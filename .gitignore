@@ -27,3 +27,6 @@ secrets.json
 .idea/
 Thumbs.db
 .DS_Store
+
+# Generated PDF text extracts
+00_project_context/pdf_reading_extracts/
