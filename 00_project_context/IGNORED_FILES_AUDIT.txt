@@ -1,0 +1,20 @@
+﻿ D 00_project_context/CURRENT_STATE.md
+?? 00_project_context/GIT_STATUS_AUDIT.txt
+?? 00_project_context/TRACKED_FILES.txt
+!! .venvs/
+!! 00_project_context/CURRENT_STATE.local.backup.md
+!! 00_project_context/pdf_reading_extracts/
+!! 01_literature/
+!! 02_code_repositories/
+!! 03_tools_and_packages/
+!! AGENTS.local.backup.md
+!! tmp/
+!! xrd_robustness/data/
+!! xrd_robustness/outputs/
+!! xrd_robustness/reports/v7_cache_14000_build.stdout.log
+!! xrd_robustness/scripts/__pycache__/
+!! xrd_robustness/src/xrd_robustness/__pycache__/
+!! xrd_robustness/src/xrd_robustness/evaluation/__pycache__/
+!! xrd_robustness/src/xrd_robustness/models/__pycache__/
+!! xrd_robustness/src/xrd_robustness/training/__pycache__/
+!! xrd_robustness/tests/__pycache__/

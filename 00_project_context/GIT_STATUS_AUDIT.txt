@@ -1,0 +1,2 @@
+﻿ D 00_project_context/CURRENT_STATE.md
+?? 00_project_context/TRACKED_FILES.txt
