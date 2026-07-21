@@ -30,3 +30,6 @@ Thumbs.db
 
 # Generated PDF text extracts
 00_project_context/pdf_reading_extracts/
+
+# Additional local virtual environments
+.venvs/

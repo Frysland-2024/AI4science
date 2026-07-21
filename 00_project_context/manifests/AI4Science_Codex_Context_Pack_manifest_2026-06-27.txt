@@ -1,0 +1,6 @@
+Created: 2026-06-27
+Lightweight pack: AI4Science_Codex_Context_Pack_2026-06-27.zip
+Full archive: AI4Science_Codex_Full_Project_Archive_2026-06-27.zip
+Root context directory: AI4Science_Codex_Context_Pack_2026-06-27
+Included Markdown context files: 24
+Included reference PDFs in full archive: 14

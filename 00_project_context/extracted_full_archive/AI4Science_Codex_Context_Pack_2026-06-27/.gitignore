@@ -1,0 +1,12 @@
+# Keep source papers only when intentionally versioned
+references/original/
+
+# Raw/restricted data
+data/
+
+# Generated outputs
+artifacts/
+reports/generated/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
