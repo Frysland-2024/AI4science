@@ -142,36 +142,54 @@ Simulator perturbation labels are not used in V9-T.
 - Previous laptop training products are not authoritative and must not be resumed.
 - Formal desktop training must start from optimizer step 0 after engineering gates pass and the user gives explicit authorization.
 
-## 7. Current blocker
+## 7. Current engineering status
 
-The scientific dataset and method comparison are defined, but the current training entry point has exposed a serious **dynamic manifest growth risk**.
+The earlier **dynamic manifest growth problem has been fixed**.
 
-Dynamic views must not be appended indefinitely as persistent manifest rows during training. They must be generated on demand and reconstructed deterministically from the frozen seed tuple.
+Dynamic training no longer materializes or persists an epoch-scale or run-scale manifest. Parameter rows are generated only for the consumed batch, or for a bounded prefetch window. The current audit reports:
 
-Therefore, formal tuning must not start until this implementation issue is fixed and audited.
+- `dynamic_rows_are_batch_bounded = true`;
+- `dynamic_rows_are_prefetch_bounded = true`;
+- maximum parameter rows per batch: `32`;
+- maximum live parameter rows with the registered prefetch window: `256`;
+- the legacy eager design would have produced `606,267,200` rows and is no longer used;
+- Dynamic ERM, JS, and Residual share the same sampler, pair schedule, and dynamic parameter-pair hashes;
+- the same dynamic coordinate replays the same parameters;
+- Train/Validation/Test exclusion gates pass.
 
-## 8. Mandatory engineering gates before tuning
+Therefore, dynamic manifest growth is **not a current blocker**.
 
-All gates below must pass:
+The remaining verification gap is narrower: the code implements epoch-boundary checkpoint resume and deterministic future schedule reconstruction, but the repository does not yet contain a dedicated end-to-end resume integration test that interrupts a real training run, reloads the checkpoint, and proves that the subsequent batch IDs and dynamic view-pair hashes match an uninterrupted reference run.
 
-1. Dynamic manifest size remains constant as optimizer steps increase.
-2. Identical seed tuples reconstruct identical perturbation parameters and spectra.
-3. Dynamic ERM, JS, and Residual receive identical paired views under the same run seed and sampler state.
-4. View 1 and view 2 remain independently sampled conditional on the same mother structure.
-5. Resume from checkpoint preserves the future view sequence and sampler state.
-6. Validation and Test structure IDs cannot enter training batches or dynamic rendering.
-7. The same optimizer-step and pattern-forward budgets are enforced across methods.
-8. Audit reports match the current frozen configuration and source-code hashes.
+## 8. Engineering gate status before tuning
 
-Any failed gate blocks training authorization.
+| Gate | Current status |
+|---|---|
+| Dynamic parameter rows remain batch/prefetch bounded | **PASS** |
+| Same dynamic coordinate replays identical parameters | **PASS** |
+| Dynamic ERM, JS, and Residual receive the same paired-view schedule | **PASS** |
+| View 1 and View 2 remain separately sampled for one mother structure | **Implemented; unit-level evidence present** |
+| Checkpoint resume restores model, optimizers, modules, Torch CPU/CUDA RNG, epoch and stream audit | **Implemented** |
+| Resumed future view sequence matches uninterrupted execution end-to-end | **PARTIAL: logic and audit-snapshot test exist; dedicated integration evidence still missing** |
+| Validation and Test IDs are excluded from dynamic training | **PASS** |
+| Optimizer-step and pattern-forward budgets match across methods | **PASS** |
+| Current reports match the frozen configuration and source hashes | **PASS in the recorded preflight; rerun after any code change** |
+
+A failed mandatory gate blocks training authorization.
 
 ## 9. Immediate next actions
 
-1. Inspect and fix the dynamic manifest lifecycle.
-2. Add or update tests for constant manifest size, deterministic reconstruction, cross-method view identity, and checkpoint-resume identity.
-3. Run a bounded engineering pilot only after these tests pass.
-4. Begin the seven-run lambda tuning only after explicit user authorization.
-5. Select the paper’s final secondary question after pilot evidence, without retrofitting a favorable result.
+1. Add a bounded **checkpoint-resume determinism integration test** at an epoch boundary.
+2. Compare uninterrupted versus resumed execution for:
+   - next batch material IDs;
+   - dynamic parameter-pair hashes;
+   - training-stream audit snapshot;
+   - checkpoint global step and epoch;
+   - optionally the next-step loss/model state under deterministic CUDA settings.
+3. Save the result as a machine-readable `v9_resume_determinism_audit.json`.
+4. Rerun the full unit suite and V9 training-stream preflight after the test is added.
+5. Run a bounded engineering pilot only after the resume gate passes.
+6. Begin the seven-run lambda tuning only after explicit user authorization.
 
 ## 10. Current paper structure
 
