@@ -1,0 +1,41 @@
+{
+  "batch_size": 64,
+  "batched_forward_calls": 6,
+  "batched_seconds_median": 1.9175675000005867,
+  "batched_seconds_trials": [
+    1.8799887000004674,
+    1.955146300000706
+  ],
+  "confusion_matrices_identical": true,
+  "device": "cuda",
+  "formal_test_results_used": false,
+  "gpu": "NVIDIA GeForce RTX 4060 Laptop GPU",
+  "maximum_first_view_probability_difference": 1.3142824172973633e-05,
+  "maximum_scalar_metric_difference": 4.20478837830085e-06,
+  "maximum_second_view_probability_difference": 1.3336539268493652e-05,
+  "metric_tolerance": 1e-05,
+  "peak_gpu_memory_mb": 568.74365234375,
+  "predicted_classes_identical": true,
+  "probability_tolerance": 2e-05,
+  "scalar_metric_differences": {
+    "accuracy": 0.0,
+    "balanced_accuracy": 0.0,
+    "correct_and_consistent_rate": 0.0,
+    "ece": 4.20478837830085e-06,
+    "macro_f1": 0.0,
+    "paired_js": 2.7756462958561784e-10,
+    "prediction_agreement": 0.0,
+    "worst_group_f1": 0.0
+  },
+  "scope": "140-structure engineering benchmark; random untrained PAMPT; no scientific metric claim",
+  "sequential_forward_calls": 280,
+  "sequential_seconds_median": 2.9640814500007764,
+  "sequential_seconds_trials": [
+    2.873150200000964,
+    3.0550127000005887
+  ],
+  "speedup": 1.545750775396365,
+  "status": "passed",
+  "structures": 140,
+  "views": 280
+}

@@ -1,0 +1,95 @@
+{
+  "algorithm": {
+    "algorithm_name": "independent_dynamic_erm",
+    "formal_training_allowed": false,
+    "marginal_profile_source": "configs/simulation.v7.candidate.json#train",
+    "operator_names": [
+      "zero_shift",
+      "peak_broadening",
+      "preferred_orientation",
+      "background",
+      "noise"
+    ],
+    "perturbation_strategy": {
+      "code_version": "independent-dynamic-v8-1",
+      "config_hash": "AA65B2AE2BBADF37B9F6F672A4BD9CEB55BE7520C647451F830A8465849CC1DD",
+      "formal_use_allowed": true,
+      "generation_order": [
+        "preferred_orientation",
+        "zero_shift",
+        "peak_broadening",
+        "background",
+        "noise",
+        "normalization"
+      ],
+      "operator_names": [
+        "zero_shift",
+        "peak_broadening",
+        "preferred_orientation",
+        "background",
+        "noise"
+      ],
+      "sampling_model": "factorized_operator_level",
+      "shared_measurement_state": false,
+      "status": "v8_independent_baseline_ready",
+      "strategy_name": "independent_dynamic"
+    },
+    "sampling_distribution": "product_of_operator_marginals",
+    "shared_measurement_state": false,
+    "software_status": "software_ready_scientific_ranges_candidate",
+    "training_mode": "dynamic_erm",
+    "training_objective": "mean_cross_entropy_over_two_views",
+    "views_per_structure_per_step": 2
+  },
+  "contract": "configs/algorithm.v8.independent_dynamic_erm.json",
+  "contract_status": "software_ready_scientific_ranges_candidate",
+  "formal_training_allowed": false,
+  "marginal_profile_source_sha256": "AA65B2AE2BBADF37B9F6F672A4BD9CEB55BE7520C647451F830A8465849CC1DD",
+  "passed": true,
+  "purpose": "software-only V8 Independent Dynamic ERM smoke; not a Pilot or scientific result",
+  "structures": [
+    {
+      "distinct_view_seeds": true,
+      "material_id": "smoke-peaks-a",
+      "valid": true,
+      "view_1_active": [
+        "peak_broadening",
+        "background",
+        "noise",
+        "preferred_orientation"
+      ],
+      "view_1_seed": 10176136911474297466,
+      "view_2_active": [
+        "zero_shift",
+        "peak_broadening",
+        "background",
+        "noise",
+        "preferred_orientation"
+      ],
+      "view_2_seed": 11911052952501106976
+    },
+    {
+      "distinct_view_seeds": true,
+      "material_id": "smoke-peaks-b",
+      "valid": true,
+      "view_1_active": [
+        "peak_broadening",
+        "noise",
+        "preferred_orientation"
+      ],
+      "view_1_seed": 17548456555387195974,
+      "view_2_active": [
+        "peak_broadening",
+        "noise",
+        "preferred_orientation"
+      ],
+      "view_2_seed": 9326274041540137260
+    }
+  ],
+  "training_step": {
+    "classification": 1.9225821495056152,
+    "consistency": 0.0,
+    "finite_gradient": true,
+    "finite_loss": true
+  }
+}

@@ -1,0 +1,106 @@
+{
+  "schema_version": "ai4science-cleanup-inventory-v1",
+  "created_at_local": "2026-07-19",
+  "scope": "E:/AI4science",
+  "status": "safe_text_cleanup_completed_binary_deletion_blocked_by_platform",
+  "policy": {
+    "formal_training_started": false,
+    "research_assets_are_not_garbage": true,
+    "destructive_shell_delete_allowed_by_platform": false,
+    "migration_authority": "xrd_robustness/reports/v9_desktop_migration_manifest.json"
+  },
+  "deleted": {
+    "file_count": 23,
+    "bytes": 560974,
+    "groups": [
+      {
+        "path": "03_tools_and_packages/logs",
+        "files": 2,
+        "bytes": 267076,
+        "reason": "curl download progress logs; no scientific or runtime content"
+      },
+      {
+        "path": "xrd_robustness/archive/v9_pre_unified_validation_20260716",
+        "files": 20,
+        "bytes": 293898,
+        "reason": "superseded two-panel Validation plans, aborted output, reports, and script"
+      },
+      {
+        "path": "xrd_robustness/reports/v7_cache_14000_build.stderr.log",
+        "files": 1,
+        "bytes": 0,
+        "reason": "empty stderr log"
+      }
+    ]
+  },
+  "platform_blocked_not_deleted": {
+    "files": 135,
+    "bytes": 1410301,
+    "groups": [
+      {
+        "path": "tmp/pdfs/hu_haotian_kbs_page3.png",
+        "files": 1,
+        "bytes": 111122,
+        "reason": "temporary rendered poster page; binary file cannot be removed by apply_patch"
+      },
+      {
+        "path": "virtual-environment-excluded Python bytecode",
+        "files": 119,
+        "bytes": 1196719,
+        "reason": "regenerable pyc/pyo; shell deletion rejected by platform policy"
+      },
+      {
+        "path": "macOS/Windows metadata outside virtual environments",
+        "files": 15,
+        "bytes": 102460,
+        "reason": "DS_Store or Thumbs.db; shell deletion rejected by platform policy"
+      }
+    ],
+    "manual_action": "Delete these paths in Windows Explorer after migration integrity is confirmed. Empty directory skeletons may also be removed manually."
+  },
+  "retained_required_or_reproducibility_assets": [
+    {
+      "path": ".venvs/xrd_tools",
+      "bytes": 7737172675,
+      "reason": "current CUDA engineering-test interpreter on the laptop; target desktop recreates it from bootstrap"
+    },
+    {
+      "path": ".venvs/xrd_legacy",
+      "bytes": 2901277941,
+      "reason": "still referenced by data acquisition, peak precomputation, and verified external-source imports"
+    },
+    {
+      "path": "xrd_robustness/data/formal_14060",
+      "bytes": 293585796,
+      "reason": "current authoritative 14060-structure training, validation, and locked-test data"
+    },
+    {
+      "path": "xrd_robustness/data/formal_14000",
+      "bytes": 289904222,
+      "reason": "auditable source layer for formal_14060; not part of the desktop runtime migration"
+    },
+    {
+      "path": "xrd_robustness/data/dev_3500",
+      "bytes": 72086547,
+      "reason": "parameter-freeze and software-development audit subset; not a test set"
+    },
+    {
+      "path": "01_literature",
+      "bytes": 361494804,
+      "reason": "paper, poster, extracted text, and reading-audit evidence"
+    },
+    {
+      "path": "02_code_repositories",
+      "bytes": 729516119,
+      "reason": "verified external source and reference implementation assets"
+    }
+  ],
+  "deduplication_audit": {
+    "formal_14000_peak_tables_checked": 14000,
+    "dev_3500_peak_tables_checked": 3500,
+    "missing_in_formal_14060": 0,
+    "size_mismatches": 0,
+    "sha256_mismatches": 0,
+    "decision": "retain provenance tiers; official desktop migration copies only formal_14060"
+  }
+}

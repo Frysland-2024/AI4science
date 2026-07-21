@@ -1,0 +1,12 @@
+name,type,file_count,bytes,disposition,reason
+.venvs,directory,159858,10638450616,retain,"xrd_tools is the current CUDA engineering environment; xrd_legacy is still referenced by acquisition, peak-cache, and external-source verification paths"
+02_code_repositories,directory,3727,729516119,retain,"verified external source, reference implementations, licences, and provenance datasets"
+xrd_robustness,directory,32031,662837220,retain,"active V9-T implementation, formal data, reports, migration package, and audit evidence"
+01_literature,directory,545,361494804,retain,"papers, poster source, extracted text, and reading-audit evidence"
+00_project_context,directory,107,12045956,retain,"research decisions and historical evidence; current-state authority redirects to CODEX_HANDOFF.md"
+03_tools_and_packages,directory,165,2560801,retain,"offline package assets; disposable download logs were removed"
+tmp,directory,1,111122,platform_blocked_manual_delete,"one temporary rendered poster PNG; binary deletion was rejected by the platform"
+README.md,file,1,2905,retain,"current workspace entry point"
+.agents,directory,0,0,platform_blocked_manual_delete,"empty directory"
+.codex,directory,0,0,platform_blocked_manual_delete,"empty directory"
+.git,directory,0,0,platform_blocked_manual_delete,"empty invalid root metadata directory"

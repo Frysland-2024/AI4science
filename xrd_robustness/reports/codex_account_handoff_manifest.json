@@ -1,0 +1,383 @@
+{
+  "active_training_processes": [],
+  "artifact_ledger": [
+    {
+      "path": "CODEX_HANDOFF.md",
+      "role": "authoritative cross-account entry point",
+      "sha256": "279F9A72217737872153E6E27CFDF2C3B2D549C22836827C95D8CC9AFCD887FC",
+      "size_bytes": 28861
+    },
+    {
+      "path": "docs/CODEX_ACCOUNT_HANDOFF.docx",
+      "role": "portable human-readable handoff manual",
+      "sha256": "AF81B14B3AC4D3815020DB1DDC4BE02170C2F10B83FBC590126A31980FD2E525",
+      "size_bytes": 56091
+    },
+    {
+      "path": "README.md",
+      "role": "project overview and handoff pointer",
+      "sha256": "95591F0244D841162F5E833CB1CB6664C006727EF89C765C8C6CB49F9627B1BA",
+      "size_bytes": 5310
+    },
+    {
+      "path": "docs/V9_METHOD_TRANSFER_ENGINEERING.md",
+      "role": "research and method-transfer engineering contract",
+      "sha256": "F7D1AF22D509C70CA131FC8674727EAF3576ADEA50EE33A56582E667CBFB85AB",
+      "size_bytes": 18084
+    },
+    {
+      "path": "docs/V9_DESKTOP_MIGRATION_HANDOFF.md",
+      "role": "desktop migration procedure",
+      "sha256": "2F25E3811ED08826A089670C6CC91B345C78EB055B79812CFABDEF391F325E6A",
+      "size_bytes": 2482
+    },
+    {
+      "path": "docs/V9_DESKTOP_HARDWARE_CONFIGURATION.md",
+      "role": "target hardware and acceleration contract",
+      "sha256": "B374DBAB142ECB8D379DD0CD28FB33087C4F0181F833DBF46A2C9AD6E3D443DD",
+      "size_bytes": 4265
+    },
+    {
+      "path": "configs/algorithm.v9.method_transfer.json",
+      "role": "authoritative experiment contract",
+      "sha256": "BB6D52A2253524F4E5DE830A8FB04C21635C3D0D920FC1C318099C0580FD2394",
+      "size_bytes": 16203
+    },
+    {
+      "path": "configs/hardware.v9.desktop.9600x_4070tis.json",
+      "role": "target desktop hardware profile",
+      "sha256": "548FA33C64B2BDC9D4F38D8A054B86278C8A2757E2F18E51191D703A56F05B93",
+      "size_bytes": 4632
+    },
+    {
+      "path": "configs/simulation.v9.method_transfer.frozen.json",
+      "role": "frozen physical simulation profiles",
+      "sha256": "AF6E2FA400525CCF48AAC18C9839CC8EFE13DD3E4C056DD45A74B4DD43262558",
+      "size_bytes": 22001
+    },
+    {
+      "path": "configs/evaluation.v9.method_transfer.json",
+      "role": "development and final evaluation locks",
+      "sha256": "24FD778E2AE1DD0C8AF519871BBC8343F56966437D5AC0E19606E7F03A4FD5D4",
+      "size_bytes": 3608
+    },
+    {
+      "path": "configs/data.v9.method_transfer.family_split.json",
+      "role": "family-aware split contract",
+      "sha256": "4FA9E216FDCD73473C303AB4AC14726FA2FAB60452CE0A76B147BAC7C4C9EFA9",
+      "size_bytes": 2776
+    },
+    {
+      "path": "data/formal_14060/manifests/split_manifest.v9t.family_v1.csv",
+      "role": "authoritative train validation test split",
+      "sha256": "4304D5FA5A35082AFD6653647875074D207E3ACDC35123FFF8FD6E42BE1C672B",
+      "size_bytes": 2741291
+    },
+    {
+      "path": "data/formal_14060/manifests/v9_method_transfer_validation.csv",
+      "role": "unified development validation panel",
+      "sha256": "7CC261206F023F2A44065419014B6D886E800A19C7A33C17B71496D9E40AD213",
+      "size_bytes": 382672
+    },
+    {
+      "path": "reports/v9_method_transfer_preflight.json",
+      "role": "latest source-machine scientific preflight",
+      "sha256": "AB31548B6316B69EFFD6AC585AEBD574C51B3FF42E758C6260AA4C8C2849A75B",
+      "size_bytes": 3617
+    },
+    {
+      "path": "reports/v9_training_stream_preflight_audit.json",
+      "role": "stream fairness and bounded-memory proof",
+      "sha256": "5A732C7F6497878CC9CB804FAA1FAD72CAFA9BC24FAF63B7276D59836B2B2C44",
+      "size_bytes": 8830
+    },
+    {
+      "path": "reports/v9_method_transfer_tuning_plan.json",
+      "role": "seven-run plan; all runs must remain unstarted",
+      "sha256": "BBF36EB7C1B0374906616F631C997A88420F56E56A4BB63B81EC2517470579DF",
+      "size_bytes": 28778
+    },
+    {
+      "path": "reports/v9_method_transfer_final_lock_audit.json",
+      "role": "simulated-test and real-test lock proof",
+      "sha256": "804A93BC943797A8FE64C1DB004D945B5308F545AEA77AB5E4D4289CCD35C038",
+      "size_bytes": 786
+    },
+    {
+      "path": "scripts/desktop_first_boot_v9.ps1",
+      "role": "no-training target-desktop acceptance orchestrator",
+      "sha256": "CBD81331AD7700E4D3037AB95E75729E69090AAADC470850E17B88A4D50F5FD8",
+      "size_bytes": 6880
+    },
+    {
+      "path": "scripts/run_v9_method_transfer.py",
+      "role": "planning and explicitly authorized execution launcher",
+      "sha256": "23E9450EF2A7C7FF87B9B13FCF67B496AB666A7EB0F2098DCF35869AE8C3358A",
+      "size_bytes": 19397
+    },
+    {
+      "path": "scripts/train_v7.py",
+      "role": "shared training entry point",
+      "sha256": "21112C93705F0287FF419DA0320E9CE90684DAAB783114B4D8A1BCC59DAE1364",
+      "size_bytes": 86366
+    },
+    {
+      "path": "scripts/prepare_codex_account_handoff.py",
+      "role": "handoff snapshot builder",
+      "sha256": "8A88C26A0B41D7F5427C02B7BD1D8518E6E94E1E92CEB18370DC0FE1A82BF2CC",
+      "size_bytes": 14847
+    },
+    {
+      "path": "scripts/verify_codex_account_handoff.py",
+      "role": "cross-account handoff verifier",
+      "sha256": "A42543450CECF61E138197F95D0F11CBF3E631C4575DE5014C3648BCE95C2555",
+      "size_bytes": 8539
+    },
+    {
+      "path": "scripts/build_codex_handoff_docx.py",
+      "role": "portable DOCX handoff renderer",
+      "sha256": "E37E0D99F296FB74630ED3E59408B67DC44EEF843B814F5FFDC98FC65261CF7B",
+      "size_bytes": 15672
+    },
+    {
+      "path": "scripts/audit_codex_handoff_docx.py",
+      "role": "dependency-free DOCX structure auditor",
+      "sha256": "42792BB1AAF25EA1D355760CCFBE0C0552237A4CB67DF7B3DBF619CCAD83257D",
+      "size_bytes": 4744
+    },
+    {
+      "path": "scripts/audit_codex_handoff_unit_tests.py",
+      "role": "standard-library full unit-test auditor",
+      "sha256": "B97855F7FFFB0B61390B7652FEA84C7BE2B50575F200E55AA64D8318F1F2F2AB",
+      "size_bytes": 2784
+    },
+    {
+      "path": "reports/codex_account_handoff_docx_audit.json",
+      "role": "DOCX structural QA and visual-render limitation",
+      "sha256": "FF31487C5C1403D4B6A2884C7E0FC91297671ADB60E85A1AD895ED000208DF82",
+      "size_bytes": 1151
+    },
+    {
+      "path": "reports/codex_account_handoff_unittest.json",
+      "role": "full source-unit-test evidence",
+      "sha256": "0BD06393E5D7C77C5F69467277B493A7EAD6E8311D3FEB40CF6AA8AD6B7983E3",
+      "size_bytes": 481
+    }
+  ],
+  "authoritative_entrypoint": "CODEX_HANDOFF.md",
+  "created_at_utc": "2026-07-19T09:05:26.280515+00:00",
+  "failed_gates": [],
+  "gates": {
+    "all_seven_runs_planned_not_started": true,
+    "authoritative_markdown_present": true,
+    "checkpoint_count_zero": true,
+    "desktop_revalidation_required": true,
+    "formal_experiment_is_development_only": true,
+    "formal_plan_requires_frozen_tuning_selection": true,
+    "no_active_training_processes": true,
+    "portable_docx_present": true,
+    "real_test_locked": true,
+    "result_count_zero": true,
+    "run_directory_count_zero": true,
+    "run_registry_empty": true,
+    "scientific_preflight_passed": true,
+    "seven_run_plan_count": true,
+    "seven_run_plan_is_current": true,
+    "simulated_test_locked": true,
+    "source_migration_manifest_ready_for_copy": true,
+    "source_migration_verification_passed": true,
+    "stream_audit_passed": true,
+    "training_process_probe_succeeded": true
+  },
+  "next_account_stop_rule": "After desktop_first_boot_v9.ps1 reports ready_for_explicit_tuning_authorization, stop and obtain a new explicit user authorization before tune-run.",
+  "output_state": {
+    "checkpoint_count": 0,
+    "registry_present": true,
+    "registry_run_count": 0,
+    "required_start_step": 0,
+    "result_count": 0,
+    "resume_allowed": false,
+    "root": "outputs/v9_method_transfer_tuning",
+    "run_directory_count": 0
+  },
+  "policy": {
+    "cold_restart_from_optimizer_step_zero": true,
+    "copy_or_resume_laptop_checkpoints": false,
+    "development_tuning_authorized_now": false,
+    "formal_training_authorized_now": false,
+    "real_test_authorized_now": false,
+    "simulated_test_authorized_now": false,
+    "source_laptop": "engineering tests and no-training audits only",
+    "target_desktop_first_boot": "environment and no-training acceptance only"
+  },
+  "portable_manual": "docs/CODEX_ACCOUNT_HANDOFF.docx",
+  "registered_acceleration": {
+    "automatic_mixed_precision": {
+      "dtype": "bfloat16",
+      "enabled": true,
+      "fallback_to_float32": true,
+      "gradient_scaler": false
+    },
+    "cuda_math": {
+      "allow_tf32_cudnn": true,
+      "allow_tf32_matmul": true,
+      "cudnn_benchmark": true,
+      "cudnn_deterministic": true,
+      "float32_matmul_precision": "high"
+    },
+    "dynamic_prefetch": {
+      "applies_to_modes": [
+        "clean_erm",
+        "offline_erm",
+        "dynamic_erm",
+        "dynamic_js",
+        "dynamic_residual"
+      ],
+      "clean_duplicate_policy": "render-once-reuse-x1-as-x2",
+      "fixed_view_generation": "frozen-manifest-process-prefetch-v1",
+      "main_process_training_peak_cache": "disabled-when-prefetch-enabled",
+      "multiprocessing_start_method": "spawn",
+      "non_blocking_h2d": true,
+      "pin_memory": true,
+      "prefetch_batches": 8,
+      "worker_native_threads": 1,
+      "worker_processes": 8
+    },
+    "evaluation_batch_size": 256,
+    "main_process": {
+      "interop_threads": 1,
+      "intraop_threads": 2,
+      "native_thread_environment": "fixed-main-thread-env-v1"
+    },
+    "optimizer": {
+      "fused": true,
+      "name": "AdamW",
+      "zero_grad_set_to_none": true
+    },
+    "parallel_run_scheduler": {
+      "concurrent_run_prefetch_workers": 4,
+      "failure_policy": "finish-active-pair-then-stop",
+      "registry_write_policy": "parent-process-only",
+      "serial_tail_prefetch_workers": 8,
+      "strategy": "bounded-pairs-v1"
+    },
+    "run_concurrency": 2,
+    "torch_compile": {
+      "backend": "inductor",
+      "dynamic": false,
+      "enabled": true,
+      "fallback_to_eager": true,
+      "fullgraph": false,
+      "mode": "default"
+    }
+  },
+  "research": {
+    "class_count": 7,
+    "core_modes": [
+      "dynamic_erm",
+      "dynamic_js",
+      "dynamic_residual"
+    ],
+    "primary_model": "PAMPT-B3",
+    "program": "V9-T",
+    "reference_modes": [
+      "near-clean ERM",
+      "offline ERM"
+    ],
+    "short_name": "Algorithm Transfer for PXRD Robustness",
+    "split_counts": {
+      "test": 2109,
+      "train": 9842,
+      "validation": 2109
+    },
+    "structured_dynamic_status": "archived",
+    "unique_material_ids": 14060
+  },
+  "schema_version": "codex-account-handoff-v1",
+  "source_machine": {
+    "hostname": "Frysland",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "python": "E:\\AI4science\\.venvs\\xrd_tools\\Scripts\\python.exe"
+  },
+  "status": "handoff_ready_for_copy",
+  "target_desktop": {
+    "cpu": "AMD Ryzen 5 9600X",
+    "gpu": "NVIDIA GeForce RTX 4070 Ti SUPER",
+    "gpu_memory_mb": 16384,
+    "logical_threads": 12,
+    "minimum_system_memory_gb": 32,
+    "physical_cores": 6,
+    "storage": "NVMe SSD recommended for the project and peak cache"
+  },
+  "training_stream": {
+    "batch_size": 16,
+    "dynamic_parameter_pair_hash": "46149a5170c51f67ec9a05b04978520eece0221d741f4478f402eb5eb1e07e07",
+    "epochs": 50,
+    "legacy_eager_rows": 606267200,
+    "maximum_live_dynamic_rows": 256,
+    "optimizer_steps": 30650,
+    "pair_schedule_hash": "99c033bddbdfd3bd442388201c11863047e83f2012eebfd0781aac94a4d932a0",
+    "sampler_hash": "6e1a4e6e46f59e913fc0165c41d8a584a1669514d70ec0814985a34c4ee6430c",
+    "spectrum_exposures": 980800,
+    "steps_per_epoch": 616,
+    "structure_exposures": 490400
+  },
+  "tuning_runs": [
+    {
+      "lambda_name": null,
+      "lambda_value": null,
+      "method_id": "ordinary_dynamic_augmentation",
+      "output_dir": "outputs/v9_method_transfer_tuning/ordinary_dynamic_augmentation__tuning_seed_20260710",
+      "run_id": "ordinary_dynamic_augmentation__tuning_seed_20260710",
+      "status": "planned_not_started"
+    },
+    {
+      "lambda_name": "lambda_js",
+      "lambda_value": 0.1,
+      "method_id": "js_consistency_transfer",
+      "output_dir": "outputs/v9_method_transfer_tuning/js_consistency_transfer__lambda_js_0p1__tuning_seed_20260710",
+      "run_id": "js_consistency_transfer__lambda_js_0p1__tuning_seed_20260710",
+      "status": "planned_not_started"
+    },
+    {
+      "lambda_name": "lambda_js",
+      "lambda_value": 0.3,
+      "method_id": "js_consistency_transfer",
+      "output_dir": "outputs/v9_method_transfer_tuning/js_consistency_transfer__lambda_js_0p3__tuning_seed_20260710",
+      "run_id": "js_consistency_transfer__lambda_js_0p3__tuning_seed_20260710",
+      "status": "planned_not_started"
+    },
+    {
+      "lambda_name": "lambda_js",
+      "lambda_value": 1.0,
+      "method_id": "js_consistency_transfer",
+      "output_dir": "outputs/v9_method_transfer_tuning/js_consistency_transfer__lambda_js_1p0__tuning_seed_20260710",
+      "run_id": "js_consistency_transfer__lambda_js_1p0__tuning_seed_20260710",
+      "status": "planned_not_started"
+    },
+    {
+      "lambda_name": "lambda_res",
+      "lambda_value": 0.01,
+      "method_id": "residual_decorrelation_transfer",
+      "output_dir": "outputs/v9_method_transfer_tuning/residual_decorrelation_transfer__lambda_res_0p01__tuning_seed_20260710",
+      "run_id": "residual_decorrelation_transfer__lambda_res_0p01__tuning_seed_20260710",
+      "status": "planned_not_started"
+    },
+    {
+      "lambda_name": "lambda_res",
+      "lambda_value": 0.1,
+      "method_id": "residual_decorrelation_transfer",
+      "output_dir": "outputs/v9_method_transfer_tuning/residual_decorrelation_transfer__lambda_res_0p1__tuning_seed_20260710",
+      "run_id": "residual_decorrelation_transfer__lambda_res_0p1__tuning_seed_20260710",
+      "status": "planned_not_started"
+    },
+    {
+      "lambda_name": "lambda_res",
+      "lambda_value": 1.0,
+      "method_id": "residual_decorrelation_transfer",
+      "output_dir": "outputs/v9_method_transfer_tuning/residual_decorrelation_transfer__lambda_res_1p0__tuning_seed_20260710",
+      "run_id": "residual_decorrelation_transfer__lambda_res_1p0__tuning_seed_20260710",
+      "status": "planned_not_started"
+    }
+  ]
+}

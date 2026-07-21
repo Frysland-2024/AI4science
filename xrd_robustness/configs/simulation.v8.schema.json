@@ -1,0 +1,108 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.xrd-robustness/schemas/simulation.v8.schema.json",
+  "title": "XRD Robustness V8 Perturbation Strategy Contract",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "status",
+    "perturbation_strategy",
+    "methodology_policy",
+    "real_experiment_policy"
+  ],
+  "properties": {
+    "schema_version": {"const": "v8.0-interface"},
+    "purpose": {"type": "string"},
+    "status": {
+      "enum": [
+        "interface_only",
+        "structured_definition_not_frozen",
+        "dev_frozen",
+        "formal_frozen"
+      ]
+    },
+    "perturbation_strategy": {
+      "type": "object",
+      "required": ["name", "status", "formal_use_allowed"],
+      "properties": {
+        "name": {"enum": ["independent_dynamic", "structured_dynamic"]},
+        "status": {
+          "enum": ["v8_independent_baseline_ready", "legacy_baseline_preserved", "not_frozen", "dev_frozen", "formal_frozen"]
+        },
+        "formal_use_allowed": {"type": "boolean"},
+        "implementation": {"type": "string"},
+        "parameter_profile_source": {"type": "string"}
+      },
+      "additionalProperties": false
+    },
+    "measurement_state": {
+      "type": "object",
+      "required": ["sample_state", "instrument_state", "acquisition_state"],
+      "properties": {
+        "sample_state": {"$ref": "#/$defs/state_branch"},
+        "instrument_state": {"$ref": "#/$defs/state_branch"},
+        "acquisition_state": {"$ref": "#/$defs/state_branch"}
+      },
+      "additionalProperties": false
+    },
+    "joint_distribution": {"$ref": "#/$defs/unfrozen_component"},
+    "generation_order": {"$ref": "#/$defs/unfrozen_component"},
+    "methodology_policy": {
+      "type": "object",
+      "required": [
+        "five_perturbations_retained",
+        "structured_rules_require_approval",
+        "instrument_agnostic"
+      ],
+      "properties": {
+        "five_perturbations_retained": {"const": true},
+        "structured_rules_require_approval": {"const": true},
+        "instrument_agnostic": {"const": true},
+        "parameter_source_priority": {"type": "array", "items": {"type": "string"}}
+      },
+      "additionalProperties": false
+    },
+    "real_experiment_policy": {
+      "type": "object",
+      "required": ["role", "parameter_definition_source", "training_prerequisite"],
+      "properties": {
+        "role": {"const": "optional_future_external_validation"},
+        "parameter_definition_source": {"const": false},
+        "training_prerequisite": {"const": false}
+      },
+      "additionalProperties": false
+    },
+    "metadata_schema": {"type": "string"},
+    "notes": {"type": "array", "items": {"type": "string"}}
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "state_branch": {
+      "type": "object",
+      "required": ["status", "frozen", "variables"],
+      "properties": {
+        "status": {"enum": ["TBD", "dev_frozen", "formal_frozen"]},
+        "frozen": {"type": "boolean"},
+        "variables": {"type": "array", "items": {"type": "string"}},
+        "literature_source": {
+          "oneOf": [
+            {"type": "string", "minLength": 1},
+            {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}}
+          ]
+        },
+        "physics_basis": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "unfrozen_component": {
+      "type": "object",
+      "required": ["status", "frozen"],
+      "properties": {
+        "status": {"enum": ["TBD", "dev_frozen", "formal_frozen"]},
+        "frozen": {"type": "boolean"},
+        "definition": {}
+      },
+      "additionalProperties": false
+    }
+  }
+}

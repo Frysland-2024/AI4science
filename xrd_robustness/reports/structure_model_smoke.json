@@ -1,0 +1,80 @@
+{
+  "dynamic_modes_received_same_tensor_objects": true,
+  "losses": {
+    "consistency_term": 0.0,
+    "dynamic_classification_delta": 0.0,
+    "dynamic_consistency": 1.9506590366363525,
+    "dynamic_erm": 1.9506590366363525,
+    "fixed_erm": 1.9506590366363525
+  },
+  "materials_project_structures": 7,
+  "model": {
+    "backward_gradients_present": true,
+    "name": "1D Patch Transformer",
+    "output_classes": 7,
+    "parameter_count": 824455,
+    "patch_count": 219
+  },
+  "one_per_crystal_system": true,
+  "passed": true,
+  "peak_tables_loaded": 7,
+  "purpose": "software integration smoke only; no spectrum arrays persisted",
+  "views": [
+    {
+      "crystal_system": "triclinic",
+      "material_id": "mp-1205403",
+      "view_1_seed": 17153060320146750580,
+      "view_1_sha256": "b91345041ab911144161f9d07de0e6823b6cf303bdf509dbafca124f54d44c58",
+      "view_2_seed": 10097021237864023846,
+      "view_2_sha256": "b91345041ab911144161f9d07de0e6823b6cf303bdf509dbafca124f54d44c58"
+    },
+    {
+      "crystal_system": "monoclinic",
+      "material_id": "mp-996983",
+      "view_1_seed": 17749388214878807475,
+      "view_1_sha256": "c30e23f2bd1d7f8ea01e88574732fcd4c5805fff442bea5af8d97888c7daf0f3",
+      "view_2_seed": 6188436042556008329,
+      "view_2_sha256": "c30e23f2bd1d7f8ea01e88574732fcd4c5805fff442bea5af8d97888c7daf0f3"
+    },
+    {
+      "crystal_system": "orthorhombic",
+      "material_id": "mp-605663",
+      "view_1_seed": 4100956038114433597,
+      "view_1_sha256": "2e84760f94d2658ed53887659ab21818aeff1e0f7d39e488171f1ab097c1b5c8",
+      "view_2_seed": 18064229525499910011,
+      "view_2_sha256": "2e84760f94d2658ed53887659ab21818aeff1e0f7d39e488171f1ab097c1b5c8"
+    },
+    {
+      "crystal_system": "tetragonal",
+      "material_id": "mp-7906",
+      "view_1_seed": 8120258408971830142,
+      "view_1_sha256": "3d1122c9d1be4e371800d411add765c488ce961b771d2e7592d6872f46168be1",
+      "view_2_seed": 13576420965150943754,
+      "view_2_sha256": "3d1122c9d1be4e371800d411add765c488ce961b771d2e7592d6872f46168be1"
+    },
+    {
+      "crystal_system": "trigonal",
+      "material_id": "mp-1228891",
+      "view_1_seed": 8009181991755569040,
+      "view_1_sha256": "9132560ac98a8d33c38b264c6c091c6748fa25371e879b9769aecbf38064b0e3",
+      "view_2_seed": 1916592180051680796,
+      "view_2_sha256": "9132560ac98a8d33c38b264c6c091c6748fa25371e879b9769aecbf38064b0e3"
+    },
+    {
+      "crystal_system": "hexagonal",
+      "material_id": "mp-569803",
+      "view_1_seed": 16802643414541706240,
+      "view_1_sha256": "a2d754459fb48e44d458049e5f5ec34c0e8ed29dc578f2e499d3505563ea7a5f",
+      "view_2_seed": 9967935747457667855,
+      "view_2_sha256": "a2d754459fb48e44d458049e5f5ec34c0e8ed29dc578f2e499d3505563ea7a5f"
+    },
+    {
+      "crystal_system": "cubic",
+      "material_id": "mp-540872",
+      "view_1_seed": 10335380419783845456,
+      "view_1_sha256": "48759d8bba32b891e4adee652bbd6d4211079c5d9ba7040246f05dd1b0f1b044",
+      "view_2_seed": 15816934364668175241,
+      "view_2_sha256": "48759d8bba32b891e4adee652bbd6d4211079c5d9ba7040246f05dd1b0f1b044"
+    }
+  ]
+}

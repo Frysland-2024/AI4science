@@ -1,0 +1,52 @@
+{
+  "configuration": {
+    "audited_batches": 128,
+    "audited_structures": 2048,
+    "audited_views": 4096,
+    "batch_size": 16,
+    "contract_prefetch_override": null,
+    "contract_worker_override": null,
+    "maximum_live_parameter_rows": 256,
+    "multiprocessing_start_method": "spawn",
+    "non_blocking_h2d": true,
+    "pin_memory": true,
+    "prefetch_batches": 8,
+    "result_order": "absolute-step-then-batch-offset",
+    "seed": 20260710,
+    "sharding_algorithm": "sha256-material-id-mod-v1",
+    "worker_native_threads": 1,
+    "worker_peak_cache": "lazy-static-shard",
+    "worker_processes": 8,
+    "worker_thread_policy": "fixed-native-thread-env-v1"
+  },
+  "contract": "configs/algorithm.v9.method_transfer.json",
+  "contract_sha256": "DA18695CA03330324B66BDECE648C9B5014AD87E646B7E26CA61C9A211C03159",
+  "equivalence": {
+    "exact_accepted_manifest_rows": true,
+    "exact_material_order": true,
+    "exact_parameters": true,
+    "exact_spectrum_arrays": true,
+    "maximum_absolute_spectrum_difference": 0.0,
+    "prefetch_array_stream_hash": "94AE2585590D61B20EBF53506EFC75D8FEB5F7675B3BC83EBF63CD8C60CAC45C",
+    "prefetch_parameter_pair_hash": "032B8591E571DF3ED6F3863D4058FDA1C37B2298B0421A5ECDDC8875EA72E424",
+    "quality_gate_checked_views": 4101,
+    "quality_gate_counts_match": true,
+    "quality_gate_rejected_views": 5,
+    "sequential_array_stream_hash": "94AE2585590D61B20EBF53506EFC75D8FEB5F7675B3BC83EBF63CD8C60CAC45C",
+    "sequential_parameter_pair_hash": "032B8591E571DF3ED6F3863D4058FDA1C37B2298B0421A5ECDDC8875EA72E424"
+  },
+  "performance": {
+    "note": "Prefetch time includes worker initialization and lazy worker peak loads; main-process peak loading and deterministic parameter-row construction are excluded from both paths.",
+    "prefetch_batches_per_second": 21.662432620161177,
+    "prefetch_first_batch_wait_seconds": 0.07622899999842048,
+    "prefetch_seconds": 5.908846999984235,
+    "prefetch_steady_median_wait_seconds": 0.035842400015098974,
+    "sequential_batches_per_second": 3.8778231116505526,
+    "sequential_first_batch_seconds": 0.15121819998603314,
+    "sequential_seconds": 33.008210100000724,
+    "sequential_steady_median_batch_seconds": 0.2492721999878995,
+    "speedup": 5.586235368776479
+  },
+  "schema_version": "v9-dynamic-prefetch-audit-v1",
+  "status": "passed"
+}

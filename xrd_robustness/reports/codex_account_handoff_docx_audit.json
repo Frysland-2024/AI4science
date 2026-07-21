@@ -1,0 +1,30 @@
+{
+  "checks": {
+    "docx_exists_and_nonempty": true,
+    "explicit_cover_page_break_present": true,
+    "microsoft_word_open_and_page_count_succeeded": true,
+    "paragraphs_present": true,
+    "required_handoff_text_present": true,
+    "required_package_members_present": true,
+    "section_properties_present": true,
+    "tables_present": true,
+    "zip_integrity_passed": true
+  },
+  "counts": {
+    "explicit_page_breaks": 2,
+    "paragraphs": 501,
+    "sections": 1,
+    "tables": 3,
+    "word_page_count": 23
+  },
+  "created_at_utc": "2026-07-19T09:05:02.069900+00:00",
+  "failed_checks": [],
+  "input": "E:\\AI4science\\xrd_robustness\\docs\\CODEX_ACCOUNT_HANDOFF.docx",
+  "schema_version": "codex-account-handoff-docx-audit-v1",
+  "status": "structural_pass_visual_not_completed",
+  "visual_render": {
+    "authority_impact": "none: CODEX_HANDOFF.md is authoritative; the DOCX is a derived portable reading copy",
+    "completed": false,
+    "reason": "Microsoft Word opened the rebuilt DOCX and reported 23 pages; structural audit completed; page-by-page rendered visual QA was not run on this notebook."
+  }
+}

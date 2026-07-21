@@ -1,0 +1,42 @@
+{
+  "active_training_processes": [],
+  "checks": {
+    "all_seven_runs_planned_not_started": true,
+    "artifact_ledger_not_empty": true,
+    "checkpoint_count_zero": true,
+    "formal_experiment_is_development_only": true,
+    "formal_plan_requires_frozen_tuning_selection": true,
+    "handoff_does_not_authorize_tuning": true,
+    "manifest_declares_ready": true,
+    "migration_manifest_ready_for_copy": true,
+    "no_active_training_processes": true,
+    "no_handoff_hash_mismatches": true,
+    "no_handoff_size_mismatches": true,
+    "no_missing_handoff_artifacts": true,
+    "real_test_locked": true,
+    "result_count_zero": true,
+    "run_directory_count_zero": true,
+    "run_registry_present_and_empty": true,
+    "simulated_test_locked": true,
+    "training_process_probe_succeeded": true,
+    "tuning_plan_commands_current": true,
+    "tuning_plan_contract_hash_current": true
+  },
+  "execution_state": {
+    "checkpoints": 0,
+    "planned_runs": 7,
+    "registry_runs": 0,
+    "results": 0,
+    "run_directories": 0,
+    "training_authorized": false
+  },
+  "failed_checks": [],
+  "hash_mismatches": [],
+  "missing": [],
+  "next_action": "continue with no-training desktop acceptance and then stop for explicit authorization",
+  "purpose": "cross-account and migration integrity verification; no training",
+  "schema_version": "codex-account-handoff-verification-v1",
+  "size_mismatches": [],
+  "status": "pass",
+  "verified_root": "E:\\AI4science\\xrd_robustness"
+}

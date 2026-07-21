@@ -1,0 +1,205 @@
+{
+  "cross_split_family_count": 0,
+  "data_config": {
+    "path": "configs/data.v9.method_transfer.family_split.json",
+    "sha256": "4FA9E216FDCD73473C303AB4AC14726FA2FAB60452CE0A76B147BAC7C4C9EFA9"
+  },
+  "duplicate_material_id_count": 0,
+  "duplicate_structure_fingerprint_count": 0,
+  "external_real_test_separate": true,
+  "family_assignment": {
+    "class_counts": {
+      "cubic": {
+        "deterministic_assignment_attempt": 0,
+        "family_counts": {
+          "test": 118,
+          "train": 33,
+          "validation": 123
+        },
+        "minimum_feasible_max_evaluation_family_size": 12,
+        "structure_counts": {
+          "test": 301,
+          "train": 1409,
+          "validation": 302
+        },
+        "total_structures": 2012
+      },
+      "hexagonal": {
+        "deterministic_assignment_attempt": 0,
+        "family_counts": {
+          "test": 152,
+          "train": 78,
+          "validation": 176
+        },
+        "minimum_feasible_max_evaluation_family_size": 7,
+        "structure_counts": {
+          "test": 302,
+          "train": 1406,
+          "validation": 301
+        },
+        "total_structures": 2009
+      },
+      "monoclinic": {
+        "deterministic_assignment_attempt": 0,
+        "family_counts": {
+          "test": 301,
+          "train": 466,
+          "validation": 302
+        },
+        "minimum_feasible_max_evaluation_family_size": 1,
+        "structure_counts": {
+          "test": 301,
+          "train": 1409,
+          "validation": 302
+        },
+        "total_structures": 2012
+      },
+      "orthorhombic": {
+        "deterministic_assignment_attempt": 0,
+        "family_counts": {
+          "test": 255,
+          "train": 292,
+          "validation": 261
+        },
+        "minimum_feasible_max_evaluation_family_size": 2,
+        "structure_counts": {
+          "test": 302,
+          "train": 1411,
+          "validation": 303
+        },
+        "total_structures": 2016
+      },
+      "tetragonal": {
+        "deterministic_assignment_attempt": 0,
+        "family_counts": {
+          "test": 224,
+          "train": 164,
+          "validation": 217
+        },
+        "minimum_feasible_max_evaluation_family_size": 3,
+        "structure_counts": {
+          "test": 302,
+          "train": 1406,
+          "validation": 301
+        },
+        "total_structures": 2009
+      },
+      "triclinic": {
+        "deterministic_assignment_attempt": 0,
+        "family_counts": {
+          "test": 300,
+          "train": 513,
+          "validation": 300
+        },
+        "minimum_feasible_max_evaluation_family_size": 1,
+        "structure_counts": {
+          "test": 300,
+          "train": 1400,
+          "validation": 300
+        },
+        "total_structures": 2000
+      },
+      "trigonal": {
+        "deterministic_assignment_attempt": 0,
+        "family_counts": {
+          "test": 251,
+          "train": 178,
+          "validation": 247
+        },
+        "minimum_feasible_max_evaluation_family_size": 2,
+        "structure_counts": {
+          "test": 301,
+          "train": 1401,
+          "validation": 300
+        },
+        "total_structures": 2002
+      }
+    },
+    "family_count": 4951,
+    "family_definition": "re-analysed space group plus chemistry-anonymous species-wise Wyckoff orbit letters and multiplicities",
+    "family_definition_scope": "conservative deterministic proxy; not an AFLOW/XtalFinder label",
+    "family_signature_version": "anonymous-wyckoff-family-v1",
+    "ratios": {
+      "test": 0.15,
+      "train": 0.7,
+      "validation": 0.15
+    },
+    "split_counts": {
+      "test": 2109,
+      "train": 9842,
+      "validation": 2109
+    },
+    "split_seed": 20260716
+  },
+  "family_id_intersections": {
+    "train_test": 0,
+    "train_validation": 0,
+    "validation_test": 0
+  },
+  "material_id_intersections": {
+    "train_test": 0,
+    "train_validation": 0,
+    "validation_test": 0
+  },
+  "per_crystal_system": {
+    "test": {
+      "cubic": 301,
+      "hexagonal": 302,
+      "monoclinic": 301,
+      "orthorhombic": 302,
+      "tetragonal": 302,
+      "triclinic": 300,
+      "trigonal": 301
+    },
+    "train": {
+      "cubic": 1409,
+      "hexagonal": 1406,
+      "monoclinic": 1409,
+      "orthorhombic": 1411,
+      "tetragonal": 1406,
+      "triclinic": 1400,
+      "trigonal": 1401
+    },
+    "validation": {
+      "cubic": 302,
+      "hexagonal": 301,
+      "monoclinic": 302,
+      "orthorhombic": 303,
+      "tetragonal": 301,
+      "triclinic": 300,
+      "trigonal": 300
+    }
+  },
+  "schema_version": "v9t-family-aware-split-audit-v1",
+  "split_manifest": {
+    "path": "data/formal_14060/manifests/split_manifest.v9t.family_v1.csv",
+    "sha256": "4304D5FA5A35082AFD6653647875074D207E3ACDC35123FFF8FD6E42BE1C672B"
+  },
+  "split_seed": 20260716,
+  "status": "passed",
+  "structure_counts": {
+    "test": 2109,
+    "train": 9842,
+    "validation": 2109
+  },
+  "structure_fingerprint_intersections": {
+    "train_test": 0,
+    "train_validation": 0,
+    "validation_test": 0
+  },
+  "test_locked": true,
+  "unified_validation_manifest_only": true,
+  "unique_material_id_count": 14060,
+  "unique_structure_fingerprint_count": 14060,
+  "validation_manifest": {
+    "path": "data/formal_14060/manifests/v9_method_transfer_validation.csv",
+    "sha256": "7CC261206F023F2A44065419014B6D886E800A19C7A33C17B71496D9E40AD213"
+  },
+  "view_inheritance_audit": {
+    "all_generated_views_inherit_parent_structure_split": true,
+    "peak_cache_is_split_independent_reflection_data": true,
+    "persisted_perturbed_spectrum_row_count": 0,
+    "split_before_view_generation": true,
+    "status": "passed"
+  }
+}

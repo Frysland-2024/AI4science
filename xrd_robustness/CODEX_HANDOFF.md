@@ -1,0 +1,680 @@
+# XRD Robustness V9-T：跨 Codex 账号与台式机完整交接
+
+> **新账号必须从这里开始。** 本文件是接管入口，不是训练授权。先核验机器可读证据，再进行任何操作。
+
+## 给下一个 Codex 的第一条指令（可直接复制）
+
+```text
+请先完整阅读 E:\AI4science\xrd_robustness\CODEX_HANDOFF.md，并把它作为接管入口。
+随后只运行不含训练的交接核验、迁移核验、环境核验和台式机工程验收。
+任何一步失败都必须停止并报告具体失败项；不得猜测、跳过或自动修改科学合同。
+即使 desktop_readiness.json 显示 ready_for_explicit_tuning_authorization，也必须停下，等待我在台式机上重新明确授权，才能运行 tune-run。
+不得恢复、复制或使用笔记本 checkpoint；完整 lambda 7-run 必须从 optimizer step 0 开始。
+不得访问 simulated test 或 real test，也不得启动 15-run 正式实验，除非我分别重新明确授权。
+```
+
+## 0. 一页结论：现在究竟到哪一步
+
+截至 2026-07-19，本项目的当前主线是 **V9-T：Algorithm Transfer for PXRD Robustness**。科学合同、数据划分、物理模拟范围、PAMPT-B3 主干、三种核心动态方法、公平性流审计、台式机硬件配置、迁移脚本和 7-run 计划均已建立。
+
+当前执行状态必须表述为：
+
+- lambda 调参完成度：**0/7**；七条 run 全部是 `planned_not_started`。
+- 活动训练进程：0。
+- 活动 run registry：0 条记录。
+- 活动 checkpoint：0。
+- 活动 `results.json`：0。
+- 活动 run 目录：0。
+- 笔记本旧训练产物已经物理删除，不迁移、不恢复。
+- 台式机采用冷启动：七条 run 全部从 **optimizer step 0** 开始。
+- 笔记本允许单元测试、哈希审计、CUDA smoke test 和有界吞吐测试；不允许正式训练。
+- 台式机首次启动脚本也只做工程验收，不包含训练命令。
+- `ready_for_explicit_tuning_authorization` 仅表示工程门通过，不表示已获训练授权。
+- 之前聊天中出现过“启动 7 次调参”，但用户随后明确暂停，并决定迁移到台式机重新开始。**最新意图优先：当前没有训练授权。**
+- 15-run 正式实验、simulated test 和 real test 分别需要后续独立授权；lambda 调参授权不能外推到这些阶段。
+
+机器可读零状态见：
+
+- `outputs/v9_method_transfer_tuning/run_registry.json`
+- `outputs/v9_method_transfer_tuning/desktop_restart_state.json`
+- `reports/codex_account_handoff_manifest.json`
+- `reports/codex_account_handoff_verification.json`
+
+## 1. 证据优先级与失效规则
+
+新账号不能依赖旧账号聊天记忆，也不能把本文件中的数字当作永不过期。判断当前状态时按以下顺序建立信任：
+
+1. `configs/*.json` 中冻结的机器可读合同。
+2. 当前源代码实现及其 SHA-256。
+3. 与当前合同/代码哈希匹配的 JSON/CSV 审计报告。
+4. 本文件和 `docs/*.md` 中的解释性文字。
+5. 历史聊天、旧输出和 `archive/` 只可作为背景，不得覆盖当前合同。
+
+若配置、代码、报告、迁移清单或本文互相冲突，必须：
+
+1. 停止训练和测试集访问；
+2. 指出冲突文件、字段和哈希；
+3. 重新生成只读审计；
+4. 修复冲突后重新验证；
+5. 不得用“看起来应该没问题”替代证据。
+
+本项目目录 `E:\AI4science\xrd_robustness` **没有独立 Git 元数据**。不要声称 worktree clean，不要使用 `git reset` 或 `git checkout` 恢复文件。当前可信性依赖配置、源文件、数据、缓存、计划、检查点和报告的 SHA-256 链。
+
+便携版 `docs/CODEX_ACCOUNT_HANDOFF.docx` 是本文的派生阅读副本；根目录 Markdown 始终是文字权威源。当前 DOCX 已通过 ZIP/XML 结构、必备章节、表格和分页元素校验，也已由 Microsoft Word 成功打开并统计为 23 页；本笔记本缺少 LibreOffice，且 Word 的无界面 PDF 导出接口超时，因此未宣称逐页视觉渲染通过。该限制不影响 Markdown、JSON、CSV 和源文件的哈希迁移验证。
+
+## 2. 新账号接管时的最短安全路径
+
+在源笔记本上，或台式机已经完成 13.2 冻结环境创建后，在项目根目录执行：
+
+```powershell
+$ProjectRoot = 'E:\AI4science\xrd_robustness'
+Set-Location $ProjectRoot
+$Python = 'E:\AI4science\.venvs\xrd_tools\Scripts\python.exe'
+
+& $Python -s scripts\verify_codex_account_handoff.py
+& $Python -s scripts\verify_v9_desktop_migration.py --root $ProjectRoot
+```
+
+两个命令都必须返回 `pass`。它们不训练模型。如果交接核验失败，新账号必须停下，不得继续 bootstrap、首启或训练。
+
+如果台式机尚未创建 `xrd_tools`，不得用普通 Python 强行运行完整交接核验；此时只按 13.1 执行纯文件迁移校验，然后创建冻结环境。
+
+迁移到台式机后，桌面端还必须重新执行迁移 SHA-256 验证；源笔记本上的 `pass` 只能证明源文件内部一致，不能证明复制过程正确。
+
+## 3. 研究问题与论文边界
+
+核心研究问题是：
+
+> 在母晶体结构、物理增广视图、模型架构、优化预算和评估面板严格匹配的条件下，显式建模同一晶体不同扰动视图之间的关系，能否比单纯增广监督更好地泛化到未见扰动和真实 PXRD 图谱？
+
+当前论文只做 **跨领域算法迁移与 XRD 特定验证**，不声称发明新的通用机器学习理论。
+
+论文方法递进是：
+
+1. augmentation-only supervised learning；
+2. cross-view prediction consistency；
+3. difference-aware residual class decorrelation。
+
+Dynamic/Paired ERM 是最强、最公平的动态增广基线和成对视图基础设施。动态增广本身不作为创新点。
+
+Residual Class Decorrelation 是重点假设，但在获得直接、匹配的 Dynamic 和 JS 对照结果之前，不得预先宣称 Residual 更优。
+
+结构化扰动不属于当前 V9-T：
+
+- `structured_perturbation_in_scope = false`
+- `structured_perturbation_status = archived`
+- 未来 V10 的 simulator-supervised residual 研究已经延期，不得混入当前 7-run 或 15-run。
+
+权威合同：`configs/algorithm.v9.method_transfer.json`。
+
+## 4. 数据、划分与泄漏边界
+
+权威数据根：`data/formal_14060`。
+
+冻结 family-aware 划分：
+
+| Split | 结构数 | 当前用途 |
+|---|---:|---|
+| Train | 9,842 | 训练和动态视图生成 |
+| Validation | 2,109 | lambda 选择、开发 OOD 比较、checkpoint 选择 |
+| Test | 2,109 | 当前锁定；不能用于调参或方法选择 |
+| 合计 | 14,060 | 七晶系，结构 ID 唯一 |
+
+关键文件：
+
+- `configs/data.v9.method_transfer.family_split.json`
+- `data/formal_14060/manifests/split_manifest.v9t.family_v1.csv`
+- `data/formal_14060/manifests/v9_method_transfer_validation.csv`
+- `reports/v9_method_transfer_split_audit.json`
+
+冻结审计确认：跨 split 的结构家族交叉数为 0，Train/Validation/Test ID 互斥。动态训练只允许读取 Train ID；Validation 和 Test 不得进入训练动态视图流。
+
+`formal_14060` 反射峰缓存完整：14,060/14,060，失败数 0。峰缓存包含峰位、积分强度、hkl、多重性和倒易矢量等反射元数据。
+
+## 5. 物理模拟器与输入谱图
+
+每个母结构从同一份理想反射峰表在线生成两个独立扰动视图 `x1` 和 `x2`，两者标签相同。
+
+模型输入网格：
+
+- `2theta_min = 10.0°`
+- `2theta_max = 80.0°`
+- `step = 0.02°`
+- 输入长度 = 3,501
+
+当前五类物理扰动：
+
+1. 全局 `2theta` 峰位偏移；
+2. FWHM 峰宽展宽；
+3. 平滑非负背景；
+4. 泊松光子计数与可选电子读出噪声；
+5. March-Dollase 择优取向。
+
+背景和噪声必须始终作为两个物理效应描述：
+
+```text
+I_observed = I_peak + I_background + noise
+```
+
+择优取向先改变反射积分强度；背景添加到期望强度；随后采样计数噪声和电子噪声；最后裁剪并进行输入归一化。
+
+真实仪器标定不是训练前置条件。扰动来源优先级必须保持可见：`literature_source`、`code_source`、`physics_basis`；真实仪器数据只有在用户明确批准时才能成为参数来源。
+
+冻结模拟配置：`configs/simulation.v9.method_transfer.frozen.json`。
+
+## 6. 当前模型架构：PAMPT-B3
+
+完整名称可表述为：
+
+> 物理模拟成对视图驱动的峰先验双分支 Transformer，加可插拔跨视图关系目标。
+
+模型不是两个独立网络。`x1` 和 `x2` 两次调用同一套共享 PAMPT-B3 编码器与七分类头。
+
+PAMPT-B3 内部：
+
+1. 主信号支路使用 5、11、21 三种卷积核提取多尺度局部峰形；
+2. 峰先验支路从原始谱图的一阶和二阶导数提取峰位、峰肩和峰形变化；
+3. 两条支路都用重叠 Patch：patch size 16、stride 8；
+4. 输入产生 437 个 Token；
+5. embedding dimension 128；
+6. 四个、四头注意力块，顺序为 `self -> guided -> self -> guided`；
+7. 对编码 Token 做 mean pooling；
+8. 线性分类头输出七晶系。
+
+实测模型参数量为 1,419,660。实现入口：`src/xrd_robustness/models/xrd_pampt.py`。
+
+## 7. 五种方法与七次 lambda 调参
+
+完整方法族有五种：
+
+| 合同 mode | 论文名称 | 角色 |
+|---|---|---|
+| `clean_erm` | Near-clean ERM | 参考方法；`clean_erm` 只是兼容名称 |
+| `offline_erm` | Offline Physical Augmentation ERM | 参考方法 |
+| `dynamic_erm` | Dynamic/Paired ERM | 最强匹配基线 |
+| `dynamic_js` | JS Consistency | 候选方法 |
+| `dynamic_residual` | Residual Class Decorrelation | 重点候选方法 |
+
+当前 **7-run lambda tuning** 只包含 Dynamic、JS 和 Residual：
+
+1. `ordinary_dynamic_augmentation__tuning_seed_20260710`
+2. `js_consistency_transfer__lambda_js_0p1__tuning_seed_20260710`
+3. `js_consistency_transfer__lambda_js_0p3__tuning_seed_20260710`
+4. `js_consistency_transfer__lambda_js_1p0__tuning_seed_20260710`
+5. `residual_decorrelation_transfer__lambda_res_0p01__tuning_seed_20260710`
+6. `residual_decorrelation_transfer__lambda_res_0p1__tuning_seed_20260710`
+7. `residual_decorrelation_transfer__lambda_res_1p0__tuning_seed_20260710`
+
+lambda 网格：
+
+- `lambda_js = [0.1, 0.3, 1.0]`
+- `lambda_res = [0.01, 0.1, 1.0]`
+- Residual head depth = 1
+- Residual warmup = 2 epochs
+- Residual ramp = 3 epochs
+
+共同训练预算：
+
+- tuning seed = 20260710
+- evaluation seed = 20260720
+- epochs = 50
+- steps per epoch = 616
+- maximum optimizer steps = 30,650
+- batch size = 16 个母结构
+- 每结构两个视图，即每 step 32 张训练谱图
+- evaluation batch size = 256
+
+### 7.1 Dynamic/Paired ERM
+
+```text
+L = 0.5 * [CE(p1, y) + CE(p2, y)]
+```
+
+输入成对，但不显式约束两视图关系。
+
+### 7.2 JS Consistency
+
+```text
+L = L_classification + lambda_js * JS(p1, p2)
+```
+
+约束同一晶体两个扰动视图的预测分布一致。
+
+### 7.3 Residual Class Decorrelation
+
+```text
+r = abs(L2Norm(z1) - L2Norm(z2))
+```
+
+残差对视图顺序不变。每个 step 只做两次主干 forward：
+
+1. Step A：对 `z1/z2` detach，训练残差分类头从 `r` 预测晶系；
+2. Step B：冻结残差头参数但保留对输入的梯度，训练 PAMPT 最小化分类损失，并使残差头输出趋近七类均匀分布。
+
+```text
+L = L_classification + lambda_res * KL(q(class | r) || Uniform(7))
+```
+
+残差头只参与训练；正式推理只需 PAMPT 编码器和七分类头。
+
+## 8. 公平性与可重放性合同
+
+五种方法共享：
+
+- 同一 Train 结构集合；
+- 同一固定预算 sampler；
+- 同一 deterministic epoch shuffle；
+- 同一 batch 结构顺序；
+- 同一 pair ID 顺序；
+- 同一 optimizer-step 数；
+- 同一结构暴露量和谱图暴露量；
+- 同一验证面板；
+- 同一最后固定预算 checkpoint 规则。
+
+三个核心动态方法 `dynamic_erm`、`dynamic_js`、`dynamic_residual` 还共享完全相同的动态参数 pair hash。它们看到相同的 `x1/x2`，只改变学习目标。
+
+当前流审计证据：
+
+- optimizer steps：30,650
+- structure exposures：490,400
+- spectrum exposures：980,800
+- unique train structures：9,842
+- 每结构暴露次数：49 至 52
+- batch 内动态参数行上限：32
+- `8` 个预取 batch 下最大 live 动态参数行：256
+- sampler hash：`6e1a4e6e46f59e913fc0165c41d8a584a1669514d70ec0814985a34c4ee6430c`
+- pair schedule hash：`99c033bddbdfd3bd442388201c11863047e83f2012eebfd0781aac94a4d932a0`
+- 核心动态 parameter pair hash：`46149a5170c51f67ec9a05b04978520eece0221d741f4478f402eb5eb1e07e07`
+
+权威报告：`reports/v9_training_stream_preflight_audit.json`。
+
+## 9. 已经修复的工程问题
+
+以下问题不再是待办：
+
+1. **606,267,200 行动态 manifest 膨胀**：旧设计等价于 `9842 * 50 * 616 * 2` 行；当前只为实际 batch/预取窗口生成参数，最大 live 行为 256。
+2. **训练 batch 没有 shuffle**：当前每个 epoch 使用训练 seed 控制的 SHA-256 key sort；所有方法共享 sampler/pair schedule hash。
+3. **每 step CUDA scalar 同步**：高频 `.item()` 已移除，GPU 标量在 epoch 级汇总后才同步到 CPU。
+4. **peak table 重复加载**：启用预取时主进程不再加载全部训练 peak table；worker 按稳定分片惰性加载静态 shard。
+5. **Clean/Offline 串行渲染**：Near-clean、Offline 和三个动态方法均已接入确定性多进程预取。
+6. **CPU/GPU 传输阻塞**：启用 pinned memory 和 non-blocking H2D。
+7. **低精度和编译未利用**：已接入 BF16 AMP、TF32、`torch.compile/Inductor`、fused AdamW，并保留显式 fallback 与运行来源记录。
+8. **评估逐样本前向**：注册评估 batch 256；台式机需在 128/256/512 中重新验收。
+9. **单 run 调度**：注册两个并发 run 的有界调度器，但必须先通过台式机双进程显存和聚合吞吐门。
+
+这些修复通过代码合同和轻量审计证明；真正台式机吞吐仍必须在目标机器重新测量，不能用笔记本数值替代。
+
+## 10. 台式机目标硬件与注册配置
+
+用户报告的目标：
+
+- CPU：AMD Ryzen 5 9600X，6 核 12 线程
+- GPU：用户称“4070 Ti S，16 GB”；当前合理解释为 NVIDIA GeForce RTX 4070 Ti SUPER
+- VRAM：16 GB
+- 系统内存：用户尚未在本交接中提供实测值；配置要求至少 32 GB
+- 项目和 peak cache 推荐放 NVMe SSD
+
+GPU 精确型号、可用显存、系统内存和逻辑线程必须由台式机上的 `nvidia-smi`、PyTorch 和系统探针确认，不得只按用户口头型号自动放行。
+
+当前注册配置：
+
+### 单 run
+
+- 8 个预取 worker
+- 每 worker 1 个原生线程
+- 8 个 batch 预取窗口
+- 主进程 intra-op 2，inter-op 1
+- training batch 16
+- evaluation batch 256
+
+### 两个并发 run
+
+- 注册 `run_concurrency = 2`
+- 每条并发 run 分配 4 个预取 worker
+- 两条合计仍为 8 个 worker
+- 第七条尾任务恢复 8 个 worker
+- 若台式机双进程门失败，安全 fallback 是 `--max-parallel-runs 1`
+
+### GPU
+
+- `float32_matmul_precision = high`
+- TF32 matmul/cudnn 开启
+- cuDNN benchmark 开启
+- cuDNN deterministic 开启
+- BF16 AMP 开启，无 GradScaler，允许明确记录的 FP32 fallback
+- `torch.compile(backend='inductor', mode='default')`
+- fused AdamW
+- `zero_grad(set_to_none=True)`
+
+两个并发 run 必须满足：
+
+- 聚合峰值显存低于 15,360 MiB；
+- 聚合吞吐不低于串行的 95%；
+- 数值、梯度和损失等价门通过；
+- 检测到真实编译图执行；仅发生 eager fallback 不算编译门通过。
+
+权威配置：`configs/hardware.v9.desktop.9600x_4070tis.json`。
+
+## 11. 笔记本与 XRD-clean 环境的准确角色
+
+笔记本 GPU 是 NVIDIA GeForce RTX 4060 Laptop GPU，约 8 GB VRAM。它不是目标台式机，因此笔记本预取、BF16、显存和吞吐结果只能作为工程证据，不能冻结台式机运行配置。
+
+环境边界：
+
+- `E:\AI4science\.venvs\xrd_tools\Scripts\python.exe`：当前 CUDA 训练/审计解释器，Python 3.11.9，PyTorch 2.5.1+cu124。
+- `.conda\envs\xrd-clean`：CPU PyTorch 测试环境；可用于轻量 CPU 单元测试，但不是正式训练环境，也不迁移到台式机。
+- 不复制任何 `.venv`/`.conda` 目录；台式机重新创建环境。
+- `reports/v9_laptop_environment_reference.txt` 只是包参考，不是要求原样复制整个笔记本环境。
+
+## 12. 迁移清单与复制边界
+
+源笔记本先运行：
+
+```powershell
+Set-Location E:\AI4science\xrd_robustness
+$Python = 'E:\AI4science\.venvs\xrd_tools\Scripts\python.exe'
+
+& $Python -s scripts\prepare_codex_account_handoff.py
+& $Python -s scripts\prepare_v9_desktop_migration.py
+& $Python -s scripts\verify_codex_account_handoff.py
+& $Python -s scripts\verify_v9_desktop_migration.py --root E:\AI4science\xrd_robustness
+```
+
+必须满足：
+
+- handoff = `handoff_ready_for_copy`
+- handoff verification = `pass`
+- migration = `ready_for_copy`
+- migration verification = `pass`
+- active training process / registry / checkpoint / result / run directory 都为 0
+
+复制前先 dry run：
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts\copy_v9_desktop_payload.ps1 `
+  -DestinationRoot 'E:\AI4science\xrd_robustness' -WhatIf
+```
+
+确认目标路径后再去掉 `-WhatIf`。复制器不会删除目标文件，只复制 CSV 清单中的文件和迁移控制文件，并拒绝 `..` 越界路径。
+
+迁移排除：
+
+- Python/Conda 虚拟环境；
+- `__pycache__`、`.pytest_cache`、`*.pyc`、`*.pyo`、`*.tmp`；
+- 活动范围外的旧输出；
+- 旧 checkpoint 和 optimizer state；
+- `archive/` 不是当前执行依赖。
+
+## 13. 台式机第一次接管：按顺序执行
+
+### 13.1 复制后立即核验
+
+如果台式机上的 `xrd_tools` 环境还没有创建，先使用任意可用的 Python 3.11，只执行不依赖 PyTorch 的迁移文件校验：
+
+```powershell
+Set-Location E:\AI4science\xrd_robustness
+python -s scripts\verify_v9_desktop_migration.py --root E:\AI4science\xrd_robustness
+```
+
+完成 13.2 的冻结环境创建后，再用 `xrd_tools` 执行完整的跨账号语义校验：
+
+```powershell
+Set-Location E:\AI4science\xrd_robustness
+$Python = 'E:\AI4science\.venvs\xrd_tools\Scripts\python.exe'
+
+& $Python -s scripts\verify_v9_desktop_migration.py --root E:\AI4science\xrd_robustness
+& $Python -s scripts\verify_codex_account_handoff.py
+```
+
+### 13.2 创建台式机环境
+
+先安装：
+
+- 与 CUDA PyTorch 兼容的 NVIDIA 驱动；
+- Python 3.11.9；
+- Visual Studio 2022 C++ Build Tools，x64 C++ workload。
+
+然后：
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts\bootstrap_v9_desktop_environment.ps1
+```
+
+要求：Python 3.11.9、PyTorch 2.5.1+cu124、CUDA runtime 12.4、CUDA available、BF16 supported、`pip check`、MSVC 工具链和目标 GPU/显存全部通过。
+
+### 13.3 运行完整单元测试
+
+```powershell
+$env:PYTHONPATH = 'E:\AI4science\xrd_robustness\src'
+& $Python -s -m unittest discover -s tests -p 'test_*.py' -v
+```
+
+任何失败都必须先修复，再继续首启工程门。
+
+### 13.4 只查看首启计划
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts\desktop_first_boot_v9.ps1 -PlanOnly
+```
+
+必须看到 `formal_training_commands=0`。`PlanOnly` 不应写报告或执行测试。
+
+### 13.5 执行无训练首启验收
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts\desktop_first_boot_v9.ps1
+```
+
+它依次执行：
+
+1. 迁移逐文件验证；
+2. runtime/environment 现场验证；
+3. V9-T contract preflight；
+4. 目标硬件识别；
+5. 8x8 单 run 预取等价审计；
+6. 4x8 并发单元预取等价审计；
+7. 完整 worker/window 候选矩阵；
+8. pinned/non-blocking H2D 审计；
+9. 评估 batch 128/256/512 审计；
+10. Dynamic/JS/Residual 的 FP32、BF16、compiled BF16 数值与吞吐门；
+11. 两进程显存与聚合吞吐门；
+12. 生成 `reports/desktop_acceptance/desktop_readiness.json`。
+
+这个脚本没有 `tune-run`，不会创建训练 checkpoint。
+
+### 13.6 强制停止点
+
+如果 readiness 状态不是 `ready_for_explicit_tuning_authorization`：修复失败门并重跑，不能训练。
+
+如果状态是 `ready_for_explicit_tuning_authorization`：**仍然停止。** 向用户报告门禁证据，等待用户在台式机上重新明确授权完整 lambda 7-run。
+
+## 14. 训练授权矩阵
+
+| 操作 | 当前是否授权 | 说明 |
+|---|---|---|
+| 阅读代码/合同/报告 | 是 | 只读 |
+| 单元测试 | 是 | 不创建训练 checkpoint |
+| 数据、哈希、流、公平性审计 | 是 | 不访问 Test 内容 |
+| CUDA smoke/吞吐工程测试 | 是 | 有界、非正式训练 |
+| 台式机环境 bootstrap | 是，迁移接管阶段 | 不训练 |
+| 台式机 first boot acceptance | 是，迁移接管阶段 | 不训练 |
+| 7-run `tune-run` | **否** | 必须在台式机上获得新的明确授权 |
+| 15-run 正式实验 | **否** | 需要 lambda 冻结后再单独授权 |
+| simulated test | **否** | 需要方法冻结后单独授权 |
+| real test | **否** | 需要真实数据 manifest 冻结和单独授权 |
+
+任何“请继续”“按计划做”都只能在当前已授权阶段内解释，不能自动跨越到下一个训练或测试阶段。
+
+## 15. 用户未来明确授权 7-run 后的唯一启动方式
+
+在收到台式机上的新授权之后，先重新生成当前计划：
+
+```powershell
+& $Python -s scripts\run_v9_method_transfer.py preflight
+& $Python -s scripts\run_v9_method_transfer.py tune-plan
+& $Python -s scripts\run_v9_method_transfer.py final-preflight
+& $Python -s scripts\verify_codex_account_handoff.py
+```
+
+再次确认：
+
+- preflight scientific status passed；
+- desktop runtime ready；
+- 七条 run 仍为 `planned_not_started`；
+- registry/checkpoint/result/run directory 全为 0；
+- simulated/real test 仍锁定；
+- plan、contract、trainer、launcher 和缓存哈希当前一致。
+
+然后只能使用注册 launcher，不要手工拼七条训练命令：
+
+```powershell
+& $Python -s scripts\run_v9_method_transfer.py tune-run --confirm-development-tuning
+```
+
+默认使用通过台式机门禁的注册双 run 调度器。若双 run 门失败或用户选择保守串行：
+
+```powershell
+& $Python -s scripts\run_v9_method_transfer.py tune-run `
+  --confirm-development-tuning --max-parallel-runs 1
+```
+
+`--confirm-development-tuning` 只是命令级防误触参数，不能替代用户授权。
+
+## 16. 7-run 完成后的阶段边界
+
+七次调参完成后：
+
+1. 验证七条结果、checkpoint、sampler/pair/parameter hash 和失败状态；
+2. 运行 `tune-select`，按冻结 Validation 规则选择 lambda；
+3. 主要指标：mean single-factor OOD macro-F1；
+4. 相对 Dynamic baseline 的 ID drop 最大允许 0.01；
+5. 并列时选择较小 lambda；
+6. 写入并冻结 tuning selection artifact；
+7. 到此停止。
+
+不得自动开始 15-run。15-run 是五方法乘三个 seed 的正式 development experiment，必须单独授权。
+
+15-run 完成并冻结方法之后仍不得自动访问 simulated test。simulated test 完成后也不得自动访问 real test。真实 XRD 只用于最终外部验证，不用于扰动范围、lambda、方法或 checkpoint 选择。
+
+## 17. 故障与恢复规则
+
+### 17.1 首启工程门失败
+
+- 保留失败 JSON 和控制台日志；
+- 报告准确的 failed check；
+- 只修复该工程问题；
+- 不放宽科学公平性合同；
+- 重新运行对应审计和最终 readiness；
+- 不训练。
+
+### 17.2 某条 tuning run 失败
+
+- launcher 的策略是让当前并发 pair 收尾后停止调度新任务；
+- 不覆盖已有结果；
+- 检查 run registry 和该 run 的 runtime provenance；
+- 只在相同合同、相同 run ID、相同 sampler/pair schedule 下恢复；
+- 当前交接初始状态不允许使用任何笔记本 checkpoint；
+- 训练开始后的 checkpoint 恢复策略必须验证 `global_step`、sampler contract hash、pair schedule 和源文件哈希。
+
+### 17.3 `torch.compile` 失败
+
+- 可以记录 eager fallback 以便诊断；
+- 但台式机 acceptance 要求检测到真实 compiled graph；
+- 若长期无法执行 compiled graph，不得把 fallback 伪报为编译门通过；
+- 可以退回串行或 FP32 进行诊断，但正式配置变化必须重新审计并记录。
+
+### 17.4 显存不足
+
+- 不得随意改变训练 batch 16，因为它属于暴露量和公平性合同；
+- 优先把 run concurrency 从 2 降为 1；
+- 再检查评估 batch、编译缓存和预取设置；
+- 任何影响训练视图、optimizer steps 或 pair schedule 的变化都必须拒绝。
+
+## 18. 胡皓天架构只作为对照背景
+
+此前阅读过胡皓天的海报和 KBS 论文：
+
+命名消歧：用户在聊天里曾写“胡浩天”，但本地海报/论文文件和已核读资料使用“胡皓天”；新账号检索本地资产时应使用“胡皓天”，不得把两种写法误当成两套架构。
+
+- 海报：`E:\AI4science\01_literature\4f936fcce3e6bcd362ddb656afaac913.png`
+- 论文：`E:\AI4science\01_literature\literature_zones\03_consistency_ssl_physical_regularization\胡皓天KBS.pdf`
+- 论文主题：Hyperspectral single-source domain generalization via structured data simulation and domain-disparity decorrelation。
+
+其 SD3Net 使用 SDSG（SALS + MSVS）生成域、MRCE 编码器和残差类别去相关。与本项目的共同思想是“同样本跨扰动视图 + 差异中的类别去相关”。关键区别：
+
+- 胡皓天：学习型/结构化数据模拟 + MRCE CNN；
+- 本项目：非学习型物理 PXRD 模拟器 + 峰先验 PAMPT Transformer；
+- 本项目残差是归一化表征绝对差，对视图顺序不变；
+- 本项目还独立比较 JS Consistency；
+- 当前 V9-T 不包含结构化动态生成器。
+
+这些外部文献文件不属于 `xrd_robustness` 执行依赖。即使没有迁移原图和 PDF，本节也足以避免新账号误以为当前模型就是 SD3Net。
+
+## 19. 已归档、已删除或不得复活的内容
+
+- 旧笔记本 V9 调参输出已经删除并验证不存在。
+- 不存在可迁移的旧 optimizer state 或 checkpoint。
+- `archive/v9_pre_unified_validation_20260716` 中的旧二分 Validation 清单、中止输出和旧脚本已于 2026-07-19 物理删除；平台可能保留空目录骨架，但其中不得重新放入历史内容。
+- 旧的两个 Validation 子集已经废止；当前只使用统一 Validation。
+- V8 StructuredDynamicStrategy 已归档，不得偷偷重新放入 V9-T。
+- V10 simulator-supervised representation learning 延期，不得混入本论文。
+- `xrd-clean` 不是台式机训练环境，不需要迁移。
+- 全工作区清理分类、已删除项目和平台阻止项见 `reports/ai4science_cleanup_inventory_20260719.json`。
+
+## 20. 关键文件地图
+
+### 第一次必须读
+
+1. `CODEX_HANDOFF.md`
+2. `reports/codex_account_handoff_manifest.json`
+3. `configs/algorithm.v9.method_transfer.json`
+4. `docs/V9_METHOD_TRANSFER_ENGINEERING.md`
+5. `docs/V9_DESKTOP_MIGRATION_HANDOFF.md`
+6. `configs/hardware.v9.desktop.9600x_4070tis.json`
+7. `reports/v9_training_stream_preflight_audit.json`
+8. `reports/v9_method_transfer_tuning_plan.json`
+9. `reports/v9_method_transfer_final_lock_audit.json`
+
+### 架构与训练实现
+
+- `src/xrd_robustness/models/xrd_pampt.py`
+- `src/xrd_robustness/training/objectives.py`
+- `src/xrd_robustness/training_stream.py`
+- `src/xrd_robustness/training_prefetch.py`
+- `src/xrd_robustness/view_manifest.py`
+- `scripts/train_v7.py`
+- `scripts/run_v9_method_transfer.py`
+
+### 迁移与台式机门禁
+
+- `scripts/prepare_v9_desktop_migration.py`
+- `scripts/copy_v9_desktop_payload.ps1`
+- `scripts/verify_v9_desktop_migration.py`
+- `scripts/bootstrap_v9_desktop_environment.ps1`
+- `scripts/desktop_first_boot_v9.ps1`
+- `scripts/audit_v9_desktop_readiness.py`
+
+### 交接本身
+
+- `scripts/prepare_codex_account_handoff.py`
+- `scripts/verify_codex_account_handoff.py`
+- `docs/CODEX_ACCOUNT_HANDOFF.docx`
+- `reports/codex_account_handoff_manifest.json`
+- `reports/codex_account_handoff_verification.json`
+
+## 21. 接管完成的定义
+
+只有同时满足以下条件，才能说“新账号已经正确接管”，但仍不能说“训练已授权”：
+
+1. 新账号完整阅读本文件；
+2. 交接 artifact ledger 的大小和 SHA-256 全部匹配；
+3. 迁移 payload 在台式机逐文件验证通过；
+4. 台式机环境和硬件现场探针通过；
+5. 全量单元测试通过；
+6. 预取、H2D、评估 batch、BF16、compile、双 run 门通过；
+7. `desktop_readiness.json` 为 `ready_for_explicit_tuning_authorization`；
+8. registry/checkpoint/result/run directory 仍为 0；
+9. simulated test 和 real test 仍锁定；
+10. 新账号向用户报告证据并停下等待训练授权。
+
+这十条是跨账号、跨机器交接的最终验收边界。

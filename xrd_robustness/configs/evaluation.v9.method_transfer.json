@@ -1,0 +1,120 @@
+{
+  "schema_version": "v9.1-method-transfer-evaluation",
+  "status": "frozen_engineering_contract",
+  "source_split": {
+    "path": "data/formal_14060/manifests/split_manifest.v9t.family_v1.csv",
+    "sha256": "4304D5FA5A35082AFD6653647875074D207E3ACDC35123FFF8FD6E42BE1C672B"
+  },
+  "simulation": {
+    "path": "configs/simulation.v9.method_transfer.frozen.json",
+    "sha256": "AF6E2FA400525CCF48AAC18C9839CC8EFE13DD3E4C056DD45A74B4DD43262558"
+  },
+  "development": {
+    "evaluation_seed": 20260720,
+    "views_per_structure": 2,
+    "in_range_profile": "in_range",
+    "single_factor_profiles": [
+      "ood_shift_negative",
+      "ood_shift_positive",
+      "ood_broadening",
+      "ood_noise",
+      "ood_background",
+      "ood_texture"
+    ],
+    "unseen_combination_profiles": [
+      "ood_combo_shift_broadening",
+      "ood_combo_background_noise",
+      "ood_combo_texture_shift"
+    ],
+    "stress_profile": "ood_all",
+    "unified_validation": {
+      "path": "data/formal_14060/manifests/v9_method_transfer_validation.csv",
+      "sha256": "7CC261206F023F2A44065419014B6D886E800A19C7A33C17B71496D9E40AD213",
+      "count": 2109,
+      "allowed_uses": [
+        "hyperparameter_selection",
+        "early_stopping",
+        "checkpoint_selection",
+        "development_method_comparison"
+      ]
+    },
+    "split_audit": {
+      "path": "reports/v9_method_transfer_split_audit.json",
+      "sha256": "9FD1B2484DE08B44DE63512B60C5C8B999C803DB57FD21EAFCD7ECD8D2F0421F"
+    }
+  },
+  "simulated_test": {
+    "enabled": false,
+    "locked": true,
+    "structure_split": "test",
+    "structure_count": 2109,
+    "evaluation_seeds": [20260721, 20260722, 20260723],
+    "profiles": [
+      "level0",
+      "in_range",
+      "ood_shift_negative",
+      "ood_shift_positive",
+      "ood_broadening",
+      "ood_noise",
+      "ood_background",
+      "ood_texture",
+      "ood_combo_shift_broadening",
+      "ood_combo_background_noise",
+      "ood_combo_texture_shift",
+      "ood_all"
+    ],
+    "unlock_requirements": [
+      "unified Validation comparison selected and froze exactly one method",
+      "selected method hyperparameters are frozen",
+      "three formal checkpoint hashes are frozen",
+      "test panel manifest hashes are generated before inference",
+      "explicit user authorization is recorded"
+    ],
+    "results_must_not_change_selected_method": true
+  },
+  "real_test": {
+    "enabled": false,
+    "locked": true,
+    "contract_path": "configs/real_test.v9.method_transfer.template.json",
+    "contract_sha256": "AB75819E94A3CA333CCD3E082056A9553CF81F8677D0B9D5E788A00C6DFE4B62",
+    "unlock_after_simulated_test": true,
+    "selection_use_forbidden": true
+  },
+  "required_metrics": [
+    "accuracy",
+    "balanced_accuracy",
+    "macro_f1",
+    "per_class_recall",
+    "per_class_f1",
+    "confusion_matrix",
+    "worst_group_f1",
+    "ece"
+  ],
+  "required_run_provenance": [
+    "run_id",
+    "study_contract_hash",
+    "evaluation_contract_hash",
+    "resolved_config_hash",
+    "source_tree_hash",
+    "data_manifest_hash",
+    "development_subset_manifest_hash",
+    "simulation_config_hash",
+    "peak_cache_manifest_hash",
+    "training_sampler_contract_hash",
+    "training_stream_audit_hash",
+    "training_stream_audit",
+    "view_manifest_hash",
+    "evaluation_manifest_hash",
+    "checkpoint_hash",
+    "seed",
+    "evaluation_seed",
+    "runtime_provenance",
+    "optimizer_steps",
+    "training_backbone_forward_views",
+    "training_structure_exposures",
+    "training_view_exposures",
+    "wall_clock_seconds",
+    "gpu_hours",
+    "peak_gpu_memory_mb"
+  ]
+}

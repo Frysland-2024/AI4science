@@ -1,0 +1,83 @@
+{
+  "contract_status": "v9t_algorithm_transfer_paper_mainline_family_split_frozen_validation_tuning_authorized",
+  "core_comparison_run_count": 9,
+  "cross_split_family_count": 0,
+  "development_profiles": [
+    "in_range",
+    "ood_all",
+    "ood_background",
+    "ood_broadening",
+    "ood_combo_background_noise",
+    "ood_combo_shift_broadening",
+    "ood_combo_texture_shift",
+    "ood_noise",
+    "ood_shift_negative",
+    "ood_shift_positive",
+    "ood_texture",
+    "train"
+  ],
+  "development_tuning_run_count": 7,
+  "development_validation_count": 2109,
+  "experiment_execution_enabled": false,
+  "formal_development_run_count": 15,
+  "freeze_evidence_status": "passed",
+  "hashes": {
+    "data_config": "4FA9E216FDCD73473C303AB4AC14726FA2FAB60452CE0A76B147BAC7C4C9EFA9",
+    "development_validation_manifest": "7CC261206F023F2A44065419014B6D886E800A19C7A33C17B71496D9E40AD213",
+    "evaluation_contract": "24FD778E2AE1DD0C8AF519871BBC8343F56966437D5AC0E19606E7F03A4FD5D4",
+    "freeze_evidence": "34793043BEA82BE9DB1C514491BC9DA04876A5F96285458DC19E84288175F810",
+    "hardware_profile": "548FA33C64B2BDC9D4F38D8A054B86278C8A2757E2F18E51191D703A56F05B93",
+    "parameter_table": "A81656EA7EE4FD33F69F479061E739C1F181C4BFEE712F428A32296F842CA36B",
+    "peak_cache_manifest": "6AE0CFD1B5B29671E2F532D7A094F2FC412CABD64E4CF77D42915937BACC8D18",
+    "simulation_config": "AF6E2FA400525CCF48AAC18C9839CC8EFE13DD3E4C056DD45A74B4DD43262558",
+    "split_audit": "9FD1B2484DE08B44DE63512B60C5C8B999C803DB57FD21EAFCD7ECD8D2F0421F",
+    "split_manifest": "4304D5FA5A35082AFD6653647875074D207E3ACDC35123FFF8FD6E42BE1C672B",
+    "trainer": "21112C93705F0287FF419DA0320E9CE90684DAAB783114B4D8A1BCC59DAE1364",
+    "trainer_supporting_paths": {
+      "src/xrd_robustness/training_prefetch.py": "245B58369D435BEA3E156A9AEAACB6F08501031C8BDACF3AA738B909877C8FB0"
+    }
+  },
+  "real_test_locked": true,
+  "runtime": {
+    "configured_python": "E:\\AI4science\\.venvs\\xrd_tools\\Scripts\\python.exe",
+    "cuda_available": true,
+    "cuda_runtime": "12.4",
+    "execution_blockers": [
+      "gpu_name mismatch: expected 'NVIDIA GeForce RTX 4070 Ti SUPER', observed 'NVIDIA GeForce RTX 4060 Laptop GPU'",
+      "GPU memory is below the frozen minimum"
+    ],
+    "formal_execution_blockers": [
+      "gpu_name mismatch: expected 'NVIDIA GeForce RTX 4070 Ti SUPER', observed 'NVIDIA GeForce RTX 4060 Laptop GPU'",
+      "GPU memory is below the frozen minimum",
+      "formal experiment execution is not authorized in the contract"
+    ],
+    "gpu_memory_mb": 8187,
+    "gpu_name": "NVIDIA GeForce RTX 4060 Laptop GPU",
+    "pip_check": "passed",
+    "python": "E:\\AI4science\\.venvs\\xrd_tools\\Scripts\\python.exe",
+    "python_version": "3.11.9",
+    "ready_for_development_tuning": false,
+    "ready_for_formal_conclusions": false,
+    "ready_for_formal_experiment": false,
+    "ready_to_execute": false,
+    "required_device": "cuda",
+    "runtime_blockers": [
+      "gpu_name mismatch: expected 'NVIDIA GeForce RTX 4070 Ti SUPER', observed 'NVIDIA GeForce RTX 4060 Laptop GPU'",
+      "GPU memory is below the frozen minimum"
+    ],
+    "runtime_frozen_and_verified": false,
+    "scientific_blockers": [],
+    "torch_version": "2.5.1+cu124"
+  },
+  "scientific_range_status": "frozen",
+  "simulated_test_locked": true,
+  "split_counts": {
+    "test": 2109,
+    "train": 9842,
+    "validation": 2109
+  },
+  "status": "passed",
+  "unique_material_ids": 14060,
+  "unique_structure_families": 4951,
+  "unique_structure_fingerprints": 14060
+}

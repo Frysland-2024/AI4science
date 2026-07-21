@@ -1,0 +1,332 @@
+{
+  "schema_version": "v7.1-candidate",
+  "run_seed": 20260714,
+  "purpose": "Formal instrument-agnostic five-perturbation configuration frozen for the V9 cross-domain method-transfer controlled experiment after dev_3500 distribution and spectrum-quality audits; it is not local-instrument calibration and it is outside the simulator-label-supervision study",
+  "status": "formal_frozen",
+  "apply_probability_semantics": "operator-level online coverage control for the XRDMatch-style Independent baseline, not experimental prevalence; each operator activity and value is proposed without a shared measurement state",
+  "normalization": "preferred orientation modifies reflection integrated intensities before peak rendering; smooth non-negative background is added to the expected intensity, Poisson photon counts and optional count-space electronic readout noise are sampled before clipping, and the model input is then max-normalized",
+  "methodology_policy": {
+    "parameter_source_hierarchy": ["peer_reviewed_literature", "paper_used_open_source_code", "physics_constrained_distribution", "explicitly_approved_real_instrument_data"],
+    "instrument_agnostic": true,
+    "formal_training_requires_parameter_evidence": true,
+    "default_for_perturbation_supervision_pilot": false
+  },
+  "real_experiment_policy": {
+    "role": "optional_future_external_validation",
+    "parameter_definition_source": false,
+    "training_prerequisite": false
+  },
+  "parameter_evidence": {
+    "background_type": {
+      "literature_source": ["Schopmans et al. 2023", "Vecsei et al. 2019"],
+      "code_source": "src/xrd_robustness/measurement_models.py",
+      "physics_basis": "Background is a smooth additive expectation term; flat, polynomial, and Gaussian-process forms are instrument-agnostic representations."
+    },
+    "background_order": {
+      "literature_source": ["Lee et al. 2023", "SimXRD-4M 2025"],
+      "code_source": "src/xrd_robustness/measurement_models.py",
+      "physics_basis": "Polynomial order controls smooth angular variation and is a representation choice rather than an instrument identity."
+    },
+    "background_variation": {
+      "literature_source": "Schopmans et al. 2023",
+      "code_source": "src/xrd_robustness/measurement_models.py",
+      "physics_basis": "Non-negative coefficients perturb a smooth background shape; candidate magnitudes remain subject to dev_3500 review."
+    },
+    "background_anchor_count": {
+      "code_source": "src/xrd_robustness/measurement_models.py",
+      "physics_basis": "Numerical discretization of a smooth Gaussian-process background, not a physical instrument parameter."
+    },
+    "background_gp_length_scale": {
+      "literature_source": "Schopmans et al. 2023",
+      "code_source": "src/xrd_robustness/measurement_models.py",
+      "physics_basis": "Positive correlation length enforces a slowly varying background; source units are not treated as directly interchangeable."
+    },
+    "background_floor_fraction": {
+      "code_source": "src/xrd_robustness/measurement_models.py",
+      "physics_basis": "A bounded non-negative floor represents continuous background intensity before observation noise."
+    },
+    "noise_model": {
+      "literature_source": ["Schopmans et al. 2023", "Salgado et al. 2023"],
+      "code_source": "src/xrd_robustness/measurement_models.py",
+      "physics_basis": "Photon counts follow a Poisson process and electronic readout is approximated by additive Gaussian noise."
+    },
+    "noise_stage": {
+      "code_source": "src/xrd_robustness/measurement_models.py",
+      "physics_basis": "Observation noise is sampled on expected intensity before clipping and model-input normalization."
+    },
+    "poisson_count_scale": {
+      "code_source": "src/xrd_robustness/measurement_models.py",
+      "physics_basis": "The positive count scale is the exposure/intensity factor in C_i ~ Poisson(g I_i); candidate bounds require dev_3500 review."
+    },
+    "electronic_noise_std_ratio": {
+      "code_source": "src/xrd_robustness/measurement_models.py",
+      "physics_basis": "Non-negative Gaussian readout-noise scale relative to expected intensity; retained at zero for count-space V7 profiles."
+    },
+    "electronic_noise_std_counts": {
+      "code_source": "src/xrd_robustness/measurement_models.py",
+      "physics_basis": "Non-negative Gaussian readout-noise standard deviation in count space; candidate bounds require dev_3500 review."
+    },
+    "delta_2theta_deg": {
+      "literature_source": ["Szymanski et al. 2021", "SimXRD-4M 2025"],
+      "code_source": "src/xrd_robustness/simulator.py",
+      "physics_basis": "One global 2theta-axis offset, not lattice strain or a fitted local instrument function."
+    },
+    "fwhm_deg": {
+      "literature_source": ["Salgado et al. 2023", "Schopmans et al. 2023"],
+      "code_source": "src/xrd_robustness/simulator.py",
+      "physics_basis": "Area-conserving effective scalar Gaussian-width surrogate motivated by Scherrer/Caglioti broadening."
+    },
+    "background_to_peak_ratio": {
+      "literature_source": ["Schopmans et al. 2023", "CPICANN 2024", "SimXRD-4M 2025"],
+      "code_source": "src/xrd_robustness/measurement_models.py",
+      "physics_basis": "Non-negative smooth additive background on the documented reference-peak scale."
+    },
+    "noise_std_ratio": {
+      "literature_source": ["Schopmans et al. 2023", "Vecsei et al. 2019", "Salgado et al. 2023"],
+      "code_source": "src/xrd_robustness/measurement_models.py",
+      "physics_basis": "Additive Gaussian observation-noise option retained as one explicit V7 measurement model."
+    },
+    "preferred_orientation": {
+      "literature_source": ["Lee et al. 2023", "Szymanski et al. 2021", "SimXRD-4M 2025"],
+      "code_source": "src/xrd_robustness/preferred_orientation.py",
+      "physics_basis": "March-Dollase modifies reflection integrated intensities using one preferred reciprocal-space direction without moving peak positions."
+    }
+  },
+  "quality_gates": {
+    "top20_peak_recall_min": 0.8,
+    "retained_integrated_intensity_min": 0.95,
+    "clipped_fraction_max": 0.55,
+    "window": [10.0, 80.0],
+    "reject_non_finite": true,
+    "reject_negative_intensity": true
+  },
+  "profiles": {
+    "level0": {
+      "severity_level": 0,
+      "background_type": "flat",
+      "background_order": 0,
+      "background_variation": 0.0,
+      "background_floor_fraction": 0.0,
+      "noise_model": "poisson",
+      "noise_stage": "before_normalization",
+      "poisson_count_scale": 40000.0,
+      "electronic_noise_std_ratio": 0.0,
+      "electronic_noise_std_counts": 0.0,
+      "delta_2theta_deg": {"distribution": "fixed", "min_value": 0.0, "max_value": 0.0, "apply_probability": 1.0},
+      "fwhm_deg": {"distribution": "fixed", "min_value": 0.08, "max_value": 0.08, "apply_probability": 1.0},
+      "background_to_peak_ratio": {"distribution": "fixed", "min_value": 0.0, "max_value": 0.0, "apply_probability": 0.0},
+      "noise_std_ratio": {"distribution": "fixed", "min_value": 0.0, "max_value": 0.0, "apply_probability": 0.0},
+      "preferred_orientation": {"enabled": false, "model": "march_dollase", "distribution": "fixed", "min_value": 1.0, "max_value": 1.0, "apply_probability": 0.0, "preferred_axis_policy": "low_index_reflection", "candidate_low_index_count": 16}
+    },
+    "train": {
+      "severity_level": 1,
+      "background_type": "polynomial",
+      "background_order": 3,
+      "background_variation": {"distribution": "uniform", "min_value": 0.15, "max_value": 0.45, "apply_probability": 1.0},
+      "background_floor_fraction": 0.15,
+      "noise_model": "poisson_gaussian",
+      "noise_stage": "before_normalization",
+      "poisson_count_scale": {"distribution": "log_uniform", "min_value": 2500.0, "max_value": 40000.0, "apply_probability": 1.0},
+      "electronic_noise_std_ratio": 0.0,
+      "electronic_noise_std_counts": {"distribution": "uniform", "min_value": 0.0, "max_value": 2.0, "apply_probability": 1.0},
+      "delta_2theta_deg": {"distribution": "uniform", "min_value": -0.2, "max_value": 0.2, "apply_probability": 0.5},
+      "fwhm_deg": {"distribution": "uniform", "min_value": 0.08, "max_value": 0.2, "apply_probability": 1.0},
+      "background_to_peak_ratio": {"distribution": "uniform", "min_value": 0.0, "max_value": 0.02, "apply_probability": 0.5},
+      "noise_std_ratio": {"distribution": "fixed", "min_value": 0.0, "max_value": 0.0, "apply_probability": 1.0},
+      "preferred_orientation": {"enabled": true, "model": "march_dollase", "distribution": "uniform", "min_value": 0.8, "max_value": 1.0, "apply_probability": 0.7, "preferred_axis_policy": "low_index_reflection", "candidate_low_index_count": 16}
+    },
+    "in_range": {
+      "severity_level": 1,
+      "background_type": "polynomial",
+      "background_order": 3,
+      "background_variation": {"distribution": "uniform", "min_value": 0.15, "max_value": 0.45, "apply_probability": 1.0},
+      "background_floor_fraction": 0.15,
+      "noise_model": "poisson_gaussian",
+      "noise_stage": "before_normalization",
+      "poisson_count_scale": {"distribution": "log_uniform", "min_value": 2500.0, "max_value": 40000.0, "apply_probability": 1.0},
+      "electronic_noise_std_ratio": 0.0,
+      "electronic_noise_std_counts": {"distribution": "uniform", "min_value": 0.0, "max_value": 2.0, "apply_probability": 1.0},
+      "delta_2theta_deg": {"distribution": "uniform", "min_value": -0.2, "max_value": 0.2, "apply_probability": 0.5},
+      "fwhm_deg": {"distribution": "uniform", "min_value": 0.08, "max_value": 0.2, "apply_probability": 1.0},
+      "background_to_peak_ratio": {"distribution": "uniform", "min_value": 0.0, "max_value": 0.02, "apply_probability": 0.5},
+      "noise_std_ratio": {"distribution": "fixed", "min_value": 0.0, "max_value": 0.0, "apply_probability": 1.0},
+      "preferred_orientation": {"enabled": true, "model": "march_dollase", "distribution": "uniform", "min_value": 0.8, "max_value": 1.0, "apply_probability": 0.7, "preferred_axis_policy": "low_index_reflection", "candidate_low_index_count": 16}
+    },
+    "ood_shift_negative": {
+      "severity_level": 3,
+      "background_type": "polynomial",
+      "background_order": 2,
+      "background_variation": 0.0,
+      "background_floor_fraction": 0.0,
+      "noise_model": "poisson",
+      "noise_stage": "before_normalization",
+      "poisson_count_scale": 40000.0,
+      "electronic_noise_std_ratio": 0.0,
+      "electronic_noise_std_counts": 0.0,
+      "delta_2theta_deg": {"distribution": "uniform", "min_value": -0.5, "max_value": -0.2, "apply_probability": 1.0},
+      "fwhm_deg": {"distribution": "fixed", "min_value": 0.08, "max_value": 0.08, "apply_probability": 1.0},
+      "background_to_peak_ratio": {"distribution": "fixed", "min_value": 0.0, "max_value": 0.0, "apply_probability": 0.0},
+      "noise_std_ratio": {"distribution": "fixed", "min_value": 0.0, "max_value": 0.0, "apply_probability": 0.0},
+      "preferred_orientation": {"enabled": false, "model": "march_dollase", "distribution": "fixed", "min_value": 1.0, "max_value": 1.0, "apply_probability": 0.0}
+    },
+    "ood_shift_positive": {
+      "severity_level": 3,
+      "background_type": "polynomial",
+      "background_order": 2,
+      "background_variation": 0.0,
+      "background_floor_fraction": 0.0,
+      "noise_model": "poisson",
+      "noise_stage": "before_normalization",
+      "poisson_count_scale": 40000.0,
+      "electronic_noise_std_ratio": 0.0,
+      "electronic_noise_std_counts": 0.0,
+      "delta_2theta_deg": {"distribution": "uniform", "min_value": 0.2, "max_value": 0.5, "apply_probability": 1.0},
+      "fwhm_deg": {"distribution": "fixed", "min_value": 0.08, "max_value": 0.08, "apply_probability": 1.0},
+      "background_to_peak_ratio": {"distribution": "fixed", "min_value": 0.0, "max_value": 0.0, "apply_probability": 0.0},
+      "noise_std_ratio": {"distribution": "fixed", "min_value": 0.0, "max_value": 0.0, "apply_probability": 0.0},
+      "preferred_orientation": {"enabled": false, "model": "march_dollase", "distribution": "fixed", "min_value": 1.0, "max_value": 1.0, "apply_probability": 0.0}
+    },
+    "ood_broadening": {
+      "severity_level": 3,
+      "background_type": "polynomial",
+      "background_order": 2,
+      "background_variation": 0.0,
+      "background_floor_fraction": 0.0,
+      "noise_model": "poisson",
+      "noise_stage": "before_normalization",
+      "poisson_count_scale": 40000.0,
+      "electronic_noise_std_ratio": 0.0,
+      "electronic_noise_std_counts": 0.0,
+      "delta_2theta_deg": {"distribution": "fixed", "min_value": 0.0, "max_value": 0.0, "apply_probability": 1.0},
+      "fwhm_deg": {"distribution": "uniform", "min_value": 0.2, "max_value": 0.35, "apply_probability": 1.0},
+      "background_to_peak_ratio": {"distribution": "fixed", "min_value": 0.0, "max_value": 0.0, "apply_probability": 0.0},
+      "noise_std_ratio": {"distribution": "fixed", "min_value": 0.0, "max_value": 0.0, "apply_probability": 0.0},
+      "preferred_orientation": {"enabled": false, "model": "march_dollase", "distribution": "fixed", "min_value": 1.0, "max_value": 1.0, "apply_probability": 0.0}
+    },
+    "ood_noise": {
+      "severity_level": 3,
+      "background_type": "polynomial",
+      "background_order": 2,
+      "background_variation": 0.0,
+      "background_floor_fraction": 0.0,
+      "noise_model": "poisson_gaussian",
+      "noise_stage": "before_normalization",
+      "poisson_count_scale": {"distribution": "log_uniform", "min_value": 100.0, "max_value": 2500.0, "apply_probability": 1.0},
+      "electronic_noise_std_ratio": 0.0,
+      "electronic_noise_std_counts": {"distribution": "uniform", "min_value": 0.0, "max_value": 5.0, "apply_probability": 1.0},
+      "delta_2theta_deg": {"distribution": "fixed", "min_value": 0.0, "max_value": 0.0, "apply_probability": 1.0},
+      "fwhm_deg": {"distribution": "fixed", "min_value": 0.08, "max_value": 0.08, "apply_probability": 1.0},
+      "background_to_peak_ratio": {"distribution": "fixed", "min_value": 0.0, "max_value": 0.0, "apply_probability": 0.0},
+      "noise_std_ratio": {"distribution": "fixed", "min_value": 0.0, "max_value": 0.0, "apply_probability": 1.0},
+      "preferred_orientation": {"enabled": false, "model": "march_dollase", "distribution": "fixed", "min_value": 1.0, "max_value": 1.0, "apply_probability": 0.0}
+    },
+    "ood_background": {
+      "severity_level": 3,
+      "background_type": "gaussian_process",
+      "background_order": 2,
+      "background_variation": {"distribution": "uniform", "min_value": 0.35, "max_value": 0.90, "apply_probability": 1.0},
+      "background_anchor_count": 33,
+      "background_gp_length_scale": 0.12,
+      "background_floor_fraction": 0.20,
+      "noise_model": "poisson",
+      "noise_stage": "before_normalization",
+      "poisson_count_scale": 40000.0,
+      "electronic_noise_std_ratio": 0.0,
+      "electronic_noise_std_counts": 0.0,
+      "delta_2theta_deg": {"distribution": "fixed", "min_value": 0.0, "max_value": 0.0, "apply_probability": 1.0},
+      "fwhm_deg": {"distribution": "fixed", "min_value": 0.08, "max_value": 0.08, "apply_probability": 1.0},
+      "background_to_peak_ratio": {"distribution": "uniform", "min_value": 0.02, "max_value": 0.05, "apply_probability": 1.0},
+      "noise_std_ratio": {"distribution": "fixed", "min_value": 0.0, "max_value": 0.0, "apply_probability": 0.0},
+      "preferred_orientation": {"enabled": false, "model": "march_dollase", "distribution": "fixed", "min_value": 1.0, "max_value": 1.0, "apply_probability": 0.0}
+    },
+    "ood_texture": {
+      "severity_level": 3,
+      "background_type": "polynomial",
+      "background_order": 3,
+      "background_variation": {"distribution": "uniform", "min_value": 0.15, "max_value": 0.45, "apply_probability": 1.0},
+      "background_floor_fraction": 0.15,
+      "noise_model": "poisson_gaussian",
+      "noise_stage": "before_normalization",
+      "poisson_count_scale": {"distribution": "log_uniform", "min_value": 2500.0, "max_value": 40000.0, "apply_probability": 1.0},
+      "electronic_noise_std_ratio": 0.0,
+      "electronic_noise_std_counts": {"distribution": "uniform", "min_value": 0.0, "max_value": 2.0, "apply_probability": 1.0},
+      "delta_2theta_deg": {"distribution": "uniform", "min_value": -0.2, "max_value": 0.2, "apply_probability": 0.5},
+      "fwhm_deg": {"distribution": "uniform", "min_value": 0.08, "max_value": 0.2, "apply_probability": 1.0},
+      "background_to_peak_ratio": {"distribution": "uniform", "min_value": 0.0, "max_value": 0.02, "apply_probability": 0.5},
+      "noise_std_ratio": {"distribution": "fixed", "min_value": 0.0, "max_value": 0.0, "apply_probability": 1.0},
+      "preferred_orientation": {"enabled": true, "model": "march_dollase", "distribution": "uniform", "min_value": 0.5, "max_value": 0.8, "apply_probability": 1.0, "preferred_axis_policy": "low_index_reflection", "candidate_low_index_count": 16}
+    },
+    "ood_combo_shift_broadening": {
+      "severity_level": 4,
+      "background_type": "polynomial",
+      "background_order": 2,
+      "background_variation": 0.0,
+      "background_floor_fraction": 0.0,
+      "noise_model": "poisson",
+      "noise_stage": "before_normalization",
+      "poisson_count_scale": 40000.0,
+      "electronic_noise_std_ratio": 0.0,
+      "electronic_noise_std_counts": 0.0,
+      "delta_2theta_deg": {"distribution": "uniform", "min_value": 0.2, "max_value": 0.5, "apply_probability": 1.0},
+      "fwhm_deg": {"distribution": "uniform", "min_value": 0.2, "max_value": 0.35, "apply_probability": 1.0},
+      "background_to_peak_ratio": {"distribution": "fixed", "min_value": 0.0, "max_value": 0.0, "apply_probability": 0.0},
+      "noise_std_ratio": {"distribution": "fixed", "min_value": 0.0, "max_value": 0.0, "apply_probability": 0.0},
+      "preferred_orientation": {"enabled": false, "model": "march_dollase", "distribution": "fixed", "min_value": 1.0, "max_value": 1.0, "apply_probability": 0.0}
+    },
+    "ood_combo_background_noise": {
+      "severity_level": 4,
+      "background_type": "gaussian_process",
+      "background_order": 2,
+      "background_variation": {"distribution": "uniform", "min_value": 0.35, "max_value": 0.90, "apply_probability": 1.0},
+      "background_anchor_count": 33,
+      "background_gp_length_scale": 0.12,
+      "background_floor_fraction": 0.20,
+      "noise_model": "poisson_gaussian",
+      "noise_stage": "before_normalization",
+      "poisson_count_scale": {"distribution": "log_uniform", "min_value": 100.0, "max_value": 2500.0, "apply_probability": 1.0},
+      "electronic_noise_std_ratio": 0.0,
+      "electronic_noise_std_counts": {"distribution": "uniform", "min_value": 0.0, "max_value": 5.0, "apply_probability": 1.0},
+      "delta_2theta_deg": {"distribution": "fixed", "min_value": 0.0, "max_value": 0.0, "apply_probability": 1.0},
+      "fwhm_deg": {"distribution": "fixed", "min_value": 0.08, "max_value": 0.08, "apply_probability": 1.0},
+      "background_to_peak_ratio": {"distribution": "uniform", "min_value": 0.02, "max_value": 0.05, "apply_probability": 1.0},
+      "noise_std_ratio": {"distribution": "fixed", "min_value": 0.0, "max_value": 0.0, "apply_probability": 1.0},
+      "preferred_orientation": {"enabled": false, "model": "march_dollase", "distribution": "fixed", "min_value": 1.0, "max_value": 1.0, "apply_probability": 0.0}
+    },
+    "ood_combo_texture_shift": {
+      "severity_level": 4,
+      "background_type": "polynomial",
+      "background_order": 2,
+      "background_variation": 0.0,
+      "background_floor_fraction": 0.0,
+      "noise_model": "poisson",
+      "noise_stage": "before_normalization",
+      "poisson_count_scale": 40000.0,
+      "electronic_noise_std_ratio": 0.0,
+      "electronic_noise_std_counts": 0.0,
+      "delta_2theta_deg": {"distribution": "uniform", "min_value": -0.5, "max_value": -0.2, "apply_probability": 1.0},
+      "fwhm_deg": {"distribution": "fixed", "min_value": 0.08, "max_value": 0.08, "apply_probability": 1.0},
+      "background_to_peak_ratio": {"distribution": "fixed", "min_value": 0.0, "max_value": 0.0, "apply_probability": 0.0},
+      "noise_std_ratio": {"distribution": "fixed", "min_value": 0.0, "max_value": 0.0, "apply_probability": 0.0},
+      "preferred_orientation": {"enabled": true, "model": "march_dollase", "distribution": "uniform", "min_value": 0.5, "max_value": 0.8, "apply_probability": 1.0, "preferred_axis_policy": "low_index_reflection", "candidate_low_index_count": 16}
+    },
+    "ood_all": {
+      "severity_level": 4,
+      "background_type": "gaussian_process",
+      "background_order": 2,
+      "background_variation": {"distribution": "uniform", "min_value": 0.35, "max_value": 0.90, "apply_probability": 1.0},
+      "background_anchor_count": 33,
+      "background_gp_length_scale": 0.12,
+      "background_floor_fraction": 0.20,
+      "noise_model": "poisson_gaussian",
+      "noise_stage": "before_normalization",
+      "poisson_count_scale": {"distribution": "log_uniform", "min_value": 100.0, "max_value": 2500.0, "apply_probability": 1.0},
+      "electronic_noise_std_ratio": 0.0,
+      "electronic_noise_std_counts": {"distribution": "uniform", "min_value": 0.0, "max_value": 5.0, "apply_probability": 1.0},
+      "delta_2theta_deg": {"distribution": "uniform", "min_value": -0.5, "max_value": 0.5, "apply_probability": 1.0},
+      "fwhm_deg": {"distribution": "uniform", "min_value": 0.2, "max_value": 0.35, "apply_probability": 1.0},
+      "background_to_peak_ratio": {"distribution": "uniform", "min_value": 0.02, "max_value": 0.05, "apply_probability": 1.0},
+      "noise_std_ratio": {"distribution": "fixed", "min_value": 0.0, "max_value": 0.0, "apply_probability": 1.0},
+      "preferred_orientation": {"enabled": true, "model": "march_dollase", "distribution": "uniform", "min_value": 0.5, "max_value": 0.8, "apply_probability": 1.0, "preferred_axis_policy": "low_index_reflection", "candidate_low_index_count": 16}
+    }
+  }
+}

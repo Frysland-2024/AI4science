@@ -1,0 +1,344 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "algorithm.v9.method_transfer.schema.json",
+  "title": "V9-T XRD cross-domain method-transfer contract",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "status",
+    "study_kind",
+    "research_question",
+    "narrative_policy",
+    "trainer",
+    "hardware_profile",
+    "runtime",
+    "data",
+    "simulation",
+    "evaluation",
+    "model",
+    "development_tuning",
+    "formal_hyperparameters",
+    "experiment",
+    "fairness",
+    "metrics_and_logging",
+    "validation_comparison",
+    "final_evaluation",
+    "execution_policy"
+  ],
+  "properties": {
+    "$schema": {"type": "string"},
+    "schema_version": {"const": "v9.1-method-transfer"},
+    "status": {"type": "string", "minLength": 1},
+    "study_kind": {"const": "cross_domain_method_transfer"},
+    "research_question": {"type": "string", "minLength": 1},
+    "narrative_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "program_id",
+        "paper_short_name",
+        "primary_identity",
+        "current_program_priority",
+        "paper_scope",
+        "core_problem",
+        "challenged_paradigm",
+        "augmentation_only_definition",
+        "augmentation_implementations_in_scope",
+        "registered_method_progression",
+        "paper_method_priority",
+        "dynamic_perturbation_role",
+        "dynamic_perturbation_claimed_as_innovation",
+        "structured_perturbation_in_scope",
+        "structured_perturbation_status",
+        "evidence_chain",
+        "contribution_boundary",
+        "result_narrative_policy",
+        "paper_outcome_branches",
+        "deferred_research",
+        "deferred_program_id",
+        "deferred_program_title",
+        "deferred_program_reuses",
+        "deferred_research_reentry_requires_explicit_user_decision",
+        "simulator_label_supervision_in_scope",
+        "measurement_factorization_claim_in_scope",
+        "clean_and_offline_are_reference_baselines_not_competing_research_routes"
+      ],
+      "properties": {
+        "program_id": {"const": "V9-T"},
+        "paper_short_name": {"const": "Algorithm Transfer for PXRD Robustness"},
+        "primary_identity": {"const": "controlled cross-domain algorithm transfer for PXRD sim-to-real robustness"},
+        "current_program_priority": {"const": "complete_algorithm_transfer_paper_first"},
+        "paper_scope": {"const": "algorithm_transfer_only"},
+        "core_problem": {"type": "string", "minLength": 1},
+        "challenged_paradigm": {"const": "augmentation_only_supervised_learning"},
+        "augmentation_only_definition": {"type": "string", "minLength": 1},
+        "augmentation_implementations_in_scope": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "registered_method_progression": {
+          "const": [
+            "augmentation_only_supervised_learning",
+            "cross_view_prediction_consistency",
+            "difference_aware_residual_class_decorrelation"
+          ]
+        },
+        "paper_method_priority": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "dynamic_perturbation_role": {"const": "strong_matched_augmentation_only_baseline_and_paired_view_infrastructure"},
+        "dynamic_perturbation_claimed_as_innovation": {"const": false},
+        "structured_perturbation_in_scope": {"const": false},
+        "structured_perturbation_status": {"const": "archived"},
+        "evidence_chain": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "contribution_boundary": {"type": "string", "minLength": 1},
+        "result_narrative_policy": {"type": "string", "minLength": 1},
+        "paper_outcome_branches": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "residual_stably_beats_dynamic_and_js",
+            "residual_effective_js_comparison_inconclusive",
+            "js_effective_residual_no_extra_gain",
+            "both_effective_no_clear_difference",
+            "neither_effective"
+          ],
+          "properties": {
+            "residual_stably_beats_dynamic_and_js": {"type": "string", "minLength": 1},
+            "residual_effective_js_comparison_inconclusive": {"type": "string", "minLength": 1},
+            "js_effective_residual_no_extra_gain": {"type": "string", "minLength": 1},
+            "both_effective_no_clear_difference": {"type": "string", "minLength": 1},
+            "neither_effective": {"type": "string", "minLength": 1}
+          }
+        },
+        "deferred_research": {"const": "simulator_label_supervised_residual"},
+        "deferred_program_id": {"const": "V10"},
+        "deferred_program_title": {"const": "Simulator-Supervised Representation Learning"},
+        "deferred_program_reuses": {
+          "type": "array",
+          "minItems": 6,
+          "maxItems": 6,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "deferred_research_reentry_requires_explicit_user_decision": {"const": true},
+        "simulator_label_supervision_in_scope": {"const": false},
+        "measurement_factorization_claim_in_scope": {"const": false},
+        "clean_and_offline_are_reference_baselines_not_competing_research_routes": {"const": true}
+      }
+    },
+    "trainer": {
+      "type": "object",
+      "required": ["path", "supporting_paths", "required_flag"],
+      "properties": {
+        "supporting_paths": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "hardware_profile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"type": "string", "pattern": "^[0-9A-F]{64}$"}
+      }
+    },
+    "runtime": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "python_executable",
+        "python_version",
+        "torch_version",
+        "cuda_runtime",
+        "gpu_name",
+        "minimum_gpu_memory_mb",
+        "pip_check_required"
+      ],
+      "properties": {
+        "python_executable": {"type": "string", "minLength": 1},
+        "python_version": {"type": "string", "minLength": 1},
+        "torch_version": {"type": "string", "minLength": 1},
+        "cuda_runtime": {"type": "string", "minLength": 1},
+        "gpu_name": {"type": "string", "minLength": 1},
+        "minimum_gpu_memory_mb": {"type": "integer", "minimum": 1},
+        "pip_check_required": {"const": true}
+      }
+    },
+    "data": {
+      "type": "object",
+      "required": [
+        "root",
+        "dataset_size",
+        "data_config",
+        "data_config_sha256",
+        "split_manifest",
+        "split_manifest_sha256",
+        "split_audit",
+        "split_audit_sha256",
+        "peak_cache_manifest",
+        "peak_cache_manifest_sha256",
+        "peak_cache_name",
+        "expected_split_counts",
+        "selection_split",
+        "development_validation_manifest",
+        "development_validation_manifest_sha256",
+        "development_validation_count",
+        "simulated_test_locked",
+        "real_test_locked"
+      ]
+    },
+    "simulation": {
+      "type": "object",
+      "required": [
+        "path",
+        "sha256",
+        "scientific_range_status",
+        "freeze_evidence",
+        "freeze_evidence_sha256",
+        "parameter_table",
+        "parameter_table_sha256",
+        "clean_profile",
+        "train_profile",
+        "in_range_profile",
+        "development_ood_profiles",
+        "real_xrd_used_for_selection"
+      ]
+    },
+    "evaluation": {
+      "type": "object",
+      "required": ["path", "sha256", "development_evaluation_seed"]
+    },
+    "model": {"type": "object"},
+    "development_tuning": {
+      "type": "object",
+      "required": [
+        "name",
+        "execution_enabled",
+        "seed",
+        "epochs",
+        "max_optimizer_steps",
+        "output_root",
+        "baseline_method_id",
+        "candidates",
+        "selection"
+      ]
+    },
+    "formal_hyperparameters": {
+      "type": "object",
+      "required": ["frozen", "selection_artifact", "values"]
+    },
+    "experiment": {
+      "type": "object",
+      "required": [
+        "seeds",
+        "epochs",
+        "max_optimizer_steps",
+        "validation_interval_steps",
+        "batch_size",
+        "evaluation_batch_size",
+        "device",
+        "development_only",
+        "dynamic_view_prefetch",
+        "output_root",
+        "methods"
+      ],
+      "properties": {
+        "dynamic_view_prefetch": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "enabled",
+            "applies_to_modes",
+            "worker_processes",
+            "worker_native_threads",
+            "worker_thread_policy",
+            "prefetch_batches",
+            "multiprocessing_start_method",
+            "sharding_algorithm",
+            "result_order",
+            "worker_peak_cache",
+            "fixed_view_generation",
+            "clean_duplicate_policy",
+            "main_process_training_peak_cache",
+            "pin_memory",
+            "non_blocking_h2d"
+          ],
+          "properties": {
+            "enabled": {"const": true},
+            "applies_to_modes": {
+              "const": [
+                "clean_erm",
+                "offline_erm",
+                "dynamic_erm",
+                "dynamic_js",
+                "dynamic_residual"
+              ]
+            },
+            "worker_processes": {"type": "integer", "minimum": 1},
+            "worker_native_threads": {"const": 1},
+            "worker_thread_policy": {"const": "fixed-native-thread-env-v1"},
+            "prefetch_batches": {"type": "integer", "minimum": 1},
+            "multiprocessing_start_method": {"const": "spawn"},
+            "sharding_algorithm": {"const": "sha256-material-id-mod-v1"},
+            "result_order": {"const": "absolute-step-then-batch-offset"},
+            "worker_peak_cache": {"const": "lazy-static-shard"},
+            "fixed_view_generation": {"const": "frozen-manifest-process-prefetch-v1"},
+            "clean_duplicate_policy": {"const": "render-once-reuse-x1-as-x2"},
+            "main_process_training_peak_cache": {"const": "disabled-when-prefetch-enabled"},
+            "pin_memory": {"const": true},
+            "non_blocking_h2d": {"const": true}
+          }
+        },
+        "methods": {"type": "array", "minItems": 5, "maxItems": 5}
+      }
+    },
+    "fairness": {"type": "object"},
+    "metrics_and_logging": {
+      "type": "object",
+      "required": ["required_metrics", "required_provenance"]
+    },
+    "validation_comparison": {
+      "type": "object",
+      "required": [
+        "primary_metric",
+        "primary_ood_profiles",
+        "secondary_combination_profiles",
+        "seed_count",
+        "selectable_method_ids",
+        "report_paired_bootstrap_95_ci",
+        "pass_fail_decision_forbidden",
+        "selection_rule"
+      ]
+    },
+    "final_evaluation": {"type": "object"},
+    "execution_policy": {
+      "type": "object",
+      "required": [
+        "tuning_plan_generation_enabled",
+        "development_tuning_execution_enabled",
+        "formal_plan_generation_requires_frozen_tuning_selection",
+        "experiment_execution_enabled",
+        "formal_scientific_conclusions_enabled",
+        "simulated_test_enabled",
+        "real_test_enabled"
+      ]
+    }
+  }
+}

@@ -1,0 +1,86 @@
+{
+  "dataset_root": "data/formal_14060",
+  "dataset_size": 14060,
+  "external_real_test": {
+    "inside_14060": false,
+    "selection_use_forbidden": true
+  },
+  "peak_cache": {
+    "path": "data/formal_14060/manifests/peak_cache_manifest.v7.reflection.csv",
+    "sha256": "6AE0CFD1B5B29671E2F532D7A094F2FC412CABD64E4CF77D42915937BACC8D18",
+    "split_independent": true
+  },
+  "schema_version": "v9t-family-aware-data-split-v1",
+  "source_records": {
+    "path": "data/formal_14060/mp_processed/structure_records.jsonl",
+    "sha256": "05D5D33F200194612A8CDBE29D9443FC7BAD9C245F66D185364B66A75915CC6C"
+  },
+  "split": {
+    "counts": {
+      "test": 2109,
+      "train": 9842,
+      "validation": 2109
+    },
+    "family_definition": "re-analysed space group plus chemistry-anonymous species-wise Wyckoff orbit letters and multiplicities",
+    "family_definition_scope": "conservative deterministic proxy; not an AFLOW/XtalFinder label",
+    "family_signature_version": "anonymous-wyckoff-family-v1",
+    "path": "data/formal_14060/manifests/split_manifest.v9t.family_v1.csv",
+    "per_crystal_system": {
+      "test": {
+        "cubic": 301,
+        "hexagonal": 302,
+        "monoclinic": 301,
+        "orthorhombic": 302,
+        "tetragonal": 302,
+        "triclinic": 300,
+        "trigonal": 301
+      },
+      "train": {
+        "cubic": 1409,
+        "hexagonal": 1406,
+        "monoclinic": 1409,
+        "orthorhombic": 1411,
+        "tetragonal": 1406,
+        "triclinic": 1400,
+        "trigonal": 1401
+      },
+      "validation": {
+        "cubic": 302,
+        "hexagonal": 301,
+        "monoclinic": 302,
+        "orthorhombic": 303,
+        "tetragonal": 301,
+        "triclinic": 300,
+        "trigonal": 300
+      }
+    },
+    "ratios": {
+      "test": 0.15,
+      "train": 0.7,
+      "validation": 0.15
+    },
+    "seed": 20260716,
+    "sha256": "4304D5FA5A35082AFD6653647875074D207E3ACDC35123FFF8FD6E42BE1C672B",
+    "stratification": "seven_crystal_systems",
+    "unit": "unique_crystal_structure",
+    "whole_family_assignment": true
+  },
+  "status": "frozen",
+  "test": {
+    "count": 2109,
+    "iid_profile_role": "training-range perturbations on the same locked test structures",
+    "ood_profile_role": "unseen stronger perturbations on the same locked test structures",
+    "selection_use_forbidden": true
+  },
+  "validation": {
+    "count": 2109,
+    "path": "data/formal_14060/manifests/v9_method_transfer_validation.csv",
+    "roles": [
+      "hyperparameter_selection",
+      "early_stopping",
+      "checkpoint_selection",
+      "development_method_comparison"
+    ],
+    "sha256": "7CC261206F023F2A44065419014B6D886E800A19C7A33C17B71496D9E40AD213"
+  }
+}

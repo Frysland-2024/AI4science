@@ -1,0 +1,41 @@
+{
+  "scope": "E:/AI4science/xrd_robustness",
+  "date": "2026-07-16",
+  "markdown_count_before": 24,
+  "markdown_count_after": 5,
+  "retained_or_rewritten": [
+    "README.md",
+    "docs/V9_METHOD_TRANSFER_ENGINEERING.md",
+    "docs/V9_SIMULATOR_SUPERVISED_RESIDUAL_ENGINEERING.md",
+    "docs/DATA_AND_SIMULATION_CONTRACT.md",
+    "data/README.md"
+  ],
+  "deleted": [
+    {"path": "docs/V9_METHOD_TRANSFER_PARAMETER_FREEZE.md", "sha256": "FC61DBC79AD57A084A65AEED054536A764AFDC92C4120C2FE4F837F11EECD65D", "merged_into": "docs/V9_METHOD_TRANSFER_ENGINEERING.md"},
+    {"path": "docs/V8_XRDMATCH_INDEPENDENT_BASELINE.md", "sha256": "57A4D98202A6903319EB0720282BD4C952A15574AD8CA0843037C3C02D079FB7", "merged_into": "docs/DATA_AND_SIMULATION_CONTRACT.md"},
+    {"path": "docs/V8_STRUCTURED_DYNAMIC_V0_SPEC.md", "sha256": "E949621DC5DC4CB8D85D6C781B0194A75FCAC3D74F7F08DA7EE38CFD93DE295D", "reason": "archived V8 structured-perturbation design"},
+    {"path": "docs/V8_SIMXRD_SAMPLING_AUDIT.md", "sha256": "AB9DE50DFCE1B85F12182C7DC5FAC8EB83795FAADCDDD0BC45DB3EC58C7EF798", "reason": "historical narrative; CSV evidence retained"},
+    {"path": "docs/V8_REFACTOR_PLAN.md", "sha256": "5783851CABE6278894D651356FEF5F060160D2C6835E891E02B940FC07248C9F", "reason": "superseded implementation plan"},
+    {"path": "docs/V8_PERTURBATION_CODE_AUDIT.md", "sha256": "CE57D5DF3187D5E45C9AAC40E51D8D17DADE8E64A9B47570F7203982B5D2D0A9", "reason": "superseded audit narrative; machine evidence retained"},
+    {"path": "docs/V8_METHOD_UPDATE.md", "sha256": "77F3F3FEBD1C6D4D6F846310B6F60244C2B29A2551BA400798A962429C26D0A6", "reason": "superseded by two independent V9 studies"},
+    {"path": "docs/V7_PERTURBATION_SUPERVISION_PILOT.md", "sha256": "0296AECB1E2B7EE7A69A0072C0714B809F514AE3FC6CCA6F98E4ED9FDE012AC3", "merged_into": "docs/V9_SIMULATOR_SUPERVISED_RESIDUAL_ENGINEERING.md"},
+    {"path": "docs/V7_METHOD_AND_OWNERSHIP.md", "sha256": "24F28B4741EAF3652C3607F8A5919BD7D68CF397BBFDF1FC3BAAE8AABA35C14A", "reason": "superseded method and empty ownership template"},
+    {"path": "docs/V7_LITERATURE_GUIDE.md", "sha256": "C09618C557DB8ACFA4BF69FC3A798D407F29C1C02A140F0A29D8B58822C17B1C", "reason": "historical literature summary; source reconciliation retained outside repository"},
+    {"path": "docs/V7_IMPLEMENTATION_PLAN.md", "sha256": "DE788428579A8E8BA815926DD2567E913D1B9EA76971873006CC559D04AB95F0", "reason": "superseded implementation plan"},
+    {"path": "docs/V7_CONTRIBUTION_LEDGER.md", "sha256": "CC742CA97BDA9108FB4EAA37F4CDA7144237D441BCF305D7F94E2D2D06A326F6", "reason": "empty historical template"},
+    {"path": "docs/V7_BACKGROUND_NOISE_PHYSICAL_BASIS.md", "sha256": "E0667FAF41400B69DA7D8B3669188ECB31049AABBCBF90FB3B5642FE3E64CFB5", "merged_into": "docs/DATA_AND_SIMULATION_CONTRACT.md"},
+    {"path": "docs/perturbation_probability_method.md", "sha256": "B3A4DD33797BDC16AFD6D50904EDCA90D5A7DA8D45244FC74569A7C04CA78668", "merged_into": "docs/DATA_AND_SIMULATION_CONTRACT.md"},
+    {"path": "docs/INSTRUMENT_AGNOSTIC_METHODOLOGY.md", "sha256": "E54100D5BC69E92E8E5CB6CAB61EF912E435E59C3533DC4EBFB5D01EE37EE1FB", "merged_into": "docs/DATA_AND_SIMULATION_CONTRACT.md"},
+    {"path": "docs/data_schema.md", "sha256": "38CCA24E4C2216750B3C08383853AF0544ABFCC2AFC2D0C44B79749DCCC5D5A5", "merged_into": "docs/DATA_AND_SIMULATION_CONTRACT.md"},
+    {"path": "docs/CODEX_METHOD_UPDATE_V8_STRUCTURED_DYNAMIC_XRD_2026-07-15.md", "sha256": "D2D72282DA025189E59AC0A5F6A0400AB61A939739952B44BA2B179CB17AD51D", "reason": "V8 source history retained in 00_project_context"},
+    {"path": "reports/V7_UNIFICATION_REPORT_2026-07-15.md", "sha256": "08E8326BE6D6D98E1F9B67C1F57335C7901B93C1ACE74E520673E77DF4940682", "reason": "obsolete narrative report; JSON/CSV/XML evidence retained"},
+    {"path": "reports/dev_3500_subset_plan.md", "sha256": "D80E7D23F9D39246D45EFA7A705FC7C6AB889D62BE45CAB05593B98EC4985515", "reason": "completed historical plan; data manifests retained"},
+    {"path": "reports/formal_14000_database_plan.md", "sha256": "97C8BBA65AE6B06A86DA45EE078CCDCD300F1E8E38A628242060D104292934EA", "reason": "completed historical plan; data manifests retained"},
+    {"path": "data/tiers/README.md", "sha256": "9EA95360251499E58D3B45150D0C864CBC99356C10FD53D8DF1BCF40F95E1B6D", "merged_into": "data/README.md"}
+  ],
+  "untouched_scope": [
+    "E:/AI4science/00_project_context",
+    "E:/AI4science/01_literature",
+    "E:/AI4science/02_code_repositories"
+  ]
+}

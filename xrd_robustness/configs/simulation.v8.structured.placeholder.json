@@ -1,0 +1,36 @@
+{
+  "schema_version": "v8.0-interface",
+  "purpose": "V8 structured dynamic strategy interface placeholder; not a training configuration",
+  "status": "structured_definition_not_frozen",
+  "perturbation_strategy": {
+    "name": "structured_dynamic",
+    "status": "not_frozen",
+    "formal_use_allowed": false,
+    "implementation": "src/xrd_robustness/perturbation_strategy.py:StructuredDynamicStrategy",
+    "parameter_profile_source": "TBD after literature-backed physical design approval"
+  },
+  "measurement_state": {
+    "sample_state": {"status": "TBD", "frozen": false, "variables": []},
+    "instrument_state": {"status": "TBD", "frozen": false, "variables": []},
+    "acquisition_state": {"status": "TBD", "frozen": false, "variables": []}
+  },
+  "joint_distribution": {"status": "TBD", "frozen": false},
+  "generation_order": {"status": "TBD", "frozen": false},
+  "methodology_policy": {
+    "five_perturbations_retained": true,
+    "structured_rules_require_approval": true,
+    "instrument_agnostic": true,
+    "parameter_source_priority": ["literature", "paper-used open-source code", "physics"]
+  },
+  "real_experiment_policy": {
+    "role": "optional_future_external_validation",
+    "parameter_definition_source": false,
+    "training_prerequisite": false
+  },
+  "metadata_schema": "configs/perturbation_metadata.v8.schema.json",
+  "notes": [
+    "Do not add a joint sampler merely to make this placeholder executable.",
+    "Do not use this file for pilot or formal training.",
+    "Independent V7 behavior remains available as the V8 baseline."
+  ]
+}

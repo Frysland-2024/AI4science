@@ -1,0 +1,34 @@
+{
+  "checks": {
+    "exact_round_trip_match": true,
+    "non_blocking_copy_completed_after_synchronize": true,
+    "source_is_pinned": true
+  },
+  "configuration": {
+    "iterations": 20,
+    "non_blocking_h2d": true,
+    "payload_megabytes": 16,
+    "pin_memory": true
+  },
+  "device": {
+    "compute_capability": "8.9",
+    "name": "NVIDIA GeForce RTX 4060 Laptop GPU",
+    "total_memory_bytes": 8585216000
+  },
+  "measurement": {
+    "effective_gib_per_second": 12.420804954778319,
+    "elapsed_seconds": 0.025159399985568598,
+    "interpretation": "smoke measurement only; rerun on the target desktop",
+    "transferred_bytes": 335544320
+  },
+  "purpose": "pinned-memory and non-blocking H2D smoke audit; no training",
+  "runtime": {
+    "cuda_available": true,
+    "platform": "Windows-10-10.0.26200-SP0",
+    "python": "3.11.9",
+    "torch": "2.5.1+cu124",
+    "torch_cuda": "12.4"
+  },
+  "schema_version": "v9-cuda-transfer-audit-v1",
+  "status": "pass"
+}

@@ -1,0 +1,201 @@
+{
+  "schema_version": "v7.2-perturbation-supervision-pilot",
+  "run_seed": 20260715,
+  "purpose": "Instrument-agnostic method-development Pilot for perturbation-supervised residual learning with peak shift and effective peak width; ranges remain candidates until Pilot review",
+  "status": "pilot_candidate_not_frozen",
+  "sampling_semantics": {
+    "train": "continuous_physical_state",
+    "apply_probability_role": "deterministic factor inclusion or exclusion for this Pilot, not an estimate of experimental prevalence",
+    "identity_handling": "zero shift lies inside the continuous state space; effective FWHM is always positive",
+    "independence_claim": "none; this minimal Pilot tests identifiability before adding physically grouped mechanisms"
+  },
+  "methodology_policy": {
+    "parameter_source_hierarchy": [
+      "peer_reviewed_literature",
+      "paper_used_open_source_code",
+      "physics_constrained_distribution",
+      "explicitly_approved_real_instrument_data"
+    ],
+    "instrument_agnostic": true,
+    "formal_training_requires_parameter_evidence": true
+  },
+  "real_experiment_policy": {
+    "role": "optional_future_external_validation",
+    "parameter_definition_source": false,
+    "training_prerequisite": false
+  },
+  "parameter_evidence": {
+    "background_type": {
+      "code_source": "src/xrd_robustness/measurement_models.py",
+      "physics_basis": "Disabled flat background is retained only to satisfy the common renderer contract."
+    },
+    "delta_2theta_deg": {
+      "literature_source": ["Szymanski et al. 2021", "SimXRD-4M 2025"],
+      "code_source": "src/xrd_robustness/simulator.py",
+      "physics_basis": "One global 2theta-axis offset; the Pilot supervises the signed difference between paired views."
+    },
+    "fwhm_deg": {
+      "literature_source": ["Salgado et al. 2023", "Schopmans et al. 2023"],
+      "code_source": "src/xrd_robustness/simulator.py",
+      "physics_basis": "Positive area-conserving effective Gaussian width; paired supervision uses the log-width ratio."
+    },
+    "background_to_peak_ratio": {
+      "code_source": "src/xrd_robustness/measurement_models.py",
+      "physics_basis": "Fixed at zero so background cannot confound the minimal identifiability Pilot."
+    },
+    "noise_std_ratio": {
+      "code_source": "src/xrd_robustness/measurement_models.py",
+      "physics_basis": "Fixed at zero so observation noise cannot confound the minimal identifiability Pilot."
+    }
+  },
+  "quality_gates": {
+    "top20_peak_recall_min": 0.8,
+    "retained_integrated_intensity_min": 0.95,
+    "clipped_fraction_max": 0.55,
+    "window": [10.0, 80.0],
+    "reject_non_finite": true,
+    "reject_negative_intensity": true
+  },
+  "profiles": {
+    "pilot_train": {
+      "severity_level": 1,
+      "background_type": "flat",
+      "delta_2theta_deg": {
+        "distribution": "uniform",
+        "min_value": -0.2,
+        "max_value": 0.2,
+        "apply_probability": 1.0
+      },
+      "fwhm_deg": {
+        "distribution": "uniform",
+        "min_value": 0.08,
+        "max_value": 0.2,
+        "apply_probability": 1.0
+      },
+      "background_to_peak_ratio": {
+        "distribution": "fixed",
+        "min_value": 0.0,
+        "max_value": 0.0,
+        "apply_probability": 0.0
+      },
+      "noise_std_ratio": {
+        "distribution": "fixed",
+        "min_value": 0.0,
+        "max_value": 0.0,
+        "apply_probability": 0.0
+      }
+    },
+    "pilot_in_range": {
+      "severity_level": 1,
+      "background_type": "flat",
+      "delta_2theta_deg": {
+        "distribution": "uniform",
+        "min_value": -0.2,
+        "max_value": 0.2,
+        "apply_probability": 1.0
+      },
+      "fwhm_deg": {
+        "distribution": "uniform",
+        "min_value": 0.08,
+        "max_value": 0.2,
+        "apply_probability": 1.0
+      },
+      "background_to_peak_ratio": {
+        "distribution": "fixed",
+        "min_value": 0.0,
+        "max_value": 0.0,
+        "apply_probability": 0.0
+      },
+      "noise_std_ratio": {
+        "distribution": "fixed",
+        "min_value": 0.0,
+        "max_value": 0.0,
+        "apply_probability": 0.0
+      }
+    },
+    "pilot_ood_shift": {
+      "severity_level": 2,
+      "background_type": "flat",
+      "delta_2theta_deg": {
+        "distribution": "uniform",
+        "min_value": 0.25,
+        "max_value": 0.5,
+        "apply_probability": 1.0
+      },
+      "fwhm_deg": {
+        "distribution": "uniform",
+        "min_value": 0.08,
+        "max_value": 0.2,
+        "apply_probability": 1.0
+      },
+      "background_to_peak_ratio": {
+        "distribution": "fixed",
+        "min_value": 0.0,
+        "max_value": 0.0,
+        "apply_probability": 0.0
+      },
+      "noise_std_ratio": {
+        "distribution": "fixed",
+        "min_value": 0.0,
+        "max_value": 0.0,
+        "apply_probability": 0.0
+      }
+    },
+    "pilot_ood_width": {
+      "severity_level": 2,
+      "background_type": "flat",
+      "delta_2theta_deg": {
+        "distribution": "uniform",
+        "min_value": -0.2,
+        "max_value": 0.2,
+        "apply_probability": 1.0
+      },
+      "fwhm_deg": {
+        "distribution": "uniform",
+        "min_value": 0.22,
+        "max_value": 0.35,
+        "apply_probability": 1.0
+      },
+      "background_to_peak_ratio": {
+        "distribution": "fixed",
+        "min_value": 0.0,
+        "max_value": 0.0,
+        "apply_probability": 0.0
+      },
+      "noise_std_ratio": {
+        "distribution": "fixed",
+        "min_value": 0.0,
+        "max_value": 0.0,
+        "apply_probability": 0.0
+      }
+    },
+    "pilot_ood_joint_extreme": {
+      "severity_level": 3,
+      "background_type": "flat",
+      "delta_2theta_deg": {
+        "distribution": "uniform",
+        "min_value": 0.25,
+        "max_value": 0.5,
+        "apply_probability": 1.0
+      },
+      "fwhm_deg": {
+        "distribution": "uniform",
+        "min_value": 0.22,
+        "max_value": 0.35,
+        "apply_probability": 1.0
+      },
+      "background_to_peak_ratio": {
+        "distribution": "fixed",
+        "min_value": 0.0,
+        "max_value": 0.0,
+        "apply_probability": 0.0
+      },
+      "noise_std_ratio": {
+        "distribution": "fixed",
+        "min_value": 0.0,
+        "max_value": 0.0,
+        "apply_probability": 0.0
+      }
+    }
+  }
+}

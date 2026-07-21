@@ -1,0 +1,8 @@
+mode: dynamic_js
+lambda_js: 0.1
+# V9.2 algorithm-transfer grid; 1.0 is a candidate upper bound, not a selected value.
+candidate_lambda_js: [0.1, 0.3, 1.0]
+optimizer: adamw
+epochs: 50
+learning_rate: 0.0001
+weight_decay: 0.0001

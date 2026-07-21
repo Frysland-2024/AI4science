@@ -1,0 +1,150 @@
+{
+  "control_files_not_self_listed": [
+    "reports/codex_account_handoff_verification.json",
+    "reports/v9_desktop_migration_files.csv",
+    "reports/v9_desktop_migration_manifest.json",
+    "reports/v9_desktop_migration_verification.json"
+  ],
+  "copy_roots": [
+    "data/formal_14060",
+    "configs",
+    "src",
+    "scripts",
+    "tests",
+    "docs",
+    "reports",
+    "tools",
+    "outputs/v9_method_transfer_tuning",
+    "CODEX_HANDOFF.md",
+    "README.md",
+    "pyproject.toml"
+  ],
+  "created_at_utc": "2026-07-19T09:08:25.582111+00:00",
+  "critical_hashes": {
+    "contract": "BB6D52A2253524F4E5DE830A8FB04C21635C3D0D920FC1C318099C0580FD2394",
+    "desktop_hardware_audit_report": "844D680159162658C70D5C1402F737ABA791BD33D74B07DABC71B95ED53AB2ED",
+    "desktop_hardware_audit_script": "31E2AFB055D18A3BC167D1A55B5D7ADB6CDEA5F9FB056B2C9AD946A66E59C8EA",
+    "desktop_hardware_profile": "548FA33C64B2BDC9D4F38D8A054B86278C8A2757E2F18E51191D703A56F05B93",
+    "desktop_measurement_implementations": {
+      "acceleration_audit": "77B94272F11DEAF4DD89B2808E3ADEA543E95C262794F5FE82C438D9951791EB",
+      "environment_bootstrap": "9C38BBA7C802CE6FF7D140F97EC9AB06C73DC919C15C5F89BEF6BEF3FA305500",
+      "evaluation_batch_audit": "FA5AEB0E71630F2AF983E852A143832E8538578BB6F32DD70C0815D9CC2957BD",
+      "first_boot_orchestrator": "CBD81331AD7700E4D3037AB95E75729E69090AAADC470850E17B88A4D50F5FD8",
+      "hardware_audit": "31E2AFB055D18A3BC167D1A55B5D7ADB6CDEA5F9FB056B2C9AD946A66E59C8EA",
+      "prefetch_matrix_audit": "1E5C33DCE7A523273A11D6538637B836A5BB7E910EDB218C1F6C65C0B8D9C879",
+      "readiness_audit": "324A3C5621879D0644E26AFDC2FB3F7DC6565DF3C86808B353222CA422BE70C5",
+      "runtime_environment_audit": "8D3EB88D6DE719F96B86477D816A23808DC817A61F0527D0BD5FA76CE79EEB2C"
+    },
+    "launcher": "23E9450EF2A7C7FF87B9B13FCF67B496AB666A7EB0F2098DCF35869AE8C3358A",
+    "prefetch_module": "245B58369D435BEA3E156A9AEAACB6F08501031C8BDACF3AA738B909877C8FB0",
+    "trainer": "21112C93705F0287FF419DA0320E9CE90684DAAB783114B4D8A1BCC59DAE1364",
+    "tuning_plan": "BBF36EB7C1B0374906616F631C997A88420F56E56A4BB63B81EC2517470579DF"
+  },
+  "environment_reference": {
+    "path": "reports/v9_laptop_environment_reference.txt",
+    "pip_freeze_status": "passed",
+    "sha256": "5BFC4BDC73BCDF0A635D6682673622643527DFBFEF17C30DCE611AC769BFD639"
+  },
+  "explicit_exclusions": [
+    "all other outputs outside outputs/v9_method_transfer_tuning",
+    ".venv/.conda environments; recreate on desktop",
+    "__pycache__, .pytest_cache, *.pyc, *.pyo, *.tmp"
+  ],
+  "file_manifest": {
+    "group_summary": {
+      "CODEX_HANDOFF.md": {
+        "file_count": 1,
+        "size_bytes": 28861
+      },
+      "README.md": {
+        "file_count": 1,
+        "size_bytes": 5310
+      },
+      "configs": {
+        "file_count": 24,
+        "size_bytes": 108794
+      },
+      "data": {
+        "file_count": 14071,
+        "size_bytes": 293585796
+      },
+      "docs": {
+        "file_count": 7,
+        "size_bytes": 93374
+      },
+      "outputs": {
+        "file_count": 3,
+        "size_bytes": 5307
+      },
+      "pyproject.toml": {
+        "file_count": 1,
+        "size_bytes": 320
+      },
+      "reports": {
+        "file_count": 46,
+        "size_bytes": 289461
+      },
+      "scripts": {
+        "file_count": 45,
+        "size_bytes": 479838
+      },
+      "src": {
+        "file_count": 39,
+        "size_bytes": 333760
+      },
+      "tests": {
+        "file_count": 32,
+        "size_bytes": 136928
+      }
+    },
+    "path": "reports/v9_desktop_migration_files.csv",
+    "payload_size_bytes": 295067749,
+    "payload_stream_sha256": "B17714AD5CB717C2C044E7DE062E82AA14ADC950280A617EAE7ED623B8BE39FC",
+    "row_count": 14270,
+    "sha256": "86B18EB1C96FD890731A1358FE8965DCE897AD415FD5ED9BA44BD300DB4EA0EF"
+  },
+  "gates": {
+    "active_checkpoint_count_is_zero": true,
+    "active_result_count_is_zero": true,
+    "active_run_directory_count_is_zero": true,
+    "active_run_registry_is_empty": true,
+    "desktop_hardware_audit_is_current": true,
+    "no_active_training_processes": true,
+    "payload_contains_formal_14060": true,
+    "preflight_asset_hashes_are_current": true,
+    "preflight_status_passed": true,
+    "seven_run_plan_is_planning_only": true,
+    "training_process_probe_succeeded": true,
+    "tuning_plan_commands_are_current": true,
+    "tuning_plan_contract_hash_is_current": true
+  },
+  "policy": {
+    "desktop_training_requires_separate_future_authorization": true,
+    "process_migration_mode": "cold restart from optimizer step zero on desktop; no live process or checkpoint migration",
+    "prohibited_on_source_laptop": [
+      "tune-run",
+      "seven-run lambda tuning",
+      "fifteen-run formal experiment",
+      "any training that creates a checkpoint"
+    ],
+    "source_laptop": "engineering tests and read-only audits are allowed"
+  },
+  "process_state": {
+    "active_training_process_count": 0,
+    "active_training_processes": [],
+    "checkpoint_count": 0,
+    "planned_run_count": 7,
+    "probe_supported": true,
+    "registry_run_count": 0,
+    "result_count": 0,
+    "run_directory_count": 0
+  },
+  "schema_version": "v9-desktop-migration-manifest-v1",
+  "source": {
+    "hostname": "Frysland",
+    "logical_cpu_count": 32,
+    "platform": "Windows-10-10.0.26200-SP0",
+    "python_executable": "E:\\AI4science\\.venvs\\xrd_tools\\Scripts\\python.exe"
+  },
+  "status": "ready_for_copy"
+}
