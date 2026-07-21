@@ -14,25 +14,31 @@
 
 | 入口 | 用途 |
 |---|---|
-| [`xrd_robustness/CODEX_HANDOFF.md`](xrd_robustness/CODEX_HANDOFF.md) | 跨台式机、跨 Codex 账号的当前唯一接管入口 |
-| [`00_project_context/README.md`](00_project_context/README.md) | 活动研究上下文、V9.2 计划、决策历史与未来方向 |
+| [`00_project_context/CURRENT_STATE.md`](00_project_context/CURRENT_STATE.md) | 当前科学主线、实验状态、工程阻塞、Gate 与下一步；新会话优先读取 |
+| [`AGENTS.md`](AGENTS.md) | Codex/GPT 在仓库中的工作规范与状态更新责任 |
+| [`xrd_robustness/CODEX_HANDOFF.md`](xrd_robustness/CODEX_HANDOFF.md) | 跨台式机、跨 Codex 账号的当前工程接管入口 |
+| [`00_project_context/PROJECT_JOURNEY.md`](00_project_context/PROJECT_JOURNEY.md) | 从 FerroAI、因果不变性思考到 XRD 与 V9-T 的研究演变历程 |
+| [`00_project_context/SYNC_PROTOCOL.md`](00_project_context/SYNC_PROTOCOL.md) | 本地与 GitHub 同步检查、提交和冲突处理规范 |
+| [`00_project_context/README.md`](00_project_context/README.md) | 活动研究上下文、历史计划、决策资料与未来方向 |
 | [`xrd_robustness/README.md`](xrd_robustness/README.md) | 当前代码、配置、数据、测试与实际运行边界 |
 | [`01_literature/README.md`](01_literature/README.md) | 文献分区、阅读审计和论文—代码映射 |
 | [`02_code_repositories/README.md`](02_code_repositories/README.md) | 本地外部代码资产及复用边界 |
 
 ## 文档层级
 
-1. `xrd_robustness/CODEX_HANDOFF.md`、当前配置、源代码、清单和验证报告共同决定“本地现在能运行什么”。
-2. `00_project_context/` 根部文件解释研究决策和历史路线；其中旧计划不得覆盖当前 V9-T 机器合同。
-3. `00_project_context/archive/`、V6/V7 文档及日期化报告保留为历史证据，不作为当前执行命令。
-4. `extracted_full_archive/`、`source_package/`、外部仓库 README、许可证、`.venvs/` 和 `.conda/` 是来源或运行时资产，不参与项目 Markdown 去重。
-5. 2026-07-19 清理审计见 [`xrd_robustness/reports/ai4science_cleanup_inventory_20260719.json`](xrd_robustness/reports/ai4science_cleanup_inventory_20260719.json)。
+1. 当前配置、源代码、机器可读清单和匹配的验证报告决定实际可运行状态。
+2. `xrd_robustness/CODEX_HANDOFF.md` 规定工程接管、授权和测试集访问边界。
+3. `00_project_context/CURRENT_STATE.md` 汇总当前科学身份、实验进度、阻塞与下一步，但不能覆盖更高优先级的机器证据。
+4. `00_project_context/PROJECT_JOURNEY.md` 记录方案为什么改变；历史内容不得因为当前方案改变而删除。
+5. `00_project_context/archive/`、V6/V7/V8 文档及日期化报告保留为历史证据，不作为当前执行命令。
+6. `extracted_full_archive/`、`source_package/`、外部仓库 README、许可证、`.venvs/` 和 `.conda/` 是来源或运行时资产，不参与项目 Markdown 去重。
+7. 2026-07-19 清理审计见 [`xrd_robustness/reports/ai4science_cleanup_inventory_20260719.json`](xrd_robustness/reports/ai4science_cleanup_inventory_20260719.json)。
 
 ## 历史报告
 
 - [`00_project_context/archive/PROJECT_ORGANIZATION_REPORT_2026-07-04.md`](00_project_context/archive/PROJECT_ORGANIZATION_REPORT_2026-07-04.md)：早期项目组织与 MVP 设计。
 - [`01_literature/literature_audit/READING_SYNTHESIS_2026-06-28.md`](01_literature/literature_audit/READING_SYNTHESIS_2026-06-28.md)：早期跨方向阅读综述。
 
-## 2026-07-16 Markdown 整合
+## 2026-07-21 状态同步
 
-本轮整合保留 V9.2 命名的两份计划作为权威版本，删除其逐字相同的旧别名；项目发展叙事合并到 `00_project_context/PROJECT_JOURNEY.md`；文献导入索引保留 ASCII 工具友好版本及来源包内原始归档。
+仓库现已建立统一状态入口、研究历程入口和工作规范。任何新的 GPT/Codex 会话应先读取 `AGENTS.md`、`CURRENT_STATE.md`、`PROJECT_JOURNEY.md` 与 `CODEX_HANDOFF.md`，再判断是否可以修改代码或启动实验。
