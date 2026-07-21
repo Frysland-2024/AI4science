@@ -1,0 +1,29 @@
+﻿# Local Python environment
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+
+# Temporary files
+tmp/
+*.tmp
+*.log
+
+# Large local research assets
+01_literature/
+02_code_repositories/
+03_tools_and_packages/
+
+# Secrets
+.env
+.env.*
+*.key
+*.pem
+credentials.json
+secrets.json
+
+# OS / IDE
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store
