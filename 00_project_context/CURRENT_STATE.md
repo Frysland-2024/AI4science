@@ -1,6 +1,7 @@
 # AI4science Current State
 
-**Canonical status date:** 2026-07-21  
+**Canonical status date:** 2026-07-22
+
 **Repository:** `Frysland-2024/AI4science`  
 **Active engineering root:** `xrd_robustness/`
 
@@ -239,3 +240,18 @@ When documents disagree, use this order:
 6. archived plans and historical conversations.
 
 A conflict between higher-priority evidence sources must stop training and trigger a new audit.
+
+## 14. Repository synchronization policy
+
+The repository root is `E:/AI4science`, the active branch is `main`, and the normal
+publication target is `origin/main`. Root `AGENTS.md` now requires an automatic GitHub
+synchronization workflow after actual code, configuration, or project-documentation
+changes: verify the root worktree, run relevant tests or audits, update handoff/state
+records when project state changes, stage only explicit task files, inspect the staged
+diff and scan for secrets/prohibited artifacts, commit with an accurate English
+message, require a clean worktree, and push with `git push origin main`.
+
+This is a repository-governance change only. It does not change the V9-T scientific
+design, the 0/7 tuning state, any experiment result, or any training/test authorization.
+An explicit user instruction not to commit or not to push overrides automatic
+publication for that task.

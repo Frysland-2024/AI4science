@@ -58,7 +58,7 @@
 4. 修复冲突后重新验证；
 5. 不得用“看起来应该没问题”替代证据。
 
-本项目目录 `E:\AI4science\xrd_robustness` **没有独立 Git 元数据**。不要声称 worktree clean，不要使用 `git reset` 或 `git checkout` 恢复文件。当前可信性依赖配置、源文件、数据、缓存、计划、检查点和报告的 SHA-256 链。
+本项目目录 `E:\AI4science\xrd_robustness` **没有独立 Git 元数据**，但它属于上级 Git 仓库 `E:\AI4science`。所有 `git status`、暂存、提交和推送都必须从该仓库根目录执行；只有在根目录实际运行 `git status --short --branch` 后才能报告 worktree 状态。根目录 `AGENTS.md` 规定：实际修改代码、配置或项目文档后，先运行相关测试或审计，只显式暂存本次任务文件，检查 staged diff 与秘密信息，再使用准确的英文提交说明并推送 `origin/main`。不得使用 `git reset --hard`、force push 或其他历史改写操作。当前科学可信性仍依赖配置、源文件、数据、缓存、计划、检查点和报告的 SHA-256 链。
 
 便携版 `docs/CODEX_ACCOUNT_HANDOFF.docx` 是本文的派生阅读副本；根目录 Markdown 始终是文字权威源。当前 DOCX 已通过 ZIP/XML 结构、必备章节、表格和分页元素校验，也已由 Microsoft Word 成功打开并统计为 23 页；本笔记本缺少 LibreOffice，且 Word 的无界面 PDF 导出接口超时，因此未宣称逐页视觉渲染通过。该限制不影响 Markdown、JSON、CSV 和源文件的哈希迁移验证。
 
