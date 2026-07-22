@@ -147,7 +147,7 @@
   },
   "method_parameter_governance": {
     "path": "configs/v9_method_parameter_governance.json",
-    "sha256": "D43B2C8534A59F9D6513B6BD95731DF742792F756DFCF64D163093C1D43BE045",
+    "sha256": "A7423BC2C41707D27807A43FBA3358EF0DBD9474F0F62CADC0176812732F58FE",
     "status": "candidate_range_recalibration_required_before_validation",
     "registered_candidate_grids": {
       "lambda_js": [0.1, 0.3, 1.0],

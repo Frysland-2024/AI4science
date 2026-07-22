@@ -376,3 +376,29 @@ conditions are met.
 
 This decision does not add Raman to V9-T, alter the XRD method matrix, authorize
 Raman model development, or change the XRD 0/7 and 0/15 experiment states.
+
+## 19. Method-parameter literature provenance correction
+
+The Hu et al. SD3Net paper was re-audited against the local primary PDF and the
+publisher record. Its Equations 16-17 define
+`L_cls = lambda_1 L_sd + lambda_2 L_sim` and
+`L_total = L_cls + lambda_3 L_decorr`. Table 5 fixes `lambda_3=1` for Pavia,
+HyRANK, and WHU while jointly varying `lambda_1/lambda_2`; Figure 12 separately
+reports a regularization parameter `lambda` with an optimum near `1e-4` but does
+not explicitly reconcile that symbol with the Table 5 `lambda_3` value.
+
+Current scientific interpretation:
+
+- the paper supports residual entropy/decorrelation as a method precedent;
+- it supports reasoning in terms of relative loss contributions, sensitivity,
+  and module ablation;
+- neither `1` nor `1e-4` is numerical authority for V9-T `lambda_res`;
+- copying `1e-4` into the PXRD grid is explicitly prohibited by the governance
+  contract;
+- the existing candidate grids remain unchanged and unfrozen pending the same
+  Train-only scale review.
+
+This provenance correction changes no implementation formula, run count,
+training authorization, Validation access, or Test lock. Tuning remains 0/7,
+the formal comparison remains 0/15, and the registered candidate-range Gate
+remains blocked.

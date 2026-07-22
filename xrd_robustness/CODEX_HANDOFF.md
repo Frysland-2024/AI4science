@@ -629,6 +629,8 @@ powershell -NoProfile -ExecutionPolicy Bypass -File scripts\desktop_first_boot_v
 - 本项目还独立比较 JS Consistency；
 - 当前 V9-T 不包含结构化动态生成器。
 
+参数溯源已经按论文原文更正：式 (16)–(17) 定义 `L_cls=lambda_1 L_sd+lambda_2 L_sim` 和 `L_total=L_cls+lambda_3 L_decorr`；Table 5 在三个数据集上都列 `lambda_3=1`，并在 `[0.1,1]` 内联合检查 `lambda_1/lambda_2`。Fig. 12 又单列一个约在 `1e-4` 最优的 regularization parameter `lambda`，但正文没有明确解释它与 `lambda_3=1` 的关系。新账号不得把 `1e-4` 误称为该论文的 `lambda_3`，更不得把它作为 V9-T `lambda_res` 的数值依据。该论文对本项目只提供机制存在性、相对损失比例、敏感性分析和模块消融的先例。
+
 这些外部文献文件不属于 `xrd_robustness` 执行依赖。即使没有迁移原图和 PDF，本节也足以避免新账号误以为当前模型就是 SD3Net。
 
 ## 19. 已归档、已删除或不得复活的内容

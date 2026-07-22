@@ -4,8 +4,8 @@
     {
       "path": "CODEX_HANDOFF.md",
       "role": "authoritative cross-account entry point",
-      "sha256": "4ABBAC068B8504B68C3119BF65723B37D06DDA73CEE57F8CE229E4C13A39B9EA",
-      "size_bytes": 36227
+      "sha256": "A009D97542B50DC4C21C1955764EE4EE7DD5A6791545CE2F055BF752ED079C0E",
+      "size_bytes": 36849
     },
     {
       "path": "docs/CODEX_ACCOUNT_HANDOFF.docx",
@@ -16,14 +16,14 @@
     {
       "path": "README.md",
       "role": "project overview and handoff pointer",
-      "sha256": "4510D26F564D90AB17B2324CB0FF13F8F0765E98A36D53120DE9A8DD92F2C273",
-      "size_bytes": 7112
+      "sha256": "89032D3609CD5946B51360FB32EF333F49855B86449738BCEF7614D0629A358F",
+      "size_bytes": 7477
     },
     {
       "path": "docs/V9_METHOD_TRANSFER_ENGINEERING.md",
       "role": "research and method-transfer engineering contract",
-      "sha256": "69B472BD613E50274E0D61CCEB50EA527A778C707589832A3FCC0F6D34BE209E",
-      "size_bytes": 19593
+      "sha256": "3D4CA6964BFA901A1EA53B7A0E08F8D21116093FDFB5AFDAF51526211FC7CA9F",
+      "size_bytes": 19941
     },
     {
       "path": "docs/V9_DESKTOP_MIGRATION_HANDOFF.md",
@@ -40,7 +40,7 @@
     {
       "path": "configs/algorithm.v9.method_transfer.json",
       "role": "authoritative experiment contract",
-      "sha256": "B5962975D7C1D731691F2DFF6EBC35D11C87DB8EE18A18946A19BAB5D565FB18",
+      "sha256": "2195C1E941AC3E5EE17960A0D2263FB700984272203D0FD1806FC97456E7CD0D",
       "size_bytes": 17168
     },
     {
@@ -82,7 +82,7 @@
     {
       "path": "reports/v9_method_transfer_preflight.json",
       "role": "latest source-machine scientific preflight",
-      "sha256": "75AA2DB7D2ADE2E0AAAE3EC235DD98E647AC9D7E99E0E964D01A8DAAEBD4A3AD",
+      "sha256": "65B1AB7678138ED64B2CC6E49884B0E8C97729B33E2B65700A28B3D0FD2EAF7E",
       "size_bytes": 4344
     },
     {
@@ -94,7 +94,7 @@
     {
       "path": "reports/v9_method_transfer_tuning_plan.json",
       "role": "seven-run plan; all runs must remain unstarted",
-      "sha256": "61A2B32F8547650E42317C69511EB020D2253CEC37A353EB9F19174C104560D8",
+      "sha256": "6380BBF11131353791FAB4C48CC02A209CB2BCE80041449FC848A717DABCF934",
       "size_bytes": 29519
     },
     {
@@ -165,7 +165,7 @@
     }
   ],
   "authoritative_entrypoint": "CODEX_HANDOFF.md",
-  "created_at_utc": "2026-07-22T10:01:04.007030+00:00",
+  "created_at_utc": "2026-07-22T10:16:20.502779+00:00",
   "failed_gates": [],
   "gates": {
     "all_seven_runs_planned_not_started": true,

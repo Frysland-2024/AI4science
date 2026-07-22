@@ -106,3 +106,5 @@ E:\AI4science\.venvs\xrd_tools\Scripts\python.exe -s scripts\audit_v9_real_test_
 - `docs/V9_METHOD_PARAMETER_GOVERNANCE.md`。
 
 损失尺度审计只诊断数值作用强度，不选择 λ。正式 PAMPT-B3 的 128-step Train-only 结果显示，当前六个注册候选的中位辅助/分类 backbone 梯度比均低于 1%，尚未展示“弱—实质但不主导—主导”的跨度。审计反推的平衡中心数值很大，不能自动当作正式网格；正式调参前需要复核并完成唯一一次候选范围治理决定。
+
+外部论文只提供方法与敏感性流程先例，不提供可直接搬用的数值：Hu et al. 的 SD3Net 正文/Table 5 使用 `lambda_3=1`，Fig. 12 又报告一个未明确映射到 `lambda_3`、约在 `1e-4` 最优的 regularization parameter。因此两者都不是 V9-T `lambda_res` 的数值权威；完整限制见参数治理文档与机器合同。

@@ -23,6 +23,20 @@ V9-T 的方法公式、方向、reduction、梯度流和调度语义已经通过
 5. 三点敏感性、多 seed 和配对比较检验是否依赖幸运点；
 6. simulated Test 和 real test 不参与任何参数决策。
 
+## 胡皓天论文能支持什么、不能支持什么
+
+已按原文重新核对 Haotian Hu 等人的 SD3Net 论文（Knowledge-Based Systems 348 (2026) 116429，DOI `10.1016/j.knosys.2026.116429`）：
+
+- 式 (16) 是 `L_cls = lambda_1 L_sd + lambda_2 L_sim`；
+- 式 (17) 是 `L_total = L_cls + lambda_3 L_decorr`；
+- Table 5 对 Pavia、HyRANK、WHU 都列出 `lambda_3=1`，并分别给出 `(lambda_1, lambda_2)=(0.1,1.0)`、`(0.1,0.1)`、`(0.1,0.3)`；
+- 正文说明以 `lambda_3` 为尺度锚点，在 `[0.1,1]` 内联合检查 `lambda_1` 与 `lambda_2`，并用 3D surface 展示敏感性；
+- Fig. 12 又单独把一个记作 `lambda` 的 regularization parameter 从 `1e-2` 扫到 `1e-6`，报告约 `1e-4` 最优，但没有明确说明它如何对应式 (17) 和 Table 5 中的 `lambda_3=1`。
+
+因此这篇论文只能为 V9-T 提供三类方法学先例：残差熵/去相关目标确实存在、损失权重应解释为相对贡献、应报告敏感性和模块消融。它**不能**为本项目的 `lambda_res` 提供可直接搬用的数值范围；尤其禁止把 Fig. 12 的 `1e-4` 写成“胡皓天论文的残差损失权重”，也禁止把它倒灌进 V9-T 配置。
+
+本项目的分类损失系数固定为 1，Dynamic/Paired ERM 已充当 `lambda=0` 消融锚点，因此 7-run 仍为 1 个基线加 3 个 JS 和 3 个 Residual 候选，不额外复制两个零权重 run。候选范围是否修订仍只由 V9-T 自身的 Train-only 数值审计决定；最终值仍只由冻结后的 Simulation Validation 协议决定。
+
 ## 语义审计
 
 权威机器可读报告是 `reports/v9_method_semantics_audit.json`。
@@ -78,7 +92,7 @@ abs(L2Norm(z1) - L2Norm(z2))
 | 参数 | 定位 | 当前依据 | 当前证据 | 正式选择方式 |
 |---|---|---|---|---|
 | `lambda_js` | 核心 | JS 一致性原理；旧网格仅为内部预注册，不是外部数值权威 | 语义通过；现网格尺度 Gate 阻断 | 修订并冻结三点后只用 Validation |
-| `lambda_res` | 核心 | residual entropy/decorrelation 原理；旧 YAML/default 不是外部数值权威 | 语义通过；现网格尺度 Gate 阻断 | 修订并冻结三点后只用 Validation |
+| `lambda_res` | 核心 | residual entropy/decorrelation 原理；Hu et al. 仅支持机制与敏感性流程；旧 YAML/default 和论文 `1e-4` 都不是本项目数值权威 | 语义通过；现网格尺度 Gate 阻断 | 修订并冻结三点后只用 Validation |
 | residual head depth=1 | 次要 | 最小容量实现 | 单层/参数量/梯度流测试通过 | 固定，不搜索 |
 | warm-up=2 | 次要 | 避免初期辅助目标干扰 | 调度单元测试通过 | 固定，不搜索 |
 | ramp=3 | 次要 | 平滑开启正则 | 调度单元测试通过 | 固定，不搜索 |

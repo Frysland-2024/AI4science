@@ -22,6 +22,9 @@ from xrd_robustness.method_transfer import (
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 CONTRACT_PATH = PROJECT_ROOT / "configs" / "algorithm.v9.method_transfer.json"
+METHOD_PARAMETER_GOVERNANCE_PATH = (
+    PROJECT_ROOT / "configs" / "v9_method_parameter_governance.json"
+)
 HASH_A = hashlib.sha256(b"a").hexdigest().upper()
 HASH_B = hashlib.sha256(b"b").hexdigest().upper()
 HASH_C = hashlib.sha256(b"c").hexdigest().upper()
@@ -44,6 +47,47 @@ class MethodTransferContractTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.contract = load_contract(CONTRACT_PATH)
+        cls.method_parameter_governance = json.loads(
+            METHOD_PARAMETER_GOVERNANCE_PATH.read_text(encoding="utf-8")
+        )
+
+    def test_hu_et_al_parameter_provenance_cannot_authorize_v9_residual_grid(self):
+        provenance = self.method_parameter_governance[
+            "literature_parameter_provenance"
+        ]["hu_et_al_2026_sd3net"]
+        self.assertEqual(provenance["doi"], "10.1016/j.knosys.2026.116429")
+        self.assertEqual(
+            provenance["local_primary_pdf_sha256"],
+            "5F30D94A288542EA173F4A774B9CBE2EB27CD0A8B6B6E9667FB62514E816579F",
+        )
+        self.assertEqual(
+            provenance["paper_loss_definition"]["paper_equations"], [16, 17]
+        )
+        self.assertEqual(provenance["table_5_record"]["lambda_3_fixed_anchor"], 1.0)
+        self.assertEqual(
+            provenance["table_5_record"]["lambda_1_lambda_2_joint_search_range"],
+            [0.1, 1.0],
+        )
+        self.assertEqual(
+            provenance["figure_12_record"]["reported_optimum"], 0.0001
+        )
+        self.assertFalse(
+            provenance["figure_12_record"]["explicit_mapping_to_lambda_3"]
+        )
+        self.assertIn(
+            "copy 1e-4 into V9-T lambda_res",
+            provenance["prohibited_evidentiary_use"],
+        )
+        residual_source = self.method_parameter_governance["parameter_sources"][
+            "lambda_res"
+        ]
+        self.assertFalse(residual_source["external_numerical_authority"])
+        self.assertEqual(
+            self.method_parameter_governance["tuning_gate"][
+                "candidate_range_frozen_for_validation"
+            ],
+            False,
+        )
 
     def test_current_assets_and_locked_splits_pass_preflight(self):
         audit = audit_contract_assets(self.contract, PROJECT_ROOT)

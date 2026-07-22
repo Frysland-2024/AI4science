@@ -14,6 +14,53 @@
     "lambda_js": [0.1, 0.3, 1.0],
     "lambda_res": [0.01, 0.1, 1.0]
   },
+  "literature_parameter_provenance": {
+    "hu_et_al_2026_sd3net": {
+      "citation": "Haotian Hu et al., Hyperspectral single-source domain generalization via structured data simulation and domain-disparity decorrelation, Knowledge-Based Systems 348 (2026) 116429",
+      "doi": "10.1016/j.knosys.2026.116429",
+      "publisher_url": "https://www.sciencedirect.com/science/article/pii/S095070512601155X",
+      "local_primary_pdf_sha256": "5F30D94A288542EA173F4A774B9CBE2EB27CD0A8B6B6E9667FB62514E816579F",
+      "audited_printed_pages": [7, 8, 11, 12],
+      "source_domain": "cross-scene hyperspectral image single-source domain generalization",
+      "paper_loss_definition": {
+        "classification": "L_cls = lambda_1 * L_sd + lambda_2 * L_sim",
+        "total": "L_total = L_cls + lambda_3 * L_decorr",
+        "paper_equations": [16, 17]
+      },
+      "table_5_record": {
+        "lambda_3_fixed_anchor": 1.0,
+        "lambda_1_lambda_2_joint_search_range": [0.1, 1.0],
+        "dataset_settings": {
+          "Pavia": {"lambda_1": 0.1, "lambda_2": 1.0, "lambda_3": 1.0},
+          "HyRANK": {"lambda_1": 0.1, "lambda_2": 0.1, "lambda_3": 1.0},
+          "WHU": {"lambda_1": 0.1, "lambda_2": 0.3, "lambda_3": 1.0}
+        },
+        "sensitivity_design": "fix lambda_3 as a scale anchor and jointly inspect lambda_1 and lambda_2 with a 3D surface"
+      },
+      "figure_12_record": {
+        "symbol_in_text": "lambda",
+        "tested_values": [0.01, 0.001, 0.0001, 0.00001, 0.000001],
+        "reported_optimum": 0.0001,
+        "explicit_mapping_to_lambda_3": false,
+        "interpretation": "the paper separately calls this a regularization parameter but does not explicitly reconcile it with the lambda_3=1 loss weight reported in Equations 17 and Table 5"
+      },
+      "selection_context": {
+        "train_validation_split": "80%-20%",
+        "checkpoint_rule": "best validation model after validation accuracy converges",
+        "independent_runs_reported": 10
+      },
+      "allowed_evidentiary_use": [
+        "support the existence of a residual entropy/decorrelation mechanism",
+        "support controlling relative loss contributions rather than treating weights as physical constants",
+        "support sensitivity analysis and module ablation"
+      ],
+      "prohibited_evidentiary_use": [
+        "treat 1e-4 as the Hu et al. lambda_3 value",
+        "copy 1e-4 into V9-T lambda_res",
+        "claim the paper numerically validates any V9-T lambda_res grid"
+      ]
+    }
+  },
   "parameter_sources": {
     "lambda_js": {
       "role": "core_method_weight",
@@ -28,6 +75,9 @@
       "necessity_basis": "balances residual class-confusion KL against supervised classification",
       "mathematical_scale": "KL(q || Uniform) equals ln(7)-H(q), uses batch mean, and lies in [0, ln(7)]",
       "current_grid_basis": "legacy internal YAML/default only; not independent numerical authority",
+      "external_method_basis": "Hu et al. 2026 supports residual entropy/decorrelation, relative loss weighting, sensitivity analysis, and ablation as methodological precedents",
+      "external_numerical_authority": false,
+      "external_numerical_limit": "Hu et al. report lambda_3=1 in Equations 17/Table 5 while a separate Figure 12 regularization parameter lambda peaks near 1e-4 without an explicit mapping; neither value is transferable to the V9-T loss scale",
       "train_only_scale_result": "all registered values have negligible median backbone-gradient influence under the frozen audit",
       "final_selection": "three-point Simulation Validation search after the candidate range is frozen"
     },

@@ -61,7 +61,7 @@
   },
   "contract": {
     "path": "configs/algorithm.v9.method_transfer.json",
-    "sha256": "B5962975D7C1D731691F2DFF6EBC35D11C87DB8EE18A18946A19BAB5D565FB18"
+    "sha256": "2195C1E941AC3E5EE17960A0D2263FB700984272203D0FD1806FC97456E7CD0D"
   },
   "deferred_until_target_gate": {},
   "engineering_checks": {
