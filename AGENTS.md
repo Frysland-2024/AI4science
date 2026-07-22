@@ -16,6 +16,32 @@ At the start of every task in this repository:
 4. If the skill cannot be read, report that explicitly. Do not claim an indexing
    result until an evidence-based fallback has been completed.
 
+## Default GitHub Repository Policy
+
+For all project-related questions, progress reviews, scientific decisions, code
+inspection, experiment status checks, application narratives, and planning tasks,
+the default and authoritative GitHub repository is:
+
+```text
+Frysland-2024/AI4science
+```
+
+Apply the following rules:
+
+1. Read `Frysland-2024/AI4science` by default before answering any current
+   project question. Do not rely only on chat memory or archived local documents.
+2. Read `Frysland-2024/ferroai-audit` only when the user explicitly asks about
+   the old FerroAI project, or when the task is clearly limited to historical
+   FerroAI code, evidence, or audit records.
+3. If a task compares the old FerroAI project with the current XRD/AI4science
+   project, read both repositories. Treat `Frysland-2024/AI4science` as the
+   authority for current status and `Frysland-2024/ferroai-audit` only as the
+   authority for historical FerroAI evidence.
+4. Never allow information from `ferroai-audit` to override the current XRD,
+   V9-T, application-planning, or project-state records in `AI4science`.
+5. If the repository choice is ambiguous, remain on `Frysland-2024/AI4science`
+   unless the user clearly identifies the old FerroAI project.
+
 Before working on the XRD project, read:
 
 1. `00_project_context/CURRENT_STATE.md`
