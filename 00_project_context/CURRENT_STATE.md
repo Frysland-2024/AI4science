@@ -135,6 +135,7 @@ Simulator perturbation labels are not used in V9-T.
 
 - Lambda tuning: **0/7 runs completed**.
 - Seven tuning runs: planned, not started.
+- Tuning-plan generation remains available for inspection, but both tuning execution switches are false because the method-parameter candidate range is not frozen.
 - Active training process: none.
 - Active checkpoint selected for formal comparison: none.
 - Formal multi-seed 15-run stage: not started.
@@ -162,7 +163,9 @@ Therefore, dynamic manifest growth is **not a current blocker**.
 
 The checkpoint-resume verification gap is now closed. A bounded real-cache CUDA audit interrupts after epoch 0, reloads a self-contained checkpoint, and compares the continuation against an uninterrupted three-epoch reference. All 12 checks pass, including future material IDs, accepted parameter pairs, next-step loss, global step, stream hashes/snapshot, and final model-parameter SHA256. The checkpoint also stores the stream audit and sampler-contract hash directly; RNG restore explicitly normalizes CPU/CUDA state tensors after `map_location`.
 
-The Train-only loss/gradient audit is also complete for all registered JS and Residual candidates over eight optimizer steps per candidate. Numerical legality, zero-weight reduction, symmetry/invariance, warmup/ramp, gradient propagation, finite values, memory/time logging, and collapse checks pass. This audit did **not** select λ and used no Validation/Test/real data. It also exposed an unresolved scientific-governance issue: on this bounded early-training audit, the largest weighted auxiliary-to-classification loss ratios were below 1% for both methods. Therefore the registered ranges are numerically safe, but this evidence alone does not demonstrate a full weak-to-strong scale span. Do not change the frozen candidates automatically; review this observation before authorizing the seven tuning runs.
+The method-parameter semantic audit is now complete: all 22 checks pass. It proves zero-weight reduction to Dynamic/Paired ERM, JS symmetry/non-negativity/batch-mean reduction, residual entropy direction, finite normalization, head/backbone gradient flow, and the exact 2-epoch warmup plus 3-epoch ramp. The production V9 residual is an absolute normalized feature difference and is therefore swap-invariant; the separately retained signed residual is swap-antisymmetric. These semantics are tested independently and must not be conflated.
+
+The scale audit has been upgraded from the earlier eight-step small-model probe to a formal PAMPT-B3, CUDA, 128-step Train-only calibration. It uses 14 balanced structures (two per crystal system), excludes the first 64 burn-in steps, follows a classification-only backbone trajectory, and updates the residual probe only from detached features. It used no Validation/Test/real data and selected no λ. All numerical checks pass, but the registered range Gate is **blocked**: all six candidates have median weighted auxiliary-to-classification backbone-gradient ratios below 1%. The largest current JS candidate reaches `7.489e-5`; the largest Residual candidate reaches `7.610e-4`. Diagnostic median balance coefficients are about `9.745e4` and `2.950e4`, respectively, but these large values are not automatically registered or selected. The audit trajectory and influence bands require scientific review before the single permitted pre-Validation range revision.
 
 ## 8. Engineering gate status before tuning
 
@@ -176,17 +179,20 @@ The Train-only loss/gradient audit is also complete for all registered JS and Re
 | Resumed future view sequence matches uninterrupted execution end-to-end | **PASS: real reflection-cache CUDA audit, 12/12 checks** |
 | Validation and Test IDs are excluded from dynamic training | **PASS** |
 | Optimizer-step and pattern-forward budgets match across methods | **PASS** |
+| Method formula, reduction, zero-weight fallback, direction and gradient flow | **PASS: 22/22 semantic checks** |
+| Registered λ grids span weak, material non-dominant, and dominant gradient influence | **BLOCKED: all current candidates remain below 1% median influence** |
 | Current reports match the frozen configuration and source hashes | **PASS in the recorded preflight; rerun after any code change** |
 
 A failed mandatory gate blocks training authorization.
 
 ## 9. Immediate next actions
 
-1. Review the Train-only scale observation and decide whether the registered λ sets remain unchanged or require a separately documented governance revision. Do not use Validation performance to make this pre-authorization decision.
-2. Complete the desktop migration hash rehearsal and rerun the full unit suite/V9 preflight on the final source tree.
-3. On the target desktop, run bootstrap plus first-boot engineering acceptance; stop at `ready_for_explicit_tuning_authorization`.
-4. Begin the seven-run lambda tuning from optimizer step 0 only after explicit user authorization.
-5. Keep the 15-run comparison, simulated Test, and real test under their separate locks.
+1. Review whether the formal B3 128-step Train-only trajectory and registered influence bands are sufficiently representative; the diagnostic balance centers are too large to adopt automatically.
+2. If accepted, make the single permitted overall logarithmic range revision before any Validation access; then rerun semantic/scale audits, refresh hashes, and freeze the range.
+3. Complete the desktop migration hash rehearsal and rerun the full unit suite/V9 preflight on the final source tree.
+4. On the target desktop, run bootstrap plus first-boot engineering acceptance; the tuning Gate must still stop unless the candidate range is frozen and the user explicitly authorizes execution.
+5. Begin the seven-run lambda tuning from optimizer step 0 only after both the parameter Gate and explicit user authorization pass.
+6. Keep the 15-run comparison, simulated Test, and real test under their separate locks.
 
 ## 10. Current paper structure
 
@@ -283,7 +289,9 @@ unchanged.
 ### Completed engineering evidence
 
 - `reports/v9_resume_determinism_audit.json`: PASS, 12/12 end-to-end resume checks on CUDA using the real reflection cache and frozen Train renderer.
-- `reports/v9_loss_gradient_scale_audit.json`: PASS for numerical legality over 8 Train-only optimizer steps per registered candidate; no λ selection.
+- `reports/v9_method_semantics_audit.json`: PASS, 22/22 formula/direction/reduction/gradient-flow/schedule checks.
+- `reports/v9_loss_gradient_scale_audit.json`: numerical PASS on formal PAMPT-B3 over 128 Train-only optimizer steps, with a blocked registered-candidate range Gate; no λ selection.
+- `configs/v9_method_parameter_governance.json`: hashed source table, fixed secondary parameters, one-revision policy, and fail-closed tuning Gate.
 - `reports/v9_real_test_preprocessing_readiness.json`: locked-ready preprocessing contract; no model or real spectrum loaded.
 - Formal runs now export hashed per-spectrum `prediction_rows.jsonl` with `family_id`, probabilities, and profile/run identity.
 
@@ -301,8 +309,8 @@ unchanged.
 - disabled real-test manifest/hash/preprocessing/overlap audit interfaces;
 - manuscript skeleton, result/figure templates, and reviewer-attack checklist;
 - migration/first-boot workflow remains training-free;
-- the refreshed desktop payload contains 14,288 files (295,195,217 bytes), with stream SHA-256 `F137D1C32E94E4B3CEB1239BDAA048989048C260C2A205C5B3F43DF4344BAE0E`;
-- source-side migration verification passed with 14,288/14,288 files, 0 missing files, 0 size mismatches, and 0 hash mismatches;
+- the refreshed desktop payload count, bytes, and stream SHA-256 are authoritative only in `reports/v9_desktop_migration_manifest.json`, avoiding a self-referential stale copy here;
+- source-side migration verification passed with every manifest file checked, 0 missing files, 0 size mismatches, and 0 hash mismatches; exact counts are authoritative in `reports/v9_desktop_migration_verification.json`;
 - the copy-script `-WhatIf` rehearsal copied nothing, and the first-boot `-PlanOnly` rehearsal contained 0 formal-training commands.
 
 ### Unchanged experiment status and blockers
@@ -310,7 +318,7 @@ unchanged.
 - λ tuning remains **0/7**; formal development comparison remains **0/15**.
 - Simulated Test and real test remain unused and locked.
 - No laptop checkpoint is authoritative.
-- The immediate scientific blocker before tuning authorization is the registered λ range adequacy review described above; the immediate machine blocker is target-desktop first-boot acceptance.
+- The immediate scientific blocker before tuning authorization is the registered λ range adequacy review and one permitted pre-Validation revision described above; the immediate machine blocker is target-desktop first-boot acceptance.
 - The source-side migration package is ready for copy, but this is not target-machine acceptance; the desktop must still run its own environment, hardware, transfer, evaluation, acceleration, and final-readiness probes.
 
 ## 17. Local WICSCI2025 external-material inventory

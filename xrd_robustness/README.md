@@ -6,7 +6,7 @@
 
 | 研究 | 优先级 | 核心问题 | 当前状态（2026-07-16） | 研究完成度 |
 |---|---|---|---|---:|
-| V9-T 算法迁移论文 | 当前唯一主线 | 显式建模同结构跨扰动视图关系，能否在单纯数据增广之上提高未知扰动与真实谱泛化 | family-aware 70/15/15 划分与统一 Validation 已冻结；训练仍为 0/7 调参、0/15 正式实验 | 约 35% |
+| V9-T 算法迁移论文 | 当前唯一主线 | 显式建模同结构跨扰动视图关系，能否在单纯数据增广之上提高未知扰动与真实谱泛化 | family-aware 70/15/15 划分与统一 Validation 已冻结；方法语义 Gate 通过，现候选范围尺度 Gate 阻断；训练仍为 0/7 调参、0/15 正式实验 | 约 35% |
 | V10 Simulator-Supervised Representation Learning | 延期 | 已知模拟器变量能否监督测量变化表征 | 只保留旧原型和研究备忘，不进入 V9-T | 约 15% |
 
 百分比衡量的是完整研究交付物，不代表已有科学结论。算法迁移工程准备已完成，但没有训练结果，所以完整研究仍约为 35%。真实谱只用于最终 `real test`，不参与扰动参数定义、超参数选择、方法比较或 checkpoint 选择。
@@ -59,7 +59,7 @@ E:\AI4science\.venvs\xrd_tools\Scripts\python.exe -s scripts\run_v9_method_trans
 E:\AI4science\.venvs\xrd_tools\Scripts\python.exe -s scripts\run_v9_method_transfer.py final-preflight
 ```
 
-λ 调参结果尚未冻结，因此 15 次正式计划当前必须拒绝生成。新的统一 Validation 已冻结；旧的两个 Validation 子集已废止。训练开关仍关闭，本次更新不启动训练。simulated test 和 real test 也继续锁定，未经对应阶段的明确授权不得解除。
+λ 调参结果尚未冻结，而且当前三点网格没有通过 Train-only 梯度尺度 Gate，因此 7-run 执行与 15 次正式计划都必须 fail-closed。新的统一 Validation 已冻结；旧的两个 Validation 子集已废止。本次更新不启动训练。simulated test 和 real test 也继续锁定，未经对应阶段的明确授权不得解除。
 
 仓库测试：
 
@@ -91,16 +91,18 @@ powershell -ExecutionPolicy Bypass -File scripts\desktop_first_boot_v9.ps1
 ```powershell
 $env:PYTHONPATH='E:\AI4science\xrd_robustness\src'
 E:\AI4science\.venvs\xrd_tools\Scripts\python.exe -s scripts\audit_v9_resume_determinism.py --device cuda
-E:\AI4science\.venvs\xrd_tools\Scripts\python.exe -s scripts\audit_v9_loss_and_gradient_scale.py --device cuda
+E:\AI4science\.venvs\xrd_tools\Scripts\python.exe -s scripts\audit_v9_method_parameter_semantics.py --device cpu
+E:\AI4science\.venvs\xrd_tools\Scripts\python.exe -s scripts\audit_v9_loss_and_gradient_scale.py --device cuda --steps 128 --burn-in-steps 64
 E:\AI4science\.venvs\xrd_tools\Scripts\python.exe -s scripts\audit_v9_real_test_preprocessing.py
 ```
 
 正式 run 将输出带 SHA256 绑定的 `prediction_rows.jsonl`。结果冻结后，使用 `scripts/analyze_v9_results.py` 对多个 run 的逐谱文件做 family-level paired hierarchical bootstrap；不得仅对三个 seed 汇总值 bootstrap。机制诊断入口为 `scripts/analyze_v9_mechanisms.py`，真实谱合同继续保持 disabled。
 
-当前三份机器可读证据：
+当前方法参数相关的机器可读证据与治理合同：
 
-- `reports/v9_resume_determinism_audit.json`；
+- `reports/v9_method_semantics_audit.json`；
 - `reports/v9_loss_gradient_scale_audit.json`；
-- `reports/v9_real_test_preprocessing_readiness.json`。
+- `configs/v9_method_parameter_governance.json`；
+- `docs/V9_METHOD_PARAMETER_GOVERNANCE.md`。
 
-损失尺度审计只证明数值合法性，不选择 λ。它提示当前注册候选在有界早期训练中尚未展示“弱到强”的完整跨度，因此正式调参授权前还需要一次明确的候选范围治理决定。
+损失尺度审计只诊断数值作用强度，不选择 λ。正式 PAMPT-B3 的 128-step Train-only 结果显示，当前六个注册候选的中位辅助/分类 backbone 梯度比均低于 1%，尚未展示“弱—实质但不主导—主导”的跨度。审计反推的平衡中心数值很大，不能自动当作正式网格；正式调参前需要复核并完成唯一一次候选范围治理决定。

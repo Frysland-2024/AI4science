@@ -1,6 +1,6 @@
 # V9-T 算法迁移论文工程契约
 
-状态日期：2026-07-18。项目当前正式身份为 **V9-T：算法迁移主线**，唯一目标是完成算法迁移论文。9,842 / 2,109 / 2,109 的 family-aware（家族分组）70/15/15 划分和统一 Validation 契约已经冻结。训练仍为 0/7 调参、0/15 正式开发实验，simulated test 0 次、real test 0 次。Validation-only 调参在契约中已获授权但当前暂停；正式实验、simulated test 与 real test 的执行开关继续保持关闭。
+状态日期：2026-07-22。项目当前正式身份为 **V9-T：算法迁移主线**，唯一目标是完成算法迁移论文。9,842 / 2,109 / 2,109 的 family-aware（家族分组）70/15/15 划分和统一 Validation 契约已经冻结。方法参数语义 Gate 已通过，但当前候选范围没有通过 Train-only 梯度尺度 Gate。训练仍为 0/7 调参、0/15 正式开发实验，simulated test 0 次、real test 0 次；所有执行开关继续保持关闭。
 
 本研究没有 Pilot 阶段，也不使用 A/B/C2 命名。动态增广是单纯数据增广范式的一种强实现，同时负责生成成对视图，但不作为创新点；结构化扰动继续封存。Near-clean ERM 与离线物理增强只是参考基线。模拟器标签监督残差研究已延期为 **V10：Simulator-Supervised Representation Learning**，不属于当前论文、实验矩阵或资源计划。
 
@@ -68,15 +68,17 @@
 
 最终论文方法只从第 3、4、5 组中选择：若迁移方法未带来可靠收益，Dynamic/Paired ERM 可以成为诚实结论；若 JS 或 Residual 更优，则按统一 Validation 的预注册主指标选择得分最高者。Residual 是重点假设，但必须用相对 Dynamic ERM 和 JS 的直接配对证据决定能否支持更强主张。Near-clean 与离线增强不是额外研究路线。模拟器标签监督在本契约中必须保持 `false`。
 
-## λ 到底是什么，为什么出现 1.0
+## λ 的证据链与当前阻断状态
 
-`lambda_js` 和 `lambda_res` 是辅助损失相对分类损失的数值权重。`1.0` 只表示损失公式中的系数为 1，不代表辅助目标与分类目标同等重要，也不代表它已经被验证为最佳值。
+`lambda_js` 和 `lambda_res` 是辅助损失相对分类损失的数值权重。`1.0` 只表示损失公式中的系数为 1，不代表辅助目标与分类目标同等重要，也不代表它已经被验证为最佳值。方法参数的合法性链固定为：方法原理 → 损失数学尺度与 reduction → Train-only 数值审计 → 预注册 Validation 选择 → 三点敏感性与多 seed。
 
-- JS 调参集合 `{0.1, 0.3, 1.0}` 直接来自 `CODEX_V9_2_ENGINEERING_WITH_ARCHIVED_STRUCTURED_PERTURBATION.md` 第 394 行；训练器和旧 JS 配置中的默认值是 `0.1`。
-- 残差去相关集合 `{0.01, 0.1, 1.0}` 来自当前 `configs/training_dynamic_residual.yaml`；训练器默认值同样是 `0.1`。
+- JS 集合 `{0.1, 0.3, 1.0}` 来自旧工程文档和默认配置，是内部预注册起点，不是独立外部数值依据。
+- 残差去相关集合 `{0.01, 0.1, 1.0}` 来自旧 YAML/default，同样不能作为自身合理性的证据。
 - V9.2 第 424 行的 `{0.1, 0.3, 1.0}` 是模拟器标签监督研究的 `lambda_meas`，不得倒灌为算法迁移的 `lambda_res` 依据。
 
-因此，`0.1` 是工程默认值，`1.0` 是候选上界，二者都不是科学最优值。正式实验只能使用验证集调参后冻结的值。
+新语义审计已证明 JS 的自然对数范围是 `[0, ln(2)]`，Residual 的 `KL(q || Uniform)=ln(7)-H(q)`，两者均为 batch mean；`lambda=0` 退化、交换语义、方向、数值稳定性、梯度流和调度也全部通过。正式 B3、七类平衡 Train 子集、128-step 审计却显示现有六个候选的中位辅助/分类 backbone 梯度比全部小于 1%，所以当前范围 Gate 为 blocked。
+
+审计反推的梯度平衡中心约为 JS `9.745e4`、Residual `2.950e4`。这只是短 Train-only 轨迹的诊断值，不能自动替换正式网格。完整参数表、影响带、一次性修订政策和 Gate 见 `docs/V9_METHOD_PARAMETER_GOVERNANCE.md` 与 `configs/v9_method_parameter_governance.json`。在范围复核、唯一一次整体修订、重跑审计和冻结哈希完成前，Validation-only tuning execution 必须保持关闭。
 
 ## 统一 Validation 的职责
 
@@ -137,6 +139,7 @@ real test 只用于最终外部测试。真实谱清单必须包含来源、许�
 为避免破坏已经冻结的路径和哈希，现有文件名继续保留 `v9_method_transfer`；项目身份以契约中的 `program_id=V9-T` 为准。
 
 - `configs/algorithm.v9.method_transfer.json`：研究、调参、五组实验、公平性与执行门禁；
+- `configs/v9_method_parameter_governance.json`：方法参数来源、语义/尺度证据哈希、固定次要参数与范围 Gate；
 - `configs/evaluation.v9.method_transfer.json`：开发、simulated test 与 real test 的独立契约；
 - `configs/real_test.v9.method_transfer.template.json`：真实谱清单与预处理模板；
 - `configs/simulation.v9.method_transfer.frozen.json`：冻结扰动及未见组合；
@@ -191,4 +194,4 @@ E:\AI4science\.venvs\xrd_tools\Scripts\python.exe -s scripts\run_v9_method_trans
 E:\AI4science\.venvs\xrd_tools\Scripts\python.exe -s -m unittest discover -s tests -q
 ```
 
-当前新 split 与统一 Validation 已冻结。7 次 Validation-only 调参虽已获授权，但目前按用户要求暂停，且本次 trainer 与执行契约已经改变，因此旧的 40-epoch checkpoint 只作归档，不能续跑；迁移到台式机后必须用同一份新计划从第 0 步重新开始。`experiment_execution_enabled=false`、`simulated_test_enabled=false`、`real_test_enabled=false` 继续保持；15 次正式实验和两类最终测试仍需要各自独立授权。
+当前新 split 与统一 Validation 已冻结，但 7 次 Validation-only 调参尚未获得方法参数 Gate 的执行许可。旧的 40-epoch checkpoint 只作归档，不能续跑；迁移到台式机后也必须先完成候选范围复核和冻结，再由用户单独授权并从第 0 步开始。`development_tuning_execution_enabled=false`、`experiment_execution_enabled=false`、`simulated_test_enabled=false`、`real_test_enabled=false` 继续保持；15 次正式实验和两类最终测试仍需要各自独立授权。

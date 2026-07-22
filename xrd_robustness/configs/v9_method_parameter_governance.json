@@ -1,0 +1,100 @@
+{
+  "schema_version": "v9-method-parameter-governance-v1",
+  "status": "candidate_range_recalibration_required_before_validation",
+  "candidate_range_frozen_for_validation": false,
+  "scope": "method-specific parameter legality for V9-T",
+  "evidence_chain": [
+    "method principle explains why the auxiliary coefficient exists",
+    "loss definition and reduction establish the mathematical scale",
+    "Train-only loss and backbone-gradient audit checks whether the registered grid spans meaningful influence",
+    "a frozen Simulation Validation protocol selects the final value without Test or real-XRD access",
+    "multi-seed sensitivity evidence checks that the final result is not a lucky isolated point"
+  ],
+  "registered_candidate_grids": {
+    "lambda_js": [0.1, 0.3, 1.0],
+    "lambda_res": [0.01, 0.1, 1.0]
+  },
+  "parameter_sources": {
+    "lambda_js": {
+      "role": "core_method_weight",
+      "necessity_basis": "balances paired-view JS consistency against supervised classification",
+      "mathematical_scale": "natural-log JS divergence is batch mean and lies in [0, ln(2)]",
+      "current_grid_basis": "legacy internal preregistration only; not independent numerical authority",
+      "train_only_scale_result": "all registered values have negligible median backbone-gradient influence under the frozen audit",
+      "final_selection": "three-point Simulation Validation search after the candidate range is frozen"
+    },
+    "lambda_res": {
+      "role": "core_method_weight",
+      "necessity_basis": "balances residual class-confusion KL against supervised classification",
+      "mathematical_scale": "KL(q || Uniform) equals ln(7)-H(q), uses batch mean, and lies in [0, ln(7)]",
+      "current_grid_basis": "legacy internal YAML/default only; not independent numerical authority",
+      "train_only_scale_result": "all registered values have negligible median backbone-gradient influence under the frozen audit",
+      "final_selection": "three-point Simulation Validation search after the candidate range is frozen"
+    },
+    "residual_head_depth": {
+      "role": "fixed_secondary_structure_parameter",
+      "value": 1,
+      "basis": "minimum-capacity one-layer linear probe",
+      "formal_parameter_count": 903,
+      "selection_policy": "fixed; no result-driven search"
+    },
+    "warmup_epochs": {
+      "role": "fixed_secondary_schedule_parameter",
+      "value": 2,
+      "basis": "prevent the residual objective from influencing the initial classifier trajectory",
+      "selection_policy": "fixed; exact schedule is unit-tested; no result-driven search"
+    },
+    "ramp_epochs": {
+      "role": "fixed_secondary_schedule_parameter",
+      "value": 3,
+      "basis": "smoothly introduce the residual objective after warm-up",
+      "selection_policy": "fixed; exact schedule is unit-tested; no result-driven search"
+    }
+  },
+  "semantic_evidence": {
+    "path": "reports/v9_method_semantics_audit.json",
+    "sha256": "2C159DC6AC0A45BE4D90936F210EA44FE86728748C64B165636BC58A39BA003A",
+    "status": "pass",
+    "validation_used": false,
+    "simulated_test_used": false,
+    "real_test_used": false
+  },
+  "scale_evidence": {
+    "path": "reports/v9_loss_gradient_scale_audit.json",
+    "sha256": "DDDE0BD70450529F4E133FF1A3ED617F123241D56779E455713ABFB905E09BB1",
+    "status": "pass",
+    "candidate_range_gate": "blocked",
+    "formal_backbone": "PAMPT-B3",
+    "optimizer_steps": 128,
+    "burn_in_steps": 64,
+    "balanced_train_structures": 14,
+    "validation_used": false,
+    "simulated_test_used": false,
+    "real_test_used": false
+  },
+  "diagnostic_scale_centers": {
+    "lambda_js": 97454.2320067654,
+    "lambda_res": 29497.752236612032,
+    "interpretation": "Train-only median coefficient for unit auxiliary backbone-gradient norm to match classification; diagnostic only, not a selected or automatically registered value"
+  },
+  "one_revision_policy": {
+    "maximum_range_revisions_before_validation": 1,
+    "completed_range_revisions": 0,
+    "automatic_grid_change_forbidden": true,
+    "validation_performance_must_not_inform_revision": true,
+    "simulated_test_and_real_xrd_must_remain_locked": true,
+    "required_before_revision": "review whether the audit trajectory and influence bands are sufficiently representative before choosing a single overall logarithmic shift",
+    "required_after_revision": "update this file, the main contract, hashes, documentation, and rerun both audits before freezing"
+  },
+  "tuning_gate": {
+    "lambda_zero_semantics_pass": true,
+    "formula_direction_reduction_and_gradient_flow_pass": true,
+    "registered_candidate_range_covers_weak_material_and_dominant": false,
+    "search_range_basis_recorded": true,
+    "residual_head_warmup_and_ramp_frozen": true,
+    "selection_metric_seed_and_tie_breaker_unchanged": true,
+    "simulated_test_and_real_test_untouched": true,
+    "candidate_range_frozen_for_validation": false,
+    "development_tuning_execution_allowed": false
+  }
+}

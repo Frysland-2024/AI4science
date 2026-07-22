@@ -122,6 +122,15 @@ def _runtime_audit(contract: dict[str, Any]) -> dict[str, Any]:
         runtime_blockers.append(f"torch import failed: {import_error}")
     runtime_blockers.extend(mismatches)
     tuning_blockers = list(runtime_blockers)
+    governance = contract["method_parameter_governance"]
+    if governance["candidate_range_frozen_for_validation"] is not True:
+        tuning_blockers.append(
+            "method-parameter candidate range is not frozen for Validation"
+        )
+    if governance["development_tuning_execution_allowed"] is not True:
+        tuning_blockers.append(
+            "method-parameter Train-only scale Gate does not allow tuning"
+        )
     if not contract["execution_policy"]["development_tuning_execution_enabled"]:
         tuning_blockers.append(
             "Validation-only development tuning is not authorized in the contract"

@@ -17,6 +17,7 @@
     "simulation",
     "evaluation",
     "model",
+    "method_parameter_governance",
     "development_tuning",
     "formal_hyperparameters",
     "experiment",
@@ -226,6 +227,46 @@
       "required": ["path", "sha256", "development_evaluation_seed"]
     },
     "model": {"type": "object"},
+    "method_parameter_governance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "sha256",
+        "status",
+        "registered_candidate_grids",
+        "candidate_range_frozen_for_validation",
+        "development_tuning_execution_allowed"
+      ],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"type": "string", "pattern": "^[0-9A-F]{64}$"},
+        "status": {"type": "string", "minLength": 1},
+        "registered_candidate_grids": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["lambda_js", "lambda_res"],
+          "properties": {
+            "lambda_js": {
+              "type": "array",
+              "minItems": 3,
+              "maxItems": 3,
+              "uniqueItems": true,
+              "items": {"type": "number", "exclusiveMinimum": 0}
+            },
+            "lambda_res": {
+              "type": "array",
+              "minItems": 3,
+              "maxItems": 3,
+              "uniqueItems": true,
+              "items": {"type": "number", "exclusiveMinimum": 0}
+            }
+          }
+        },
+        "candidate_range_frozen_for_validation": {"type": "boolean"},
+        "development_tuning_execution_allowed": {"type": "boolean"}
+      }
+    },
     "development_tuning": {
       "type": "object",
       "required": [

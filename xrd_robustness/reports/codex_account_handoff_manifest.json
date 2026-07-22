@@ -4,8 +4,8 @@
     {
       "path": "CODEX_HANDOFF.md",
       "role": "authoritative cross-account entry point",
-      "sha256": "279F9A72217737872153E6E27CFDF2C3B2D549C22836827C95D8CC9AFCD887FC",
-      "size_bytes": 28861
+      "sha256": "4ABBAC068B8504B68C3119BF65723B37D06DDA73CEE57F8CE229E4C13A39B9EA",
+      "size_bytes": 36227
     },
     {
       "path": "docs/CODEX_ACCOUNT_HANDOFF.docx",
@@ -16,14 +16,14 @@
     {
       "path": "README.md",
       "role": "project overview and handoff pointer",
-      "sha256": "95591F0244D841162F5E833CB1CB6664C006727EF89C765C8C6CB49F9627B1BA",
-      "size_bytes": 5310
+      "sha256": "4510D26F564D90AB17B2324CB0FF13F8F0765E98A36D53120DE9A8DD92F2C273",
+      "size_bytes": 7112
     },
     {
       "path": "docs/V9_METHOD_TRANSFER_ENGINEERING.md",
       "role": "research and method-transfer engineering contract",
-      "sha256": "F7D1AF22D509C70CA131FC8674727EAF3576ADEA50EE33A56582E667CBFB85AB",
-      "size_bytes": 18084
+      "sha256": "69B472BD613E50274E0D61CCEB50EA527A778C707589832A3FCC0F6D34BE209E",
+      "size_bytes": 19593
     },
     {
       "path": "docs/V9_DESKTOP_MIGRATION_HANDOFF.md",
@@ -40,8 +40,8 @@
     {
       "path": "configs/algorithm.v9.method_transfer.json",
       "role": "authoritative experiment contract",
-      "sha256": "BB6D52A2253524F4E5DE830A8FB04C21635C3D0D920FC1C318099C0580FD2394",
-      "size_bytes": 16203
+      "sha256": "B5962975D7C1D731691F2DFF6EBC35D11C87DB8EE18A18946A19BAB5D565FB18",
+      "size_bytes": 17168
     },
     {
       "path": "configs/hardware.v9.desktop.9600x_4070tis.json",
@@ -82,20 +82,20 @@
     {
       "path": "reports/v9_method_transfer_preflight.json",
       "role": "latest source-machine scientific preflight",
-      "sha256": "AB31548B6316B69EFFD6AC585AEBD574C51B3FF42E758C6260AA4C8C2849A75B",
-      "size_bytes": 3617
+      "sha256": "75AA2DB7D2ADE2E0AAAE3EC235DD98E647AC9D7E99E0E964D01A8DAAEBD4A3AD",
+      "size_bytes": 4344
     },
     {
       "path": "reports/v9_training_stream_preflight_audit.json",
       "role": "stream fairness and bounded-memory proof",
-      "sha256": "5A732C7F6497878CC9CB804FAA1FAD72CAFA9BC24FAF63B7276D59836B2B2C44",
+      "sha256": "231382F1DA5B9C101CDDFF70928812053E0D9DF16B468BCB0E4A3D5B96DC8F6B",
       "size_bytes": 8830
     },
     {
       "path": "reports/v9_method_transfer_tuning_plan.json",
       "role": "seven-run plan; all runs must remain unstarted",
-      "sha256": "BBF36EB7C1B0374906616F631C997A88420F56E56A4BB63B81EC2517470579DF",
-      "size_bytes": 28778
+      "sha256": "61A2B32F8547650E42317C69511EB020D2253CEC37A353EB9F19174C104560D8",
+      "size_bytes": 29519
     },
     {
       "path": "reports/v9_method_transfer_final_lock_audit.json",
@@ -112,14 +112,14 @@
     {
       "path": "scripts/run_v9_method_transfer.py",
       "role": "planning and explicitly authorized execution launcher",
-      "sha256": "23E9450EF2A7C7FF87B9B13FCF67B496AB666A7EB0F2098DCF35869AE8C3358A",
-      "size_bytes": 19397
+      "sha256": "9C1BC891309E7963841D7DA408A7D78BF87858BA019B46C8E7AF8F61089B792A",
+      "size_bytes": 19832
     },
     {
       "path": "scripts/train_v7.py",
       "role": "shared training entry point",
-      "sha256": "21112C93705F0287FF419DA0320E9CE90684DAAB783114B4D8A1BCC59DAE1364",
-      "size_bytes": 86366
+      "sha256": "6E117ECC38EDD273BB9A3EBE433789D5B06C20BBE611205AC06D472D9F2813D9",
+      "size_bytes": 89130
     },
     {
       "path": "scripts/prepare_codex_account_handoff.py",
@@ -165,7 +165,7 @@
     }
   ],
   "authoritative_entrypoint": "CODEX_HANDOFF.md",
-  "created_at_utc": "2026-07-19T09:05:26.280515+00:00",
+  "created_at_utc": "2026-07-22T10:01:04.007030+00:00",
   "failed_gates": [],
   "gates": {
     "all_seven_runs_planned_not_started": true,

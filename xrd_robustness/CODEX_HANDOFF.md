@@ -15,11 +15,12 @@
 
 ## 0. 一页结论：现在究竟到哪一步
 
-截至 2026-07-19，本项目的当前主线是 **V9-T：Algorithm Transfer for PXRD Robustness**。科学合同、数据划分、物理模拟范围、PAMPT-B3 主干、三种核心动态方法、公平性流审计、台式机硬件配置、迁移脚本和 7-run 计划均已建立。
+截至 2026-07-22，本项目的当前主线是 **V9-T：Algorithm Transfer for PXRD Robustness**。科学合同、数据划分、物理模拟范围、PAMPT-B3 主干、三种核心动态方法、公平性流审计、台式机硬件配置、迁移脚本和 7-run 计划均已建立。方法参数语义 Gate 已通过，但当前候选范围的 Train-only 梯度尺度 Gate 为 blocked。
 
 当前执行状态必须表述为：
 
 - lambda 调参完成度：**0/7**；七条 run 全部是 `planned_not_started`。
+- 7-run 只能生成计划供检查；`development_tuning.execution_enabled=false` 且 `development_tuning_execution_enabled=false`，不得执行。
 - 活动训练进程：0。
 - 活动 run registry：0 条记录。
 - 活动 checkpoint：0。
@@ -214,6 +215,8 @@ PAMPT-B3 内部：
 | `dynamic_residual` | Residual Class Decorrelation | 重点候选方法 |
 
 当前 **7-run lambda tuning** 只包含 Dynamic、JS 和 Residual：
+
+以下 run ID 仍是计划模板，不是已冻结可执行网格。当前候选范围 Gate 阻断，任何接管 agent 都不得据此启动训练。
 
 1. `ordinary_dynamic_augmentation__tuning_seed_20260710`
 2. `js_consistency_transfer__lambda_js_0p1__tuning_seed_20260710`
@@ -705,7 +708,9 @@ powershell -NoProfile -ExecutionPolicy Bypass -File scripts\desktop_first_boot_v
 
 - `reports/v9_resume_determinism_audit.json`：真实 reflection cache、冻结 Train renderer、CUDA 小模型；连续运行与 epoch 0 后中断/恢复在后续 material ID、parameter pair、next loss、global step、stream hash/snapshot 和最终模型 SHA256 上全部一致，12/12 PASS。
 - checkpoint 现在直接保存 `training_stream_audit` 与 `training_sampler_contract_hash`；修复了 `map_location=cuda` 后 CPU RNG state 被放到 CUDA 的恢复错误。
-- `reports/v9_loss_gradient_scale_audit.json`：JS `{0.1,0.3,1.0}` 与 Residual `{0.01,0.1,1.0}` 各 8 个 Train-only optimizer steps，数值合法性检查全部通过；未使用 Validation/Test/real data，未选择 λ。
+- `reports/v9_method_semantics_audit.json`：22/22 PASS；覆盖零权重退化、JS 对称/非负/batch mean、Residual 熵方向与数值稳定性、head/backbone 梯度流及 2-epoch warmup/3-epoch ramp。
+- `reports/v9_loss_gradient_scale_audit.json`：正式 PAMPT-B3、14 个七类平衡 Train 结构、128 optimizer steps（前 64 burn-in）；数值审计通过，但当前候选范围 Gate 为 blocked；未使用 Validation/Test/real data，未选择 λ。
+- `configs/v9_method_parameter_governance.json`：绑定两份审计哈希、参数来源、固定 head/warmup/ramp、一次性范围修订政策和 tuning Gate。
 
 ### 新的统计执行契约
 
@@ -724,7 +729,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File scripts\desktop_first_boot_v
 
 ### 当前新增阻塞项
 
-数值审计显示：在有界早期训练里，两个注册候选集合的最大“加权辅助损失/分类损失”均低于 1%。这证明当前值数值安全，但不能证明范围已经覆盖弱—合理—强。不得由接管 agent 自动修改候选值，也不得用真实谱决定；在授权 7-run 前，必须把“保持原集合还是进行单独的参数治理修订”提交给用户明确决定并记录理由。
+正式 B3 审计显示：当前六个候选的中位“加权辅助 backbone 梯度/分类 backbone 梯度”全部低于 1%；`lambda_js=1.0` 为 `7.489e-5`，`lambda_res=1.0` 为 `7.610e-4`。诊断平衡中心约为 JS `9.745e4`、Residual `2.950e4`，跨度过大，不能由接管 agent 自动写成正式网格。必须先复核短 Train-only 轨迹和 influence bands 的代表性，再在接触 Validation 前进行最多一次整体对数平移，重跑两份审计并冻结哈希。不得用 Validation、Test 或真实谱驱动这次修订。
 
 ### 状态锁保持不变
 
@@ -732,7 +737,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File scripts\desktop_first_boot_v
 - active process/checkpoint/result/run directory：0；
 - simulated Test、real test：未访问且锁定；
 - 笔记本 checkpoint：不具权威性，不复制、不恢复；
-- 台式机 first boot 即使达到 `ready_for_explicit_tuning_authorization`，仍必须停下等待用户授权。
+- 台式机 first boot 即使工程检查通过，也必须同时看到 `candidate_range_frozen_for_validation=true` 和用户明确授权才可执行 7-run；当前两项均不满足。
 
 ### 迁移演练证据
 

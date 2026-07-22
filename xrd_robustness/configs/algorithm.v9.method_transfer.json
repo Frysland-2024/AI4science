@@ -1,7 +1,7 @@
 {
   "$schema": "algorithm.v9.method_transfer.schema.json",
   "schema_version": "v9.1-method-transfer",
-  "status": "v9t_algorithm_transfer_paper_mainline_family_split_frozen_validation_tuning_authorized",
+  "status": "v9t_method_parameter_semantics_pass_candidate_range_recalibration_required",
   "study_kind": "cross_domain_method_transfer",
   "research_question": "Under matched crystal structures, physical-augmentation views, architecture, compute budget, and evaluation panels, does explicit modeling of relations between differently perturbed views of the same crystal structure through JS consistency or residual class decorrelation improve PXRD generalization to unseen perturbations and real experimental patterns beyond augmentation-only supervised learning?",
   "narrative_policy": {
@@ -145,9 +145,20 @@
     "variant": "b3",
     "shared_encoder_and_classifier": true
   },
+  "method_parameter_governance": {
+    "path": "configs/v9_method_parameter_governance.json",
+    "sha256": "D43B2C8534A59F9D6513B6BD95731DF742792F756DFCF64D163093C1D43BE045",
+    "status": "candidate_range_recalibration_required_before_validation",
+    "registered_candidate_grids": {
+      "lambda_js": [0.1, 0.3, 1.0],
+      "lambda_res": [0.01, 0.1, 1.0]
+    },
+    "candidate_range_frozen_for_validation": false,
+    "development_tuning_execution_allowed": false
+  },
   "development_tuning": {
     "name": "validation_only_development_tuning",
-    "execution_enabled": true,
+    "execution_enabled": false,
     "seed": 20260710,
     "epochs": 50,
     "max_optimizer_steps": 30650,
@@ -159,13 +170,13 @@
         "method_id": "js_consistency_transfer",
         "parameter": "lambda_js",
         "values": [0.1, 0.3, 1.0],
-        "source": "CODEX_V9_2_ENGINEERING_WITH_ARCHIVED_STRUCTURED_PERTURBATION.md line 394; 0.1 is also the existing trainer and training_dynamic_js.yaml default"
+        "source": "configs/v9_method_parameter_governance.json; legacy internal grid retained only until the Train-only scale Gate is resolved"
       },
       {
         "method_id": "residual_decorrelation_transfer",
         "parameter": "lambda_res",
         "values": [0.01, 0.1, 1.0],
-        "source": "configs/training_dynamic_residual.yaml; 0.1 is also the existing trainer default"
+        "source": "configs/v9_method_parameter_governance.json; legacy internal grid retained only until the Train-only scale Gate is resolved"
       }
     ],
     "selection": {
@@ -364,13 +375,13 @@
   },
   "execution_policy": {
     "tuning_plan_generation_enabled": true,
-    "development_tuning_execution_enabled": true,
+    "development_tuning_execution_enabled": false,
     "formal_plan_generation_requires_frozen_tuning_selection": true,
     "experiment_execution_enabled": false,
     "formal_scientific_conclusions_enabled": false,
     "simulated_test_enabled": false,
     "real_test_enabled": false,
-    "experiment_blocker": "Validation-only lambda tuning is explicitly authorized; formal controlled training remains unauthorized until the tuning selection is frozen and separately approved.",
+    "experiment_blocker": "Validation-only lambda tuning is blocked until the Train-only method-parameter audit supports a single revised three-point grid, the range is frozen before Validation, hashes are refreshed, and the user separately authorizes execution on the target machine.",
     "formal_blocker": "The tuning selection, 15 formal development runs, unified Validation comparison, and locked final evaluations are incomplete."
   }
 }

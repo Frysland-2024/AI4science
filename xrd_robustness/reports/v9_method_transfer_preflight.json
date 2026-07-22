@@ -1,5 +1,5 @@
 {
-  "contract_status": "v9t_algorithm_transfer_paper_mainline_family_split_frozen_validation_tuning_authorized",
+  "contract_status": "v9t_method_parameter_semantics_pass_candidate_range_recalibration_required",
   "core_comparison_run_count": 9,
   "cross_split_family_count": 0,
   "development_profiles": [
@@ -27,6 +27,9 @@
     "evaluation_contract": "24FD778E2AE1DD0C8AF519871BBC8343F56966437D5AC0E19606E7F03A4FD5D4",
     "freeze_evidence": "34793043BEA82BE9DB1C514491BC9DA04876A5F96285458DC19E84288175F810",
     "hardware_profile": "548FA33C64B2BDC9D4F38D8A054B86278C8A2757E2F18E51191D703A56F05B93",
+    "method_parameter_governance": "D43B2C8534A59F9D6513B6BD95731DF742792F756DFCF64D163093C1D43BE045",
+    "method_parameter_scale": "DDDE0BD70450529F4E133FF1A3ED617F123241D56779E455713ABFB905E09BB1",
+    "method_parameter_semantics": "2C159DC6AC0A45BE4D90936F210EA44FE86728748C64B165636BC58A39BA003A",
     "parameter_table": "A81656EA7EE4FD33F69F479061E739C1F181C4BFEE712F428A32296F842CA36B",
     "peak_cache_manifest": "6AE0CFD1B5B29671E2F532D7A094F2FC412CABD64E4CF77D42915937BACC8D18",
     "simulation_config": "AF6E2FA400525CCF48AAC18C9839CC8EFE13DD3E4C056DD45A74B4DD43262558",
@@ -37,6 +40,9 @@
       "src/xrd_robustness/training_prefetch.py": "245B58369D435BEA3E156A9AEAACB6F08501031C8BDACF3AA738B909877C8FB0"
     }
   },
+  "method_parameter_candidate_range_gate": "blocked",
+  "method_parameter_governance_status": "candidate_range_recalibration_required_before_validation",
+  "method_parameter_tuning_execution_allowed": false,
   "real_test_locked": true,
   "runtime": {
     "configured_python": "E:\\AI4science\\.venvs\\xrd_tools\\Scripts\\python.exe",
@@ -44,7 +50,10 @@
     "cuda_runtime": "12.4",
     "execution_blockers": [
       "gpu_name mismatch: expected 'NVIDIA GeForce RTX 4070 Ti SUPER', observed 'NVIDIA GeForce RTX 4060 Laptop GPU'",
-      "GPU memory is below the frozen minimum"
+      "GPU memory is below the frozen minimum",
+      "method-parameter candidate range is not frozen for Validation",
+      "method-parameter Train-only scale Gate does not allow tuning",
+      "Validation-only development tuning is not authorized in the contract"
     ],
     "formal_execution_blockers": [
       "gpu_name mismatch: expected 'NVIDIA GeForce RTX 4070 Ti SUPER', observed 'NVIDIA GeForce RTX 4060 Laptop GPU'",

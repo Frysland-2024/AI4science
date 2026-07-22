@@ -57,6 +57,16 @@ class MethodTransferContractTests(unittest.TestCase):
         self.assertTrue(audit["simulated_test_locked"])
         self.assertTrue(audit["real_test_locked"])
         self.assertFalse(audit["experiment_execution_enabled"])
+        self.assertEqual(
+            audit["method_parameter_governance_status"],
+            "candidate_range_recalibration_required_before_validation",
+        )
+        self.assertEqual(audit["method_parameter_candidate_range_gate"], "blocked")
+        self.assertFalse(audit["method_parameter_tuning_execution_allowed"])
+        self.assertEqual(
+            audit["hashes"]["method_parameter_governance"],
+            self.contract["method_parameter_governance"]["sha256"],
+        )
         self.assertTrue(Path(self.contract["runtime"]["python_executable"]).is_file())
         self.assertEqual(
             audit["hashes"]["hardware_profile"],
@@ -100,6 +110,7 @@ class MethodTransferContractTests(unittest.TestCase):
             plan["execution_enabled"],
             self.contract["execution_policy"]["development_tuning_execution_enabled"],
         )
+        self.assertFalse(plan["execution_enabled"])
         self.assertEqual(len({run["run_id"] for run in plan["runs"]}), 7)
         for run in plan["runs"]:
             self.assertIn("--development-only", run["argv"])
@@ -166,6 +177,22 @@ class MethodTransferContractTests(unittest.TestCase):
         contract = copy.deepcopy(self.contract)
         contract["narrative_policy"]["challenged_paradigm"] = "dynamic_augmentation"
         with self.assertRaisesRegex(ValueError, "augmentation-only paradigm"):
+            validate_contract(contract)
+
+    def test_contract_rejects_tuning_when_method_parameter_range_is_not_frozen(self):
+        contract = copy.deepcopy(self.contract)
+        contract["development_tuning"]["execution_enabled"] = True
+        contract["execution_policy"]["development_tuning_execution_enabled"] = True
+        contract["method_parameter_governance"][
+            "development_tuning_execution_allowed"
+        ] = True
+        with self.assertRaisesRegex(ValueError, "candidate range is frozen"):
+            validate_contract(contract)
+
+    def test_contract_rejects_candidate_grid_outside_governance(self):
+        contract = copy.deepcopy(self.contract)
+        contract["development_tuning"]["candidates"][0]["values"] = [0.3, 1.0, 3.0]
+        with self.assertRaisesRegex(ValueError, "unexpected development tuning grids"):
             validate_contract(contract)
 
     def test_formal_plan_fails_closed_before_tuning_freeze(self):

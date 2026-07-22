@@ -72,6 +72,7 @@ def validate_contract(contract: Mapping[str, Any]) -> None:
     runtime = contract.get("runtime")
     experiment = contract.get("experiment")
     evaluation = contract.get("evaluation")
+    method_parameter_governance = contract.get("method_parameter_governance")
     tuning = contract.get("development_tuning")
     formal_hyperparameters = contract.get("formal_hyperparameters")
     metrics_and_logging = contract.get("metrics_and_logging")
@@ -85,6 +86,7 @@ def validate_contract(contract: Mapping[str, Any]) -> None:
         ("runtime", runtime),
         ("experiment", experiment),
         ("evaluation", evaluation),
+        ("method_parameter_governance", method_parameter_governance),
         ("development_tuning", tuning),
         ("formal_hyperparameters", formal_hyperparameters),
         ("metrics_and_logging", metrics_and_logging),
@@ -222,10 +224,25 @@ def validate_contract(contract: Mapping[str, Any]) -> None:
     tuning_candidates = tuning.get("candidates")
     if not isinstance(tuning_candidates, list) or len(tuning_candidates) != 2:
         raise ValueError("development tuning requires JS and residual candidate grids")
+    expected_grids = method_parameter_governance.get("registered_candidate_grids")
+    if not isinstance(expected_grids, Mapping) or set(expected_grids) != {
+        "lambda_js",
+        "lambda_res",
+    }:
+        raise ValueError("method-parameter governance must register JS and residual grids")
     expected_grids = {
-        "lambda_js": [0.1, 0.3, 1.0],
-        "lambda_res": [0.01, 0.1, 1.0],
+        str(parameter): list(values)
+        for parameter, values in expected_grids.items()
     }
+    for parameter, values in expected_grids.items():
+        if (
+            len(values) != 3
+            or any(not isinstance(value, (int, float)) or float(value) <= 0 for value in values)
+            or [float(value) for value in values] != sorted(float(value) for value in values)
+        ):
+            raise ValueError(
+                f"{parameter} must have exactly three positive, increasing candidates"
+            )
     observed_grids = {
         str(item.get("parameter")): list(item.get("values", []))
         for item in tuning_candidates
@@ -242,6 +259,21 @@ def validate_contract(contract: Mapping[str, Any]) -> None:
         execution.get("development_tuning_execution_enabled")
     ):
         raise ValueError("development tuning execution switches disagree")
+    if bool(tuning["execution_enabled"]) != bool(
+        method_parameter_governance.get("development_tuning_execution_allowed")
+    ):
+        raise ValueError("development tuning disagrees with the method-parameter Gate")
+    if method_parameter_governance.get("candidate_range_frozen_for_validation") is not True:
+        if bool(tuning["execution_enabled"]):
+            raise ValueError(
+                "development tuning must remain disabled until the candidate range is frozen"
+            )
+    elif method_parameter_governance.get("status") != "candidate_range_frozen_for_validation":
+        raise ValueError("frozen candidate range requires the matching governance status")
+    if not str(method_parameter_governance.get("path", "")).strip() or len(
+        str(method_parameter_governance.get("sha256", ""))
+    ) != 64:
+        raise ValueError("method-parameter governance path and SHA256 must be frozen")
     formal_values = formal_hyperparameters.get("values", {})
     if set(formal_values) != {"lambda_js", "lambda_res"}:
         raise ValueError("formal hyperparameters must contain lambda_js and lambda_res")
@@ -381,6 +413,15 @@ def audit_contract_assets(contract: Mapping[str, Any], project_root: str | Path)
     parameter_table = _project_path(root, str(simulation["parameter_table"]))
     evaluation_contract = _project_path(root, str(contract["evaluation"]["path"]))
     hardware_profile_path = _project_path(root, str(contract["hardware_profile"]["path"]))
+    governance_contract = contract["method_parameter_governance"]
+    governance_path = _project_path(root, str(governance_contract["path"]))
+    governance_payload = json.loads(governance_path.read_text(encoding="utf-8"))
+    semantic_evidence_path = _project_path(
+        root, str(governance_payload.get("semantic_evidence", {}).get("path", ""))
+    )
+    scale_evidence_path = _project_path(
+        root, str(governance_payload.get("scale_evidence", {}).get("path", ""))
+    )
 
     required = [
         data_root,
@@ -396,6 +437,9 @@ def audit_contract_assets(contract: Mapping[str, Any], project_root: str | Path)
         parameter_table,
         evaluation_contract,
         hardware_profile_path,
+        governance_path,
+        semantic_evidence_path,
+        scale_evidence_path,
     ]
     missing = [str(path) for path in required if not path.exists()]
     if missing:
@@ -417,6 +461,9 @@ def audit_contract_assets(contract: Mapping[str, Any], project_root: str | Path)
         "parameter_table": sha256_file(parameter_table),
         "evaluation_contract": sha256_file(evaluation_contract),
         "hardware_profile": sha256_file(hardware_profile_path),
+        "method_parameter_governance": sha256_file(governance_path),
+        "method_parameter_semantics": sha256_file(semantic_evidence_path),
+        "method_parameter_scale": sha256_file(scale_evidence_path),
     }
     expected_hashes = {
         "split_manifest": str(data["split_manifest_sha256"]).upper(),
@@ -431,6 +478,13 @@ def audit_contract_assets(contract: Mapping[str, Any], project_root: str | Path)
         "parameter_table": str(simulation["parameter_table_sha256"]).upper(),
         "evaluation_contract": str(contract["evaluation"]["sha256"]).upper(),
         "hardware_profile": str(contract["hardware_profile"]["sha256"]).upper(),
+        "method_parameter_governance": str(governance_contract["sha256"]).upper(),
+        "method_parameter_semantics": str(
+            governance_payload["semantic_evidence"]["sha256"]
+        ).upper(),
+        "method_parameter_scale": str(
+            governance_payload["scale_evidence"]["sha256"]
+        ).upper(),
     }
     mismatches = {
         key: {"expected": expected, "actual": hashes[key]}
@@ -439,6 +493,45 @@ def audit_contract_assets(contract: Mapping[str, Any], project_root: str | Path)
     }
     if mismatches:
         raise ValueError(f"method-transfer asset hash mismatch: {mismatches}")
+
+    if governance_payload.get("schema_version") != "v9-method-parameter-governance-v1":
+        raise ValueError("unsupported method-parameter governance schema")
+    for key in ("status", "candidate_range_frozen_for_validation"):
+        if governance_payload.get(key) != governance_contract.get(key):
+            raise ValueError(f"method-parameter governance mismatch: {key}")
+    if (
+        governance_payload.get("registered_candidate_grids")
+        != governance_contract.get("registered_candidate_grids")
+    ):
+        raise ValueError("method-parameter candidate grids disagree")
+    governance_gate = governance_payload.get("tuning_gate", {})
+    if bool(governance_gate.get("development_tuning_execution_allowed")) != bool(
+        governance_contract.get("development_tuning_execution_allowed")
+    ):
+        raise ValueError("method-parameter execution Gate disagrees with the main contract")
+
+    semantic_evidence = json.loads(semantic_evidence_path.read_text(encoding="utf-8"))
+    if semantic_evidence.get("status") != "pass" or any(
+        semantic_evidence.get(key) is not False
+        for key in ("validation_used", "simulated_test_used", "real_test_used")
+    ):
+        raise ValueError("method-parameter semantic evidence is invalid or leaked")
+    if not all(semantic_evidence.get("checks", {}).values()):
+        raise ValueError("method-parameter semantic evidence contains failed checks")
+
+    scale_evidence = json.loads(scale_evidence_path.read_text(encoding="utf-8"))
+    if scale_evidence.get("status") != "pass" or any(
+        scale_evidence.get(key) is not False
+        for key in ("validation_used", "simulated_test_used", "real_test_used")
+    ):
+        raise ValueError("method-parameter scale evidence is invalid or leaked")
+    if not all(scale_evidence.get("checks", {}).values()):
+        raise ValueError("method-parameter scale evidence contains failed checks")
+    if (
+        scale_evidence.get("candidate_range_gate", {}).get("status")
+        != governance_payload.get("scale_evidence", {}).get("candidate_range_gate")
+    ):
+        raise ValueError("candidate-range Gate status disagrees with scale evidence")
 
     hardware_payload = json.loads(hardware_profile_path.read_text(encoding="utf-8"))
     if hardware_payload.get("schema_version") != "v9-desktop-hardware-profile-v1":
@@ -653,6 +746,13 @@ def audit_contract_assets(contract: Mapping[str, Any], project_root: str | Path)
         "development_profiles": sorted(required_profiles),
         "scientific_range_status": "frozen",
         "freeze_evidence_status": "passed",
+        "method_parameter_governance_status": governance_payload["status"],
+        "method_parameter_candidate_range_gate": scale_evidence[
+            "candidate_range_gate"
+        ]["status"],
+        "method_parameter_tuning_execution_allowed": bool(
+            governance_gate["development_tuning_execution_allowed"]
+        ),
         "simulated_test_locked": True,
         "real_test_locked": True,
         "formal_development_run_count": len(contract["experiment"]["methods"])

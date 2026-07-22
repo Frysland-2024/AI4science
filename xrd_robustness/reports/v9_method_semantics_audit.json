@@ -1,0 +1,71 @@
+{
+  "candidate_selection_performed": false,
+  "checks": {
+    "classification_batchmean_duplicate_invariant": true,
+    "deferred_signed_residual_swap_antisymmetric": true,
+    "js_batchmean_duplicate_invariant": true,
+    "js_identical_predictions_zero": true,
+    "js_natural_log_bound_ln2": true,
+    "js_non_negative": true,
+    "js_swap_symmetric": true,
+    "js_zero_weight_backbone_update_equals_dynamic_erm": true,
+    "minimizing_residual_kl_increases_entropy": true,
+    "residual_confusion_batchmean_duplicate_invariant": true,
+    "residual_gradient_reaches_backbone": true,
+    "residual_head_depth_one_is_single_linear_layer": true,
+    "residual_head_formal_parameter_count_is_903": true,
+    "residual_kl_equals_log_classes_minus_entropy": true,
+    "residual_normalization_finite_for_zero_vectors": true,
+    "residual_peaked_prediction_has_positive_kl": true,
+    "residual_probe_gradient_reaches_head": true,
+    "residual_uniform_prediction_has_zero_kl": true,
+    "residual_warmup_and_ramp_exact": true,
+    "residual_zero_weight_backbone_update_equals_dynamic_erm": true,
+    "v9_decorrelation_objective_swap_invariant": true,
+    "v9_production_residual_swap_invariant": true
+  },
+  "device": "cpu",
+  "formal_training_runs_started": 0,
+  "input_hashes": {
+    "audit_script": "2F7FC8D8A72008E6F6EF602BFF82CB9E0C2765E7A272A1FC580097E3EA931ED4",
+    "objective_source": "09D0E99BA70AEF8C095C7FA41519917A21C6C6BBB80748C3807346F2109420AF"
+  },
+  "mathematical_scale": {
+    "js_range": [
+      0.0,
+      0.6931471805599453
+    ],
+    "log_base": "natural",
+    "residual_confusion_identity": "KL(q||Uniform(7)) = ln(7) - H(q)",
+    "residual_confusion_kl_range": [
+      0.0,
+      1.9459101490553132
+    ],
+    "seven_class_cross_entropy_at_uniform_prediction": 1.9459101490553132
+  },
+  "real_test_used": false,
+  "residual_contract": {
+    "deferred_signed_path": "L2Norm(z2) - L2Norm(z1); sign reverses under view swap",
+    "scientific_interpretation": "V9-T decorrelates class information from residual magnitude and does not claim a signed perturbation delta",
+    "v9_production": "abs(L2Norm(z1) - L2Norm(z2)); invariant to view order"
+  },
+  "residual_schedule_epochs_0_to_6": [
+    0.0,
+    0.0,
+    0.03333333333333333,
+    0.06666666666666667,
+    0.1,
+    0.1,
+    0.1
+  ],
+  "schema_version": "v9-method-parameter-semantics-audit-v1",
+  "scope": "data_free_objective_semantics",
+  "simulated_test_used": false,
+  "status": "pass",
+  "validation_used": false,
+  "zero_weight_backbone_hashes": {
+    "dynamic_erm": "1BA8CCF208A6C4762D75F2D4886141B918CABC316680729AE14D1399D7E87724",
+    "js_zero": "1BA8CCF208A6C4762D75F2D4886141B918CABC316680729AE14D1399D7E87724",
+    "residual_zero": "1BA8CCF208A6C4762D75F2D4886141B918CABC316680729AE14D1399D7E87724"
+  }
+}
