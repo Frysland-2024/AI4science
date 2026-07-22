@@ -255,3 +255,29 @@ This is a repository-governance change only. It does not change the V9-T scienti
 design, the 0/7 tuning state, any experiment result, or any training/test authorization.
 An explicit user instruction not to commit or not to push overrides automatic
 publication for that task.
+
+## 15. Local GTIIT external-data inventory
+
+On 2026-07-22, an external GTIIT laboratory archive was moved from the desktop,
+validated, and organized under `E:/AI4science/04_external_lab_data/GTIIT`. The
+entire top-level directory is Git-ignored because it contains raw experimental
+data, PDFs, images, external scripts, and privacy-sensitive laboratory forms.
+
+Current local evidence:
+
+- the source archive SHA-256 is
+  `959B26A57519BF0CEAC77581EBF2653FD52AD4B6FCCFFCFDA8FDC6433D1508B6`;
+- all 561 extracted files match their seven nested ZIP entries by size and CRC;
+- the XRD portion contains 543 files, including 237 RAW and 228 TXT files;
+- 224/228 XRD TXT files parse as monotonic two-column spectra, and 218 RAW/TXT
+  pairs share a directory and filename stem;
+- one remote XRD folder was explicitly missing from the source export;
+- 40 of 41 readable non-temporary Word documents were flagged for contact,
+  address, invoicing, or account-like information and must remain local.
+
+This inventory creates a candidate real-instrument data pool only. It is not a
+frozen label manifest, training source, Validation set, or authorized real test.
+Before any future use, it requires de-identification, sample-level label evidence,
+batch isolation, provenance documentation, and the relevant explicit authorization.
+The V9-T scientific design, current blocker, 0/7 tuning state, and test locks are
+unchanged.

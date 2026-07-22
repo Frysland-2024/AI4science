@@ -13,6 +13,7 @@ tmp/
 01_literature/
 02_code_repositories/
 03_tools_and_packages/
+04_external_lab_data/
 
 # Secrets
 .env

@@ -23,6 +23,7 @@
 | [`xrd_robustness/README.md`](xrd_robustness/README.md) | 当前代码、配置、数据、测试与实际运行边界 |
 | [`01_literature/README.md`](01_literature/README.md) | 文献分区、阅读审计和论文—代码映射 |
 | [`02_code_repositories/README.md`](02_code_repositories/README.md) | 本地外部代码资产及复用边界 |
+| `04_external_lab_data/GTIIT/README.md`（仅本地） | GTIIT 实验数据的分类、完整性、隐私风险与当前用途边界；整个顶层目录不进入 Git |
 
 ## 文档层级
 
@@ -33,6 +34,7 @@
 5. `00_project_context/archive/`、V6/V7/V8 文档及日期化报告保留为历史证据，不作为当前执行命令。
 6. `extracted_full_archive/`、`source_package/`、外部仓库 README、许可证、`.venvs/` 和 `.conda/` 是来源或运行时资产，不参与项目 Markdown 去重。
 7. 2026-07-19 清理审计见 [`xrd_robustness/reports/ai4science_cleanup_inventory_20260719.json`](xrd_robustness/reports/ai4science_cleanup_inventory_20260719.json)。
+8. `04_external_lab_data/` 是 Git 忽略的本地外部实验资料区；其中的原始光谱、PDF、图片、实验表单和外部脚本不得提交。
 
 ## 历史报告
 
