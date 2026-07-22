@@ -27,8 +27,8 @@
     "evaluation_contract": "24FD778E2AE1DD0C8AF519871BBC8343F56966437D5AC0E19606E7F03A4FD5D4",
     "freeze_evidence": "34793043BEA82BE9DB1C514491BC9DA04876A5F96285458DC19E84288175F810",
     "hardware_profile": "548FA33C64B2BDC9D4F38D8A054B86278C8A2757E2F18E51191D703A56F05B93",
-    "method_parameter_governance": "A7423BC2C41707D27807A43FBA3358EF0DBD9474F0F62CADC0176812732F58FE",
-    "method_parameter_scale": "DDDE0BD70450529F4E133FF1A3ED617F123241D56779E455713ABFB905E09BB1",
+    "method_parameter_governance": "482D5107C81447902C75F595FE2996C7B569FB1424297D3C57E6494C3F4B1620",
+    "method_parameter_scale": "43CADB63F82FCB705561FBFB281DF87B6D9446F1D587A6DEAADACB71D07DA997",
     "method_parameter_semantics": "2C159DC6AC0A45BE4D90936F210EA44FE86728748C64B165636BC58A39BA003A",
     "parameter_table": "A81656EA7EE4FD33F69F479061E739C1F181C4BFEE712F428A32296F842CA36B",
     "peak_cache_manifest": "6AE0CFD1B5B29671E2F532D7A094F2FC412CABD64E4CF77D42915937BACC8D18",
@@ -41,7 +41,7 @@
     }
   },
   "method_parameter_candidate_range_gate": "blocked",
-  "method_parameter_governance_status": "candidate_range_recalibration_required_before_validation",
+  "method_parameter_governance_status": "diagnostic_milestone_audit_required_before_validation",
   "method_parameter_tuning_execution_allowed": false,
   "real_test_locked": true,
   "runtime": {

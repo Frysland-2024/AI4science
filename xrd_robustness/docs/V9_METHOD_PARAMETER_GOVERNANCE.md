@@ -2,12 +2,14 @@
 
 ## 当前结论
 
-V9-T 的方法公式、方向、reduction、梯度流和调度语义已经通过审计；但当前两组三点候选范围尚未通过数值尺度 Gate，因此 **Validation-only 7-run 仍然禁止执行**。
+V9-T 的方法公式、方向、reduction、梯度流和调度语义已经通过审计；但 128-step 短轨迹结束时，分类主干和 residual probe 都尚未显示出高于随机水平的学习信号。因此梯度倒数只能视为诊断性的补偿倍数，当前两组三点网格保持不变，**Validation-only 7-run 仍然禁止执行**。
 
 这不是方法实现失败。准确状态是：
 
 - 工程/公式 Gate：通过；
-- Train-only 数值审计：执行成功；
+- Train-only 数值审计：执行成功，但学习阶段不足以解释权重；
+- 分类学习信号：未证明；
+- residual probe 类别预测能力：未证明；
 - 当前候选范围 Gate：阻断；
 - Validation、simulated Test、real test：均未使用；
 - 正式调参进度：`0/7`。
@@ -18,7 +20,7 @@ V9-T 的方法公式、方向、reduction、梯度流和调度语义已经通过
 
 1. 方法原理解释参数为什么存在；
 2. 损失定义与 batch-mean reduction 给出数学尺度；
-3. 只使用 Train 的 loss/gradient 审计排除整体过弱或过强的候选区间；
+3. 只使用 Train 的 loss/gradient 审计，并先确认分类主干与 residual probe 已进入可解释的学习阶段；
 4. 候选区间冻结后，仅用 Simulation Validation 选择最终值；
 5. 三点敏感性、多 seed 和配对比较检验是否依赖幸运点；
 6. simulated Test 和 real test 不参与任何参数决策。
@@ -67,32 +69,51 @@ abs(L2Norm(z1) - L2Norm(z2))
 - residual probe 只用 detached features 更新，不改变 backbone；
 - 没有候选专属训练，没有模型选择。
 
-当前候选的中位辅助/分类 backbone 梯度比为：
+新版审计使用 128 个不重复的固定配对 batch，并把 PAMPT 的监督分类头排除在“backbone 梯度”之外。JS 使用 `batchmean` KL（类别维求和、batch 维求均值），Residual 使用逐样本类别维求和再做一次 batch mean；二者都没有重复除以类别数。
+
+审计轨迹三等分的均值如下；这里的 early/middle/late 只表示 128-step 诊断轨迹的三段，不是正式 50-epoch 训练的早中晚：
+
+| 指标 | early (0–41) | middle (42–84) | late (85–127) |
+|---|---:|---:|---:|
+| `L_cls` | 1.9637 | 1.9507 | 1.9499 |
+| `L_JS` / prediction JS | 3.454e-7 | 2.514e-7 | 2.968e-7 |
+| `L_res` | 2.604e-4 | 2.562e-4 | 2.527e-4 |
+| `||grad L_cls||` | 1.770 | 1.525 | 1.291 |
+| `||grad L_JS||` | 7.837e-6 | 4.297e-6 | 4.675e-6 |
+| `||grad L_res||` | 8.052e-5 | 5.737e-5 | 5.431e-5 |
+| normalized feature residual norm | 7.745e-3 | 6.440e-3 | 6.344e-3 |
+| residual-head entropy | 1.945650 | 1.945654 | 1.945658 |
+| classification accuracy | 12.59% | 9.97% | 11.96% |
+| residual probe pre-update accuracy | 14.29% | 13.95% | 14.62% |
+
+七分类随机准确率为 `14.29%`，均匀预测的交叉熵/最大熵为 `ln(7)=1.94591`。late 段分类准确率仅 `11.96%`，`L_cls=1.9499`；probe 准确率仅 `14.62%`，交叉熵 `1.94613`，residual-head entropy 几乎等于最大熵。两个视图的 top-1 预测 late 段却有 `99.34%` 一致。这说明 JS 很小主要因为两个视图在尚未学会分类时已经输出几乎相同的预测；Residual 很小则与 probe 尚未学会从 residual 预测类别同时发生。此时“均匀 residual 预测”不能被解释为去相关成功。
+
+当前候选在后 64 step 的中位辅助/分类 backbone 梯度比为：
 
 | 参数 | 候选值 | 中位梯度比 |
 |---|---:|---:|
-| `lambda_js` | 0.1 | 7.489e-6 |
-| `lambda_js` | 0.3 | 2.247e-5 |
-| `lambda_js` | 1.0 | 7.489e-5 |
-| `lambda_res` | 0.01 | 7.610e-6 |
-| `lambda_res` | 0.1 | 7.610e-5 |
-| `lambda_res` | 1.0 | 7.610e-4 |
+| `lambda_js` | 0.1 | 3.480e-7 |
+| `lambda_js` | 0.3 | 1.044e-6 |
+| `lambda_js` | 1.0 | 3.480e-6 |
+| `lambda_res` | 0.01 | 3.913e-7 |
+| `lambda_res` | 0.1 | 3.913e-6 |
+| `lambda_res` | 1.0 | 3.913e-5 |
 
 按预注册的描述性影响带，`R < 0.01` 为几乎不起作用，`0.01 <= R < 0.1` 为弱，`0.1 <= R < 1` 为实质但不主导，`R >= 1` 为主导。当前六个候选全部落在 `R < 0.01`，所以不能声称它们覆盖了“弱—中—强”。
 
-审计给出的中位梯度平衡中心约为：
+对这些比值取倒数会得到诊断性的梯度补偿倍数：
 
-- JS：`lambda_0 = 9.745e4`；
-- Residual：`lambda_0 = 2.950e4`。
+- JS：约 `2.874e5`；
+- Residual：约 `2.556e4`。
 
-这些中心值只是当前 Train-only 轨迹上的诊断量，不是 Validation 选择结果，也没有自动写入正式候选网格。如此大的跨度要求在执行唯一一次整体平移前，先复核短轨迹、训练阶段和 influence bands 是否足以代表正式训练。
+它们不是理论权重、不是候选网格提案、不是 Validation 选择结果，也没有写入正式配置。下一次合法动作是在 Train-only 范围内按“学习里程碑”复测：先确认分类主干已经明显优于随机；对 Residual 还必须确认 pre-update probe 能从 residual 中预测类别。只有这两项成立后，辅助梯度的大小才具有可解释性。在此之前禁止整体平移网格。
 
 ## 参数来源与冻结策略
 
 | 参数 | 定位 | 当前依据 | 当前证据 | 正式选择方式 |
 |---|---|---|---|---|
-| `lambda_js` | 核心 | JS 一致性原理；旧网格仅为内部预注册，不是外部数值权威 | 语义通过；现网格尺度 Gate 阻断 | 修订并冻结三点后只用 Validation |
-| `lambda_res` | 核心 | residual entropy/decorrelation 原理；Hu et al. 仅支持机制与敏感性流程；旧 YAML/default 和论文 `1e-4` 都不是本项目数值权威 | 语义通过；现网格尺度 Gate 阻断 | 修订并冻结三点后只用 Validation |
+| `lambda_js` | 核心 | JS 一致性原理；旧网格仅为内部预注册，不是外部数值权威 | 语义通过；短轨迹分类尚未学习，梯度补偿不可解释 | 学习里程碑审计后决定是否修订；冻结后只用 Validation |
+| `lambda_res` | 核心 | residual entropy/decorrelation 原理；Hu et al. 仅支持机制与敏感性流程；旧 YAML/default 和论文 `1e-4` 都不是本项目数值权威 | 语义通过；probe 仍为随机水平，不能宣称去相关成功 | probe 能力审计后决定是否修订；冻结后只用 Validation |
 | residual head depth=1 | 次要 | 最小容量实现 | 单层/参数量/梯度流测试通过 | 固定，不搜索 |
 | warm-up=2 | 次要 | 避免初期辅助目标干扰 | 调度单元测试通过 | 固定，不搜索 |
 | ramp=3 | 次要 | 平滑开启正则 | 调度单元测试通过 | 固定，不搜索 |
@@ -101,10 +122,13 @@ abs(L2Norm(z1) - L2Norm(z2))
 
 - [x] `lambda=0` 严格退化为 Dynamic/Paired ERM；
 - [x] 公式、方向、reduction、数值稳定性与梯度流通过；
+- [ ] Train-only 分类主干达到非随机学习里程碑；
+- [ ] residual probe 在施加混淆解释前证明具有类别预测能力；
+- [ ] 梯度补偿倍数的解释 Gate 通过；
 - [ ] 冻结候选区间覆盖不同辅助梯度强度；
 - [x] 搜索范围依据与调整政策已写入仓库；
 - [x] residual head、warm-up、ramp 已明确冻结；
 - [x] 选择指标、seed、并列规则保持不变；
 - [x] simulated Test 与 real test 完全未接触。
 
-在第三项通过前，主合同中的两个 tuning execution switches 必须保持 `false`。候选范围最多允许在接触 Validation 前整体修订一次；修订不能由性能结果驱动，修订后必须更新配置、文档和哈希并重新运行两份审计。
+在以上未勾选项通过前，主合同中的两个 tuning execution switches 必须保持 `false`。候选范围最多允许在接触 Validation 前整体修订一次；修订不能由性能结果驱动，修订后必须更新配置、文档和哈希并重新运行两份审计。

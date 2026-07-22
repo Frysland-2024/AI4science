@@ -1,6 +1,6 @@
 {
   "schema_version": "v9-method-parameter-governance-v1",
-  "status": "candidate_range_recalibration_required_before_validation",
+  "status": "diagnostic_milestone_audit_required_before_validation",
   "candidate_range_frozen_for_validation": false,
   "scope": "method-specific parameter legality for V9-T",
   "evidence_chain": [
@@ -67,7 +67,7 @@
       "necessity_basis": "balances paired-view JS consistency against supervised classification",
       "mathematical_scale": "natural-log JS divergence is batch mean and lies in [0, ln(2)]",
       "current_grid_basis": "legacy internal preregistration only; not independent numerical authority",
-      "train_only_scale_result": "all registered values have negligible median backbone-gradient influence under the frozen audit",
+      "train_only_scale_result": "the 128-step diagnostic trajectory never demonstrated a non-random classification signal; both views already agreed on nearly uniform/untrained predictions, so the tiny JS gradient cannot yet justify a candidate-range revision",
       "final_selection": "three-point Simulation Validation search after the candidate range is frozen"
     },
     "lambda_res": {
@@ -78,7 +78,7 @@
       "external_method_basis": "Hu et al. 2026 supports residual entropy/decorrelation, relative loss weighting, sensitivity analysis, and ablation as methodological precedents",
       "external_numerical_authority": false,
       "external_numerical_limit": "Hu et al. report lambda_3=1 in Equations 17/Table 5 while a separate Figure 12 regularization parameter lambda peaks near 1e-4 without an explicit mapping; neither value is transferable to the V9-T loss scale",
-      "train_only_scale_result": "all registered values have negligible median backbone-gradient influence under the frozen audit",
+      "train_only_scale_result": "the residual probe remained at chance with cross-entropy at the uniform baseline, so near-uniform residual-head output cannot yet be interpreted as successful decorrelation and the tiny residual gradient cannot justify a candidate-range revision",
       "final_selection": "three-point Simulation Validation search after the candidate range is frozen"
     },
     "residual_head_depth": {
@@ -111,21 +111,27 @@
   },
   "scale_evidence": {
     "path": "reports/v9_loss_gradient_scale_audit.json",
-    "sha256": "DDDE0BD70450529F4E133FF1A3ED617F123241D56779E455713ABFB905E09BB1",
+    "sha256": "43CADB63F82FCB705561FBFB281DF87B6D9446F1D587A6DEAADACB71D07DA997",
+    "schema_version": "v9-loss-gradient-scale-audit-v3",
     "status": "pass",
     "candidate_range_gate": "blocked",
+    "gradient_compensation_interpretation_gate": "blocked",
     "formal_backbone": "PAMPT-B3",
     "optimizer_steps": 128,
     "burn_in_steps": 64,
     "balanced_train_structures": 14,
+    "fixed_pair_batches": 128,
+    "fixed_pair_batches_repeated": false,
+    "classification_learning_signal": "not_demonstrated",
+    "residual_probe_competence": "not_demonstrated",
     "validation_used": false,
     "simulated_test_used": false,
     "real_test_used": false
   },
-  "diagnostic_scale_centers": {
-    "lambda_js": 97454.2320067654,
-    "lambda_res": 29497.752236612032,
-    "interpretation": "Train-only median coefficient for unit auxiliary backbone-gradient norm to match classification; diagnostic only, not a selected or automatically registered value"
+  "diagnostic_gradient_compensation_factors": {
+    "lambda_js": 287400.6148373947,
+    "lambda_res": 25557.669898619482,
+    "interpretation": "inverse median backbone-gradient ratios from an unlearned 128-step trajectory; diagnostic alarm signals only, not theoretical weights, grid proposals, selected values, or automatically registered values"
   },
   "one_revision_policy": {
     "maximum_range_revisions_before_validation": 1,
@@ -133,13 +139,16 @@
     "automatic_grid_change_forbidden": true,
     "validation_performance_must_not_inform_revision": true,
     "simulated_test_and_real_xrd_must_remain_locked": true,
-    "required_before_revision": "review whether the audit trajectory and influence bands are sufficiently representative before choosing a single overall logarithmic shift",
+    "required_before_revision": "run a Train-only milestone audit after the backbone shows a non-random classification signal and require the residual probe to demonstrate class-prediction competence before interpreting residual confusion; review view strength and raw losses without Validation/Test access",
     "required_after_revision": "update this file, the main contract, hashes, documentation, and rerun both audits before freezing"
   },
   "tuning_gate": {
     "lambda_zero_semantics_pass": true,
     "formula_direction_reduction_and_gradient_flow_pass": true,
     "registered_candidate_range_covers_weak_material_and_dominant": false,
+    "classification_learning_signal_demonstrated": false,
+    "residual_probe_competence_demonstrated": false,
+    "gradient_compensation_interpretation_gate_passed": false,
     "search_range_basis_recorded": true,
     "residual_head_warmup_and_ramp_frozen": true,
     "selection_metric_seed_and_tie_breaker_unchanged": true,

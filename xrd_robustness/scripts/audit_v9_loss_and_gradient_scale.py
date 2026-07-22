@@ -5,7 +5,11 @@ small, class-balanced subset of the frozen Train split.  It never reads
 Validation, simulated Test, or real XRD, and it never selects a hyperparameter
 from performance.  Auxiliary losses are measured at coefficient one so the
 registered candidate weights can be evaluated as weak, material, or dominant
-relative to the classification gradient.
+relative to the classification gradient.  The audit also follows the raw
+losses, unweighted backbone-gradient norms, view distances, and residual-probe
+competence over early/middle/late thirds of the diagnostic trajectory.  An
+inverse gradient ratio is reported only as a diagnostic compensation factor;
+it is not interpreted as a theoretically correct loss weight.
 """
 
 from __future__ import annotations
@@ -61,23 +65,60 @@ CLASS_SYSTEMS = (
 DEFAULT_STEPS = 128
 DEFAULT_BURN_IN_STEPS = 64
 DEFAULT_BATCH_SIZE = 7
-DEFAULT_AUDIT_EPOCHS = 4
+DEFAULT_AUDIT_EPOCHS = math.ceil(DEFAULT_STEPS / 2)
 AUDIT_BATCHES_PER_EPOCH = 2
+REQUESTED_DIAGNOSTICS = {
+    "raw_L_cls": "classification_loss",
+    "raw_L_JS": "js_loss",
+    "raw_L_res": "residual_confusion_loss",
+    "unweighted_grad_norm_cls": "classification_gradient_norm",
+    "unweighted_grad_norm_JS": "js_gradient_norm",
+    "unweighted_grad_norm_res": "residual_confusion_gradient_norm",
+    "prediction_JS_distance": "prediction_js_distance",
+    "feature_residual_norm": "feature_residual_l2_norm",
+    "residual_head_entropy": "residual_head_entropy",
+}
 
 
-def _gradient_norm(
-    loss: torch.Tensor, parameters: Iterable[torch.nn.Parameter]
-) -> float:
-    trainable = [parameter for parameter in parameters if parameter.requires_grad]
+def _gradient_norms(
+    loss: torch.Tensor, model: torch.nn.Module
+) -> dict[str, float]:
+    """Return full-model and encoder-only norms from one autograd traversal.
+
+    PAMPT calls its supervised classifier ``head``.  Previous audit versions
+    described a norm over all model parameters as a backbone norm.  Keeping the
+    scopes separate prevents the classifier head from obscuring the encoder
+    scale that the auxiliary objectives actually regularize.
+    """
+
+    named_trainable = [
+        (name, parameter)
+        for name, parameter in model.named_parameters()
+        if parameter.requires_grad
+    ]
     gradients = torch.autograd.grad(
-        loss, trainable, retain_graph=True, allow_unused=True
+        loss,
+        [parameter for _, parameter in named_trainable],
+        retain_graph=True,
+        allow_unused=True,
     )
-    squared = sum(
-        float(gradient.detach().float().pow(2).sum())
-        for gradient in gradients
-        if gradient is not None
-    )
-    return float(squared**0.5)
+    full_squared = 0.0
+    backbone_squared = 0.0
+    task_head_squared = 0.0
+    for (name, _), gradient in zip(named_trainable, gradients, strict=True):
+        if gradient is None:
+            continue
+        squared = float(gradient.detach().float().pow(2).sum())
+        full_squared += squared
+        if name.startswith("head."):
+            task_head_squared += squared
+        else:
+            backbone_squared += squared
+    return {
+        "full_model": float(full_squared**0.5),
+        "backbone": float(backbone_squared**0.5),
+        "task_head": float(task_head_squared**0.5),
+    }
 
 
 def _canonical_hash(value: Any) -> str:
@@ -107,6 +148,55 @@ def _summary(values: Sequence[float]) -> dict[str, float]:
         "minimum": float(array.min()),
         "maximum": float(array.max()),
     }
+
+
+def _mean_entropy(logits: torch.Tensor) -> torch.Tensor:
+    probabilities = F.softmax(logits, dim=-1)
+    return -(probabilities * F.log_softmax(logits, dim=-1)).sum(dim=-1).mean()
+
+
+def _mean_accuracy(logits: torch.Tensor, labels: torch.Tensor) -> float:
+    return float((logits.argmax(dim=-1) == labels).float().mean().detach())
+
+
+def _phase_diagnostics(trace: Sequence[dict[str, float]]) -> dict[str, Any]:
+    """Summarize non-overlapping early/middle/late audit-trajectory thirds."""
+
+    length = len(trace)
+    boundaries = (0, length // 3, (2 * length) // 3, length)
+    phases: dict[str, Any] = {}
+    for name, start, stop in zip(
+        ("early", "middle", "late"), boundaries[:-1], boundaries[1:], strict=True
+    ):
+        rows = trace[start:stop]
+        phases[name] = {
+            "start_step": int(rows[0]["calibration_step"]),
+            "end_step_inclusive": int(rows[-1]["calibration_step"]),
+            "steps": len(rows),
+            "requested_diagnostics": {
+                output_name: _summary([row[source_name] for row in rows])
+                for output_name, source_name in REQUESTED_DIAGNOSTICS.items()
+            },
+            "residual_probe_diagnostics": {
+                key: _summary([row[key] for row in rows])
+                for key in (
+                    "residual_probe_loss_before_update",
+                    "residual_probe_accuracy_before_update",
+                    "residual_probe_entropy_before_update",
+                    "residual_probe_loss_after_update",
+                    "residual_probe_accuracy_after_update",
+                    "residual_probe_entropy_after_update",
+                )
+            },
+            "trajectory_context_diagnostics": {
+                key: _summary([row[key] for row in rows])
+                for key in (
+                    "classification_accuracy",
+                    "prediction_top1_agreement",
+                )
+            },
+        }
+    return phases
 
 
 def _gradient_band(ratio: float) -> str:
@@ -285,13 +375,14 @@ def _candidate_scale_rows(
     calibration = {
         "lambda_gradient_balance_median": lambda_center,
         "lambda_gradient_balance_distribution": _summary(lambda_balance_values),
-        "decade_grid_proposal": [
+        "diagnostic_decade_compensation_factors": [
             _round_significant(lambda_center * factor) for factor in (0.1, 1.0, 10.0)
         ],
-        "conservative_grid_proposal": [
+        "diagnostic_local_compensation_factors": [
             _round_significant(lambda_center * factor) for factor in (0.3, 1.0, 3.0)
         ],
-        "proposal_is_not_validation_selection": True,
+        "compensation_factors_are_not_grid_proposals": True,
+        "compensation_factors_are_not_validation_selection": True,
         "coverage": coverage,
     }
     return rows, calibration
@@ -375,12 +466,28 @@ def run_audit(
             F.cross_entropy(output1["logits"], labels)
             + F.cross_entropy(output2["logits"], labels)
         )
+        classification_accuracy = 0.5 * (
+            _mean_accuracy(output1["logits"], labels)
+            + _mean_accuracy(output2["logits"], labels)
+        )
+        prediction_top1_agreement = float(
+            (
+                output1["logits"].argmax(dim=-1)
+                == output2["logits"].argmax(dim=-1)
+            )
+            .float()
+            .mean()
+            .detach()
+        )
         consistency = js_divergence(output1["logits"], output2["logits"])
         residual_detached = symmetric_measurement_residual(
             embedding1.detach(), embedding2.detach()
         )
         head_optimizer.zero_grad(set_to_none=True)
-        probe_loss = F.cross_entropy(residual_head(residual_detached), labels)
+        probe_logits_before = residual_head(residual_detached)
+        probe_loss = F.cross_entropy(probe_logits_before, labels)
+        probe_accuracy_before = _mean_accuracy(probe_logits_before, labels)
+        probe_entropy_before = float(_mean_entropy(probe_logits_before).detach())
         probe_loss.backward()
         head_optimizer.step()
 
@@ -390,10 +497,17 @@ def run_audit(
         for parameter in residual_head.parameters():
             parameter.requires_grad_(False)
         residual = symmetric_measurement_residual(embedding1, embedding2)
-        independence = residual_confusion_kl(residual_head(residual))
-        classification_gradient = _gradient_norm(classification, model.parameters())
-        js_gradient = _gradient_norm(consistency, model.parameters())
-        residual_gradient = _gradient_norm(independence, model.parameters())
+        probe_logits_after = residual_head(residual)
+        probe_loss_after = F.cross_entropy(probe_logits_after, labels)
+        probe_accuracy_after = _mean_accuracy(probe_logits_after, labels)
+        probe_entropy_after = float(_mean_entropy(probe_logits_after).detach())
+        independence = residual_confusion_kl(probe_logits_after)
+        classification_gradients = _gradient_norms(classification, model)
+        js_gradients = _gradient_norms(consistency, model)
+        residual_gradients = _gradient_norms(independence, model)
+        classification_gradient = classification_gradients["backbone"]
+        js_gradient = js_gradients["backbone"]
+        residual_gradient = residual_gradients["backbone"]
 
         classification.backward()
         optimizer.step()
@@ -408,12 +522,39 @@ def run_audit(
                 "calibration_step": float(calibration_step),
                 "fixed_batch_index": float(calibration_step % len(fixed_batches)),
                 "classification_loss": float(classification.detach()),
+                "classification_accuracy": classification_accuracy,
                 "js_loss": float(consistency.detach()),
                 "residual_confusion_loss": float(independence.detach()),
                 "residual_probe_loss": float(probe_loss.detach()),
+                "residual_probe_loss_before_update": float(probe_loss.detach()),
+                "residual_probe_accuracy_before_update": probe_accuracy_before,
+                "residual_probe_entropy_before_update": probe_entropy_before,
+                "residual_probe_loss_after_update": float(probe_loss_after.detach()),
+                "residual_probe_accuracy_after_update": probe_accuracy_after,
+                "residual_probe_entropy_after_update": probe_entropy_after,
+                "prediction_js_distance": float(consistency.detach()),
+                "prediction_top1_agreement": prediction_top1_agreement,
+                "feature_residual_l2_norm": float(
+                    residual.detach().float().norm(dim=-1).mean()
+                ),
+                "residual_head_entropy": probe_entropy_after,
                 "classification_gradient_norm": classification_gradient,
                 "js_gradient_norm": js_gradient,
                 "residual_confusion_gradient_norm": residual_gradient,
+                "classification_full_model_gradient_norm": classification_gradients[
+                    "full_model"
+                ],
+                "js_full_model_gradient_norm": js_gradients["full_model"],
+                "residual_confusion_full_model_gradient_norm": residual_gradients[
+                    "full_model"
+                ],
+                "classification_task_head_gradient_norm": classification_gradients[
+                    "task_head"
+                ],
+                "js_task_head_gradient_norm": js_gradients["task_head"],
+                "residual_confusion_task_head_gradient_norm": residual_gradients[
+                    "task_head"
+                ],
                 "js_to_classification_loss_ratio_at_lambda_1": float(
                     (consistency / classification).detach()
                 ),
@@ -429,6 +570,51 @@ def run_audit(
         )
 
     analysis_trace = trace[burn_in_steps:]
+    phase_diagnostics = _phase_diagnostics(trace)
+    late_context = phase_diagnostics["late"]["trajectory_context_diagnostics"]
+    late_probe = phase_diagnostics["late"]["residual_probe_diagnostics"]
+    late_examples = phase_diagnostics["late"]["steps"] * batch_size
+    chance_accuracy = 1.0 / len(CLASS_SYSTEMS)
+    chance_standard_error = math.sqrt(
+        chance_accuracy * (1.0 - chance_accuracy) / late_examples
+    )
+    diagnostic_accuracy_threshold = chance_accuracy + 2.0 * chance_standard_error
+    late_probe_accuracy = late_probe["residual_probe_accuracy_before_update"]["mean"]
+    late_probe_loss = late_probe["residual_probe_loss_before_update"]["mean"]
+    uniform_cross_entropy = math.log(float(len(CLASS_SYSTEMS)))
+    late_classification_accuracy = late_context["classification_accuracy"]["mean"]
+    late_classification_loss = phase_diagnostics["late"]["requested_diagnostics"][
+        "raw_L_cls"
+    ]["mean"]
+    classification_learning_signal = {
+        "status": "diagnostic_signal_present"
+        if late_classification_accuracy > diagnostic_accuracy_threshold
+        and late_classification_loss < uniform_cross_entropy
+        else "not_demonstrated",
+        "late_examples_per_view": late_examples,
+        "chance_accuracy": chance_accuracy,
+        "descriptive_accuracy_threshold": diagnostic_accuracy_threshold,
+        "late_accuracy_mean_across_two_views": late_classification_accuracy,
+        "uniform_cross_entropy": uniform_cross_entropy,
+        "late_classification_loss_mean": late_classification_loss,
+        "not_a_formal_training_or_generalization_claim": True,
+    }
+    residual_probe_competence = {
+        "status": "diagnostic_signal_present"
+        if late_probe_accuracy > diagnostic_accuracy_threshold
+        and late_probe_loss < uniform_cross_entropy
+        else "not_demonstrated",
+        "evaluation_scope": "pre-update predictions on each arriving batch in the late third of the repeated-structure Train-only audit stream",
+        "late_examples": late_examples,
+        "chance_accuracy": chance_accuracy,
+        "descriptive_accuracy_threshold": diagnostic_accuracy_threshold,
+        "threshold_definition": "chance accuracy plus two binomial standard errors; descriptive screen only because batches and structures are not independent held-out observations",
+        "late_pre_update_accuracy_mean": late_probe_accuracy,
+        "uniform_cross_entropy": uniform_cross_entropy,
+        "late_pre_update_cross_entropy_mean": late_probe_loss,
+        "required_before_residual_weight_interpretation": "the residual head must show a non-trivial class-prediction signal before a near-uniform confusion output can be interpreted as successful backbone decorrelation",
+        "not_a_generalization_claim": True,
+    }
     grids = _registered_grids()
     js_candidates, js_calibration = _candidate_scale_rows(
         analysis_trace,
@@ -460,6 +646,7 @@ def run_audit(
         and model.config.depth == 4,
         "classification_only_backbone_trajectory": True,
         "residual_head_uses_detached_features_for_probe_update": True,
+        "backbone_gradient_scope_excludes_supervised_task_head": True,
         "analysis_window_excludes_initial_burn_in": burn_in_steps > 0,
         "js_gradients_observed": all(row["js_gradient_norm"] > 0.0 for row in analysis_trace),
         "residual_gradients_observed": all(
@@ -492,7 +679,7 @@ def run_audit(
         for row in trace
     ]
     return {
-        "schema_version": "v9-loss-gradient-scale-audit-v2",
+        "schema_version": "v9-loss-gradient-scale-audit-v3",
         "status": "pass" if all(checks.values()) else "fail",
         "scope": "train_only_method_parameter_scale_calibration",
         "formal_training_runs_started": 0,
@@ -521,10 +708,16 @@ def run_audit(
             "paired_spectra_per_step": 2 * batch_size,
             "fixed_train_subset_size": len(material_ids),
             "fixed_pair_batches": len(fixed_batches),
-            "fixed_pair_batches_repeated": True,
-            "residual_probe_head_training": "one detached-feature update per calibration step; no probe gradient reaches the backbone",
+            "fixed_pair_batches_repeated": len(fixed_batches) < steps,
+            "maximum_batch_reuse_count": int(math.ceil(steps / len(fixed_batches))),
+            "residual_probe_head_training": "one detached-feature update per calibration step; pre-update predictions measure whether earlier probe updates learned a class signal; no probe gradient reaches the backbone",
             "auxiliary_coefficient_during_measurement": 1.0,
             "performance_metric_used": False,
+        },
+        "reduction_audit": {
+            "classification": "PyTorch cross_entropy default reduction=mean over batch",
+            "js": "each KL uses reduction=batchmean: sum over seven classes and divide by batch size; the two KL directions are averaged; there is no extra class mean",
+            "residual": "KL(q || Uniform) sums over seven classes per sample and then takes one batch mean; there is no repeated class mean",
         },
         "training_data": {
             "split": "train",
@@ -556,14 +749,34 @@ def run_audit(
         "train_only_gradient_calibration": {
             "lambda_js": js_calibration,
             "lambda_res": residual_calibration,
+            "interpretation": "inverse gradient ratios are trajectory-specific diagnostic compensation factors, not theoretically correct or automatically admissible loss weights",
+        },
+        "gradient_compensation_interpretation_gate": {
+            "status": "blocked",
+            "reason": "the inverse ratios are large diagnostic signals; loss definitions, view strength, backbone learning stage, and residual-probe competence must be interpreted before any one-time grid revision",
+            "automatic_grid_change_performed": False,
+            "registered_grids_unchanged": True,
         },
         "candidate_range_gate": candidate_range_gate,
+        "trajectory_phase_definition": "three non-overlapping equal-count thirds of the 128-step diagnostic trajectory; these are audit early/middle/late phases, not epochs from a formal 50-epoch run",
+        "early_middle_late_diagnostics": phase_diagnostics,
+        "classification_learning_signal": classification_learning_signal,
+        "residual_probe_competence": residual_probe_competence,
         "full_trace_summary": {
             key: _summary([row[key] for row in trace])
             for key in (
                 "classification_loss",
+                "classification_accuracy",
                 "js_loss",
                 "residual_confusion_loss",
+                "prediction_js_distance",
+                "prediction_top1_agreement",
+                "feature_residual_l2_norm",
+                "residual_head_entropy",
+                "residual_probe_loss_before_update",
+                "residual_probe_accuracy_before_update",
+                "residual_probe_loss_after_update",
+                "residual_probe_accuracy_after_update",
                 "classification_gradient_norm",
                 "js_gradient_norm",
                 "residual_confusion_gradient_norm",
@@ -582,11 +795,7 @@ def run_audit(
             else 0.0,
         },
         "checks": checks,
-        "decision": (
-            "numerical calibration passed, but registered candidate ranges remain blocked for tuning until the candidate-range gate passes and the range is frozen before Validation"
-            if candidate_range_gate["status"] != "pass"
-            else "numerical calibration and candidate-range coverage passed; no lambda was selected and explicit tuning authorization is still required"
-        ),
+        "decision": "diagnostic audit completed; do not infer a formal lambda from inverse gradient ratios, do not change either registered grid, and keep Validation tuning blocked pending scientific review of the phase diagnostics and residual-probe competence",
     }
 
 
@@ -619,6 +828,15 @@ def main() -> int:
             {
                 "status": report["status"],
                 "candidate_range_gate": report["candidate_range_gate"]["status"],
+                "gradient_compensation_interpretation_gate": report[
+                    "gradient_compensation_interpretation_gate"
+                ]["status"],
+                "classification_learning_signal": report[
+                    "classification_learning_signal"
+                ]["status"],
+                "residual_probe_competence": report[
+                    "residual_probe_competence"
+                ]["status"],
                 "output": str(output),
                 "checks": report["checks"],
             },

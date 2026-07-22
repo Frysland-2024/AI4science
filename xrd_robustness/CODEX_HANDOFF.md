@@ -744,8 +744,8 @@ powershell -NoProfile -ExecutionPolicy Bypass -File scripts\desktop_first_boot_v
 ### 迁移演练证据
 
 - `reports/v9_desktop_migration_manifest.json` 已在所有本轮代码、配置、文档和审计产物完成后重新生成，状态为 `ready_for_copy`。
-- payload 清单为 14,288 个文件；权威字节数与 stream SHA-256 只读取 `reports/v9_desktop_migration_manifest.json`，避免在 payload 自身文件中抄录聚合哈希造成自引用失效。
-- `reports/v9_desktop_migration_verification.json` 在源机器逐文件验证 14,288/14,288：missing=0、size mismatch=0、hash mismatch=0。
+- payload 的权威文件数、字节数与 stream SHA-256 只读取 `reports/v9_desktop_migration_manifest.json`，避免在 payload 自身文件中抄录会随源码变化失效的聚合值。
+- `reports/v9_desktop_migration_verification.json` 在源机器逐文件验证全部清单项：missing=0、size mismatch=0、hash mismatch=0；具体数量只以该报告为准。
 - `copy_v9_desktop_payload.ps1 -WhatIf` 只完成复制演练，没有写入目标目录；`desktop_first_boot_v9.ps1 -PlanOnly` 验证了 11 个验收步骤，并确认 formal training commands=0。
 - 这些证据只证明源端 payload 自洽和脚本可规划，不替代台式机现场验收，也不构成 7-run 授权。
 
@@ -756,3 +756,56 @@ powershell -NoProfile -ExecutionPolicy Bypass -File scripts\desktop_first_boot_v
 - 当前 MATLAB 原型仅覆盖读取、选峰/区间积分和空间绘图，没有 ML 假设、样品级划分、baseline 或外部验证。
 - Raman 只作为未来第二项目的数据种子；补齐多个独立样品/批次、标签证据和样品级外部验证后，才考虑 spatial-spectral self-supervision、unmixing/segmentation 或 anomaly detection。
 - 当前唯一主研究仍为 XRD V9-T。本节不授权 Raman 开发，不改变 XRD 方法矩阵、λ 候选、0/7、0/15 或 Test 锁。
+
+## 23. 方法权重诊断更新：不得把梯度倒数写成正式 λ
+
+`reports/v9_loss_gradient_scale_audit.json` 已升级为 schema v3 并在 CUDA
+上重跑。新 agent 必须优先采用本节，旧章节中“下一步直接整体平移网格”
+的表述已经被本轮证据取代。
+
+### 新审计实际测量了什么
+
+- 正式 PAMPT-B3、14 个七类平衡 Train 结构、128 optimizer steps；
+- 128 个不重复的确定性配对 batch，不再循环旧报告中的 8 个 batch；
+- early=0–41、middle=42–84、late=85–127，仅是审计轨迹三等分，
+  不是正式 50-epoch 训练的早中晚；
+- raw `L_cls/L_JS/L_res`、三项未加权 encoder/backbone gradient norm、
+  prediction JS、normalized feature residual norm、residual-head entropy；
+- residual probe 每次 Step A 更新前后的 loss/accuracy/entropy；
+- PAMPT `head.*` 已从 encoder/backbone gradient norm 中排除，同时在 trace
+  中保留 full-model/task-head norm；
+- Validation、simulated Test、real data、候选专属训练和 λ 选择全部为 0/false。
+
+### 决定性的 late-stage 结果
+
+- 分类准确率 `11.96%`，低于七分类随机 `14.29%`；
+- `L_cls=1.9499`，与均匀交叉熵 `ln(7)=1.94591` 一致；
+- 两视图 top-1 agreement `99.34%`，prediction JS 约 `2.97e-7`；
+- residual probe pre-update accuracy `14.62%`，CE `1.94613`；
+- residual-head entropy 约 `1.94566`，几乎是最大熵；
+- classification learning signal 与 residual probe competence 均为
+  `not_demonstrated`。
+
+所以 JS 小首先是两个未学会任务的预测本来就相同；Residual 小首先与
+probe 尚未学会类别同时发生。倒数得到的 JS `2.874e5`、Residual
+`2.556e4` 只叫 diagnostic gradient compensation factors，不是理论权重、
+网格提案或可自动采用的值。
+
+### 当前 Gate 与接管规则
+
+- JS `{0.1,0.3,1.0}`、Residual `{0.01,0.1,1.0}` 原样保留且未冻结；
+- 不得执行一次性范围平移，不得启动 7-run；
+- 下一项科学工作是设计 Train-only milestone audit：分类主干先明显优于
+  随机，再测 JS；Residual 还必须先证明 pre-update probe 高于描述性随机
+  阈值，再解释 confusion gradient；
+- 这项更长诊断尚未授权执行，也不能使用 Validation/Test/real XRD；
+- tuning `0/7`、formal development `0/15`、candidate-range Gate blocked、
+  gradient-compensation interpretation Gate blocked；
+- 台式机 first boot 与方法参数 Gate 仍是两个独立阻塞项。
+
+复现当前短诊断的命令（只复现现有证据，不解决里程碑阻塞）：
+
+```powershell
+$env:PYTHONPATH='E:/AI4science/xrd_robustness/src'
+E:/AI4science/.venvs/xrd_tools/Scripts/python.exe scripts/audit_v9_loss_and_gradient_scale.py --device cuda --steps 128 --burn-in-steps 64 --output reports/v9_loss_gradient_scale_audit.json
+```

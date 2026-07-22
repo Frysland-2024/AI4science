@@ -77,9 +77,11 @@
 - V9.2 第 424 行的 `{0.1, 0.3, 1.0}` 是模拟器标签监督研究的 `lambda_meas`，不得倒灌为算法迁移的 `lambda_res` 依据。
 - Hu et al. 的 SD3Net 式 (17) 与 Table 5 把去相关权重写为 `lambda_3=1`，而 Fig. 12 另有一个约在 `1e-4` 最优、却没有明确映射到 `lambda_3` 的 regularization parameter `lambda`。该论文支持“相对损失比例 + 敏感性 + 消融”的程序，不支持把 `1e-4` 或 `1` 直接迁移为本项目 `lambda_res`。
 
-新语义审计已证明 JS 的自然对数范围是 `[0, ln(2)]`，Residual 的 `KL(q || Uniform)=ln(7)-H(q)`，两者均为 batch mean；`lambda=0` 退化、交换语义、方向、数值稳定性、梯度流和调度也全部通过。正式 B3、七类平衡 Train 子集、128-step 审计却显示现有六个候选的中位辅助/分类 backbone 梯度比全部小于 1%，所以当前范围 Gate 为 blocked。
+新语义审计已证明 JS 的自然对数范围是 `[0, ln(2)]`，Residual 的 `KL(q || Uniform)=ln(7)-H(q)`，两者均为 batch mean；具体实现都是类别维求和后只除以 batch，并不存在重复 class mean。`lambda=0` 退化、交换语义、方向、数值稳定性、梯度流和调度也全部通过。
 
-审计反推的梯度平衡中心约为 JS `9.745e4`、Residual `2.950e4`。这只是短 Train-only 轨迹的诊断值，不能自动替换正式网格。完整参数表、影响带、一次性修订政策和 Gate 见 `docs/V9_METHOD_PARAMETER_GOVERNANCE.md` 与 `configs/v9_method_parameter_governance.json`。在范围复核、唯一一次整体修订、重跑审计和冻结哈希完成前，Validation-only tuning execution 必须保持关闭。
+新版正式 B3、七类平衡 Train 子集、128-step 审计使用 128 个不重复配对 batch，并把监督分类头排除在 backbone 梯度范数之外。它显示 late 段分类准确率仅 `11.96%`（随机 `14.29%`）、`L_cls=1.9499`（均匀交叉熵 `ln(7)=1.94591`）；两个视图 top-1 却有 `99.34%` 一致，prediction JS 只有约 `2.97e-7`。Residual probe 的 late pre-update 准确率为 `14.62%`、交叉熵为 `1.94613`，也未证明具有类别预测能力。因此当前六个候选梯度比小首先是“主干与 probe 尚未学起来”的诊断信号，不能解释为合理权重应是几万。
+
+梯度倒数得到的诊断补偿倍数约为 JS `2.874e5`、Residual `2.556e4`，但它们不是理论权重、不是网格提案，也不会自动替换正式配置。完整 early/middle/late 指标、一次性修订政策和 Gate 见 `docs/V9_METHOD_PARAMETER_GOVERNANCE.md` 与 `configs/v9_method_parameter_governance.json`。下一步必须先做 Train-only 学习里程碑复测，并在解释 Residual 混淆前证明 probe 已能从 residual 预测类别；在此之前 Validation-only tuning execution 保持关闭，两组三点网格保持不变。
 
 ## 统一 Validation 的职责
 

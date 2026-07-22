@@ -165,7 +165,7 @@ The checkpoint-resume verification gap is now closed. A bounded real-cache CUDA 
 
 The method-parameter semantic audit is now complete: all 22 checks pass. It proves zero-weight reduction to Dynamic/Paired ERM, JS symmetry/non-negativity/batch-mean reduction, residual entropy direction, finite normalization, head/backbone gradient flow, and the exact 2-epoch warmup plus 3-epoch ramp. The production V9 residual is an absolute normalized feature difference and is therefore swap-invariant; the separately retained signed residual is swap-antisymmetric. These semantics are tested independently and must not be conflated.
 
-The scale audit has been upgraded from the earlier eight-step small-model probe to a formal PAMPT-B3, CUDA, 128-step Train-only calibration. It uses 14 balanced structures (two per crystal system), excludes the first 64 burn-in steps, follows a classification-only backbone trajectory, and updates the residual probe only from detached features. It used no Validation/Test/real data and selected no λ. All numerical checks pass, but the registered range Gate is **blocked**: all six candidates have median weighted auxiliary-to-classification backbone-gradient ratios below 1%. The largest current JS candidate reaches `7.489e-5`; the largest Residual candidate reaches `7.610e-4`. Diagnostic median balance coefficients are about `9.745e4` and `2.950e4`, respectively, but these large values are not automatically registered or selected. The audit trajectory and influence bands require scientific review before the single permitted pre-Validation range revision.
+The scale audit has been upgraded to schema v3 on formal PAMPT-B3, CUDA, and a 128-step Train-only trajectory. It uses 14 balanced structures and 128 non-repeated paired batches, excludes the supervised task head from encoder/backbone gradient norms, and records raw losses, gradients, view/residual distances, and probe competence across audit-trajectory thirds. It used no Validation/Test/real data and selected no λ. The numerical run passes, but both interpretation prerequisites fail: late classification accuracy is 11.96% (chance 14.29%), and late residual-probe pre-update accuracy is 14.62% with cross-entropy at the uniform baseline. The inverse-gradient values (`2.874e5` JS and `2.556e4` Residual) are therefore diagnostic compensation factors from an insufficiently learned trajectory, not theoretical weights or grid proposals. Both registered grids remain unchanged; a Train-only learning-milestone audit is required before the single permitted pre-Validation range decision.
 
 ## 8. Engineering gate status before tuning
 
@@ -180,6 +180,9 @@ The scale audit has been upgraded from the earlier eight-step small-model probe 
 | Validation and Test IDs are excluded from dynamic training | **PASS** |
 | Optimizer-step and pattern-forward budgets match across methods | **PASS** |
 | Method formula, reduction, zero-weight fallback, direction and gradient flow | **PASS: 22/22 semantic checks** |
+| Classification learning signal exists before JS scale interpretation | **BLOCKED: late audit accuracy remains at/below chance** |
+| Residual probe predicts class before confusion scale interpretation | **BLOCKED: late pre-update probe remains at chance/uniform CE** |
+| Inverse-gradient compensation factors are scientifically interpretable | **BLOCKED: short trajectory is insufficiently learned** |
 | Registered λ grids span weak, material non-dominant, and dominant gradient influence | **BLOCKED: all current candidates remain below 1% median influence** |
 | Current reports match the frozen configuration and source hashes | **PASS in the recorded preflight; rerun after any code change** |
 
@@ -187,12 +190,13 @@ A failed mandatory gate blocks training authorization.
 
 ## 9. Immediate next actions
 
-1. Review whether the formal B3 128-step Train-only trajectory and registered influence bands are sufficiently representative; the diagnostic balance centers are too large to adopt automatically.
-2. If accepted, make the single permitted overall logarithmic range revision before any Validation access; then rerun semantic/scale audits, refresh hashes, and freeze the range.
-3. Complete the desktop migration hash rehearsal and rerun the full unit suite/V9 preflight on the final source tree.
-4. On the target desktop, run bootstrap plus first-boot engineering acceptance; the tuning Gate must still stop unless the candidate range is frozen and the user explicitly authorizes execution.
-5. Begin the seven-run lambda tuning from optimizer step 0 only after both the parameter Gate and explicit user authorization pass.
-6. Keep the 15-run comparison, simulated Test, and real test under their separate locks.
+1. Design a longer Train-only milestone audit that measures auxiliary scale only after the classifier has a clear non-random training signal.
+2. For Residual, require the pre-update probe to demonstrate class-prediction competence before interpreting near-uniform confusion or considering a grid revision.
+3. Only after those prerequisites pass, decide whether the current grid is adequate or make the single permitted overall logarithmic range revision before any Validation access; then rerun semantic/scale audits, refresh hashes, and freeze the range.
+4. Complete the desktop migration hash rehearsal and rerun the full unit suite/V9 preflight on the final source tree.
+5. On the target desktop, run bootstrap plus first-boot engineering acceptance; the tuning Gate must still stop unless the candidate range is frozen and the user explicitly authorizes execution.
+6. Begin the seven-run lambda tuning from optimizer step 0 only after both the parameter Gate and explicit user authorization pass.
+7. Keep the 15-run comparison, simulated Test, and real test under their separate locks.
 
 ## 10. Current paper structure
 
@@ -318,7 +322,7 @@ unchanged.
 - λ tuning remains **0/7**; formal development comparison remains **0/15**.
 - Simulated Test and real test remain unused and locked.
 - No laptop checkpoint is authoritative.
-- The immediate scientific blocker before tuning authorization is the registered λ range adequacy review and one permitted pre-Validation revision described above; the immediate machine blocker is target-desktop first-boot acceptance.
+- The immediate scientific blocker before tuning authorization is a Train-only learning-milestone audit that demonstrates non-random classification and residual-probe competence before any λ-range decision; the immediate machine blocker is target-desktop first-boot acceptance.
 - The source-side migration package is ready for copy, but this is not target-machine acceptance; the desktop must still run its own environment, hardware, transfer, evaluation, acceleration, and final-readiness probes.
 
 ## 17. Local WICSCI2025 external-material inventory
@@ -402,3 +406,50 @@ This provenance correction changes no implementation formula, run count,
 training authorization, Validation access, or Test lock. Tuning remains 0/7,
 the formal comparison remains 0/15, and the registered candidate-range Gate
 remains blocked.
+
+## 20. Method-weight gradient compensation diagnosis
+
+The V9-T Train-only scale audit was upgraded to schema v3 and rerun on CUDA.
+It now records the requested raw losses, unweighted encoder/backbone gradients,
+prediction JS distance, normalized feature-residual norm, and residual-head
+entropy over non-overlapping early/middle/late thirds of the 128-step audit
+trajectory. It also records pre-update residual-probe accuracy/loss/entropy so
+probe learning is not confused with successful decorrelation.
+
+Completed evidence:
+
+- 128 deterministic, non-repeated paired Train batches from 14 balanced
+  structures; no Validation, simulated Test, real spectrum, candidate-specific
+  run, or formal training run was used;
+- JS and Residual reductions are each one batch mean after summing the class
+  dimension; no repeated class mean was found;
+- encoder/backbone gradient norms now explicitly exclude PAMPT's supervised
+  task head; full-model and task-head norms remain available in the trace;
+- late classification accuracy is 11.96% with `L_cls=1.9499`, versus seven-class
+  chance 14.29% and uniform cross-entropy `ln(7)=1.94591`;
+- late paired-view top-1 agreement is 99.34% while prediction JS is
+  approximately `2.97e-7`, showing that high agreement occurred before the
+  classifier learned the task;
+- late residual-probe pre-update accuracy is 14.62%, cross-entropy is 1.94613,
+  and head entropy remains approximately maximal, so residual class-prediction
+  competence is not demonstrated.
+
+Scientific status:
+
+- inverse-gradient values (approximately `2.874e5` for JS and `2.556e4` for
+  Residual) are diagnostic compensation factors from an insufficiently learned
+  trajectory, not theoretical weights or grid proposals;
+- both registered grids remain exactly unchanged and unfrozen;
+- the previous wording that a range recalibration was already required is
+  superseded: first require a Train-only classification learning milestone and,
+  for Residual, a competent class probe before interpreting auxiliary-gradient
+  scale;
+- the candidate-range Gate and the new gradient-compensation interpretation
+  Gate remain blocked; tuning is 0/7 and formal development is 0/15;
+- simulated Test and real test remain unused and locked.
+
+Next action: design and explicitly authorize a longer Train-only,
+milestone-triggered diagnostic that stops only after the classifier has a clear
+non-random training signal, then reassess JS; the Residual assessment must also
+show that the pre-update probe predicts class above its descriptive chance
+threshold before any candidate-grid revision is considered.

@@ -147,8 +147,8 @@
   },
   "method_parameter_governance": {
     "path": "configs/v9_method_parameter_governance.json",
-    "sha256": "A7423BC2C41707D27807A43FBA3358EF0DBD9474F0F62CADC0176812732F58FE",
-    "status": "candidate_range_recalibration_required_before_validation",
+    "sha256": "482D5107C81447902C75F595FE2996C7B569FB1424297D3C57E6494C3F4B1620",
+    "status": "diagnostic_milestone_audit_required_before_validation",
     "registered_candidate_grids": {
       "lambda_js": [0.1, 0.3, 1.0],
       "lambda_res": [0.01, 0.1, 1.0]
@@ -170,13 +170,13 @@
         "method_id": "js_consistency_transfer",
         "parameter": "lambda_js",
         "values": [0.1, 0.3, 1.0],
-        "source": "configs/v9_method_parameter_governance.json; legacy internal grid retained only until the Train-only scale Gate is resolved"
+        "source": "configs/v9_method_parameter_governance.json; legacy internal grid retained unchanged while the Train-only learning-stage diagnosis is unresolved"
       },
       {
         "method_id": "residual_decorrelation_transfer",
         "parameter": "lambda_res",
         "values": [0.01, 0.1, 1.0],
-        "source": "configs/v9_method_parameter_governance.json; legacy internal grid retained only until the Train-only scale Gate is resolved"
+        "source": "configs/v9_method_parameter_governance.json; legacy internal grid retained unchanged while the Train-only learning-stage and residual-probe diagnosis is unresolved"
       }
     ],
     "selection": {

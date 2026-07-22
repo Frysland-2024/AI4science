@@ -103,7 +103,7 @@ class MethodTransferContractTests(unittest.TestCase):
         self.assertFalse(audit["experiment_execution_enabled"])
         self.assertEqual(
             audit["method_parameter_governance_status"],
-            "candidate_range_recalibration_required_before_validation",
+            "diagnostic_milestone_audit_required_before_validation",
         )
         self.assertEqual(audit["method_parameter_candidate_range_gate"], "blocked")
         self.assertFalse(audit["method_parameter_tuning_execution_allowed"])
