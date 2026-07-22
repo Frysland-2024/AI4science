@@ -1,7 +1,7 @@
 {
   "schema_version": "v9-method-parameter-governance-v1",
-  "status": "diagnostic_milestone_audit_required_before_validation",
-  "candidate_range_frozen_for_validation": false,
+  "status": "candidate_range_frozen_for_validation",
+  "candidate_range_frozen_for_validation": true,
   "scope": "method-specific parameter legality for V9-T",
   "evidence_chain": [
     "method principle explains why the auxiliary coefficient exists",
@@ -11,8 +11,17 @@
     "multi-seed sensitivity evidence checks that the final result is not a lucky isolated point"
   ],
   "registered_candidate_grids": {
-    "lambda_js": [0.1, 0.3, 1.0],
-    "lambda_res": [0.01, 0.1, 1.0]
+    "lambda_js": [0.3, 3.0, 30.0],
+    "lambda_res": [0.2, 2.0, 20.0]
+  },
+  "gradient_ratio_influence_bands": {
+    "negligible": {"lower_inclusive": null, "upper_exclusive": 0.01},
+    "weak": {"lower_inclusive": 0.01, "upper_exclusive": 0.1},
+    "material_non_dominant": {
+      "lower_inclusive": 0.1,
+      "upper_exclusive": 1.0
+    },
+    "dominant": {"lower_inclusive": 1.0, "upper_exclusive": null}
   },
   "literature_parameter_provenance": {
     "hu_et_al_2026_sd3net": {
@@ -66,19 +75,19 @@
       "role": "core_method_weight",
       "necessity_basis": "balances paired-view JS consistency against supervised classification",
       "mathematical_scale": "natural-log JS divergence is batch mean and lies in [0, ln(2)]",
-      "current_grid_basis": "legacy internal preregistration only; not independent numerical authority",
-      "train_only_scale_result": "the 128-step diagnostic trajectory never demonstrated a non-random classification signal; both views already agreed on nearly uniform/untrained predictions, so the tiny JS gradient cannot yet justify a candidate-range revision",
+      "current_grid_basis": "single human-approved pre-Validation revision from the epoch-5 Train-only learned-state gradient ratio; Dynamic ERM supplies the lambda=0 anchor, while [0.3, 3, 30] is a strict decade grid designed to cover weak, material non-dominant, and dominant influence",
+      "train_only_scale_result": "the learned-state epoch-5 unweighted JS/classification backbone-gradient ratio motivated the human revision; direct Train-only autograd measurement gave median weighted ratios 0.02283, 0.22842, and 2.28533 for lambda 0.3, 3, and 30, covering weak, material non-dominant, and dominant influence without Validation performance",
       "final_selection": "three-point Simulation Validation search after the candidate range is frozen"
     },
     "lambda_res": {
       "role": "core_method_weight",
       "necessity_basis": "balances residual class-confusion KL against supervised classification",
       "mathematical_scale": "KL(q || Uniform) equals ln(7)-H(q), uses batch mean, and lies in [0, ln(7)]",
-      "current_grid_basis": "legacy internal YAML/default only; not independent numerical authority",
+      "current_grid_basis": "single human-approved pre-Validation revision from the epoch-5 Train-only learned-state gradient ratio; Dynamic ERM supplies the lambda=0 anchor, while [0.2, 2, 20] is a strict decade grid designed to cover weak, material non-dominant, and dominant influence",
       "external_method_basis": "Hu et al. 2026 supports residual entropy/decorrelation, relative loss weighting, sensitivity analysis, and ablation as methodological precedents",
       "external_numerical_authority": false,
       "external_numerical_limit": "Hu et al. report lambda_3=1 in Equations 17/Table 5 while a separate Figure 12 regularization parameter lambda peaks near 1e-4 without an explicit mapping; neither value is transferable to the V9-T loss scale",
-      "train_only_scale_result": "the residual probe remained at chance with cross-entropy at the uniform baseline, so near-uniform residual-head output cannot yet be interpreted as successful decorrelation and the tiny residual gradient cannot justify a candidate-range revision",
+      "train_only_scale_result": "the disjoint Train residual probe demonstrated class signal and the learned-state epoch-5 unweighted Residual/classification backbone-gradient ratio motivated the human revision; direct Train-only autograd measurement gave median weighted ratios 0.02581, 0.25854, and 2.58715 for lambda 0.2, 2, and 20, covering weak, material non-dominant, and dominant influence without Validation performance",
       "final_selection": "three-point Simulation Validation search after the candidate range is frozen"
     },
     "residual_head_depth": {
@@ -128,6 +137,33 @@
     "simulated_test_used": false,
     "real_test_used": false
   },
+  "learned_state_evidence": {
+    "path": "reports/v9_learned_state_scale_audit.json",
+    "sha256": "384982FE0C3D0E125F4D8AD96637FBFFCBBD9D76823CEEF3C01C296AA8BE62CE",
+    "schema_version": "v9-learned-state-scale-audit-v1",
+    "status": "pass",
+    "epoch5_js_to_classification_backbone_gradient_ratio_median": 0.05898,
+    "epoch5_residual_to_classification_backbone_gradient_ratio_median": 0.09738,
+    "classification_learning_signal": "learned_state_demonstrated",
+    "residual_probe_competence": "signal_demonstrated",
+    "validation_used": false,
+    "simulated_test_used": false,
+    "real_xrd_used": false
+  },
+  "candidate_grid_gate_evidence": {
+    "path": "reports/v9_candidate_grid_gate.json",
+    "sha256": "E59EE2A56906757C82238CB47D520B1D74D690455EA907540AFFF59EA2E8A947",
+    "schema_version": "v9-candidate-grid-gate-v1",
+    "status": "pass",
+    "measurement_mode": "candidate_specific_weighted_and_combined_objectives_evaluated_by_autograd",
+    "linear_extrapolation_only": false,
+    "candidate_range_may_be_frozen": true,
+    "validation_tuning_authorized": false,
+    "seven_run_authorized": false,
+    "validation_used": false,
+    "simulated_test_used": false,
+    "real_xrd_used": false
+  },
   "diagnostic_gradient_compensation_factors": {
     "lambda_js": 287400.6148373947,
     "lambda_res": 25557.669898619482,
@@ -135,25 +171,47 @@
   },
   "one_revision_policy": {
     "maximum_range_revisions_before_validation": 1,
-    "completed_range_revisions": 0,
+    "completed_range_revisions": 1,
     "automatic_grid_change_forbidden": true,
     "validation_performance_must_not_inform_revision": true,
     "simulated_test_and_real_xrd_must_remain_locked": true,
     "required_before_revision": "run a Train-only milestone audit after the backbone shows a non-random classification signal and require the residual probe to demonstrate class-prediction competence before interpreting residual confusion; review view strength and raw losses without Validation/Test access",
-    "required_after_revision": "update this file, the main contract, hashes, documentation, and rerun both audits before freezing"
+    "required_after_revision": "directly measure every revised candidate on a rebuilt Train-only learned state; update this file, the main contract, hashes, and documentation; freeze only if the candidate Gate passes",
+    "completed_revision": {
+      "decision_date": "2026-07-22",
+      "decision_authority": "explicit human scientific approval",
+      "validation_performance_consulted": false,
+      "previous_grids": {
+        "lambda_js": [0.1, 0.3, 1.0],
+        "lambda_res": [0.01, 0.1, 1.0]
+      },
+      "revised_grids": {
+        "lambda_js": [0.3, 3.0, 30.0],
+        "lambda_res": [0.2, 2.0, 20.0]
+      },
+      "reason": "Dynamic ERM supplies the zero-weight anchor; strict decade grids give comparable Train-only predicted influence and target weak, material non-dominant, and dominant bands with threshold margin",
+      "direct_measurement_required_before_freeze": true,
+      "direct_measurement_completed": true,
+      "direct_measurement_report": "reports/v9_candidate_grid_gate.json",
+      "candidate_grid_changed_after_direct_measurement": false,
+      "audit_instrumentation_corrections_before_freeze": [
+        "changed the gradient-sum identity tolerance from a float32-style 1e-4 to 0.05 for separate BF16 autograd traversals after observing finite 0.84%-2.36% traversal differences",
+        "removed an internally introduced p90 <= 10 combined-gradient rule because it contradicted the open-ended dominant influence band; retained the preregistered finite and single-batch 50x runaway guards"
+      ]
+    }
   },
   "tuning_gate": {
     "lambda_zero_semantics_pass": true,
     "formula_direction_reduction_and_gradient_flow_pass": true,
-    "registered_candidate_range_covers_weak_material_and_dominant": false,
-    "classification_learning_signal_demonstrated": false,
-    "residual_probe_competence_demonstrated": false,
-    "gradient_compensation_interpretation_gate_passed": false,
+    "registered_candidate_range_covers_weak_material_and_dominant": true,
+    "classification_learning_signal_demonstrated": true,
+    "residual_probe_competence_demonstrated": true,
+    "gradient_compensation_interpretation_gate_passed": true,
     "search_range_basis_recorded": true,
     "residual_head_warmup_and_ramp_frozen": true,
     "selection_metric_seed_and_tie_breaker_unchanged": true,
     "simulated_test_and_real_test_untouched": true,
-    "candidate_range_frozen_for_validation": false,
+    "candidate_range_frozen_for_validation": true,
     "development_tuning_execution_allowed": false
   }
 }

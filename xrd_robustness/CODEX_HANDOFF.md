@@ -15,7 +15,7 @@
 
 ## 0. 一页结论：现在究竟到哪一步
 
-截至 2026-07-22，本项目的当前主线是 **V9-T：Algorithm Transfer for PXRD Robustness**。科学合同、数据划分、物理模拟范围、PAMPT-B3 主干、三种核心动态方法、公平性流审计、台式机硬件配置、迁移脚本和 7-run 计划均已建立。方法参数语义 Gate 已通过，但当前候选范围的 Train-only 梯度尺度 Gate 为 blocked。
+截至 2026-07-22，本项目的当前主线是 **V9-T：Algorithm Transfer for PXRD Robustness**。科学合同、数据划分、物理模拟范围、PAMPT-B3 主干、三种核心动态方法、公平性流审计、台式机硬件配置、迁移脚本和 7-run 计划均已建立。方法参数语义 Gate 与六候选 Train-only 梯度尺度 Gate 均已通过；JS `[0.3,3,30]`、Residual `[0.2,2,20]` 已在唯一一次人工修订后冻结。7-run 尚未获得执行授权。
 
 当前执行状态必须表述为：
 
@@ -216,20 +216,20 @@ PAMPT-B3 内部：
 
 当前 **7-run lambda tuning** 只包含 Dynamic、JS 和 Residual：
 
-以下 run ID 仍是计划模板，不是已冻结可执行网格。当前候选范围 Gate 阻断，任何接管 agent 都不得据此启动训练。
+以下 run ID 是已冻结候选网格的计划模板，但 7-run 仍未获得执行授权；任何接管 agent 都不得据此启动训练。
 
 1. `ordinary_dynamic_augmentation__tuning_seed_20260710`
-2. `js_consistency_transfer__lambda_js_0p1__tuning_seed_20260710`
-3. `js_consistency_transfer__lambda_js_0p3__tuning_seed_20260710`
-4. `js_consistency_transfer__lambda_js_1p0__tuning_seed_20260710`
-5. `residual_decorrelation_transfer__lambda_res_0p01__tuning_seed_20260710`
-6. `residual_decorrelation_transfer__lambda_res_0p1__tuning_seed_20260710`
-7. `residual_decorrelation_transfer__lambda_res_1p0__tuning_seed_20260710`
+2. `js_consistency_transfer__lambda_js_0p3__tuning_seed_20260710`
+3. `js_consistency_transfer__lambda_js_3p0__tuning_seed_20260710`
+4. `js_consistency_transfer__lambda_js_30p0__tuning_seed_20260710`
+5. `residual_decorrelation_transfer__lambda_res_0p2__tuning_seed_20260710`
+6. `residual_decorrelation_transfer__lambda_res_2p0__tuning_seed_20260710`
+7. `residual_decorrelation_transfer__lambda_res_20p0__tuning_seed_20260710`
 
 lambda 网格：
 
-- `lambda_js = [0.1, 0.3, 1.0]`
-- `lambda_res = [0.01, 0.1, 1.0]`
+- `lambda_js = [0.3, 3.0, 30.0]`
+- `lambda_res = [0.2, 2.0, 20.0]`
 - Residual head depth = 1
 - Residual warmup = 2 epochs
 - Residual ramp = 3 epochs
@@ -711,8 +711,9 @@ powershell -NoProfile -ExecutionPolicy Bypass -File scripts\desktop_first_boot_v
 - `reports/v9_resume_determinism_audit.json`：真实 reflection cache、冻结 Train renderer、CUDA 小模型；连续运行与 epoch 0 后中断/恢复在后续 material ID、parameter pair、next loss、global step、stream hash/snapshot 和最终模型 SHA256 上全部一致，12/12 PASS。
 - checkpoint 现在直接保存 `training_stream_audit` 与 `training_sampler_contract_hash`；修复了 `map_location=cuda` 后 CPU RNG state 被放到 CUDA 的恢复错误。
 - `reports/v9_method_semantics_audit.json`：22/22 PASS；覆盖零权重退化、JS 对称/非负/batch mean、Residual 熵方向与数值稳定性、head/backbone 梯度流及 2-epoch warmup/3-epoch ramp。
-- `reports/v9_loss_gradient_scale_audit.json`：正式 PAMPT-B3、14 个七类平衡 Train 结构、128 optimizer steps（前 64 burn-in）；数值审计通过，但当前候选范围 Gate 为 blocked；未使用 Validation/Test/real data，未选择 λ。
-- `configs/v9_method_parameter_governance.json`：绑定两份审计哈希、参数来源、固定 head/warmup/ramp、一次性范围修订政策和 tuning Gate。
+- `reports/v9_loss_gradient_scale_audit.json`：正式 PAMPT-B3、14 个七类平衡 Train 结构、128 optimizer steps（前 64 burn-in）；该历史数值审计通过但处于 chance state，不能决定网格。
+- `reports/v9_candidate_grid_gate.json`：从 epoch 0 重建 learned state 并直接测量六个冻结候选，当前范围 Gate 通过；未使用 Validation/Test/real data，未选择最终 λ。
+- `configs/v9_method_parameter_governance.json`：绑定语义、chance-state、learned-state 与 candidate-grid Gate 哈希，冻结 head/warmup/ramp、一次性范围修订及 tuning Gate。
 
 ### 新的统计执行契约
 
@@ -739,7 +740,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File scripts\desktop_first_boot_v
 - active process/checkpoint/result/run directory：0；
 - simulated Test、real test：未访问且锁定；
 - 笔记本 checkpoint：不具权威性，不复制、不恢复；
-- 台式机 first boot 即使工程检查通过，也必须同时看到 `candidate_range_frozen_for_validation=true` 和用户明确授权才可执行 7-run；当前两项均不满足。
+- 台式机 first boot 即使工程检查通过，也必须同时看到 `candidate_range_frozen_for_validation=true` 和用户明确授权才可执行 7-run；当前前者已满足，后者仍不满足。
 
 ### 迁移演练证据
 
@@ -758,6 +759,8 @@ powershell -NoProfile -ExecutionPolicy Bypass -File scripts\desktop_first_boot_v
 - 当前唯一主研究仍为 XRD V9-T。本节不授权 Raman 开发，不改变 XRD 方法矩阵、λ 候选、0/7、0/15 或 Test 锁。
 
 ## 23. 方法权重诊断更新：不得把梯度倒数写成正式 λ
+
+本节是 chance-state 诊断的历史记录；候选范围的当前权威状态以第 25 节为准。
 
 `reports/v9_loss_gradient_scale_audit.json` 已升级为 schema v3 并在 CUDA
 上重跑。新 agent 必须优先采用本节，旧章节中“下一步直接整体平移网格”
@@ -812,6 +815,8 @@ E:/AI4science/.venvs/xrd_tools/Scripts/python.exe scripts/audit_v9_loss_and_grad
 
 ## 24. 2026-07-22 learned-state Train-only audit（取代“尚未授权”的旧阻塞描述）
 
+本节记录人工修订前的 learned-state 证据；修订后的当前权威状态以第 25 节为准。
+
 用户已明确授权并完成更长的 Train-only 诊断，但**没有授权任何候选训练、
 Validation tuning 或 7-run**。权威报告为：
 
@@ -860,8 +865,8 @@ JS 与 Residual 都有实际信号，旧 128-step 几万级倒数仍然作废。
 - 新报告只让 learned-state 梯度进入 `eligible_for_human_review`，不产生
   自动 grid proposal；
 - JS `[0.1,0.3,1.0]`、Residual `[0.01,0.1,1.0]` 原样保留为待审候选；
-- `candidate_range_frozen_for_validation=false`；两个 tuning execution
-  switches 继续关闭；
+- 在该历史 checkpoint，`candidate_range_frozen_for_validation=false`；两个
+  tuning execution switches 继续关闭；
 - tuning 仍为 0/7，formal development 仍为 0/15；Test 与 real test 锁定；
 - 下一项科学动作是用户/研究者人工判断是否根据 learned-state 比率使用
   唯一一次 pre-Validation 整体对数范围修订；任何 agent 不得自动作出该
@@ -878,4 +883,66 @@ E:/AI4science/.venvs/xrd_tools/Scripts/python.exe scripts/audit_v9_learned_state
 
 ```powershell
 E:/AI4science/.venvs/xrd_tools/Scripts/python.exe -m unittest tests.test_v9_learned_state_scale_audit -v
+```
+
+## 25. 2026-07-22 唯一一次候选网格修订与 Train-only 冻结 Gate
+
+用户已明确批准并消耗唯一一次 pre-Validation 网格修订：
+
+- JS：`[0.3, 3.0, 30.0]`；
+- Residual：`[0.2, 2.0, 20.0]`。
+
+机器治理阈值为 negligible `<0.01`、weak `[0.01,0.1)`、material
+non-dominant `[0.1,1)`、dominant `>=1`。Dynamic/Paired ERM 继续作为
+`lambda=0` 锚点，因此计划仍为 1 ERM + 3 JS + 3 Residual，共 7 run。
+
+权威 Gate 报告：
+
+- `reports/v9_candidate_grid_gate.json`
+- schema：`v9-candidate-grid-gate-v1`
+- SHA-256：`E59EE2A56906757C82238CB47D520B1D74D690455EA907540AFFF59EA2E8A947`
+- 脚本：`scripts/audit_v9_candidate_grid_gate.py`
+- 脚本 SHA-256：`60D71F8E4B27F8ECFBD6C7067D16275B197059C2F9C5A749D38D9DE6E3290069`
+
+该 Gate 没有磁盘 checkpoint 可恢复，因此从相同固定 seed、epoch 0 重建
+五 epoch、完整 9,842 Train 结构的 classification-only Dynamic/Paired ERM
+PAMPT-B3。probe-train、probe-audit、scale-audit 仍为三个互斥的 700
+结构 Train 子集；probe 为一层头、`lr=1e-3`、50 epochs。六个候选分别
+对加权辅助目标和合并目标执行真实 autograd，不是仅用 `lambda=1` 线性外推。
+
+| 方法 | λ | 中位辅助/分类 backbone 梯度比 | 实测 band |
+|---|---:|---:|---|
+| JS | 0.3 | 0.02283 | weak |
+| JS | 3.0 | 0.22842 | material non-dominant |
+| JS | 30.0 | 2.28533 | dominant |
+| Residual | 0.2 | 0.02581 | weak |
+| Residual | 2.0 | 0.25854 | material non-dominant |
+| Residual | 20.0 | 2.58715 | dominant |
+
+主干 learned-state Gate 和互斥 residual-probe Gate 再次通过；六候选的有限性、
+分类与辅助梯度存在性、band 匹配、中位分类下降方向、BF16 梯度和一致性与
+单 batch 50 倍失控保护全部通过。审计工具在冻结前透明修正了 BF16 容差和
+一个与 dominant 开区间冲突的内部 p90 上限；网格、Train 数据和四段影响
+阈值均未改变，完整理由写入治理 JSON、报告和 PROJECT_JOURNEY。
+
+当前接管规则：
+
+- `candidate_range_frozen_for_validation=true`；
+- `completed_range_revisions=1`，不得再次修改候选范围；
+- `development_tuning.execution_enabled=false`；
+- `execution_policy.development_tuning_execution_enabled=false`；
+- 7-run 仍为 `0/7`，Validation tuning 未授权；
+- simulated Test 与 real XRD 继续锁定；
+- 迁移与预检证据已经刷新；下一动作仅是等待用户单独授权 7-run。
+
+重跑 Gate 会重新训练约 4 分钟且不写 checkpoint：
+
+```powershell
+E:/AI4science/.venvs/xrd_tools/Scripts/python.exe scripts/audit_v9_candidate_grid_gate.py --device cuda --prefetch-workers 8 --prefetch-batches 8 --output reports/v9_candidate_grid_gate.json
+```
+
+当前安全验证命令（不会启动训练）：
+
+```powershell
+$env:PYTHONPATH='src'; E:/AI4science/.venvs/xrd_tools/Scripts/python.exe -m unittest tests.test_v9_candidate_grid_gate tests.test_method_transfer -v
 ```

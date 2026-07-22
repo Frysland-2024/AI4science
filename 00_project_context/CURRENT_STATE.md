@@ -135,7 +135,7 @@ Simulator perturbation labels are not used in V9-T.
 
 - Lambda tuning: **0/7 runs completed**.
 - Seven tuning runs: planned, not started.
-- Tuning-plan generation remains available for inspection, but both tuning execution switches are false because the method-parameter candidate range is not frozen.
+- The method-parameter candidate ranges are frozen after the one-time Train-only Gate, but both tuning execution switches remain false because the 7-run has not received separate execution authorization.
 - Active training process: none.
 - Active checkpoint selected for formal comparison: none.
 - Formal multi-seed 15-run stage: not started.
@@ -167,7 +167,7 @@ The method-parameter semantic audit is now complete: all 22 checks pass. It prov
 
 The schema-v3 128-step scale audit remains preserved, but it is now classified only as **initialization/chance-state evidence**. Its late classification accuracy was 11.96% (chance 14.29%) and the residual probe remained at uniform CE, so its inverse-gradient values (`2.874e5` JS and `2.556e4` Residual) are invalid for grid revision.
 
-The authorized learned-state audit is now complete in `reports/v9_learned_state_scale_audit.json` (SHA-256 `384982FE0C3D0E125F4D8AD96637FBFFCBBD9D76823CEEF3C01C296AA8BE62CE`). After an unexpected host restart, the complete trajectory was rerun from epoch 0 with the same fixed seed; no in-memory checkpoint recovery is claimed. One classification-only Dynamic/Paired ERM PAMPT-B3 model trained for five epochs on all 9,842 Train structures with the shared batch-16 AdamW configuration; no checkpoint was written. At epochs 1, 3, and 5, three disjoint seven-class-balanced Train subsets (700 structures each) were used for residual-probe calibration, residual-probe audit, and scale measurement. The backbone was still at chance at epoch 1, but learned-state gates passed at epochs 3 and 5. At epoch 5, Train CE was 1.62189 and two-view accuracy was 31.02%; the held-out-within-Train residual probe reached 32.57% accuracy, 28.92% Macro-F1, and CE 1.85059. Median unweighted auxiliary/backbone gradient ratios at epoch 5 were 0.05898 for JS and 0.09738 for Residual. This demonstrates usable learned-state signal, not a final loss weight. The registered grids remain unchanged and unfrozen; no Validation tuning or 7-run has started, and a human scientific decision is still required before the single permitted range revision.
+The authorized learned-state audit remains the evidence that the backbone and detached residual probe reached an interpretable state. The user then approved the single permitted pre-Validation grid revision: JS `[0.3, 3.0, 30.0]` and Residual `[0.2, 2.0, 20.0]`. The decisive Train-only Gate is `reports/v9_candidate_grid_gate.json` (SHA-256 `E59EE2A56906757C82238CB47D520B1D74D690455EA907540AFFF59EA2E8A947`). It rebuilt a classification-only Dynamic/Paired ERM PAMPT-B3 from the same fixed seed and epoch 0 for five epochs on all 9,842 Train structures, wrote no checkpoint, trained the detached one-layer residual probe for 50 epochs at `lr=1e-3` on a disjoint Train-calibration subset, and directly evaluated the weighted auxiliary and combined backbone gradients for all six candidates on the separate Train scale subset. Median weighted auxiliary/classification ratios were JS `0.02283`, `0.22842`, `2.28533` and Residual `0.02581`, `0.25854`, `2.58715`, exactly spanning weak, material non-dominant, and dominant. All finite, gradient-presence, combined-direction, identity, and runaway checks passed. No Validation metric, simulated Test, or real XRD was used. The candidate range is now frozen and the one revision is consumed, but both tuning execution switches remain false and the 7-run remains 0/7 pending separate explicit user authorization.
 
 ## 8. Engineering gate status before tuning
 
@@ -184,20 +184,20 @@ The authorized learned-state audit is now complete in `reports/v9_learned_state_
 | Method formula, reduction, zero-weight fallback, direction and gradient flow | **PASS: 22/22 semantic checks** |
 | Classification learning signal exists before JS scale interpretation | **PASS at learned-state epochs 3 and 5** |
 | Residual probe predicts class on an exclusive Train-audit subset | **PASS at epochs 3 and 5; epoch-5 accuracy 32.57%, Macro-F1 28.92%** |
-| Learned-state auxiliary-gradient ratios are eligible for interpretation | **PASS for human review only; no automatic lambda inference** |
-| Registered λ grids span weak, material non-dominant, and dominant gradient influence | **BLOCKED: JS reaches 5.90% and Residual 9.74% at λ=1; neither grid spans all three bands** |
+| Learned-state auxiliary-gradient ratios are eligible for interpretation | **PASS; used only for the single human-approved pre-Validation revision** |
+| Registered λ grids span weak, material non-dominant, and dominant gradient influence | **PASS: direct Train-only autograd Gate for JS `[0.3,3,30]` and Residual `[0.2,2,20]`** |
+| Candidate range is frozen before Validation | **PASS; one permitted revision consumed** |
+| Validation tuning execution authorized | **NO: both execution switches remain false; 7-run remains 0/7** |
 | Current reports match the frozen configuration and source hashes | **PASS in the recorded preflight; rerun after any code change** |
 
 A failed mandatory gate blocks training authorization.
 
 ## 9. Immediate next actions
 
-1. Human-review the learned-state epoch-3/5 ratios and decide whether the single permitted pre-Validation logarithmic range revision is scientifically justified; do not infer a grid automatically.
-2. If and only if a revision is explicitly approved, update the governance/main contracts, rerun semantic and scale audits, refresh hashes, and freeze the range before any Validation access.
-3. Complete the desktop migration hash rehearsal and rerun the full unit suite/V9 preflight on the final source tree.
-4. On the target desktop, run bootstrap plus first-boot engineering acceptance; the tuning Gate must still stop unless the candidate range is frozen and the user explicitly authorizes execution.
-5. Begin the seven-run lambda tuning from optimizer step 0 only after both the parameter Gate and explicit user authorization pass.
-6. Keep the 15-run comparison, simulated Test, and real test under their separate locks.
+1. Complete the desktop migration hash rehearsal and rerun the full unit suite/V9 preflight on the final source tree.
+2. On the target desktop, run bootstrap plus first-boot engineering acceptance; the frozen candidate range does not itself authorize tuning.
+3. Wait for explicit user authorization before enabling or starting the seven-run Validation-only lambda tuning from optimizer step 0.
+4. Keep the 15-run comparison, simulated Test, and real test under their separate locks.
 
 ## 10. Current paper structure
 
@@ -323,7 +323,7 @@ unchanged.
 - λ tuning remains **0/7**; formal development comparison remains **0/15**.
 - Simulated Test and real test remain unused and locked.
 - No laptop checkpoint is authoritative.
-- The immediate scientific blocker before tuning authorization is a Train-only learning-milestone audit that demonstrates non-random classification and residual-probe competence before any λ-range decision; the immediate machine blocker is target-desktop first-boot acceptance.
+- The method-parameter range Gate is complete. The remaining blockers are explicit user authorization for the seven-run and target-desktop first-boot acceptance.
 - The source-side migration package is ready for copy, but this is not target-machine acceptance; the desktop must still run its own environment, hardware, transfer, evaluation, acceleration, and final-readiness probes.
 
 ## 17. Local WICSCI2025 external-material inventory
@@ -400,13 +400,15 @@ Current scientific interpretation:
 - neither `1` nor `1e-4` is numerical authority for V9-T `lambda_res`;
 - copying `1e-4` into the PXRD grid is explicitly prohibited by the governance
   contract;
-- the existing candidate grids remain unchanged and unfrozen pending the same
-  Train-only scale review.
+- at the time of this literature correction, the candidate grids remained
+  unchanged and unfrozen; this historical state is superseded by Section 21
+  and the current frozen-grid summary above.
 
-This provenance correction changes no implementation formula, run count,
-training authorization, Validation access, or Test lock. Tuning remains 0/7,
-the formal comparison remains 0/15, and the registered candidate-range Gate
-remains blocked.
+This provenance correction changed no implementation formula, run count,
+training authorization, Validation access, or Test lock. At that historical
+checkpoint, tuning was 0/7, the formal comparison was 0/15, and the registered
+candidate-range Gate was blocked; the later Train-only Gate resolved only the
+candidate-range blocker, not the execution authorization.
 
 ## 20. Method-weight gradient compensation diagnosis
 
@@ -440,20 +442,21 @@ Scientific status:
 - inverse-gradient values (approximately `2.874e5` for JS and `2.556e4` for
   Residual) are diagnostic compensation factors from an insufficiently learned
   trajectory, not theoretical weights or grid proposals;
-- both registered grids remain exactly unchanged and unfrozen;
+- both registered grids remained unchanged and unfrozen at this historical
+  diagnostic stage; the later human revision and direct Gate supersede this state;
 - the previous wording that a range recalibration was already required is
   superseded: first require a Train-only classification learning milestone and,
   for Residual, a competent class probe before interpreting auxiliary-gradient
   scale;
-- the candidate-range Gate and the new gradient-compensation interpretation
-  Gate remain blocked; tuning is 0/7 and formal development is 0/15;
+- at this historical diagnostic stage, the candidate-range Gate and the new
+  gradient-compensation interpretation Gate were blocked; tuning was 0/7 and
+  formal development was 0/15;
 - simulated Test and real test remain unused and locked.
 
-Next action: design and explicitly authorize a longer Train-only,
-milestone-triggered diagnostic that stops only after the classifier has a clear
-non-random training signal, then reassess JS; the Residual assessment must also
-show that the pre-update probe predicts class above its descriptive chance
-threshold before any candidate-grid revision is considered.
+The next action recorded at that checkpoint was to design and explicitly
+authorize a longer Train-only, milestone-triggered diagnostic. That action was
+subsequently completed in Section 21 and followed by the one-time revision and
+direct six-candidate Gate summarized in the current-state sections above.
 
 ## 21. Learned-state Train-only scale audit
 
@@ -485,11 +488,8 @@ Results:
 The scientific interpretation is narrow but decisive: after the backbone learns,
 JS has non-zero signal and the current symmetric normalized residual contains
 class-predictive information. The huge inverse ratios from the 128-step report
-are still invalid. The new report does **not** select a lambda, propose or apply
-a new grid, freeze the range, enable tuning, or start the 7-run. The two current
-grids remain pending human review; `candidate_range_frozen_for_validation=false`,
-tuning is 0/7, formal development is 0/15, and both test stages remain locked.
-
-Current blocker: a human scientific decision on whether the learned-state ratios
-justify the one allowed pre-Validation grid revision. There is no authorized
-training command until that decision is recorded.
+are still invalid. This learned-state report itself did **not** select a lambda,
+propose or apply a new grid, freeze the range, enable tuning, or start the 7-run.
+Its historical human-review blocker was subsequently resolved by the explicit
+revision and direct six-candidate Gate summarized above. Tuning remains 0/7,
+formal development remains 0/15, and both test stages remain locked.

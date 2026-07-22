@@ -331,3 +331,23 @@ Raman 数据表面上是两个 26 x 26 x 829 的空间—光谱立方体，共�
 - 不自动生成或应用新网格，不启动 Validation tuning/7-run；是否进行唯一一次整体对数平移必须由人工结合 learned-state 比率另行决定并记录。
 
 这一步把参数尺度审计从“观察一个数”升级为“先证明测量状态、再证明 probe 能力、最后解释梯度”。它排除了初始化假象，但刻意没有越过人工作出的科学治理决定。
+
+## 2026-07-22：完成唯一一次 pre-Validation 网格修订并冻结候选范围
+
+在 learned-state 证据通过人工审查后，用户明确选择第二组 decade grids：JS `[0.3,3,30]`、Residual `[0.2,2,20]`。决定依据不是 Validation 性能，而是四项预先声明的治理逻辑：Dynamic/Paired ERM 已提供 `lambda=0` 锚点；每组严格十倍间隔；两种方法在 learned-state 下的预期影响尽量接近；三个点分别瞄准 weak、material non-dominant 和 dominant。机器合同同步固定 negligible `<0.01`、weak `[0.01,0.1)`、material non-dominant `[0.1,1)`、dominant `>=1`。
+
+因为上一次 learned-state checkpoint 只存在内存，本次没有声称恢复，而是用相同固定 seed 从 epoch 0 再训练一个五 epoch、完整 9,842 Train 结构的 classification-only Dynamic/Paired ERM PAMPT-B3。三个 700 结构的 probe calibration、probe audit、scale audit Train 子集继续严格互斥；detached residual probe 固定一层、`lr=1e-3`、50 epochs。随后对六个候选分别调用 autograd 测量加权辅助目标与 `L_cls + lambda L_aux` 总目标，避免只把 `lambda=1` 的比率线性外推。
+
+最终权威报告 `reports/v9_candidate_grid_gate.json` 通过。主干 learned-state 和 residual-probe competence 再次成立；实测中位辅助/分类 backbone 梯度比分别为 JS `0.02283/0.22842/2.28533`、Residual `0.02581/0.25854/2.58715`，两组均严格落入 weak/material/dominant。所有 loss 与梯度有限，分类梯度和加权辅助梯度非零，中位合并梯度仍是分类下降方向，未触发单 batch 50 倍失控保护。全程未使用 Validation 指标、simulated Test 或 real XRD，未保存 checkpoint，也未启动候选训练或 7-run。
+
+审计实现本身在冻结前经历两项透明修正。第一次把独立 BF16 autograd 遍历的梯度和恒等式误用 `1e-4` float32 风格容差；六候选只有该检查失败，实际差异为 0.84%–2.36%，因此按 BF16 数值路径改为 5%。第二次给 dominant 候选额外加入 p90 combined/classification `<=10`，JS=30 在一次重跑中为 10.13，虽然 loss/梯度均有限、最大比率 16.07、中位方向仍正确；该上限与 `R>=1` 的开放 dominant 定义冲突且并非用户批准阈值，因此删除 p90 硬判定，但保留 50 倍单 batch 失控保护。两次修正都没有改网格、数据、影响带或读取任何性能验证结果；脚本哈希改变后均从 epoch 0 重跑，最终报告与当前脚本哈希一致。
+
+决定：
+
+- 唯一一次候选范围修订已消耗，`completed_range_revisions=1`；
+- JS `[0.3,3,30]` 与 Residual `[0.2,2,20]` 现以 `candidate_range_frozen_for_validation=true` 冻结，不得再根据后续结果扩展；
+- 这只完成搜索空间合法性，不代表任何 λ 已被选为最终值；
+- 两个 tuning execution switches 继续为 `false`，7-run 保持 `0/7`；
+- Validation-only tuning 仍须用户单独明确授权，simulated Test 与 real XRD 继续锁定。
+
+这一节点闭合了“方法原理—learned-state 数值尺度—人工预注册范围—直接 Train-only Gate”的前半条证据链，同时保留后半条“独立 Validation 选择—多 seed 敏感性—锁定 Test”的授权边界。

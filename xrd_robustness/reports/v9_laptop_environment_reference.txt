@@ -20,7 +20,7 @@ asttokens==3.0.2
 astunparse==1.6.3
 async-lru==2.3.0
 attrs==26.1.0
--e git+https://github.com/Frysland-2024/AI4science.git@00a5c332c2c92f28547e18ea2c36a65105940f73#egg=autoXRD&subdirectory=02_code_repositories\xrd_perturbation_core\extracted_verified\xrd-autoanalyzer-main\xrd-autoanalyzer-main
+-e git+https://github.com/Frysland-2024/AI4science.git@99cecbe86d15bf481dbf537bacf920f9dc0c45f8#egg=autoXRD&subdirectory=02_code_repositories\xrd_perturbation_core\extracted_verified\xrd-autoanalyzer-main\xrd-autoanalyzer-main
 babel==2.18.0
 beautifulsoup4==4.15.0
 bleach==6.4.0
@@ -93,7 +93,7 @@ matplotlib==3.9.4
 matplotlib-inline==0.2.2
 mdurl==0.1.2
 mistune==3.3.3
--e git+https://github.com/Frysland-2024/AI4science.git@00a5c332c2c92f28547e18ea2c36a65105940f73#egg=ML4pXRDs_tools&subdirectory=02_code_repositories\xrd_perturbation_core\extracted_verified\ml4pxrds-master\ml4pxrds-master
+-e git+https://github.com/Frysland-2024/AI4science.git@99cecbe86d15bf481dbf537bacf920f9dc0c45f8#egg=ML4pXRDs_tools&subdirectory=02_code_repositories\xrd_perturbation_core\extracted_verified\ml4pxrds-master\ml4pxrds-master
 ml_dtypes==0.5.4
 monty==2026.5.18
 mpmath==1.3.0

@@ -6,10 +6,10 @@
 
 | 研究 | 优先级 | 核心问题 | 当前状态（2026-07-16） | 研究完成度 |
 |---|---|---|---|---:|
-| V9-T 算法迁移论文 | 当前唯一主线 | 显式建模同结构跨扰动视图关系，能否在单纯数据增广之上提高未知扰动与真实谱泛化 | family-aware 70/15/15 划分与统一 Validation 已冻结；方法语义 Gate 通过，现候选范围尺度 Gate 阻断；训练仍为 0/7 调参、0/15 正式实验 | 约 35% |
+| V9-T 算法迁移论文 | 当前唯一主线 | 显式建模同结构跨扰动视图关系，能否在单纯数据增广之上提高未知扰动与真实谱泛化 | family-aware 70/15/15 划分已冻结；方法语义与 Train-only 候选范围 Gate 通过，网格已冻结但 tuning 尚未授权；训练仍为 0/7 调参、0/15 正式实验 | 约 40% |
 | V10 Simulator-Supervised Representation Learning | 延期 | 已知模拟器变量能否监督测量变化表征 | 只保留旧原型和研究备忘，不进入 V9-T | 约 15% |
 
-百分比衡量的是完整研究交付物，不代表已有科学结论。算法迁移工程准备已完成，但没有训练结果，所以完整研究仍约为 35%。真实谱只用于最终 `real test`，不参与扰动参数定义、超参数选择、方法比较或 checkpoint 选择。
+百分比衡量的是完整研究交付物，不代表已有科学结论。候选网格的 Train-only 合法性证据已经闭合，但没有 Validation 调参或正式性能结果，所以完整研究仍约为 40%。真实谱只用于最终 `real test`，不参与扰动参数定义、超参数选择、方法比较或 checkpoint 选择。
 
 ## 当前论文的核心叙事
 
@@ -59,7 +59,7 @@ E:\AI4science\.venvs\xrd_tools\Scripts\python.exe -s scripts\run_v9_method_trans
 E:\AI4science\.venvs\xrd_tools\Scripts\python.exe -s scripts\run_v9_method_transfer.py final-preflight
 ```
 
-λ 调参结果尚未冻结，而且当前三点网格没有通过 Train-only 梯度尺度 Gate，因此 7-run 执行与 15 次正式计划都必须 fail-closed。新的统一 Validation 已冻结；旧的两个 Validation 子集已废止。本次更新不启动训练。simulated test 和 real test 也继续锁定，未经对应阶段的明确授权不得解除。
+λ 最终值尚未由 Validation 选择；候选网格 JS `[0.3,3,30]` 与 Residual `[0.2,2,20]` 已通过 Train-only 梯度尺度 Gate 并冻结，但两个 tuning execution switches 仍为 `false`，因此 7-run 与 15 次正式计划都必须 fail-closed。新的统一 Validation 已冻结；旧的两个 Validation 子集已废止。本次更新不启动训练。simulated test 和 real test 也继续锁定，未经对应阶段的明确授权不得解除。
 
 仓库测试：
 
@@ -103,11 +103,14 @@ E:\AI4science\.venvs\xrd_tools\Scripts\python.exe -s scripts\audit_v9_real_test_
 - `reports/v9_method_semantics_audit.json`；
 - `reports/v9_loss_gradient_scale_audit.json`；
 - `reports/v9_learned_state_scale_audit.json`；
+- `reports/v9_candidate_grid_gate.json`；
 - `configs/v9_method_parameter_governance.json`；
 - `docs/V9_METHOD_PARAMETER_GOVERNANCE.md`。
 
-损失尺度审计只诊断数值作用强度，不选择 λ。新版 PAMPT-B3 128-step Train-only 报告给出 early/middle/late 的原始 loss、未加权 backbone 梯度、prediction JS、feature residual norm 和 residual-head entropy，并使用 128 个不重复配对 batch。结果显示分类主干到 late 段仍未优于随机，residual probe 也停留在随机水平；所以反推的几万至几十万只是不充分学习阶段的梯度补偿倍数，不能当作理论权重或正式网格。两组三点候选保持不变，必须先完成 Train-only 学习里程碑与 probe 能力复测。
+损失尺度审计只诊断数值作用强度，不选择 λ。PAMPT-B3 128-step Train-only 报告显示分类主干和 residual probe 尚未学会，因此其几万至几十万梯度倒数只保留为 initialization/chance-state 报警证据，不能当作理论权重或正式网格。
 
-该学习里程碑复测现已完成。`v9_learned_state_scale_audit.json` 使用完整 9,842 个 Train 结构训练一个五 epoch、classification-only Dynamic/Paired ERM PAMPT-B3，并在 epoch 1/3/5 使用三组互斥、各 700 个七类平衡 Train 结构分别完成 probe calibration、probe audit 和 scale audit。主机意外重启后，该审计以相同固定 seed 从 epoch 0 完整重跑，没有使用或声称断点恢复。epoch 3/5 的主干与 residual-probe Gate 均通过；epoch 5 的 Train CE/两视图 accuracy 为 1.62189/31.02%，互斥 probe audit 为 32.57% accuracy、28.92% Macro-F1、CE 1.85059。epoch-5 未加权 JS/分类与 Residual/分类 backbone 梯度比中位数分别为 0.05898 和 0.09738。该报告只证明已学习状态下存在可解释信号：不选择 λ、不改网格、不冻结 candidate range，也不授权 Validation tuning 或 7-run。当前两组三点仍是待审候选，下一步是人工决定是否使用唯一一次 pre-Validation 范围修订。
+学习里程碑复测随后完成：`v9_learned_state_scale_audit.json` 使用完整 9,842 个 Train 结构训练五 epoch 的 classification-only Dynamic/Paired ERM PAMPT-B3，并以三组互斥、各 700 个七类平衡 Train 结构完成 probe calibration、probe audit 和 scale audit。主机意外重启后从固定 seed、epoch 0 完整重跑，没有声称 checkpoint 恢复。epoch 3/5 的主干与 residual-probe Gate 均通过；epoch-5 未加权 JS/分类与 Residual/分类 backbone 梯度比中位数分别为 0.05898 和 0.09738。
+
+用户随后批准唯一一次 pre-Validation 网格修订：JS `[0.3, 3, 30]`，Residual `[0.2, 2, 20]`。`v9_candidate_grid_gate.json` 再次从 epoch 0 重建同一类 Train-only learned state，并对六个候选分别执行加权辅助目标和总目标的真实 autograd 测量，而非只做线性外推。实测中位辅助/分类 backbone 梯度比分别为 JS `0.02283/0.22842/2.28533`、Residual `0.02581/0.25854/2.58715`，两者均覆盖 weak、material non-dominant、dominant，且有限性、梯度存在性、方向与失控保护全部通过。候选范围现已冻结，但 `development_tuning.execution_enabled=false` 与 `development_tuning_execution_enabled=false` 仍保持关闭；7-run 仍为 `0/7`，只有用户另行明确授权后才能启动。
 
 外部论文只提供方法与敏感性流程先例，不提供可直接搬用的数值：Hu et al. 的 SD3Net 正文/Table 5 使用 `lambda_3=1`，Fig. 12 又报告一个未明确映射到 `lambda_3`、约在 `1e-4` 最优的 regularization parameter。因此两者都不是 V9-T `lambda_res` 的数值权威；完整限制见参数治理文档与机器合同。

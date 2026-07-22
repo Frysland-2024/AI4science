@@ -72,12 +72,17 @@ class V9LossGradientScaleAuditTests(unittest.TestCase):
                 calibration[method]["compensation_factors_are_not_grid_proposals"]
             )
 
-    def test_registered_grids_and_data_locks_remain_unchanged(self) -> None:
+    def test_historical_audit_did_not_change_grids_or_open_data_locks(self) -> None:
         registered = self.contract["method_parameter_governance"][
             "registered_candidate_grids"
         ]
-        self.assertEqual(registered["lambda_js"], [0.1, 0.3, 1.0])
-        self.assertEqual(registered["lambda_res"], [0.01, 0.1, 1.0])
+        self.assertEqual(registered["lambda_js"], [0.3, 3.0, 30.0])
+        self.assertEqual(registered["lambda_res"], [0.2, 2.0, 20.0])
+        self.assertFalse(
+            self.report["gradient_compensation_interpretation_gate"][
+                "automatic_grid_change_performed"
+            ]
+        )
         self.assertFalse(self.report["validation_used"])
         self.assertFalse(self.report["simulated_test_used"])
         self.assertFalse(self.report["real_test_used"])

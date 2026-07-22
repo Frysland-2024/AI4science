@@ -82,11 +82,15 @@ class MethodTransferContractTests(unittest.TestCase):
             "lambda_res"
         ]
         self.assertFalse(residual_source["external_numerical_authority"])
-        self.assertEqual(
+        self.assertTrue(
             self.method_parameter_governance["tuning_gate"][
                 "candidate_range_frozen_for_validation"
-            ],
-            False,
+            ]
+        )
+        self.assertFalse(
+            self.method_parameter_governance["tuning_gate"][
+                "development_tuning_execution_allowed"
+            ]
         )
 
     def test_current_assets_and_locked_splits_pass_preflight(self):
@@ -103,9 +107,9 @@ class MethodTransferContractTests(unittest.TestCase):
         self.assertFalse(audit["experiment_execution_enabled"])
         self.assertEqual(
             audit["method_parameter_governance_status"],
-            "diagnostic_milestone_audit_required_before_validation",
+            "candidate_range_frozen_for_validation",
         )
-        self.assertEqual(audit["method_parameter_candidate_range_gate"], "blocked")
+        self.assertEqual(audit["method_parameter_candidate_range_gate"], "pass")
         self.assertFalse(audit["method_parameter_tuning_execution_allowed"])
         self.assertEqual(
             audit["hashes"]["method_parameter_governance"],
@@ -230,6 +234,12 @@ class MethodTransferContractTests(unittest.TestCase):
         contract["method_parameter_governance"][
             "development_tuning_execution_allowed"
         ] = True
+        contract["method_parameter_governance"][
+            "candidate_range_frozen_for_validation"
+        ] = False
+        contract["method_parameter_governance"]["status"] = (
+            "approved_candidate_grid_revision_train_only_gate_pending"
+        )
         with self.assertRaisesRegex(ValueError, "candidate range is frozen"):
             validate_contract(contract)
 
@@ -246,7 +256,7 @@ class MethodTransferContractTests(unittest.TestCase):
     def test_formal_plan_contains_clean_offline_and_three_core_methods(self):
         with patch(
             "xrd_robustness.method_transfer._frozen_hyperparameters",
-            return_value={"lambda_js": 0.3, "lambda_res": 0.1},
+            return_value={"lambda_js": 3.0, "lambda_res": 2.0},
         ):
             plan = build_run_plan(self.contract, PROJECT_ROOT)
         self.assertEqual(plan["run_count"], 15)
@@ -266,8 +276,8 @@ class MethodTransferContractTests(unittest.TestCase):
         self.assertIn("--clean-profile", clean["argv"])
         self.assertIn("--offline-views", offline["argv"])
         self.assertIn("--paired-offline-views", offline["argv"])
-        self.assertEqual(js["hyperparameters"]["lambda_js"], 0.3)
-        self.assertEqual(residual["hyperparameters"]["lambda_res"], 0.1)
+        self.assertEqual(js["hyperparameters"]["lambda_js"], 3.0)
+        self.assertEqual(residual["hyperparameters"]["lambda_res"], 2.0)
 
     def test_final_test_contracts_remain_locked(self):
         audit = audit_final_evaluation_locks(self.contract, PROJECT_ROOT)
@@ -409,11 +419,11 @@ class MethodTransferTuningTests(SyntheticResultMixin, unittest.TestCase):
                 if run["role"] == "baseline":
                     ood = 0.60
                 elif "lambda_js" in run["hyperparameters"]:
-                    ood = {0.1: 0.61, 0.3: 0.625, 1.0: 0.62}[
+                    ood = {0.3: 0.61, 3.0: 0.625, 30.0: 0.62}[
                         float(run["hyperparameters"]["lambda_js"])
                     ]
                 else:
-                    ood = {0.01: 0.59, 0.1: 0.605, 1.0: 0.603}[
+                    ood = {0.2: 0.59, 2.0: 0.605, 20.0: 0.603}[
                         float(run["hyperparameters"]["lambda_res"])
                     ]
                 self._write_result(
@@ -427,7 +437,7 @@ class MethodTransferTuningTests(SyntheticResultMixin, unittest.TestCase):
                 )
             selection = evaluate_tuning_selection(self.contract, root, PROJECT_ROOT)
             self.assertEqual(selection["status"], "selected")
-            self.assertEqual(selection["selected_values"], {"lambda_js": 0.3, "lambda_res": 0.1})
+            self.assertEqual(selection["selected_values"], {"lambda_js": 3.0, "lambda_res": 2.0})
             self.assertFalse(selection["simulated_test_used"])
             self.assertFalse(selection["real_test_used"])
 
@@ -459,8 +469,8 @@ class MethodTransferUnifiedValidationTests(SyntheticResultMixin, unittest.TestCa
         self.contract = copy.deepcopy(load_contract(CONTRACT_PATH))
         self.contract["formal_hyperparameters"]["frozen"] = True
         self.contract["formal_hyperparameters"]["values"] = {
-            "lambda_js": 0.3,
-            "lambda_res": 0.1,
+            "lambda_js": 3.0,
+            "lambda_res": 2.0,
         }
 
     def _synthetic_results(

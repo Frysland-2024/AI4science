@@ -104,13 +104,17 @@ class V9LearnedStateScaleAuditTests(unittest.TestCase):
             for metric in expected:
                 self.assertTrue(all(math.isfinite(value) for value in summary[metric].values()))
 
-    def test_no_grid_or_execution_switch_was_changed(self) -> None:
+    def test_historical_report_did_not_change_grid_and_current_switches_stay_off(self) -> None:
         registered = self.contract["method_parameter_governance"][
             "registered_candidate_grids"
         ]
-        self.assertEqual(registered["lambda_js"], [0.1, 0.3, 1.0])
-        self.assertEqual(registered["lambda_res"], [0.01, 0.1, 1.0])
-        self.assertFalse(self.governance["candidate_range_frozen_for_validation"])
+        self.assertEqual(registered["lambda_js"], [0.3, 3.0, 30.0])
+        self.assertEqual(registered["lambda_res"], [0.2, 2.0, 20.0])
+        self.assertTrue(self.governance["candidate_range_frozen_for_validation"])
+        self.assertEqual(
+            self.governance["one_revision_policy"]["completed_range_revisions"],
+            1,
+        )
         self.assertFalse(
             self.governance["tuning_gate"]["development_tuning_execution_allowed"]
         )

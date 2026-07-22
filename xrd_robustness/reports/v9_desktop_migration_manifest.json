@@ -19,10 +19,10 @@
     "README.md",
     "pyproject.toml"
   ],
-  "created_at_utc": "2026-07-22T11:23:19.143022+00:00",
+  "created_at_utc": "2026-07-22T12:23:48.660082+00:00",
   "critical_hashes": {
-    "contract": "D8E029E725FD7156C7409EA231FCF3999885637B6F94E462A0EB4D4D20E597CF",
-    "desktop_hardware_audit_report": "59AA209F27868631F142AB489B8156A11CC0F73905209A850E514AAA22F6683A",
+    "contract": "25B249615E29D56030236700C85A4CF7D1157622C5A1ECE01A8622107EA8AD3B",
+    "desktop_hardware_audit_report": "0520F830E4FE64F4C6A9FCB64850C9FE35101EC316AA9B8584048610D5FB7AD0",
     "desktop_hardware_audit_script": "31E2AFB055D18A3BC167D1A55B5D7ADB6CDEA5F9FB056B2C9AD946A66E59C8EA",
     "desktop_hardware_profile": "548FA33C64B2BDC9D4F38D8A054B86278C8A2757E2F18E51191D703A56F05B93",
     "desktop_measurement_implementations": {
@@ -38,12 +38,12 @@
     "launcher": "9C1BC891309E7963841D7DA408A7D78BF87858BA019B46C8E7AF8F61089B792A",
     "prefetch_module": "245B58369D435BEA3E156A9AEAACB6F08501031C8BDACF3AA738B909877C8FB0",
     "trainer": "6E117ECC38EDD273BB9A3EBE433789D5B06C20BBE611205AC06D472D9F2813D9",
-    "tuning_plan": "D02FAF433F26A95E629592F09991BA3CCA47AFF1274CC75C5918B0EC17D0F5C9"
+    "tuning_plan": "4A596C85B5771D15C776F6F2EF383DA13635C8300659A12A258F22D5315158BF"
   },
   "environment_reference": {
     "path": "reports/v9_laptop_environment_reference.txt",
     "pip_freeze_status": "passed",
-    "sha256": "4DBF28170712E6BDD95D026B98A4BD17A1F982EC75FE6EA99A190A849E7225D2"
+    "sha256": "28244F0F76591E6A2B30BAD2DA2A770F353F8B7D01A004BCEEBE05EDC8D815F6"
   },
   "explicit_exclusions": [
     "all other outputs outside outputs/v9_method_transfer_tuning",
@@ -54,15 +54,15 @@
     "group_summary": {
       "CODEX_HANDOFF.md": {
         "file_count": 1,
-        "size_bytes": 43430
+        "size_bytes": 46904
       },
       "README.md": {
         "file_count": 1,
-        "size_bytes": 8737
+        "size_bytes": 8925
       },
       "configs": {
         "file_count": 26,
-        "size_bytes": 121154
+        "size_bytes": 124727
       },
       "data": {
         "file_count": 14071,
@@ -70,7 +70,7 @@
       },
       "docs": {
         "file_count": 11,
-        "size_bytes": 116271
+        "size_bytes": 118683
       },
       "outputs": {
         "file_count": 3,
@@ -81,27 +81,27 @@
         "size_bytes": 320
       },
       "reports": {
-        "file_count": 53,
-        "size_bytes": 856526
+        "file_count": 54,
+        "size_bytes": 1148591
       },
       "scripts": {
-        "file_count": 52,
-        "size_bytes": 593761
+        "file_count": 53,
+        "size_bytes": 621114
       },
       "src": {
         "file_count": 40,
-        "size_bytes": 362988
+        "size_bytes": 365581
       },
       "tests": {
-        "file_count": 38,
-        "size_bytes": 161888
+        "file_count": 39,
+        "size_bytes": 166781
       }
     },
     "path": "reports/v9_desktop_migration_files.csv",
-    "payload_size_bytes": 295856178,
-    "payload_stream_sha256": "7D7562FFCD9DBC6E2163F65BE0D5B234B40044ACE8501702B1A2C327381CAD81",
-    "row_count": 14297,
-    "sha256": "F370DC3B3E8CC5A6882C1F669918F8E4259D55A0584D3B005B7250B5735642AC"
+    "payload_size_bytes": 296192729,
+    "payload_stream_sha256": "0837492537F03CA1BD7205CB97C1485F00BA1428ACD62DEEDB0EE90322BA8B03",
+    "row_count": 14300,
+    "sha256": "909721381A501AAB15569AD8A136D4E89375AD43D82E9C010FB45870DA7F61A3"
   },
   "gates": {
     "active_checkpoint_count_is_zero": true,

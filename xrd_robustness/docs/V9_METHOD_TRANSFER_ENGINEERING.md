@@ -1,6 +1,6 @@
 # V9-T 算法迁移论文工程契约
 
-状态日期：2026-07-22。项目当前正式身份为 **V9-T：算法迁移主线**，唯一目标是完成算法迁移论文。9,842 / 2,109 / 2,109 的 family-aware（家族分组）70/15/15 划分和统一 Validation 契约已经冻结。方法参数语义 Gate 已通过，但当前候选范围没有通过 Train-only 梯度尺度 Gate。训练仍为 0/7 调参、0/15 正式开发实验，simulated test 0 次、real test 0 次；所有执行开关继续保持关闭。
+状态日期：2026-07-22。项目当前正式身份为 **V9-T：算法迁移主线**，唯一目标是完成算法迁移论文。9,842 / 2,109 / 2,109 的 family-aware（家族分组）70/15/15 划分和统一 Validation 契约已经冻结。方法参数语义 Gate 与六候选 Train-only 梯度尺度 Gate 均已通过；JS `[0.3,3,30]`、Residual `[0.2,2,20]` 已在唯一一次人工修订后冻结。训练仍为 0/7 调参、0/15 正式开发实验，simulated test 0 次、real test 0 次；所有执行开关继续保持关闭，等待用户单独授权 7-run。
 
 本研究没有 Pilot 阶段，也不使用 A/B/C2 命名。动态增广是单纯数据增广范式的一种强实现，同时负责生成成对视图，但不作为创新点；结构化扰动继续封存。Near-clean ERM 与离线物理增强只是参考基线。模拟器标签监督残差研究已延期为 **V10：Simulator-Supervised Representation Learning**，不属于当前论文、实验矩阵或资源计划。
 
@@ -81,7 +81,7 @@
 
 新版正式 B3、七类平衡 Train 子集、128-step 审计使用 128 个不重复配对 batch，并把监督分类头排除在 backbone 梯度范数之外。它显示 late 段分类准确率仅 `11.96%`（随机 `14.29%`）、`L_cls=1.9499`（均匀交叉熵 `ln(7)=1.94591`）；两个视图 top-1 却有 `99.34%` 一致，prediction JS 只有约 `2.97e-7`。Residual probe 的 late pre-update 准确率为 `14.62%`、交叉熵为 `1.94613`，也未证明具有类别预测能力。因此当前六个候选梯度比小首先是“主干与 probe 尚未学起来”的诊断信号，不能解释为合理权重应是几万。
 
-梯度倒数得到的诊断补偿倍数约为 JS `2.874e5`、Residual `2.556e4`，但它们不是理论权重、不是网格提案，也不会自动替换正式配置。完整 early/middle/late 指标、一次性修订政策和 Gate 见 `docs/V9_METHOD_PARAMETER_GOVERNANCE.md` 与 `configs/v9_method_parameter_governance.json`。下一步必须先做 Train-only 学习里程碑复测，并在解释 Residual 混淆前证明 probe 已能从 residual 预测类别；在此之前 Validation-only tuning execution 保持关闭，两组三点网格保持不变。
+梯度倒数得到的诊断补偿倍数约为 JS `2.874e5`、Residual `2.556e4`，但它们不是理论权重、不是网格提案，也没有进入正式配置。后续 learned-state 审计先证明主干和 residual probe 具有可解释信号；用户再批准唯一一次 decade-grid 修订，六候选 Gate 以真实 Train-only autograd 测量证明 JS `[0.3,3,30]` 与 Residual `[0.2,2,20]` 覆盖 weak/material/dominant。完整指标、审计工具修正和冻结政策见 `docs/V9_METHOD_PARAMETER_GOVERNANCE.md` 与 `configs/v9_method_parameter_governance.json`。Validation-only tuning execution 仍关闭，候选范围不得再次修改。
 
 ## 统一 Validation 的职责
 

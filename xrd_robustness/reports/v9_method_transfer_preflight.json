@@ -1,5 +1,5 @@
 {
-  "contract_status": "v9t_method_parameter_semantics_pass_candidate_range_recalibration_required",
+  "contract_status": "v9t_candidate_range_frozen_tuning_authorization_required",
   "core_comparison_run_count": 9,
   "cross_split_family_count": 0,
   "development_profiles": [
@@ -27,7 +27,9 @@
     "evaluation_contract": "24FD778E2AE1DD0C8AF519871BBC8343F56966437D5AC0E19606E7F03A4FD5D4",
     "freeze_evidence": "34793043BEA82BE9DB1C514491BC9DA04876A5F96285458DC19E84288175F810",
     "hardware_profile": "548FA33C64B2BDC9D4F38D8A054B86278C8A2757E2F18E51191D703A56F05B93",
-    "method_parameter_governance": "482D5107C81447902C75F595FE2996C7B569FB1424297D3C57E6494C3F4B1620",
+    "method_parameter_candidate_grid_gate": "E59EE2A56906757C82238CB47D520B1D74D690455EA907540AFFF59EA2E8A947",
+    "method_parameter_governance": "4479476A5492A8E81000C2B8E315D8CDA2446198BAE6B36163E9A42792CE1369",
+    "method_parameter_learned_state": "384982FE0C3D0E125F4D8AD96637FBFFCBBD9D76823CEEF3C01C296AA8BE62CE",
     "method_parameter_scale": "43CADB63F82FCB705561FBFB281DF87B6D9446F1D587A6DEAADACB71D07DA997",
     "method_parameter_semantics": "2C159DC6AC0A45BE4D90936F210EA44FE86728748C64B165636BC58A39BA003A",
     "parameter_table": "A81656EA7EE4FD33F69F479061E739C1F181C4BFEE712F428A32296F842CA36B",
@@ -40,8 +42,8 @@
       "src/xrd_robustness/training_prefetch.py": "245B58369D435BEA3E156A9AEAACB6F08501031C8BDACF3AA738B909877C8FB0"
     }
   },
-  "method_parameter_candidate_range_gate": "blocked",
-  "method_parameter_governance_status": "diagnostic_milestone_audit_required_before_validation",
+  "method_parameter_candidate_range_gate": "pass",
+  "method_parameter_governance_status": "candidate_range_frozen_for_validation",
   "method_parameter_tuning_execution_allowed": false,
   "real_test_locked": true,
   "runtime": {
@@ -51,7 +53,6 @@
     "execution_blockers": [
       "gpu_name mismatch: expected 'NVIDIA GeForce RTX 4070 Ti SUPER', observed 'NVIDIA GeForce RTX 4060 Laptop GPU'",
       "GPU memory is below the frozen minimum",
-      "method-parameter candidate range is not frozen for Validation",
       "method-parameter Train-only scale Gate does not allow tuning",
       "Validation-only development tuning is not authorized in the contract"
     ],

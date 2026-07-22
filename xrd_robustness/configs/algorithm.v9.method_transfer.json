@@ -1,7 +1,7 @@
 {
   "$schema": "algorithm.v9.method_transfer.schema.json",
   "schema_version": "v9.1-method-transfer",
-  "status": "v9t_method_parameter_semantics_pass_candidate_range_recalibration_required",
+  "status": "v9t_candidate_range_frozen_tuning_authorization_required",
   "study_kind": "cross_domain_method_transfer",
   "research_question": "Under matched crystal structures, physical-augmentation views, architecture, compute budget, and evaluation panels, does explicit modeling of relations between differently perturbed views of the same crystal structure through JS consistency or residual class decorrelation improve PXRD generalization to unseen perturbations and real experimental patterns beyond augmentation-only supervised learning?",
   "narrative_policy": {
@@ -147,13 +147,13 @@
   },
   "method_parameter_governance": {
     "path": "configs/v9_method_parameter_governance.json",
-    "sha256": "482D5107C81447902C75F595FE2996C7B569FB1424297D3C57E6494C3F4B1620",
-    "status": "diagnostic_milestone_audit_required_before_validation",
+    "sha256": "4479476A5492A8E81000C2B8E315D8CDA2446198BAE6B36163E9A42792CE1369",
+    "status": "candidate_range_frozen_for_validation",
     "registered_candidate_grids": {
-      "lambda_js": [0.1, 0.3, 1.0],
-      "lambda_res": [0.01, 0.1, 1.0]
+      "lambda_js": [0.3, 3.0, 30.0],
+      "lambda_res": [0.2, 2.0, 20.0]
     },
-    "candidate_range_frozen_for_validation": false,
+    "candidate_range_frozen_for_validation": true,
     "development_tuning_execution_allowed": false
   },
   "development_tuning": {
@@ -169,14 +169,14 @@
       {
         "method_id": "js_consistency_transfer",
         "parameter": "lambda_js",
-        "values": [0.1, 0.3, 1.0],
-        "source": "configs/v9_method_parameter_governance.json; legacy internal grid retained unchanged while the Train-only learning-stage diagnosis is unresolved"
+        "values": [0.3, 3.0, 30.0],
+        "source": "configs/v9_method_parameter_governance.json; single human-approved pre-Validation decade-grid revision, directly measured on a rebuilt Train-only learned state and frozen after the candidate Gate passed"
       },
       {
         "method_id": "residual_decorrelation_transfer",
         "parameter": "lambda_res",
-        "values": [0.01, 0.1, 1.0],
-        "source": "configs/v9_method_parameter_governance.json; legacy internal grid retained unchanged while the Train-only learning-stage and residual-probe diagnosis is unresolved"
+        "values": [0.2, 2.0, 20.0],
+        "source": "configs/v9_method_parameter_governance.json; single human-approved pre-Validation decade-grid revision, directly measured with a competent disjoint Train residual probe and frozen after the candidate Gate passed"
       }
     ],
     "selection": {
@@ -195,7 +195,7 @@
       "lambda_js": null,
       "lambda_res": null
     },
-    "current_0_1_values_are_defaults_not_scientific_optima": true
+    "legacy_0_1_values_were_defaults_not_scientific_optima": true
   },
   "experiment": {
     "seeds": [20260711, 20260712, 20260713],
@@ -381,7 +381,7 @@
     "formal_scientific_conclusions_enabled": false,
     "simulated_test_enabled": false,
     "real_test_enabled": false,
-    "experiment_blocker": "Validation-only lambda tuning is blocked until the Train-only method-parameter audit supports a single revised three-point grid, the range is frozen before Validation, hashes are refreshed, and the user separately authorizes execution on the target machine.",
+    "experiment_blocker": "The revised candidate range and hashes are frozen, but Validation-only lambda tuning remains disabled until the user separately authorizes the seven-run execution on the target machine.",
     "formal_blocker": "The tuning selection, 15 formal development runs, unified Validation comparison, and locked final evaluations are incomplete."
   }
 }

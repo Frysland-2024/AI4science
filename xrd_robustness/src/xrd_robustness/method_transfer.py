@@ -422,6 +422,18 @@ def audit_contract_assets(contract: Mapping[str, Any], project_root: str | Path)
     scale_evidence_path = _project_path(
         root, str(governance_payload.get("scale_evidence", {}).get("path", ""))
     )
+    learned_state_evidence_path = _project_path(
+        root,
+        str(governance_payload.get("learned_state_evidence", {}).get("path", "")),
+    )
+    candidate_grid_gate_path = _project_path(
+        root,
+        str(
+            governance_payload.get("candidate_grid_gate_evidence", {}).get(
+                "path", ""
+            )
+        ),
+    )
 
     required = [
         data_root,
@@ -440,6 +452,8 @@ def audit_contract_assets(contract: Mapping[str, Any], project_root: str | Path)
         governance_path,
         semantic_evidence_path,
         scale_evidence_path,
+        learned_state_evidence_path,
+        candidate_grid_gate_path,
     ]
     missing = [str(path) for path in required if not path.exists()]
     if missing:
@@ -464,6 +478,10 @@ def audit_contract_assets(contract: Mapping[str, Any], project_root: str | Path)
         "method_parameter_governance": sha256_file(governance_path),
         "method_parameter_semantics": sha256_file(semantic_evidence_path),
         "method_parameter_scale": sha256_file(scale_evidence_path),
+        "method_parameter_learned_state": sha256_file(learned_state_evidence_path),
+        "method_parameter_candidate_grid_gate": sha256_file(
+            candidate_grid_gate_path
+        ),
     }
     expected_hashes = {
         "split_manifest": str(data["split_manifest_sha256"]).upper(),
@@ -484,6 +502,12 @@ def audit_contract_assets(contract: Mapping[str, Any], project_root: str | Path)
         ).upper(),
         "method_parameter_scale": str(
             governance_payload["scale_evidence"]["sha256"]
+        ).upper(),
+        "method_parameter_learned_state": str(
+            governance_payload["learned_state_evidence"]["sha256"]
+        ).upper(),
+        "method_parameter_candidate_grid_gate": str(
+            governance_payload["candidate_grid_gate_evidence"]["sha256"]
         ).upper(),
     }
     mismatches = {
@@ -532,6 +556,37 @@ def audit_contract_assets(contract: Mapping[str, Any], project_root: str | Path)
         != governance_payload.get("scale_evidence", {}).get("candidate_range_gate")
     ):
         raise ValueError("candidate-range Gate status disagrees with scale evidence")
+
+    learned_state_evidence = json.loads(
+        learned_state_evidence_path.read_text(encoding="utf-8")
+    )
+    if learned_state_evidence.get("status") != "pass" or any(
+        learned_state_evidence.get(key) is not False
+        for key in ("validation_used", "simulated_test_used", "real_xrd_used")
+    ):
+        raise ValueError("learned-state method-parameter evidence is invalid or leaked")
+    if not all(learned_state_evidence.get("checks", {}).values()):
+        raise ValueError("learned-state method-parameter evidence contains failed checks")
+
+    candidate_grid_gate = json.loads(
+        candidate_grid_gate_path.read_text(encoding="utf-8")
+    )
+    if candidate_grid_gate.get("status") != "pass" or any(
+        candidate_grid_gate.get(key) is not False
+        for key in ("validation_used", "simulated_test_used", "real_xrd_used")
+    ):
+        raise ValueError("candidate-grid Gate evidence is invalid or leaked")
+    if not all(candidate_grid_gate.get("checks", {}).values()):
+        raise ValueError("candidate-grid Gate evidence contains failed checks")
+    gate_decision = candidate_grid_gate.get("candidate_grid_gate", {})
+    if gate_decision.get("status") != "pass" or not bool(
+        gate_decision.get("candidate_range_may_be_frozen")
+    ):
+        raise ValueError("candidate-grid Gate does not authorize range freezing")
+    if gate_decision.get("validation_tuning_authorized") is not False:
+        raise ValueError("candidate-grid Gate cannot authorize Validation tuning")
+    if governance_payload.get("candidate_range_frozen_for_validation") is not True:
+        raise ValueError("passed candidate-grid Gate must be followed by a frozen range")
 
     hardware_payload = json.loads(hardware_profile_path.read_text(encoding="utf-8"))
     if hardware_payload.get("schema_version") != "v9-desktop-hardware-profile-v1":
@@ -747,8 +802,8 @@ def audit_contract_assets(contract: Mapping[str, Any], project_root: str | Path)
         "scientific_range_status": "frozen",
         "freeze_evidence_status": "passed",
         "method_parameter_governance_status": governance_payload["status"],
-        "method_parameter_candidate_range_gate": scale_evidence[
-            "candidate_range_gate"
+        "method_parameter_candidate_range_gate": candidate_grid_gate[
+            "candidate_grid_gate"
         ]["status"],
         "method_parameter_tuning_execution_allowed": bool(
             governance_gate["development_tuning_execution_allowed"]
