@@ -312,3 +312,28 @@ unchanged.
 - No laptop checkpoint is authoritative.
 - The immediate scientific blocker before tuning authorization is the registered λ range adequacy review described above; the immediate machine blocker is target-desktop first-boot acceptance.
 - The source-side migration package is ready for copy, but this is not target-machine acceptance; the desktop must still run its own environment, hardware, transfer, evaluation, acceleration, and final-readiness probes.
+
+## 17. Local WICSCI2025 external-material inventory
+
+On 2026-07-22, `C:/Users/81504/Desktop/1.zip` was validated, moved, and
+organized under `E:/AI4science/04_external_lab_data/WICSCI2025`. The directory
+is covered by the repository's external-data ignore rule and is not a tracked
+training dependency.
+
+Current local evidence:
+
+- archive SHA-256: `1B22A831D648D18790A46D3430753CB6AE767B7F87EF15CFEEC959CE199FD813`;
+- 337 extracted files totaling 670,143,742 bytes, with a 337-row per-file
+  SHA-256 inventory;
+- full ZIP payload read passed, with no unsafe paths, symbolic links, or common
+  secret patterns detected;
+- four organized projects: molecular-vibration/IR/Raman processing (DXL),
+  Quantum ESPRESSO XAS/Xspectra examples (HBY), the MIT-licensed NMRNet code
+  and demo data (XFJ), and an NN-NMR tutorial with an external model weight
+  (YQ).
+
+These materials are useful as isolated spectroscopy and AI4S references,
+especially for learned NMR representations and physics-to-spectrum workflows.
+They are not PXRD labels, V9-T Train/Validation/Test inputs, or authorization to
+load the external model weight. The V9-T experiment states and test locks are
+unchanged.
