@@ -19,7 +19,7 @@
     "README.md",
     "pyproject.toml"
   ],
-  "created_at_utc": "2026-07-22T09:06:35.661106+00:00",
+  "created_at_utc": "2026-07-22T09:21:34.681772+00:00",
   "critical_hashes": {
     "contract": "41DB7897F36A072B37D43B0EA2CDC2CB72ECF671DCCE68B5B1F8A4526B6C26F0",
     "desktop_hardware_audit_report": "99AD5F1E32A3AB81C3182DA8DA04200B5E68AC93F52E9963DC4DECA10B1E37AB",
@@ -43,7 +43,7 @@
   "environment_reference": {
     "path": "reports/v9_laptop_environment_reference.txt",
     "pip_freeze_status": "passed",
-    "sha256": "7B6E4FF43BE40457E3532F0B479816C7AA1786FD0B10E235FC3B9C40039525B5"
+    "sha256": "075369F24C0F8428C6747CD144E9B3EA55EBAC1BE9EDE41D72764DB89FB6123C"
   },
   "explicit_exclusions": [
     "all other outputs outside outputs/v9_method_transfer_tuning",
@@ -54,7 +54,7 @@
     "group_summary": {
       "CODEX_HANDOFF.md": {
         "file_count": 1,
-        "size_bytes": 34338
+        "size_bytes": 35225
       },
       "README.md": {
         "file_count": 1,
@@ -98,10 +98,10 @@
       }
     },
     "path": "reports/v9_desktop_migration_files.csv",
-    "payload_size_bytes": 295194330,
-    "payload_stream_sha256": "7765E4905B1E7DC343938549C7974003068D324EAD78A59F7C668E5BE49A2311",
+    "payload_size_bytes": 295195217,
+    "payload_stream_sha256": "F137D1C32E94E4B3CEB1239BDAA048989048C260C2A205C5B3F43DF4344BAE0E",
     "row_count": 14288,
-    "sha256": "AFF2E0E9F46990B02E13B6DC4DF02E7412BF16BF7C46A5B705EC0EB6E4CD8E74"
+    "sha256": "53BB534AF4128D9B254F4B8EE15D2421DF87625281632FE9CE62286223416071"
   },
   "gates": {
     "active_checkpoint_count_is_zero": true,

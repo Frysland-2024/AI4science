@@ -741,3 +741,11 @@ powershell -NoProfile -ExecutionPolicy Bypass -File scripts\desktop_first_boot_v
 - `reports/v9_desktop_migration_verification.json` 在源机器逐文件验证 14,288/14,288：missing=0、size mismatch=0、hash mismatch=0。
 - `copy_v9_desktop_payload.ps1 -WhatIf` 只完成复制演练，没有写入目标目录；`desktop_first_boot_v9.ps1 -PlanOnly` 验证了 11 个验收步骤，并确认 formal training commands=0。
 - 这些证据只证明源端 payload 自洽和脚本可规划，不替代台式机现场验收，也不构成 7-run 授权。
+
+## 22. 跨项目边界：Raman 不替代当前 XRD 主线
+
+- 本地 Raman mapping 只有两个独立样品文件，虽然每个文件包含 26 x 26 x 829 的空间—光谱立方体，但 1,352 条像素谱不是 1,352 个独立样本。
+- 禁止按像素随机切分 Train/Test 后把结果解释为掺杂泛化；样品、批次、日期、仪器和空间背景会共同泄漏。
+- 当前 MATLAB 原型仅覆盖读取、选峰/区间积分和空间绘图，没有 ML 假设、样品级划分、baseline 或外部验证。
+- Raman 只作为未来第二项目的数据种子；补齐多个独立样品/批次、标签证据和样品级外部验证后，才考虑 spatial-spectral self-supervision、unmixing/segmentation 或 anomaly detection。
+- 当前唯一主研究仍为 XRD V9-T。本节不授权 Raman 开发，不改变 XRD 方法矩阵、λ 候选、0/7、0/15 或 Test 锁。

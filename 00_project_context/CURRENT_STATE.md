@@ -301,7 +301,7 @@ unchanged.
 - disabled real-test manifest/hash/preprocessing/overlap audit interfaces;
 - manuscript skeleton, result/figure templates, and reviewer-attack checklist;
 - migration/first-boot workflow remains training-free;
-- the refreshed desktop payload contains 14,288 files (295,194,330 bytes), with stream SHA-256 `7765E4905B1E7DC343938549C7974003068D324EAD78A59F7C668E5BE49A2311`;
+- the refreshed desktop payload contains 14,288 files (295,195,217 bytes), with stream SHA-256 `F137D1C32E94E4B3CEB1239BDAA048989048C260C2A205C5B3F43DF4344BAE0E`;
 - source-side migration verification passed with 14,288/14,288 files, 0 missing files, 0 size mismatches, and 0 hash mismatches;
 - the copy-script `-WhatIf` rehearsal copied nothing, and the first-boot `-PlanOnly` rehearsal contained 0 formal-training commands.
 
@@ -337,3 +337,34 @@ especially for learned NMR representations and physics-to-spectrum workflows.
 They are not PXRD labels, V9-T Train/Validation/Test inputs, or authorization to
 load the external model weight. The V9-T experiment states and test locks are
 unchanged.
+
+## 18. Cross-project priority: XRD primary, Raman secondary
+
+The active research priority remains XRD V9-T. The local Raman mapping material
+under `04_external_lab_data/GTIIT/06_raman_mapping` is a promising seed for a
+future spatial-spectral project, but it is not currently a second ML study of
+comparable maturity.
+
+Verified Raman evidence:
+
+- two sample files, `sample_1_undoped_20240823.txt` and
+  `sample_2_doped_20240823.txt`;
+- each file contains a 26 x 26 spatial grid and 829 Raman-shift bins;
+- the apparent 1,352 pixel spectra therefore come from only two independent
+  specimen files whose names record the same date (`20240823`);
+- the available MATLAB prototype reads the text cube, selects/integrates a
+  Raman-shift interval, plots spectra, and renders a spatial surface; it does
+  not implement an ML hypothesis, sample-level split, baseline comparison, or
+  external validation.
+
+Consequently, pixels from one specimen must not be randomly divided into Train
+and Test and described as independent samples. The current files support
+descriptive visualization and exploratory PCA/NMF-style analysis only. A future
+Raman ML project requires multiple independent specimens and batches, stronger
+label/provenance evidence, sample-level held-out evaluation, and a frozen
+scientific task. Its preferred long-term niche is spatial-spectral
+self-supervision, segmentation/unmixing, or anomaly detection after those data
+conditions are met.
+
+This decision does not add Raman to V9-T, alter the XRD method matrix, authorize
+Raman model development, or change the XRD 0/7 and 0/15 experiment states.
