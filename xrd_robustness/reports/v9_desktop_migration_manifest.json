@@ -19,7 +19,7 @@
     "README.md",
     "pyproject.toml"
   ],
-  "created_at_utc": "2026-07-22T10:39:53.014920+00:00",
+  "created_at_utc": "2026-07-22T11:23:19.143022+00:00",
   "critical_hashes": {
     "contract": "D8E029E725FD7156C7409EA231FCF3999885637B6F94E462A0EB4D4D20E597CF",
     "desktop_hardware_audit_report": "59AA209F27868631F142AB489B8156A11CC0F73905209A850E514AAA22F6683A",
@@ -43,7 +43,7 @@
   "environment_reference": {
     "path": "reports/v9_laptop_environment_reference.txt",
     "pip_freeze_status": "passed",
-    "sha256": "7BE5FDD2B0761DA42117D07E74BEA0737540F9BA76A212E7582CC8F0F02A36EF"
+    "sha256": "4DBF28170712E6BDD95D026B98A4BD17A1F982EC75FE6EA99A190A849E7225D2"
   },
   "explicit_exclusions": [
     "all other outputs outside outputs/v9_method_transfer_tuning",
@@ -54,11 +54,11 @@
     "group_summary": {
       "CODEX_HANDOFF.md": {
         "file_count": 1,
-        "size_bytes": 39727
+        "size_bytes": 43430
       },
       "README.md": {
         "file_count": 1,
-        "size_bytes": 7673
+        "size_bytes": 8737
       },
       "configs": {
         "file_count": 26,
@@ -81,27 +81,27 @@
         "size_bytes": 320
       },
       "reports": {
-        "file_count": 52,
-        "size_bytes": 667156
+        "file_count": 53,
+        "size_bytes": 856526
       },
       "scripts": {
-        "file_count": 51,
-        "size_bytes": 557462
+        "file_count": 52,
+        "size_bytes": 593761
       },
       "src": {
         "file_count": 40,
         "size_bytes": 362988
       },
       "tests": {
-        "file_count": 37,
-        "size_bytes": 155876
+        "file_count": 38,
+        "size_bytes": 161888
       }
     },
     "path": "reports/v9_desktop_migration_files.csv",
-    "payload_size_bytes": 295619730,
-    "payload_stream_sha256": "39938A8698998B08F5BF6A05F4CD968C2DCEAF32C7E81BF73191C18BC983A8E7",
-    "row_count": 14294,
-    "sha256": "52AE4D24B72A4D54E3A82B8EB568954ADAB35A3F3D224808513C213C723EB1C1"
+    "payload_size_bytes": 295856178,
+    "payload_stream_sha256": "7D7562FFCD9DBC6E2163F65BE0D5B234B40044ACE8501702B1A2C327381CAD81",
+    "row_count": 14297,
+    "sha256": "F370DC3B3E8CC5A6882C1F669918F8E4259D55A0584D3B005B7250B5735642AC"
   },
   "gates": {
     "active_checkpoint_count_is_zero": true,

@@ -16,7 +16,7 @@
   "status": "pass",
   "verification_hostname": "Frysland",
   "verification_is_on_source_host": true,
-  "verified_file_count": 14294,
-  "verified_payload_size_bytes": 295619730,
+  "verified_file_count": 14297,
+  "verified_payload_size_bytes": 295856178,
   "verified_root": "E:\\AI4science\\xrd_robustness"
 }

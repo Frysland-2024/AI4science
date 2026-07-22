@@ -313,3 +313,21 @@ Raman 数据表面上是两个 26 x 26 x 829 的空间—光谱立方体，共�
 - Validation、simulated Test 和 real test 继续不参与诊断，两项 tuning execution switches 保持关闭。
 
 这次修正没有否定 JS 或 Residual 方法，也没有证明现网格合理。它只是把因果顺序恢复为：先证明主任务与探针已进入可解释状态，再讨论辅助梯度尺度，最后才可能在 Validation 前做唯一一次范围治理决定。
+
+## 2026-07-22：用已学习状态把“辅助目标没信号”与“初始化没信号”分开
+
+项目随后执行了明确授权的 learned-state Train-only audit。它不是正式性能实验，也不使用任何候选 λ：唯一的 PAMPT-B3 主干以 Dynamic/Paired ERM 在完整 9,842 个 Train 结构上训练五个 epoch，并在预先固定的 epoch 1、3、5 观察学习状态。全程没有读取 Validation、simulated Test 或 real XRD，没有保存 checkpoint，也没有启动 7-run。
+
+为避免“probe 自己没学会”继续伪装成“residual 没有类别信息”，Residual 证据被拆成三个互斥的七类平衡 Train 子集：700 个结构只用于训练 detached residual probe，另 700 个只用于 probe 审计，再用第三组 700 个测量 loss 与 backbone 梯度。实现试跑还暴露了一个重要审计细节：把主干的 `1e-4` 学习率机械复制给 probe 会造成欠拟合假阴性。最终冻结的诊断协议仍使用一层 residual head，但给 detached probe 使用仓库既有 post-hoc probe 的 `1e-3` 数量级、固定 50 epochs；这不会改变 backbone，只提高“是否存在可读取类别信号”这个检测的灵敏度。
+
+结果形成了清晰的时间对照：epoch 1 时主干和 probe Gate 都失败；epoch 3 和 epoch 5 时两者都通过。主机意外重启后，由于 checkpoint 只存在内存，审计按同一固定 seed 从 epoch 0 完整重跑，没有声称断点恢复；本次重跑报告成为权威结果。epoch 5 的主干 Train CE 为 1.62189、两视图准确率 31.02%；互斥 Train-audit residual probe 达到 32.57% accuracy、28.92% Macro-F1、CE 1.85059，明显优于 14.29% chance。与此同时，raw JS 中位数升至 0.01862、两视图 top-1 disagreement 为 35.42%，说明短审计里的近零 JS 主要是随机状态现象，而不是已经学到完美不变性。epoch-5 未加权辅助/分类 backbone 梯度比中位数为 JS 0.05898、Residual 0.09738。
+
+决定：
+
+- 128-step 报告继续保存，但只作为 initialization/chance-state evidence；其中几万到几十万的倒数不允许进入参数治理；
+- learned-state 报告证明 JS 与 Residual 在主干学习后都有可测信号，也证明当前 residual 确实含有可被 probe 读取的晶系信息；
+- 这些结果只把参数讨论推进到“可人工审查”，不等于现网格合理，更不等于已选出最终权重；
+- 原 JS `[0.1,0.3,1.0]` 与 Residual `[0.01,0.1,1.0]` 继续原样保留为待审候选，`candidate_range_frozen_for_validation` 保持 `false`，两个 tuning execution switches 保持关闭；
+- 不自动生成或应用新网格，不启动 Validation tuning/7-run；是否进行唯一一次整体对数平移必须由人工结合 learned-state 比率另行决定并记录。
+
+这一步把参数尺度审计从“观察一个数”升级为“先证明测量状态、再证明 probe 能力、最后解释梯度”。它排除了初始化假象，但刻意没有越过人工作出的科学治理决定。

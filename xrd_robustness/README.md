@@ -102,9 +102,12 @@ E:\AI4science\.venvs\xrd_tools\Scripts\python.exe -s scripts\audit_v9_real_test_
 
 - `reports/v9_method_semantics_audit.json`；
 - `reports/v9_loss_gradient_scale_audit.json`；
+- `reports/v9_learned_state_scale_audit.json`；
 - `configs/v9_method_parameter_governance.json`；
 - `docs/V9_METHOD_PARAMETER_GOVERNANCE.md`。
 
 损失尺度审计只诊断数值作用强度，不选择 λ。新版 PAMPT-B3 128-step Train-only 报告给出 early/middle/late 的原始 loss、未加权 backbone 梯度、prediction JS、feature residual norm 和 residual-head entropy，并使用 128 个不重复配对 batch。结果显示分类主干到 late 段仍未优于随机，residual probe 也停留在随机水平；所以反推的几万至几十万只是不充分学习阶段的梯度补偿倍数，不能当作理论权重或正式网格。两组三点候选保持不变，必须先完成 Train-only 学习里程碑与 probe 能力复测。
+
+该学习里程碑复测现已完成。`v9_learned_state_scale_audit.json` 使用完整 9,842 个 Train 结构训练一个五 epoch、classification-only Dynamic/Paired ERM PAMPT-B3，并在 epoch 1/3/5 使用三组互斥、各 700 个七类平衡 Train 结构分别完成 probe calibration、probe audit 和 scale audit。主机意外重启后，该审计以相同固定 seed 从 epoch 0 完整重跑，没有使用或声称断点恢复。epoch 3/5 的主干与 residual-probe Gate 均通过；epoch 5 的 Train CE/两视图 accuracy 为 1.62189/31.02%，互斥 probe audit 为 32.57% accuracy、28.92% Macro-F1、CE 1.85059。epoch-5 未加权 JS/分类与 Residual/分类 backbone 梯度比中位数分别为 0.05898 和 0.09738。该报告只证明已学习状态下存在可解释信号：不选择 λ、不改网格、不冻结 candidate range，也不授权 Validation tuning 或 7-run。当前两组三点仍是待审候选，下一步是人工决定是否使用唯一一次 pre-Validation 范围修订。
 
 外部论文只提供方法与敏感性流程先例，不提供可直接搬用的数值：Hu et al. 的 SD3Net 正文/Table 5 使用 `lambda_3=1`，Fig. 12 又报告一个未明确映射到 `lambda_3`、约在 `1e-4` 最优的 regularization parameter。因此两者都不是 V9-T `lambda_res` 的数值权威；完整限制见参数治理文档与机器合同。

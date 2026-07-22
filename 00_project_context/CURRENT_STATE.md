@@ -165,7 +165,9 @@ The checkpoint-resume verification gap is now closed. A bounded real-cache CUDA 
 
 The method-parameter semantic audit is now complete: all 22 checks pass. It proves zero-weight reduction to Dynamic/Paired ERM, JS symmetry/non-negativity/batch-mean reduction, residual entropy direction, finite normalization, head/backbone gradient flow, and the exact 2-epoch warmup plus 3-epoch ramp. The production V9 residual is an absolute normalized feature difference and is therefore swap-invariant; the separately retained signed residual is swap-antisymmetric. These semantics are tested independently and must not be conflated.
 
-The scale audit has been upgraded to schema v3 on formal PAMPT-B3, CUDA, and a 128-step Train-only trajectory. It uses 14 balanced structures and 128 non-repeated paired batches, excludes the supervised task head from encoder/backbone gradient norms, and records raw losses, gradients, view/residual distances, and probe competence across audit-trajectory thirds. It used no Validation/Test/real data and selected no λ. The numerical run passes, but both interpretation prerequisites fail: late classification accuracy is 11.96% (chance 14.29%), and late residual-probe pre-update accuracy is 14.62% with cross-entropy at the uniform baseline. The inverse-gradient values (`2.874e5` JS and `2.556e4` Residual) are therefore diagnostic compensation factors from an insufficiently learned trajectory, not theoretical weights or grid proposals. Both registered grids remain unchanged; a Train-only learning-milestone audit is required before the single permitted pre-Validation range decision.
+The schema-v3 128-step scale audit remains preserved, but it is now classified only as **initialization/chance-state evidence**. Its late classification accuracy was 11.96% (chance 14.29%) and the residual probe remained at uniform CE, so its inverse-gradient values (`2.874e5` JS and `2.556e4` Residual) are invalid for grid revision.
+
+The authorized learned-state audit is now complete in `reports/v9_learned_state_scale_audit.json` (SHA-256 `384982FE0C3D0E125F4D8AD96637FBFFCBBD9D76823CEEF3C01C296AA8BE62CE`). After an unexpected host restart, the complete trajectory was rerun from epoch 0 with the same fixed seed; no in-memory checkpoint recovery is claimed. One classification-only Dynamic/Paired ERM PAMPT-B3 model trained for five epochs on all 9,842 Train structures with the shared batch-16 AdamW configuration; no checkpoint was written. At epochs 1, 3, and 5, three disjoint seven-class-balanced Train subsets (700 structures each) were used for residual-probe calibration, residual-probe audit, and scale measurement. The backbone was still at chance at epoch 1, but learned-state gates passed at epochs 3 and 5. At epoch 5, Train CE was 1.62189 and two-view accuracy was 31.02%; the held-out-within-Train residual probe reached 32.57% accuracy, 28.92% Macro-F1, and CE 1.85059. Median unweighted auxiliary/backbone gradient ratios at epoch 5 were 0.05898 for JS and 0.09738 for Residual. This demonstrates usable learned-state signal, not a final loss weight. The registered grids remain unchanged and unfrozen; no Validation tuning or 7-run has started, and a human scientific decision is still required before the single permitted range revision.
 
 ## 8. Engineering gate status before tuning
 
@@ -180,23 +182,22 @@ The scale audit has been upgraded to schema v3 on formal PAMPT-B3, CUDA, and a 1
 | Validation and Test IDs are excluded from dynamic training | **PASS** |
 | Optimizer-step and pattern-forward budgets match across methods | **PASS** |
 | Method formula, reduction, zero-weight fallback, direction and gradient flow | **PASS: 22/22 semantic checks** |
-| Classification learning signal exists before JS scale interpretation | **BLOCKED: late audit accuracy remains at/below chance** |
-| Residual probe predicts class before confusion scale interpretation | **BLOCKED: late pre-update probe remains at chance/uniform CE** |
-| Inverse-gradient compensation factors are scientifically interpretable | **BLOCKED: short trajectory is insufficiently learned** |
-| Registered λ grids span weak, material non-dominant, and dominant gradient influence | **BLOCKED: all current candidates remain below 1% median influence** |
+| Classification learning signal exists before JS scale interpretation | **PASS at learned-state epochs 3 and 5** |
+| Residual probe predicts class on an exclusive Train-audit subset | **PASS at epochs 3 and 5; epoch-5 accuracy 32.57%, Macro-F1 28.92%** |
+| Learned-state auxiliary-gradient ratios are eligible for interpretation | **PASS for human review only; no automatic lambda inference** |
+| Registered λ grids span weak, material non-dominant, and dominant gradient influence | **BLOCKED: JS reaches 5.90% and Residual 9.74% at λ=1; neither grid spans all three bands** |
 | Current reports match the frozen configuration and source hashes | **PASS in the recorded preflight; rerun after any code change** |
 
 A failed mandatory gate blocks training authorization.
 
 ## 9. Immediate next actions
 
-1. Design a longer Train-only milestone audit that measures auxiliary scale only after the classifier has a clear non-random training signal.
-2. For Residual, require the pre-update probe to demonstrate class-prediction competence before interpreting near-uniform confusion or considering a grid revision.
-3. Only after those prerequisites pass, decide whether the current grid is adequate or make the single permitted overall logarithmic range revision before any Validation access; then rerun semantic/scale audits, refresh hashes, and freeze the range.
-4. Complete the desktop migration hash rehearsal and rerun the full unit suite/V9 preflight on the final source tree.
-5. On the target desktop, run bootstrap plus first-boot engineering acceptance; the tuning Gate must still stop unless the candidate range is frozen and the user explicitly authorizes execution.
-6. Begin the seven-run lambda tuning from optimizer step 0 only after both the parameter Gate and explicit user authorization pass.
-7. Keep the 15-run comparison, simulated Test, and real test under their separate locks.
+1. Human-review the learned-state epoch-3/5 ratios and decide whether the single permitted pre-Validation logarithmic range revision is scientifically justified; do not infer a grid automatically.
+2. If and only if a revision is explicitly approved, update the governance/main contracts, rerun semantic and scale audits, refresh hashes, and freeze the range before any Validation access.
+3. Complete the desktop migration hash rehearsal and rerun the full unit suite/V9 preflight on the final source tree.
+4. On the target desktop, run bootstrap plus first-boot engineering acceptance; the tuning Gate must still stop unless the candidate range is frozen and the user explicitly authorizes execution.
+5. Begin the seven-run lambda tuning from optimizer step 0 only after both the parameter Gate and explicit user authorization pass.
+6. Keep the 15-run comparison, simulated Test, and real test under their separate locks.
 
 ## 10. Current paper structure
 
@@ -453,3 +454,42 @@ milestone-triggered diagnostic that stops only after the classifier has a clear
 non-random training signal, then reassess JS; the Residual assessment must also
 show that the pre-update probe predicts class above its descriptive chance
 threshold before any candidate-grid revision is considered.
+
+## 21. Learned-state Train-only scale audit
+
+The longer milestone audit requested above is complete. It trained exactly one
+classification-only Dynamic/Paired ERM PAMPT-B3 trajectory for five epochs on
+all 9,842 Train structures, using batch size 16 and AdamW with learning rate and
+weight decay `1e-4`. It wrote no checkpoint and did not read Validation,
+simulated Test, or real XRD. The actual device was an RTX 4060 Laptop GPU; this
+is diagnostic evidence only and makes no target-desktop performance claim.
+
+At preregistered epochs 1, 3, and 5, detached residuals were split across three
+mutually exclusive balanced Train subsets: 700 for probe calibration, 700 for
+probe audit, and 700 for gradient-scale measurement. A one-layer residual probe
+was fit for 50 epochs with fixed AdamW `lr=1e-3`, `weight_decay=0`; this stronger
+diagnostic fit is intentionally separate from the backbone optimizer so an
+underfit probe cannot create a false negative.
+
+Results:
+
+- epoch 1 remains chance state: backbone learning and probe gates both fail;
+- epoch 3 passes both gates; probe audit accuracy is 22.43%, Macro-F1 16.55%;
+- epoch 5 passes both gates; backbone Train CE is 1.62189 with 31.02% two-view
+  accuracy, while the disjoint residual-probe audit gives 32.57% accuracy,
+  28.92% Macro-F1, and CE 1.85059;
+- epoch-5 median raw JS is 0.01862; paired top-1 disagreement is 35.42%;
+- epoch-5 median unweighted JS/classification backbone-gradient ratio is
+  0.05898 and Residual/classification is 0.09738.
+
+The scientific interpretation is narrow but decisive: after the backbone learns,
+JS has non-zero signal and the current symmetric normalized residual contains
+class-predictive information. The huge inverse ratios from the 128-step report
+are still invalid. The new report does **not** select a lambda, propose or apply
+a new grid, freeze the range, enable tuning, or start the 7-run. The two current
+grids remain pending human review; `candidate_range_frozen_for_validation=false`,
+tuning is 0/7, formal development is 0/15, and both test stages remain locked.
+
+Current blocker: a human scientific decision on whether the learned-state ratios
+justify the one allowed pre-Validation grid revision. There is no authorized
+training command until that decision is recorded.

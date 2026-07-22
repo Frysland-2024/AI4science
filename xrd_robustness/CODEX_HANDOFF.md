@@ -809,3 +809,73 @@ probe 尚未学会类别同时发生。倒数得到的 JS `2.874e5`、Residual
 $env:PYTHONPATH='E:/AI4science/xrd_robustness/src'
 E:/AI4science/.venvs/xrd_tools/Scripts/python.exe scripts/audit_v9_loss_and_gradient_scale.py --device cuda --steps 128 --burn-in-steps 64 --output reports/v9_loss_gradient_scale_audit.json
 ```
+
+## 24. 2026-07-22 learned-state Train-only audit（取代“尚未授权”的旧阻塞描述）
+
+用户已明确授权并完成更长的 Train-only 诊断，但**没有授权任何候选训练、
+Validation tuning 或 7-run**。权威报告为：
+
+- `reports/v9_learned_state_scale_audit.json`
+- schema：`v9-learned-state-scale-audit-v1`
+- SHA-256：`384982FE0C3D0E125F4D8AD96637FBFFCBBD9D76823CEEF3C01C296AA8BE62CE`
+- 脚本：`scripts/audit_v9_learned_state_scale.py`
+- 脚本 SHA-256：`C500C4F2516B214B757981EC2911A448BAAD07E715A58B19F19E821D849FC81A`
+
+### 诊断合同与数据边界
+
+- 一个 PAMPT-B3、classification-only Dynamic/Paired ERM 轨迹；
+- 完整 9,842 Train 结构，5 epochs，batch size 16；
+- 主干 AdamW：`lr=1e-4`、`weight_decay=1e-4`，两个动态 Train 视图；
+- milestone 固定为 epoch 1、3、5；
+- probe calibration、probe audit、scale audit 各为 700 个七类平衡 Train
+  结构，三者严格互斥；
+- probe 是一层 `ResidualClassifier`，使用 detached residual，固定 50
+  epochs、AdamW `lr=1e-3`、`weight_decay=0`；该独立诊断学习率用于避免
+  underfit-probe 假阴性，不会改变 backbone；
+- `validation_used=false`、`simulated_test_used=false`、`real_xrd_used=false`；
+- `checkpoint_written=false`、`formal_training_runs_started=0`、
+  `candidate_specific_training_performed=false`；
+- 实际设备是 RTX 4060 Laptop GPU；报告不作目标台式机性能声明。
+
+### 结果
+
+| Epoch | Backbone learning Gate | Probe Gate | Probe audit accuracy | Probe Macro-F1 | Raw JS median | JS/cls grad median | Residual/cls grad median |
+|---:|---|---|---:|---:|---:|---:|---:|
+| 1 | not demonstrated | not demonstrated | 14.86% | 8.33% | `5.95e-7` | `1.00e-5` | `1.70e-4` |
+| 3 | pass | pass | 22.43% | 16.55% | `0.00593` | `0.02945` | `0.07034` |
+| 5 | pass | pass | 32.57% | 28.92% | `0.01862` | `0.05898` | `0.09738` |
+
+Epoch 5 的主干训练 CE 为 1.62189、两视图准确率为 31.02%；probe audit
+CE 为 1.85059。结论是：主干学习后，JS 不再接近零；当前 symmetric
+normalized residual 确实含有可被独立 Train probe 读取的晶系信息。因此
+JS 与 Residual 都有实际信号，旧 128-step 几万级倒数仍然作废。
+
+主机意外重启后，本报告使用相同固定 seed 从 epoch 0 完整重跑；此前仅
+存在于内存的模型、优化器和缓存状态均未恢复，也没有断点恢复声明。
+
+### 当前 Gate 与接管规则
+
+- 旧 `reports/v9_loss_gradient_scale_audit.json` 继续保留，只能称为
+  initialization/chance-state evidence；
+- 新报告只让 learned-state 梯度进入 `eligible_for_human_review`，不产生
+  自动 grid proposal；
+- JS `[0.1,0.3,1.0]`、Residual `[0.01,0.1,1.0]` 原样保留为待审候选；
+- `candidate_range_frozen_for_validation=false`；两个 tuning execution
+  switches 继续关闭；
+- tuning 仍为 0/7，formal development 仍为 0/15；Test 与 real test 锁定；
+- 下一项科学动作是用户/研究者人工判断是否根据 learned-state 比率使用
+  唯一一次 pre-Validation 整体对数范围修订；任何 agent 不得自动作出该
+  决定，也不得直接启动训练。
+
+复现 learned-state 诊断（约 4 分钟，RTX 4060 Laptop GPU；不得误当正式
+训练命令）：
+
+```powershell
+E:/AI4science/.venvs/xrd_tools/Scripts/python.exe scripts/audit_v9_learned_state_scale.py --device cuda --prefetch-workers 8 --prefetch-batches 8 --output reports/v9_learned_state_scale_audit.json
+```
+
+当前无授权训练命令。下一条安全验证命令：
+
+```powershell
+E:/AI4science/.venvs/xrd_tools/Scripts/python.exe -m unittest tests.test_v9_learned_state_scale_audit -v
+```
