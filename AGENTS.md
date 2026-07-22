@@ -1,5 +1,21 @@
 # AI4science Repository Instructions
 
+## Mandatory Project Skill
+
+At the start of every task in this repository:
+
+1. Read and enable the `check-journal-indexing` skill from
+   `C:/Users/81504/.codex/skills/check-journal-indexing/SKILL.md`.
+2. For tasks involving journals, papers, or SCIE, EI Compendex, or CSCD
+   coverage, follow that skill's full verification workflow. In particular, use
+   ISSN/eISSN-first matching, separate current source-list status from
+   publication-year and article-level evidence, and do not report unsupported
+   `Yes` or `No` conclusions.
+3. For unrelated tasks, load the skill instructions but do not perform irrelevant
+   journal-indexing searches.
+4. If the skill cannot be read, report that explicitly. Do not claim an indexing
+   result until an evidence-based fallback has been completed.
+
 Before working on the XRD project, read:
 
 1. `00_project_context/CURRENT_STATE.md`
