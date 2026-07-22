@@ -344,6 +344,15 @@
       "residual_decorrelation_transfer"
     ],
     "report_paired_bootstrap_95_ci": true,
+    "paired_bootstrap_contract": {
+      "independent_unit": "mother_structure_family",
+      "pairing": "within_seed_same_family",
+      "aggregation": "mean_paired_contrast_across_all_registered_seeds",
+      "seed_only_bootstrap_forbidden": true,
+      "replicates": 10000,
+      "random_seed": 20260716,
+      "prediction_row_schema": "configs/v9_prediction_rows.schema.json"
+    },
     "pass_fail_decision_forbidden": true,
     "selection_rule": "choose the selectable method with the highest three-seed mean primary metric on unified Validation; use lower complexity rank only for an exact tie"
   },

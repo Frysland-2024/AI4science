@@ -289,6 +289,36 @@ class SyntheticResultMixin:
             ],
         }
         output.parent.mkdir(parents=True, exist_ok=True)
+        rows = []
+        in_range_profile = self.contract["simulation"]["in_range_profile"]
+        for profile, value in [(in_range_profile, in_range), *[(name, ood) for name in profiles]]:
+            row_accuracy = max(0.05, min(0.95, 0.5 + (float(value) - 0.58) * 5.0))
+            correct_count = int(round(row_accuracy * 210))
+            for family in range(210):
+                label = family % 7
+                prediction = label if family < correct_count else (label + 1) % 7
+                probabilities = [0.01] * 7
+                probabilities[prediction] = 0.94
+                rows.append({
+                    "seed": seed,
+                    "method_id": method["id"],
+                    "profile": profile,
+                    "material_id": f"mp-{family}",
+                    "family_id": f"family-{family}",
+                    "label": label,
+                    "prediction": prediction,
+                    "probabilities": probabilities,
+                })
+        prediction_path = output.parent / "prediction_rows.jsonl"
+        prediction_path.write_text(
+            "".join(json.dumps(row, sort_keys=True) + "\n" for row in rows),
+            encoding="utf-8",
+        )
+        result["prediction_rows"] = {
+            "path": prediction_path.name,
+            "sha256": sha256_file(prediction_path),
+            "row_count": len(rows),
+        }
         output.write_text(json.dumps(result), encoding="utf-8")
 
 

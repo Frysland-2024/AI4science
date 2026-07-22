@@ -1,0 +1,21 @@
+{
+  "checks": {
+    "grid_matches_loader": true,
+    "linear_interpolation_frozen": true,
+    "no_unregistered_signal_editing": true,
+    "out_of_range_fill_zero": true,
+    "overlap_audit_required": true,
+    "real_test_disabled": true,
+    "required_columns_exact": true,
+    "selection_use_forbidden": true
+  },
+  "contract_path": "E:\\AI4science\\xrd_robustness\\configs\\real_test.v9.method_transfer.template.json",
+  "contract_sha256": "AB75819E94A3CA333CCD3E082056A9553CF81F8677D0B9D5E788A00C6DFE4B62",
+  "manifest_audit": "not_run_manifest_intentionally_absent",
+  "model_loaded": false,
+  "real_test_used": false,
+  "remaining_blocker": "real-test manifest is intentionally absent/unfrozen and explicit authorization is required",
+  "schema_version": "v9-real-test-preprocessing-readiness-v1",
+  "spectra_loaded": false,
+  "status": "locked_ready_for_future_manifest"
+}

@@ -696,3 +696,48 @@ powershell -NoProfile -ExecutionPolicy Bypass -File scripts\desktop_first_boot_v
 10. 新账号向用户报告证据并停下等待训练授权。
 
 这十条是跨账号、跨机器交接的最终验收边界。
+
+## 16. 2026-07-22 笔记本阶段新增闭环证据
+
+以下内容优先于本文件中仍把 resume integration test 写成“未完成”的旧段落；旧段落保留作为历史上下文。
+
+### 已关闭的工程 Gate
+
+- `reports/v9_resume_determinism_audit.json`：真实 reflection cache、冻结 Train renderer、CUDA 小模型；连续运行与 epoch 0 后中断/恢复在后续 material ID、parameter pair、next loss、global step、stream hash/snapshot 和最终模型 SHA256 上全部一致，12/12 PASS。
+- checkpoint 现在直接保存 `training_stream_audit` 与 `training_sampler_contract_hash`；修复了 `map_location=cuda` 后 CPU RNG state 被放到 CUDA 的恢复错误。
+- `reports/v9_loss_gradient_scale_audit.json`：JS `{0.1,0.3,1.0}` 与 Residual `{0.01,0.1,1.0}` 各 8 个 Train-only optimizer steps，数值合法性检查全部通过；未使用 Validation/Test/real data，未选择 λ。
+
+### 新的统计执行契约
+
+- 每个正式 run 结束时必须生成并在 `results.json` 中哈希绑定 `prediction_rows.jsonl`。
+- 每行至少包含 seed、method ID、profile、material ID、family ID、label、prediction、probabilities。
+- 正式比较必须在 seed 内对母结构/family cluster 做配对 bootstrap，再跨全部注册 seed 汇总。
+- 禁止恢复旧的“只对三个 seed 数值反复 bootstrap”实现。
+- 声称 Residual 优于 JS 时，必须直接报告 `Residual - JS` 与 family-level 95% CI。
+
+### 预先准备的非训练资产
+
+- `scripts/analyze_v9_results.py`：验证逐谱 schema，输出分类/ECE/worst-group/confusion 和 family bootstrap 对比表。
+- `scripts/analyze_v9_mechanisms.py`：只消费冻结 feature arrays，输出 Residual/feature norm、variance、effective rank、class separation 等；不得把 Residual 直接命名为物理测量变量。
+- `scripts/audit_v9_real_test_preprocessing.py`：只审计锁定 contract/未来 manifest；当前报告明确 `model_loaded=false`、`spectra_loaded=false`、`real_test_used=false`。
+- 论文骨架、结果/绘图模板和审稿人攻击清单已经建立，不能提前填入正向结论。
+
+### 当前新增阻塞项
+
+数值审计显示：在有界早期训练里，两个注册候选集合的最大“加权辅助损失/分类损失”均低于 1%。这证明当前值数值安全，但不能证明范围已经覆盖弱—合理—强。不得由接管 agent 自动修改候选值，也不得用真实谱决定；在授权 7-run 前，必须把“保持原集合还是进行单独的参数治理修订”提交给用户明确决定并记录理由。
+
+### 状态锁保持不变
+
+- tuning：**0/7**；formal development：**0/15**；
+- active process/checkpoint/result/run directory：0；
+- simulated Test、real test：未访问且锁定；
+- 笔记本 checkpoint：不具权威性，不复制、不恢复；
+- 台式机 first boot 即使达到 `ready_for_explicit_tuning_authorization`，仍必须停下等待用户授权。
+
+### 迁移演练证据
+
+- `reports/v9_desktop_migration_manifest.json` 已在所有本轮代码、配置、文档和审计产物完成后重新生成，状态为 `ready_for_copy`。
+- payload 清单为 14,288 个文件；权威字节数与 stream SHA-256 只读取 `reports/v9_desktop_migration_manifest.json`，避免在 payload 自身文件中抄录聚合哈希造成自引用失效。
+- `reports/v9_desktop_migration_verification.json` 在源机器逐文件验证 14,288/14,288：missing=0、size mismatch=0、hash mismatch=0。
+- `copy_v9_desktop_payload.ps1 -WhatIf` 只完成复制演练，没有写入目标目录；`desktop_first_boot_v9.ps1 -PlanOnly` 验证了 11 个验收步骤，并确认 formal training commands=0。
+- 这些证据只证明源端 payload 自洽和脚本可规划，不替代台式机现场验收，也不构成 7-run 授权。

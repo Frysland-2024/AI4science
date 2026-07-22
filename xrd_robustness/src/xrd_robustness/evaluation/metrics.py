@@ -102,6 +102,7 @@ def paired_view_metrics(
     correct_and_consistent = (first_pred == labels) & (second_pred == labels) & (first_pred == second_pred)
     return {
         "prediction_agreement": float(np.mean(first_pred == second_pred)),
+        "prediction_flip_rate": float(np.mean(first_pred != second_pred)),
         "paired_js": float(np.mean(js)),
         "correct_and_consistent_rate": float(np.mean(correct_and_consistent)),
     }
@@ -124,11 +125,15 @@ def residual_diagnostics(
     residual: np.ndarray,
     *,
     probe_logits: np.ndarray | None = None,
+    labels: Iterable[int] | None = None,
 ) -> dict[str, float]:
     residual = np.asarray(residual, dtype=np.float64)
     if residual.ndim != 2:
         raise ValueError("residual must have shape [batch, embedding_dim]")
-    output = {"residual_norm": float(np.linalg.norm(residual, axis=1).mean())}
+    output = {
+        "residual_norm": float(np.linalg.norm(residual, axis=1).mean()),
+        **representation_diagnostics(residual, labels=labels, prefix="residual"),
+    }
     if probe_logits is not None:
         logits = np.asarray(probe_logits, dtype=np.float64)
         shifted = logits - logits.max(axis=1, keepdims=True)
@@ -136,4 +141,42 @@ def residual_diagnostics(
         probabilities /= probabilities.sum(axis=1, keepdims=True)
         entropy = -np.sum(probabilities * np.log(np.clip(probabilities, 1e-12, 1.0)), axis=1)
         output["residual_prediction_entropy"] = float(entropy.mean())
+    return output
+
+
+def representation_diagnostics(
+    features: np.ndarray,
+    *,
+    labels: Iterable[int] | None = None,
+    prefix: str = "feature",
+) -> dict[str, float]:
+    """Summarize scale, collapse risk, rank, and optional class separation."""
+    array = np.asarray(features, dtype=np.float64)
+    if array.ndim != 2 or array.shape[0] < 2:
+        raise ValueError("features must have shape [at_least_two_samples, embedding_dim]")
+    centered = array - array.mean(axis=0, keepdims=True)
+    singular = np.linalg.svd(centered, compute_uv=False)
+    energy = np.square(singular)
+    if float(energy.sum()) > 0.0:
+        probabilities = energy / energy.sum()
+        effective_rank = float(np.exp(-np.sum(probabilities * np.log(np.clip(probabilities, 1e-12, 1.0)))))
+    else:
+        effective_rank = 0.0
+    output = {
+        f"{prefix}_norm": float(np.linalg.norm(array, axis=1).mean()),
+        f"{prefix}_mean_variance": float(np.var(array, axis=0).mean()),
+        f"{prefix}_effective_rank": effective_rank,
+    }
+    if labels is not None:
+        target = np.asarray(list(labels), dtype=np.int64)
+        if target.shape[0] != array.shape[0]:
+            raise ValueError("labels and features have different batch sizes")
+        global_mean = array.mean(axis=0)
+        between = 0.0
+        within = 0.0
+        for label in np.unique(target):
+            group = array[target == label]
+            between += len(group) * float(np.square(group.mean(axis=0) - global_mean).sum())
+            within += float(np.square(group - group.mean(axis=0)).sum())
+        output[f"{prefix}_class_separation_ratio"] = float(between / max(within, 1e-12))
     return output

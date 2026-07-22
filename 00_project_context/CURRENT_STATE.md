@@ -160,7 +160,9 @@ Dynamic training no longer materializes or persists an epoch-scale or run-scale 
 
 Therefore, dynamic manifest growth is **not a current blocker**.
 
-The remaining verification gap is narrower: the code implements epoch-boundary checkpoint resume and deterministic future schedule reconstruction, but the repository does not yet contain a dedicated end-to-end resume integration test that interrupts a real training run, reloads the checkpoint, and proves that the subsequent batch IDs and dynamic view-pair hashes match an uninterrupted reference run.
+The checkpoint-resume verification gap is now closed. A bounded real-cache CUDA audit interrupts after epoch 0, reloads a self-contained checkpoint, and compares the continuation against an uninterrupted three-epoch reference. All 12 checks pass, including future material IDs, accepted parameter pairs, next-step loss, global step, stream hashes/snapshot, and final model-parameter SHA256. The checkpoint also stores the stream audit and sampler-contract hash directly; RNG restore explicitly normalizes CPU/CUDA state tensors after `map_location`.
+
+The Train-only loss/gradient audit is also complete for all registered JS and Residual candidates over eight optimizer steps per candidate. Numerical legality, zero-weight reduction, symmetry/invariance, warmup/ramp, gradient propagation, finite values, memory/time logging, and collapse checks pass. This audit did **not** select λ and used no Validation/Test/real data. It also exposed an unresolved scientific-governance issue: on this bounded early-training audit, the largest weighted auxiliary-to-classification loss ratios were below 1% for both methods. Therefore the registered ranges are numerically safe, but this evidence alone does not demonstrate a full weak-to-strong scale span. Do not change the frozen candidates automatically; review this observation before authorizing the seven tuning runs.
 
 ## 8. Engineering gate status before tuning
 
@@ -171,7 +173,7 @@ The remaining verification gap is narrower: the code implements epoch-boundary c
 | Dynamic ERM, JS, and Residual receive the same paired-view schedule | **PASS** |
 | View 1 and View 2 remain separately sampled for one mother structure | **Implemented; unit-level evidence present** |
 | Checkpoint resume restores model, optimizers, modules, Torch CPU/CUDA RNG, epoch and stream audit | **Implemented** |
-| Resumed future view sequence matches uninterrupted execution end-to-end | **PARTIAL: logic and audit-snapshot test exist; dedicated integration evidence still missing** |
+| Resumed future view sequence matches uninterrupted execution end-to-end | **PASS: real reflection-cache CUDA audit, 12/12 checks** |
 | Validation and Test IDs are excluded from dynamic training | **PASS** |
 | Optimizer-step and pattern-forward budgets match across methods | **PASS** |
 | Current reports match the frozen configuration and source hashes | **PASS in the recorded preflight; rerun after any code change** |
@@ -180,17 +182,11 @@ A failed mandatory gate blocks training authorization.
 
 ## 9. Immediate next actions
 
-1. Add a bounded **checkpoint-resume determinism integration test** at an epoch boundary.
-2. Compare uninterrupted versus resumed execution for:
-   - next batch material IDs;
-   - dynamic parameter-pair hashes;
-   - training-stream audit snapshot;
-   - checkpoint global step and epoch;
-   - optionally the next-step loss/model state under deterministic CUDA settings.
-3. Save the result as a machine-readable `v9_resume_determinism_audit.json`.
-4. Rerun the full unit suite and V9 training-stream preflight after the test is added.
-5. Run a bounded engineering pilot only after the resume gate passes.
-6. Begin the seven-run lambda tuning only after explicit user authorization.
+1. Review the Train-only scale observation and decide whether the registered λ sets remain unchanged or require a separately documented governance revision. Do not use Validation performance to make this pre-authorization decision.
+2. Complete the desktop migration hash rehearsal and rerun the full unit suite/V9 preflight on the final source tree.
+3. On the target desktop, run bootstrap plus first-boot engineering acceptance; stop at `ready_for_explicit_tuning_authorization`.
+4. Begin the seven-run lambda tuning from optimizer step 0 only after explicit user authorization.
+5. Keep the 15-run comparison, simulated Test, and real test under their separate locks.
 
 ## 10. Current paper structure
 
@@ -281,3 +277,38 @@ Before any future use, it requires de-identification, sample-level label evidenc
 batch isolation, provenance documentation, and the relevant explicit authorization.
 The V9-T scientific design, current blocker, 0/7 tuning state, and test locks are
 unchanged.
+
+## 16. Laptop-stage V9-T closure package (2026-07-22)
+
+### Completed engineering evidence
+
+- `reports/v9_resume_determinism_audit.json`: PASS, 12/12 end-to-end resume checks on CUDA using the real reflection cache and frozen Train renderer.
+- `reports/v9_loss_gradient_scale_audit.json`: PASS for numerical legality over 8 Train-only optimizer steps per registered candidate; no λ selection.
+- `reports/v9_real_test_preprocessing_readiness.json`: locked-ready preprocessing contract; no model or real spectrum loaded.
+- Formal runs now export hashed per-spectrum `prediction_rows.jsonl` with `family_id`, probabilities, and profile/run identity.
+
+### Frozen statistical design
+
+- The independent resampling unit is the mother-structure/family cluster.
+- Resampling is paired within each registered seed, then contrasts are averaged across all registered seeds.
+- Bootstrapping only the three seed summaries is removed from the formal comparison path.
+- Direct `Residual - JS` evidence is mandatory for superiority language.
+- Synthetic tests cover consistent gains, mixed seed direction, near-ties, and OOD gains accompanied by ID loss.
+
+### Prepared non-result assets
+
+- mechanism diagnostics for paired JS/flip rate, residual probe inputs, norm, variance, effective rank, class separation, and collapse risk;
+- disabled real-test manifest/hash/preprocessing/overlap audit interfaces;
+- manuscript skeleton, result/figure templates, and reviewer-attack checklist;
+- migration/first-boot workflow remains training-free;
+- the refreshed desktop payload contains 14,288 files (295,194,330 bytes), with stream SHA-256 `7765E4905B1E7DC343938549C7974003068D324EAD78A59F7C668E5BE49A2311`;
+- source-side migration verification passed with 14,288/14,288 files, 0 missing files, 0 size mismatches, and 0 hash mismatches;
+- the copy-script `-WhatIf` rehearsal copied nothing, and the first-boot `-PlanOnly` rehearsal contained 0 formal-training commands.
+
+### Unchanged experiment status and blockers
+
+- λ tuning remains **0/7**; formal development comparison remains **0/15**.
+- Simulated Test and real test remain unused and locked.
+- No laptop checkpoint is authoritative.
+- The immediate scientific blocker before tuning authorization is the registered λ range adequacy review described above; the immediate machine blocker is target-desktop first-boot acceptance.
+- The source-side migration package is ready for copy, but this is not target-machine acceptance; the desktop must still run its own environment, hardware, transfer, evaluation, acceleration, and final-readiness probes.

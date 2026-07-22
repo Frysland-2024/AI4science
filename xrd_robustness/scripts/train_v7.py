@@ -343,6 +343,9 @@ def _load_records(
         if str(split_row.get("crystal_system")) != str(row["crystal_system"]):
             raise ValueError(f"split manifest crystal-system mismatch: {material_id}")
         row["split"] = str(split_row["split"])
+        row["family_id"] = str(
+            split_row.get("family_id") or row["structure_fingerprint"]
+        )
     return selected
 
 
@@ -708,6 +711,10 @@ def _evaluate(
     factory: OnlineViewFactory,
     device: torch.device,
     evaluation_batch_size: int = 1,
+    prediction_sink: list[dict[str, Any]] | None = None,
+    prediction_seed: int | None = None,
+    prediction_method_id: str | None = None,
+    prediction_profile: str | None = None,
 ) -> dict[str, Any]:
     prediction = _predict_paired_views(
         model,
@@ -732,6 +739,23 @@ def _evaluate(
             prediction["labels"],
         )
     )
+    if prediction_sink is not None:
+        if prediction_seed is None or prediction_method_id is None or prediction_profile is None:
+            raise ValueError("prediction export requires seed, method_id, and profile")
+        for index_value, material_id in enumerate(ids):
+            prediction_sink.append(
+                {
+                    "seed": int(prediction_seed),
+                    "method_id": str(prediction_method_id),
+                    "profile": str(prediction_profile),
+                    "material_id": str(material_id),
+                    "family_id": str(records[material_id]["family_id"]),
+                    "label": int(prediction["labels"][index_value]),
+                    "prediction": int(prediction["predictions"][index_value]),
+                    "probabilities": prediction["probabilities"][index_value].tolist(),
+                    "second_probabilities": prediction["second_probabilities"][index_value].tolist(),
+                }
+            )
     return metrics
 
 
@@ -1258,6 +1282,12 @@ def main() -> int:
         history = json.loads(history_path.read_text(encoding="utf-8"))
     else:
         history = []
+    final_prediction_rows: list[dict[str, Any]] = []
+    statistics_method_id = (
+        str(args.run_id).rsplit("__seed_", 1)[0]
+        if args.run_id and "__seed_" in str(args.run_id)
+        else str(args.mode)
+    )
     if len(history) < start_epoch:
         raise SystemExit(
             "resume checkpoint is ahead of history.json; training stream audit cannot be restored"
@@ -1672,6 +1702,9 @@ def main() -> int:
             "training_stream_audit": epoch_stream_audit,
         }
         if should_evaluate:
+            prediction_sink = (
+                final_prediction_rows if global_step_total == target_optimizer_steps else None
+            )
             epoch_result["validation"] = _evaluate(
                 model,
                 validation_ids,
@@ -1691,6 +1724,10 @@ def main() -> int:
                 factory=factory,
                 device=device,
                 evaluation_batch_size=args.evaluation_batch_size,
+                prediction_sink=prediction_sink,
+                prediction_seed=args.seed,
+                prediction_method_id=statistics_method_id,
+                prediction_profile=args.in_range_profile,
             )
             epoch_result["ood"] = {
                 profile: _evaluate(
@@ -1702,6 +1739,10 @@ def main() -> int:
                     factory=factory,
                     device=device,
                     evaluation_batch_size=args.evaluation_batch_size,
+                    prediction_sink=prediction_sink,
+                    prediction_seed=args.seed,
+                    prediction_method_id=statistics_method_id,
+                    prediction_profile=profile,
                 )
                 for profile, index in ood_indexes.items()
             }
@@ -1735,6 +1776,10 @@ def main() -> int:
             provenance={
                 "peak_cache_manifest_hash": peak_cache_manifest_hash,
                 "simulation_config_hash": simulation_config_hash,
+            },
+            extra_state={
+                "training_stream_audit": epoch_stream_audit,
+                "training_sampler_contract_hash": sampler_contract_hash,
             },
         )
 
@@ -1914,6 +1959,11 @@ def main() -> int:
         }
     )
     checkpoint_path = run_dir / "last.ckpt"
+    prediction_rows_path = run_dir / "prediction_rows.jsonl"
+    prediction_rows_path.write_text(
+        "".join(json.dumps(row, sort_keys=True) + "\n" for row in final_prediction_rows),
+        encoding="utf-8",
+    )
     report = {
         "run_id": args.run_id or run_dir.name,
         "mode": args.mode,
@@ -1941,6 +1991,12 @@ def main() -> int:
             "validation": validation_hash,
             "evaluation": evaluation_hash,
             "ood": ood_hashes,
+        },
+        "prediction_rows": {
+            "path": prediction_rows_path.name,
+            "sha256": file_hash(prediction_rows_path),
+            "row_count": len(final_prediction_rows),
+            "independent_unit": "family_id_from_split_manifest_or_structure_fingerprint_fallback",
         },
         "checkpoint_hash": file_hash(checkpoint_path),
         "resumed_from": str(Path(args.resume).resolve()) if args.resume else None,

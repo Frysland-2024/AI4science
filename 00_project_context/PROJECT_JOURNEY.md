@@ -197,3 +197,39 @@ V8 的结构化动态扰动提出了重要问题，但其状态变量、依赖�
 截至当前，本地已经具备 14,060 结构池、反射缓存、五扰动算子、PAMPT、成对视图及部分 JS/残差组件，但这些属于可复用的 V7/V8 地基。V9.2 专用 schema、pair generator、统一 trainer、固定面板、Pilot、Gate 和分支报告尚未完成。
 
 当前有效执行原则是：先统一 V9.2 与现有冻结 split，收缩主指标和真实谱使用边界，再完成 Stage 0；在这些门禁通过前，不把计划文档表述为已经实现，也不启动 Pilot 或正式训练。
+
+## 2026-07-22：从参数溯源推进到程序性合法性
+
+笔记本阶段的收口把项目的审计标准从模拟器参数扩展到了整个实验程序。早期版本主要追问物理扰动参数是否有文献、代码或物理依据；V9-T 进一步要求算法参数、随机执行、统计不确定性和外部测试边界都能独立复现与质询。
+
+### Resume 成为实验身份的一部分
+
+仅能序列化模型和优化器，不再视为 checkpoint 支持已经完成。新的真实缓存 CUDA 审计在 epoch 0 后中断，再与从未中断的三 epoch 参考运行比较；必须严格一致的对象包括后续母结构顺序、接受的动态参数对、pair schedule/stream hash、下一步 loss、global step、最终 stream snapshot 和最终模型 SHA256。该审计发现并修复了一个真实设备问题：`map_location=cuda` 会同时移动 CPU RNG tensor，因此恢复逻辑现在显式把 CPU/CUDA RNG 状态归一到正确设备。最终 12/12 检查通过。
+
+决定：未来正式 checkpoint 必须自包含 training-stream audit 与 sampler-contract hash。没有继续运行证据时，不能只凭“理论上可恢复”宣称可复现。
+
+### 损失权重与性能调参被严格分离
+
+注册的 JS/Residual 权重在 Train-only 数据上各进行了 8 个有界优化步骤的数值合法性审计。审计覆盖零权重严格退化到 Dynamic ERM、JS 非负与交换对称、Residual 交换不变、2-epoch warmup/3-epoch ramp、head/backbone 梯度传播、非有限数、梯度/特征/Residual 尺度、坍塌风险、显存和时间；没有使用 Validation、simulated Test、real XRD，也没有选择 λ。
+
+审计表明候选值数值稳定，但在这段早期训练中，两种方法最大的加权辅助损失都低于分类损失的 1%。这不能证明候选范围科学上不合适，因为辅助项尺度可能随训练演化；但它也没有证明范围已经覆盖“弱到强”。
+
+决定：不得静默放大或替换候选集合。范围充分性必须在调参授权前作为独立的科学治理问题记录；数值工程证据与 Validation 性能选择继续分离。
+
+### 不确定性单位从 seed 转向母结构家族
+
+旧比较程序只对三个 seed 汇总值做 bootstrap，这一路径已经移除。正式 run 现在导出带哈希的逐谱记录，包含 seed、method、profile、material ID、family ID、label、prediction 和 probabilities。注册分析在每个 seed 内对成对的母结构/family cluster 重采样，再跨全部注册 seed 汇总，并直接计算 `Residual - JS`。
+
+决定：母结构/family 是基本独立统计单位。seed 仍作为完整重复逐一报告，但不再被当作仅有的三个 bootstrap 样本。结论代码用稳定提升、seed 方向混合、近似持平以及 OOD 提升伴随 ID 下降四类合成情形做了测试。
+
+### 机制表述与 real-test 边界在结果前冻结
+
+机制接口现在覆盖 paired JS、prediction flip、correct-and-consistent、Residual probe 输入、norm、variance、effective rank、class separation 和坍塌检查。允许的表述是 Residual 中的类别可预测信息是否改变；没有额外识别证据时，不把 Residual 等同于物理测量因子。
+
+real-XRD 路径增加了只读预处理审计：冻结 10–80°、0.02°、线性插值、零填充、max normalization，以及 SHA256、来源、标签证据、相纯度和重叠控制。manifest 尚未冻结时，审计既不加载模型，也不加载真实谱。
+
+决定：real XRD 仍是唯一方法冻结后的一次性外部测试，不能定义模拟参数、选择 λ、决定 JS/Residual，或用来挽救负面的开发结果。
+
+### 当前边界
+
+本阶段产生的是工程和方法学证据，不是科学性能结果。调参仍为 0/7，正式比较仍为 0/15，两个测试阶段继续锁定。下一步机器动作是台式机 first-boot 验收；下一项科学决定是正式授权调参前明确审查候选尺度是否充分。

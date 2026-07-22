@@ -115,12 +115,14 @@ Validation 固定为 2,109 个结构，不再拆分调参子集与独立方法�
 
 - 六个单因素 OOD 的平均 Macro-F1 提升至少 0.01；
 - 3 个 seed 的配对增益全部为正；
-- 配对 bootstrap 95% 区间下界大于 0；
+- 以母结构/family cluster 为独立单元、在各 seed 内配对重采样并跨全部注册 seed 汇总的 hierarchical bootstrap 95% 区间下界大于 0；禁止只对三个 seed 汇总值反复 bootstrap；
 - ID Macro-F1 平均下降不超过 0.01；
 - 任一单因素 OOD 平均下降不超过 0.01；
 - 任一预注册组合 OOD 平均下降不超过 0.01。
 
-此外，“Residual 稳定优于 JS”的论文主张必须单独计算 `Residual - JS` 的逐 seed 配对差：平均值为正、3 个 seed 全部为正、配对 bootstrap 95% 区间下界大于 0。分别优于 Dynamic ERM 并不足以证明 Residual 优于 JS。
+此外，“Residual 稳定优于 JS”的论文主张必须单独计算 `Residual - JS` 的逐 seed 配对差：平均值为正、3 个 seed 全部为正、family-level hierarchical bootstrap 95% 区间下界大于 0。分别优于 Dynamic ERM 并不足以证明 Residual 优于 JS。
+
+每个正式 run 必须导出并在 `results.json` 中以 SHA256 绑定 `prediction_rows.jsonl`。每行至少包含 seed、method ID、profile、material ID、family ID、label、prediction 和 probabilities；缺失、重复、方法/seed 不符、profile 不完整或哈希不符时，统一 Validation 比较必须 fail closed。
 
 工程选择只看冻结的 Validation 主指标与并列规则；论文是否声称方法优越性仍由上述直接配对统计决定。真实谱不参与任何开发选择。
 

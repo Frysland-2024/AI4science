@@ -1,0 +1,474 @@
+{
+  "audit_optimizer_steps_per_candidate": 8,
+  "candidate_scale_observation": {
+    "descriptive_threshold_only": "weighted auxiliary loss / classification loss >= 0.01",
+    "interpretation": "registered candidates are numerically stable but this bounded early-training audit does not demonstrate a weak-to-strong span",
+    "js_max_weighted_loss_ratio": 7.411364357778893e-07,
+    "registered_candidates_reach_one_percent_loss_scale": {
+      "js": false,
+      "residual": false
+    },
+    "residual_max_weighted_loss_ratio": 0.002747036487562582
+  },
+  "candidate_selection_performed": false,
+  "checks": {
+    "all_values_finite": true,
+    "js_gradients_propagate": true,
+    "js_non_negative": true,
+    "js_self_zero": true,
+    "js_swap_symmetric": true,
+    "js_zero_weight_reduces_to_erm": true,
+    "no_feature_collapse": true,
+    "probe_gradients_propagate": true,
+    "residual_gradients_propagate": true,
+    "residual_swap_invariant": true,
+    "residual_zero_weight_reduces_to_erm": true,
+    "warmup_and_ramp_exact": true
+  },
+  "decision": "numerical legality passed; no lambda selected; candidate-range adequacy requires a separate scientific governance decision and Validation remains the only authorized future performance source",
+  "device": "cuda",
+  "formal_training_runs_started": 0,
+  "js_candidates": [
+    {
+      "audit_steps": 8,
+      "aux_to_classification_loss_ratio": 7.432985649202806e-08,
+      "classification_gradient_norm": 3.4335509184118944,
+      "classification_loss": 1.9546849429607391,
+      "js_loss": 1.4510005712509155e-06,
+      "lambda_js": 0.1,
+      "observed_ranges": {
+        "aux_to_classification_loss_ratio": [
+          3.747731369685425e-08,
+          1.1656549503413771e-07
+        ],
+        "classification_gradient_norm": [
+          2.7873093936488136,
+          4.057340178786438
+        ],
+        "classification_loss": [
+          1.8992900848388672,
+          1.9979643821716309
+        ],
+        "js_loss": [
+          7.487833499908447e-07,
+          2.305954694747925e-06
+        ],
+        "total_gradient_norm": [
+          2.787309452189363,
+          4.057340174163356
+        ],
+        "unweighted_js_gradient_norm": [
+          1.8724548325020025e-05,
+          7.68908080066948e-05
+        ],
+        "weighted_js_gradient_norm": [
+          1.8726822075278782e-06,
+          7.689194822092648e-06
+        ],
+        "weighted_js_loss": [
+          7.487833642016994e-08,
+          2.3059547515913437e-07
+        ]
+      },
+      "step_time_mean_seconds": 0.06782211249810643,
+      "step_time_p95_seconds": 0.2368012849961813,
+      "total_gradient_norm": 3.433551019443647,
+      "unweighted_js_gradient_norm": 4.583361473545489e-05,
+      "weighted_js_gradient_norm": 4.583510686582799e-06,
+      "weighted_js_loss": 1.451000599672625e-07
+    },
+    {
+      "audit_steps": 8,
+      "aux_to_classification_loss_ratio": 2.2269605981506402e-07,
+      "classification_gradient_norm": 3.433550917110324,
+      "classification_loss": 1.9546849429607391,
+      "js_loss": 1.4491379261016846e-06,
+      "lambda_js": 0.3,
+      "observed_ranges": {
+        "aux_to_classification_loss_ratio": [
+          1.1243194109056276e-07,
+          3.513912929520302e-07
+        ],
+        "classification_gradient_norm": [
+          2.787309301294607,
+          4.057340178786438
+        ],
+        "classification_loss": [
+          1.8992900848388672,
+          1.9979643821716309
+        ],
+        "js_loss": [
+          7.487833499908447e-07,
+          2.3171305656433105e-06
+        ],
+        "total_gradient_norm": [
+          2.7873094655884816,
+          4.057340428242802
+        ],
+        "unweighted_js_gradient_norm": [
+          1.872449184171135e-05,
+          7.689113353794942e-05
+        ],
+        "weighted_js_gradient_norm": [
+          5.617788655599595e-06,
+          2.3067111285863233e-05
+        ],
+        "weighted_js_loss": [
+          2.246350163659372e-07,
+          6.951391924303607e-07
+        ]
+      },
+      "step_time_mean_seconds": 0.03244770000128483,
+      "step_time_p95_seconds": 0.03564265499808243,
+      "total_gradient_norm": 3.433551234672608,
+      "unweighted_js_gradient_norm": 4.583291685757508e-05,
+      "weighted_js_gradient_norm": 1.3750215854566238e-05,
+      "weighted_js_loss": 4.347413984362447e-07
+    },
+    {
+      "audit_steps": 8,
+      "aux_to_classification_loss_ratio": 7.411364357778893e-07,
+      "classification_gradient_norm": 3.4335508887647013,
+      "classification_loss": 1.954684928059578,
+      "js_loss": 1.4468096196651459e-06,
+      "lambda_js": 1.0,
+      "observed_ranges": {
+        "aux_to_classification_loss_ratio": [
+          3.747731227576878e-07,
+          1.1713043477357132e-06
+        ],
+        "classification_gradient_norm": [
+          2.7873094490125214,
+          4.057340178786438
+        ],
+        "classification_loss": [
+          1.8992900848388672,
+          1.9979643821716309
+        ],
+        "js_loss": [
+          7.487833499908447e-07,
+          2.3171305656433105e-06
+        ],
+        "total_gradient_norm": [
+          2.787309999333045,
+          4.057340808233968
+        ],
+        "unweighted_js_gradient_norm": [
+          1.8725539939203128e-05,
+          7.68914458451673e-05
+        ],
+        "weighted_js_gradient_norm": [
+          1.8725539939203128e-05,
+          7.68914458451673e-05
+        ],
+        "weighted_js_loss": [
+          7.487833499908447e-07,
+          2.3171305656433105e-06
+        ]
+      },
+      "step_time_mean_seconds": 0.03127191249950556,
+      "step_time_p95_seconds": 0.035028384997713144,
+      "total_gradient_norm": 3.433551924562539,
+      "unweighted_js_gradient_norm": 4.583351885614248e-05,
+      "weighted_js_gradient_norm": 4.583351885614248e-05,
+      "weighted_js_loss": 1.4468096196651459e-06
+    }
+  ],
+  "material_ids": [
+    "mp-1001614",
+    "mp-1001613",
+    "mp-1001604",
+    "mp-1001603"
+  ],
+  "parameter_pair_ids": [
+    [
+      "bf6d55e5333733adb8a1fd988cfd7709698976a72c914ade1b90a43deb9f3cc7",
+      "4742b50e2d290d9096efe7ec62a6f566683c17ecffaf5c8330d551d6722250e4"
+    ],
+    [
+      "b86b97ac1c037e05b0a4b2d0e24daf12c85a52d55a65e245b9b64d55f669af0d",
+      "a4a1896e296c8f8aaf1e4bcf63557a9a1121faa4627bcec3193ae0744f90bb2b"
+    ],
+    [
+      "cbb1ac77696ee8bd91def2887f346e0b75474d4d498af132c6668c7742a36f79",
+      "2e83d0c4783e37accdcd2f120bc0aa69a6a21ff2ed3a99f60eeea1a149e7c3b6"
+    ],
+    [
+      "95a92f37351cca418b0a44731001c23f07ef8d6980b56e3ee210cb7b7c8dbb97",
+      "c39eda68250acf6c1642be2c419d894245fc7bbb74ec539338dc90951b4e6a7f"
+    ]
+  ],
+  "peak_gpu_memory_mb": 69.97021484375,
+  "real_test_used": false,
+  "residual_candidates": [
+    {
+      "audit_steps": 8,
+      "aux_to_classification_loss_ratio": 2.7470981194710475e-05,
+      "classification_gradient_norm": 3.433500484142144,
+      "classification_loss": 1.9547650516033173,
+      "feature_effective_rank": 3.2993070483207703,
+      "feature_mean_variance": 0.0004459305891941767,
+      "feature_norm": 5.539661407470703,
+      "independence_loss": 0.00536888581700623,
+      "lambda_res": 0.01,
+      "observed_ranges": {
+        "aux_to_classification_loss_ratio": [
+          2.6945126592181623e-05,
+          2.8232929253135808e-05
+        ],
+        "classification_gradient_norm": [
+          2.7891284149276534,
+          4.055078465905926
+        ],
+        "classification_loss": [
+          1.8988499641418457,
+          1.9981218576431274
+        ],
+        "feature_effective_rank": [
+          2.266632556915283,
+          4.734239101409912
+        ],
+        "feature_mean_variance": [
+          0.0002153808600269258,
+          0.0007083561504259706
+        ],
+        "feature_norm": [
+          5.53703498840332,
+          5.543901443481445
+        ],
+        "independence_loss": [
+          0.005316303577274084,
+          0.005407121963799
+        ],
+        "probe_head_gradient_norm": [
+          0.4721991645640101,
+          0.701540345579444
+        ],
+        "probe_loss": [
+          1.8632014989852905,
+          1.9747896194458008
+        ],
+        "residual_mean_variance": [
+          3.611104830270051e-06,
+          1.8576083675725386e-05
+        ],
+        "residual_norm": [
+          0.02052118629217148,
+          0.038529373705387115
+        ],
+        "total_gradient_norm": [
+          2.789128480641734,
+          4.055078685545874
+        ],
+        "unweighted_independence_gradient_norm": [
+          0.0008281107067500982,
+          0.0015273007393702255
+        ],
+        "weighted_independence_gradient_norm": [
+          8.281103615609358e-06,
+          1.5273000740828163e-05
+        ],
+        "weighted_independence_loss": [
+          5.316303577274084e-05,
+          5.407121716416441e-05
+        ]
+      },
+      "probe_head_gradient_norm": 0.5848189641856507,
+      "probe_loss": 1.9186079800128937,
+      "residual_mean_variance": 8.918144175140696e-06,
+      "residual_norm": 0.028846649453043938,
+      "step_time_mean_seconds": 0.03665428750537103,
+      "step_time_p95_seconds": 0.05469441500608808,
+      "total_gradient_norm": 3.4335005632871054,
+      "unweighted_independence_gradient_norm": 0.0011301694935144358,
+      "weighted_independence_gradient_norm": 1.130169397381662e-05,
+      "weighted_independence_loss": 5.368885649659205e-05
+    },
+    {
+      "audit_steps": 8,
+      "aux_to_classification_loss_ratio": 0.0002747087455645669,
+      "classification_gradient_norm": 3.4334908448774186,
+      "classification_loss": 1.9547665566205978,
+      "feature_effective_rank": 3.2992099821567535,
+      "feature_mean_variance": 0.00044593924030778,
+      "feature_norm": 5.53964376449585,
+      "independence_loss": 0.005368869344238192,
+      "lambda_res": 0.1,
+      "observed_ranges": {
+        "aux_to_classification_loss_ratio": [
+          0.00026945126592181623,
+          0.00028232752811163664
+        ],
+        "classification_gradient_norm": [
+          2.789119617363428,
+          4.055078465905926
+        ],
+        "classification_loss": [
+          1.8988540172576904,
+          1.9981218576431274
+        ],
+        "feature_effective_rank": [
+          2.266585350036621,
+          4.734165668487549
+        ],
+        "feature_mean_variance": [
+          0.00021538211149163544,
+          0.0007083927048370242
+        ],
+        "feature_norm": [
+          5.537013053894043,
+          5.543882369995117
+        ],
+        "independence_loss": [
+          0.005316331051290035,
+          0.005407111719250679
+        ],
+        "probe_head_gradient_norm": [
+          0.4721991476607069,
+          0.7015403414516257
+        ],
+        "probe_loss": [
+          1.8632018566131592,
+          1.9747896194458008
+        ],
+        "residual_mean_variance": [
+          3.6112039651925443e-06,
+          1.8577822629595175e-05
+        ],
+        "residual_norm": [
+          0.02052128314971924,
+          0.038530342280864716
+        ],
+        "total_gradient_norm": [
+          2.789120289208824,
+          4.055080699362174
+        ],
+        "unweighted_independence_gradient_norm": [
+          0.0008280966472945762,
+          0.0015272400619944881
+        ],
+        "weighted_independence_gradient_norm": [
+          8.280968386983198e-05,
+          0.00015272401252650256
+        ],
+        "weighted_independence_loss": [
+          0.0005316330934874713,
+          0.0005407111602835357
+        ]
+      },
+      "probe_head_gradient_norm": 0.5848189846055077,
+      "probe_loss": 1.9186079949140549,
+      "residual_mean_variance": 8.918508086708243e-06,
+      "residual_norm": 0.028846976347267628,
+      "step_time_mean_seconds": 0.034200412501377286,
+      "step_time_p95_seconds": 0.038384114998189035,
+      "total_gradient_norm": 3.4334916299663805,
+      "unweighted_independence_gradient_norm": 0.001130171797213227,
+      "weighted_independence_gradient_norm": 0.00011301717366344393,
+      "weighted_independence_loss": 0.0005368869315134361
+    },
+    {
+      "audit_steps": 8,
+      "aux_to_classification_loss_ratio": 0.002747036487562582,
+      "classification_gradient_norm": 3.433512019394696,
+      "classification_loss": 1.9547733962535858,
+      "feature_effective_rank": 3.2985831797122955,
+      "feature_mean_variance": 0.0004460640557226725,
+      "feature_norm": 5.5396528840065,
+      "independence_loss": 0.0053687895415350795,
+      "lambda_res": 1.0,
+      "observed_ranges": {
+        "aux_to_classification_loss_ratio": [
+          0.002694512717425823,
+          0.002823149785399437
+        ],
+        "classification_gradient_norm": [
+          2.7891352274716605,
+          4.055078465905926
+        ],
+        "classification_loss": [
+          1.8988711833953857,
+          1.9981218576431274
+        ],
+        "feature_effective_rank": [
+          2.2663373947143555,
+          4.733613967895508
+        ],
+        "feature_mean_variance": [
+          0.00021541761816479266,
+          0.0007088120910339057
+        ],
+        "feature_norm": [
+          5.537022590637207,
+          5.543891906738281
+        ],
+        "independence_loss": [
+          0.0053162770345807076,
+          0.005406954325735569
+        ],
+        "probe_head_gradient_norm": [
+          0.4721992693968346,
+          0.7015406039310441
+        ],
+        "probe_loss": [
+          1.863203763961792,
+          1.9747895002365112
+        ],
+        "residual_mean_variance": [
+          3.6122155506745912e-06,
+          1.8594044377095997e-05
+        ],
+        "residual_norm": [
+          0.020522750914096832,
+          0.03853963688015938
+        ],
+        "total_gradient_norm": [
+          2.7891420856403584,
+          4.055100907055655
+        ],
+        "unweighted_independence_gradient_norm": [
+          0.0008281256012566496,
+          0.0015275802671567513
+        ],
+        "weighted_independence_gradient_norm": [
+          0.0008281256012566496,
+          0.0015275802671567513
+        ],
+        "weighted_independence_loss": [
+          0.0053162770345807076,
+          0.005406954325735569
+        ]
+      },
+      "probe_head_gradient_norm": 0.5848191720207412,
+      "probe_loss": 1.9186082184314728,
+      "residual_mean_variance": 8.921938899675297e-06,
+      "residual_norm": 0.02885050349868834,
+      "step_time_mean_seconds": 0.031320774996856926,
+      "step_time_p95_seconds": 0.03538405499639339,
+      "total_gradient_norm": 3.4335200170128823,
+      "unweighted_independence_gradient_norm": 0.0011303119260379084,
+      "weighted_independence_gradient_norm": 0.0011303119260379084,
+      "weighted_independence_loss": 0.0053687895415350795
+    }
+  ],
+  "residual_schedule_epochs_0_to_6": [
+    0.0,
+    0.0,
+    0.03333333333333333,
+    0.06666666666666667,
+    0.1,
+    0.1,
+    0.1
+  ],
+  "residual_swap_contract": "absolute normalized residual is invariant, not sign-equivariant",
+  "schema_version": "v9-loss-gradient-scale-audit-v1",
+  "scope": "bounded_train_only_engineering_audit",
+  "simulated_test_used": false,
+  "status": "pass",
+  "validation_used": false,
+  "zero_weight_model_hashes": {
+    "erm": "0B6F0C3C72789EDD3608C444C1E7E56B7636BCBE7E114017499DDBFDD67FC0AF",
+    "js": "0B6F0C3C72789EDD3608C444C1E7E56B7636BCBE7E114017499DDBFDD67FC0AF",
+    "residual": "0B6F0C3C72789EDD3608C444C1E7E56B7636BCBE7E114017499DDBFDD67FC0AF"
+  }
+}

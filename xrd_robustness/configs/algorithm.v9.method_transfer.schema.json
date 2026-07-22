@@ -323,6 +323,7 @@
         "seed_count",
         "selectable_method_ids",
         "report_paired_bootstrap_95_ci",
+        "paired_bootstrap_contract",
         "pass_fail_decision_forbidden",
         "selection_rule"
       ]

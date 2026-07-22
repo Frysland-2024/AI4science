@@ -33,8 +33,13 @@ class CheckpointProvenanceTests(unittest.TestCase):
                 view_manifest_hash="views",
                 seed=3,
                 provenance=provenance,
+                extra_state={"training_stream_audit": {"optimizer_steps": 2}},
             )
             payload = load_checkpoint(path, model=model, optimizers=[optimizer])
+            self.assertEqual(
+                payload["extra_state"]["training_stream_audit"]["optimizer_steps"],
+                2,
+            )
             assert_checkpoint_provenance(
                 payload,
                 data_manifest_hash="data",
@@ -67,6 +72,25 @@ class CheckpointProvenanceTests(unittest.TestCase):
             )
             with self.assertRaisesRegex(ValueError, "optimizer count mismatch"):
                 load_checkpoint(path, model=model, optimizers=[optimizer])
+
+    def test_rng_restore_normalizes_cpu_state_tensor(self):
+        model = torch.nn.Linear(2, 2)
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "last.ckpt"
+            save_checkpoint(
+                path,
+                model=model,
+                optimizers=[],
+                epoch=1,
+                global_step=1,
+                config={"name": "tiny"},
+                data_manifest_hash="data",
+                view_manifest_hash="views",
+                seed=3,
+            )
+            payload = load_checkpoint(path, model=model)
+            self.assertEqual(payload["torch_rng_state"].dtype, torch.uint8)
+            self.assertEqual(torch.get_rng_state().device.type, "cpu")
 
 
 if __name__ == "__main__":

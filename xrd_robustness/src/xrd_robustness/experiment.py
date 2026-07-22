@@ -86,6 +86,7 @@ def save_checkpoint(
     seed: int,
     extra_modules: Mapping[str, torch.nn.Module] | None = None,
     provenance: Mapping[str, Any] | None = None,
+    extra_state: Mapping[str, Any] | None = None,
 ) -> None:
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -104,6 +105,7 @@ def save_checkpoint(
         "view_manifest_hash": str(view_manifest_hash),
         "seed": int(seed),
         "provenance": _jsonable(provenance or {}),
+        "extra_state": _jsonable(extra_state or {}),
         "torch_rng_state": torch.get_rng_state(),
     }
     if torch.cuda.is_available():
@@ -141,7 +143,13 @@ def load_checkpoint(
     for scheduler, state in zip(schedulers, scheduler_states, strict=False):
         scheduler.load_state_dict(state)
     if "torch_rng_state" in payload:
-        torch.set_rng_state(payload["torch_rng_state"])
+        # ``map_location='cuda'`` also moves serialized CPU RNG tensors.  The
+        # default CPU generator requires a CPU ByteTensor, so normalize it
+        # explicitly instead of making CUDA resume depend on map-location side
+        # effects.
+        torch.set_rng_state(payload["torch_rng_state"].detach().cpu())
     if torch.cuda.is_available() and "cuda_rng_state" in payload:
-        torch.cuda.set_rng_state_all(payload["cuda_rng_state"])
+        torch.cuda.set_rng_state_all(
+            [state.detach().cpu() for state in payload["cuda_rng_state"]]
+        )
     return payload

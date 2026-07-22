@@ -83,3 +83,24 @@ powershell -ExecutionPolicy Bypass -File scripts\desktop_first_boot_v9.ps1
 ```
 
 这些命令只建立环境并运行工程验收，不启动训练。即使最终状态为 `ready_for_explicit_tuning_authorization`，完整 7-run 仍需用户另行明确授权。
+
+## 笔记本阶段闭环工具（2026-07-22）
+
+以下命令只做工程/统计准备，不授权正式训练或任何 Test 访问：
+
+```powershell
+$env:PYTHONPATH='E:\AI4science\xrd_robustness\src'
+E:\AI4science\.venvs\xrd_tools\Scripts\python.exe -s scripts\audit_v9_resume_determinism.py --device cuda
+E:\AI4science\.venvs\xrd_tools\Scripts\python.exe -s scripts\audit_v9_loss_and_gradient_scale.py --device cuda
+E:\AI4science\.venvs\xrd_tools\Scripts\python.exe -s scripts\audit_v9_real_test_preprocessing.py
+```
+
+正式 run 将输出带 SHA256 绑定的 `prediction_rows.jsonl`。结果冻结后，使用 `scripts/analyze_v9_results.py` 对多个 run 的逐谱文件做 family-level paired hierarchical bootstrap；不得仅对三个 seed 汇总值 bootstrap。机制诊断入口为 `scripts/analyze_v9_mechanisms.py`，真实谱合同继续保持 disabled。
+
+当前三份机器可读证据：
+
+- `reports/v9_resume_determinism_audit.json`；
+- `reports/v9_loss_gradient_scale_audit.json`；
+- `reports/v9_real_test_preprocessing_readiness.json`。
+
+损失尺度审计只证明数值合法性，不选择 λ。它提示当前注册候选在有界早期训练中尚未展示“弱到强”的完整跨度，因此正式调参授权前还需要一次明确的候选范围治理决定。

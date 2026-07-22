@@ -13,9 +13,10 @@ import csv
 import hashlib
 import json
 from pathlib import Path
-import random
 from statistics import mean
 from typing import Any, Mapping, Sequence
+
+from .evaluation.statistics import hierarchical_paired_bootstrap, validate_prediction_rows
 
 from .training_prefetch import (
     PREFETCH_RESULT_ORDER,
@@ -277,6 +278,18 @@ def validate_contract(contract: Mapping[str, Any]) -> None:
         raise ValueError("combination OOD profiles must be included in the development panel")
     if int(validation_comparison.get("seed_count", 0)) != len(seeds):
         raise ValueError("Validation comparison seed count must match the formal experiment")
+    bootstrap = validation_comparison.get("paired_bootstrap_contract", {})
+    expected_bootstrap = {
+        "independent_unit": "mother_structure_family",
+        "pairing": "within_seed_same_family",
+        "aggregation": "mean_paired_contrast_across_all_registered_seeds",
+        "seed_only_bootstrap_forbidden": True,
+        "replicates": 10000,
+        "random_seed": 20260716,
+        "prediction_row_schema": "configs/v9_prediction_rows.schema.json",
+    }
+    if bootstrap != expected_bootstrap:
+        raise ValueError("Validation comparison must use the frozen family-level bootstrap contract")
     if validation_comparison.get("pass_fail_decision_forbidden") is not True:
         raise ValueError("Validation comparison must not reintroduce a pass/fail Gate")
     selectable = list(map(str, validation_comparison.get("selectable_method_ids", [])))
@@ -985,17 +998,6 @@ def _final_evaluation(result: Mapping[str, Any]) -> Mapping[str, Any]:
     raise ValueError("results.json has no completed development evaluation")
 
 
-def _bootstrap_interval(values: Sequence[float], *, seed: int = 20260716) -> tuple[float, float]:
-    if not values:
-        raise ValueError("cannot bootstrap an empty sequence")
-    rng = random.Random(seed)
-    samples = sorted(
-        mean(rng.choice(values) for _ in values)
-        for _ in range(10000)
-    )
-    return samples[249], samples[9749]
-
-
 def _is_sha256(value: Any) -> bool:
     text = str(value or "")
     return len(text) == 64 and all(character in "0123456789abcdefABCDEF" for character in text)
@@ -1134,6 +1136,31 @@ def _load_audited_result(
             raise ValueError(
                 f"{result_path} profile {profile} is missing metrics: {missing_metrics}"
             )
+    prediction_metadata = result.get("prediction_rows", {})
+    if not isinstance(prediction_metadata, Mapping):
+        raise ValueError(f"missing prediction-row metadata: {result_path}")
+    prediction_path = (result_path.parent / str(prediction_metadata.get("path", ""))).resolve()
+    try:
+        prediction_path.relative_to(result_path.parent.resolve())
+    except ValueError as error:
+        raise ValueError(f"prediction-row path escapes run directory: {result_path}") from error
+    if not prediction_path.is_file():
+        raise ValueError(f"missing prediction-row artifact: {prediction_path}")
+    if sha256_file(prediction_path) != str(prediction_metadata.get("sha256", "")).upper():
+        raise ValueError(f"prediction-row hash mismatch: {prediction_path}")
+    prediction_rows = validate_prediction_rows(
+        json.loads(line)
+        for line in prediction_path.read_text(encoding="utf-8").splitlines()
+        if line.strip()
+    )
+    if len(prediction_rows) != int(prediction_metadata.get("row_count", -1)):
+        raise ValueError(f"prediction-row count mismatch: {prediction_path}")
+    if any(row["seed"] != seed or row["method_id"] != str(method["id"]) for row in prediction_rows):
+        raise ValueError(f"prediction-row run identity mismatch: {prediction_path}")
+    observed_profiles = {row["profile"] for row in prediction_rows}
+    expected_profiles = {str(contract["simulation"]["in_range_profile"]), *map(str, contract["simulation"]["development_ood_profiles"])}
+    if observed_profiles != expected_profiles:
+        raise ValueError(f"prediction-row profile coverage mismatch: {prediction_path}")
     return {
         "result": result,
         "final": final,
@@ -1155,6 +1182,7 @@ def _load_audited_result(
             name: float(final["ood"][name]["macro_f1"])
             for name in contract["simulation"]["development_ood_profiles"]
         },
+        "prediction_rows": prediction_rows,
     }
 
 
@@ -1294,6 +1322,7 @@ def evaluate_validation_comparison(
     root = Path(results_root)
     experiment = contract["experiment"]
     comparison = contract["validation_comparison"]
+    bootstrap_contract = comparison["paired_bootstrap_contract"]
     methods = {str(item["id"]): item for item in experiment["methods"]}
     baseline_id = next(key for key, item in methods.items() if item["role"] == "baseline")
     primary_profiles = list(map(str, comparison["primary_ood_profiles"]))
@@ -1377,12 +1406,24 @@ def evaluate_validation_comparison(
     )
 
     def paired_contrast(focus_id: str, comparator_id: str) -> dict[str, Any]:
+        family_contrast = hierarchical_paired_bootstrap(
+            [
+                row
+                for (method_id, _seed), metrics in run_metrics.items()
+                if method_id in {focus_id, comparator_id}
+                for row in metrics["prediction_rows"]
+            ],
+            focus_method_id=focus_id,
+            comparator_method_id=comparator_id,
+            profiles=primary_profiles,
+            replicates=int(bootstrap_contract["replicates"]),
+            random_seed=int(bootstrap_contract["random_seed"]),
+        )
         deltas = [
-            run_metrics[(focus_id, int(seed))]["mean_ood_macro_f1"]
-            - run_metrics[(comparator_id, int(seed))]["mean_ood_macro_f1"]
+            float(family_contrast["paired_seed_deltas"][str(int(seed))])
             for seed in experiment["seeds"]
         ]
-        ci_low, ci_high = _bootstrap_interval(deltas)
+        ci_low, ci_high = family_contrast["hierarchical_bootstrap_95_ci"]
         return {
             "focus_method_id": focus_id,
             "comparator_method_id": comparator_id,
@@ -1390,6 +1431,7 @@ def evaluate_validation_comparison(
             "paired_seed_deltas": deltas,
             "mean_delta": mean(deltas),
             "paired_bootstrap_95_ci": [ci_low, ci_high],
+            "hierarchical_bootstrap": family_contrast,
             "all_seed_deltas_positive": all(value > 0.0 for value in deltas),
             "mean_id_delta": mean(
                 run_metrics[(focus_id, int(seed))]["id_macro_f1"]
