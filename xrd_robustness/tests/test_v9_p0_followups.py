@@ -3,6 +3,9 @@ from __future__ import annotations
 from pathlib import Path
 import sys
 import unittest
+from unittest.mock import patch
+
+import numpy as np
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -14,6 +17,10 @@ from analyze_v9_p0_statistical_robustness import (  # noqa: E402
     analyze_report,
 )
 from audit_v9_p0_short_trajectory import _aggregate  # noqa: E402
+from audit_v9_p0_short_trajectory_resilient import (  # noqa: E402
+    _is_quality_gate_exhaustion,
+    _render_balanced_bundle_with_retry,
+)
 
 
 class V9P0FollowupUtilityTest(unittest.TestCase):
@@ -103,6 +110,45 @@ class V9P0FollowupUtilityTest(unittest.TestCase):
             ],
             0.0,
         )
+
+    def test_quality_gate_exhaustion_is_detected_narrowly(self) -> None:
+        self.assertTrue(
+            _is_quality_gate_exhaustion(
+                ValueError("quality gate exhausted deterministic resampling after 32 attempts")
+            )
+        )
+        self.assertFalse(_is_quality_gate_exhaustion(ValueError("unrelated render error")))
+
+    @patch("audit_v9_p0_short_trajectory_resilient.p0._render_profile")
+    @patch("audit_v9_p0_short_trajectory_resilient.p0._balanced_repeat_batch")
+    def test_quality_invalid_whole_batch_is_replaced_deterministically(
+        self, balanced_batch, render_profile
+    ) -> None:
+        balanced_batch.side_effect = [["bad"], ["good"]]
+        view = np.zeros((1, 8), dtype=np.float32)
+        render_profile.side_effect = [
+            ValueError("quality gate exhausted deterministic resampling after 32 attempts"),
+            (view, view.copy()),
+        ]
+        material_ids, rendered, rejections, attempt = _render_balanced_bundle_with_retry(
+            pool=["bad", "good"],
+            labels={"bad": 0, "good": 0},
+            profiles=("train",),
+            logical_repeat=3,
+            stream_offset=10,
+            render_repeat_base=20,
+            panel_start=0,
+            peaks={},
+            sampler=object(),
+            factory=object(),
+            phase="unit_test",
+            max_attempts=2,
+        )
+        self.assertEqual(material_ids, ["good"])
+        self.assertEqual(set(rendered), {"train"})
+        self.assertEqual(attempt, 1)
+        self.assertEqual(len(rejections), 1)
+        self.assertEqual(rejections[0]["material_ids"], ["bad"])
 
 
 if __name__ == "__main__":
