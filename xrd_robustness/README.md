@@ -30,7 +30,8 @@
 | simulated Test | 锁定、未执行 |
 | RRUFF-70 样品组成 | 冻结 |
 | RRUFF 真实域角色划分 | 冻结：21 train / 14 validation / 35 final test |
-| real-adaptation 代码 | 尚未实现 |
+| real-adaptation 合同审计与计划生成 | 已实现，禁止加载模型或谱图 |
+| real-adaptation 训练器 | 尚未实现 |
 | 真实适配与 final real test | 均锁定、未执行 |
 
 ## 核心论文问题
@@ -83,7 +84,7 @@ GTIIT 不进入 RRUFF 主适配训练、验证或最终 Macro-F1。当前只保�
 - `CODEX_HANDOFF.md`：模拟训练与台式机接管；
 - `CODEX_HANDOFF_REAL_ADAPTATION_ADDENDUM.md`：真实域新协议交接。
 
-机器可读配置、源代码和匹配哈希报告优先于解释性文档。新 real-adaptation 合同目前是设计合同，执行入口尚未实现，因此真实数据仍不能运行。
+机器可读配置、源代码和匹配哈希报告优先于解释性文档。真实适配训练器仍不存在，因此真实数据训练和 final-test 推理仍不能运行。
 
 ## 模拟数据流程
 
@@ -120,16 +121,23 @@ E:\AI4science\.venvs\xrd_tools\Scripts\python.exe -s scripts\run_v9_method_trans
 # 检查 Test 锁
 E:\AI4science\.venvs\xrd_tools\Scripts\python.exe -s scripts\run_v9_method_transfer.py final-preflight
 
+# 真实适配合同审计；不加载模型或谱图
+E:\AI4science\.venvs\xrd_tools\Scripts\python.exe -s scripts\audit_v9_real_adaptation_contract.py
+
+# 本地 manifest 已复制后执行严格哈希与成员审计
+E:\AI4science\.venvs\xrd_tools\Scripts\python.exe -s scripts\audit_v9_real_adaptation_contract.py --require-local-data
+
+# 仅生成 primary head-only 适配计划，不训练
+E:\AI4science\.venvs\xrd_tools\Scripts\python.exe -s scripts\run_v9_real_adaptation.py plan
+
+# 同时生成预注册 secondary full-network 计划，不训练
+E:\AI4science\.venvs\xrd_tools\Scripts\python.exe -s scripts\run_v9_real_adaptation.py plan --include-secondary
+
 # 单元测试
 $env:PYTHONPATH='E:\AI4science\xrd_robustness\src'
 E:\AI4science\.venvs\xrd_tools\Scripts\python.exe -s -m unittest discover -s tests -p 'test_*.py' -v
 ```
 
-以下计划入口尚不存在，不得伪造执行结果：
+`run_v9_real_adaptation.py run` 当前必须返回 `refused_execution_disabled`，并保证 `model_loaded=false`、`spectra_loaded=false`。
 
-```text
-scripts/audit_v9_real_adaptation_contract.py
-scripts/run_v9_real_adaptation.py
-```
-
-下一项工程任务是实现上述两个入口、复制本地冻结 manifest、增加泄漏与 episode 一致性测试；这仍不自动授权真实适配训练。
+下一项工程任务是复制本地冻结 manifest、在目标仓库运行严格 preflight，并实现 classifier-head adaptation trainer、adaptation-validation checkpoint 选择与结果哈希绑定；完成这些工作仍不自动授权真实适配训练。
