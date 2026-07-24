@@ -7,11 +7,17 @@ import unittest
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PROJECT_ROOT / "scripts"))
+sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
+import audit_v10_train_only_pilot_v2 as pilot_v2_module  # noqa: E402
 from v10_pilot_v2_evaluation import (  # noqa: E402
     learned_state_gate,
     pilot_v2_decision,
     premise_recheck,
+)
+from v10_pilot_v2_training import (  # noqa: E402
+    BRANCH_KEY_BASE_OFFSET,
+    BRANCH_STREAM_EPOCH_OFFSET,
 )
 
 
@@ -43,6 +49,11 @@ def _branch(
 
 
 class V10PilotV2Tests(unittest.TestCase):
+    def test_all_v2_modules_import_and_offsets_are_separate(self) -> None:
+        self.assertEqual(pilot_v2_module.PRETRAIN_EPOCHS, 5)
+        self.assertGreater(BRANCH_STREAM_EPOCH_OFFSET, 5)
+        self.assertGreater(BRANCH_KEY_BASE_OFFSET, 500_000)
+
     def test_learned_state_gate_passes_only_above_accuracy_and_below_ce(self) -> None:
         metrics = {
             "classification_accuracy_across_two_views": 0.40,
