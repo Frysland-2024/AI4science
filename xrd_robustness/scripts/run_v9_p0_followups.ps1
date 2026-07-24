@@ -65,7 +65,8 @@ if (-not $SkipReplication) {
 
 if (-not $SkipTrajectory) {
     Write-Host "[4/4] Running matched Train-only short trajectory on CUDA..."
-    & $PythonExe scripts\audit_v9_p0_short_trajectory.py `
+    Write-Host "Quality-invalid batches are never accepted; a new balanced Train-only batch is drawn deterministically."
+    & $PythonExe scripts\audit_v9_p0_short_trajectory_resilient.py `
         --device cuda `
         --steps $TrajectorySteps `
         --repeats $TrajectoryRepeats `
