@@ -1,6 +1,6 @@
 {
   "schema_version": "v9-real-domain-adaptation-v1",
-  "status": "role_assignment_frozen_execution_disabled",
+  "status": "role_assignment_frozen_preflight_implemented_execution_disabled",
   "program_id": "V9-T",
   "study_role": "secondary_real_domain_label_efficiency_axis",
   "scientific_question": "Under identical real support samples, validation data, adaptation objective and compute, do JS consistency or residual class decorrelation simulation-pretrained models retain a relative advantage over Dynamic/Paired ERM after limited labeled-real-data adaptation?",
@@ -68,13 +68,14 @@
     "js_consistency_transfer",
     "residual_decorrelation_transfer"
   ],
+  "pretraining_seeds": [20260711, 20260712, 20260713],
   "pre_real_unlock_requirements": [
     "simulation Validation tuning is complete",
     "formal simulation hyperparameters are frozen for all three core methods",
     "three checkpoint hashes per core method are frozen",
     "simulated-test results are complete and immutable",
     "real role and episode manifest hashes pass preflight",
-    "adaptation implementation and tests pass",
+    "adaptation training implementation and tests pass",
     "explicit user authorization is recorded"
   ],
   "primary_adaptation": {
@@ -162,16 +163,27 @@
     "selection_use_forbidden": true
   },
   "implementation": {
-    "status": "not_implemented",
-    "required_entrypoint": "scripts/run_v9_real_adaptation.py",
-    "required_preflight": "scripts/audit_v9_real_adaptation_contract.py",
-    "required_tests": [
+    "status": "contract_audit_and_plan_implemented_training_not_implemented",
+    "audit_entrypoint": "scripts/audit_v9_real_adaptation_contract.py",
+    "planning_entrypoint": "scripts/run_v9_real_adaptation.py",
+    "training_entrypoint": "scripts/run_v9_real_adaptation.py run",
+    "training_entrypoint_must_refuse": true,
+    "implemented_tests": [
       "role_manifest_hash_and_count_validation",
       "episode_membership_identity_across_methods",
-      "final_test_exclusion_from_training_and_validation",
-      "cross_entropy_only_primary_adaptation",
-      "checkpoint_and_result_hash_binding",
-      "no_model_loaded_by_split_preflight"
+      "final_test_exclusion_from_support_and_validation",
+      "cross_entropy_only_primary_contract",
+      "deterministic_plan_counts",
+      "hash_mismatch_fail_closed",
+      "no_model_or_spectrum_loaded_by_preflight"
+    ],
+    "remaining_required_work": [
+      "copy frozen local manifests into the Git-ignored project data path",
+      "integrate approved checkpoint loading",
+      "implement classifier-head adaptation training",
+      "implement adaptation-validation checkpoint selection",
+      "bind adapted checkpoint and result hashes",
+      "implement final-stage inference only after separate authorization"
     ]
   }
 }
