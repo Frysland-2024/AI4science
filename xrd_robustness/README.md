@@ -1,116 +1,135 @@
 # XRD Robustness V9-T
 
-> 跨机器、跨 Codex 账号接管必须先完整阅读根目录 [`CODEX_HANDOFF.md`](CODEX_HANDOFF.md)，并运行 `scripts/verify_codex_account_handoff.py`。该交接不构成训练授权。
+> 跨机器、跨 Codex 账号接管先阅读 [`CODEX_HANDOFF.md`](CODEX_HANDOFF.md)；真实域少样本设计再阅读 [`CODEX_HANDOFF_REAL_ADAPTATION_ADDENDUM.md`](CODEX_HANDOFF_REAL_ADAPTATION_ADDENDUM.md)。这些文档均不构成训练或测试授权。
 
-当前项目正式切换为 **V9-T：算法迁移主线**，不再使用 A/B/C2 或“先 Pilot、再选路线”的叙事。模拟器标签监督残差研究保留已有记录，并延期为 **V10：Simulator-Supervised Representation Learning**。
+## 当前研究身份
 
-| 研究 | 优先级 | 核心问题 | 当前状态（2026-07-16） | 研究完成度 |
-|---|---|---|---|---:|
-| V9-T 算法迁移论文 | 当前唯一主线 | 显式建模同结构跨扰动视图关系，能否在单纯数据增广之上提高未知扰动与真实谱泛化 | family-aware 70/15/15 划分已冻结；方法语义与 Train-only 候选范围 Gate 通过，网格已冻结但 tuning 尚未授权；训练仍为 0/7 调参、0/15 正式实验 | 约 40% |
-| V10 Simulator-Supervised Representation Learning | 延期 | 已知模拟器变量能否监督测量变化表征 | 只保留旧原型和研究备忘，不进入 V9-T | 约 15% |
+当前唯一主线仍是 **V9-T：Algorithm Transfer for PXRD Robustness**。
 
-百分比衡量的是完整研究交付物，不代表已有科学结论。候选网格的 Train-only 合法性证据已经闭合，但没有 Validation 调参或正式性能结果，所以完整研究仍约为 40%。真实谱只用于最终 `real test`，不参与扰动参数定义、超参数选择、方法比较或 checkpoint 选择。
+模拟阶段比较三种核心学习原则：
 
-## 当前论文的核心叙事
+1. Dynamic/Paired ERM：单纯动态增广监督；
+2. JS Consistency：跨视图预测一致性；
+3. Residual Class Decorrelation：差异感知的残差类别去相关。
 
-模拟 XRD 数据充足，但测量扰动造成模拟—真实差距。现有方法主要依赖**单纯数据增广**：通过离线预生成、在线动态生成、扩大扰动覆盖或提高模拟真实性，让模型见到更多、更接近实验条件的输入。这些实现形式不同，但都只规定模型“看到了什么”，通常没有显式规定同一晶体结构的不同扰动视图之间应学习什么关系。
+论文现在包含两层真实域证据：
 
-V9-T 的递进固定为：**单纯数据增广 → 跨视图一致性 → 差异感知的残差去相关**。Dynamic/Paired ERM 是单纯数据增广范式中最强、最公平的直接基线，同时提供成对视图基础设施；JS Consistency 显式约束预测稳定，Residual Class Decorrelation 则允许测量差异存在，同时减少残差中的晶系类别信息。动态增广本身不是论文要挑战的对象，也不作为创新点。
+- **0-shot real robustness**：完全不使用真实标签；
+- **few-shot real adaptation**：三方法使用完全相同的少量真实标签后，比较相对增益和标签效率。
 
-论文贡献定位为“严格的跨领域方法迁移与 XRD 特定验证”，不声称创造新的通用机器学习理论，也不包含模拟器标签监督。
+项目仍不声称创造新的通用机器学习理论；核心是严格匹配条件下的跨领域方法迁移和 PXRD 特定验证。
+
+## 当前状态（2026-07-24）
+
+| 阶段 | 状态 |
+|---|---|
+| 14,060 结构 family-aware 划分 | 冻结：Train 9,842 / Validation 2,109 / Test 2,109 |
+| 方法参数候选范围 | 冻结：JS `[0.3,3,30]`；Residual `[0.2,2,20]` |
+| Simulation Validation tuning | **0/7，未授权** |
+| 正式模拟实验 | **0/15，未开始** |
+| simulated Test | 锁定、未执行 |
+| RRUFF-70 样品组成 | 冻结 |
+| RRUFF 真实域角色划分 | 冻结：21 train / 14 validation / 35 final test |
+| real-adaptation 代码 | 尚未实现 |
+| 真实适配与 final real test | 均锁定、未执行 |
+
+## 核心论文问题
+
+在相同母结构、动态配对视图、backbone、优化预算和模拟评测面板下：
+
+> JS Consistency 或 Residual Class Decorrelation 能否在 Dynamic/Paired ERM 之上，提高未知扰动泛化，并在 0/1/2/3-shot 真实域适配中保持相对优势？
+
+真实数据提高三种方法的绝对准确率是允许且预期的。公平性来自：
+
+- 同一个 RRUFF support episode；
+- 同一个 adaptation validation；
+- 同一个 CE 适配目标；
+- 同一优化与 early-stopping 规则；
+- final real test 完全隔离。
+
+## RRUFF-70 真实域协议
+
+来源语料：`rruff-real-pxrd-70-v1.0-final`，七晶系各 10 条。
+
+模型访问前按固定 SHA-256 规则冻结为：
+
+| 角色 | 每晶系 | 总数 |
+|---|---:|---:|
+| adaptation train | 3 | 21 |
+| adaptation validation | 2 | 14 |
+| final real test | 5 | 35 |
+
+少样本预算为 0/1/2/3-shot。1-shot 和 2-shot 各有 3 个固定 support episode；3-shot 使用全部 21 条 adaptation train。
+
+主适配实验固定为：冻结 encoder、只更新 classifier head、cross-entropy only。全模型 CE 微调作为预注册次要分析。
+
+完整合同：
+
+- `docs/V9_REAL_FEWSHOT_ADAPTATION_PROTOCOL.md`
+- `configs/real_adaptation.v9.method_transfer.json`
+
+本地数据 manifest 和谱图属于 Git 忽略数据，不得提交。
+
+## GTIIT 数据边界
+
+GTIIT 不进入 RRUFF 主适配训练、验证或最终 Macro-F1。当前只保留为本地仪器 supplementary case study，且必须先完成样品标签、批次、隐私和 provenance 审计。
 
 ## 文档入口
 
-- `docs/V9_METHOD_TRANSFER_ENGINEERING.md`：算法迁移研究的范围、λ 来源、五组实验、公平性、Validation 比较和执行门禁。
-- `docs/V9_SIMULATOR_SUPERVISED_RESIDUAL_ENGINEERING.md`：延期研究备忘；不属于当前论文和执行入口。
-- `docs/DATA_AND_SIMULATION_CONTRACT.md`：两项研究共享的数据、物理模拟、证据来源和真实谱红线。
-- `data/README.md`：当前数据目录与清单入口。
+- `docs/V9_METHOD_TRANSFER_ENGINEERING.md`：模拟算法迁移、lambda、五组实验、公平性和执行门禁；
+- `docs/V9_REAL_FEWSHOT_ADAPTATION_PROTOCOL.md`：RRUFF-70 的 21/14/35 划分、0/1/2/3-shot 与适配统计；
+- `docs/DATA_AND_SIMULATION_CONTRACT.md`：模拟与真实数据统一边界；
+- `docs/V9_SIMULATOR_SUPERVISED_RESIDUAL_ENGINEERING.md`：延期的 V10 备忘；
+- `CODEX_HANDOFF.md`：模拟训练与台式机接管；
+- `CODEX_HANDOFF_REAL_ADAPTATION_ADDENDUM.md`：真实域新协议交接。
 
-机器可读配置和 JSON/CSV 报告优先于叙事文档。若文档与配置冲突，执行入口必须拒绝运行并先修复冲突。
+机器可读配置、源代码和匹配哈希报告优先于解释性文档。新 real-adaptation 合同目前是设计合同，执行入口尚未实现，因此真实数据仍不能运行。
 
-## 共享数据与流程
+## 模拟数据流程
 
 ```text
-Materials Project 晶体结构
-  -> formal_14060：Train 9,842 / Validation 2,109 / Test 2,109；七晶系分层、家族代理分组
-  -> 理想反射缓存（峰位、积分强度、hkl、多重性、倒易矢量）
-  -> 同一母结构在线生成配对扰动视图
-  -> PAMPT 骨干与对应研究损失
-  -> Validation ID / development-OOD
-  -> 方法与 checkpoint 冻结
-  -> simulated test
-  -> real test
+Materials Project structures
+  -> formal_14060 family split
+  -> ideal reflection cache
+  -> paired online physical perturbations
+  -> PAMPT-B3 + ERM / JS / Residual
+  -> Simulation Validation tuning
+  -> formal checkpoints
+  -> simulated Test
 ```
 
-渲染谱不作为独立结构样本持久化。背景与噪声是两个物理效应，观测链保持“Bragg 峰 + 背景，再采样噪声”的加性顺序。
+## 真实域流程
 
-## 当前可执行命令
+```text
+Frozen core-method checkpoints
+  -> RRUFF adaptation train / validation
+  -> 0/1/2/3-shot CE adaptation
+  -> freeze adapted checkpoints
+  -> one immutable evaluation on 35-sample final real test
+```
 
-算法迁移只读预检与 7 次调参计划生成：
+## 当前安全命令
 
 ```powershell
+# 只读模拟预检
 E:\AI4science\.venvs\xrd_tools\Scripts\python.exe -s scripts\run_v9_method_transfer.py preflight
+
+# 仅生成 7-run 计划，不训练
 E:\AI4science\.venvs\xrd_tools\Scripts\python.exe -s scripts\run_v9_method_transfer.py tune-plan
-```
 
-检查最终测试锁：
-
-```powershell
+# 检查 Test 锁
 E:\AI4science\.venvs\xrd_tools\Scripts\python.exe -s scripts\run_v9_method_transfer.py final-preflight
-```
 
-λ 最终值尚未由 Validation 选择；候选网格 JS `[0.3,3,30]` 与 Residual `[0.2,2,20]` 已通过 Train-only 梯度尺度 Gate 并冻结，但两个 tuning execution switches 仍为 `false`，因此 7-run 与 15 次正式计划都必须 fail-closed。新的统一 Validation 已冻结；旧的两个 Validation 子集已废止。本次更新不启动训练。simulated test 和 real test 也继续锁定，未经对应阶段的明确授权不得解除。
-
-仓库测试：
-
-```powershell
+# 单元测试
 $env:PYTHONPATH='E:\AI4science\xrd_robustness\src'
 E:\AI4science\.venvs\xrd_tools\Scripts\python.exe -s -m unittest discover -s tests -p 'test_*.py' -v
 ```
 
-台式机硬件配置只读审计（不训练）：
+以下计划入口尚不存在，不得伪造执行结果：
 
-```powershell
-E:\AI4science\.venvs\xrd_tools\Scripts\python.exe -s scripts\audit_v9_desktop_hardware_config.py
+```text
+scripts/audit_v9_real_adaptation_contract.py
+scripts/run_v9_real_adaptation.py
 ```
 
-台式机迁移与首启入口见 `docs/V9_DESKTOP_MIGRATION_HANDOFF.md`。迁移后依次运行：
-
-```powershell
-powershell -ExecutionPolicy Bypass -File scripts\bootstrap_v9_desktop_environment.ps1
-powershell -ExecutionPolicy Bypass -File scripts\desktop_first_boot_v9.ps1 -PlanOnly
-powershell -ExecutionPolicy Bypass -File scripts\desktop_first_boot_v9.ps1
-```
-
-这些命令只建立环境并运行工程验收，不启动训练。即使最终状态为 `ready_for_explicit_tuning_authorization`，完整 7-run 仍需用户另行明确授权。
-
-## 笔记本阶段闭环工具（2026-07-22）
-
-以下命令只做工程/统计准备，不授权正式训练或任何 Test 访问：
-
-```powershell
-$env:PYTHONPATH='E:\AI4science\xrd_robustness\src'
-E:\AI4science\.venvs\xrd_tools\Scripts\python.exe -s scripts\audit_v9_resume_determinism.py --device cuda
-E:\AI4science\.venvs\xrd_tools\Scripts\python.exe -s scripts\audit_v9_method_parameter_semantics.py --device cpu
-E:\AI4science\.venvs\xrd_tools\Scripts\python.exe -s scripts\audit_v9_loss_and_gradient_scale.py --device cuda --steps 128 --burn-in-steps 64
-E:\AI4science\.venvs\xrd_tools\Scripts\python.exe -s scripts\audit_v9_real_test_preprocessing.py
-```
-
-正式 run 将输出带 SHA256 绑定的 `prediction_rows.jsonl`。结果冻结后，使用 `scripts/analyze_v9_results.py` 对多个 run 的逐谱文件做 family-level paired hierarchical bootstrap；不得仅对三个 seed 汇总值 bootstrap。机制诊断入口为 `scripts/analyze_v9_mechanisms.py`，真实谱合同继续保持 disabled。
-
-当前方法参数相关的机器可读证据与治理合同：
-
-- `reports/v9_method_semantics_audit.json`；
-- `reports/v9_loss_gradient_scale_audit.json`；
-- `reports/v9_learned_state_scale_audit.json`；
-- `reports/v9_candidate_grid_gate.json`；
-- `configs/v9_method_parameter_governance.json`；
-- `docs/V9_METHOD_PARAMETER_GOVERNANCE.md`。
-
-损失尺度审计只诊断数值作用强度，不选择 λ。PAMPT-B3 128-step Train-only 报告显示分类主干和 residual probe 尚未学会，因此其几万至几十万梯度倒数只保留为 initialization/chance-state 报警证据，不能当作理论权重或正式网格。
-
-学习里程碑复测随后完成：`v9_learned_state_scale_audit.json` 使用完整 9,842 个 Train 结构训练五 epoch 的 classification-only Dynamic/Paired ERM PAMPT-B3，并以三组互斥、各 700 个七类平衡 Train 结构完成 probe calibration、probe audit 和 scale audit。主机意外重启后从固定 seed、epoch 0 完整重跑，没有声称 checkpoint 恢复。epoch 3/5 的主干与 residual-probe Gate 均通过；epoch-5 未加权 JS/分类与 Residual/分类 backbone 梯度比中位数分别为 0.05898 和 0.09738。
-
-用户随后批准唯一一次 pre-Validation 网格修订：JS `[0.3, 3, 30]`，Residual `[0.2, 2, 20]`。`v9_candidate_grid_gate.json` 再次从 epoch 0 重建同一类 Train-only learned state，并对六个候选分别执行加权辅助目标和总目标的真实 autograd 测量，而非只做线性外推。实测中位辅助/分类 backbone 梯度比分别为 JS `0.02283/0.22842/2.28533`、Residual `0.02581/0.25854/2.58715`，两者均覆盖 weak、material non-dominant、dominant，且有限性、梯度存在性、方向与失控保护全部通过。候选范围现已冻结，但 `development_tuning.execution_enabled=false` 与 `development_tuning_execution_enabled=false` 仍保持关闭；7-run 仍为 `0/7`，只有用户另行明确授权后才能启动。
-
-外部论文只提供方法与敏感性流程先例，不提供可直接搬用的数值：Hu et al. 的 SD3Net 正文/Table 5 使用 `lambda_3=1`，Fig. 12 又报告一个未明确映射到 `lambda_3`、约在 `1e-4` 最优的 regularization parameter。因此两者都不是 V9-T `lambda_res` 的数值权威；完整限制见参数治理文档与机器合同。
+下一项工程任务是实现上述两个入口、复制本地冻结 manifest、增加泄漏与 episode 一致性测试；这仍不自动授权真实适配训练。
