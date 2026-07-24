@@ -1,0 +1,617 @@
+{
+  "descriptive_flags": {
+    "js": {
+      "all_leave_one_profile_out_lower_95_above_zero": false,
+      "clustered_lower_95_above_zero": true,
+      "clustered_mean_positive": true,
+      "minimum_leave_one_profile_out_lower_95": -0.00023276860515276582,
+      "not_a_formal_performance_conclusion": true
+    },
+    "residual": {
+      "all_leave_one_profile_out_lower_95_above_zero": false,
+      "clustered_lower_95_above_zero": false,
+      "clustered_mean_positive": true,
+      "minimum_leave_one_profile_out_lower_95": -0.006817792306343715,
+      "not_a_formal_performance_conclusion": true
+    }
+  },
+  "formal_boundaries": {
+    "formal_claim_allowed": false,
+    "lambda_selected": false,
+    "model_training_performed": false,
+    "real_xrd_used": false,
+    "simulated_test_used": false,
+    "validation_used": false
+  },
+  "input_report": {
+    "immutable": true,
+    "path": "E:/AI4science/xrd_robustness/reports/v9_p0_local_benefit.json",
+    "sha256_after": "8A89A90B42352331AB926A3169EB35EC27BF05B8F2C8374849CD1FAC273CEBEA",
+    "sha256_before": "8A89A90B42352331AB926A3169EB35EC27BF05B8F2C8374849CD1FAC273CEBEA",
+    "unchanged": true
+  },
+  "leave_one_profile_out": {
+    "js": {
+      "ood_background": {
+        "included_profiles": [
+          "ood_shift_negative",
+          "ood_shift_positive",
+          "ood_broadening",
+          "ood_noise",
+          "ood_texture"
+        ],
+        "repeat_clustered_bootstrap_95": {
+          "draws": 10000,
+          "lower_95": -0.00010102331638336177,
+          "mean": 0.0017201721668243406,
+          "sampling_unit_count": 12,
+          "upper_95": 0.0038405687610308325
+        },
+        "summary": {
+          "count": 12,
+          "maximum": 0.010149741172790527,
+          "mean": 0.0017201721668243406,
+          "median": 0.000984787940979004,
+          "minimum": -0.002161741256713867,
+          "positive_sign_rate": 0.5833333333333334
+        }
+      },
+      "ood_broadening": {
+        "included_profiles": [
+          "ood_shift_negative",
+          "ood_shift_positive",
+          "ood_noise",
+          "ood_background",
+          "ood_texture"
+        ],
+        "repeat_clustered_bootstrap_95": {
+          "draws": 10000,
+          "lower_95": -0.00023276860515276582,
+          "mean": 0.0032526691754659015,
+          "sampling_unit_count": 12,
+          "upper_95": 0.007128809293111164
+        },
+        "summary": {
+          "count": 12,
+          "maximum": 0.015377163887023926,
+          "mean": 0.0032526691754659015,
+          "median": 0.0014931797981262208,
+          "minimum": -0.006188750267028809,
+          "positive_sign_rate": 0.5833333333333334
+        }
+      },
+      "ood_noise": {
+        "included_profiles": [
+          "ood_shift_negative",
+          "ood_shift_positive",
+          "ood_broadening",
+          "ood_background",
+          "ood_texture"
+        ],
+        "repeat_clustered_bootstrap_95": {
+          "draws": 10000,
+          "lower_95": 0.0003842260440190632,
+          "mean": 0.005223254362742107,
+          "sampling_unit_count": 12,
+          "upper_95": 0.010493505100409188
+        },
+        "summary": {
+          "count": 12,
+          "maximum": 0.02242100238800049,
+          "mean": 0.005223254362742107,
+          "median": 0.0022398710250854494,
+          "minimum": -0.006820082664489746,
+          "positive_sign_rate": 0.6666666666666666
+        }
+      },
+      "ood_shift_negative": {
+        "included_profiles": [
+          "ood_shift_positive",
+          "ood_broadening",
+          "ood_noise",
+          "ood_background",
+          "ood_texture"
+        ],
+        "repeat_clustered_bootstrap_95": {
+          "draws": 10000,
+          "lower_95": 0.0003392155965169273,
+          "mean": 0.005217464764912924,
+          "sampling_unit_count": 12,
+          "upper_95": 0.010515124499797818
+        },
+        "summary": {
+          "count": 12,
+          "maximum": 0.02243661880493164,
+          "mean": 0.005217464764912924,
+          "median": 0.002116549015045166,
+          "minimum": -0.007219719886779785,
+          "positive_sign_rate": 0.5833333333333334
+        }
+      },
+      "ood_shift_positive": {
+        "included_profiles": [
+          "ood_shift_negative",
+          "ood_broadening",
+          "ood_noise",
+          "ood_background",
+          "ood_texture"
+        ],
+        "repeat_clustered_bootstrap_95": {
+          "draws": 10000,
+          "lower_95": 0.00022549718618392956,
+          "mean": 0.005181453625361126,
+          "sampling_unit_count": 12,
+          "upper_95": 0.010491911570231119
+        },
+        "summary": {
+          "count": 12,
+          "maximum": 0.023004722595214844,
+          "mean": 0.005181453625361126,
+          "median": 0.002182769775390625,
+          "minimum": -0.0076990842819213865,
+          "positive_sign_rate": 0.6666666666666666
+        }
+      },
+      "ood_texture": {
+        "included_profiles": [
+          "ood_shift_negative",
+          "ood_shift_positive",
+          "ood_broadening",
+          "ood_noise",
+          "ood_background"
+        ],
+        "repeat_clustered_bootstrap_95": {
+          "draws": 10000,
+          "lower_95": 0.00025295585393905664,
+          "mean": 0.004828512668609619,
+          "sampling_unit_count": 12,
+          "upper_95": 0.009885847270488739
+        },
+        "summary": {
+          "count": 12,
+          "maximum": 0.01996331214904785,
+          "mean": 0.004828512668609619,
+          "median": 0.0019646167755126955,
+          "minimum": -0.007603168487548828,
+          "positive_sign_rate": 0.6666666666666666
+        }
+      }
+    },
+    "residual": {
+      "ood_background": {
+        "included_profiles": [
+          "ood_shift_negative",
+          "ood_shift_positive",
+          "ood_broadening",
+          "ood_noise",
+          "ood_texture"
+        ],
+        "repeat_clustered_bootstrap_95": {
+          "draws": 10000,
+          "lower_95": -0.0018747785687446596,
+          "mean": 0.0008869508902231853,
+          "sampling_unit_count": 12,
+          "upper_95": 0.004033818791309991
+        },
+        "summary": {
+          "count": 12,
+          "maximum": 0.012186884880065918,
+          "mean": 0.0008869508902231853,
+          "median": -0.0003942251205444336,
+          "minimum": -0.006462454795837402,
+          "positive_sign_rate": 0.4166666666666667
+        }
+      },
+      "ood_broadening": {
+        "included_profiles": [
+          "ood_shift_negative",
+          "ood_shift_positive",
+          "ood_noise",
+          "ood_background",
+          "ood_texture"
+        ],
+        "repeat_clustered_bootstrap_95": {
+          "draws": 10000,
+          "lower_95": -0.005550393511851628,
+          "mean": 0.0007970154285430906,
+          "sampling_unit_count": 12,
+          "upper_95": 0.007341150442759196
+        },
+        "summary": {
+          "count": 12,
+          "maximum": 0.019909882545471193,
+          "mean": 0.0007970154285430906,
+          "median": -0.0008654594421386719,
+          "minimum": -0.017230534553527833,
+          "positive_sign_rate": 0.4166666666666667
+        }
+      },
+      "ood_noise": {
+        "included_profiles": [
+          "ood_shift_negative",
+          "ood_shift_positive",
+          "ood_broadening",
+          "ood_background",
+          "ood_texture"
+        ],
+        "repeat_clustered_bootstrap_95": {
+          "draws": 10000,
+          "lower_95": -0.006277013222376505,
+          "mean": 0.0022915263970692957,
+          "sampling_unit_count": 12,
+          "upper_95": 0.011075988362232845
+        },
+        "summary": {
+          "count": 12,
+          "maximum": 0.028324294090270995,
+          "mean": 0.0022915263970692957,
+          "median": -0.0005303978919982909,
+          "minimum": -0.021545219421386718,
+          "positive_sign_rate": 0.5
+        }
+      },
+      "ood_shift_negative": {
+        "included_profiles": [
+          "ood_shift_positive",
+          "ood_broadening",
+          "ood_noise",
+          "ood_background",
+          "ood_texture"
+        ],
+        "repeat_clustered_bootstrap_95": {
+          "draws": 10000,
+          "lower_95": -0.006817792306343715,
+          "mean": 0.0020000596841176356,
+          "sampling_unit_count": 12,
+          "upper_95": 0.01093921119968096
+        },
+        "summary": {
+          "count": 12,
+          "maximum": 0.028376269340515136,
+          "mean": 0.0020000596841176356,
+          "median": -0.0013141870498657225,
+          "minimum": -0.022730112075805664,
+          "positive_sign_rate": 0.5
+        }
+      },
+      "ood_shift_positive": {
+        "included_profiles": [
+          "ood_shift_negative",
+          "ood_broadening",
+          "ood_noise",
+          "ood_background",
+          "ood_texture"
+        ],
+        "repeat_clustered_bootstrap_95": {
+          "draws": 10000,
+          "lower_95": -0.006670977671941121,
+          "mean": 0.0020650327205657955,
+          "sampling_unit_count": 12,
+          "upper_95": 0.011186787188053129
+        },
+        "summary": {
+          "count": 12,
+          "maximum": 0.029018735885620116,
+          "mean": 0.0020650327205657955,
+          "median": -0.0005853772163391113,
+          "minimum": -0.023059487342834473,
+          "positive_sign_rate": 0.5
+        }
+      },
+      "ood_texture": {
+        "included_profiles": [
+          "ood_shift_negative",
+          "ood_shift_positive",
+          "ood_broadening",
+          "ood_noise",
+          "ood_background"
+        ],
+        "repeat_clustered_bootstrap_95": {
+          "draws": 10000,
+          "lower_95": -0.006609526524941126,
+          "mean": 0.0018464644749959305,
+          "sampling_unit_count": 12,
+          "upper_95": 0.01034284969170888
+        },
+        "summary": {
+          "count": 12,
+          "maximum": 0.025071167945861818,
+          "mean": 0.0018464644749959305,
+          "median": -0.0009621858596801757,
+          "minimum": -0.02365570068359375,
+          "positive_sign_rate": 0.5
+        }
+      }
+    }
+  },
+  "per_profile_analysis": {
+    "js": {
+      "ood_background": {
+        "repeat_bootstrap_95": {
+          "draws": 10000,
+          "lower_95": -0.0009213487307230628,
+          "mean": 0.01682266592979431,
+          "sampling_unit_count": 12,
+          "upper_95": 0.035799564421176905
+        },
+        "summary": {
+          "count": 12,
+          "maximum": 0.08549284934997559,
+          "mean": 0.01682266592979431,
+          "median": 0.007246732711791992,
+          "minimum": -0.026883840560913086,
+          "positive_sign_rate": 0.5833333333333334
+        }
+      },
+      "ood_broadening": {
+        "repeat_bootstrap_95": {
+          "draws": 10000,
+          "lower_95": 0.002273577948411306,
+          "mean": 0.009160180886586508,
+          "sampling_unit_count": 12,
+          "upper_95": 0.016754005104303353
+        },
+        "summary": {
+          "count": 12,
+          "maximum": 0.0362553596496582,
+          "mean": 0.009160180886586508,
+          "median": 0.0042549967765808105,
+          "minimum": -0.006748795509338379,
+          "positive_sign_rate": 0.75
+        }
+      },
+      "ood_noise": {
+        "repeat_bootstrap_95": {
+          "draws": 10000,
+          "lower_95": -0.001712636152903239,
+          "mean": -0.000692745049794515,
+          "sampling_unit_count": 12,
+          "upper_95": 0.0003671358029047642
+        },
+        "summary": {
+          "count": 12,
+          "maximum": 0.0033152103424072266,
+          "mean": -0.000692745049794515,
+          "median": -0.0007048249244689941,
+          "minimum": -0.0035921335220336914,
+          "positive_sign_rate": 0.3333333333333333
+        }
+      },
+      "ood_shift_negative": {
+        "repeat_bootstrap_95": {
+          "draws": 10000,
+          "lower_95": -0.001692012200752894,
+          "mean": -0.0006637970606486002,
+          "sampling_unit_count": 12,
+          "upper_95": 0.00032391349474589025
+        },
+        "summary": {
+          "count": 12,
+          "maximum": 0.002337217330932617,
+          "mean": -0.0006637970606486002,
+          "median": -0.00022274255752563477,
+          "minimum": -0.003538846969604492,
+          "positive_sign_rate": 0.4166666666666667
+        }
+      },
+      "ood_shift_positive": {
+        "repeat_bootstrap_95": {
+          "draws": 10000,
+          "lower_95": -0.001522312561670939,
+          "mean": -0.00048374136288960773,
+          "sampling_unit_count": 12,
+          "upper_95": 0.0004827116926511128
+        },
+        "summary": {
+          "count": 12,
+          "maximum": 0.002227306365966797,
+          "mean": -0.00048374136288960773,
+          "median": -0.00022929906845092773,
+          "minimum": -0.004084229469299316,
+          "positive_sign_rate": 0.4166666666666667
+        }
+      },
+      "ood_texture": {
+        "repeat_bootstrap_95": {
+          "draws": 10000,
+          "lower_95": -0.0010132079323132831,
+          "mean": 0.00128096342086792,
+          "sampling_unit_count": 12,
+          "upper_95": 0.004215482870737709
+        },
+        "summary": {
+          "count": 12,
+          "maximum": 0.0143815279006958,
+          "mean": 0.00128096342086792,
+          "median": -6.884336471557617e-05,
+          "minimum": -0.004077315330505371,
+          "positive_sign_rate": 0.5
+        }
+      }
+    },
+    "residual": {
+      "ood_background": {
+        "repeat_bootstrap_95": {
+          "draws": 10000,
+          "lower_95": -0.026782965660095213,
+          "mean": 0.005452295144399007,
+          "sampling_unit_count": 12,
+          "upper_95": 0.03864371851086617
+        },
+        "summary": {
+          "count": 12,
+          "maximum": 0.11259782314300537,
+          "mean": 0.005452295144399007,
+          "median": -0.005124449729919434,
+          "minimum": -0.08301687240600586,
+          "positive_sign_rate": 0.4166666666666667
+        }
+      },
+      "ood_broadening": {
+        "repeat_bootstrap_95": {
+          "draws": 10000,
+          "lower_95": -0.0065753551820913955,
+          "mean": 0.0059019724527994795,
+          "sampling_unit_count": 12,
+          "upper_95": 0.018797774612903585
+        },
+        "summary": {
+          "count": 12,
+          "maximum": 0.04642641544342041,
+          "mean": 0.0059019724527994795,
+          "median": 0.00028640031814575195,
+          "minimum": -0.02853083610534668,
+          "positive_sign_rate": 0.5
+        }
+      },
+      "ood_noise": {
+        "repeat_bootstrap_95": {
+          "draws": 10000,
+          "lower_95": -0.0033083895842234293,
+          "mean": -0.001570582389831543,
+          "sampling_unit_count": 12,
+          "upper_95": 0.00015649050474166742
+        },
+        "summary": {
+          "count": 12,
+          "maximum": 0.004114627838134766,
+          "mean": -0.001570582389831543,
+          "median": -0.0011082291603088379,
+          "minimum": -0.006957411766052246,
+          "positive_sign_rate": 0.25
+        }
+      },
+      "ood_shift_negative": {
+        "repeat_bootstrap_95": {
+          "draws": 10000,
+          "lower_95": -0.002317132552464803,
+          "mean": -0.00011324882507324219,
+          "sampling_unit_count": 12,
+          "upper_95": 0.0019454613327980039
+        },
+        "summary": {
+          "count": 12,
+          "maximum": 0.005807280540466309,
+          "mean": -0.00011324882507324219,
+          "median": -5.3048133850097656e-05,
+          "minimum": -0.007683515548706055,
+          "positive_sign_rate": 0.5
+        }
+      },
+      "ood_shift_positive": {
+        "repeat_bootstrap_95": {
+          "draws": 10000,
+          "lower_95": -0.0019932116071383157,
+          "mean": -0.0004381140073140462,
+          "sampling_unit_count": 12,
+          "upper_95": 0.0012160701056321461
+        },
+        "summary": {
+          "count": 12,
+          "maximum": 0.005372285842895508,
+          "mean": -0.0004381140073140462,
+          "median": -0.000858604907989502,
+          "minimum": -0.006112098693847656,
+          "positive_sign_rate": 0.4166666666666667
+        }
+      },
+      "ood_texture": {
+        "repeat_bootstrap_95": {
+          "draws": 10000,
+          "lower_95": -0.003138358145952225,
+          "mean": 0.0006547272205352783,
+          "sampling_unit_count": 12,
+          "upper_95": 0.004890815665324528
+        },
+        "summary": {
+          "count": 12,
+          "maximum": 0.017531394958496094,
+          "mean": 0.0006547272205352783,
+          "median": -0.00036525726318359375,
+          "minimum": -0.010712981224060059,
+          "positive_sign_rate": 0.5
+        }
+      }
+    }
+  },
+  "repeat_clustered_analysis": {
+    "js": {
+      "repeat_clustered_bootstrap_95": {
+        "draws": 10000,
+        "lower_95": 9.125471115112295e-05,
+        "mean": 0.004237254460652669,
+        "sampling_unit_count": 12,
+        "upper_95": 0.008685785945918824
+      },
+      "repeat_level_values": {
+        "0": 0.010144213835398356,
+        "1": 0.018856863180796306,
+        "2": -0.00628209114074707,
+        "3": -0.0026649037996927896,
+        "4": 0.009951968987782797,
+        "5": 0.0031632582346598306,
+        "6": 8.229414621988933e-05,
+        "7": 0.015956540902455647,
+        "8": -0.0010450482368469238,
+        "9": -0.002200921376546224,
+        "10": 0.00039825836817423504,
+        "11": 0.0044866204261779785
+      },
+      "summary": {
+        "count": 12,
+        "maximum": 0.018856863180796306,
+        "mean": 0.004237254460652669,
+        "median": 0.0017807583014170327,
+        "minimum": -0.00628209114074707,
+        "positive_sign_rate": 0.6666666666666666
+      }
+    },
+    "residual": {
+      "repeat_clustered_bootstrap_95": {
+        "draws": 10000,
+        "lower_95": -0.005641055893566872,
+        "mean": 0.0016478415992524896,
+        "sampling_unit_count": 12,
+        "upper_95": 0.00906061857110924
+      },
+      "repeat_level_values": {
+        "0": 0.010891258716583252,
+        "1": 0.023814539114634197,
+        "2": -0.01911391814549764,
+        "3": -0.015189011891682943,
+        "4": 0.016920705636342365,
+        "5": 0.0003617008527119954,
+        "6": -0.010411043961842855,
+        "7": 0.018817702929178875,
+        "8": -0.004152854283650716,
+        "9": -0.001708666483561198,
+        "10": -0.0036958654721577964,
+        "11": 0.0032395521799723306
+      },
+      "summary": {
+        "count": 12,
+        "maximum": 0.023814539114634197,
+        "mean": 0.0016478415992524896,
+        "median": -0.0006734828154246013,
+        "minimum": -0.01911391814549764,
+        "positive_sign_rate": 0.5
+      }
+    }
+  },
+  "sampling_policy": {
+    "bootstrap_draws": 10000,
+    "bootstrap_seed": 20260724,
+    "primary_unit": "repeat",
+    "reason": "six OOD profiles generated within one repeat are treated as correlated measurements"
+  },
+  "schema_version": "v9-p0-statistical-robustness-v1",
+  "scope": "post-hoc statistics on the frozen Train-only P0 report",
+  "single_factor_profiles": [
+    "ood_shift_negative",
+    "ood_shift_positive",
+    "ood_broadening",
+    "ood_noise",
+    "ood_background",
+    "ood_texture"
+  ]
+}
