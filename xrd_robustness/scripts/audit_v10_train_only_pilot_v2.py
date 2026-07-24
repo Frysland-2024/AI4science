@@ -7,7 +7,7 @@ import json
 from pathlib import Path
 import sys
 import time
-from typing import Any
+from typing import Any, Mapping, Sequence
 
 import numpy as np
 import torch
@@ -41,7 +41,10 @@ from v10_pilot_config import (  # noqa: E402
     TRAIN_STRUCTURES_PER_CLASS,
     WARMUP_EPOCHS,
 )
-from v10_pilot_evaluation import evaluate_branch  # noqa: E402
+from v10_pilot_evaluation import (  # noqa: E402
+    classification_metrics,
+    evaluate_branch,
+)
 from v10_pilot_targets import balanced_train_take, canonical_hash  # noqa: E402
 from v10_pilot_training import PilotTrainStream, new_optimizer  # noqa: E402
 from v10_pilot_v2_evaluation import (  # noqa: E402
@@ -59,6 +62,37 @@ from xrd_robustness.models import PAMPT, PAMPTConfig  # noqa: E402
 
 SCHEMA_VERSION = "v10-train-only-pilot-v2"
 PRETRAIN_EPOCHS = 5
+LEARNED_STATE_STREAM_EPOCH = 30_000
+LEARNED_STATE_KEY_BASE = 30_000_000
+
+
+def _render_in_range_classification_panel(
+    *,
+    stream: PilotTrainStream,
+    material_ids: Sequence[str],
+    labels: Mapping[str, int],
+) -> dict[str, np.ndarray]:
+    """Render one deterministic train-profile pair per audit structure."""
+    first_rows: list[np.ndarray] = []
+    second_rows: list[np.ndarray] = []
+    crystal_labels: list[int] = []
+    sample_groups: list[str] = []
+    for batch_ids, first, second, _, _ in stream.batches(
+        material_ids,
+        stream_epoch=LEARNED_STATE_STREAM_EPOCH,
+        key_base=LEARNED_STATE_KEY_BASE,
+    ):
+        first_rows.append(np.asarray(first, dtype=np.float32))
+        second_rows.append(np.asarray(second, dtype=np.float32))
+        crystal_labels.extend(int(labels[material_id]) for material_id in batch_ids)
+        sample_groups.extend(str(material_id) for material_id in batch_ids)
+    return {
+        "first": np.concatenate(first_rows, axis=0),
+        "second": np.concatenate(second_rows, axis=0),
+        "crystal_labels": np.asarray(crystal_labels, dtype=np.int64),
+        "sample_groups": np.asarray(sample_groups),
+        "profile": np.asarray(["train"] * len(sample_groups)),
+    }
 
 
 def _base_report(
@@ -100,6 +134,8 @@ def _base_report(
             "pretraining_epochs": pretrain_epochs,
             "pretraining_structures": len(train_ids_all),
             "pretraining_uses_complete_frozen_train_split": True,
+            "learned_state_gate_profile": "train",
+            "premise_recheck_profiles": "controlled single-factor measurement panel",
             "branch_epochs": branch_epochs,
             "branch_train_structures_per_class": train_structures_per_class,
             "branch_total_train_structures": len(pilot_train_ids),
@@ -170,6 +206,14 @@ def _base_report(
         ],
         "runtime_seconds": time.perf_counter() - started,
     }
+
+
+def _finalize_runtime(report: dict[str, Any], started: float, device: torch.device) -> None:
+    report["runtime_seconds"] = time.perf_counter() - started
+    if device.type == "cuda":
+        report["runtime"]["peak_cuda_memory_bytes"] = int(
+            torch.cuda.max_memory_allocated(device)
+        )
 
 
 def run_pilot_v2(
@@ -285,6 +329,7 @@ def run_pilot_v2(
         worker_count=worker_count,
         prefetch_batches=prefetch_batches,
     )
+    learned_state_panel: dict[str, np.ndarray] | None = None
     try:
         for epoch_index in range(pretrain_epochs):
             epoch_report = pretrain_erm_epoch(
@@ -304,10 +349,48 @@ def run_pilot_v2(
                 f"accuracy={epoch_report['classification_accuracy_across_two_views']:.4f}",
                 flush=True,
             )
+        learned_state_panel = _render_in_range_classification_panel(
+            stream=pretrain_stream,
+            material_ids=audit_ids,
+            labels=labels,
+        )
     finally:
         pretrain_stream.close()
+    if learned_state_panel is None:
+        raise RuntimeError("learned-state panel was not rendered")
 
-    learned_evaluation = evaluate_branch(
+    learned_classification = classification_metrics(
+        base_model,
+        learned_state_panel,
+        device,
+        amp_enabled=runtime["amp_enabled"],
+    )
+    state_sampling_units = len(np.unique(learned_state_panel["sample_groups"]))
+    state_gate = learned_state_gate(
+        learned_classification,
+        audit_sampling_units=state_sampling_units,
+    )
+    report["learned_state_evaluation"] = {
+        "profile": "train",
+        "classification": learned_classification,
+        "sampling_units": state_sampling_units,
+        "not_a_generalization_claim": True,
+    }
+    report["learned_state_gate"] = state_gate
+    if state_gate["status"] != "PASS":
+        report["pilot_decision"] = {
+            "pilot_status": "INELIGIBLE_LEARNED_STATE",
+            "automatic_formal_v10_authorization": False,
+            "requires_human_review": True,
+            "rationale": (
+                "The paired-ERM backbone did not demonstrate in-range classification "
+                "learning; V10 mechanism evidence is therefore not interpretable."
+            ),
+        }
+        _finalize_runtime(report, started, device)
+        return report
+
+    learned_premise_evaluation = evaluate_branch(
         base_model,
         calibration_panel,
         audit_panel,
@@ -316,32 +399,11 @@ def run_pilot_v2(
         permutations=permutations,
         seed=SEED + 60_000,
     )
-    audit_sampling_units = len(np.unique(audit_panel["sample_groups"]))
-    state_gate = learned_state_gate(
-        learned_evaluation["controlled_panel_classification"],
-        audit_sampling_units=audit_sampling_units,
-    )
-    report["learned_state_evaluation"] = learned_evaluation
-    report["learned_state_gate"] = state_gate
-    if state_gate["status"] != "PASS":
-        report["pilot_decision"] = {
-            "pilot_status": "INELIGIBLE_LEARNED_STATE",
-            "automatic_formal_v10_authorization": False,
-            "requires_human_review": True,
-            "rationale": (
-                "The paired-ERM backbone did not demonstrate classification learning; "
-                "V10 mechanism evidence is therefore not interpretable."
-            ),
-        }
-        report["runtime_seconds"] = time.perf_counter() - started
-        if device.type == "cuda":
-            report["runtime"]["peak_cuda_memory_bytes"] = int(
-                torch.cuda.max_memory_allocated(device)
-            )
-        return report
-
-    premise = premise_recheck(learned_evaluation)
-    report["premise_recheck"] = premise
+    premise = premise_recheck(learned_premise_evaluation)
+    report["premise_recheck"] = {
+        "decision": premise,
+        "evaluation": learned_premise_evaluation,
+    }
     if premise["status"] != "PASS":
         report["pilot_decision"] = {
             "pilot_status": "HOLD_PREMISE_RECHECK",
@@ -349,14 +411,10 @@ def run_pilot_v2(
             "requires_human_review": True,
             "rationale": (
                 "The learned backbone did not reproduce the complete measurement-plus-"
-                "crystal-leakage premise required for a matched V10 branch comparison."
+                "crystal-leakage premise required for a matched V10 comparison."
             ),
         }
-        report["runtime_seconds"] = time.perf_counter() - started
-        if device.type == "cuda":
-            report["runtime"]["peak_cuda_memory_bytes"] = int(
-                torch.cuda.max_memory_allocated(device)
-            )
+        _finalize_runtime(report, started, device)
         return report
 
     models, v9_head, v10_head, perturbation_regressor, optimizers = (
@@ -419,11 +477,7 @@ def run_pilot_v2(
     report["pilot_decision"] = pilot_v2_decision(
         report["branch_epoch_evaluations"][-1]["branches"]
     )
-    report["runtime_seconds"] = time.perf_counter() - started
-    if device.type == "cuda":
-        report["runtime"]["peak_cuda_memory_bytes"] = int(
-            torch.cuda.max_memory_allocated(device)
-        )
+    _finalize_runtime(report, started, device)
     return report
 
 
