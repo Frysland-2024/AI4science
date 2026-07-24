@@ -30,6 +30,10 @@ Write-Host "Original SHA256: $OriginalHashBefore"
 
 $env:PYTHONPATH = (Join-Path $ProjectRoot "src")
 
+$StatisticsOutput = Join-Path $ProjectRoot "reports\v9_p0_statistical_robustness.json"
+$ReplicationOutput = Join-Path $ProjectRoot "reports\v9_p0_local_benefit_replication_seed1.json"
+$TrajectoryOutput = Join-Path $ProjectRoot "reports\v9_p0_short_trajectory.json"
+
 Write-Host "[1/4] Running focused follow-up utility tests..."
 & $PythonExe -m unittest discover -s tests -p "test_v9_p0_followups.py" -v
 if ($LASTEXITCODE -ne 0) {
@@ -39,7 +43,7 @@ if ($LASTEXITCODE -ne 0) {
 Write-Host "[2/4] Running CPU-only clustered bootstrap and leave-one-profile-out analysis..."
 & $PythonExe scripts\analyze_v9_p0_statistical_robustness.py `
     --input $Original `
-    --output "reports\v9_p0_statistical_robustness.json"
+    --output $StatisticsOutput
 if ($LASTEXITCODE -ne 0) {
     throw "Statistical robustness analysis failed."
 }
@@ -51,7 +55,7 @@ if (-not $SkipReplication) {
         --repeats $ReplicationRepeats `
         --worker-count $WorkerCount `
         --prefetch-batches $PrefetchBatches `
-        --output "reports\v9_p0_local_benefit_replication_seed1.json"
+        --output $ReplicationOutput
     if ($LASTEXITCODE -ne 0) {
         throw "Independent-seed replication failed."
     }
@@ -67,7 +71,7 @@ if (-not $SkipTrajectory) {
         --repeats $TrajectoryRepeats `
         --worker-count $WorkerCount `
         --prefetch-batches $PrefetchBatches `
-        --output "reports\v9_p0_short_trajectory.json"
+        --output $TrajectoryOutput
     if ($LASTEXITCODE -ne 0) {
         throw "Short-trajectory diagnostic failed."
     }
@@ -83,11 +87,14 @@ if ($OriginalHashAfter -ne $OriginalHashBefore) {
 Write-Host "All requested follow-ups completed."
 Write-Host "Original preserved: $Original"
 Write-Host "Original SHA256 unchanged: $OriginalHashAfter"
-Write-Host "New reports:"
-Write-Host "  reports\v9_p0_statistical_robustness.json"
+Write-Host "New reports and SHA256 values:"
+Write-Host "  $StatisticsOutput"
+Write-Host "  $((Get-FileHash -Algorithm SHA256 $StatisticsOutput).Hash)"
 if (-not $SkipReplication) {
-    Write-Host "  reports\v9_p0_local_benefit_replication_seed1.json"
+    Write-Host "  $ReplicationOutput"
+    Write-Host "  $((Get-FileHash -Algorithm SHA256 $ReplicationOutput).Hash)"
 }
 if (-not $SkipTrajectory) {
-    Write-Host "  reports\v9_p0_short_trajectory.json"
+    Write-Host "  $TrajectoryOutput"
+    Write-Host "  $((Get-FileHash -Algorithm SHA256 $TrajectoryOutput).Hash)"
 }
