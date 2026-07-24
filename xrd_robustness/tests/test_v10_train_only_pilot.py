@@ -27,6 +27,7 @@ def _params(
         noise_std_ratio=0.0,
         background_type="flat",
         severity_level=0,
+        noise_model="poisson_gaussian",
         poisson_count_scale=count_scale,
         electronic_noise_std_counts=electronic,
     )
