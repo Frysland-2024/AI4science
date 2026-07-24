@@ -4,154 +4,88 @@
 **Repository:** `Frysland-2024/AI4science`  
 **Active engineering root:** `xrd_robustness/`
 
-> This file records the current state only. Historical and abandoned directions remain in `PROJECT_JOURNEY.md`, archived design documents, and dated decision records.
+> Current-state record only. Historical reasoning remains in `PROJECT_JOURNEY.md` and dated decision files.
 
-## 1. Current research identity
+## 1. Research identity
 
 The active project is **V9-T: Algorithm Transfer for PXRD Robustness**.
 
-It is a bridge from materials-centered ML toward ML-centered scientific research. The paper asks whether different learning principles—not merely more simulated spectra—produce more robust and more transferable representations under controlled PXRD measurement-domain shift.
-
-The paper scope is now:
+Its current paper scope is:
 
 > **controlled simulated pretraining, zero-shot experimental robustness, and label-efficient real-domain adaptation for PXRD crystal-system classification.**
 
-It does not claim a new general-purpose ML theory.
+The project compares learning principles rather than merely increasing simulated data volume. It is an XRD-specific controlled method-transfer study, not a claim of new general-purpose ML theory.
 
-## 2. Core method comparison
-
-Under matched mother structures, perturbation views, architecture, optimizer budget and simulation evaluation panels, compare:
+## 2. Core methods
 
 1. `ordinary_dynamic_augmentation`: Dynamic/Paired ERM;
 2. `js_consistency_transfer`: JS Consistency;
 3. `residual_decorrelation_transfer`: Residual Class Decorrelation.
 
-The common paired-view flow is:
+Near-clean ERM and frozen offline physical augmentation remain simulation reference baselines.
 
-```text
-same mother structure and same dynamic pair
-├── Dynamic/Paired ERM: classification only
-├── JS Consistency: classification + prediction consistency
-└── Residual Decorrelation: classification + residual class decorrelation
-```
+## 3. Frozen simulation contract
 
-Near-clean ERM and frozen offline physical augmentation remain reference baselines. Dynamic augmentation is not claimed as the innovation.
+Materials Project structures: **14,060**.
 
-## 3. Frozen simulation data contract
-
-Total unique Materials Project structures: **14,060**.
-
-| Split | Structures | Role |
+| Split | Count | Role |
 |---|---:|---|
 | Train | 9,842 | training and dynamic view generation |
-| Validation | 2,109 | lambda selection, early stopping, checkpoint selection, simulation development comparison |
-| Test | 2,109 | locked final simulated evaluation |
+| Validation | 2,109 | lambda, early stopping, checkpoint and development comparison |
+| Test | 2,109 | locked simulated Test |
 
-Rules:
+All methods share the same mother-structure/family split. Dynamic ERM, JS and Residual also share the same sampler, pair schedule and accepted perturbation parameter-pair stream under matched seeds.
 
-- split at unique structure/family level;
-- all derived views inherit the mother-structure split;
-- Validation and Test never enter the training view generator;
-- all methods share the same mother structures and matched pair schedule.
-
-Each structure has a complete ideal-reflection cache containing peak position, integrated intensity, hkl, multiplicity, reciprocal vector and reflection-to-peak mapping.
-
-## 4. Frozen simulation perturbation family
-
-The active training distribution contains:
-
-- global zero shift: Uniform `[-0.2°, 0.2°]`, activation probability `0.5`;
-- FWHM: Uniform `[0.08°, 0.20°]`, activation probability `1.0`;
-- smooth third-order polynomial background, ratio Uniform `[0, 0.02]`, activation probability `0.5`;
-- Poisson count scale: Log-uniform `[2500, 40000]`;
-- electronic-noise standard deviation: Uniform `[0, 2]` counts;
-- March–Dollase parameter: Uniform `[0.8, 1.0]`, activation probability `0.7`.
-
-Activation probabilities describe training coverage, not empirical instrument frequencies.
-
-## 5. Method-parameter governance
-
-The one permitted pre-Validation range revision has been consumed and the candidate ranges are frozen:
+Frozen candidate grids:
 
 ```text
 lambda_JS  ∈ {0.3, 3.0, 30.0}
 lambda_res ∈ {0.2, 2.0, 20.0}
 ```
 
-The decisive Train-only candidate Gate directly measured weighted auxiliary and combined backbone gradients on a rebuilt learned state. Median weighted auxiliary/classification ratios were:
+Train-only semantics, learned-state and candidate-grid gates have passed. This does not authorize training.
 
-- JS: `0.02283 / 0.22842 / 2.28533`;
-- Residual: `0.02581 / 0.25854 / 2.58715`.
+## 4. Simulation execution state
 
-The ranges cover weak, material non-dominant and dominant influence. This does not authorize tuning.
+```text
+lambda tuning = 0/7
+formal simulation comparison = 0/15
+simulated Test = locked, not started
+active authoritative checkpoints = 0
+active training processes = 0
+```
 
-## 6. Simulation experiment state
+Formal desktop runs must start from optimizer step 0 after target-machine acceptance and explicit authorization.
 
-- lambda tuning: **0/7**;
-- seven tuning runs: planned, not started;
-- tuning execution switches: false;
-- active training process: none;
-- active authoritative checkpoint: none;
-- formal five-method, three-seed comparison: **0/15**;
-- simulated Test: locked, not authorized, not started;
-- previous laptop training products: non-authoritative and must not be resumed;
-- formal desktop execution must start from optimizer step 0 after engineering acceptance and explicit authorization.
+## 5. Real-domain research axis
 
-## 7. Completed engineering evidence
+Before any formal model accessed RRUFF-70, the real-data question was expanded from pure zero-shot evaluation to:
 
-The following gates are closed:
+- 0-shot experimental robustness;
+- 1/2/3-shot real-domain adaptation efficiency.
 
-- dynamic parameter rows remain batch/prefetch bounded;
-- maximum parameter rows per batch: 32;
-- maximum live rows under the registered prefetch window: 256;
-- Dynamic ERM, JS and Residual share the same sampler, pair schedule and parameter-pair hashes;
-- the same dynamic coordinate deterministically replays the same parameters;
-- Train/Validation/Test exclusion gates pass;
-- checkpoint resume audit passes 12/12 checks on the real reflection cache and CUDA;
-- method semantic audit passes 22/22 checks;
-- learned-state classification and residual-probe gates pass at epochs 3 and 5;
-- candidate-grid legality Gate passes for all six registered lambda values.
+Scientific question:
 
-The remaining blockers before 7-run execution are target-desktop acceptance and a separate explicit user authorization.
+> With identical real support samples, adaptation validation, CE objective and compute, do JS or Residual retain a relative advantage over Dynamic/Paired ERM?
 
-## 8. New real-domain research axis
-
-The old design restricted real spectra to a pure zero-shot final test. Before any formal model accessed RRUFF-70, the user approved a stronger transfer-learning question:
-
-> When Dynamic ERM, JS and Residual receive the same limited labeled real data and the same adaptation protocol, do JS or Residual retain a relative advantage and require fewer real labels?
-
-The paper now reports both:
-
-- **0-shot real robustness**;
-- **1/2/3-shot real-domain adaptation efficiency**.
-
-Absolute real-domain accuracy may improve after adaptation. The controlled comparison remains the relative difference between the three simulation-pretrained methods.
+Absolute accuracy may improve for every method; the controlled estimands remain the relative differences against Dynamic ERM.
 
 Decision record:
 
 - `00_project_context/decisions/2026-07-24_RRUFF_FEWSHOT_ADAPTATION.md`
 
-## 9. Frozen RRUFF-70 source corpus
+## 6. Frozen RRUFF-70 source and roles
 
-Dataset identity: `rruff-real-pxrd-70-v1.0-final`.
+Dataset: `rruff-real-pxrd-70-v1.0-final`, 70 measured mineral powder PXRD profiles, seven crystal systems, 10 per class.
 
-- 70 measured mineral powder PXRD profiles;
-- seven crystal systems;
-- 10 samples per crystal system;
-- source manifest SHA-256:
-  `17236DA1654E43370034DB6F7391C5882583FFAF62147856B8A85D79BC1174C5`;
-- no model prediction was used for dataset selection;
-- preprocessing: 10–80°, 0.02°, linear interpolation, zero fill, max normalization, no smoothing, no baseline subtraction, no manual peak editing.
-
-The corpus measures simulation-to-experiment measurement-domain transfer. It is not claimed as a strict unseen-structure benchmark or a quantitative phase-purity benchmark.
-
-## 10. Frozen RRUFF real-domain roles
-
-Role assignment occurred before model access using:
+Source manifest SHA-256:
 
 ```text
-SHA256(20260724 | crystal_system | sample_id)
+17236DA1654E43370034DB6F7391C5882583FFAF62147856B8A85D79BC1174C5
 ```
+
+Role assignment occurred before model access using ascending
+`SHA256(20260724|crystal_system|sample_id)` within each class:
 
 | Role | Per class | Total |
 |---|---:|---:|
@@ -159,132 +93,114 @@ SHA256(20260724 | crystal_system | sample_id)
 | adaptation validation | 2 | 14 |
 | final real test | 5 | 35 |
 
-Frozen local manifests:
-
-- `data/real_xrd/rruff70/manifests/rruff70_real_adaptation_split_v1.csv`
-  - SHA-256 `32C63334CF8EBEAC4CBE109E273E409345C5998C4247E867D464836B92EA4455`
-- `data/real_xrd/rruff70/manifests/rruff70_fewshot_episode_manifest_v1.csv`
-  - SHA-256 `B38CE6083CE2F0D181C7E0B597112C0CAB852B9B8F92D9C77EDBACA7359EB0E6`
-
-These files and spectra are local Git-ignored data and must not be committed.
-
-## 11. Few-shot episode design
-
-Within each class, the three adaptation-train samples receive frozen ranks 1/2/3.
-
-- 0-shot: no real training data;
-- 1-shot: three episodes using rank 1, rank 2 or rank 3;
-- 2-shot: three episodes using (1,2), (1,3) or (2,3);
-- 3-shot: one episode using all three ranks.
-
-Every method and every pretraining seed must use the identical episode membership.
-
-## 12. Primary real-adaptation protocol
-
-Primary analysis:
-
-- start from the frozen simulation-pretrained checkpoint for each method and seed;
-- freeze encoder;
-- update classifier head only;
-- cross-entropy only;
-- no JS or Residual auxiliary loss on real data;
-- AdamW;
-- learning-rate candidates `[1e-4, 3e-4, 1e-3]`;
-- weight decay `1e-4`;
-- maximum 200 epochs;
-- patience 30;
-- select adaptation checkpoint by 14-sample adaptation-validation Macro-F1;
-- tie break by smaller learning rate, then earlier epoch.
-
-A preregistered secondary analysis allows full-network CE fine-tuning with `[1e-6, 3e-6, 1e-5]`, maximum 100 epochs and patience 20.
-
-## 13. Final real-test boundary
-
-The 35 final-real-test samples remain fully locked until:
-
-1. Simulation Validation tuning is complete;
-2. formal hyperparameters are frozen for all three core methods;
-3. three checkpoint hashes per method are frozen;
-4. simulated Test is complete and immutable;
-5. real-adaptation code, tests and preflight pass;
-6. all adapted checkpoint hashes are frozen;
-7. the user provides separate final-real-test authorization.
-
-The final stage must evaluate all preregistered 0/1/2/3-shot method/seed/episode combinations in one immutable run. Results cannot change support samples, learning rate, epoch, checkpoint or dataset membership.
-
-## 14. Real-domain metrics and estimands
-
-At each shot budget, primary effects are:
+Role manifest SHA-256:
 
 ```text
-Delta_JS  = MacroF1(JS)       - MacroF1(Dynamic ERM)
-Delta_RES = MacroF1(Residual) - MacroF1(Dynamic ERM)
+32C63334CF8EBEAC4CBE109E273E409345C5998C4247E867D464836B92EA4455
 ```
 
-Required reporting includes:
+Few-shot episode manifest SHA-256:
 
-- Accuracy, Balanced Accuracy, Macro-F1;
-- per-class Recall/F1 and confusion matrix;
-- within-method gain from 0-shot;
-- all pretraining seeds and support episodes;
-- crystal-system-stratified paired bootstrap 95% intervals;
-- the complete label-efficiency curve, not only the best shot.
+```text
+B38CE6083CE2F0D181C7E0B597112C0CAB852B9B8F92D9C77EDBACA7359EB0E6
+```
 
-## 15. GTIIT status
+These manifests and spectra are local Git-ignored data.
 
-GTIIT does not enter RRUFF adaptation train, adaptation validation or final-test aggregate metrics.
+## 7. Few-shot design
 
-It remains a supplementary local-instrument case study and still requires:
+Each class has frozen adaptation-train ranks 1/2/3:
 
-- de-identification;
-- sample-level label evidence;
-- batch and duplicate isolation;
-- provenance manifest;
-- separate authorization.
+- 0-shot: no real training data;
+- 1-shot: three episodes using rank 1, 2 or 3;
+- 2-shot: three episodes using (1,2), (1,3) or (2,3);
+- 3-shot: one episode using (1,2,3).
 
-## 16. Current real-domain engineering state
+All methods and pretraining seeds use identical episode membership.
 
-Completed:
+Primary adaptation:
 
-- scientific design frozen;
-- RRUFF-70 role assignment frozen;
-- support episodes frozen;
-- GitHub protocol and machine-readable design contract added.
+- encoder frozen;
+- classifier head trainable;
+- CE only;
+- AdamW;
+- LR `[1e-4, 3e-4, 1e-3]`;
+- weight decay `1e-4`;
+- max 200 epochs;
+- patience 30;
+- adaptation-validation Macro-F1 selects checkpoint.
 
-Not completed:
+Secondary preregistered analysis: full-network CE with LR `[1e-6, 3e-6, 1e-5]`, max 100 epochs and patience 20.
 
-- local manifests copied into the project data path;
+## 8. Implemented real-adaptation engineering
+
+Implemented and committed:
+
+- `configs/real_adaptation.v9.method_transfer.json`;
+- `src/xrd_robustness/evaluation/real_adaptation.py`;
 - `scripts/audit_v9_real_adaptation_contract.py`;
-- `scripts/run_v9_real_adaptation.py`;
-- adaptation unit tests;
-- adaptation training;
-- final real test.
+- `scripts/run_v9_real_adaptation.py` preflight/plan paths;
+- `tests/test_v9_real_adaptation_contract.py`;
+- updated README, engineering, data, handoff and decision documentation.
 
-Therefore:
+The audit is fail-closed and loads neither models nor spectra. It validates CSV hashes, 70 unique samples, 21/14/35 counts, seven-class 3/2/5 balance, train ranks, episode membership and final-test exclusion.
+
+The deterministic planner produces:
+
+- primary: 189 candidate training runs, 63 checkpoint-selection groups, 9 zero-shot evaluations;
+- primary + secondary: 378 candidate runs and 126 selection groups.
+
+`run_v9_real_adaptation.py run` currently refuses execution.
+
+## 9. Targeted verification completed
+
+An isolated targeted test run passed 3/3 tests:
+
+- complete role/episode fixture passes without model or spectrum access;
+- plan counts are deterministic;
+- manifest hash mismatch fails closed.
+
+The actual generated RRUFF split artifacts also passed the same local audit:
+
+- 70 unique samples;
+- 21/14/35 role counts;
+- every class 3/2/5;
+- all seven registered support episodes balanced;
+- 14 validation and 35 final-test samples in every episode.
+
+The full repository test suite has not been run through the GitHub connector; it must be rerun in the local worktree.
+
+## 10. Remaining blockers
+
+- copy the frozen manifests into the project Git-ignored path;
+- run strict `--require-local-data` preflight in `E:/AI4science`;
+- implement approved simulation-checkpoint loading;
+- implement head-only adaptation training and adaptation-validation selection;
+- bind adapted checkpoint and result hashes;
+- finish target-desktop acceptance;
+- obtain separate authorizations for 7-run, adaptation train/validation and final real test.
+
+Current locks:
 
 ```text
 real_adaptation.execution_enabled = false
 final_real_test.enabled = false
 ```
 
-## 17. Immediate next actions
+## 11. GTIIT status
 
-1. Complete desktop migration and first-boot engineering acceptance.
-2. Run the existing simulation preflight and full unit suite.
-3. Obtain explicit authorization before enabling the 7-run.
-4. Implement the real-adaptation preflight, runner and tests without loading final-test data.
-5. Copy the frozen local RRUFF manifests and verify the registered hashes.
-6. Keep simulated Test, adaptation execution and final real test under separate locks.
+GTIIT is not part of RRUFF adaptation train, validation or final-test aggregate metrics. It remains a supplementary local-instrument case study requiring de-identification, label evidence, batch/duplicate isolation, provenance and separate authorization.
 
-## 18. Evidence priority
+## 12. Immediate next commands
 
-When evidence disagrees, use this order:
+After copying the two frozen manifests into
+`E:/AI4science/xrd_robustness/data/real_xrd/rruff70/manifests/`:
 
-1. frozen machine-readable configurations;
-2. current source code and hashes;
-3. matching audit reports and experiment registry;
-4. this `CURRENT_STATE.md`;
-5. current design documents and dated decision records;
-6. archived plans and historical conversations.
+```powershell
+$env:PYTHONPATH='E:\AI4science\xrd_robustness\src'
+E:\AI4science\.venvs\xrd_tools\Scripts\python.exe -s scripts\audit_v9_real_adaptation_contract.py --require-local-data
+E:\AI4science\.venvs\xrd_tools\Scripts\python.exe -s scripts\run_v9_real_adaptation.py plan
+E:\AI4science\.venvs\xrd_tools\Scripts\python.exe -s -m unittest discover -s tests -p 'test_*.py' -v
+```
 
-A conflict between higher-priority evidence sources must stop training or test access and trigger a new audit.
+No real-data training or final-test inference is currently authorized.
