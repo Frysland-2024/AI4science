@@ -25,7 +25,7 @@
 |---|---|
 | 14,060 结构 family-aware 划分 | 冻结：Train 9,842 / Validation 2,109 / Test 2,109 |
 | 方法参数候选范围 | 冻结：JS `[0.3,3,30]`；Residual `[0.2,2,20]` |
-| Simulation Validation tuning | **0/7，已授权在实测笔记本上执行；等待注册启动器启动** |
+| Simulation Validation tuning | **0/7，已授权；笔记本严格等价扫描已冻结 16-worker/16-batch 预取，等待注册启动器从零启动** |
 | 正式模拟实验 | **0/15，未开始** |
 | simulated Test | 锁定、未执行 |
 | RRUFF-70 样品组成 | 冻结 |

@@ -75,7 +75,7 @@
   },
   "hardware_profile": {
     "path": "configs/hardware.v9.laptop.7945hx_4060.json",
-    "sha256": "A961E8CD22A2E4CAF6F0ACA114F61BA4125BBE144578B0299874D2B07E386AB3"
+    "sha256": "A0FC0DA4F20D30F60F3498535B893EA747F8FE7535138A57304D10E26E3142A0"
   },
   "runtime": {
     "python_executable": "E:/AI4science/.venvs/xrd_tools/Scripts/python.exe",
@@ -215,10 +215,10 @@
         "dynamic_js",
         "dynamic_residual"
       ],
-      "worker_processes": 8,
+      "worker_processes": 16,
       "worker_native_threads": 1,
       "worker_thread_policy": "fixed-native-thread-env-v1",
-      "prefetch_batches": 8,
+      "prefetch_batches": 16,
       "multiprocessing_start_method": "spawn",
       "sharding_algorithm": "sha256-material-id-mod-v1",
       "result_order": "absolute-step-then-batch-offset",

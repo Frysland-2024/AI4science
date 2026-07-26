@@ -29,9 +29,9 @@
         "dynamic_js",
         "dynamic_residual"
       ],
-      "worker_processes": 8,
+      "worker_processes": 16,
       "worker_native_threads": 1,
-      "prefetch_batches": 8,
+      "prefetch_batches": 16,
       "multiprocessing_start_method": "spawn",
       "fixed_view_generation": "frozen-manifest-process-prefetch-v1",
       "clean_duplicate_policy": "render-once-reuse-x1-as-x2",
@@ -74,8 +74,8 @@
     "run_concurrency": 1,
     "parallel_run_scheduler": {
       "strategy": "serial-v1",
-      "concurrent_run_prefetch_workers": 8,
-      "serial_tail_prefetch_workers": 8,
+      "concurrent_run_prefetch_workers": 16,
+      "serial_tail_prefetch_workers": 16,
       "failure_policy": "stop-after-failed-run",
       "registry_write_policy": "parent-process-only"
     }
@@ -112,11 +112,11 @@
       "readiness_audit": "scripts/audit_v9_desktop_readiness.py"
     },
     "current_selection": {
-      "worker_processes": 8,
-      "prefetch_batches": 8,
+      "worker_processes": 16,
+      "prefetch_batches": 16,
       "run_concurrency": 1,
       "decision": "explicit user authorization to execute the seven-run tuning stage on the laptop",
-      "evidence_note": "Prior matched laptop audits passed exact prefetch and evaluation equivalence. Fresh runtime, power, process, registry, and bounded acceleration checks are required immediately before launch."
+      "evidence_note": "A fresh 128-batch strict-equivalence audit passed with exact manifests, material order, parameters, spectra, parameter hashes, and quality-gate counts. The frozen 16-worker/16-batch configuration delivered about 32.4 batches/s and was the fastest tested point; 8/8, 12/12, 20/20, and 24/24 delivered 13.56, 17.67, 23.15, and 29.08 batches/s respectively in the selection sweep."
     },
     "selection_rule": "Run only one registered tuning job at a time. Stop after any failed run and keep formal and final evaluation locks closed."
   }

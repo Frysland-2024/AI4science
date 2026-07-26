@@ -26,25 +26,25 @@ class V9ParallelLauncherTests(unittest.TestCase):
         self.argv = [
             "scripts/train_v7.py",
             "--dynamic-prefetch-workers",
-            "8",
+            "16",
             "--dynamic-prefetch-batches",
-            "8",
+            "16",
         ]
 
     def test_registered_laptop_concurrency_uses_all_workers_for_one_run(self) -> None:
         self.assertEqual(self.applied["run_concurrency"], 1)
         effective, workers = _scheduled_argv(self.argv, self.scheduler, group_size=1)
-        self.assertEqual(workers, 8)
+        self.assertEqual(workers, 16)
         self.assertEqual(
-            effective[effective.index("--dynamic-prefetch-workers") + 1], "8"
+            effective[effective.index("--dynamic-prefetch-workers") + 1], "16"
         )
         self.assertEqual(self.scheduler["strategy"], "serial-v1")
 
-    def test_unpaired_tail_run_restores_all_eight_workers(self) -> None:
+    def test_serial_run_restores_all_sixteen_workers(self) -> None:
         effective, workers = _scheduled_argv(self.argv, self.scheduler, group_size=1)
-        self.assertEqual(workers, 8)
+        self.assertEqual(workers, 16)
         self.assertEqual(
-            effective[effective.index("--dynamic-prefetch-workers") + 1], "8"
+            effective[effective.index("--dynamic-prefetch-workers") + 1], "16"
         )
 
 
