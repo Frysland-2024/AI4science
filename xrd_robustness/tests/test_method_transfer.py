@@ -149,6 +149,15 @@ class MethodTransferContractTests(unittest.TestCase):
 
     def test_tuning_plan_is_seven_full_budget_validation_only_runs(self):
         plan = build_tuning_plan(self.contract, PROJECT_ROOT)
+        self.assertEqual(
+            self.contract["checkpoint_selection"]["validation_interval_epochs"],
+            10,
+        )
+        self.assertEqual(
+            self.contract["checkpoint_selection"]["patience_validation_checks"],
+            2,
+        )
+        self.assertEqual(self.contract["checkpoint_selection"]["patience_epochs"], 20)
         self.assertEqual(plan["run_count"], 7)
         self.assertEqual(
             plan["execution_enabled"],
@@ -209,7 +218,7 @@ class MethodTransferContractTests(unittest.TestCase):
             )
             self.assertEqual(
                 run["argv"][run["argv"].index("--validation-interval-steps") + 1],
-                "3080",
+                "6160",
             )
             self.assertEqual(
                 run["argv"][run["argv"].index("--early-stopping-min-epochs") + 1],
@@ -217,7 +226,7 @@ class MethodTransferContractTests(unittest.TestCase):
             )
             self.assertEqual(
                 run["argv"][run["argv"].index("--early-stopping-patience") + 1],
-                "4",
+                "2",
             )
             self.assertEqual(
                 run["argv"][run["argv"].index("--early-stopping-min-delta") + 1],

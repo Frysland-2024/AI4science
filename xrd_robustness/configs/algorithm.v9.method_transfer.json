@@ -1,7 +1,7 @@
 {
   "$schema": "algorithm.v9.method_transfer.schema.json",
   "schema_version": "v9.1-method-transfer",
-  "status": "v9t_100_epoch_early_stopping_retuning_authorized_on_measured_laptop",
+  "status": "v9t_100_epoch_10_epoch_validation_patience2_retuning_authorized_on_measured_laptop",
   "study_kind": "cross_domain_method_transfer",
   "research_question": "Under matched crystal structures, physical-augmentation views, architecture, maximum compute budget, Validation early-stopping rule, and evaluation panels, does explicit modeling of relations between differently perturbed views of the same crystal structure through JS consistency or residual class decorrelation improve PXRD generalization to unseen perturbations and real experimental patterns beyond augmentation-only supervised learning?",
   "narrative_policy": {
@@ -145,9 +145,9 @@
   "checkpoint_selection": {
     "strategy": "validation_early_stopping",
     "max_epochs": 100,
-    "validation_interval_epochs": 5,
+    "validation_interval_epochs": 10,
     "minimum_epochs": 50,
-    "patience_validation_checks": 4,
+    "patience_validation_checks": 2,
     "patience_epochs": 20,
     "min_delta": 0.001,
     "primary_metric": "mean_single_factor_ood_macro_f1",
@@ -190,8 +190,8 @@
     "seed": 20260710,
     "epochs": 100,
     "max_optimizer_steps": 61600,
-    "validation_interval_steps": 3080,
-    "output_root": "outputs/v9_method_transfer_tuning_100e_early_stopping",
+    "validation_interval_steps": 6160,
+    "output_root": "outputs/v9_method_transfer_tuning_100e_10epoch_patience2",
     "baseline_method_id": "ordinary_dynamic_augmentation",
     "candidates": [
       {
@@ -211,13 +211,13 @@
       "primary_metric": "mean_single_factor_ood_macro_f1",
       "maximum_id_drop_vs_baseline": 0.01,
       "tie_breaker": "smallest_lambda",
-      "selection_artifact": "reports/v9_method_transfer_tuning_selection_100e_early_stopping.json",
+      "selection_artifact": "reports/v9_method_transfer_tuning_selection_100e_10epoch_patience2.json",
       "selection_artifact_required_before_formal_plan": true
     }
   },
   "formal_hyperparameters": {
     "frozen": false,
-    "selection_artifact": "reports/v9_method_transfer_tuning_selection_100e_early_stopping.json",
+    "selection_artifact": "reports/v9_method_transfer_tuning_selection_100e_10epoch_patience2.json",
     "selection_artifact_sha256": null,
     "values": {
       "lambda_js": null,
@@ -229,7 +229,7 @@
     "seeds": [20260711, 20260712, 20260713],
     "epochs": 100,
     "max_optimizer_steps": 61600,
-    "validation_interval_steps": 3080,
+    "validation_interval_steps": 6160,
     "batch_size": 16,
     "evaluation_batch_size": 256,
     "device": "cuda",

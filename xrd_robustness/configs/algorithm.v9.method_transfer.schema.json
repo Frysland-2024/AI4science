@@ -247,9 +247,9 @@
       "properties": {
         "strategy": {"const": "validation_early_stopping"},
         "max_epochs": {"const": 100},
-        "validation_interval_epochs": {"const": 5},
+        "validation_interval_epochs": {"const": 10},
         "minimum_epochs": {"const": 50},
-        "patience_validation_checks": {"const": 4},
+        "patience_validation_checks": {"const": 2},
         "patience_epochs": {"const": 20},
         "min_delta": {"const": 0.001},
         "primary_metric": {"const": "mean_single_factor_ood_macro_f1"},

@@ -6,6 +6,22 @@
 
 > Current-state record only. Historical reasoning remains in `PROJECT_JOURNEY.md` and dated decision files.
 
+## 2026-07-26 authoritative 10-epoch Validation override
+
+The user replaced the initial 5-epoch / patience-4 schedule before it produced
+any countable tuning result. The superseded queue was stopped at epoch 14 /
+optimizer step 8,624 of its first run and preserved intact under
+`outputs/superseded_v9_tuning_5epoch_patience4_20260726_1859`; it must not be
+resumed or counted.
+
+The active retuning contract keeps the 100-epoch / 61,600-step maximum,
+`min_epochs=50`, `min_delta=0.001`, monitor, checkpoint artifacts and
+tie-breakers unchanged, but Validation now runs every 10 epochs / 6,160 steps
+and patience is 2 Validation checks. The no-improvement window therefore remains
+20 epochs while avoiding half of the scheduled Validation passes. All seven
+candidates restart from optimizer step 0 in
+`outputs/v9_method_transfer_tuning_100e_10epoch_patience2`.
+
 ## 2026-07-26 authoritative 100-epoch retuning override
 
 The user has authorized a fresh Validation-only rerun of the complete frozen

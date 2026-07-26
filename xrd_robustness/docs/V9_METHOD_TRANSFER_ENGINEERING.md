@@ -1,5 +1,11 @@
 # V9-T 算法迁移与真实域适配工程契约
 
+> 2026-07-26 latest execution override: Validation now runs every 10 epochs /
+> 6,160 optimizer steps with patience 2. The effective 20-epoch
+> no-improvement window is unchanged. The superseded 5-epoch / patience-4
+> partial run is isolated and does not count; all seven candidates restart from
+> optimizer step 0 in the new output root.
+
 > 2026-07-26 execution override: the complete frozen seven-candidate
 > Validation-only grid is being rerun from optimizer step 0 with
 > `max_epochs=100`, `max_optimizer_steps=61600`, Validation every 5 epochs

@@ -211,6 +211,13 @@ def validate_contract(contract: Mapping[str, Any]) -> None:
     )
     if validation_interval_epochs <= 0:
         raise ValueError("validation_interval_epochs must be positive")
+    if int(checkpoint_selection["minimum_epochs"]) % validation_interval_epochs != 0:
+        raise ValueError("minimum_epochs must be a scheduled Validation epoch")
+    if int(checkpoint_selection.get("patience_epochs", 0)) != (
+        validation_interval_epochs
+        * int(checkpoint_selection["patience_validation_checks"])
+    ):
+        raise ValueError("patience_epochs must equal interval times patience checks")
     if int(experiment["max_optimizer_steps"]) != int(experiment["epochs"]) * steps_per_epoch:
         raise ValueError("maximum optimizer steps must cover complete registered epochs")
     if int(experiment["validation_interval_steps"]) != (

@@ -30,12 +30,12 @@ from xrd_robustness.method_transfer import (
 DEFAULT_CONTRACT = PROJECT_ROOT / "configs" / "algorithm.v9.method_transfer.json"
 DEFAULT_PREFLIGHT = PROJECT_ROOT / "reports" / "v9_method_transfer_preflight.json"
 DEFAULT_TUNING_PLAN = (
-    PROJECT_ROOT / "reports" / "v9_method_transfer_tuning_plan_100e_early_stopping.json"
+    PROJECT_ROOT / "reports" / "v9_method_transfer_tuning_plan_100e_10epoch_patience2.json"
 )
 DEFAULT_TUNING_SELECTION = (
     PROJECT_ROOT
     / "reports"
-    / "v9_method_transfer_tuning_selection_100e_early_stopping.json"
+    / "v9_method_transfer_tuning_selection_100e_10epoch_patience2.json"
 )
 DEFAULT_PLAN = PROJECT_ROOT / "reports" / "v9_method_transfer_run_plan.json"
 DEFAULT_COMPARISON = PROJECT_ROOT / "reports" / "v9_method_transfer_validation_comparison.json"
@@ -222,7 +222,7 @@ def _parser() -> argparse.ArgumentParser:
         default=str(
             PROJECT_ROOT
             / "outputs"
-            / "v9_method_transfer_tuning_100e_early_stopping"
+            / "v9_method_transfer_tuning_100e_10epoch_patience2"
         ),
     )
     tuning_select.add_argument("--output", default=str(DEFAULT_TUNING_SELECTION))

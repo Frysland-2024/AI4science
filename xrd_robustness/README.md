@@ -25,7 +25,7 @@
 |---|---|
 | 14,060 结构 family-aware 划分 | 冻结：Train 9,842 / Validation 2,109 / Test 2,109 |
 | 方法参数候选范围 | 冻结：JS `[0.3,3,30]`；Residual `[0.2,2,20]` |
-| Simulation Validation tuning | **旧 50-epoch endpoint 7/7 已归档；新的 100-epoch early-stopping 完整网格已获授权并从 0/7 重新执行** |
+| Simulation Validation tuning | **旧 50-epoch endpoint 7/7 已归档；新合同为最多 100 epoch、每 10 epoch Validation、patience 2，完整网格从 0/7 重启** |
 | 正式模拟实验 | **0/15，未开始** |
 | simulated Test | 锁定、未执行 |
 | RRUFF-70 样品组成 | 冻结 |
@@ -125,7 +125,7 @@ E:\AI4science\.venvs\xrd_tools\Scripts\python.exe -s scripts\run_v9_method_trans
 # 仅生成 7-run 计划，不训练
 E:\AI4science\.venvs\xrd_tools\Scripts\python.exe -s scripts\run_v9_method_transfer.py tune-plan
 
-# 当前已授权的 100-epoch 上限、Validation-only 七条串行调参队列
+# 当前已授权的 100-epoch 上限、每 10 epoch Validation、patience 2 的七条串行调参队列
 E:\AI4science\.venvs\xrd_tools\Scripts\python.exe -s scripts\run_v9_method_transfer.py tune-run --confirm-development-tuning --max-parallel-runs 1
 
 # 检查 Test 锁

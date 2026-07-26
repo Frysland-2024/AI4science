@@ -1,7 +1,7 @@
 {
   "configured_prefetch_batches": 16,
   "contract": "E:\\AI4science\\xrd_robustness\\configs\\algorithm.v9.method_transfer.json",
-  "contract_sha256": "07b9624f36fcb06adf14e89b9fa383844de4be2f43e2d8d72800231bfda41484",
+  "contract_sha256": "fc14c8fbedc993eeb36374992fe90480720e633ed3e93deb7b2e85084d6e7e56",
   "epoch_shuffle_hashes": [
     "7bcc24b9567391da5af5ef7b6d0da5a29e87a9dbfc1efd472c74d9e6ce503b5c",
     "282b84ba8db3fed80f1cc0ef082c0abe98e935756e5798e59fb452357e86edd7",

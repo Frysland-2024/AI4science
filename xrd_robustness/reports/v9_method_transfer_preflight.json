@@ -1,5 +1,5 @@
 {
-  "contract_status": "v9t_100_epoch_early_stopping_retuning_authorized_on_measured_laptop",
+  "contract_status": "v9t_100_epoch_10_epoch_validation_patience2_retuning_authorized_on_measured_laptop",
   "core_comparison_run_count": 9,
   "cross_split_family_count": 0,
   "development_profiles": [

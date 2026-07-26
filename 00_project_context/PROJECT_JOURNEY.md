@@ -483,3 +483,19 @@ sampler、pair 与 parameter hashes，而不再要求每条 run 的最终完整�
 或实际步数相等。旧 50-epoch 选择仍作为历史固定终点证据保留，但不再是
 新制度下的最终 lambda 结论。15-run 正式实验、simulated Test、real XRD、
 真实适配和 V10 仍未获授权。
+
+## 2026-07-26：在首条未完成 run 阶段把 Validation 间隔改为 10 epochs
+
+初始 100-epoch 合同按每 5 epochs Validation、patience 4 启动后，首条
+Dynamic ERM 在 epoch 14 / optimizer step 8,624 时仍未形成任何可计数的
+最终结果。实测确认训练主体很快，而包含 11 个面板、23,199 条预测的
+Validation 是新增时间的主要来源。用户因此在结果产生前明确将间隔改为
+每 10 epochs / 6,160 steps，并把 patience 改为 2。
+
+两套参数都表示连续 20 epochs 没有超过 `min_delta=0.001` 的主指标改善，
+因此停止等待窗口不变；变化只减少预定 Validation 次数。旧进程被停止，
+其两次 Validation、`best.ckpt`、`last.ckpt`、history 和日志完整隔离到
+`outputs/superseded_v9_tuning_5epoch_patience4_20260726_1859`，不得恢复或
+计入新七条。候选网格、seed、模型、最大 61,600 步、最少 50 epochs、
+监控指标、tie-break、硬件调度及所有数据边界均不变。新七条必须从
+optimizer step 0 在独立输出根重启。
