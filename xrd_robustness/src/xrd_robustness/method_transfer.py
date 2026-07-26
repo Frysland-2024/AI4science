@@ -99,9 +99,12 @@ def validate_contract(contract: Mapping[str, Any]) -> None:
             raise ValueError(f"{name} must be an object")
 
     if trainer.get("supporting_paths") != [
-        "src/xrd_robustness/training_prefetch.py"
+        "src/xrd_robustness/training_prefetch.py",
+        "src/xrd_robustness/training/early_stopping.py",
     ]:
-        raise ValueError("trainer supporting_paths must freeze the dynamic prefetch implementation")
+        raise ValueError(
+            "trainer supporting_paths must freeze prefetch and early-stopping implementations"
+        )
     if not str(hardware_profile.get("path", "")).strip() or len(
         str(hardware_profile.get("sha256", ""))
     ) != 64:
@@ -171,6 +174,49 @@ def validate_contract(contract: Mapping[str, Any]) -> None:
         raise ValueError("validation_interval_steps must be positive")
     if experiment.get("development_only") is not True:
         raise ValueError("method-transfer experiment must keep test splits locked")
+    checkpoint_selection = contract.get("checkpoint_selection")
+    if not isinstance(checkpoint_selection, Mapping):
+        raise ValueError("checkpoint_selection must be an object")
+    if checkpoint_selection.get("strategy") != "validation_early_stopping":
+        raise ValueError("checkpoint selection must use Validation early stopping")
+    if int(checkpoint_selection.get("max_epochs", 0)) != int(experiment["epochs"]):
+        raise ValueError("checkpoint max_epochs must match experiment.epochs")
+    if int(checkpoint_selection.get("minimum_epochs", 0)) <= 0:
+        raise ValueError("checkpoint minimum_epochs must be positive")
+    if int(checkpoint_selection["minimum_epochs"]) > int(experiment["epochs"]):
+        raise ValueError("checkpoint minimum_epochs cannot exceed max_epochs")
+    if int(checkpoint_selection.get("patience_validation_checks", 0)) <= 0:
+        raise ValueError("checkpoint patience must be positive")
+    if float(checkpoint_selection.get("min_delta", -1)) < 0:
+        raise ValueError("checkpoint min_delta cannot be negative")
+    if checkpoint_selection.get("primary_metric") != "mean_single_factor_ood_macro_f1":
+        raise ValueError("unexpected early-stopping primary metric")
+    primary_profiles = list(checkpoint_selection.get("primary_ood_profiles", []))
+    if primary_profiles != list(
+        contract["validation_comparison"]["primary_ood_profiles"]
+    ):
+        raise ValueError("early-stopping profiles must match the registered primary profiles")
+    if checkpoint_selection.get("tie_breakers") != [
+        "validation_id_macro_f1",
+        "earlier_epoch",
+    ]:
+        raise ValueError("unexpected early-stopping tie breakers")
+    steps_per_epoch = (
+        int(contract["data"]["expected_split_counts"]["train"])
+        + int(experiment["batch_size"])
+        - 1
+    ) // int(experiment["batch_size"])
+    validation_interval_epochs = int(
+        checkpoint_selection.get("validation_interval_epochs", 0)
+    )
+    if validation_interval_epochs <= 0:
+        raise ValueError("validation_interval_epochs must be positive")
+    if int(experiment["max_optimizer_steps"]) != int(experiment["epochs"]) * steps_per_epoch:
+        raise ValueError("maximum optimizer steps must cover complete registered epochs")
+    if int(experiment["validation_interval_steps"]) != (
+        validation_interval_epochs * steps_per_epoch
+    ):
+        raise ValueError("validation interval steps must equal complete registered epochs")
     dynamic_prefetch = experiment.get("dynamic_view_prefetch")
     if not isinstance(dynamic_prefetch, Mapping):
         raise ValueError("experiment.dynamic_view_prefetch must be an object")
@@ -914,6 +960,15 @@ def _training_argv(
         str(max_optimizer_steps),
         "--validation-interval-steps",
         str(validation_interval_steps),
+        "--early-stopping",
+        "--early-stopping-min-epochs",
+        str(contract["checkpoint_selection"]["minimum_epochs"]),
+        "--early-stopping-patience",
+        str(contract["checkpoint_selection"]["patience_validation_checks"]),
+        "--early-stopping-min-delta",
+        str(contract["checkpoint_selection"]["min_delta"]),
+        "--early-stopping-ood-profiles",
+        ",".join(contract["checkpoint_selection"]["primary_ood_profiles"]),
         "--batch-size",
         str(experiment["batch_size"]),
         "--evaluation-batch-size",
@@ -1168,6 +1223,9 @@ def build_run_plan(contract: Mapping[str, Any], project_root: str | Path) -> dic
 
 
 def _final_evaluation(result: Mapping[str, Any]) -> Mapping[str, Any]:
+    selected = result.get("selection_evaluation")
+    if isinstance(selected, Mapping) and "in_range" in selected and "ood" in selected:
+        return selected
     for item in reversed(result.get("history", [])):
         if "in_range" in item and "ood" in item:
             return item
@@ -1260,13 +1318,31 @@ def _load_audited_result(
         raise ValueError(f"formal result was not produced on CUDA: {result_path}")
 
     compute = result.get("compute_summary", {})
-    expected_forward_views = expected_optimizer_steps * 2
-    expected_structure_exposures = expected_optimizer_steps * int(
+    actual_optimizer_steps = int(compute.get("optimizer_steps", -1))
+    steps_per_epoch = (
+        int(contract["data"]["expected_split_counts"]["train"])
+        + int(contract["experiment"]["batch_size"])
+        - 1
+    ) // int(contract["experiment"]["batch_size"])
+    minimum_optimizer_steps = (
+        int(contract["checkpoint_selection"]["minimum_epochs"]) * steps_per_epoch
+    )
+    validation_interval_steps = int(
+        contract["development_tuning"]["validation_interval_steps"]
+    )
+    if (
+        actual_optimizer_steps < minimum_optimizer_steps
+        or actual_optimizer_steps > expected_optimizer_steps
+        or actual_optimizer_steps % validation_interval_steps != 0
+    ):
+        raise ValueError(f"early-stopped optimizer step is outside the contract: {result_path}")
+    expected_forward_views = actual_optimizer_steps * 2
+    expected_structure_exposures = actual_optimizer_steps * int(
         contract["experiment"]["batch_size"]
     )
     expected_view_exposures = expected_forward_views * int(contract["experiment"]["batch_size"])
     expected_compute = {
-        "optimizer_steps": expected_optimizer_steps,
+        "optimizer_steps": actual_optimizer_steps,
         "training_backbone_forward_views": expected_forward_views,
         "training_structure_exposures": expected_structure_exposures,
         "training_view_exposures": expected_view_exposures,
@@ -1290,13 +1366,65 @@ def _load_audited_result(
         if not _is_sha256(stream_audit.get(key)):
             raise ValueError(f"missing or malformed training stream {key}: {result_path}")
     expected_audit_counts = {
-        "optimizer_steps": expected_optimizer_steps,
+        "optimizer_steps": actual_optimizer_steps,
         "structure_exposures": expected_structure_exposures,
         "spectrum_exposures": expected_view_exposures,
     }
     for key, expected in expected_audit_counts.items():
         if int(stream_audit.get(key, -1)) != expected:
             raise ValueError(f"training stream exposure mismatch for {key}: {result_path}")
+
+    early = result.get("early_stopping", {})
+    state = early.get("state", {}) if isinstance(early, Mapping) else {}
+    if (
+        early.get("enabled") is not True
+        or int(early.get("max_epochs", -1))
+        != int(contract["checkpoint_selection"]["max_epochs"])
+        or int(early.get("minimum_epochs", -1))
+        != int(contract["checkpoint_selection"]["minimum_epochs"])
+        or int(early.get("patience_validation_checks", -1))
+        != int(contract["checkpoint_selection"]["patience_validation_checks"])
+        or float(early.get("min_delta", -1))
+        != float(contract["checkpoint_selection"]["min_delta"])
+        or list(early.get("primary_profiles", []))
+        != list(contract["checkpoint_selection"]["primary_ood_profiles"])
+        or list(early.get("tie_breakers", []))
+        != list(contract["checkpoint_selection"]["tie_breakers"])
+    ):
+        raise ValueError(f"early-stopping provenance mismatch: {result_path}")
+    best_epoch = int(state.get("best_epoch", -1))
+    best_global_step = int(state.get("best_global_step", -1))
+    if best_epoch <= 0 or best_global_step != best_epoch * steps_per_epoch:
+        raise ValueError(f"invalid best-checkpoint identity: {result_path}")
+    checkpoint_path = result_path.parent / str(result.get("checkpoint_path", ""))
+    if checkpoint_path.name != "best.ckpt" or not checkpoint_path.is_file():
+        raise ValueError(f"missing registered best checkpoint: {result_path}")
+    if sha256_file(checkpoint_path) != str(result["checkpoint_hash"]).upper():
+        raise ValueError(f"best checkpoint hash mismatch: {result_path}")
+    validation_history = [
+        item for item in result.get("history", []) if "in_range" in item and "ood" in item
+    ]
+    expected_validation_steps = list(
+        range(validation_interval_steps, actual_optimizer_steps + 1, validation_interval_steps)
+    )
+    if [int(item.get("global_step", -1)) for item in validation_history] != expected_validation_steps:
+        raise ValueError(f"Validation schedule mismatch: {result_path}")
+    final_history_stream = validation_history[-1].get("training_stream_audit", {})
+    for key in ("sampler_hash", "pair_schedule_hash", "parameter_pair_hash"):
+        if str(final_history_stream.get(key, "")).upper() != str(
+            stream_audit.get(key, "")
+        ).upper():
+            raise ValueError(f"history/final training stream mismatch for {key}: {result_path}")
+    best_history = next(
+        (
+            item
+            for item in validation_history
+            if int(item.get("epoch", -1)) == best_epoch
+        ),
+        None,
+    )
+    if best_history is None or _final_evaluation(result) != best_history:
+        raise ValueError(f"selection evaluation is not the best checkpoint epoch: {result_path}")
 
     final = _final_evaluation(result)
     required_metrics = set(map(str, contract["metrics_and_logging"]["required_metrics"]))
@@ -1362,6 +1490,9 @@ def _load_audited_result(
         "pair_schedule_hash": str(stream_audit["pair_schedule_hash"]).upper(),
         "parameter_pair_hash": str(stream_audit["parameter_pair_hash"]).upper(),
         "compute": {key: compute[key] for key in expected_compute},
+        "history": list(result.get("history", [])),
+        "best_epoch": best_epoch,
+        "best_global_step": best_global_step,
         "id_macro_f1": float(final["in_range"]["macro_f1"]),
         "profile_macro_f1": {
             name: float(final["ood"][name]["macro_f1"])
@@ -1401,21 +1532,36 @@ def evaluate_tuning_selection(
 
     evaluation_hashes = {item["evaluation_manifest_hash"] for item in audited.values()}
     core_view_hashes = {item["view_manifest_hash"] for item in audited.values()}
-    sampler_hashes = {item["training_sampler_hash"] for item in audited.values()}
-    pair_schedule_hashes = {item["pair_schedule_hash"] for item in audited.values()}
-    parameter_pair_hashes = {item["parameter_pair_hash"] for item in audited.values()}
-    compute_budgets = {canonical_hash(item["compute"]) for item in audited.values()}
+    sampler_contract_hashes = {
+        item["result"]["training_sampler_contract_hash"] for item in audited.values()
+    }
     if (
         len(evaluation_hashes) != 1
         or len(core_view_hashes) != 1
-        or len(sampler_hashes) != 1
-        or len(pair_schedule_hashes) != 1
-        or len(parameter_pair_hashes) != 1
-        or len(compute_budgets) != 1
+        or len(sampler_contract_hashes) != 1
     ):
         raise ValueError(
-            "development tuning runs do not share matched sampler, pairs, views, evaluation, and compute"
+            "development tuning runs do not share the registered maximum sampler contract, views, and evaluation"
         )
+    common_prefix_step = min(
+        int(item["compute"]["optimizer_steps"]) for item in audited.values()
+    )
+    common_prefix_snapshots = []
+    for item in audited.values():
+        snapshot = next(
+            (
+                row["training_stream_audit"]
+                for row in item["history"]
+                if int(row.get("global_step", -1)) == common_prefix_step
+            ),
+            None,
+        )
+        if not isinstance(snapshot, Mapping):
+            raise ValueError("a tuning run is missing the registered common-prefix audit")
+        common_prefix_snapshots.append(snapshot)
+    for key in ("sampler_hash", "pair_schedule_hash", "parameter_pair_hash"):
+        if len({str(snapshot.get(key, "")).upper() for snapshot in common_prefix_snapshots}) != 1:
+            raise ValueError(f"development tuning common-prefix mismatch for {key}")
 
     baseline_run = next(run for run in plan["runs"] if run["role"] == "baseline")
     baseline = audited[str(baseline_run["run_id"])]
@@ -1482,6 +1628,19 @@ def evaluate_tuning_selection(
         "result_artifact_hashes": {
             run_id: sha256_file(item["result_path"])
             for run_id, item in sorted(audited.items())
+        },
+        "realized_compute": {
+            run_id: {
+                "optimizer_steps": int(item["compute"]["optimizer_steps"]),
+                "best_epoch": int(item["best_epoch"]),
+                "best_global_step": int(item["best_global_step"]),
+            }
+            for run_id, item in sorted(audited.items())
+        },
+        "common_prefix_optimizer_steps": common_prefix_step,
+        "common_prefix_stream_hashes": {
+            key: str(common_prefix_snapshots[0][key]).upper()
+            for key in ("sampler_hash", "pair_schedule_hash", "parameter_pair_hash")
         },
         "formal_freeze_required_next": True,
     }
@@ -1551,15 +1710,46 @@ def evaluate_validation_comparison(
                 "peak_cache_manifest_hash",
                 "evaluation_manifest_hash",
                 "training_sampler_contract_hash",
-                "training_sampler_hash",
-                "pair_schedule_hash",
-                "compute",
             ]
             if method["role"] in CORE_ROLES:
-                comparison_keys.extend(["view_manifest_hash", "parameter_pair_hash"])
+                comparison_keys.append("view_manifest_hash")
             for key in comparison_keys:
                 if candidate[key] != baseline[key]:
                     fairness_errors.append(f"seed {seed}: {method_id} mismatched {key}")
+        core_ids = [
+            method_id for method_id, method in methods.items() if method["role"] in CORE_ROLES
+        ]
+        common_prefix_step = min(
+            int(run_metrics[(method_id, int(seed))]["compute"]["optimizer_steps"])
+            for method_id in core_ids
+        )
+        prefix_snapshots = []
+        for method_id in core_ids:
+            snapshot = next(
+                (
+                    row["training_stream_audit"]
+                    for row in run_metrics[(method_id, int(seed))]["history"]
+                    if int(row.get("global_step", -1)) == common_prefix_step
+                ),
+                None,
+            )
+            if not isinstance(snapshot, Mapping):
+                fairness_errors.append(
+                    f"seed {seed}: {method_id} missing common-prefix audit"
+                )
+            else:
+                prefix_snapshots.append(snapshot)
+        if len(prefix_snapshots) == len(core_ids):
+            for key in ("sampler_hash", "pair_schedule_hash", "parameter_pair_hash"):
+                if len(
+                    {
+                        str(snapshot.get(key, "")).upper()
+                        for snapshot in prefix_snapshots
+                    }
+                ) != 1:
+                    fairness_errors.append(
+                        f"seed {seed}: core methods mismatched common-prefix {key}"
+                    )
     if fairness_errors:
         raise ValueError(f"matched-budget audit failed: {fairness_errors}")
 

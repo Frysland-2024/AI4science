@@ -25,7 +25,7 @@
 |---|---|
 | 14,060 结构 family-aware 划分 | 冻结：Train 9,842 / Validation 2,109 / Test 2,109 |
 | 方法参数候选范围 | 冻结：JS `[0.3,3,30]`；Residual `[0.2,2,20]` |
-| Simulation Validation tuning | **7/7 已完成并通过最终产物审计；Validation 选择为 lambda_JS=3.0、lambda_res=2.0，后续阶段仍未解锁** |
+| Simulation Validation tuning | **旧 50-epoch endpoint 7/7 已归档；新的 100-epoch early-stopping 完整网格已获授权并从 0/7 重新执行** |
 | 正式模拟实验 | **0/15，未开始** |
 | simulated Test | 锁定、未执行 |
 | RRUFF-70 样品组成 | 冻结 |
@@ -37,7 +37,7 @@
 
 ## 核心论文问题
 
-在相同母结构、动态配对视图、backbone、优化预算和模拟评测面板下：
+在相同母结构、动态配对视图、backbone、最大优化预算、early-stopping 规则和模拟评测面板下：
 
 > JS Consistency 或 Residual Class Decorrelation 能否在 Dynamic/Paired ERM 之上，提高未知扰动泛化，并在 0/1/2/3-shot 真实域适配中保持相对优势？
 
@@ -124,6 +124,9 @@ E:\AI4science\.venvs\xrd_tools\Scripts\python.exe -s scripts\run_v9_method_trans
 
 # 仅生成 7-run 计划，不训练
 E:\AI4science\.venvs\xrd_tools\Scripts\python.exe -s scripts\run_v9_method_transfer.py tune-plan
+
+# 当前已授权的 100-epoch 上限、Validation-only 七条串行调参队列
+E:\AI4science\.venvs\xrd_tools\Scripts\python.exe -s scripts\run_v9_method_transfer.py tune-run --confirm-development-tuning --max-parallel-runs 1
 
 # 检查 Test 锁
 E:\AI4science\.venvs\xrd_tools\Scripts\python.exe -s scripts\run_v9_method_transfer.py final-preflight

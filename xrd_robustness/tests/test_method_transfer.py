@@ -202,6 +202,27 @@ class MethodTransferContractTests(unittest.TestCase):
             self.assertEqual(
                 run["argv"][run["argv"].index("--amp-dtype") + 1], "bfloat16"
             )
+            self.assertIn("--early-stopping", run["argv"])
+            self.assertEqual(
+                run["argv"][run["argv"].index("--max-optimizer-steps") + 1],
+                "61600",
+            )
+            self.assertEqual(
+                run["argv"][run["argv"].index("--validation-interval-steps") + 1],
+                "3080",
+            )
+            self.assertEqual(
+                run["argv"][run["argv"].index("--early-stopping-min-epochs") + 1],
+                "50",
+            )
+            self.assertEqual(
+                run["argv"][run["argv"].index("--early-stopping-patience") + 1],
+                "4",
+            )
+            self.assertEqual(
+                run["argv"][run["argv"].index("--early-stopping-min-delta") + 1],
+                "0.001",
+            )
             self.assertNotIn("perturbation_supervised_residual", run["argv"])
             self.assertEqual(
                 run["development_subset_manifest_hash"],
@@ -299,6 +320,37 @@ class SyntheticResultMixin:
         locked: bool = True,
     ) -> None:
         profiles = self.contract["simulation"]["development_ood_profiles"]
+        optimizer_steps = int(self.contract["experiment"]["max_optimizer_steps"])
+        steps_per_epoch = 616
+        best_epoch = optimizer_steps // steps_per_epoch
+        structure_exposures = optimizer_steps * int(
+            self.contract["experiment"]["batch_size"]
+        )
+        spectrum_exposures = structure_exposures * 2
+        validation_interval_steps = int(
+            self.contract["experiment"]["validation_interval_steps"]
+        )
+        history = []
+        for global_step in range(
+            validation_interval_steps,
+            optimizer_steps + 1,
+            validation_interval_steps,
+        ):
+            epoch = global_step // steps_per_epoch
+            history.append(
+                {
+                    "epoch": epoch,
+                    "global_step": global_step,
+                    "in_range": _metrics(in_range),
+                    "ood": {name: _metrics(ood) for name in profiles},
+                    "training_stream_audit": {
+                        "sampler_hash": training_sampler_hash,
+                        "pair_schedule_hash": pair_schedule_hash,
+                        "parameter_pair_hash": parameter_pair_hash,
+                    },
+                }
+            )
+        selection_evaluation = history[-1]
         result = {
             "run_id": run_id,
             "mode": method["mode"],
@@ -317,13 +369,14 @@ class SyntheticResultMixin:
                 "sampler_hash": training_sampler_hash,
                 "pair_schedule_hash": pair_schedule_hash,
                 "parameter_pair_hash": parameter_pair_hash,
-                "optimizer_steps": 30650,
-                "structure_exposures": 490400,
-                "spectrum_exposures": 980800,
+                "optimizer_steps": optimizer_steps,
+                "structure_exposures": structure_exposures,
+                "spectrum_exposures": spectrum_exposures,
             },
             "view_manifest_hash": view_manifest_hash,
             "evaluation_manifest_hash": evaluation_manifest_hash,
             "checkpoint_hash": HASH_C,
+            "checkpoint_path": "best.ckpt",
             "offline_manifest_hash": HASH_C if method["mode"] in {"clean_erm", "offline_erm"} else None,
             "data_manifest_hash": self.contract["data"]["split_manifest_sha256"],
             "development_subset_manifest_hash": subset_hash,
@@ -343,23 +396,36 @@ class SyntheticResultMixin:
                 "real_test_locked": True,
             },
             "compute_summary": {
-                "optimizer_steps": 30650,
-                "training_backbone_forward_views": 61300,
-                "training_structure_exposures": 490400,
-                "training_view_exposures": 980800,
+                "optimizer_steps": optimizer_steps,
+                "training_backbone_forward_views": optimizer_steps * 2,
+                "training_structure_exposures": structure_exposures,
+                "training_view_exposures": spectrum_exposures,
                 "wall_clock_seconds": 100.0,
                 "gpu_hours": 0.03,
                 "peak_gpu_memory_mb": 1000.0,
             },
-            "history": [
-                {
-                    "epoch": 50,
-                    "in_range": _metrics(in_range),
-                    "ood": {name: _metrics(ood) for name in profiles},
-                }
-            ],
+            "history": history,
+            "selection_evaluation": selection_evaluation,
+            "early_stopping": {
+                "enabled": True,
+                "max_epochs": self.contract["checkpoint_selection"]["max_epochs"],
+                "minimum_epochs": self.contract["checkpoint_selection"]["minimum_epochs"],
+                "patience_validation_checks": self.contract["checkpoint_selection"][
+                    "patience_validation_checks"
+                ],
+                "min_delta": self.contract["checkpoint_selection"]["min_delta"],
+                "primary_profiles": self.contract["checkpoint_selection"][
+                    "primary_ood_profiles"
+                ],
+                "tie_breakers": self.contract["checkpoint_selection"]["tie_breakers"],
+                "state": {
+                    "best_epoch": best_epoch,
+                    "best_global_step": optimizer_steps,
+                },
+            },
         }
         output.parent.mkdir(parents=True, exist_ok=True)
+        (output.parent / "best.ckpt").write_bytes(b"c")
         rows = []
         in_range_profile = self.contract["simulation"]["in_range_profile"]
         for profile, value in [(in_range_profile, in_range), *[(name, ood) for name in profiles]]:
@@ -452,7 +518,7 @@ class MethodTransferTuningTests(SyntheticResultMixin, unittest.TestCase):
                     training_sampler_hash=(HASH_B if run is plan["runs"][0] else HASH_A),
                     prediction_method_id=method["mode"],
                 )
-            with self.assertRaisesRegex(ValueError, "matched sampler"):
+            with self.assertRaisesRegex(ValueError, "common-prefix mismatch"):
                 evaluate_tuning_selection(self.contract, root, PROJECT_ROOT)
 
 

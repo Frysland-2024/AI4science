@@ -1,9 +1,9 @@
 {
   "$schema": "algorithm.v9.method_transfer.schema.json",
   "schema_version": "v9.1-method-transfer",
-  "status": "v9t_validation_tuning_authorized_on_measured_laptop",
+  "status": "v9t_100_epoch_early_stopping_retuning_authorized_on_measured_laptop",
   "study_kind": "cross_domain_method_transfer",
-  "research_question": "Under matched crystal structures, physical-augmentation views, architecture, compute budget, and evaluation panels, does explicit modeling of relations between differently perturbed views of the same crystal structure through JS consistency or residual class decorrelation improve PXRD generalization to unseen perturbations and real experimental patterns beyond augmentation-only supervised learning?",
+  "research_question": "Under matched crystal structures, physical-augmentation views, architecture, maximum compute budget, Validation early-stopping rule, and evaluation panels, does explicit modeling of relations between differently perturbed views of the same crystal structure through JS consistency or residual class decorrelation improve PXRD generalization to unseen perturbations and real experimental patterns beyond augmentation-only supervised learning?",
   "narrative_policy": {
     "program_id": "V9-T",
     "paper_short_name": "Algorithm Transfer for PXRD Robustness",
@@ -68,7 +68,8 @@
   "trainer": {
     "path": "scripts/train_v7.py",
     "supporting_paths": [
-      "src/xrd_robustness/training_prefetch.py"
+      "src/xrd_robustness/training_prefetch.py",
+      "src/xrd_robustness/training/early_stopping.py"
     ],
     "required_flag": "--development-only",
     "legacy_filename_only": true
@@ -141,6 +142,33 @@
     "development_evaluation_seed": 20260720,
     "validation_role": "hyperparameter_selection_early_stopping_checkpoint_selection_and_development_method_comparison"
   },
+  "checkpoint_selection": {
+    "strategy": "validation_early_stopping",
+    "max_epochs": 100,
+    "validation_interval_epochs": 5,
+    "minimum_epochs": 50,
+    "patience_validation_checks": 4,
+    "patience_epochs": 20,
+    "min_delta": 0.001,
+    "primary_metric": "mean_single_factor_ood_macro_f1",
+    "primary_ood_profiles": [
+      "ood_shift_negative",
+      "ood_shift_positive",
+      "ood_broadening",
+      "ood_noise",
+      "ood_background",
+      "ood_texture"
+    ],
+    "tie_breakers": [
+      "validation_id_macro_f1",
+      "earlier_epoch"
+    ],
+    "checkpoint_artifacts": [
+      "best.ckpt",
+      "last.ckpt"
+    ],
+    "patience_semantics": "count all consecutive scheduled checks without a primary improvement greater than min_delta, but never terminate before minimum_epochs; a Validation-ID tie-break checkpoint update does not reset patience"
+  },
   "model": {
     "variant": "b3",
     "shared_encoder_and_classifier": true
@@ -160,10 +188,10 @@
     "name": "validation_only_development_tuning",
     "execution_enabled": true,
     "seed": 20260710,
-    "epochs": 50,
-    "max_optimizer_steps": 30650,
-    "validation_interval_steps": 30650,
-    "output_root": "outputs/v9_method_transfer_tuning",
+    "epochs": 100,
+    "max_optimizer_steps": 61600,
+    "validation_interval_steps": 3080,
+    "output_root": "outputs/v9_method_transfer_tuning_100e_early_stopping",
     "baseline_method_id": "ordinary_dynamic_augmentation",
     "candidates": [
       {
@@ -183,13 +211,13 @@
       "primary_metric": "mean_single_factor_ood_macro_f1",
       "maximum_id_drop_vs_baseline": 0.01,
       "tie_breaker": "smallest_lambda",
-      "selection_artifact": "reports/v9_method_transfer_tuning_selection.json",
+      "selection_artifact": "reports/v9_method_transfer_tuning_selection_100e_early_stopping.json",
       "selection_artifact_required_before_formal_plan": true
     }
   },
   "formal_hyperparameters": {
     "frozen": false,
-    "selection_artifact": "reports/v9_method_transfer_tuning_selection.json",
+    "selection_artifact": "reports/v9_method_transfer_tuning_selection_100e_early_stopping.json",
     "selection_artifact_sha256": null,
     "values": {
       "lambda_js": null,
@@ -199,9 +227,9 @@
   },
   "experiment": {
     "seeds": [20260711, 20260712, 20260713],
-    "epochs": 50,
-    "max_optimizer_steps": 30650,
-    "validation_interval_steps": 30650,
+    "epochs": 100,
+    "max_optimizer_steps": 61600,
+    "validation_interval_steps": 3080,
     "batch_size": 16,
     "evaluation_batch_size": 256,
     "device": "cuda",
@@ -282,13 +310,15 @@
   "fairness": {
     "same_structure_split": true,
     "same_backbone_forward_views": true,
-    "same_optimizer_steps": true,
-    "same_training_view_exposures": true,
+    "same_maximum_optimizer_steps": true,
+    "same_realized_optimizer_steps": false,
+    "same_maximum_training_view_exposures": true,
+    "same_realized_training_view_exposures": false,
     "deterministic_epoch_shuffle": "sha256-key-sort-v1",
     "same_training_sampler_hash_all_methods": true,
-    "same_pair_schedule_hash_all_methods": true,
-    "same_parameter_pair_hash_within_core_comparison": true,
-    "same_checkpoint_rule": "last_fixed_budget_checkpoint",
+    "same_pair_schedule_hash_at_common_prefix_all_methods": true,
+    "same_parameter_pair_hash_at_common_prefix_within_core_comparison": true,
+    "same_checkpoint_rule": "best_validation_checkpoint_under_common_100_epoch_early_stopping_rule",
     "same_pair_ids_within_core_comparison": true,
     "same_fixed_evaluation_panel_for_all_methods_and_seeds": true,
     "reference_baselines_have_different_training_views_by_definition": true,

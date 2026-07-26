@@ -1,5 +1,14 @@
 # V9-T 算法迁移与真实域适配工程契约
 
+> 2026-07-26 execution override: the complete frozen seven-candidate
+> Validation-only grid is being rerun from optimizer step 0 with
+> `max_epochs=100`, `max_optimizer_steps=61600`, Validation every 5 epochs
+> (3,080 steps), `min_epochs=50`, `min_delta=0.001`, and patience 4. The
+> selection monitor is mean single-factor Validation-OOD Macro-F1. Both best
+> and last checkpoints are retained; ties use higher Validation-ID Macro-F1
+> and then the earlier epoch. The historical 50-epoch selection is not the
+> final selection under this new optimization contract.
+
 状态日期：2026-07-24。
 
 ## 1. 论文问题

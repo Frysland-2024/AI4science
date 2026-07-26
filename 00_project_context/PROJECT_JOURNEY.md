@@ -461,3 +461,25 @@ Validation 必然继续提高，也不能排除过拟合；它只能否定“已
   边界保持锁定。
 
 权威只读审计为 `xrd_robustness/reports/v9_tuning_convergence_audit.json`。
+
+## 2026-07-26：统一改为 100 epoch 上限加预注册 early stopping，并完整重跑候选网格
+
+50-epoch 审计证明旧七条 run 只有终点 Validation，因而既不能证明已经
+收敛，也不能证明继续训练一定有效。用户据此明确选择不只补跑当前赢家，
+而是在保持候选网格、seed、模型、动态谱图暴露边界和 Validation-only
+边界不变的条件下，从 optimizer step 0 完整重跑七个候选。这样避免把旧
+30,650-step 赢家直接外推到一个不同的优化制度。
+
+新制度预注册为：最多 100 epochs / 61,600 optimizer steps；每 5 epochs /
+3,080 steps 做一次 Validation；至少训练 50 epochs；监控 single-factor
+Validation-OOD Macro-F1 的均值；`mode=max`、`min_delta=0.001`、patience
+为 4 次 Validation。保存 `best.ckpt` 和 `last.ckpt`；主指标在
+`min_delta` 内时先比较 Validation-ID Macro-F1，再选择更早 epoch。没有
+引入 learning-rate scheduler。
+
+这一改变也修正了公平性表述：各方法共享同一最大预算和同一停止规则，
+但允许 early stopping 产生不同的实际步数；因此审计共同训练前缀的
+sampler、pair 与 parameter hashes，而不再要求每条 run 的最终完整流哈希
+或实际步数相等。旧 50-epoch 选择仍作为历史固定终点证据保留，但不再是
+新制度下的最终 lambda 结论。15-run 正式实验、simulated Test、real XRD、
+真实适配和 V10 仍未获授权。

@@ -16,6 +16,7 @@
     "data",
     "simulation",
     "evaluation",
+    "checkpoint_selection",
     "model",
     "method_parameter_governance",
     "development_tuning",
@@ -226,6 +227,46 @@
       "type": "object",
       "required": ["path", "sha256", "development_evaluation_seed"]
     },
+    "checkpoint_selection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "strategy",
+        "max_epochs",
+        "validation_interval_epochs",
+        "minimum_epochs",
+        "patience_validation_checks",
+        "patience_epochs",
+        "min_delta",
+        "primary_metric",
+        "primary_ood_profiles",
+        "tie_breakers",
+        "checkpoint_artifacts",
+        "patience_semantics"
+      ],
+      "properties": {
+        "strategy": {"const": "validation_early_stopping"},
+        "max_epochs": {"const": 100},
+        "validation_interval_epochs": {"const": 5},
+        "minimum_epochs": {"const": 50},
+        "patience_validation_checks": {"const": 4},
+        "patience_epochs": {"const": 20},
+        "min_delta": {"const": 0.001},
+        "primary_metric": {"const": "mean_single_factor_ood_macro_f1"},
+        "primary_ood_profiles": {
+          "type": "array",
+          "minItems": 6,
+          "maxItems": 6,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "tie_breakers": {
+          "const": ["validation_id_macro_f1", "earlier_epoch"]
+        },
+        "checkpoint_artifacts": {"const": ["best.ckpt", "last.ckpt"]},
+        "patience_semantics": {"type": "string", "minLength": 1}
+      }
+    },
     "model": {"type": "object"},
     "method_parameter_governance": {
       "type": "object",
@@ -275,6 +316,7 @@
         "seed",
         "epochs",
         "max_optimizer_steps",
+        "validation_interval_steps",
         "output_root",
         "baseline_method_id",
         "candidates",

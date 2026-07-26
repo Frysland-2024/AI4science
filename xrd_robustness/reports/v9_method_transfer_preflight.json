@@ -1,5 +1,5 @@
 {
-  "contract_status": "v9t_validation_tuning_authorized_on_measured_laptop",
+  "contract_status": "v9t_100_epoch_early_stopping_retuning_authorized_on_measured_laptop",
   "core_comparison_run_count": 9,
   "cross_split_family_count": 0,
   "development_profiles": [
@@ -37,9 +37,10 @@
     "simulation_config": "AF6E2FA400525CCF48AAC18C9839CC8EFE13DD3E4C056DD45A74B4DD43262558",
     "split_audit": "9FD1B2484DE08B44DE63512B60C5C8B999C803DB57FD21EAFCD7ECD8D2F0421F",
     "split_manifest": "4304D5FA5A35082AFD6653647875074D207E3ACDC35123FFF8FD6E42BE1C672B",
-    "trainer": "7C3F7DF26BBC2BF829CD65432F288BBEEF88C9FBA03D157EAB4E1A3EE4C63523",
+    "trainer": "A568E542CCC342F82272C364704CF109B9A28D770297D3D2014FD8B09167FC56",
     "trainer_supporting_paths": {
-      "src/xrd_robustness/training_prefetch.py": "245B58369D435BEA3E156A9AEAACB6F08501031C8BDACF3AA738B909877C8FB0"
+      "src/xrd_robustness/training/early_stopping.py": "C62942DF08FA0E55E83E5BDA3DBA7D385265AFDD959171E889E45258DE78FD11",
+      "src/xrd_robustness/training_prefetch.py": "E2FA1BFE850DCE6EC3582B6CE738A033E46354757B8BE7B65FEB8AEBB95AA27D"
     }
   },
   "method_parameter_candidate_range_gate": "pass",

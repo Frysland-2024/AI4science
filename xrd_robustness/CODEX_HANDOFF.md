@@ -1,5 +1,22 @@
 # XRD Robustness V9-T：跨 Codex 账号与台式机完整交接
 
+> **2026-07-26 100-epoch early-stopping retuning override (authoritative):**
+> The user has authorized a fresh optimizer-step-0 rerun of the complete frozen
+> seven-candidate Validation-only grid. The new fixed maximum is 100 epochs /
+> 61,600 optimizer steps; Validation runs every 5 epochs / 3,080 steps;
+> `min_epochs=50`; the monitor is mean single-factor Validation-OOD Macro-F1
+> with `mode=max`, `min_delta=0.001`, and patience 4 Validation checks.
+> Save both `best.ckpt` and `last.ckpt`. Primary-score ties within `min_delta`
+> are resolved by higher Validation-ID Macro-F1 and then the earlier epoch.
+> The complete grid restarts from step 0 in
+> `outputs/v9_method_transfer_tuning_100e_early_stopping`; do not resume or
+> overwrite the historical 50-epoch tuning outputs. The registered laptop
+> profile remains one run at a time with 16 workers / 16 prefetched batches,
+> eager BF16, TF32, fused AdamW, pinned memory, and non-blocking H2D. The prior
+> 50-epoch selection is historical fixed-endpoint evidence only. After 7/7,
+> run the new selection audit and stop. Do not start the 15-run formal stage,
+> simulated Test, real XRD, real adaptation, or V10.
+
 > **2026-07-26 convergence-audit override:** The seven completed tuning runs
 > are an internally fair fixed-budget comparison at 30,650 optimizer steps, but
 > they do not prove convergence by epoch 50. Each canonical history contains

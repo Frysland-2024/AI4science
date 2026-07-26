@@ -6,6 +6,46 @@
 
 > Current-state record only. Historical reasoning remains in `PROJECT_JOURNEY.md` and dated decision files.
 
+## 2026-07-26 authoritative 100-epoch retuning override
+
+The user has authorized a fresh Validation-only rerun of the complete frozen
+seven-candidate V9-T tuning grid under one common early-stopping contract. The
+previous 50-epoch, 30,650-step seven-run comparison remains preserved as
+historical endpoint evidence; its selected values (`lambda_JS=3.0`,
+`lambda_res=2.0`) are not treated as the final selection under the new
+optimization contract.
+
+The new contract is frozen as follows:
+
+```text
+max_epochs = 100
+max_optimizer_steps = 61,600
+validation_interval = 5 epochs = 3,080 optimizer steps
+min_epochs = 50
+monitor = mean single-factor Validation-OOD Macro-F1
+mode = max
+min_delta = 0.001
+patience = 4 validation checks
+checkpoint = best + last
+tie-break = higher Validation-ID Macro-F1, then earlier epoch
+```
+
+All seven candidates restart from optimizer step 0 in
+`outputs/v9_method_transfer_tuning_100e_early_stopping`. They share the same
+maximum budget, stopping rule, Validation panels, seed, sampler and pair-stream
+contract. Because early stopping can produce different realized step counts,
+fairness is defined by the common maximum budget and stopping rule plus exact
+common-prefix sampler/pair/parameter hashes, not by equal realized compute.
+There is no learning-rate scheduler. The measured laptop execution profile
+remains strict serial scheduling with 16 DataLoader workers and a 16-batch
+prefetch window, eager BF16, TF32, fused AdamW, pinned memory and non-blocking
+host-to-device transfer.
+
+At the time this override was written, implementation and preflight evidence
+were being finalized and the new registry was `0/7`; no new tuning process had
+yet been counted. The 15-run formal comparison, simulated Test, real XRD,
+real-domain adaptation and V10 remain unauthorized and locked.
+
 ## 1. Research identity
 
 The active project is **V9-T: Algorithm Transfer for PXRD Robustness**.

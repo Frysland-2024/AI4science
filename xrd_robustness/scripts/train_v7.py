@@ -55,6 +55,10 @@ from xrd_robustness.training import (
     run_training_step,
     signed_measurement_residual,
 )
+from xrd_robustness.training.early_stopping import (
+    EarlyStoppingState,
+    update_early_stopping,
+)
 from xrd_robustness.training_stream import (
     TRAINING_STREAM_SCHEMA_VERSION,
     TrainingStreamAudit,
@@ -117,6 +121,19 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--epochs", type=int, default=50)
     parser.add_argument("--max-optimizer-steps", type=int, help="fixed V7 training budget; cycles full batches deterministically")
     parser.add_argument("--validation-interval-steps", type=int, default=0)
+    parser.add_argument(
+        "--early-stopping",
+        action="store_true",
+        help="select best.ckpt on Validation and stop under the registered patience rule",
+    )
+    parser.add_argument("--early-stopping-min-epochs", type=int, default=1)
+    parser.add_argument("--early-stopping-patience", type=int, default=1)
+    parser.add_argument("--early-stopping-min-delta", type=float, default=0.0)
+    parser.add_argument(
+        "--early-stopping-ood-profiles",
+        default="",
+        help="comma-separated OOD profiles averaged for the primary stopping metric",
+    )
     parser.add_argument(
         "--evaluation-batch-size",
         type=int,
@@ -938,6 +955,17 @@ def main() -> int:
         raise SystemExit("max-optimizer-steps must be positive")
     if args.validation_interval_steps < 0:
         raise SystemExit("validation-interval-steps cannot be negative")
+    if args.early_stopping:
+        if args.validation_interval_steps <= 0:
+            raise SystemExit("early stopping requires a positive validation interval")
+        if args.early_stopping_min_epochs <= 0:
+            raise SystemExit("early-stopping-min-epochs must be positive")
+        if args.early_stopping_min_epochs > args.epochs:
+            raise SystemExit("early-stopping-min-epochs cannot exceed epochs")
+        if args.early_stopping_patience <= 0:
+            raise SystemExit("early-stopping-patience must be positive")
+        if args.early_stopping_min_delta < 0:
+            raise SystemExit("early-stopping-min-delta cannot be negative")
     if args.lambda_js < 0 or args.lambda_res < 0 or args.lambda_perturb < 0:
         raise SystemExit("objective weights must be non-negative")
     target_config = PerturbationTargetConfig(
@@ -955,6 +983,18 @@ def main() -> int:
     data_root = resolve_data_root(PROJECT_ROOT, args.data_root)
     simulation_config = json.loads(simulation_path.read_text(encoding="utf-8"))
     ood_profiles = [value.strip() for value in args.ood_profiles.split(",") if value.strip()]
+    early_stopping_ood_profiles = [
+        value.strip()
+        for value in args.early_stopping_ood_profiles.split(",")
+        if value.strip()
+    ]
+    if args.early_stopping and (
+        not early_stopping_ood_profiles
+        or not set(early_stopping_ood_profiles).issubset(ood_profiles)
+    ):
+        raise SystemExit(
+            "early-stopping OOD profiles must be a non-empty subset of --ood-profiles"
+        )
     try:
         validate_formal_simulation_config(
             simulation_config,
@@ -1059,6 +1099,7 @@ def main() -> int:
         "device": str(device),
         "max_optimizer_steps": args.max_optimizer_steps,
         "validation_interval_steps": args.validation_interval_steps,
+        "early_stopping_ood_profiles": early_stopping_ood_profiles,
         "unique_train_structures": len(train_ids),
         "simulation_config_hash": simulation_config_hash,
         "peak_cache_manifest_hash": peak_cache_manifest_hash,
@@ -1344,6 +1385,18 @@ def main() -> int:
     if len(history) > start_epoch:
         history = history[:start_epoch]
         history_path.write_text(json.dumps(history, indent=2, sort_keys=True), encoding="utf-8")
+    early_stopping_state = EarlyStoppingState()
+    if args.early_stopping and start_epoch:
+        if resume_payload is None:
+            raise SystemExit("early-stopping resume is missing checkpoint payload")
+        saved_state = resume_payload.get("extra_state", {}).get("early_stopping")
+        if not isinstance(saved_state, dict):
+            raise SystemExit("early-stopping resume is missing checkpoint state")
+        early_stopping_state = EarlyStoppingState.from_mapping(saved_state)
+        if early_stopping_state.best_epoch is not None and not (
+            run_dir / "best.ckpt"
+        ).is_file():
+            raise SystemExit("early-stopping resume is missing best.ckpt")
     if start_epoch:
         try:
             stream_audit = TrainingStreamAudit.from_snapshot(
@@ -1410,7 +1463,9 @@ def main() -> int:
     training_prefetch_wait_seconds = 0.0
     if device.type == "cuda":
         torch.cuda.reset_peak_memory_stats(device)
-    for epoch in range(start_epoch, training_epochs):
+    stopped_early = bool(args.early_stopping and early_stopping_state.stopped)
+    training_stop_epoch = start_epoch if stopped_early else training_epochs
+    for epoch in range(start_epoch, training_stop_epoch):
         model.train()
         if residual_classifier is not None:
             residual_classifier.train()
@@ -1750,21 +1805,15 @@ def main() -> int:
             },
             "training_stream_audit": epoch_stream_audit,
         }
+        save_best = False
         if should_evaluate:
             prediction_sink = (
-                final_prediction_rows if global_step_total == target_optimizer_steps else None
+                final_prediction_rows
+                if not args.early_stopping
+                and global_step_total == target_optimizer_steps
+                else None
             )
-            epoch_result["validation"] = _evaluate(
-                model,
-                validation_ids,
-                records,
-                index=validation_index,
-                peaks=peaks,
-                factory=factory,
-                device=device,
-                evaluation_batch_size=args.evaluation_batch_size,
-            )
-            epoch_result["in_range"] = _evaluate(
+            in_range_metrics = _evaluate(
                 model,
                 evaluation_ids,
                 records,
@@ -1777,6 +1826,21 @@ def main() -> int:
                 prediction_seed=args.seed,
                 prediction_method_id=statistics_method_id,
                 prediction_profile=args.in_range_profile,
+            )
+            epoch_result["in_range"] = in_range_metrics
+            epoch_result["validation"] = (
+                in_range_metrics
+                if args.development_only
+                else _evaluate(
+                    model,
+                    validation_ids,
+                    records,
+                    index=validation_index,
+                    peaks=peaks,
+                    factory=factory,
+                    device=device,
+                    evaluation_batch_size=args.evaluation_batch_size,
+                )
             )
             epoch_result["ood"] = {
                 profile: _evaluate(
@@ -1795,6 +1859,32 @@ def main() -> int:
                 )
                 for profile, index in ood_indexes.items()
             }
+            if args.early_stopping:
+                primary = float(
+                    np.mean(
+                        [
+                            epoch_result["ood"][profile]["macro_f1"]
+                            for profile in early_stopping_ood_profiles
+                        ]
+                    )
+                )
+                validation_id = float(epoch_result["in_range"]["macro_f1"])
+                save_best, stopped_early = update_early_stopping(
+                    early_stopping_state,
+                    epoch=epoch + 1,
+                    global_step=global_step_total,
+                    primary=primary,
+                    validation_id=validation_id,
+                    min_delta=args.early_stopping_min_delta,
+                    patience=args.early_stopping_patience,
+                    min_epochs=args.early_stopping_min_epochs,
+                )
+                epoch_result["early_stopping"] = {
+                    "primary_metric": primary,
+                    "validation_id_macro_f1": validation_id,
+                    "save_best_checkpoint": save_best,
+                    "state": early_stopping_state.to_dict(),
+                }
         history.append(epoch_result)
         history_path.write_text(json.dumps(history, indent=2, sort_keys=True), encoding="utf-8")
         stream_audit_path.write_text(
@@ -1811,6 +1901,31 @@ def main() -> int:
             ),
             encoding="utf-8",
         )
+        checkpoint_extra_state = {
+            "training_stream_audit": epoch_stream_audit,
+            "training_sampler_contract_hash": sampler_contract_hash,
+            "early_stopping": (
+                early_stopping_state.to_dict() if args.early_stopping else None
+            ),
+        }
+        if args.early_stopping and save_best:
+            save_checkpoint(
+                run_dir / "best.ckpt",
+                model=model,
+                optimizers=[optimizer_main] + auxiliary_optimizers,
+                epoch=epoch + 1,
+                global_step=global_step_total,
+                config=model_config,
+                data_manifest_hash=data_manifest_hash,
+                view_manifest_hash=view_manifest_hash,
+                seed=args.seed,
+                extra_modules=extra_modules or None,
+                provenance={
+                    "peak_cache_manifest_hash": peak_cache_manifest_hash,
+                    "simulation_config_hash": simulation_config_hash,
+                },
+                extra_state=checkpoint_extra_state,
+            )
         save_checkpoint(
             run_dir / "last.ckpt",
             model=model,
@@ -1826,11 +1941,10 @@ def main() -> int:
                 "peak_cache_manifest_hash": peak_cache_manifest_hash,
                 "simulation_config_hash": simulation_config_hash,
             },
-            extra_state={
-                "training_stream_audit": epoch_stream_audit,
-                "training_sampler_contract_hash": sampler_contract_hash,
-            },
+            extra_state=checkpoint_extra_state,
         )
+        if stopped_early:
+            break
 
     if training_prefetcher is not None:
         if training_prefetcher.in_flight_batches:
@@ -1839,6 +1953,69 @@ def main() -> int:
                 f"{training_prefetcher.in_flight_batches}"
             )
         training_prefetcher.close()
+
+    selection_evaluation = None
+    if args.early_stopping:
+        best_checkpoint_path = run_dir / "best.ckpt"
+        if early_stopping_state.best_epoch is None or not best_checkpoint_path.is_file():
+            raise SystemExit("early stopping finished without a best checkpoint")
+        load_checkpoint(
+            best_checkpoint_path,
+            model=model,
+            extra_modules=extra_modules or None,
+            map_location=device,
+        )
+        selection_evaluation = next(
+            (
+                item
+                for item in history
+                if int(item.get("epoch", -1)) == early_stopping_state.best_epoch
+                and "in_range" in item
+                and "ood" in item
+            ),
+            None,
+        )
+        if selection_evaluation is None:
+            raise SystemExit("best checkpoint epoch has no matching Validation history")
+        final_prediction_rows.clear()
+        replayed_in_range = _evaluate(
+            model,
+            evaluation_ids,
+            records,
+            index=evaluation_index,
+            peaks=peaks,
+            factory=factory,
+            device=device,
+            evaluation_batch_size=args.evaluation_batch_size,
+            prediction_sink=final_prediction_rows,
+            prediction_seed=args.seed,
+            prediction_method_id=statistics_method_id,
+            prediction_profile=args.in_range_profile,
+        )
+        replayed_ood = {
+            profile: _evaluate(
+                model,
+                evaluation_ids,
+                records,
+                index=index,
+                peaks=peaks,
+                factory=factory,
+                device=device,
+                evaluation_batch_size=args.evaluation_batch_size,
+                prediction_sink=final_prediction_rows,
+                prediction_seed=args.seed,
+                prediction_method_id=statistics_method_id,
+                prediction_profile=profile,
+            )
+            for profile, index in ood_indexes.items()
+        }
+        if (
+            replayed_in_range != selection_evaluation["in_range"]
+            or replayed_ood != selection_evaluation["ood"]
+        ):
+            raise SystemExit(
+                "best-checkpoint prediction replay does not match its Validation history"
+            )
 
     posthoc_train_probe_hash = None
     posthoc_train_probe_index = None
@@ -2006,9 +2183,9 @@ def main() -> int:
             for path in source_paths
         }
     )
-    checkpoint_path = run_dir / "last.ckpt"
+    checkpoint_path = run_dir / ("best.ckpt" if args.early_stopping else "last.ckpt")
     prediction_rows_path = run_dir / "prediction_rows.jsonl"
-    if args.resume and not final_prediction_rows:
+    if args.resume and not args.early_stopping and not final_prediction_rows:
         if (
             not history
             or int(history[-1].get("global_step", -1)) != target_optimizer_steps
@@ -2097,6 +2274,7 @@ def main() -> int:
             "independent_unit": "family_id_from_split_manifest_or_structure_fingerprint_fallback",
         },
         "checkpoint_hash": file_hash(checkpoint_path),
+        "checkpoint_path": checkpoint_path.name,
         "resumed_from": str(Path(args.resume).resolve()) if args.resume else None,
         "quality_gate": {
             "enabled": factory.quality_gate,
@@ -2136,6 +2314,27 @@ def main() -> int:
         "training_prefetch": training_prefetch_contract,
         "offline_manifest_hash": offline_hash,
         "history": history,
+        "selection_evaluation": selection_evaluation,
+        "early_stopping": (
+            {
+                "enabled": True,
+                "max_epochs": args.epochs,
+                "maximum_optimizer_steps": target_optimizer_steps,
+                "validation_interval_steps": args.validation_interval_steps,
+                "validation_interval_epochs": (
+                    args.validation_interval_steps // steps_per_epoch
+                ),
+                "minimum_epochs": args.early_stopping_min_epochs,
+                "patience_validation_checks": args.early_stopping_patience,
+                "min_delta": args.early_stopping_min_delta,
+                "primary_metric": "mean_single_factor_ood_macro_f1",
+                "primary_profiles": early_stopping_ood_profiles,
+                "tie_breakers": ["validation_id_macro_f1", "earlier_epoch"],
+                "state": early_stopping_state.to_dict(),
+            }
+            if args.early_stopping
+            else {"enabled": False}
+        ),
         "posthoc_residual_probe": probe_report,
         "perturbation_decoder": perturbation_decoder_report,
         "perturbation_target": (
@@ -2181,7 +2380,7 @@ def main() -> int:
             "real_test_locked": True,
         },
     }
-    latest_evaluation = next(
+    latest_evaluation = selection_evaluation or next(
         (item for item in reversed(history) if "in_range" in item and "ood" in item),
         None,
     )
@@ -2265,9 +2464,11 @@ def main() -> int:
         ),
         "per_step_cuda_scalar_synchronization": "epoch_aggregate_only",
         "fixed_budget": fixed_budget,
+        "maximum_optimizer_steps": target_optimizer_steps,
+        "stopped_early": stopped_early,
         "paired_offline_views": bool(args.paired_offline_views),
         "auxiliary_head_forward_views": (
-            target_optimizer_steps * 2 if mode in residual_modes else 0
+            stream_audit.optimizer_steps * 2 if mode in residual_modes else 0
         ),
     }
     (run_dir / "results.json").write_text(json.dumps(report, indent=2, sort_keys=True), encoding="utf-8")

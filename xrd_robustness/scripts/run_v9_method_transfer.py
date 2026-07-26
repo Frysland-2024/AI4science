@@ -29,8 +29,14 @@ from xrd_robustness.method_transfer import (
 
 DEFAULT_CONTRACT = PROJECT_ROOT / "configs" / "algorithm.v9.method_transfer.json"
 DEFAULT_PREFLIGHT = PROJECT_ROOT / "reports" / "v9_method_transfer_preflight.json"
-DEFAULT_TUNING_PLAN = PROJECT_ROOT / "reports" / "v9_method_transfer_tuning_plan.json"
-DEFAULT_TUNING_SELECTION = PROJECT_ROOT / "reports" / "v9_method_transfer_tuning_selection.json"
+DEFAULT_TUNING_PLAN = (
+    PROJECT_ROOT / "reports" / "v9_method_transfer_tuning_plan_100e_early_stopping.json"
+)
+DEFAULT_TUNING_SELECTION = (
+    PROJECT_ROOT
+    / "reports"
+    / "v9_method_transfer_tuning_selection_100e_early_stopping.json"
+)
 DEFAULT_PLAN = PROJECT_ROOT / "reports" / "v9_method_transfer_run_plan.json"
 DEFAULT_COMPARISON = PROJECT_ROOT / "reports" / "v9_method_transfer_validation_comparison.json"
 DEFAULT_FINAL_PREFLIGHT = PROJECT_ROOT / "reports" / "v9_method_transfer_final_lock_audit.json"
@@ -213,7 +219,11 @@ def _parser() -> argparse.ArgumentParser:
     )
     tuning_select.add_argument(
         "--results-root",
-        default=str(PROJECT_ROOT / "outputs" / "v9_method_transfer_tuning"),
+        default=str(
+            PROJECT_ROOT
+            / "outputs"
+            / "v9_method_transfer_tuning_100e_early_stopping"
+        ),
     )
     tuning_select.add_argument("--output", default=str(DEFAULT_TUNING_SELECTION))
 
