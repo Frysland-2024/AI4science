@@ -2,7 +2,7 @@
   "schema_version": "v9-figure-plan-v1",
   "result_dependent": true,
   "figures": [
-    {"id": "main_ood", "source": "method_profile_metrics.csv", "design": "grouped bars or radar", "uncertainty": "family-cluster hierarchical 95% CI"},
+    {"id": "main_ood", "source": "method_profile_metrics.csv", "design": "grouped bars or radar", "uncertainty": "parent-structure-cluster hierarchical 95% CI"},
     {"id": "paired_gain", "source": "paired_comparisons.csv", "design": "forest plot", "required_contrasts": ["js_minus_dynamic", "residual_minus_dynamic", "residual_minus_js"]},
     {"id": "confusion", "source": "statistics report summaries", "design": "one fixed-scale confusion matrix per method"},
     {"id": "mechanism", "source": "mechanism diagnostics report", "design": "residual probe, norm, variance, effective rank"},

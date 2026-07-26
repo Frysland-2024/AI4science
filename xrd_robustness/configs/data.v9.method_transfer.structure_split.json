@@ -10,21 +10,21 @@
     "sha256": "6AE0CFD1B5B29671E2F532D7A094F2FC412CABD64E4CF77D42915937BACC8D18",
     "split_independent": true
   },
-  "schema_version": "v9t-family-aware-data-split-v1",
+  "schema_version": "v9t-parent-structure-data-split-v1",
   "source_records": {
     "path": "data/formal_14060/mp_processed/structure_records.jsonl",
     "sha256": "05D5D33F200194612A8CDBE29D9443FC7BAD9C245F66D185364B66A75915CC6C"
   },
   "split": {
+    "algorithm": "sha256_seeded_crystal_system_stratified_random_v1",
     "counts": {
       "test": 2109,
       "train": 9842,
       "validation": 2109
     },
-    "family_definition": "re-analysed space group plus chemistry-anonymous species-wise Wyckoff orbit letters and multiplicities",
-    "family_definition_scope": "conservative deterministic proxy; not an AFLOW/XtalFinder label",
-    "family_signature_version": "anonymous-wyckoff-family-v1",
-    "path": "data/formal_14060/manifests/split_manifest.v9t.family_v1.csv",
+    "family_fields_used_for_assignment": false,
+    "parent_structure_id_source": "structure_fingerprint",
+    "path": "data/formal_14060/manifests/split_manifest.json",
     "per_crystal_system": {
       "test": {
         "cubic": 301,
@@ -59,11 +59,10 @@
       "train": 0.7,
       "validation": 0.15
     },
-    "seed": 20260716,
-    "sha256": "4304D5FA5A35082AFD6653647875074D207E3ACDC35123FFF8FD6E42BE1C672B",
-    "stratification": "seven_crystal_systems",
-    "unit": "unique_crystal_structure",
-    "whole_family_assignment": true
+    "seed": 20260726,
+    "sha256": "B9D3B72E42EA0FD549DAE34425FF61D2D650D5DD7FE6F337D747CB952CF43293",
+    "stratification": "crystal_system",
+    "unit": "parent_structure"
   },
   "status": "frozen",
   "test": {
@@ -74,6 +73,8 @@
   },
   "validation": {
     "count": 2109,
+    "id_role": "unseen_parent_structures_with_id_perturbations",
+    "ood_role": "same_unseen_parent_structures_with_ood_perturbations",
     "path": "data/formal_14060/manifests/v9_method_transfer_validation.csv",
     "roles": [
       "hyperparameter_selection",
@@ -81,6 +82,6 @@
       "checkpoint_selection",
       "development_method_comparison"
     ],
-    "sha256": "7CC261206F023F2A44065419014B6D886E800A19C7A33C17B71496D9E40AD213"
+    "sha256": "82BF44DB866CE5776FBD8CCD8E0D316501C15E7F920AC972E94F8C2E4CD6D7F6"
   }
 }

@@ -4,8 +4,8 @@
     {
       "path": "CODEX_HANDOFF.md",
       "role": "authoritative cross-account entry point",
-      "sha256": "A009D97542B50DC4C21C1955764EE4EE7DD5A6791545CE2F055BF752ED079C0E",
-      "size_bytes": 36849
+      "sha256": "4ABE1F549A0522850EAFEF9C3E6A588470CBB616BBFF14B68DA515221D3F5D44",
+      "size_bytes": 60879
     },
     {
       "path": "docs/CODEX_ACCOUNT_HANDOFF.docx",
@@ -16,14 +16,14 @@
     {
       "path": "README.md",
       "role": "project overview and handoff pointer",
-      "sha256": "89032D3609CD5946B51360FB32EF333F49855B86449738BCEF7614D0629A358F",
-      "size_bytes": 7477
+      "sha256": "219DA157D12F349401585211B0092C5A508240BD3EE5CBDFC659675DB3967A4B",
+      "size_bytes": 7509
     },
     {
       "path": "docs/V9_METHOD_TRANSFER_ENGINEERING.md",
       "role": "research and method-transfer engineering contract",
-      "sha256": "3D4CA6964BFA901A1EA53B7A0E08F8D21116093FDFB5AFDAF51526211FC7CA9F",
-      "size_bytes": 19941
+      "sha256": "2BDAAAACA25CED70E751F5AEA233476CB1348864293463432FCB472435F38F37",
+      "size_bytes": 9237
     },
     {
       "path": "docs/V9_DESKTOP_MIGRATION_HANDOFF.md",
@@ -40,8 +40,8 @@
     {
       "path": "configs/algorithm.v9.method_transfer.json",
       "role": "authoritative experiment contract",
-      "sha256": "2195C1E941AC3E5EE17960A0D2263FB700984272203D0FD1806FC97456E7CD0D",
-      "size_bytes": 17168
+      "sha256": "D6384C4F87514EBABFCD0FF0732E3C3F86F45AA52A38F9F9A9E93B52798A2570",
+      "size_bytes": 18787
     },
     {
       "path": "configs/hardware.v9.desktop.9600x_4070tis.json",
@@ -58,44 +58,44 @@
     {
       "path": "configs/evaluation.v9.method_transfer.json",
       "role": "development and final evaluation locks",
-      "sha256": "24FD778E2AE1DD0C8AF519871BBC8343F56966437D5AC0E19606E7F03A4FD5D4",
-      "size_bytes": 3608
+      "sha256": "4B07EEBCF7F8E70391D9BB2365C7AFE63F0F044CDA644FF7EAA7FAD9CB9799A5",
+      "size_bytes": 3953
     },
     {
-      "path": "configs/data.v9.method_transfer.family_split.json",
-      "role": "family-aware split contract",
-      "sha256": "4FA9E216FDCD73473C303AB4AC14726FA2FAB60452CE0A76B147BAC7C4C9EFA9",
-      "size_bytes": 2776
+      "path": "configs/data.v9.method_transfer.structure_split.json",
+      "role": "parent-structure split contract",
+      "sha256": "C57A2C9C400518576B1D7776762B0C8BEBF72BDA4775E6173C3FD091D3A6855C",
+      "size_bytes": 2738
     },
     {
-      "path": "data/formal_14060/manifests/split_manifest.v9t.family_v1.csv",
+      "path": "data/formal_14060/manifests/split_manifest.json",
       "role": "authoritative train validation test split",
-      "sha256": "4304D5FA5A35082AFD6653647875074D207E3ACDC35123FFF8FD6E42BE1C672B",
-      "size_bytes": 2741291
+      "sha256": "B9D3B72E42EA0FD549DAE34425FF61D2D650D5DD7FE6F337D747CB952CF43293",
+      "size_bytes": 2966559
     },
     {
       "path": "data/formal_14060/manifests/v9_method_transfer_validation.csv",
       "role": "unified development validation panel",
-      "sha256": "7CC261206F023F2A44065419014B6D886E800A19C7A33C17B71496D9E40AD213",
-      "size_bytes": 382672
+      "sha256": "82BF44DB866CE5776FBD8CCD8E0D316501C15E7F920AC972E94F8C2E4CD6D7F6",
+      "size_bytes": 245529
     },
     {
       "path": "reports/v9_method_transfer_preflight.json",
       "role": "latest source-machine scientific preflight",
-      "sha256": "65B1AB7678138ED64B2CC6E49884B0E8C97729B33E2B65700A28B3D0FD2EAF7E",
-      "size_bytes": 4344
+      "sha256": "A32549C217F969D56A16740FB57A298948E6ECBAF02285708777C82A1A5A19BC",
+      "size_bytes": 3976
     },
     {
       "path": "reports/v9_training_stream_preflight_audit.json",
       "role": "stream fairness and bounded-memory proof",
-      "sha256": "231382F1DA5B9C101CDDFF70928812053E0D9DF16B468BCB0E4A3D5B96DC8F6B",
-      "size_bytes": 8830
+      "sha256": "A12AC96DF6A3FD7B9AD066CA34EA75A613E1DD5E51687BF3391209DD707840FF",
+      "size_bytes": 12490
     },
     {
-      "path": "reports/v9_method_transfer_tuning_plan.json",
-      "role": "seven-run plan; all runs must remain unstarted",
-      "sha256": "6380BBF11131353791FAB4C48CC02A209CB2BCE80041449FC848A717DABCF934",
-      "size_bytes": 29519
+      "path": "reports/v9_method_transfer_tuning_plan_parent_structure_split_v1.json",
+      "role": "new-split seven-run plan; execution remains gated",
+      "sha256": "D2F76CEC068E42220EEE6C70C8044E320AFF1B6E3B4263969009271777C27891",
+      "size_bytes": 30518
     },
     {
       "path": "reports/v9_method_transfer_final_lock_audit.json",
@@ -112,20 +112,20 @@
     {
       "path": "scripts/run_v9_method_transfer.py",
       "role": "planning and explicitly authorized execution launcher",
-      "sha256": "9C1BC891309E7963841D7DA408A7D78BF87858BA019B46C8E7AF8F61089B792A",
-      "size_bytes": 19832
+      "sha256": "01B8FBD49A6E6D7FF61CE5C1E593DFD2636ACE7B5C636C5B1607E0A3212D0EEB",
+      "size_bytes": 19971
     },
     {
       "path": "scripts/train_v7.py",
       "role": "shared training entry point",
-      "sha256": "6E117ECC38EDD273BB9A3EBE433789D5B06C20BBE611205AC06D472D9F2813D9",
-      "size_bytes": 89130
+      "sha256": "C8B991034D8DA5A94DC0989B1D08C367F07B9AA84054B39A1DCE5590516AC885",
+      "size_bytes": 101073
     },
     {
       "path": "scripts/prepare_codex_account_handoff.py",
       "role": "handoff snapshot builder",
-      "sha256": "8A88C26A0B41D7F5427C02B7BD1D8518E6E94E1E92CEB18370DC0FE1A82BF2CC",
-      "size_bytes": 14847
+      "sha256": "118F186A9D7CFCE84B579E6267363096BF5BC93D4CAA4ED76A2D648724B0E030",
+      "size_bytes": 15332
     },
     {
       "path": "scripts/verify_codex_account_handoff.py",
@@ -165,7 +165,7 @@
     }
   ],
   "authoritative_entrypoint": "CODEX_HANDOFF.md",
-  "created_at_utc": "2026-07-22T10:16:20.502779+00:00",
+  "created_at_utc": "2026-07-26T13:29:01.294140+00:00",
   "failed_gates": [],
   "gates": {
     "all_seven_runs_planned_not_started": true,
@@ -192,12 +192,12 @@
   "next_account_stop_rule": "After desktop_first_boot_v9.ps1 reports ready_for_explicit_tuning_authorization, stop and obtain a new explicit user authorization before tune-run.",
   "output_state": {
     "checkpoint_count": 0,
-    "registry_present": true,
+    "registry_present": false,
     "registry_run_count": 0,
     "required_start_step": 0,
     "result_count": 0,
     "resume_allowed": false,
-    "root": "outputs/v9_method_transfer_tuning",
+    "root": "outputs/v9_method_transfer_tuning_parent_structure_split_v1",
     "run_directory_count": 0
   },
   "policy": {
@@ -311,72 +311,72 @@
   },
   "training_stream": {
     "batch_size": 16,
-    "dynamic_parameter_pair_hash": "46149a5170c51f67ec9a05b04978520eece0221d741f4478f402eb5eb1e07e07",
-    "epochs": 50,
-    "legacy_eager_rows": 606267200,
-    "maximum_live_dynamic_rows": 256,
-    "optimizer_steps": 30650,
-    "pair_schedule_hash": "99c033bddbdfd3bd442388201c11863047e83f2012eebfd0781aac94a4d932a0",
-    "sampler_hash": "6e1a4e6e46f59e913fc0165c41d8a584a1669514d70ec0814985a34c4ee6430c",
-    "spectrum_exposures": 980800,
+    "dynamic_parameter_pair_hash": "96bc262f62924f4ca9e312ec91d9eb815f306dd5462fc2e3e7eded635a5b4c68",
+    "epochs": 100,
+    "legacy_eager_rows": 1212534400,
+    "maximum_live_dynamic_rows": 512,
+    "optimizer_steps": 61600,
+    "pair_schedule_hash": "d8da397574e3a45822e0c00abec1bd72b5389496a21a9f58e1a18b08bab9194e",
+    "sampler_hash": "02ef220e84d27d7a2c34ac1bee15083be2e8cdeaab9914095069eab5e90a42e1",
+    "spectrum_exposures": 1971200,
     "steps_per_epoch": 616,
-    "structure_exposures": 490400
+    "structure_exposures": 985600
   },
   "tuning_runs": [
     {
       "lambda_name": null,
       "lambda_value": null,
       "method_id": "ordinary_dynamic_augmentation",
-      "output_dir": "outputs/v9_method_transfer_tuning/ordinary_dynamic_augmentation__tuning_seed_20260710",
+      "output_dir": "outputs/v9_method_transfer_tuning_parent_structure_split_v1/ordinary_dynamic_augmentation__tuning_seed_20260710",
       "run_id": "ordinary_dynamic_augmentation__tuning_seed_20260710",
-      "status": "planned_not_started"
-    },
-    {
-      "lambda_name": "lambda_js",
-      "lambda_value": 0.1,
-      "method_id": "js_consistency_transfer",
-      "output_dir": "outputs/v9_method_transfer_tuning/js_consistency_transfer__lambda_js_0p1__tuning_seed_20260710",
-      "run_id": "js_consistency_transfer__lambda_js_0p1__tuning_seed_20260710",
       "status": "planned_not_started"
     },
     {
       "lambda_name": "lambda_js",
       "lambda_value": 0.3,
       "method_id": "js_consistency_transfer",
-      "output_dir": "outputs/v9_method_transfer_tuning/js_consistency_transfer__lambda_js_0p3__tuning_seed_20260710",
+      "output_dir": "outputs/v9_method_transfer_tuning_parent_structure_split_v1/js_consistency_transfer__lambda_js_0p3__tuning_seed_20260710",
       "run_id": "js_consistency_transfer__lambda_js_0p3__tuning_seed_20260710",
       "status": "planned_not_started"
     },
     {
       "lambda_name": "lambda_js",
-      "lambda_value": 1.0,
+      "lambda_value": 3.0,
       "method_id": "js_consistency_transfer",
-      "output_dir": "outputs/v9_method_transfer_tuning/js_consistency_transfer__lambda_js_1p0__tuning_seed_20260710",
-      "run_id": "js_consistency_transfer__lambda_js_1p0__tuning_seed_20260710",
+      "output_dir": "outputs/v9_method_transfer_tuning_parent_structure_split_v1/js_consistency_transfer__lambda_js_3p0__tuning_seed_20260710",
+      "run_id": "js_consistency_transfer__lambda_js_3p0__tuning_seed_20260710",
+      "status": "planned_not_started"
+    },
+    {
+      "lambda_name": "lambda_js",
+      "lambda_value": 30.0,
+      "method_id": "js_consistency_transfer",
+      "output_dir": "outputs/v9_method_transfer_tuning_parent_structure_split_v1/js_consistency_transfer__lambda_js_30p0__tuning_seed_20260710",
+      "run_id": "js_consistency_transfer__lambda_js_30p0__tuning_seed_20260710",
       "status": "planned_not_started"
     },
     {
       "lambda_name": "lambda_res",
-      "lambda_value": 0.01,
+      "lambda_value": 0.2,
       "method_id": "residual_decorrelation_transfer",
-      "output_dir": "outputs/v9_method_transfer_tuning/residual_decorrelation_transfer__lambda_res_0p01__tuning_seed_20260710",
-      "run_id": "residual_decorrelation_transfer__lambda_res_0p01__tuning_seed_20260710",
+      "output_dir": "outputs/v9_method_transfer_tuning_parent_structure_split_v1/residual_decorrelation_transfer__lambda_res_0p2__tuning_seed_20260710",
+      "run_id": "residual_decorrelation_transfer__lambda_res_0p2__tuning_seed_20260710",
       "status": "planned_not_started"
     },
     {
       "lambda_name": "lambda_res",
-      "lambda_value": 0.1,
+      "lambda_value": 2.0,
       "method_id": "residual_decorrelation_transfer",
-      "output_dir": "outputs/v9_method_transfer_tuning/residual_decorrelation_transfer__lambda_res_0p1__tuning_seed_20260710",
-      "run_id": "residual_decorrelation_transfer__lambda_res_0p1__tuning_seed_20260710",
+      "output_dir": "outputs/v9_method_transfer_tuning_parent_structure_split_v1/residual_decorrelation_transfer__lambda_res_2p0__tuning_seed_20260710",
+      "run_id": "residual_decorrelation_transfer__lambda_res_2p0__tuning_seed_20260710",
       "status": "planned_not_started"
     },
     {
       "lambda_name": "lambda_res",
-      "lambda_value": 1.0,
+      "lambda_value": 20.0,
       "method_id": "residual_decorrelation_transfer",
-      "output_dir": "outputs/v9_method_transfer_tuning/residual_decorrelation_transfer__lambda_res_1p0__tuning_seed_20260710",
-      "run_id": "residual_decorrelation_transfer__lambda_res_1p0__tuning_seed_20260710",
+      "output_dir": "outputs/v9_method_transfer_tuning_parent_structure_split_v1/residual_decorrelation_transfer__lambda_res_20p0__tuning_seed_20260710",
+      "run_id": "residual_decorrelation_transfer__lambda_res_20p0__tuning_seed_20260710",
       "status": "planned_not_started"
     }
   ]

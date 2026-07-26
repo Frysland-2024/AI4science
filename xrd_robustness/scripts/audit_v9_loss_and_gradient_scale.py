@@ -38,6 +38,7 @@ from xrd_robustness.online_views import OnlineViewFactory
 from xrd_robustness.peak_cache import load_peak_table
 from xrd_robustness.perturbation_strategy import IndependentDynamicStrategy
 from xrd_robustness.physics import PhysicsParameterSampler
+from xrd_robustness.structure_split import load_split_manifest
 from xrd_robustness.training.objectives import (
     ResidualClassifier,
     js_divergence,
@@ -213,10 +214,9 @@ def _balanced_train_subset(
     split_manifest: Path, *, per_class: int = 2
 ) -> tuple[list[str], dict[str, int], dict[str, int]]:
     grouped: dict[str, list[str]] = defaultdict(list)
-    with split_manifest.open("r", encoding="utf-8", newline="") as handle:
-        for row in csv.DictReader(handle):
-            if row["split"] == "train":
-                grouped[str(row["crystal_system"])].append(str(row["material_id"]))
+    for row in load_split_manifest(split_manifest)["records"]:
+        if row["split"] == "train":
+            grouped[str(row["crystal_system"])].append(str(row["material_id"]))
     unknown = set(grouped) - set(CLASS_SYSTEMS)
     if unknown:
         raise ValueError(f"unexpected crystal systems in Train split: {sorted(unknown)}")
@@ -418,7 +418,7 @@ def run_audit(
         / "data"
         / "formal_14060"
         / "manifests"
-        / "split_manifest.v9t.family_v1.csv"
+        / "split_manifest.json"
     )
     simulation_path = (
         PROJECT_ROOT / "configs" / "simulation.v9.method_transfer.frozen.json"

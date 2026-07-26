@@ -68,7 +68,7 @@ SHA256(20260724 | crystal_system | sample_id)
 
 真实域协议不改变以下已经冻结的模拟阶段：
 
-- 9,842 / 2,109 / 2,109 family-aware 划分；
+- 9,842 / 2,109 / 2,109 parent-structure 随机分层划分；
 - Dynamic/Paired ERM、JS、Residual 的配对谱图流与计算预算；
 - JS `[0.3, 3.0, 30.0]`、Residual `[0.2, 2.0, 20.0]` 候选范围；
 - 7-run Simulation Validation-only tuning；

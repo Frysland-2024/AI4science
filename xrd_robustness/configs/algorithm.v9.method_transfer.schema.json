@@ -194,6 +194,8 @@
         "split_manifest_sha256",
         "split_audit",
         "split_audit_sha256",
+        "split_change_invalidation",
+        "split_change_invalidation_sha256",
         "peak_cache_manifest",
         "peak_cache_manifest_sha256",
         "peak_cache_name",
@@ -277,6 +279,7 @@
         "status",
         "registered_candidate_grids",
         "candidate_range_frozen_for_validation",
+        "current_split_gate_valid",
         "development_tuning_execution_allowed"
       ],
       "properties": {
@@ -305,6 +308,7 @@
           }
         },
         "candidate_range_frozen_for_validation": {"type": "boolean"},
+        "current_split_gate_valid": {"type": "boolean"},
         "development_tuning_execution_allowed": {"type": "boolean"}
       }
     },

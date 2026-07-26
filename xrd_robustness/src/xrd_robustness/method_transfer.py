@@ -17,6 +17,7 @@ from statistics import mean
 from typing import Any, Mapping, Sequence
 
 from .evaluation.statistics import hierarchical_paired_bootstrap, validate_prediction_rows
+from .structure_split import load_split_manifest
 
 from .training_prefetch import (
     PREFETCH_RESULT_ORDER,
@@ -316,6 +317,13 @@ def validate_contract(contract: Mapping[str, Any]) -> None:
         method_parameter_governance.get("development_tuning_execution_allowed")
     ):
         raise ValueError("development tuning disagrees with the method-parameter Gate")
+    if bool(tuning["execution_enabled"]) and (
+        method_parameter_governance.get("current_split_gate_valid") is not True
+    ):
+        raise ValueError(
+            "development tuning must remain disabled until the candidate Gate "
+            "is rerun on the current parent-structure split"
+        )
     if method_parameter_governance.get("candidate_range_frozen_for_validation") is not True:
         if bool(tuning["execution_enabled"]):
             raise ValueError(
@@ -365,8 +373,8 @@ def validate_contract(contract: Mapping[str, Any]) -> None:
         raise ValueError("Validation comparison seed count must match the formal experiment")
     bootstrap = validation_comparison.get("paired_bootstrap_contract", {})
     expected_bootstrap = {
-        "independent_unit": "mother_structure_family",
-        "pairing": "within_seed_same_family",
+        "independent_unit": "parent_structure",
+        "pairing": "within_seed_same_parent_structure",
         "aggregation": "mean_paired_contrast_across_all_registered_seeds",
         "seed_only_bootstrap_forbidden": True,
         "replicates": 10000,
@@ -374,7 +382,9 @@ def validate_contract(contract: Mapping[str, Any]) -> None:
         "prediction_row_schema": "configs/v9_prediction_rows.schema.json",
     }
     if bootstrap != expected_bootstrap:
-        raise ValueError("Validation comparison must use the frozen family-level bootstrap contract")
+        raise ValueError(
+            "Validation comparison must use the parent-structure bootstrap contract"
+        )
     if validation_comparison.get("pass_fail_decision_forbidden") is not True:
         raise ValueError("Validation comparison must not reintroduce a pass/fail Gate")
     selectable = list(map(str, validation_comparison.get("selectable_method_ids", [])))
@@ -452,6 +462,9 @@ def audit_contract_assets(contract: Mapping[str, Any], project_root: str | Path)
     split_manifest = _project_path(root, str(data["split_manifest"]))
     data_config = _project_path(root, str(data["data_config"]))
     split_audit = _project_path(root, str(data["split_audit"]))
+    split_change_invalidation = _project_path(
+        root, str(data["split_change_invalidation"])
+    )
     simulation_path = _project_path(root, str(simulation["path"]))
     freeze_evidence = _project_path(root, str(simulation["freeze_evidence"]))
     peak_manifest = _project_path(root, str(data["peak_cache_manifest"]))
@@ -493,6 +506,7 @@ def audit_contract_assets(contract: Mapping[str, Any], project_root: str | Path)
         split_manifest,
         data_config,
         split_audit,
+        split_change_invalidation,
         simulation_path,
         freeze_evidence,
         peak_manifest,
@@ -516,6 +530,7 @@ def audit_contract_assets(contract: Mapping[str, Any], project_root: str | Path)
         "split_manifest": sha256_file(split_manifest),
         "data_config": sha256_file(data_config),
         "split_audit": sha256_file(split_audit),
+        "split_change_invalidation": sha256_file(split_change_invalidation),
         "simulation_config": sha256_file(simulation_path),
         "freeze_evidence": sha256_file(freeze_evidence),
         "peak_cache_manifest": sha256_file(peak_manifest),
@@ -540,6 +555,9 @@ def audit_contract_assets(contract: Mapping[str, Any], project_root: str | Path)
         "split_manifest": str(data["split_manifest_sha256"]).upper(),
         "data_config": str(data["data_config_sha256"]).upper(),
         "split_audit": str(data["split_audit_sha256"]).upper(),
+        "split_change_invalidation": str(
+            data["split_change_invalidation_sha256"]
+        ).upper(),
         "simulation_config": str(simulation["sha256"]).upper(),
         "freeze_evidence": str(simulation["freeze_evidence_sha256"]).upper(),
         "peak_cache_manifest": str(data["peak_cache_manifest_sha256"]).upper(),
@@ -570,6 +588,22 @@ def audit_contract_assets(contract: Mapping[str, Any], project_root: str | Path)
     }
     if mismatches:
         raise ValueError(f"method-transfer asset hash mismatch: {mismatches}")
+
+    invalidation_payload = json.loads(
+        split_change_invalidation.read_text(encoding="utf-8")
+    )
+    if (
+        invalidation_payload.get("status")
+        != "all_pre_change_training_results_invalidated"
+    ):
+        raise ValueError("split-change invalidation record is not authoritative")
+    if (
+        invalidation_payload.get("new_split", {}).get("sha256", "").upper()
+        != hashes["split_manifest"]
+    ):
+        raise ValueError(
+            "split-change invalidation record points to a different new split"
+        )
 
     if governance_payload.get("schema_version") != "v9-method-parameter-governance-v1":
         raise ValueError("unsupported method-parameter governance schema")
@@ -638,8 +672,30 @@ def audit_contract_assets(contract: Mapping[str, Any], project_root: str | Path)
         raise ValueError("candidate-grid Gate does not authorize range freezing")
     if gate_decision.get("validation_tuning_authorized") is not False:
         raise ValueError("candidate-grid Gate cannot authorize Validation tuning")
-    if governance_payload.get("candidate_range_frozen_for_validation") is not True:
-        raise ValueError("passed candidate-grid Gate must be followed by a frozen range")
+    current_split_gate_valid = governance_payload.get("current_split_gate_valid")
+    if current_split_gate_valid is True:
+        if governance_payload.get("candidate_range_frozen_for_validation") is not True:
+            raise ValueError(
+                "a current passed candidate-grid Gate requires a frozen range"
+            )
+        if (
+            str(
+                candidate_grid_gate.get("input_hashes", {}).get(
+                    "split_manifest", ""
+                )
+            ).upper()
+            != hashes["split_manifest"]
+        ):
+            raise ValueError(
+                "candidate-grid Gate split hash does not match the current manifest"
+            )
+    elif current_split_gate_valid is not False:
+        raise ValueError("current_split_gate_valid must be explicitly boolean")
+    elif bool(governance_gate.get("development_tuning_execution_allowed")):
+        raise ValueError(
+            "development tuning must remain disabled while split-bound Gate "
+            "evidence is stale"
+        )
 
     hardware_payload = json.loads(hardware_profile_path.read_text(encoding="utf-8"))
     if hardware_payload.get("schema_version") not in {
@@ -767,34 +823,31 @@ def audit_contract_assets(contract: Mapping[str, Any], project_root: str | Path)
 
     counts: Counter[str] = Counter()
     material_ids: set[str] = set()
-    fingerprints: set[str] = set()
-    family_splits: dict[str, set[str]] = {}
-    with split_manifest.open("r", encoding="utf-8", newline="") as handle:
-        for row in csv.DictReader(handle):
-            material_id = str(row["material_id"])
-            fingerprint = str(row["structure_fingerprint"])
-            family_id = str(row.get("family_id", "")).strip()
-            if material_id in material_ids:
-                raise ValueError(f"duplicate material_id in split manifest: {material_id}")
-            if fingerprint in fingerprints:
-                raise ValueError(f"duplicate structure fingerprint in split manifest: {fingerprint}")
-            material_ids.add(material_id)
-            fingerprints.add(fingerprint)
-            split = str(row["split"])
-            if not family_id:
-                raise ValueError("family-aware split manifest is missing family_id")
-            family_splits.setdefault(family_id, set()).add(split)
-            counts[split] += 1
+    parent_splits: dict[str, set[str]] = {}
+    split_rows = load_split_manifest(split_manifest)["records"]
+    for row in split_rows:
+        material_id = str(row["material_id"])
+        parent_structure_id = str(row["parent_structure_id"])
+        if material_id in material_ids:
+            raise ValueError(
+                f"duplicate material_id in split manifest: {material_id}"
+            )
+        material_ids.add(material_id)
+        split = str(row["split"])
+        parent_splits.setdefault(parent_structure_id, set()).add(split)
+        counts[split] += 1
     actual_counts = dict(counts)
     if actual_counts != dict(data["expected_split_counts"]):
         raise ValueError(
             f"split count mismatch: {actual_counts} != {data['expected_split_counts']}"
         )
-    crossing_families = sorted(
-        family_id for family_id, splits in family_splits.items() if len(splits) > 1
+    crossing_parents = sorted(
+        parent_id for parent_id, splits in parent_splits.items() if len(splits) > 1
     )
-    if crossing_families:
-        raise ValueError(f"structure families cross splits: {crossing_families[:3]}")
+    if crossing_parents:
+        raise ValueError(
+            f"parent structures cross splits: {crossing_parents[:3]}"
+        )
 
     def read_validation(path: Path) -> tuple[set[str], set[str]]:
         subset_ids: set[str] = set()
@@ -815,12 +868,11 @@ def audit_contract_assets(contract: Mapping[str, Any], project_root: str | Path)
         return subset_ids, subset_systems
 
     validation_manifest_ids, _ = read_validation(validation_manifest)
-    with split_manifest.open("r", encoding="utf-8", newline="") as handle:
-        validation_ids = {
-            row["material_id"]
-            for row in csv.DictReader(handle)
-            if row["split"] == "validation"
-        }
+    validation_ids = {
+        str(row["material_id"])
+        for row in split_rows
+        if row["split"] == "validation"
+    }
     if validation_manifest_ids != validation_ids:
         raise ValueError("unified Validation manifest does not equal the validation split")
     if len(validation_manifest_ids) != int(data["development_validation_count"]):
@@ -849,12 +901,14 @@ def audit_contract_assets(contract: Mapping[str, Any], project_root: str | Path)
         raise ValueError("training entry point does not implement the simulated-test lock")
 
     evaluation_payload = json.loads(evaluation_contract.read_text(encoding="utf-8"))
-    if evaluation_payload.get("status") != "frozen_engineering_contract":
+    if evaluation_payload.get("status") != "parent_structure_split_frozen_retraining_reset":
         raise ValueError("evaluation contract is not frozen")
     if evaluation_payload["simulation"]["sha256"].upper() != hashes["simulation_config"]:
         raise ValueError("evaluation contract points to a different simulation config")
     if evaluation_payload["source_split"]["sha256"].upper() != hashes["split_manifest"]:
-        raise ValueError("evaluation contract points to a different family-aware split")
+        raise ValueError(
+            "evaluation contract points to a different parent-structure split"
+        )
     unified_validation = evaluation_payload["development"]["unified_validation"]
     if unified_validation["sha256"].upper() != hashes["development_validation_manifest"]:
         raise ValueError("evaluation contract points to a different unified Validation manifest")
@@ -869,9 +923,8 @@ def audit_contract_assets(contract: Mapping[str, Any], project_root: str | Path)
         "hashes": hashes,
         "split_counts": actual_counts,
         "unique_material_ids": len(material_ids),
-        "unique_structure_fingerprints": len(fingerprints),
-        "unique_structure_families": len(family_splits),
-        "cross_split_family_count": len(crossing_families),
+        "unique_parent_structures": len(parent_splits),
+        "cross_split_parent_structure_count": len(crossing_parents),
         "development_profiles": sorted(required_profiles),
         "scientific_range_status": "frozen",
         "freeze_evidence_status": "passed",
@@ -1788,7 +1841,7 @@ def evaluate_validation_comparison(
     )
 
     def paired_contrast(focus_id: str, comparator_id: str) -> dict[str, Any]:
-        family_contrast = hierarchical_paired_bootstrap(
+        structure_contrast = hierarchical_paired_bootstrap(
             [
                 row
                 for (method_id, _seed), metrics in run_metrics.items()
@@ -1802,10 +1855,10 @@ def evaluate_validation_comparison(
             random_seed=int(bootstrap_contract["random_seed"]),
         )
         deltas = [
-            float(family_contrast["paired_seed_deltas"][str(int(seed))])
+            float(structure_contrast["paired_seed_deltas"][str(int(seed))])
             for seed in experiment["seeds"]
         ]
-        ci_low, ci_high = family_contrast["hierarchical_bootstrap_95_ci"]
+        ci_low, ci_high = structure_contrast["hierarchical_bootstrap_95_ci"]
         return {
             "focus_method_id": focus_id,
             "comparator_method_id": comparator_id,
@@ -1813,7 +1866,7 @@ def evaluate_validation_comparison(
             "paired_seed_deltas": deltas,
             "mean_delta": mean(deltas),
             "paired_bootstrap_95_ci": [ci_low, ci_high],
-            "hierarchical_bootstrap": family_contrast,
+            "hierarchical_bootstrap": structure_contrast,
             "all_seed_deltas_positive": all(value > 0.0 for value in deltas),
             "mean_id_delta": mean(
                 run_metrics[(focus_id, int(seed))]["id_macro_f1"]

@@ -98,7 +98,7 @@ class MethodTransferContractTests(unittest.TestCase):
         self.assertEqual(audit["status"], "passed")
         self.assertEqual(audit["split_counts"], {"train": 9842, "validation": 2109, "test": 2109})
         self.assertEqual(audit["development_validation_count"], 2109)
-        self.assertEqual(audit["cross_split_family_count"], 0)
+        self.assertEqual(audit["cross_split_parent_structure_count"], 0)
         self.assertEqual(audit["development_tuning_run_count"], 7)
         self.assertEqual(audit["formal_development_run_count"], 15)
         self.assertEqual(audit["core_comparison_run_count"], 9)
@@ -440,17 +440,17 @@ class SyntheticResultMixin:
         for profile, value in [(in_range_profile, in_range), *[(name, ood) for name in profiles]]:
             row_accuracy = max(0.05, min(0.95, 0.5 + (float(value) - 0.58) * 5.0))
             correct_count = int(round(row_accuracy * 210))
-            for family in range(210):
-                label = family % 7
-                prediction = label if family < correct_count else (label + 1) % 7
+            for parent in range(210):
+                label = parent % 7
+                prediction = label if parent < correct_count else (label + 1) % 7
                 probabilities = [0.01] * 7
                 probabilities[prediction] = 0.94
                 rows.append({
                     "seed": seed,
                     "method_id": prediction_method_id or method["id"],
                     "profile": profile,
-                    "material_id": f"mp-{family}",
-                    "family_id": f"family-{family}",
+                    "material_id": f"mp-{parent}",
+                    "parent_structure_id": f"parent-{parent}",
                     "label": label,
                     "prediction": prediction,
                     "probabilities": probabilities,

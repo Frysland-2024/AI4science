@@ -109,7 +109,7 @@ def parse_args() -> argparse.Namespace:
         "--split-manifest",
         help=(
             "optional authoritative structure-level split overlay; required by V9-T "
-            "to keep the immutable formal_14060 records/cache while using its frozen family split"
+            "to keep the immutable formal_14060 records/cache while using its frozen parent-structure split"
         ),
     )
     parser.add_argument(
@@ -335,12 +335,11 @@ def _load_records(
     if split_manifest is None:
         return selected
 
-    import csv
-
     manifest = Path(split_manifest).resolve()
-    with manifest.open("r", encoding="utf-8", newline="") as handle:
-        split_rows = list(csv.DictReader(handle))
-    split_by_id: dict[str, dict[str, str]] = {}
+    from xrd_robustness.structure_split import load_split_manifest
+
+    split_rows = load_split_manifest(manifest)["records"]
+    split_by_id: dict[str, dict[str, Any]] = {}
     for split_row in split_rows:
         material_id = str(split_row.get("material_id", "")).strip()
         if not material_id or material_id in split_by_id:
@@ -357,14 +356,16 @@ def _load_records(
         )
     for material_id, row in selected.items():
         split_row = split_by_id[material_id]
-        if str(split_row.get("structure_fingerprint")) != str(row["structure_fingerprint"]):
-            raise ValueError(f"split manifest fingerprint mismatch: {material_id}")
+        if str(split_row.get("parent_structure_id")) != str(
+            row["structure_fingerprint"]
+        ):
+            raise ValueError(
+                f"split manifest parent-structure mismatch: {material_id}"
+            )
         if str(split_row.get("crystal_system")) != str(row["crystal_system"]):
             raise ValueError(f"split manifest crystal-system mismatch: {material_id}")
         row["split"] = str(split_row["split"])
-        row["family_id"] = str(
-            split_row.get("family_id") or row["structure_fingerprint"]
-        )
+        row["parent_structure_id"] = str(split_row["parent_structure_id"])
     return selected
 
 
@@ -768,7 +769,9 @@ def _evaluate(
                     "method_id": str(prediction_method_id),
                     "profile": str(prediction_profile),
                     "material_id": str(material_id),
-                    "family_id": str(records[material_id]["family_id"]),
+                    "parent_structure_id": str(
+                        records[material_id]["parent_structure_id"]
+                    ),
                     "label": int(prediction["labels"][index_value]),
                     "prediction": int(prediction["predictions"][index_value]),
                     "probabilities": prediction["probabilities"][index_value].tolist(),
@@ -2271,7 +2274,7 @@ def main() -> int:
             "path": prediction_rows_path.name,
             "sha256": file_hash(prediction_rows_path),
             "row_count": len(final_prediction_rows),
-            "independent_unit": "family_id_from_split_manifest_or_structure_fingerprint_fallback",
+            "independent_unit": "parent_structure_id",
         },
         "checkpoint_hash": file_hash(checkpoint_path),
         "checkpoint_path": checkpoint_path.name,

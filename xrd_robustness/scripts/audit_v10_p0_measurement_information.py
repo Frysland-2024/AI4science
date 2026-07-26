@@ -90,7 +90,7 @@ def run_gate(
 
     data_root = PROJECT_ROOT / "data" / "formal_14060"
     split_manifest = (
-        data_root / "manifests" / "split_manifest.v9t.family_v1.csv"
+        data_root / "manifests" / "split_manifest.json"
     )
     simulation_path = (
         PROJECT_ROOT / "configs" / "simulation.v9.method_transfer.frozen.json"

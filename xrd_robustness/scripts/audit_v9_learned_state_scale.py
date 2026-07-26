@@ -42,6 +42,7 @@ from xrd_robustness.models import PAMPT, PAMPTConfig
 from xrd_robustness.online_views import OnlineViewFactory
 from xrd_robustness.perturbation_strategy import IndependentDynamicStrategy
 from xrd_robustness.physics import PhysicsParameterSampler
+from xrd_robustness.structure_split import load_split_manifest
 from xrd_robustness.training.objectives import (
     ResidualClassifier,
     js_divergence,
@@ -150,17 +151,16 @@ def _read_train_rows(split_manifest: Path) -> tuple[list[str], dict[str, int], d
     train_ids: list[str] = []
     labels: dict[str, int] = {}
     counts = {system: 0 for system in CRYSTAL_SYSTEMS}
-    with split_manifest.open("r", encoding="utf-8", newline="") as handle:
-        for row in csv.DictReader(handle):
-            if row["split"] != "train":
-                continue
-            material_id = str(row["material_id"])
-            system = str(row["crystal_system"])
-            if system not in counts:
-                raise ValueError(f"unexpected crystal system: {system}")
-            train_ids.append(material_id)
-            labels[material_id] = CRYSTAL_SYSTEMS.index(system)
-            counts[system] += 1
+    for row in load_split_manifest(split_manifest)["records"]:
+        if row["split"] != "train":
+            continue
+        material_id = str(row["material_id"])
+        system = str(row["crystal_system"])
+        if system not in counts:
+            raise ValueError(f"unexpected crystal system: {system}")
+        train_ids.append(material_id)
+        labels[material_id] = CRYSTAL_SYSTEMS.index(system)
+        counts[system] += 1
     if len(train_ids) != len(set(train_ids)):
         raise ValueError("Train split contains duplicate material IDs")
     if len(train_ids) < 700:
@@ -618,7 +618,7 @@ def run_audit(
 
     data_root = PROJECT_ROOT / "data" / "formal_14060"
     split_manifest = (
-        data_root / "manifests" / "split_manifest.v9t.family_v1.csv"
+        data_root / "manifests" / "split_manifest.json"
     )
     simulation_path = (
         PROJECT_ROOT / "configs" / "simulation.v9.method_transfer.frozen.json"

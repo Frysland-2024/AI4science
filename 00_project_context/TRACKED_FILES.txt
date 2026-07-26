@@ -51,7 +51,7 @@ xrd_robustness/configs/algorithm.v8.independent_dynamic_erm.schema.json
 xrd_robustness/configs/algorithm.v9.method_transfer.json
 xrd_robustness/configs/algorithm.v9.method_transfer.schema.json
 xrd_robustness/configs/backbone_ablation.yaml
-xrd_robustness/configs/data.v9.method_transfer.family_split.json
+xrd_robustness/configs/data.v9.method_transfer.structure_split.json
 xrd_robustness/configs/evaluation.v9.method_transfer.json
 xrd_robustness/configs/hardware.v9.desktop.9600x_4070tis.json
 xrd_robustness/configs/model_pampt.yaml
@@ -148,7 +148,7 @@ xrd_robustness/scripts/build_codex_handoff_docx.py
 xrd_robustness/scripts/build_formal_14000.py
 xrd_robustness/scripts/build_formal_14060.py
 xrd_robustness/scripts/build_perturbation_atlas.py
-xrd_robustness/scripts/build_v9_family_split.py
+xrd_robustness/scripts/build_v9_structure_split.py
 xrd_robustness/scripts/check_mp_api.py
 xrd_robustness/scripts/copy_v9_desktop_payload.ps1
 xrd_robustness/scripts/desktop_first_boot_v9.ps1
@@ -180,7 +180,7 @@ xrd_robustness/src/xrd_robustness/evaluation/metrics.py
 xrd_robustness/src/xrd_robustness/evaluation/real_xrd.py
 xrd_robustness/src/xrd_robustness/evaluation/residual_probe.py
 xrd_robustness/src/xrd_robustness/experiment.py
-xrd_robustness/src/xrd_robustness/family_split.py
+xrd_robustness/src/xrd_robustness/structure_split.py
 xrd_robustness/src/xrd_robustness/formal_14060.py
 xrd_robustness/src/xrd_robustness/measurement_models.py
 xrd_robustness/src/xrd_robustness/method_transfer.py
@@ -216,7 +216,7 @@ xrd_robustness/tests/test_batched_evaluation.py
 xrd_robustness/tests/test_checkpoint_provenance.py
 xrd_robustness/tests/test_codex_account_handoff.py
 xrd_robustness/tests/test_dynamic_pair_dataset.py
-xrd_robustness/tests/test_family_split.py
+xrd_robustness/tests/test_structure_split.py
 xrd_robustness/tests/test_formal_14060.py
 xrd_robustness/tests/test_frozen_manifest.py
 xrd_robustness/tests/test_method_transfer.py

@@ -12,9 +12,9 @@
 - Validation 2,109；
 - Test 2,109。
 
-划分以唯一结构为单位，按七晶系分层，并将同一匿名 Wyckoff 家族代理整体分配到单一集合。
+划分以 parent structure 为唯一单位，采用固定随机种子的 70% / 15% / 15% 随机抽样，并仅按七晶系分层。`family_id` 可用于分析，但不得参与划分决策。
 
-同一 `material_id`、`structure_fingerprint` 或家族代理标识的所有结构与派生视图必须留在同一个 split。动态视图在完成母结构划分后在线生成并继承母结构 split。Test 在方法、超参数和 checkpoint 冻结前不得评估。
+同一 `parent_structure_id` 的所有 clean、weak、strong、ID、OOD 谱图必须留在同一个 split。动态视图在完成母结构划分后在线生成并继承母结构 split。Test 在方法、超参数和 checkpoint 冻结前不得评估。
 
 正式结构记录至少保存：`material_id`、化学式、原始/标准化结构、MP 与重算空间群、七晶系、位点数、稳定性、hull energy、结构指纹和 split。排除无序/部分占位结构、空间群复核不一致项和 exact-cell 重复项。
 

@@ -11,21 +11,21 @@ from xrd_robustness.evaluation.statistics import (
 
 
 class V9StatisticsTests(unittest.TestCase):
-    def test_family_bootstrap_detects_paired_improvement(self) -> None:
+    def test_parent_structure_bootstrap_detects_paired_improvement(self) -> None:
         rows = []
         for seed in (17, 29, 43):
-            for family in range(60):
-                label = family % 2
+            for parent in range(60):
+                label = parent % 2
                 for profile in ("ood_a", "ood_b"):
                     for method, errors in (("baseline", 5), ("focus", 15)):
-                        prediction = 1 - label if family % errors == 0 else label
+                        prediction = 1 - label if parent % errors == 0 else label
                         rows.append(
                             {
                                 "seed": seed,
                                 "method_id": method,
                                 "profile": profile,
-                                "material_id": f"m{family}",
-                                "family_id": f"f{family}",
+                                "material_id": f"m{parent}",
+                                "parent_structure_id": f"p{parent}",
                                 "label": label,
                                 "prediction": prediction,
                             }
@@ -38,7 +38,7 @@ class V9StatisticsTests(unittest.TestCase):
             replicates=300,
             random_seed=7,
         )
-        self.assertEqual(result["independent_unit"], "mother_structure_family")
+        self.assertEqual(result["independent_unit"], "parent_structure")
         self.assertTrue(result["seed_resampling_forbidden"])
         self.assertGreater(result["hierarchical_bootstrap_95_ci"][0], 0.0)
 
@@ -108,7 +108,7 @@ class V9StatisticsTests(unittest.TestCase):
             "method_id": "m",
             "profile": "p",
             "material_id": "id",
-            "family_id": "f",
+            "parent_structure_id": "p",
             "label": 0,
             "prediction": 0,
         }

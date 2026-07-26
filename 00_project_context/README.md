@@ -1,11 +1,16 @@
 # XRD Robustness Project Context
 
+> 2026-07-26 authoritative override: the active data contract is a
+> parent-structure-level 70/15/15 random split stratified by crystal system.
+> The former family-aware split and every result produced from it are retired.
+> New-split tuning is 0/7 and must restart from experiment 1 after fresh gates.
+
 这里是项目研究决策、证据、计划与历史边界的入口。当前可执行事实以 `E:/AI4science/xrd_robustness/CODEX_HANDOFF.md`、冻结配置、源代码、数据清单和验证报告为准；本目录中的 V6/V7/V8/V9.2 文件主要保存研究演进和设计依据。`extracted_full_archive/` 只保存 2026-06-27 原始上下文，不作为当前规则来源。
 
 ## 当前执行状态（2026-07-19）
 
 - 当前主线是 **V9-T：Algorithm Transfer for PXRD Robustness**，其工程实现已经存在，不再是“尚未实现的 V9.2 计划”。
-- 权威数据根为 `data/formal_14060/`；冻结 family-aware 划分为 train 9,842、validation 2,109、test 2,109。
+- 权威数据根为 `data/formal_14060/`；当前 parent-structure 随机分层划分为 train 9,842、validation 2,109、test 2,109。
 - 当前比较 Dynamic/Paired ERM、Dynamic JS 和 Dynamic Residual；结构化动态扰动已归档为未来方向，不属于当前 7-run 或 15-run。
 - lambda 调参进度是 **0/7**；没有活动训练进程、checkpoint、结果或可恢复 run。迁移到 AMD Ryzen 5 9600X + RTX 4070 Ti SUPER 16 GB 台式机后，七条 run 必须从 optimizer step 0 冷启动。
 - 笔记本只允许工程测试、哈希审计、CUDA smoke test 和有界吞吐测试，不进行正式训练。
@@ -18,7 +23,7 @@
 |---|---|
 | `../xrd_robustness/CODEX_HANDOFF.md` | 跨台式机、跨 Codex 账号的唯一接管入口与执行边界 |
 | `../xrd_robustness/configs/algorithm.v9.method_transfer.json` | V9-T 方法与实验范围合同 |
-| `../xrd_robustness/configs/data.v9.method_transfer.family_split.json` | 当前 family-aware split 合同 |
+| `../xrd_robustness/configs/data.v9.method_transfer.structure_split.json` | 当前 parent-structure split 合同 |
 | `../xrd_robustness/configs/training.v9.method_transfer.json` | 训练与硬件流水线合同 |
 | `../xrd_robustness/reports/codex_account_handoff_verification.json` | 交接包机器验证结果 |
 | `../xrd_robustness/reports/ai4science_cleanup_inventory_20260719.json` | 本次全工作区清理审计 |

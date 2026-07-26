@@ -2,6 +2,7 @@
   "schema_version": "v9-method-parameter-governance-v1",
   "status": "candidate_range_frozen_for_validation",
   "candidate_range_frozen_for_validation": true,
+  "current_split_gate_valid": true,
   "scope": "method-specific parameter legality for V9-T",
   "evidence_chain": [
     "method principle explains why the auxiliary coefficient exists",
@@ -152,7 +153,7 @@
   },
   "candidate_grid_gate_evidence": {
     "path": "reports/v9_candidate_grid_gate.json",
-    "sha256": "E59EE2A56906757C82238CB47D520B1D74D690455EA907540AFFF59EA2E8A947",
+    "sha256": "F9C28D29DF78EBAEF924D74297D58BAB4B69E7F87157B4543F8200E2835B38DE",
     "schema_version": "v9-candidate-grid-gate-v1",
     "status": "pass",
     "measurement_mode": "candidate_specific_weighted_and_combined_objectives_evaluated_by_autograd",
@@ -163,6 +164,9 @@
     "validation_used": false,
     "simulated_test_used": false,
     "real_xrd_used": false
+    ,"valid_for_current_split": true
+    ,"previous_retired_split_manifest_sha256": "4304D5FA5A35082AFD6653647875074D207E3ACDC35123FFF8FD6E42BE1C672B"
+    ,"current_split_manifest_sha256": "B9D3B72E42EA0FD549DAE34425FF61D2D650D5DD7FE6F337D747CB952CF43293"
   },
   "validation_tuning_authorization": {
     "authorized": true,
@@ -174,6 +178,7 @@
     "simulated_test_authorized": false,
     "real_xrd_authorized": false,
     "v10_authorized": false
+    ,"restart_requirement": "restart all seven parent-structure-split runs from optimizer step zero; the current-split Train-only candidate Gate and authoritative runtime checks passed"
   },
   "diagnostic_gradient_compensation_factors": {
     "lambda_js": 287400.6148373947,

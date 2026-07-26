@@ -19,10 +19,21 @@ class V9CandidateGridGateTests(unittest.TestCase):
         cls.contract = json.loads(CONTRACT_PATH.read_text(encoding="utf-8"))
         cls.governance = json.loads(GOVERNANCE_PATH.read_text(encoding="utf-8"))
 
-    def test_report_and_script_hash_match(self) -> None:
+    def test_report_matches_current_split_and_script(self) -> None:
         digest = hashlib.sha256(SCRIPT_PATH.read_bytes()).hexdigest()
         self.assertEqual(
             self.report["input_hashes"]["audit_script"].lower(), digest.lower()
+        )
+        self.assertEqual(
+            self.report["input_hashes"]["split_manifest"].upper(),
+            self.governance["candidate_grid_gate_evidence"][
+                "current_split_manifest_sha256"
+            ],
+        )
+        self.assertTrue(
+            self.governance["candidate_grid_gate_evidence"][
+                "valid_for_current_split"
+            ]
         )
         self.assertEqual(self.report["status"], "pass")
         self.assertTrue(all(self.report["checks"].values()))
@@ -71,6 +82,7 @@ class V9CandidateGridGateTests(unittest.TestCase):
         self.assertFalse(gate["validation_tuning_authorized"])
         self.assertFalse(gate["seven_run_authorized"])
         self.assertTrue(self.governance["candidate_range_frozen_for_validation"])
+        self.assertTrue(self.governance["current_split_gate_valid"])
         self.assertEqual(
             self.governance["status"], "candidate_range_frozen_for_validation"
         )

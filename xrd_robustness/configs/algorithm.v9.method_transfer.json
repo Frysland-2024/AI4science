@@ -1,7 +1,7 @@
 {
   "$schema": "algorithm.v9.method_transfer.schema.json",
   "schema_version": "v9.1-method-transfer",
-  "status": "v9t_100_epoch_10_epoch_validation_patience2_retuning_authorized_on_measured_laptop",
+  "status": "v9t_parent_structure_split_retraining_authorized_and_gated",
   "study_kind": "cross_domain_method_transfer",
   "research_question": "Under matched crystal structures, physical-augmentation views, architecture, maximum compute budget, Validation early-stopping rule, and evaluation panels, does explicit modeling of relations between differently perturbed views of the same crystal structure through JS consistency or residual class decorrelation improve PXRD generalization to unseen perturbations and real experimental patterns beyond augmentation-only supervised learning?",
   "narrative_policy": {
@@ -90,12 +90,14 @@
   "data": {
     "root": "data/formal_14060",
     "dataset_size": 14060,
-    "data_config": "configs/data.v9.method_transfer.family_split.json",
-    "data_config_sha256": "4FA9E216FDCD73473C303AB4AC14726FA2FAB60452CE0A76B147BAC7C4C9EFA9",
-    "split_manifest": "data/formal_14060/manifests/split_manifest.v9t.family_v1.csv",
-    "split_manifest_sha256": "4304D5FA5A35082AFD6653647875074D207E3ACDC35123FFF8FD6E42BE1C672B",
+    "data_config": "configs/data.v9.method_transfer.structure_split.json",
+    "data_config_sha256": "C57A2C9C400518576B1D7776762B0C8BEBF72BDA4775E6173C3FD091D3A6855C",
+    "split_manifest": "data/formal_14060/manifests/split_manifest.json",
+    "split_manifest_sha256": "B9D3B72E42EA0FD549DAE34425FF61D2D650D5DD7FE6F337D747CB952CF43293",
     "split_audit": "reports/v9_method_transfer_split_audit.json",
-    "split_audit_sha256": "9FD1B2484DE08B44DE63512B60C5C8B999C803DB57FD21EAFCD7ECD8D2F0421F",
+    "split_audit_sha256": "140B63065261F8C121B4811CC0CD7CBB0436E6499BFCECE49C5AC2377633C7A6",
+    "split_change_invalidation": "reports/v9_split_change_invalidation.json",
+    "split_change_invalidation_sha256": "B554E6E94BA9906FDF54C8026D2566106360C4790F6E8701F14E495F798E301A",
     "peak_cache_manifest": "data/formal_14060/manifests/peak_cache_manifest.v7.reflection.csv",
     "peak_cache_manifest_sha256": "6AE0CFD1B5B29671E2F532D7A094F2FC412CABD64E4CF77D42915937BACC8D18",
     "peak_cache_name": "peak_tables_v7_reflection",
@@ -106,7 +108,7 @@
     },
     "selection_split": "validation",
     "development_validation_manifest": "data/formal_14060/manifests/v9_method_transfer_validation.csv",
-    "development_validation_manifest_sha256": "7CC261206F023F2A44065419014B6D886E800A19C7A33C17B71496D9E40AD213",
+    "development_validation_manifest_sha256": "82BF44DB866CE5776FBD8CCD8E0D316501C15E7F920AC972E94F8C2E4CD6D7F6",
     "development_validation_count": 2109,
     "simulated_test_locked": true,
     "real_test_locked": true
@@ -138,7 +140,7 @@
   },
   "evaluation": {
     "path": "configs/evaluation.v9.method_transfer.json",
-    "sha256": "24FD778E2AE1DD0C8AF519871BBC8343F56966437D5AC0E19606E7F03A4FD5D4",
+    "sha256": "4B07EEBCF7F8E70391D9BB2365C7AFE63F0F044CDA644FF7EAA7FAD9CB9799A5",
     "development_evaluation_seed": 20260720,
     "validation_role": "hyperparameter_selection_early_stopping_checkpoint_selection_and_development_method_comparison"
   },
@@ -175,23 +177,24 @@
   },
   "method_parameter_governance": {
     "path": "configs/v9_method_parameter_governance.json",
-    "sha256": "EBE245FDE7137064E20469274C8D4EDE0FE58E58695080BB3E6135139CB8F575",
+    "sha256": "211C886127E4D3EF5AD515663E8EC8F84256E52F952394113F684154BC9355D6",
     "status": "candidate_range_frozen_for_validation",
     "registered_candidate_grids": {
       "lambda_js": [0.3, 3.0, 30.0],
       "lambda_res": [0.2, 2.0, 20.0]
     },
     "candidate_range_frozen_for_validation": true,
+    "current_split_gate_valid": true,
     "development_tuning_execution_allowed": true
   },
   "development_tuning": {
-    "name": "validation_only_development_tuning",
+    "name": "parent_structure_split_validation_only_development_tuning",
     "execution_enabled": true,
     "seed": 20260710,
     "epochs": 100,
     "max_optimizer_steps": 61600,
     "validation_interval_steps": 6160,
-    "output_root": "outputs/v9_method_transfer_tuning_100e_10epoch_patience2",
+    "output_root": "outputs/v9_method_transfer_tuning_parent_structure_split_v1",
     "baseline_method_id": "ordinary_dynamic_augmentation",
     "candidates": [
       {
@@ -211,13 +214,13 @@
       "primary_metric": "mean_single_factor_ood_macro_f1",
       "maximum_id_drop_vs_baseline": 0.01,
       "tie_breaker": "smallest_lambda",
-      "selection_artifact": "reports/v9_method_transfer_tuning_selection_100e_10epoch_patience2.json",
+      "selection_artifact": "reports/v9_method_transfer_tuning_selection_parent_structure_split_v1.json",
       "selection_artifact_required_before_formal_plan": true
     }
   },
   "formal_hyperparameters": {
     "frozen": false,
-    "selection_artifact": "reports/v9_method_transfer_tuning_selection_100e_10epoch_patience2.json",
+    "selection_artifact": "reports/v9_method_transfer_tuning_selection_parent_structure_split_v1.json",
     "selection_artifact_sha256": null,
     "values": {
       "lambda_js": null,
@@ -386,8 +389,8 @@
     ],
     "report_paired_bootstrap_95_ci": true,
     "paired_bootstrap_contract": {
-      "independent_unit": "mother_structure_family",
-      "pairing": "within_seed_same_family",
+      "independent_unit": "parent_structure",
+      "pairing": "within_seed_same_parent_structure",
       "aggregation": "mean_paired_contrast_across_all_registered_seeds",
       "seed_only_bootstrap_forbidden": true,
       "replicates": 10000,
@@ -411,7 +414,7 @@
     "formal_scientific_conclusions_enabled": false,
     "simulated_test_enabled": false,
     "real_test_enabled": false,
-    "experiment_blocker": "Only the seven-run Validation tuning stage is authorized on the measured laptop target; the 15-run formal experiment remains disabled.",
-    "formal_blocker": "The tuning selection, 15 formal development runs, unified Validation comparison, and locked final evaluations are incomplete."
+    "experiment_blocker": "The parent-structure-split seven-run Validation retraining is authorized and its current-split Train-only and runtime gates pass; start at run 1 from optimizer step zero.",
+    "formal_blocker": "All results produced under the retired family-disjoint split are invalid; the parent-structure-split tuning selection, 15 formal development runs, unified Validation comparison, and locked final evaluations are incomplete."
   }
 }

@@ -251,7 +251,7 @@ def run_pilot_v2(
         )
 
     data_root = PROJECT_ROOT / "data" / "formal_14060"
-    split_manifest = data_root / "manifests" / "split_manifest.v9t.family_v1.csv"
+    split_manifest = data_root / "manifests" / "split_manifest.json"
     simulation_path = PROJECT_ROOT / "configs" / "simulation.v9.method_transfer.frozen.json"
     train_ids_all, labels, train_class_counts = _read_train_rows(split_manifest)
     partitions = _balanced_partitions(train_ids_all, labels)

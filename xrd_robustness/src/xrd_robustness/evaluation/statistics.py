@@ -1,8 +1,8 @@
-"""Pre-registered V9 evaluation statistics at the independent-family level.
+"""Pre-registered V9 evaluation statistics at the parent-structure level.
 
 The formal experiment has only three registered random seeds.  Those seeds are
 not treated as the bootstrap sample.  Instead, each bootstrap replicate samples
-independent mother-structure/family clusters within every seed, computes a
+independent parent structures within every seed, computes a
 paired method contrast, and then averages the three seed-level contrasts.
 """
 
@@ -22,7 +22,7 @@ PREDICTION_ROW_REQUIRED_FIELDS = (
     "method_id",
     "profile",
     "material_id",
-    "family_id",
+    "parent_structure_id",
     "label",
     "prediction",
 )
@@ -41,11 +41,13 @@ def validate_prediction_rows(rows: Iterable[Mapping[str, Any]]) -> list[dict[str
         item["method_id"] = str(item["method_id"])
         item["profile"] = str(item["profile"])
         item["material_id"] = str(item["material_id"])
-        item["family_id"] = str(item["family_id"])
+        item["parent_structure_id"] = str(item["parent_structure_id"])
         item["label"] = int(item["label"])
         item["prediction"] = int(item["prediction"])
-        if not item["family_id"]:
-            raise ValueError(f"prediction row {index} has an empty family_id")
+        if not item["parent_structure_id"]:
+            raise ValueError(
+                f"prediction row {index} has an empty parent_structure_id"
+            )
         if "probabilities" in item and item["probabilities"] is not None:
             probabilities = np.asarray(item["probabilities"], dtype=np.float64)
             if probabilities.ndim != 1 or probabilities.size < 2:
@@ -93,20 +95,25 @@ def summarize_prediction_rows(rows: Iterable[Mapping[str, Any]]) -> dict[str, An
             [row["prediction"] for row in group],
             probabilities=probabilities,
             num_classes=_num_classes(group),
-            groups=[row["family_id"] for row in group],
+            groups=[row["parent_structure_id"] for row in group],
         )
         output[f"{method_id}__seed_{seed}__{profile}"] = {
             "seed": seed,
             "method_id": method_id,
             "profile": profile,
-            "independent_family_count": len({row["family_id"] for row in group}),
+            "independent_parent_structure_count": len(
+                {row["parent_structure_id"] for row in group}
+            ),
             "spectrum_count": len(group),
             "metrics": metrics,
         }
     return output
 
 
-def _family_confusion(rows: Sequence[Mapping[str, Any]], num_classes: int) -> np.ndarray:
+def _structure_confusion(
+    rows: Sequence[Mapping[str, Any]],
+    num_classes: int,
+) -> np.ndarray:
     matrix = np.zeros((num_classes, num_classes), dtype=np.int64)
     for row in rows:
         matrix[int(row["label"]), int(row["prediction"])] += 1
@@ -163,11 +170,18 @@ def hierarchical_paired_bootstrap(
         raise ValueError("no rows match the requested methods and profiles")
     grouped: dict[tuple[int, str, str, str], list[dict[str, Any]]] = defaultdict(list)
     for row in relevant:
-        grouped[(row["seed"], row["method_id"], row["profile"], row["family_id"])].append(row)
+        grouped[
+            (
+                row["seed"],
+                row["method_id"],
+                row["profile"],
+                row["parent_structure_id"],
+            )
+        ].append(row)
 
-    seed_families: dict[int, list[str]] = {}
+    seed_structures: dict[int, list[str]] = {}
     for seed in seeds:
-        family_sets = [
+        structure_sets = [
             {
                 key[3]
                 for key in grouped
@@ -176,38 +190,42 @@ def hierarchical_paired_bootstrap(
             for method in (focus_method_id, comparator_method_id)
             for profile in profile_names
         ]
-        common = sorted(set.intersection(*family_sets)) if family_sets else []
+        common = sorted(set.intersection(*structure_sets)) if structure_sets else []
         if len(common) < 2:
             raise ValueError(
-                f"seed {seed} has fewer than two paired independent families across all profiles"
+                f"seed {seed} has fewer than two paired parent structures "
+                "across all profiles"
             )
-        seed_families[seed] = common
+        seed_structures[seed] = common
 
     num_classes = _num_classes(relevant)
-    family_confusions = {
-        key: _family_confusion(group, num_classes) for key, group in grouped.items()
+    structure_confusions = {
+        key: _structure_confusion(group, num_classes)
+        for key, group in grouped.items()
     }
 
-    def contrast_for(seed: int, sampled_families: Sequence[str]) -> float:
+    def contrast_for(seed: int, sampled_structures: Sequence[str]) -> float:
         method_scores: dict[str, list[float]] = {focus_method_id: [], comparator_method_id: []}
         for method in method_scores:
             for profile in profile_names:
                 sampled_confusion = np.zeros((num_classes, num_classes), dtype=np.int64)
-                for family_id in sampled_families:
-                    sampled_confusion += family_confusions[(seed, method, profile, family_id)]
+                for parent_structure_id in sampled_structures:
+                    sampled_confusion += structure_confusions[
+                        (seed, method, profile, parent_structure_id)
+                    ]
                 method_scores[method].append(_macro_f1_from_confusion(sampled_confusion))
         return float(np.mean(method_scores[focus_method_id]) - np.mean(method_scores[comparator_method_id]))
 
     observed_seed_deltas = {
-        str(seed): contrast_for(seed, seed_families[seed]) for seed in seeds
+        str(seed): contrast_for(seed, seed_structures[seed]) for seed in seeds
     }
     rng = np.random.default_rng(random_seed)
     bootstrap_deltas = np.zeros(replicates, dtype=np.float64)
     for seed in seeds:
-        families = seed_families[seed]
+        structures = seed_structures[seed]
         counts = rng.multinomial(
-            len(families),
-            np.full(len(families), 1.0 / len(families)),
+            len(structures),
+            np.full(len(structures), 1.0 / len(structures)),
             size=replicates,
         )
         method_scores: dict[str, np.ndarray] = {}
@@ -215,7 +233,12 @@ def hierarchical_paired_bootstrap(
             profile_scores = []
             for profile in profile_names:
                 matrices = np.stack(
-                    [family_confusions[(seed, method, profile, family_id)] for family_id in families]
+                    [
+                        structure_confusions[
+                            (seed, method, profile, parent_structure_id)
+                        ]
+                        for parent_structure_id in structures
+                    ]
                 )
                 sampled_confusions = np.tensordot(counts, matrices, axes=(1, 0))
                 profile_scores.append(_macro_f1_from_confusion_batch(sampled_confusions))
@@ -230,11 +253,14 @@ def hierarchical_paired_bootstrap(
         "metric": "mean_profile_macro_f1",
         "profiles": list(profile_names),
         "seed_ids": seeds,
-        "independent_unit": "mother_structure_family",
-        "bootstrap_design": "paired_family_cluster_within_seed_then_mean_across_registered_seeds",
+        "independent_unit": "parent_structure",
+        "bootstrap_design": (
+            "paired_parent_structure_cluster_within_seed_"
+            "then_mean_across_registered_seeds"
+        ),
         "seed_resampling_forbidden": True,
-        "independent_family_count_by_seed": {
-            str(seed): len(seed_families[seed]) for seed in seeds
+        "independent_parent_structure_count_by_seed": {
+            str(seed): len(seed_structures[seed]) for seed in seeds
         },
         "paired_seed_deltas": observed_seed_deltas,
         "mean_delta": float(np.mean(list(observed_seed_deltas.values()))),
@@ -331,7 +357,7 @@ def build_method_transfer_statistics_report(
         residual_minus_js=residual_js,
     )
     return {
-        "schema_version": "v9.1-family-hierarchical-statistics",
+        "schema_version": "v9.2-parent-structure-hierarchical-statistics",
         "analysis_scope": "prediction_rows_only",
         "selection_or_tuning_performed": False,
         "simulated_test_used": False,

@@ -19,10 +19,16 @@ class V9LearnedStateScaleAuditTests(unittest.TestCase):
         cls.contract = json.loads(CONTRACT_PATH.read_text(encoding="utf-8"))
         cls.governance = json.loads(GOVERNANCE_PATH.read_text(encoding="utf-8"))
 
-    def test_report_matches_the_current_audit_script(self) -> None:
+    def test_report_is_preserved_as_retired_split_evidence(self) -> None:
         digest = hashlib.sha256(SCRIPT_PATH.read_bytes()).hexdigest()
-        self.assertEqual(
+        self.assertNotEqual(
             self.report["input_hashes"]["audit_script"].lower(), digest.lower()
+        )
+        self.assertEqual(
+            self.report["input_hashes"]["split_manifest"].upper(),
+            self.governance["candidate_grid_gate_evidence"][
+                "previous_retired_split_manifest_sha256"
+            ],
         )
         self.assertEqual(self.report["status"], "pass")
 
@@ -111,6 +117,7 @@ class V9LearnedStateScaleAuditTests(unittest.TestCase):
         self.assertEqual(registered["lambda_js"], [0.3, 3.0, 30.0])
         self.assertEqual(registered["lambda_res"], [0.2, 2.0, 20.0])
         self.assertTrue(self.governance["candidate_range_frozen_for_validation"])
+        self.assertTrue(self.governance["current_split_gate_valid"])
         self.assertEqual(
             self.governance["one_revision_policy"]["completed_range_revisions"],
             1,

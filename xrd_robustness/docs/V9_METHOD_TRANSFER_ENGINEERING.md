@@ -15,6 +15,12 @@
 > and then the earlier epoch. The historical 50-epoch selection is not the
 > final selection under this new optimization contract.
 
+> 2026-07-26 parent-structure split override: the former family-disjoint split
+> and all results produced from it are retired. The active dataset uses a
+> deterministic 70/15/15 parent-structure random split stratified by crystal
+> system. New tuning is reset to 0/7 and restarts from experiment 1. The fresh
+> current-split Train-only and authoritative runtime gates pass.
+
 状态日期：2026-07-24。
 
 ## 1. 论文问题

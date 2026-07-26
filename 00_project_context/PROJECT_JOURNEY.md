@@ -513,3 +513,33 @@ patience-4 未完成运行。该目录包含首条 run 截止 epoch 14 / step 8,
 这一清理不改变科学合同或当前七条队列：旧运行仍不得恢复到实验队列、
 不得计数，也不得用于 checkpoint 选择；候选网格、seed、数据边界、
 61,600-step 上限、Validation 间隔和 early-stopping 规则均保持不变。
+
+## 2026-07-26：从匿名 Wyckoff family-disjoint 改为 parent-structure 随机分层划分
+
+在 chemistry-anonymous Wyckoff-family-disjoint 划分下，Validation-ID 与
+Validation-OOD 均处于极低水平。项目据此决定不再把 family 隔离作为默认
+实验设置，改用 parent structure（CIF / material）作为唯一不可拆分单位。
+新的划分使用固定种子 `20260726`，仅按七晶系分层，并随机分配为 Train
+70%、Validation 15%、Test 15%。同一 parent structure 生成的 clean、
+weak、strong、ID 和 OOD 谱图全部继承同一 split；`family_id` 可以保留作
+分析字段，但不得参与任何划分决策。
+
+这不是对旧结果的后处理修补，而是实验总体设计的根本变化。因此，旧
+family-disjoint split 下的七条固定预算结果、选择结论以及当前 100-epoch
+重调中已经完成的第一条结果全部作废，不得用于模型选择、checkpoint
+恢复、Test 访问或论文结论；剩余六条旧 split 实验取消。新 split 的
+Validation-only tuning 重置为 `0/7`，从实验 1 和 optimizer step 0 开始。
+
+工程实现生成新的 `split_manifest.json`，记录 `material_id`、
+`parent_structure_id`、`crystal_system` 和 `split`，并把层级 bootstrap
+的独立单位同步改为 parent structure。Validation-ID 仍表示未见过的
+parent structure 加 ID 扰动，Validation-OOD 仍表示同一批未见过 parent
+structure 加 OOD 扰动；除 split 及其直接统计依赖外，训练方法、扰动
+设计和 Test 锁保持不变。
+
+用户已授权从实验 1 重新训练。权威 `xrd_tools` Python 3.11.9 运行时
+恢复可用后，新 Train split 上的 candidate-grid Gate 从 epoch 0 重建
+五个 epoch 并通过：分类学习信号、互斥 Train 子集 residual probe、
+六个候选的直接梯度测量及无 Validation/Test 泄漏检查均通过。当前证据
+状态是 manifest、split 审计和当前 split Gate 已完成，训练结果 `0/7`；
+实验 1 在本次源码和合同变更提交、推送后从 optimizer step 0 启动。

@@ -6,6 +6,31 @@
 
 > Current-state record only. Historical reasoning remains in `PROJECT_JOURNEY.md` and dated decision files.
 
+## 2026-07-26 parent-structure split reset (authoritative)
+
+The chemistry-anonymous Wyckoff-family-disjoint split is retired. The active
+dataset contract assigns each parent structure (`CIF` / material) as one
+indivisible unit using deterministic random sampling stratified only by the
+seven crystal systems: Train 70% (9,842), Validation 15% (2,109), and Test 15%
+(2,109), with seed `20260726`.
+
+All clean, weak, strong, ID, and OOD patterns derived from one parent structure
+inherit the same split. The regenerated local `split_manifest.json` has SHA-256
+`B9D3B72E42EA0FD549DAE34425FF61D2D650D5DD7FE6F337D747CB952CF43293`;
+the audit records 14,060 unique parent structures and zero cross-split parent
+overlap. `family_id` is not used by the assignment.
+
+Every training result produced under the retired split is invalid for model
+selection, checkpoint resume, evaluation, or paper claims. The remaining six
+old-split runs are cancelled. New-split tuning is reset to `0/7` and must
+restart at experiment 1 from optimizer step zero.
+
+The restart is authorized. The authoritative `xrd_tools` Python 3.11.9 runtime
+is available again, and the fresh Train-only candidate-grid Gate passed on the
+exact new split without accessing Validation, simulated Test, or real XRD.
+New-split training remains `0/7` until experiment 1 is launched after this
+source/configuration change is committed and pushed.
+
 ## 2026-07-26 queue paused after the first retuning run
 
 The first 10-epoch-Validation / patience-2 tuning run,
@@ -118,7 +143,7 @@ Materials Project structures: **14,060**.
 | Validation | 2,109 | fixed-budget endpoint lambda and development comparison in the completed tuning; no intermediate early-stopping evidence |
 | Test | 2,109 | locked simulated Test |
 
-All methods share the same mother-structure/family split. Dynamic ERM, JS and Residual also share the same sampler, pair schedule and accepted perturbation parameter-pair stream under matched seeds.
+All methods share the same parent-structure split. Dynamic ERM, JS and Residual also share the same sampler, pair schedule and accepted perturbation parameter-pair stream under matched seeds.
 
 Frozen candidate grids:
 

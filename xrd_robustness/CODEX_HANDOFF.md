@@ -1,6 +1,20 @@
 # XRD Robustness V9-T：跨 Codex 账号与台式机完整交接
 
-> **2026-07-26 paused-after-first state (latest operational state):**
+> **2026-07-26 parent-structure split override (latest and authoritative):**
+> The chemistry-anonymous Wyckoff-family-disjoint split is retired. The active
+> split unit is one parent structure, randomly assigned 70/15/15 with
+> crystal-system stratification and seed `20260726`. Every derived clean,
+> weak, strong, ID, and OOD pattern inherits its parent's split. The current
+> manifest SHA-256 is
+> `B9D3B72E42EA0FD549DAE34425FF61D2D650D5DD7FE6F337D747CB952CF43293`.
+> Old-split results and checkpoints are invalid. The remaining six old-split
+> runs are cancelled; new-split tuning is `0/7` and restarts at experiment 1
+> from step zero. The restart is authorized; the authoritative Python 3.11.9
+> runtime is available and the Train-only candidate-grid Gate passed on this
+> exact split without Validation/Test access. No new-split run had started
+> when this contract snapshot was frozen.
+
+> **2026-07-26 paused-after-first state (superseded by split reset):**
 > The first run, `ordinary_dynamic_augmentation__tuning_seed_20260710`,
 > completed via early stopping at epoch 80 / step 49,280. The selected best
 > checkpoint is epoch 70 / step 43,120 with mean single-factor Validation-OOD
@@ -217,7 +231,7 @@ Residual Class Decorrelation 是重点假设，但在获得直接、匹配的 Dy
 
 权威数据根：`data/formal_14060`。
 
-冻结 family-aware 划分：
+已退役的 family-aware 划分仅保留为历史记录；当前使用 parent-structure 随机分层划分：
 
 | Split | 结构数 | 当前用途 |
 |---|---:|---|
@@ -228,8 +242,8 @@ Residual Class Decorrelation 是重点假设，但在获得直接、匹配的 Dy
 
 关键文件：
 
-- `configs/data.v9.method_transfer.family_split.json`
-- `data/formal_14060/manifests/split_manifest.v9t.family_v1.csv`
+- `configs/data.v9.method_transfer.structure_split.json`
+- `data/formal_14060/manifests/split_manifest.json`
 - `data/formal_14060/manifests/v9_method_transfer_validation.csv`
 - `reports/v9_method_transfer_split_audit.json`
 
@@ -826,7 +840,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File scripts\desktop_first_boot_v
 - 每行至少包含 seed、method ID、profile、material ID、family ID、label、prediction、probabilities。
 - 正式比较必须在 seed 内对母结构/family cluster 做配对 bootstrap，再跨全部注册 seed 汇总。
 - 禁止恢复旧的“只对三个 seed 数值反复 bootstrap”实现。
-- 声称 Residual 优于 JS 时，必须直接报告 `Residual - JS` 与 family-level 95% CI。
+- 声称 Residual 优于 JS 时，必须直接报告 `Residual - JS` 与 parent-structure-level 95% CI。
 
 ### 预先准备的非训练资产
 

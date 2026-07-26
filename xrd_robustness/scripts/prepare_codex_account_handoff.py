@@ -27,7 +27,11 @@ from xrd_robustness.method_transfer import (  # noqa: E402
 
 DEFAULT_OUTPUT = PROJECT_ROOT / "reports" / "codex_account_handoff_manifest.json"
 CONTRACT_PATH = PROJECT_ROOT / "configs" / "algorithm.v9.method_transfer.json"
-PLAN_PATH = PROJECT_ROOT / "reports" / "v9_method_transfer_tuning_plan.json"
+PLAN_PATH = (
+    PROJECT_ROOT
+    / "reports"
+    / "v9_method_transfer_tuning_plan_parent_structure_split_v1.json"
+)
 PREFLIGHT_PATH = PROJECT_ROOT / "reports" / "v9_method_transfer_preflight.json"
 STREAM_AUDIT_PATH = PROJECT_ROOT / "reports" / "v9_training_stream_preflight_audit.json"
 MIGRATION_PATH = PROJECT_ROOT / "reports" / "v9_desktop_migration_manifest.json"
@@ -48,12 +52,12 @@ ARTIFACT_ROLES = {
     "configs/hardware.v9.desktop.9600x_4070tis.json": "target desktop hardware profile",
     "configs/simulation.v9.method_transfer.frozen.json": "frozen physical simulation profiles",
     "configs/evaluation.v9.method_transfer.json": "development and final evaluation locks",
-    "configs/data.v9.method_transfer.family_split.json": "family-aware split contract",
-    "data/formal_14060/manifests/split_manifest.v9t.family_v1.csv": "authoritative train validation test split",
+    "configs/data.v9.method_transfer.structure_split.json": "parent-structure split contract",
+    "data/formal_14060/manifests/split_manifest.json": "authoritative train validation test split",
     "data/formal_14060/manifests/v9_method_transfer_validation.csv": "unified development validation panel",
     "reports/v9_method_transfer_preflight.json": "latest source-machine scientific preflight",
     "reports/v9_training_stream_preflight_audit.json": "stream fairness and bounded-memory proof",
-    "reports/v9_method_transfer_tuning_plan.json": "seven-run plan; all runs must remain unstarted",
+    "reports/v9_method_transfer_tuning_plan_parent_structure_split_v1.json": "new-split seven-run plan; execution remains gated",
     "reports/v9_method_transfer_final_lock_audit.json": "simulated-test and real-test lock proof",
     "scripts/desktop_first_boot_v9.ps1": "no-training target-desktop acceptance orchestrator",
     "scripts/run_v9_method_transfer.py": "planning and explicitly authorized execution launcher",
@@ -118,8 +122,19 @@ $items | Select-Object ProcessId,Name,CommandLine | ConvertTo-Json -Compress
 def _output_state(contract: dict[str, Any]) -> dict[str, Any]:
     output_root = PROJECT_ROOT / str(contract["development_tuning"]["output_root"])
     registry_path = output_root / "run_registry.json"
-    registry = _load(registry_path)
+    registry = _load(registry_path) if registry_path.is_file() else []
     registry_runs = registry.get("runs", []) if isinstance(registry, dict) else registry
+    if not output_root.is_dir():
+        return {
+            "root": output_root.relative_to(PROJECT_ROOT).as_posix(),
+            "registry_present": False,
+            "registry_run_count": 0,
+            "checkpoint_count": 0,
+            "result_count": 0,
+            "run_directory_count": 0,
+            "resume_allowed": False,
+            "required_start_step": 0,
+        }
     checkpoints = [
         path
         for suffix in ("*.pt", "*.pth", "*.ckpt")

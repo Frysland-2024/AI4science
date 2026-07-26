@@ -1,6 +1,6 @@
 # CODEX 数据集划分更新说明：取消 Gate 集并合并为 Validation 集
 
-> **历史文档警告（2026-07-19）：**本文保留的是取消 Gate 时的旧 9,800/2,130/2,130 划分记录，不是当前执行合同。当前 V9-T 使用 family-aware 9,842/2,109/2,109 划分；请以 `../CODEX_HANDOFF.md`、`../configs/data.v9.method_transfer.family_split.json` 和当前 split 审计为准。
+> **历史文档警告（2026-07-26）：**本文保留的是取消 Gate 时的旧划分记录，不是当前执行合同。family-aware 划分也已退役。当前 V9-T 使用 parent-structure-level 70/15/15 随机分层划分；请以 `../CODEX_HANDOFF.md`、`../configs/data.v9.method_transfer.structure_split.json` 和当前 split 审计为准。
 
 ## 1. 更新目的
 

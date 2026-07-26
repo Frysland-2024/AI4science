@@ -1,4 +1,4 @@
-"""Analyze frozen V9 prediction rows with family-level hierarchical bootstrap."""
+"""Analyze V9 prediction rows with parent-structure hierarchical bootstrap."""
 
 from __future__ import annotations
 
@@ -46,14 +46,14 @@ def main() -> int:
     with (artifacts / "method_profile_metrics.csv").open("w", encoding="utf-8", newline="") as handle:
         writer = csv.DictWriter(
             handle,
-            fieldnames=["seed", "method_id", "profile", "independent_family_count", "spectrum_count", "accuracy", "balanced_accuracy", "macro_f1", "worst_group_f1", "ece"],
+            fieldnames=["seed", "method_id", "profile", "independent_parent_structure_count", "spectrum_count", "accuracy", "balanced_accuracy", "macro_f1", "worst_group_f1", "ece"],
         )
         writer.writeheader()
         for item in report["summaries"].values():
             metrics = item["metrics"]
             writer.writerow({
                 "seed": item["seed"], "method_id": item["method_id"], "profile": item["profile"],
-                "independent_family_count": item["independent_family_count"], "spectrum_count": item["spectrum_count"],
+                "independent_parent_structure_count": item["independent_parent_structure_count"], "spectrum_count": item["spectrum_count"],
                 "accuracy": metrics["accuracy"], "balanced_accuracy": metrics["balanced_accuracy"],
                 "macro_f1": metrics["macro_f1"], "worst_group_f1": metrics["worst_group_f1"], "ece": metrics.get("ece"),
             })

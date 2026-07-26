@@ -34,6 +34,7 @@ from xrd_robustness.online_views import OnlineViewFactory
 from xrd_robustness.peak_cache import load_peak_table
 from xrd_robustness.perturbation_strategy import IndependentDynamicStrategy
 from xrd_robustness.physics import PhysicsParameterSampler
+from xrd_robustness.structure_split import load_split_manifest
 from xrd_robustness.training import dynamic_erm
 from xrd_robustness.training_prefetch import render_dynamic_batch
 from xrd_robustness.training_stream import (
@@ -98,8 +99,7 @@ def _label_map(split_manifest: Path) -> tuple[list[str], dict[str, int]]:
         "triclinic",
         "trigonal",
     )
-    with split_manifest.open("r", encoding="utf-8", newline="") as handle:
-        rows = list(csv.DictReader(handle))
+    rows = load_split_manifest(split_manifest)["records"]
     train_rows = sorted(
         (row for row in rows if row["split"] == "train"),
         key=lambda row: row["material_id"],
@@ -434,7 +434,7 @@ def main() -> int:
         synthetic=args.synthetic,
         data_root=PROJECT_ROOT / "data" / "formal_14060",
         simulation_path=PROJECT_ROOT / "configs" / "simulation.v9.method_transfer.frozen.json",
-        split_manifest=PROJECT_ROOT / "data" / "formal_14060" / "manifests" / "split_manifest.v9t.family_v1.csv",
+        split_manifest=PROJECT_ROOT / "data" / "formal_14060" / "manifests" / "split_manifest.json",
     )
     report["source_hashes"] = {
         "script": file_hash(Path(__file__)).upper(),

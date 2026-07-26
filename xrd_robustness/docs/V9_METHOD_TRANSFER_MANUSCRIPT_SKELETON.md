@@ -8,7 +8,7 @@ Learning cross-view invariance for robust crystal-system classification from sim
 
 ## Abstract template
 
-Simulated powder X-ray diffraction (XRD) enables large labeled training sets, but measurement perturbations create a sim-to-real gap. We compare matched-budget empirical risk minimization (ERM), output-level Jensen-Shannon (JS) consistency, and residual class-decorrelation using a family-aware split and a shared paired dynamic view stream. Hyperparameters are chosen on Validation only; simulated Test and real XRD remain sealed until a single method is frozen. Across [registered profiles], [selected method/outcome] produced [effect with family-level 95% CI]. Mechanism diagnostics showed [measured observation only]. On the one-time external test, [result].
+Simulated powder X-ray diffraction (XRD) enables large labeled training sets, but measurement perturbations create a sim-to-real gap. We compare matched-budget empirical risk minimization (ERM), output-level Jensen-Shannon (JS) consistency, and residual class-decorrelation using a parent-structure-level split and a shared paired dynamic view stream. Hyperparameters are chosen on Validation only; simulated Test and real XRD remain sealed until a single method is frozen. Across [registered profiles], [selected method/outcome] produced [effect with parent-structure-level 95% CI]. Mechanism diagnostics showed [measured observation only]. On the one-time external test, [result].
 
 ## 1. Introduction
 
@@ -16,13 +16,15 @@ Simulated powder X-ray diffraction (XRD) enables large labeled training sets, bu
 2. Background, noise, peak-position, broadening, texture, and intensity effects create measurement variability. Keep the observation model additive: `I_obs = I_peak + I_background + noise`.
 3. Broader augmentation exposure does not itself teach a model how predictions or representations should relate across two views of one mother structure.
 4. This study therefore compares matched-budget Dynamic ERM, JS consistency, and residual decorrelation while holding backbone, structures, paired views, and optimizer-step budget fixed.
-5. Contributions: audited paired stream; family-aware leakage control; test isolation; pre-registered family-cluster statistics; mechanism diagnostics that avoid equating a learned residual with a physical measurement variable.
+5. Contributions: audited paired stream; parent-structure leakage control; test isolation; pre-registered parent-structure cluster statistics; mechanism diagnostics that avoid equating a learned residual with a physical measurement variable.
 
 ## 2. Methods
 
-### 2.1 Data and family-aware split
+### 2.1 Data and parent-structure-level split
 
-Report mother-structure count, family construction, structure fingerprints, split counts, and proof that mother structure/fingerprint/family do not cross splits.
+The dataset is split at the parent-structure level. All diffraction patterns generated from the same crystal structure are assigned to the same subset to prevent data leakage. Stratified random sampling is performed according to crystal system to maintain balanced class distributions.
+
+Report parent-structure count, structure fingerprints, split counts, the fixed random seed, and proof that no parent structure crosses splits. `family_id` may be retained for analysis but must not influence assignment.
 
 ### 2.2 Forward simulator and five perturbation families
 
@@ -50,7 +52,7 @@ Seven Validation-only tuning runs select λ from the registered candidate sets. 
 
 ### 2.7 Statistics
 
-Primary metric: mean Macro-F1 across the six registered single-factor OOD profiles. Report per-seed paired differences and 95% intervals from a paired mother-structure/family cluster bootstrap within each seed, averaged across all registered seeds. Do not bootstrap only the three seed-level summaries. Directly test `Residual - JS` for claims of superiority. Also report ID Macro-F1, balanced accuracy, worst-group F1, ECE, per-class values, and confusion matrices.
+Primary metric: mean Macro-F1 across the six registered single-factor OOD profiles. Report per-seed paired differences and 95% intervals from a paired parent-structure cluster bootstrap within each seed, averaged across all registered seeds. Do not bootstrap only the three seed-level summaries. Directly test `Residual - JS` for claims of superiority. Also report ID Macro-F1, balanced accuracy, worst-group F1, ECE, per-class values, and confusion matrices.
 
 ## 3. Results templates
 
@@ -83,14 +85,14 @@ Fill once, after method freeze and explicit unlock. Test results must not trigge
 
 ## 4. Discussion
 
-Separate what the data support from hypotheses about physical mechanism. Discuss registered negative outcomes, simulator limitations, limited seed count, external-domain limitations, and why family-level resampling is the relevant uncertainty unit.
+Separate what the data support from hypotheses about physical mechanism. Discuss registered negative outcomes, simulator limitations, limited seed count, external-domain limitations, and why parent-structure-level resampling is the relevant uncertainty unit.
 
 ## Figure plan
 
 1. Study flow and data/test locks.
 2. λ scale audit (numerical magnitude only, never labeled performance tuning).
 3. Single-factor OOD radar or grouped bars.
-4. Paired family-level gain and hierarchical 95% intervals.
+4. Paired parent-structure-level gain and hierarchical 95% intervals.
 5. Confusion matrices.
 6. Residual probe and representation diagnostics.
 7. One-time real-test result table/plot.

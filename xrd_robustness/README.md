@@ -1,5 +1,11 @@
 # XRD Robustness V9-T
 
+> **2026-07-26 split reset:** The active split is a deterministic 70/15/15
+> parent-structure-level random split stratified by crystal system (seed
+> `20260726`). All results from the retired family-disjoint split are invalid.
+> New tuning is reset to 0/7 and restarts from experiment 1. The current-split
+> Train-only Gate and authoritative runtime checks pass.
+
 > 跨机器、跨 Codex 账号接管先阅读 [`CODEX_HANDOFF.md`](CODEX_HANDOFF.md)；真实域少样本设计再阅读 [`CODEX_HANDOFF_REAL_ADAPTATION_ADDENDUM.md`](CODEX_HANDOFF_REAL_ADAPTATION_ADDENDUM.md)。这些文档均不构成训练或测试授权。
 
 ## 当前研究身份
@@ -23,7 +29,7 @@
 
 | 阶段 | 状态 |
 |---|---|
-| 14,060 结构 family-aware 划分 | 冻结：Train 9,842 / Validation 2,109 / Test 2,109 |
+| 14,060 结构 parent-structure 随机分层划分 | 冻结：Train 9,842 / Validation 2,109 / Test 2,109 |
 | 方法参数候选范围 | 冻结：JS `[0.3,3,30]`；Residual `[0.2,2,20]` |
 | Simulation Validation tuning | **旧 50-epoch endpoint 7/7 已归档；新合同为最多 100 epoch、每 10 epoch Validation、patience 2，完整网格从 0/7 重启** |
 | 正式模拟实验 | **0/15，未开始** |
@@ -97,7 +103,7 @@ ZIP 和外部源码树不进入 Git，也不构成当前 V9 的训练或评测�
 
 ```text
 Materials Project structures
-  -> formal_14060 family split
+  -> formal_14060 parent-structure split
   -> ideal reflection cache
   -> paired online physical perturbations
   -> PAMPT-B3 + ERM / JS / Residual
