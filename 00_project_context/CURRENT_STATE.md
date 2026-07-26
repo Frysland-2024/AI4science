@@ -48,10 +48,10 @@ Train-only semantics, learned-state and candidate-grid gates have passed. On 202
 ## 4. Simulation execution state
 
 ```text
-lambda tuning = 0/7
+lambda tuning = 4/7 completed; run 5 recovery pending
 formal simulation comparison = 0/15
 simulated Test = locked, not started
-active authoritative checkpoints = 0
+active authoritative checkpoints = 1 verified recovery checkpoint
 active training processes = 0
 ```
 
@@ -60,6 +60,20 @@ The registered tuning target is now the LENOVO 82WM laptop (Ryzen 9 7945HX, RTX 
 All seven tuning runs must start from optimizer step 0 through the registered launcher. Formal simulation, simulated Test, real XRD and V10 remain separately locked.
 
 The first launcher attempt on 2026-07-26 was deliberately stopped before being counted because the trainer wrote `git_commit.txt` as unavailable even though the authoritative Git root is the parent directory `E:\AI4science`. Its partial checkpoint and run directory were moved intact to `outputs/v9_method_transfer_tuning/aborted_provenance_probe_20260726_1147`; they are not resumable evidence and must not count toward 7/7. The trainer now resolves `git rev-parse HEAD` from the project path, is regression-tested, and the registered queue must restart the first run from optimizer step 0.
+
+Four registered runs have now completed with return code 0. The fifth run,
+`residual_decorrelation_transfer__lambda_res_0p2__tuning_seed_20260710`,
+completed its frozen 50-epoch, 30,650-step training budget, then failed before
+`results.json` while generating the Train-only posthoc residual probe. The
+engineering root cause was an invalid manifest split label, `posthoc_train`,
+being passed to the perturbation strategy, whose scientific split contract only
+permits `train`, `validation`, or `test`. The failed run directory, traceback,
+full-step `last.ckpt`, history, manifests, and stream audit were preserved.
+The repair labels this Train-only diagnostic as `train`; it does not change the
+model, grid, seed, optimization budget, structure or spectrum exposure, or any
+training sampler/pair/parameter hash. The verified epoch-50 checkpoint may be
+resumed only after the repair is tested, committed, and pushed; the queue must
+then finish this same run before starting run 6.
 
 ## 5. Real-domain research axis
 

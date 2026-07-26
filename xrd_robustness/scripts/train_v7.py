@@ -795,6 +795,23 @@ def _collect_residuals(
     return torch.cat(residuals), torch.tensor(labels, dtype=torch.long)
 
 
+def _build_posthoc_train_probe_rows(
+    train_ids: Sequence[str],
+    sampler: PhysicsParameterSampler,
+    *,
+    profile: str,
+) -> list[ViewManifestRow]:
+    """Build the train-only posthoc probe with a valid scientific split."""
+    return build_parameter_stream(
+        train_ids,
+        sampler,
+        profile=profile,
+        epochs=1,
+        steps_per_epoch=1,
+        split="train",
+    )
+
+
 def _evaluate_perturbation_decoder(
     model: PAMPT,
     perturbation_regressor: PerturbationDeltaRegressor,
@@ -1826,13 +1843,10 @@ def main() -> int:
                 for material_id in missing_train_peak_ids
             }
         )
-        posthoc_train_probe_rows = build_parameter_stream(
+        posthoc_train_probe_rows = _build_posthoc_train_probe_rows(
             train_ids,
             sampler,
             profile=active_train_profile,
-            epochs=1,
-            steps_per_epoch=1,
-            split="posthoc_train",
         )
         posthoc_train_probe_hash = save_manifest(
             posthoc_train_probe_rows,

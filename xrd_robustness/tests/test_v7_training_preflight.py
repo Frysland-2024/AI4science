@@ -3,6 +3,7 @@ import json
 from pathlib import Path
 import tempfile
 import unittest
+from unittest.mock import ANY, patch
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -49,6 +50,23 @@ class V7TrainingPreflightTests(unittest.TestCase):
         commit = TRAINER._git_commit(PROJECT_ROOT)
         self.assertEqual(len(commit), 40)
         self.assertTrue(all(character in "0123456789abcdef" for character in commit))
+
+    def test_posthoc_train_probe_uses_the_train_scientific_split(self):
+        with patch.object(TRAINER, "build_parameter_stream", return_value=[]) as build:
+            rows = TRAINER._build_posthoc_train_probe_rows(
+                ["mp-1"],
+                object(),
+                profile="train",
+            )
+        self.assertEqual(rows, [])
+        build.assert_called_once_with(
+            ["mp-1"],
+            ANY,
+            profile="train",
+            epochs=1,
+            steps_per_epoch=1,
+            split="train",
+        )
 
 
 if __name__ == "__main__":
