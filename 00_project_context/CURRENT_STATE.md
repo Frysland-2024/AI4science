@@ -59,6 +59,8 @@ The registered tuning target is now the LENOVO 82WM laptop (Ryzen 9 7945HX, RTX 
 
 All seven tuning runs must start from optimizer step 0 through the registered launcher. Formal simulation, simulated Test, real XRD and V10 remain separately locked.
 
+The first launcher attempt on 2026-07-26 was deliberately stopped before being counted because the trainer wrote `git_commit.txt` as unavailable even though the authoritative Git root is the parent directory `E:\AI4science`. Its partial checkpoint and run directory were moved intact to `outputs/v9_method_transfer_tuning/aborted_provenance_probe_20260726_1147`; they are not resumable evidence and must not count toward 7/7. The trainer now resolves `git rev-parse HEAD` from the project path, is regression-tested, and the registered queue must restart the first run from optimizer step 0.
+
 ## 5. Real-domain research axis
 
 Before any formal model accessed RRUFF-70, the real-data question was expanded from pure zero-shot evaluation to:
@@ -182,7 +184,7 @@ The strict local audit and deterministic plan artifacts are now synchronized:
 Neither artifact loads a model or spectrum, performs adaptation, or accesses the
 final real test.
 
-The local full repository suite passed **179/179** tests on 2026-07-26.
+The local full repository suite passed **180/180** tests on 2026-07-26.
 
 ## 10. Remaining blockers
 

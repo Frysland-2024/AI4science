@@ -379,3 +379,8 @@ Pilot v1 因三条分支都接近七分类随机水平而返回 `HOLD`，无法�
 同一探针也发现当前 Windows 环境没有可工作的 Triton，`torch.compile` 实际产生零个 compiled graph，并回退到 eager。继续请求编译只会为每个进程增加失败编译时间和警告，不会带来计算加速。因此笔记本硬件合同显式关闭 `torch.compile`，同时保留 BF16、TF32、fused AdamW、pinned memory、non-blocking H2D 和八进程预取。这个决定只改变工程执行效率，不改变模型、损失、候选网格、seed、训练步数、结构暴露或 Validation 选择规则。
 
 启动前状态仍为 0/7。所有 run 必须由注册计划和 run registry 从 optimizer step 0 启动；任一 run 失败后停止，不得自动进入后续正式或测试阶段。
+## 2026-07-26：首次笔记本启动因 Git provenance 缺口停止并从零重启
+
+注册启动器通过空闲门后，首条 Dynamic ERM tuning run 已创建冻结 manifest 并进入 GPU 负载，但 `git_commit.txt` 写成了 `unavailable: workspace has no git repository`。这不是 GitHub 状态真的缺失，而是旧训练器从未执行 Git 发现，直接硬编码 unavailable；项目的真实 Git 根在 `xrd_robustness` 的父目录 `E:\AI4science`。
+
+该缺口不改变模型、数据或参数合同，但会让七条正式结果缺少可核验的提交来源，因此不能以“训练已经开始”为理由继续累积不完整证据。队列被主动停止，部分 checkpoint 与 run 文件整体移动到 `outputs/v9_method_transfer_tuning/aborted_provenance_probe_20260726_1147`，不恢复、不计入 7-run。训练器改为从项目路径执行 `git rev-parse HEAD`，并新增父仓库解析回归测试。修复同步 GitHub 后，首条 run 仍从 optimizer step 0 重新开始。

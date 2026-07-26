@@ -45,6 +45,11 @@ class V7TrainingPreflightTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "expected 14060"):
                 TRAINER._load_records(14060, data_root)
 
+    def test_git_commit_resolves_from_parent_repository(self):
+        commit = TRAINER._git_commit(PROJECT_ROOT)
+        self.assertEqual(len(commit), 40)
+        self.assertTrue(all(character in "0123456789abcdef" for character in commit))
+
 
 if __name__ == "__main__":
     unittest.main()

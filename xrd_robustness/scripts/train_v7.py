@@ -9,6 +9,7 @@ import json
 import math
 import platform
 from pathlib import Path
+import subprocess
 import sys
 import time
 from typing import Any, Sequence
@@ -870,6 +871,22 @@ def _evaluate_perturbation_decoder(
     }
 
 
+def _git_commit(project_root: Path) -> str:
+    completed = subprocess.run(
+        ["git", "-C", str(project_root), "rev-parse", "HEAD"],
+        check=False,
+        capture_output=True,
+        text=True,
+        timeout=30,
+    )
+    commit = completed.stdout.strip()
+    if completed.returncode == 0 and len(commit) == 40 and all(
+        character in "0123456789abcdefABCDEF" for character in commit
+    ):
+        return commit.lower()
+    return "unavailable: git rev-parse failed"
+
+
 def main() -> int:
     args = parse_args()
     if args.epochs <= 0 or args.batch_size <= 0 or args.evaluation_batch_size <= 0:
@@ -1062,7 +1079,8 @@ def main() -> int:
     (run_dir / "training_sampler_contract_hash.txt").write_text(
         sampler_contract_hash, encoding="utf-8"
     )
-    (run_dir / "git_commit.txt").write_text("unavailable: workspace has no git repository\n", encoding="utf-8")
+    git_commit = _git_commit(PROJECT_ROOT)
+    (run_dir / "git_commit.txt").write_text(git_commit + "\n", encoding="utf-8")
 
     train_stream_contract = None
     if dynamic_train_mode:
@@ -1974,7 +1992,7 @@ def main() -> int:
         "evaluation_contract_hash": evaluation_contract_hash,
         "resolved_config_hash": resolved_config_hash,
         "source_tree_hash": source_tree_hash,
-        "git_commit": "unavailable: workspace has no git repository",
+        "git_commit": git_commit,
         "data_manifest_hash": data_manifest_hash,
         "development_subset_manifest_hash": development_subset_manifest_hash,
         "peak_cache_manifest_hash": peak_cache_manifest_hash,
