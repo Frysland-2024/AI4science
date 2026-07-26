@@ -1,0 +1,166 @@
+{
+  "summary": {
+    "projectName": "AI4science",
+    "locale": "zh-CN",
+    "modelId": "agent-work-loop-v4",
+    "reportContractVersion": 25,
+    "overview": "session-limited 评审：项目具备罕见的程序性安全文化（分层安全命令、哈希绑定审计、详尽的同步守卫），但权威上下文存在自相冲突、质量门禁全部停留在文字约定、会话证据源不可用使实际行为与学习捕获状态不可见。",
+    "aiAgentPractice": {
+      "inspectedSurfaces": [
+        "Rules"
+      ],
+      "coverageRows": [
+        {
+          "surface": "Rules",
+          "scopes": [
+            "Project"
+          ],
+          "count": 1,
+          "paths": [
+            "AGENTS.md"
+          ]
+        },
+        {
+          "surface": "Custom Agents",
+          "scopes": [
+            "Project"
+          ],
+          "count": 0
+        }
+      ]
+    },
+    "assignmentSummaries": [],
+    "dimensions": [
+      {
+        "id": "task-understanding",
+        "label": "任务理解",
+        "score": 52,
+        "summary": "根 AGENTS.md 给出明确阅读顺序与更新义务，但交接文档多条横幅同时自称最新权威、核心源码零模块级指令且归档目录内存在过期指令文件，权威上下文路由不可靠。",
+        "findingRefs": [
+          "handoff-authority-conflict",
+          "core-module-guidance-gap"
+        ]
+      },
+      {
+        "id": "controlled-execution",
+        "label": "可控执行",
+        "score": 50,
+        "summary": "README 按风险分层的安全命令面是亮点，但全部命令硬编码本机绝对路径、环境无法从仓库重建，且规则强制的外部技能与远程仓库读取在当前作用域无承接路由。",
+        "findingRefs": [
+          "unreachable-mandatory-preconditions",
+          "environment-not-reproducible"
+        ]
+      },
+      {
+        "id": "change-validation",
+        "label": "改动验证",
+        "score": 64,
+        "summary": "46 个测试文件与热点源码同频共演进（如 method_transfer 源码与测试路径相关共变），验证路由存在；但所有测试运行结果均未经证实，窗口内也无会话级验证行为证据。",
+        "findingRefs": []
+      },
+      {
+        "id": "reliable-delivery",
+        "label": "可靠交付",
+        "score": 45,
+        "summary": "同步流程与禁令写得详尽（禁 force-push、禁批量 staging、密钥扫描），但 origin/main 接受边界无任何机械门禁，推送是默认无确认的外发行为，恢复路径依赖叙述而非机械验收。",
+        "findingRefs": [
+          "no-mechanical-quality-gate",
+          "default-push-without-confirmation"
+        ]
+      },
+      {
+        "id": "learning-capture",
+        "label": "经验沉淀",
+        "score": 38,
+        "summary": "证据边界：qoder 会话源根报告 missing-optional-root 与 disabled-source-root 警告，窗口内 2 个合格会话产出 0 个候选任务片段；项目 Memory 计数为 2 但标题审查覆盖为 0，状态为未观察而非健康。学习捕获的检测、路由与有效性均无法主张，此缺口保留在证据边界内待源根恢复后复评。",
+        "findingRefs": []
+      }
+    ]
+  },
+  "findings": [
+    {
+      "id": "handoff-authority-conflict",
+      "title": "交接文档多条横幅同时自称“最新且权威”，接管合同裁决不明",
+      "severity": "High",
+      "reason": "事实：xrd_robustness/CODEX_HANDOFF.md 第 3 行与第 37 行两条同日 override 横幅均标注 latest and authoritative，第 25 行另有一条自称已被取代却仍居前列；该文件 5 天内 26 次提交、全文 1148 行。推断：接管代理只能凭“越靠上越新”的隐含约定裁决，一旦裁错会选错激活 split 或误判 0/7 与 7/7 完成态，进而触碰被锁定的 Test/real 阶段边界。不确定性：未观测到真实代理因此失败的实例。",
+      "expectedOutput": [
+        "接管代理打开交接文档时，第一屏即可无歧义确定当前有效合同与激活 split，历史决策仍可追溯。"
+      ],
+      "expectedArtifact": "Doc",
+      "aiFixPrompt": "/better-harness fix this issue\n\n将 xrd_robustness/CODEX_HANDOFF.md 的“当前唯一有效合同”收敛为文件顶部单一区块，历史 override 横幅移入按日期追加的归档节；每次覆盖时显式撤销被替代横幅的 authoritative 标记，不删除任何历史内容。\n\n## Validation\n\n- 重读文件确认全文只有一处 authoritative 标记\n- 确认历史横幅完整保留在归档节且带取代日期",
+      "dimensionRefs": [
+        "task-understanding"
+      ]
+    },
+    {
+      "id": "core-module-guidance-gap",
+      "title": "核心源码无模块级指令，就近查找会命中归档目录内的过期 AGENTS.md",
+      "severity": "Medium",
+      "reason": "事实：109 个源文件的模块级指令覆盖率为 0%（nestedSourceFileCoveragePercent=0）；仓库内唯一嵌套 AGENTS.md 位于 00_project_context/extracted_full_archive/ 2026-06-27 归档包内，证据包已将其计为“模块局部指令”；核心代码边界未配置（coreCodeRules.status=missing）。推断：代理进入 xrd_robustness/scripts（67 文件、31 次提交热路径）或 src（42 文件）时得不到局部规则，就近向上查找反而可能加载归档的过期指令。不确定性：未观测到误导实例。",
+      "expectedOutput": [
+        "进入核心模块的代理获得就近有效的局部规则，且不会误把归档指令当作现行约定。"
+      ],
+      "expectedArtifact": "Rules",
+      "aiFixPrompt": "/better-harness fix this issue\n\n在 xrd_robustness/ 新增一份模块级 AGENTS.md，描述 src/scripts/tests/configs/reports 的角色、锁定阶段边界与合同哈希纪律；同时在归档目录内的 AGENTS.md 顶部加显著“已归档、不适用于当前任务”声明。均为文档新增或标注，不改动任何代码。\n\n## Validation\n\n- 重新运行项目证据采集，确认嵌套指令覆盖率大于 0\n- 确认归档 AGENTS.md 首行含已归档声明",
+      "dimensionRefs": [
+        "task-understanding"
+      ]
+    },
+    {
+      "id": "no-mechanical-quality-gate",
+      "title": "提交门禁全部是文字约定，origin/main 前无任何机械执行点",
+      "severity": "Medium",
+      "reason": "事实：根 AGENTS.md 明确要求提交前运行相关测试、扫描密钥与违禁工件，但仓库内无 CI workflow、无 pre-commit、无 lint/type 配置（已核验 .github/workflows 等均为 0 命中，仅第三方 vendored 代码有配置）。推断：门禁执行完全依赖每个代理会话的自觉，一次遗忘即可让未测试代码或违禁工件进入 origin/main，且事后无门禁记录可稽核。不确定性：是否曾发生绕过无证据，测试实际通过与否未验证。",
+      "expectedOutput": [
+        "origin/main 的接受边界拥有至少一条可稽核的机械检查，文字守卫获得执行点。"
+      ],
+      "expectedArtifact": "CI Workflow",
+      "aiFixPrompt": "/better-harness fix this issue\n\n经用户单独授权后，新增一条最小机械门禁（如单个 CI workflow：push/PR 时运行 unittest discover 并检查违禁工件路径），门禁失败信息指回 AGENTS.md 对应条款。远端 CI 配置属外发变更，必须先获得明确授权。\n\n## Validation\n\n- 在一次提交上观察门禁实际运行并产生记录\n- 确认门禁覆盖 AGENTS.md 中“相关测试必须通过”的最小子集",
+      "dimensionRefs": [
+        "reliable-delivery"
+      ]
+    },
+    {
+      "id": "unreachable-mandatory-preconditions",
+      "title": "根规则将不可达的外部技能与远程仓库读取设为每任务硬前置",
+      "severity": "Medium",
+      "reason": "事实：根 AGENTS.md 要求每个任务开始时加载位于用户主目录的 Codex 技能 check-journal-indexing，并要求回答任何当前项目问题前默认先读远程 GitHub 仓库；当前 qoder 作用域内 Skills=0、MCP=0、Plugins=0，无配置化路由承接这两项前置。推断：每个任务要么产生固定的失败报告噪声、要么无声违反规则，且“本地文档不可信”的表述会让代理低估现有本地状态文件；规则未提供任何合规降级路径。不确定性：技能文件是否存在于本机未核验（超出授权），远程仓库可见性未知。",
+      "expectedOutput": [
+        "任何宿主环境下的代理都能在第一步合规起步，不再被迫在失败噪声与无声违规之间二选一。"
+      ],
+      "expectedArtifact": "Rules",
+      "aiFixPrompt": "/better-harness fix this issue\n\n修订根 AGENTS.md 两节：期刊收录技能改为仅在期刊/论文/收录类任务时按需加载，并定义读不到时的本地替代清单；GitHub 默认读取策略按宿主环境区分，在无 GitHub 连接器的环境中以本地 git 工作区加指定状态文件为权威并声明置信度。仅修改该文件的这两节。\n\n## Validation\n\n- 重读 AGENTS.md 确认两项前置均有明确的条件触发与降级路径\n- 确认修订未削弱原有的仓库路由优先级约定",
+      "dimensionRefs": [
+        "controlled-execution"
+      ]
+    },
+    {
+      "id": "default-push-without-confirmation",
+      "title": "自动同步流程默认无确认推送 origin/main，且路径守卫为脆弱字面比较",
+      "severity": "Medium",
+      "reason": "事实：根 AGENTS.md 的自动同步节把“任何改动后 commit 并 push 到 origin/main”设为默认，仅靠特定中文短语 opt-out；第 1 步要求 git rev-parse 结果字面等于 E:/AI4science，而实际工作区为小写盘符加反斜杠形式，严格字面比较在 Windows 下可能恒假或恒过。推断：未说出 opt-out 短语的任务中，外发推送成为无声默认；路径守卫可执行性不稳定。缓解事实：该节的安全设计（禁 force-push、禁批量 staging、密钥扫描）本身较完善。不确定性：无运行时证据表明曾误推或误判。",
+      "expectedOutput": [
+        "外发推送回到逐任务确认的授权边界内，路径守卫在本机真实路径形式下可靠生效。"
+      ],
+      "expectedArtifact": "Rules",
+      "aiFixPrompt": "/better-harness fix this issue\n\n修订根 AGENTS.md 自动同步节：将 push 改为默认需逐任务确认（opt-in），保留现有全部安全禁令；路径校验改为大小写与分隔符不敏感的比较；将 44 行逐步流程外移为被链接的独立文档，根文件只保留“何时同步、何时必须停”的边界。\n\n## Validation\n\n- 重读该节确认 push 需要显式确认\n- 在当前工作区路径形式下人工演算路径比较结果为真",
+      "dimensionRefs": [
+        "reliable-delivery"
+      ]
+    },
+    {
+      "id": "environment-not-reproducible",
+      "title": "命令面硬编码本机绝对路径，环境与测试入口无法从仓库重建",
+      "severity": "Medium",
+      "reason": "事实：README 的全部安全命令硬编码 E 盘 venv 解释器绝对路径；仓库内无该环境的创建步骤与依赖锁定；pyproject.toml 仅 14 行、依赖只声明 numpy（torch/pymatgen 在 optional extras）、无 project.scripts 入口，[tool.unittest] 段无标准工具消费；Python 版本声明 >=3.10 与交接文档宣称的权威 3.11.9 不一致；测试需手动设 PYTHONPATH。推断：换机器或新账号接管时环境只能靠猜，门禁测试可能在错误环境下运行导致结果失真。不确定性：现有 venv 的实际可用性未核验，交接文档后段可能含未读的环境说明。",
+      "expectedOutput": [
+        "接管者可以只凭仓库内容重建可用环境，并用与文档一致的解释器运行门禁测试。"
+      ],
+      "expectedArtifact": "Manifest",
+      "aiFixPrompt": "/better-harness fix this issue\n\n补全 xrd_robustness/pyproject.toml：运行时版本声明与交接文档一致、以 editable install 取代手动 PYTHONPATH、清理无效 [tool.unittest] 段、增加最小 project.scripts 入口；并在 README 增加从零重建工具环境的确定性步骤与依赖锁定说明。\n\n## Validation\n\n- 按新步骤在干净环境中重建并运行一条只读 preflight 命令\n- 运行一条聚焦测试命令确认无需手动 PYTHONPATH",
+      "dimensionRefs": [
+        "controlled-execution"
+      ]
+    }
+  ]
+}
