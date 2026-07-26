@@ -1,0 +1,322 @@
+{
+  "schema_version": "v9-tuning-convergence-audit-v1",
+  "generated_at": "2026-07-26T17:52:40+08:00",
+  "status": "complete_with_evidence_gap",
+  "scope": {
+    "purpose": "Read-only audit of whether the completed seven-run Validation-only tuning histories demonstrate convergence by the fixed 50-epoch endpoint.",
+    "training_started": false,
+    "test_accessed": false,
+    "real_xrd_accessed": false,
+    "scientific_contract_changed": false
+  },
+  "contract": {
+    "epochs": 50,
+    "max_optimizer_steps": 30650,
+    "validation_interval_steps": 30650,
+    "checkpoint_rule": "last_fixed_budget_checkpoint",
+    "validation_role_declared": "hyperparameter_selection_early_stopping_checkpoint_selection_and_development_method_comparison",
+    "operational_evaluation_behavior": "fixed_budget_endpoint_validation_only",
+    "contract_semantic_consistency": false,
+    "optimizer_steps_per_full_epoch": 616,
+    "final_epoch_optimizer_steps": 466,
+    "average_optimizer_steps_per_epoch": 613.0,
+    "learning_rate": 0.0001,
+    "learning_rate_scheduler": null,
+    "unique_train_structures": 9842,
+    "structure_exposures_per_run": 490400,
+    "spectrum_exposures_per_run": 980800,
+    "mean_structure_exposures_per_unique_structure": 49.8272708799,
+    "mean_spectrum_exposures_per_unique_structure": 99.6545417598,
+    "primary_ood_profiles": [
+      "ood_shift_negative",
+      "ood_shift_positive",
+      "ood_broadening",
+      "ood_noise",
+      "ood_background",
+      "ood_texture"
+    ]
+  },
+  "data_quality": {
+    "registered_completed_runs": 7,
+    "history_rows_per_run": 50,
+    "validation_rows_per_run": 1,
+    "validation_row_epoch": 50,
+    "historical_epoch_checkpoints_per_run": 0,
+    "available_checkpoint_name": "last.ckpt",
+    "hidden_epoch_validation_telemetry_found": false,
+    "checkpoint_contains_optimizer_state": true,
+    "checkpoint_contains_rng_state": true,
+    "future_continuation_state_available": true,
+    "historical_epoch_models_recoverable": false,
+    "nonfinite_training_metrics_found": false,
+    "best_epoch_recoverable": false,
+    "validation_last_10_slope_recoverable": false,
+    "overfitting_diagnosis_recoverable": false,
+    "reason": "Validation was evaluated only at global step 30,650, and each run retains only the overwritten final last.ckpt. There is no earlier Validation series or historical checkpoint set."
+  },
+  "slope_method": {
+    "estimator": "ordinary least squares",
+    "independent_variable": "midpoint of each epoch's covered optimizer-step interval",
+    "reported_scale": "change per 616 optimizer steps",
+    "primary_window": "last 10 history rows, epochs 41-50",
+    "robustness_window": "epochs 40-49, excluding the partial final epoch",
+    "interpretation_limit": "The dynamic training stream changes views across epochs, so a falling training objective does not establish improving Validation performance or exclude overfitting."
+  },
+  "runs": [
+    {
+      "label": "ERM",
+      "run_id": "ordinary_dynamic_augmentation__tuning_seed_20260710",
+      "method_id": "ordinary_dynamic_augmentation",
+      "lambda": null,
+      "selected": true,
+      "best_epoch_id": null,
+      "best_epoch_ood": null,
+      "epoch_50_id_macro_f1": 0.3818392198,
+      "epoch_50_primary_ood_macro_f1": 0.306886875,
+      "epoch_50_train_loss": 1.0280110836,
+      "last_10_train_loss_slope_per_616_steps": -0.0062863925,
+      "last_10_train_loss_slope_r2": 0.9460528388,
+      "epochs_40_49_train_loss_slope_per_616_steps": -0.0059352217,
+      "epochs_40_49_train_loss_slope_r2": 0.9270149224,
+      "epoch_50_classification_loss": 1.0280110836,
+      "last_10_classification_loss_slope_per_616_steps": -0.0062863925,
+      "last_10_classification_loss_slope_r2": 0.9460528388,
+      "epochs_40_49_classification_loss_slope_per_616_steps": -0.0059352217,
+      "epochs_40_49_classification_loss_slope_r2": 0.9270149224,
+      "last_10_train_accuracy_slope_per_616_steps": 0.0030630717,
+      "epoch_50_learning_rate": 0.0001,
+      "auxiliary_endpoint": {
+        "consistency": 0.0
+      },
+      "auxiliary_last_10_slope_per_616_steps": {
+        "consistency": 0.0
+      }
+    },
+    {
+      "label": "JS 0.3",
+      "run_id": "js_consistency_transfer__lambda_js_0p3__tuning_seed_20260710",
+      "method_id": "js_consistency_transfer",
+      "lambda": 0.3,
+      "selected": false,
+      "best_epoch_id": null,
+      "best_epoch_ood": null,
+      "epoch_50_id_macro_f1": 0.3696112228,
+      "epoch_50_primary_ood_macro_f1": 0.3177186032,
+      "epoch_50_train_loss": 1.0331720114,
+      "last_10_train_loss_slope_per_616_steps": -0.0060797803,
+      "last_10_train_loss_slope_r2": 0.9044410911,
+      "epochs_40_49_train_loss_slope_per_616_steps": -0.0060019096,
+      "epochs_40_49_train_loss_slope_r2": 0.8989130877,
+      "epoch_50_classification_loss": 1.0269156694,
+      "last_10_classification_loss_slope_per_616_steps": -0.0061688535,
+      "last_10_classification_loss_slope_r2": 0.9062266031,
+      "epochs_40_49_classification_loss_slope_per_616_steps": -0.0060915044,
+      "epochs_40_49_classification_loss_slope_r2": 0.9009183907,
+      "last_10_train_accuracy_slope_per_616_steps": 0.0029331867,
+      "epoch_50_learning_rate": 0.0001,
+      "auxiliary_endpoint": {
+        "consistency": 0.0208545979
+      },
+      "auxiliary_last_10_slope_per_616_steps": {
+        "consistency": 0.0002969546
+      }
+    },
+    {
+      "label": "JS 3.0",
+      "run_id": "js_consistency_transfer__lambda_js_3p0__tuning_seed_20260710",
+      "method_id": "js_consistency_transfer",
+      "lambda": 3.0,
+      "selected": true,
+      "best_epoch_id": null,
+      "best_epoch_ood": null,
+      "epoch_50_id_macro_f1": 0.3998665404,
+      "epoch_50_primary_ood_macro_f1": 0.3567534878,
+      "epoch_50_train_loss": 0.7841073871,
+      "last_10_train_loss_slope_per_616_steps": -0.0132941263,
+      "last_10_train_loss_slope_r2": 0.9951256214,
+      "epochs_40_49_train_loss_slope_per_616_steps": -0.0128502976,
+      "epochs_40_49_train_loss_slope_r2": 0.9944637203,
+      "epoch_50_classification_loss": 0.7165707946,
+      "last_10_classification_loss_slope_per_616_steps": -0.0143835501,
+      "last_10_classification_loss_slope_r2": 0.9957238301,
+      "epochs_40_49_classification_loss_slope_per_616_steps": -0.0139812137,
+      "epochs_40_49_classification_loss_slope_r2": 0.9959353658,
+      "last_10_train_accuracy_slope_per_616_steps": 0.0067266485,
+      "epoch_50_learning_rate": 0.0001,
+      "auxiliary_endpoint": {
+        "consistency": 0.0225121733
+      },
+      "auxiliary_last_10_slope_per_616_steps": {
+        "consistency": 0.0003631392
+      }
+    },
+    {
+      "label": "JS 30.0",
+      "run_id": "js_consistency_transfer__lambda_js_30p0__tuning_seed_20260710",
+      "method_id": "js_consistency_transfer",
+      "lambda": 30.0,
+      "selected": false,
+      "best_epoch_id": null,
+      "best_epoch_ood": null,
+      "epoch_50_id_macro_f1": 0.331747714,
+      "epoch_50_primary_ood_macro_f1": 0.2856150417,
+      "epoch_50_train_loss": 1.2649441957,
+      "last_10_train_loss_slope_per_616_steps": -0.0032706831,
+      "last_10_train_loss_slope_r2": 0.8988786554,
+      "epochs_40_49_train_loss_slope_per_616_steps": -0.0035729618,
+      "epochs_40_49_train_loss_slope_r2": 0.9375921883,
+      "epoch_50_classification_loss": 1.1995807886,
+      "last_10_classification_loss_slope_per_616_steps": -0.0035604075,
+      "last_10_classification_loss_slope_r2": 0.9559010221,
+      "epochs_40_49_classification_loss_slope_per_616_steps": -0.0038039894,
+      "epochs_40_49_classification_loss_slope_r2": 0.9710567635,
+      "last_10_train_accuracy_slope_per_616_steps": 0.0023637586,
+      "epoch_50_learning_rate": 0.0001,
+      "auxiliary_endpoint": {
+        "consistency": 0.0021787812
+      },
+      "auxiliary_last_10_slope_per_616_steps": {
+        "consistency": 0.0000096573
+      }
+    },
+    {
+      "label": "Residual 0.2",
+      "run_id": "residual_decorrelation_transfer__lambda_res_0p2__tuning_seed_20260710",
+      "method_id": "residual_decorrelation_transfer",
+      "lambda": 0.2,
+      "selected": false,
+      "best_epoch_id": null,
+      "best_epoch_ood": null,
+      "epoch_50_id_macro_f1": 0.3709109435,
+      "epoch_50_primary_ood_macro_f1": 0.3159840141,
+      "epoch_50_train_loss": 1.0229252577,
+      "last_10_train_loss_slope_per_616_steps": -0.0066862483,
+      "last_10_train_loss_slope_r2": 0.9509255642,
+      "epochs_40_49_train_loss_slope_per_616_steps": -0.0063841401,
+      "epochs_40_49_train_loss_slope_r2": 0.9398251754,
+      "epoch_50_classification_loss": 1.0204705,
+      "last_10_classification_loss_slope_per_616_steps": -0.0067068153,
+      "last_10_classification_loss_slope_r2": 0.9513855188,
+      "epochs_40_49_classification_loss_slope_per_616_steps": -0.0064047293,
+      "epochs_40_49_classification_loss_slope_r2": 0.9404652319,
+      "last_10_train_accuracy_slope_per_616_steps": 0.0033883678,
+      "epoch_50_learning_rate": 0.0001,
+      "auxiliary_endpoint": {
+        "independence": 0.0122739067,
+        "probe": 1.891323328
+      },
+      "auxiliary_last_10_slope_per_616_steps": {
+        "independence": 0.0001028397,
+        "probe": -0.0003120713
+      }
+    },
+    {
+      "label": "Residual 2.0",
+      "run_id": "residual_decorrelation_transfer__lambda_res_2p0__tuning_seed_20260710",
+      "method_id": "residual_decorrelation_transfer",
+      "lambda": 2.0,
+      "selected": true,
+      "best_epoch_id": null,
+      "best_epoch_ood": null,
+      "epoch_50_id_macro_f1": 0.3773413373,
+      "epoch_50_primary_ood_macro_f1": 0.3263461414,
+      "epoch_50_train_loss": 1.0149996281,
+      "last_10_train_loss_slope_per_616_steps": -0.0070145139,
+      "last_10_train_loss_slope_r2": 0.958025851,
+      "epochs_40_49_train_loss_slope_per_616_steps": -0.0066627705,
+      "epochs_40_49_train_loss_slope_r2": 0.9434695027,
+      "epoch_50_classification_loss": 1.0063073635,
+      "last_10_classification_loss_slope_per_616_steps": -0.0070066511,
+      "last_10_classification_loss_slope_r2": 0.9565852729,
+      "epochs_40_49_classification_loss_slope_per_616_steps": -0.0066710039,
+      "epochs_40_49_classification_loss_slope_r2": 0.9428357651,
+      "last_10_train_accuracy_slope_per_616_steps": 0.0031161009,
+      "epoch_50_learning_rate": 0.0001,
+      "auxiliary_endpoint": {
+        "independence": 0.0043461188,
+        "probe": 1.9183249474
+      },
+      "auxiliary_last_10_slope_per_616_steps": {
+        "independence": -0.0000039251,
+        "probe": -0.0000240235
+      }
+    },
+    {
+      "label": "Residual 20.0",
+      "run_id": "residual_decorrelation_transfer__lambda_res_20p0__tuning_seed_20260710",
+      "method_id": "residual_decorrelation_transfer",
+      "lambda": 20.0,
+      "selected": false,
+      "best_epoch_id": null,
+      "best_epoch_ood": null,
+      "epoch_50_id_macro_f1": 0.3832517393,
+      "epoch_50_primary_ood_macro_f1": 0.3122726229,
+      "epoch_50_train_loss": 1.0312712193,
+      "last_10_train_loss_slope_per_616_steps": -0.0064240435,
+      "last_10_train_loss_slope_r2": 0.9610528216,
+      "epochs_40_49_train_loss_slope_per_616_steps": -0.0064941276,
+      "epochs_40_49_train_loss_slope_r2": 0.9638465215,
+      "epoch_50_classification_loss": 1.0161361694,
+      "last_10_classification_loss_slope_per_616_steps": -0.0063847812,
+      "last_10_classification_loss_slope_r2": 0.960916033,
+      "epochs_40_49_classification_loss_slope_per_616_steps": -0.0064892545,
+      "epochs_40_49_classification_loss_slope_r2": 0.9649065282,
+      "last_10_train_accuracy_slope_per_616_steps": 0.0026043062,
+      "epoch_50_learning_rate": 0.0001,
+      "auxiliary_endpoint": {
+        "independence": 0.0007567563,
+        "probe": 1.9325532913
+      },
+      "auxiliary_last_10_slope_per_616_steps": {
+        "independence": -0.000001962,
+        "probe": 0.0000256851
+      }
+    }
+  ],
+  "findings": [
+    {
+      "id": "contract-semantics-conflict",
+      "severity": "blocking_before_formal_15_run",
+      "finding": "The operational fields deliberately implement endpoint-only fixed-budget selection: validation_interval_steps equals the complete 30,650-step budget and fairness.same_checkpoint_rule is last_fixed_budget_checkpoint. However, evaluation.validation_role still advertises early stopping and checkpoint selection. The seven runs followed the operational fixed-budget rule; they did not implement the advertised early-stopping role. This semantic conflict must be resolved before any formal 15-run protocol is frozen."
+    },
+    {
+      "id": "validation-curve-absent",
+      "severity": "blocking_for_convergence_claim",
+      "finding": "The requested best epoch, epoch-50-versus-best comparison, and late Validation ID/OOD slopes are not present in the completed artifacts."
+    },
+    {
+      "id": "training-objective-still-moving",
+      "severity": "warning",
+      "finding": "All seven late classification-objective slopes are negative with R-squared above 0.90. The selected JS 3.0 run has the steepest decline at -0.01438355 per 616 steps, and the conclusion remains after excluding the partial final epoch."
+    },
+    {
+      "id": "learning-rate-not-annealed",
+      "severity": "warning",
+      "finding": "All seven runs end at the original learning rate of 1e-4 because no scheduler is configured or stored."
+    },
+    {
+      "id": "fixed-budget-fairness",
+      "severity": "informational",
+      "finding": "The seven-run lambda selection remains internally valid as an equal-compute, last-fixed-budget comparison at 30,650 steps. It is not a convergence-certified ranking."
+    }
+  ],
+  "decision": {
+    "can_claim_50_epochs_converged": false,
+    "can_claim_50_epochs_definitively_too_short": false,
+    "can_diagnose_overfitting": false,
+    "configuration_interpretation": "operationally_intentional_fixed_budget_with_conflicting_early_stopping_semantics",
+    "contract_resolution_required_before_formal_15_run": true,
+    "lambda_selection_scope": "valid_at_the_frozen_30650_step_budget_only",
+    "formal_15_run_status": "not_authorized_and_should_not_be_started_from_a_convergence_claim",
+    "recommended_next_decision": "Choose and freeze one coherent protocol before formal training. Either retain 30,650 steps, remove unsupported early-stopping/checkpoint-selection semantics, and frame the study as fixed-compute endpoint selection; or separately authorize a preregistered Validation-only budget-extension audit with fixed future milestones before changing the formal budget. A finalist-only horizon probe may diagnose whether a full retune is warranted, but cannot re-freeze lambda values; any definitive new-budget selection must revalidate the complete registered candidate grid. A new learning-rate scheduler would be a distinct optimization-contract change requiring fresh tuning."
+  },
+  "sources": [
+    "outputs/v9_method_transfer_tuning/run_registry.json",
+    "outputs/v9_method_transfer_tuning/*/history.json",
+    "outputs/v9_method_transfer_tuning/*/config_resolved.json",
+    "outputs/v9_method_transfer_tuning/*/last.ckpt",
+    "configs/algorithm.v9.method_transfer.json",
+    "scripts/train_v7.py",
+    "reports/v9_method_transfer_tuning_selection.json"
+  ]
+}

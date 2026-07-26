@@ -31,7 +31,7 @@ Materials Project structures: **14,060**.
 | Split | Count | Role |
 |---|---:|---|
 | Train | 9,842 | training and dynamic view generation |
-| Validation | 2,109 | lambda, early stopping, checkpoint and development comparison |
+| Validation | 2,109 | fixed-budget endpoint lambda and development comparison in the completed tuning; no intermediate early-stopping evidence |
 | Test | 2,109 | locked simulated Test |
 
 All methods share the same mother-structure/family split. Dynamic ERM, JS and Residual also share the same sampler, pair schedule and accepted perturbation parameter-pair stream under matched seeds.
@@ -114,6 +114,49 @@ boundaries. The authoritative selection artifact is
 `xrd_robustness/reports/v9_method_transfer_tuning_selection.json`. The tuning
 queue is stopped. No 15-run formal comparison, simulated Test, real XRD, real
 adaptation, or V10 execution is authorized.
+
+### 4.1 Fixed-budget convergence audit
+
+A read-only audit of the seven canonical `history.json` files found that the
+50-epoch endpoint is **not convergence-certified**. Although every history has
+50 training rows, `validation_interval_steps=30650` means that each run has only
+one Validation evaluation, at epoch 50. Each run also retains only the
+overwritten `last.ckpt`, so the best Validation epoch, an epoch-50-versus-best
+comparison, late Validation ID/OOD slopes, and an overfitting diagnosis are not
+recoverable from the completed artifacts.
+
+This is not a hidden-logging issue. The operational contract explicitly sets
+`fairness.same_checkpoint_rule=last_fixed_budget_checkpoint`, and the trainer
+only enters evaluation when the complete 30,650-step interval is reached. No
+TensorBoard/event log, metrics CSV, earlier Validation row, or historical
+checkpoint exists in the seven canonical run directories. The final checkpoints
+do contain optimizer and RNG state, so a separately authorized future
+continuation may be technically possible after deterministic-resume validation,
+but they cannot reconstruct earlier epoch models or Validation values.
+
+There is nevertheless a contract-semantic defect that must be resolved before
+formal training: `evaluation.validation_role` still says
+`hyperparameter_selection_early_stopping_checkpoint_selection_and_development_method_comparison`.
+That description conflicts with the executed endpoint-only fixed-budget rule.
+The completed selection is valid under the operational rule, but no early
+stopping or best-checkpoint claim is supported.
+
+The training-side evidence does not show a late plateau. Ordinary-least-squares
+slopes over the last 10 history rows are negative for the classification
+objective in all seven runs, with R-squared above 0.90. The selected JS 3.0 run
+has the steepest slope, `-0.01438355` per 616 optimizer steps; selected Residual
+2.0 is `-0.00700665`. Excluding the partial 466-step final epoch leaves the same
+conclusion. All runs still use the initial learning rate `1e-4`; no learning-rate
+scheduler is configured.
+
+Therefore the selected values remain valid only as the winners of the frozen,
+equal-compute 30,650-step comparison. The evidence neither proves that 50 epochs
+is sufficient nor proves that a longer budget would improve Validation. The
+formal comparison remains `0/15` and unauthorized. If the formal budget is
+changed, the complete candidate grid must be revalidated at the new common
+horizon before freezing lambda values; adding a scheduler would be a separate
+optimization-contract change requiring fresh tuning. The authoritative audit is
+`xrd_robustness/reports/v9_tuning_convergence_audit.json`.
 
 ## 5. Real-domain research axis
 

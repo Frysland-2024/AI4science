@@ -1,5 +1,31 @@
 # XRD Robustness V9-T：跨 Codex 账号与台式机完整交接
 
+> **2026-07-26 convergence-audit override:** The seven completed tuning runs
+> are an internally fair fixed-budget comparison at 30,650 optimizer steps, but
+> they do not prove convergence by epoch 50. Each canonical history contains
+> only one Validation evaluation at epoch 50 because
+> `validation_interval_steps=30650`, and each run retains only `last.ckpt`;
+> therefore best epoch, late Validation slope, epoch-50-versus-best, and
+> overfitting are not recoverable. This was operationally intentional rather
+> than a hidden logging failure: `fairness.same_checkpoint_rule` is explicitly
+> `last_fixed_budget_checkpoint`, and the trainer does not evaluate before the
+> final interval. No hidden TensorBoard/event log, metrics CSV, earlier
+> Validation row, or historical epoch checkpoint exists. The final checkpoints
+> do contain optimizer and RNG state for a separately authorized, validated
+> future continuation, but they cannot reconstruct past epoch models. The
+> contract is nevertheless semantically inconsistent:
+> `evaluation.validation_role` still advertises early stopping and checkpoint
+> selection, neither of which these runs implemented. Resolve this conflict
+> before freezing any formal 15-run protocol. All seven late classification-objective
+> slopes remain negative, with selected JS 3.0 at `-0.01438355` and selected
+> Residual 2.0 at `-0.00700665` per 616 optimizer steps. Learning rate remains
+> the original `1e-4` because no scheduler is configured. Treat
+> `lambda_JS=3.0` and `lambda_res=2.0` as selected only at the frozen
+> 30,650-step budget. Do not start or lengthen the 15-run formal comparison
+> without a separate scientific decision; any new common budget requires
+> revalidation of the complete candidate grid. The authoritative audit is
+> `reports/v9_tuning_convergence_audit.json`.
+
 > **2026-07-26 tuning-complete override:** The seven-run laptop
 > Validation-only tuning stage is complete and audited. All seven registered
 > runs finished 30,650 optimizer steps with 490,400 structure and 980,800
@@ -154,7 +180,7 @@ Residual Class Decorrelation 是重点假设，但在获得直接、匹配的 Dy
 | Split | 结构数 | 当前用途 |
 |---|---:|---|
 | Train | 9,842 | 训练和动态视图生成 |
-| Validation | 2,109 | lambda 选择、开发 OOD 比较、checkpoint 选择 |
+| Validation | 2,109 | 已完成调参中的固定预算终点 lambda/开发 OOD 比较；没有中间 early stopping 证据 |
 | Test | 2,109 | 当前锁定；不能用于调参或方法选择 |
 | 合计 | 14,060 | 七晶系，结构 ID 唯一 |
 

@@ -409,3 +409,55 @@ guardrail，再按 mean single-factor OOD Macro-F1 对合格值排序。JS 只�
 这一结论只关闭参数选择证据，不证明多 seed 稳定性，也不构成正式方法
 性能结论；它不授权 15-run 正式比较、simulated Test、real XRD、真实
 适配或 V10。
+
+## 2026-07-26：把 50 epoch 重新界定为固定预算，而不是已证明收敛
+
+七条调参 run 完成得快，促使项目重新检查“50 epoch 是否充分”。只读审计发现，现有产物不能执行原本设想的 best-epoch 检查：训练合同把
+`validation_interval_steps` 设为完整预算 `30650`，所以每条
+`history.json` 虽有 50 条训练记录，却只有 epoch 50 一次 Validation；
+训练器又只覆盖保存 `last.ckpt`，没有逐 epoch checkpoint。因此
+best epoch、epoch 50 与 best 的差距、末 10–15 epoch 的 Validation ID/OOD
+斜率，以及是否已经过拟合，都无法从现有七条结果恢复。
+
+进一步核对证明这不是“Validation 实际执行但日志漏存”。公平性合同明确写着
+`same_checkpoint_rule=last_fixed_budget_checkpoint`，训练器也只有到完整
+30,650-step interval 才进入 evaluation；七个 canonical run 中不存在隐藏的
+TensorBoard/event、metrics CSV、历史 Validation 记录或旧 epoch checkpoint。
+最终 `last.ckpt` 保存了 optimizer 与 RNG 状态，因此未来在经过确定性恢复核验
+并获得单独授权后可以继续向前训练，却不能回到 epoch 30/40 补出历史曲线。
+
+这次审计同时发现了执行合同与语义描述的矛盾：操作字段明确实现 fixed-budget
+endpoint selection，但 `evaluation.validation_role` 仍宣称包含 early stopping
+和 checkpoint selection。七条 run 遵循的是前者，因此结果没有失效；后者则是
+当前证据不支持的陈述，必须在冻结正式 15-run 协议前选择并统一，不能同时保留
+两种说法。
+
+训练侧证据反而说明优化过程仍在移动。按每个 epoch 覆盖区间的
+`global_step` 中点对最后 10 条 history 做普通最小二乘回归，七条 run 的
+classification objective 斜率均为
+负且拟合度都高于 0.90；入选的 JS 3.0 为每 616 step `-0.01438355`，
+Residual 2.0 为 `-0.00700665`。排除只有 466 step 的最后一个不完整 epoch
+后结论不变。七条 run 的学习率也始终保持 `1e-4`，没有调度器提供“末端已
+充分退火”的证据。动态谱图每轮变化，所以训练目标继续下降并不能推出
+Validation 必然继续提高，也不能排除过拟合；它只能否定“已经由现有证据
+证明收敛”的说法。
+
+据此作出范围限定：
+
+- `lambda_JS=3.0` 与 `lambda_res=2.0` 仍是公平、统一的 30,650-step
+  固定计算预算下的合法选择；
+- 不再把这次选择表述为“50 epoch 已充分收敛”，也不把它外推为更长预算下
+  必然保持相同排名；
+- 不因训练便宜而直接把正式 15-run 改成 75 或 100 epoch。若正式预算改变，
+  必须先在新的统一 horizon 上重新验证完整七候选网格；只延长已选方法不能
+  证明 lambda 排名仍稳定；
+- 可以先把 ERM、JS 3.0、Residual 2.0 的延长作为是否值得完整重调的诊断，
+  但这种 finalist-only probe 不能重新冻结 lambda，也不能加入已经消耗完一次
+  pre-Validation 修订机会之外的新候选值；
+- 新增学习率调度器属于另一项优化合同变化，也必须重新调参，不能作为无害的
+  工程修补；
+- 当前 15-run 仍为 `0/15` 且未授权；在 fixed-budget endpoint 与 early
+  stopping 两种协议中作出明确选择并修正合同语义前，不得启动。Test 与真实域
+  边界保持锁定。
+
+权威只读审计为 `xrd_robustness/reports/v9_tuning_convergence_audit.json`。
