@@ -6,6 +6,22 @@
 
 > Current-state record only. Historical reasoning remains in `PROJECT_JOURNEY.md` and dated decision files.
 
+## 2026-07-26 pause after the first retuning run
+
+The user authorized the active first 10-epoch-Validation / patience-2 tuning
+run to finish, but requested that the queue pause before candidate 2 starts.
+The scheduler has no native stop-after-current flag, so only the inner
+`run_v9_method_transfer.py tune-run` scheduler process was suspended while its
+current `train_v7.py` child remained active. The first run must continue under
+the frozen contract; the suspended scheduler is intentional and must not be
+resumed automatically.
+
+After the first `results.json` is complete and audited, leave the remaining six
+candidates unstarted and report the paused state. Do not run `tune-select`.
+When the user later authorizes continuation, terminate any stale suspended
+launcher processes and relaunch the registered serial `tune-run` command; it
+will detect the completed first result and continue with the remaining runs.
+
 ## 2026-07-26 authoritative 10-epoch Validation override
 
 The user replaced the initial 5-epoch / patience-4 schedule before it produced

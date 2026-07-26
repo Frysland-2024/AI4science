@@ -1,5 +1,15 @@
 # XRD Robustness V9-T：跨 Codex 账号与台式机完整交接
 
+> **2026-07-26 pause-after-current override (latest operational state):**
+> Allow the active first tuning run to finish, but do not start candidate 2.
+> The inner serial scheduler process is intentionally suspended while the
+> current trainer remains active. Do not treat the suspended scheduler as a
+> failure and do not resume it automatically. Once the first `results.json`
+> is complete and audited, leave the remaining six candidates unstarted and
+> report the paused queue. Do not run `tune-select`. A later user-authorized
+> continuation should terminate stale suspended launcher processes and relaunch
+> the registered serial `tune-run`, which will skip the completed first result.
+
 > **2026-07-26 10-epoch Validation override (latest and authoritative):**
 > The user replaced the initial 5-epoch / patience-4 schedule with Validation
 > every 10 epochs / 6,160 optimizer steps and patience 2. The effective
