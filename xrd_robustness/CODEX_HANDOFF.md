@@ -1,5 +1,19 @@
 # XRD Robustness V9-T：跨 Codex 账号与台式机完整交接
 
+> **2026-07-26 tuning-complete override:** The seven-run laptop
+> Validation-only tuning stage is complete and audited. All seven registered
+> runs finished 30,650 optimizer steps with 490,400 structure and 980,800
+> spectrum exposures, 23,199 prediction rows, matching artifact hashes, common
+> sampler/pair/parameter hashes, and locked Test boundaries. The repaired
+> Residual lambda=0.2 prediction replay preserved checkpoint SHA-256
+> `91e227dd1e7224c9551e065de681036e714b05584549c94544f3522232f20084`
+> and matched its completed history metrics exactly. `tune-select` passed and
+> selected `lambda_JS=3.0` and `lambda_res=2.0`; the authoritative report is
+> `reports/v9_method_transfer_tuning_selection.json`. The queue is stopped and
+> no training process remains. Do not start the 15-run comparison, simulated
+> Test, real XRD, real adaptation, or V10 without separate explicit
+> authorization.
+
 > **2026-07-26 seven-run final-audit override:** All seven registered laptop
 > Validation-only tuning runs completed their frozen 50-epoch, 30,650-step
 > budgets and the queue exited with code 0. Final `tune-select` correctly

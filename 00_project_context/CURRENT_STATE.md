@@ -48,7 +48,7 @@ Train-only semantics, learned-state and candidate-grid gates have passed. On 202
 ## 4. Simulation execution state
 
 ```text
-lambda tuning = 7/7 training and Validation evaluation completed; final artifact audit pending one engineering recovery
+lambda tuning = 7/7 completed and audited; selected lambda_JS=3.0 and lambda_res=2.0
 formal simulation comparison = 0/15
 simulated Test = locked, not started
 active authoritative checkpoints = 7 completed tuning checkpoints
@@ -99,11 +99,21 @@ intact. The audit failure is preserved under
 The engineering repair makes the auditor follow the producer's registered
 statistics identity and makes a full-step resume deterministically replay the
 completed Validation evaluation, fail unless its metrics exactly match history,
-and only then rewrite prediction rows. The repaired Residual lambda=0.2 artifact
-must be regenerated from its verified checkpoint after tests and commit/push,
-then the seven-run `tune-select` audit must pass before tuning is called closed.
-No 15-run formal comparison, simulated Test, real XRD, real adaptation, or V10
-execution is authorized.
+and only then rewrite prediction rows.
+
+After the repair passed 181/181 tests and was committed and pushed, the
+Residual lambda=0.2 checkpoint was verified unchanged at
+`91e227dd1e7224c9551e065de681036e714b05584549c94544f3522232f20084`.
+Its deterministic Validation replay regenerated 23,199 prediction rows and
+matched the completed history metrics exactly. The seven-run `tune-select`
+audit then passed and selected `lambda_JS=3.0` and `lambda_res=2.0`. All seven
+results have 23,199 prediction rows, 30,650 optimizer steps, 490,400 structure
+exposures, 980,800 spectrum exposures, matching checkpoint/prediction hashes,
+the common sampler/pair/parameter hashes, and locked simulated/real Test
+boundaries. The authoritative selection artifact is
+`xrd_robustness/reports/v9_method_transfer_tuning_selection.json`. The tuning
+queue is stopped. No 15-run formal comparison, simulated Test, real XRD, real
+adaptation, or V10 execution is authorized.
 
 ## 5. Real-domain research axis
 

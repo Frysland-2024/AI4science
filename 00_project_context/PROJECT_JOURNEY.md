@@ -386,3 +386,26 @@ Pilot v1 因三条分支都接近七分类随机水平而返回 `HOLD`，无法�
 注册启动器通过空闲门后，首条 Dynamic ERM tuning run 已创建冻结 manifest 并进入 GPU 负载，但 `git_commit.txt` 写成了 `unavailable: workspace has no git repository`。这不是 GitHub 状态真的缺失，而是旧训练器从未执行 Git 发现，直接硬编码 unavailable；项目的真实 Git 根在 `xrd_robustness` 的父目录 `E:\AI4science`。
 
 该缺口不改变模型、数据或参数合同，但会让七条正式结果缺少可核验的提交来源，因此不能以“训练已经开始”为理由继续累积不完整证据。队列被主动停止，部分 checkpoint 与 run 文件整体移动到 `outputs/v9_method_transfer_tuning/aborted_provenance_probe_20260726_1147`，不恢复、不计入 7-run。训练器改为从项目路径执行 `git rev-parse HEAD`，并新增父仓库解析回归测试。修复同步 GitHub 后，首条 run 仍从 optimizer step 0 重新开始。
+
+## 2026-07-26：七条 Validation 调参选择冻结在两个中间候选值
+
+本次明确授权的笔记本阶段完成了全部七条预注册、完整预算的
+Validation-only runs。每条 run 均在共同 seed、sampler、pair schedule、
+accepted parameter-pair stream 和暴露预算下达到 30,650 optimizer steps。
+最终审计还实际触发了 fail-closed 恢复路径：审计器与生产器的统计身份
+不一致，以及满步恢复会把 prediction rows 重写为空，这两个工程问题均
+在不改变模型、候选网格、seed、优化预算、数据暴露或 split 边界的前提
+下修复。受影响的 Residual lambda=0.2 Validation 预测从未变化的已验证
+checkpoint 确定性重放，并且只有在指标与原始完成 history 精确一致后
+才被接受。
+
+预注册选择规则只使用冻结的统一 Validation 子集，先要求通过 in-range
+guardrail，再按 mean single-factor OOD Macro-F1 对合格值排序。JS 只有
+3.0 合格：相对 baseline 的 OOD 增益为 0.0498666，in-range Macro-F1
+变化为 +0.0180273。Residual 的 2.0 与 20.0 均合格，但 2.0 的 OOD
+增益为 0.0194593，高于 20.0 的 0.00538575。因此正式冻结值为
+`lambda_JS=3.0` 与 `lambda_res=2.0`。
+
+这一结论只关闭参数选择证据，不证明多 seed 稳定性，也不构成正式方法
+性能结论；它不授权 15-run 正式比较、simulated Test、real XRD、真实
+适配或 V10。

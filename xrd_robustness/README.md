@@ -25,7 +25,7 @@
 |---|---|
 | 14,060 结构 family-aware 划分 | 冻结：Train 9,842 / Validation 2,109 / Test 2,109 |
 | 方法参数候选范围 | 冻结：JS `[0.3,3,30]`；Residual `[0.2,2,20]` |
-| Simulation Validation tuning | **7/7 已完成训练与 Validation 评估；最终产物审计正修复 lambda_res=0.2 恢复路径的空 prediction rows，尚未解锁后续阶段** |
+| Simulation Validation tuning | **7/7 已完成并通过最终产物审计；Validation 选择为 lambda_JS=3.0、lambda_res=2.0，后续阶段仍未解锁** |
 | 正式模拟实验 | **0/15，未开始** |
 | simulated Test | 锁定、未执行 |
 | RRUFF-70 样品组成 | 冻结 |
