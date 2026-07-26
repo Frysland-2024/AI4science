@@ -10,9 +10,11 @@
 
 The user replaced the initial 5-epoch / patience-4 schedule before it produced
 any countable tuning result. The superseded queue was stopped at epoch 14 /
-optimizer step 8,624 of its first run and preserved intact under
-`outputs/superseded_v9_tuning_5epoch_patience4_20260726_1859`; it must not be
-resumed or counted.
+optimizer step 8,624 of its first run. It was initially isolated under
+`outputs/superseded_v9_tuning_5epoch_patience4_20260726_1859`, then moved to
+the Windows Recycle Bin on the user's explicit authorization on 2026-07-26.
+The source path is absent; those superseded artifacts are unavailable for
+resume and must not be counted.
 
 The active retuning contract keeps the 100-epoch / 61,600-step maximum,
 `min_epochs=50`, `min_delta=0.001`, monitor, checkpoint artifacts and

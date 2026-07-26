@@ -4,10 +4,11 @@
 > The user replaced the initial 5-epoch / patience-4 schedule with Validation
 > every 10 epochs / 6,160 optimizer steps and patience 2. The effective
 > no-improvement window remains 20 epochs. The first superseded run was stopped
-> at epoch 14 / step 8,624 and preserved under
-> `outputs/superseded_v9_tuning_5epoch_patience4_20260726_1859`; it is not
-> resumable or countable evidence. Restart all seven candidates from optimizer
-> step 0 in `outputs/v9_method_transfer_tuning_100e_10epoch_patience2`.
+> at epoch 14 / step 8,624. Its isolated output directory was moved to the
+> Windows Recycle Bin on the user's explicit authorization on 2026-07-26; the
+> source path is absent and the run is neither resumable nor countable. Restart
+> all seven candidates from optimizer step 0 in
+> `outputs/v9_method_transfer_tuning_100e_10epoch_patience2`.
 > Maximum epochs/steps, minimum epoch 50, monitor, min_delta, best+last
 > checkpoints, tie-breakers, hardware profile and all data/Test boundaries are
 > unchanged.

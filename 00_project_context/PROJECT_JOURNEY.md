@@ -499,3 +499,17 @@ Validation 是新增时间的主要来源。用户因此在结果产生前明确
 计入新七条。候选网格、seed、模型、最大 61,600 步、最少 50 epochs、
 监控指标、tie-break、硬件调度及所有数据边界均不变。新七条必须从
 optimizer step 0 在独立输出根重启。
+
+## 2026-07-26：删除被取代的未完成运行产物
+
+在新的 10-epoch Validation / patience-2 队列已从 optimizer step 0
+健康启动后，用户明确授权删除此前隔离的 5-epoch Validation /
+patience-4 未完成运行。该目录包含首条 run 截止 epoch 14 / step 8,624
+的 history、日志和 checkpoint，共 27 个文件、87,011,670 bytes。由于
+本机安全策略拒绝永久递归删除，目录被送入 Windows Recycle Bin，
+原路径 `outputs/superseded_v9_tuning_5epoch_patience4_20260726_1859`
+已不存在，仍可由用户在清空回收站前恢复。
+
+这一清理不改变科学合同或当前七条队列：旧运行仍不得恢复到实验队列、
+不得计数，也不得用于 checkpoint 选择；候选网格、seed、数据边界、
+61,600-step 上限、Validation 间隔和 early-stopping 规则均保持不变。
