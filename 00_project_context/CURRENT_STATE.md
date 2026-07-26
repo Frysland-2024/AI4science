@@ -6,6 +6,26 @@
 
 > Current-state record only. Historical reasoning remains in `PROJECT_JOURNEY.md` and dated decision files.
 
+## 2026-07-27 experiment-1 interruption (authoritative)
+
+The user force-terminated the active new-split tuning run
+`ordinary_dynamic_augmentation__tuning_seed_20260710` at about 21:40 on
+2026-07-26 in order to repair a computer memory problem. The trainer died
+after writing epoch 9 / optimizer step 5,544 to `history.json` and
+`last.ckpt`; no Validation evaluation had occurred because the first check is
+scheduled at epoch 10. Sixteen orphaned DataLoader workers survived the kill
+and were terminated on 2026-07-27 with explicit user authorization; no Python
+training process remains and the GPU holds no compute context.
+
+The run directory under
+`outputs/v9_method_transfer_tuning_parent_structure_split_v1/` is preserved
+intact and the scheduler registry remains `0/7`. The interrupted run is not
+countable evidence. Relaunching the queue requires explicit user
+authorization plus a decision between a from-step-0 restart and a
+deterministic-resume path validated against the checkpoint's global step and
+sampler/pair contract hashes. Simulated Test, the 15-run formal comparison,
+real XRD, real adaptation, and V10 remain locked.
+
 ## 2026-07-26 parent-structure split reset (authoritative)
 
 The chemistry-anonymous Wyckoff-family-disjoint split is retired. The active

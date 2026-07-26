@@ -1,6 +1,21 @@
 # XRD Robustness V9-T：跨 Codex 账号与台式机完整交接
 
-> **2026-07-26 parent-structure split override (latest and authoritative):**
+> **2026-07-27 experiment-1 interruption override (latest and authoritative):**
+> The user force-terminated the active new-split run
+> `ordinary_dynamic_augmentation__tuning_seed_20260710` at about 21:40 on
+> 2026-07-26 to repair a computer memory problem. The last persisted state is
+> epoch 9 / optimizer step 5,544; no Validation check had occurred (first is
+> at epoch 10). Sixteen orphaned DataLoader workers were terminated on
+> 2026-07-27 under explicit user authorization; no training process remains.
+> The run directory under
+> `outputs/v9_method_transfer_tuning_parent_structure_split_v1/` is preserved
+> and the registry remains `0/7`; the interrupted run is not countable.
+> Relaunch requires new explicit authorization plus a decision between a
+> from-step-0 restart and a validated deterministic resume. Simulated Test,
+> the 15-run formal stage, real XRD, real adaptation, and V10 remain locked.
+
+> **2026-07-26 parent-structure split override (superseded by the 2026-07-27
+> interruption override above for execution state; split contract unchanged):**
 > The chemistry-anonymous Wyckoff-family-disjoint split is retired. The active
 > split unit is one parent structure, randomly assigned 70/15/15 with
 > crystal-system stratification and seed `20260726`. Every derived clean,
