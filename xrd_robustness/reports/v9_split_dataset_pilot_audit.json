@@ -1,0 +1,287 @@
+{
+  "checks": {
+    "class_completeness": {
+      "expected_systems": 7,
+      "missing_by_split": {},
+      "observed_systems_global": 7,
+      "passed": true
+    },
+    "cross_split_leakage": {
+      "examples": {},
+      "material_ids_in_multiple_splits": 0,
+      "parent_structures_in_multiple_splits": 0,
+      "passed": true,
+      "unique_material_ids": 14060,
+      "unique_parent_structures": 14060
+    },
+    "manifest_identity": {
+      "matches_authoritative_hash": true,
+      "passed": true,
+      "record_count": 14060,
+      "seed": 20260726,
+      "sha256": "b9d3b72e42ea0fd549dae34425ff61d2d650d5dd7fe6f337d747cb952cf43293",
+      "split_unit": "parent_structure",
+      "stratification": "crystal_system"
+    },
+    "parent_assignment_integrity": {
+      "duplicate_material_records": 0,
+      "note": "split is assigned at parent level; shared parents are legal only because leakage check already proves one split per parent",
+      "parents_shared_by_multiple_materials": 0,
+      "passed": true
+    },
+    "run_view_manifest_cross_check": {
+      "files": {
+        "development_ood_all_view_manifest.jsonl": {
+          "in_test": 0,
+          "in_train": 0,
+          "in_validation": 2109,
+          "passed": true,
+          "unique_material_ids": 2109
+        },
+        "development_ood_background_view_manifest.jsonl": {
+          "in_test": 0,
+          "in_train": 0,
+          "in_validation": 2109,
+          "passed": true,
+          "unique_material_ids": 2109
+        },
+        "development_ood_broadening_view_manifest.jsonl": {
+          "in_test": 0,
+          "in_train": 0,
+          "in_validation": 2109,
+          "passed": true,
+          "unique_material_ids": 2109
+        },
+        "development_ood_combo_background_noise_view_manifest.jsonl": {
+          "in_test": 0,
+          "in_train": 0,
+          "in_validation": 2109,
+          "passed": true,
+          "unique_material_ids": 2109
+        },
+        "development_ood_combo_shift_broadening_view_manifest.jsonl": {
+          "in_test": 0,
+          "in_train": 0,
+          "in_validation": 2109,
+          "passed": true,
+          "unique_material_ids": 2109
+        },
+        "development_ood_combo_texture_shift_view_manifest.jsonl": {
+          "in_test": 0,
+          "in_train": 0,
+          "in_validation": 2109,
+          "passed": true,
+          "unique_material_ids": 2109
+        },
+        "development_ood_noise_view_manifest.jsonl": {
+          "in_test": 0,
+          "in_train": 0,
+          "in_validation": 2109,
+          "passed": true,
+          "unique_material_ids": 2109
+        },
+        "development_ood_shift_negative_view_manifest.jsonl": {
+          "in_test": 0,
+          "in_train": 0,
+          "in_validation": 2109,
+          "passed": true,
+          "unique_material_ids": 2109
+        },
+        "development_ood_shift_positive_view_manifest.jsonl": {
+          "in_test": 0,
+          "in_train": 0,
+          "in_validation": 2109,
+          "passed": true,
+          "unique_material_ids": 2109
+        },
+        "development_ood_texture_view_manifest.jsonl": {
+          "in_test": 0,
+          "in_train": 0,
+          "in_validation": 2109,
+          "passed": true,
+          "unique_material_ids": 2109
+        },
+        "validation_view_manifest.jsonl": {
+          "in_test": 0,
+          "in_train": 0,
+          "in_validation": 2109,
+          "passed": true,
+          "unique_material_ids": 2109
+        }
+      },
+      "passed": true,
+      "run_dir_present": true,
+      "view_manifests_checked": 11
+    },
+    "split_counts": {
+      "expected": {
+        "test": 2109,
+        "train": 9842,
+        "validation": 2109
+      },
+      "observed": {
+        "test": 2109,
+        "train": 9842,
+        "validation": 2109
+      },
+      "passed": true,
+      "total": 14060
+    },
+    "stratification": {
+      "deviations": {
+        "test:cubic": {
+          "abs_deviation": 0.000379,
+          "global_share": 0.143101,
+          "split_share": 0.142722
+        },
+        "test:hexagonal": {
+          "abs_deviation": 0.000308,
+          "global_share": 0.142888,
+          "split_share": 0.143196
+        },
+        "test:monoclinic": {
+          "abs_deviation": 0.000379,
+          "global_share": 0.143101,
+          "split_share": 0.142722
+        },
+        "test:orthorhombic": {
+          "abs_deviation": 0.00019,
+          "global_share": 0.143385,
+          "split_share": 0.143196
+        },
+        "test:tetragonal": {
+          "abs_deviation": 0.000308,
+          "global_share": 0.142888,
+          "split_share": 0.143196
+        },
+        "test:triclinic": {
+          "abs_deviation": 0.0,
+          "global_share": 0.142248,
+          "split_share": 0.142248
+        },
+        "test:trigonal": {
+          "abs_deviation": 0.000332,
+          "global_share": 0.14239,
+          "split_share": 0.142722
+        },
+        "train:cubic": {
+          "abs_deviation": 6.1e-05,
+          "global_share": 0.143101,
+          "split_share": 0.143162
+        },
+        "train:hexagonal": {
+          "abs_deviation": 3e-05,
+          "global_share": 0.142888,
+          "split_share": 0.142857
+        },
+        "train:monoclinic": {
+          "abs_deviation": 6.1e-05,
+          "global_share": 0.143101,
+          "split_share": 0.143162
+        },
+        "train:orthorhombic": {
+          "abs_deviation": 2e-05,
+          "global_share": 0.143385,
+          "split_share": 0.143365
+        },
+        "train:tetragonal": {
+          "abs_deviation": 3e-05,
+          "global_share": 0.142888,
+          "split_share": 0.142857
+        },
+        "train:triclinic": {
+          "abs_deviation": 0.0,
+          "global_share": 0.142248,
+          "split_share": 0.142248
+        },
+        "train:trigonal": {
+          "abs_deviation": 4.1e-05,
+          "global_share": 0.14239,
+          "split_share": 0.142349
+        },
+        "validation:cubic": {
+          "abs_deviation": 9.5e-05,
+          "global_share": 0.143101,
+          "split_share": 0.143196
+        },
+        "validation:hexagonal": {
+          "abs_deviation": 0.000166,
+          "global_share": 0.142888,
+          "split_share": 0.142722
+        },
+        "validation:monoclinic": {
+          "abs_deviation": 9.5e-05,
+          "global_share": 0.143101,
+          "split_share": 0.143196
+        },
+        "validation:orthorhombic": {
+          "abs_deviation": 0.000284,
+          "global_share": 0.143385,
+          "split_share": 0.14367
+        },
+        "validation:tetragonal": {
+          "abs_deviation": 0.000166,
+          "global_share": 0.142888,
+          "split_share": 0.142722
+        },
+        "validation:triclinic": {
+          "abs_deviation": 0.0,
+          "global_share": 0.142248,
+          "split_share": 0.142248
+        },
+        "validation:trigonal": {
+          "abs_deviation": 0.000142,
+          "global_share": 0.14239,
+          "split_share": 0.142248
+        }
+      },
+      "global_class_counts": {
+        "cubic": 2012,
+        "hexagonal": 2009,
+        "monoclinic": 2012,
+        "orthorhombic": 2016,
+        "tetragonal": 2009,
+        "triclinic": 2000,
+        "trigonal": 2002
+      },
+      "max_abs_share_deviation": 0.000379,
+      "passed": true,
+      "per_split_class_counts": {
+        "test": {
+          "cubic": 301,
+          "hexagonal": 302,
+          "monoclinic": 301,
+          "orthorhombic": 302,
+          "tetragonal": 302,
+          "triclinic": 300,
+          "trigonal": 301
+        },
+        "train": {
+          "cubic": 1409,
+          "hexagonal": 1406,
+          "monoclinic": 1409,
+          "orthorhombic": 1411,
+          "tetragonal": 1406,
+          "triclinic": 1400,
+          "trigonal": 1401
+        },
+        "validation": {
+          "cubic": 302,
+          "hexagonal": 301,
+          "monoclinic": 302,
+          "orthorhombic": 303,
+          "tetragonal": 301,
+          "triclinic": 300,
+          "trigonal": 300
+        }
+      },
+      "tolerance": 0.01
+    }
+  },
+  "manifest_path": "E:\\AI4science\\xrd_robustness\\data\\formal_14060\\manifests\\split_manifest.json",
+  "model_loaded": false,
+  "schema_version": "v9-split-dataset-pilot-audit-v1",
+  "simulated_test_content_accessed": false,
+  "spectra_loaded": false,
+  "status": "pass"
+}

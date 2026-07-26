@@ -543,3 +543,30 @@ structure 加 OOD 扰动；除 split 及其直接统计依赖外，训练方法�
 六个候选的直接梯度测量及无 Validation/Test 泄漏检查均通过。当前证据
 状态是 manifest、split 审计和当前 split Gate 已完成，训练结果 `0/7`；
 实验 1 在本次源码和合同变更提交、推送后从 optimizer step 0 启动。
+
+## 2026-07-27：split pilot 判定——旧 family split 偏难但不是主要瓶颈
+
+实验 1 被用户为修理内存中断后，用户预注册了一个两步 pilot 判定框架，
+用最小代价回答"性能低是不是旧 family split 造成的"：第一步只读审计
+新划分本身；第二步在隔离目录跑单条 30-epoch Dynamic ERM，判据为
+Validation-ID Macro-F1 若升到 0.6+ 则旧 split 过难是主因，若仍在 0.4
+左右则问题不在 split，应转查 backbone、数据质量或任务难度。
+
+数据集 pilot 全部通过：数量精确 9,842/2,109/2,109，七晶系分层最大
+偏差 0.000379，14,060 个 parent structure 零跨 split 泄漏，各 split
+七类齐全，且被中断 run 的 11 个视图 manifest 全部只含 Validation
+material ID。新划分的工程实现被排除为嫌疑。
+
+算法 pilot 跑满 18,480 步预算，三次 Validation 轨迹为 ID
+0.3714 → 0.4240 → 0.4212，mean single-factor OOD 0.2967 → 0.3419 →
+0.3557，gap 收窄至 0.065。与旧 family split 同方法同 seed 的对照
+（epoch 70 最佳 ID 0.3875 / OOD 0.3300）相比，新划分用三分之一预算即
+超过旧划分历史最好成绩，但 ID 在 epoch 20-30 间平台化于 0.42 附近，
+远未达到 0.6+。
+
+科学结论：旧 family-disjoint split 确实附加了约 0.04-0.05 的难度，
+但它不是 ID 性能停留在 0.4 量级的主要原因；gap 小且持续收窄说明泛化
+机制正常，瓶颈是拟合能力或任务/数据本身。下一步的研究方向依次为
+backbone 容量与特征表达、模拟数据质量、任务内在难度。该 pilot 为
+development-only 证据，不得用于模型选择或 checkpoint 复用；正式 7-run
+重启继续等待电脑修复（预计 2026 年 8 月）与新的显式授权。

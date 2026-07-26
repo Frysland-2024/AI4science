@@ -1,6 +1,29 @@
 # XRD Robustness V9-T：跨 Codex 账号与台式机完整交接
 
-> **2026-07-27 experiment-1 interruption override (latest and authoritative):**
+> **2026-07-27 split-pilot verdict override (latest and authoritative):**
+> With the 7-run queue still interrupted at `0/7`, the user authorized two
+> pilots. The read-only dataset audit
+> (`scripts/audit_v9_split_dataset_pilot.py`,
+> `reports/v9_split_dataset_pilot_audit.json`) passed every check on the
+> authoritative parent-structure manifest: exact 9,842/2,109/2,109 counts,
+> max stratification deviation 0.000379, zero parent/material leakage,
+> complete classes per split, and Validation-only view manifests in the
+> interrupted run. The isolated 30-epoch Dynamic ERM pilot
+> (`scripts/run_v9_split_pilot_erm.ps1`,
+> `outputs/v9_split_pilot_erm_30e/`, same seed/contracts as experiment 1)
+> filled all 18,480 steps: Validation-ID Macro-F1 0.3714 → 0.4240 → 0.4212
+> and mean single-factor OOD 0.2967 → 0.3419 → 0.3557 at epochs 10/20/30.
+> Under the user's pre-registered criterion (0.6+ vs ~0.4), the verdict is:
+> the old family split added only ~0.04-0.05 difficulty and is NOT the main
+> bottleneck; investigate backbone capacity, data/simulation quality, and
+> task difficulty next. The pilot is development-only and must not feed
+> model selection or checkpoint reuse. The formal 7-run relaunch stays
+> blocked pending the user's computer repair (expected August 2026) and new
+> explicit authorization. Simulated Test, the 15-run formal stage, real
+> XRD, real adaptation, and V10 remain locked.
+
+> **2026-07-27 experiment-1 interruption override (superseded by the
+> split-pilot verdict above for pilot status; interruption facts unchanged):**
 > The user force-terminated the active new-split run
 > `ordinary_dynamic_augmentation__tuning_seed_20260710` at about 21:40 on
 > 2026-07-26 to repair a computer memory problem. The last persisted state is

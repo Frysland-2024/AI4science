@@ -6,6 +6,41 @@
 
 > Current-state record only. Historical reasoning remains in `PROJECT_JOURNEY.md` and dated decision files.
 
+## 2026-07-27 split pilots completed (authoritative)
+
+Two user-authorized pilots ran on 2026-07-27 while the registered 7-run queue
+stays interrupted at `0/7`.
+
+**Dataset pilot (read-only audit): PASS on all checks.**
+`scripts/audit_v9_split_dataset_pilot.py` verified against the authoritative
+`split_manifest.json` (SHA-256 `b9d3b72e...`): exact 9,842/2,109/2,109 counts,
+maximum crystal-system share deviation 0.000379 (tolerance 0.01), zero
+parent-structure or material leakage across 14,060 parents, all seven classes
+present in every split, one split per parent, and all 11 persisted view
+manifests of the interrupted run contain Validation material IDs only.
+Report: `reports/v9_split_dataset_pilot_audit.json`.
+
+**Algorithm pilot (isolated 30-epoch Dynamic ERM): completed, budget filled.**
+Launched via `scripts/run_v9_split_pilot_erm.ps1` into the isolated root
+`outputs/v9_split_pilot_erm_30e/` (same seed 20260710, contracts, and
+hardware profile as registered experiment 1; only epochs=30, max steps
+18,480, and no early stopping differ). All 18,480 steps ran;
+`data_manifest_hash` confirms the new split; prefetch wait fraction 0.037.
+Validation trajectory (ID Macro-F1 / mean single-factor OOD Macro-F1 / gap):
+epoch 10 `0.3714 / 0.2967 / 0.075`; epoch 20 `0.4240 / 0.3419 / 0.082`;
+epoch 30 `0.4212 / 0.3557 / 0.065`.
+
+**Interpretation under the user's pre-registered criterion (ID 0.6+ means the
+old family split was the main problem; ~0.4 means it was not):** ID plateaus
+near 0.42 by epoch 20-30, above the old family split's 70-epoch best
+(ID 0.3875 / OOD 0.3300) at one third of the budget, so the old split did add
+difficulty, but the dominant bottleneck is not the split. Next investigation
+targets are backbone capacity, data/simulation quality, and intrinsic task
+difficulty. The pilot run is development-only evidence and must not be used
+for model selection or checkpoint reuse. Formal 7-run relaunch stays blocked
+until the user's computer repair (expected August 2026) and new explicit
+authorization.
+
 ## 2026-07-27 experiment-1 interruption (authoritative)
 
 The user force-terminated the active new-split tuning run
