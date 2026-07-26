@@ -1,7 +1,7 @@
 {
   "$schema": "algorithm.v9.method_transfer.schema.json",
   "schema_version": "v9.1-method-transfer",
-  "status": "v9t_candidate_range_frozen_tuning_authorization_required",
+  "status": "v9t_validation_tuning_authorized_on_measured_laptop",
   "study_kind": "cross_domain_method_transfer",
   "research_question": "Under matched crystal structures, physical-augmentation views, architecture, compute budget, and evaluation panels, does explicit modeling of relations between differently perturbed views of the same crystal structure through JS consistency or residual class decorrelation improve PXRD generalization to unseen perturbations and real experimental patterns beyond augmentation-only supervised learning?",
   "narrative_policy": {
@@ -74,16 +74,16 @@
     "legacy_filename_only": true
   },
   "hardware_profile": {
-    "path": "configs/hardware.v9.desktop.9600x_4070tis.json",
-    "sha256": "548FA33C64B2BDC9D4F38D8A054B86278C8A2757E2F18E51191D703A56F05B93"
+    "path": "configs/hardware.v9.laptop.7945hx_4060.json",
+    "sha256": "A961E8CD22A2E4CAF6F0ACA114F61BA4125BBE144578B0299874D2B07E386AB3"
   },
   "runtime": {
     "python_executable": "E:/AI4science/.venvs/xrd_tools/Scripts/python.exe",
     "python_version": "3.11.9",
     "torch_version": "2.5.1+cu124",
     "cuda_runtime": "12.4",
-    "gpu_name": "NVIDIA GeForce RTX 4070 Ti SUPER",
-    "minimum_gpu_memory_mb": 15000,
+    "gpu_name": "NVIDIA GeForce RTX 4060 Laptop GPU",
+    "minimum_gpu_memory_mb": 8000,
     "pip_check_required": true
   },
   "data": {
@@ -147,18 +147,18 @@
   },
   "method_parameter_governance": {
     "path": "configs/v9_method_parameter_governance.json",
-    "sha256": "4479476A5492A8E81000C2B8E315D8CDA2446198BAE6B36163E9A42792CE1369",
+    "sha256": "EBE245FDE7137064E20469274C8D4EDE0FE58E58695080BB3E6135139CB8F575",
     "status": "candidate_range_frozen_for_validation",
     "registered_candidate_grids": {
       "lambda_js": [0.3, 3.0, 30.0],
       "lambda_res": [0.2, 2.0, 20.0]
     },
     "candidate_range_frozen_for_validation": true,
-    "development_tuning_execution_allowed": false
+    "development_tuning_execution_allowed": true
   },
   "development_tuning": {
     "name": "validation_only_development_tuning",
-    "execution_enabled": false,
+    "execution_enabled": true,
     "seed": 20260710,
     "epochs": 50,
     "max_optimizer_steps": 30650,
@@ -375,13 +375,13 @@
   },
   "execution_policy": {
     "tuning_plan_generation_enabled": true,
-    "development_tuning_execution_enabled": false,
+    "development_tuning_execution_enabled": true,
     "formal_plan_generation_requires_frozen_tuning_selection": true,
     "experiment_execution_enabled": false,
     "formal_scientific_conclusions_enabled": false,
     "simulated_test_enabled": false,
     "real_test_enabled": false,
-    "experiment_blocker": "The revised candidate range and hashes are frozen, but Validation-only lambda tuning remains disabled until the user separately authorizes the seven-run execution on the target machine.",
+    "experiment_blocker": "Only the seven-run Validation tuning stage is authorized on the measured laptop target; the 15-run formal experiment remains disabled.",
     "formal_blocker": "The tuning selection, 15 formal development runs, unified Validation comparison, and locked final evaluations are incomplete."
   }
 }

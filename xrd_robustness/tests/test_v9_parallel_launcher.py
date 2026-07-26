@@ -12,9 +12,14 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 
 class V9ParallelLauncherTests(unittest.TestCase):
     def setUp(self) -> None:
-        profile = json.loads(
-            (PROJECT_ROOT / "configs" / "hardware.v9.desktop.9600x_4070tis.json")
+        contract = json.loads(
+            (PROJECT_ROOT / "configs" / "algorithm.v9.method_transfer.json")
             .read_text(encoding="utf-8")
+        )
+        profile = json.loads(
+            (PROJECT_ROOT / contract["hardware_profile"]["path"]).read_text(
+                encoding="utf-8"
+            )
         )
         self.applied = profile["applied"]
         self.scheduler = self.applied["parallel_run_scheduler"]
@@ -26,14 +31,14 @@ class V9ParallelLauncherTests(unittest.TestCase):
             "8",
         ]
 
-    def test_registered_concurrency_splits_eight_workers_across_two_runs(self) -> None:
-        self.assertEqual(self.applied["run_concurrency"], 2)
-        effective, workers = _scheduled_argv(self.argv, self.scheduler, group_size=2)
-        self.assertEqual(workers, 4)
+    def test_registered_laptop_concurrency_uses_all_workers_for_one_run(self) -> None:
+        self.assertEqual(self.applied["run_concurrency"], 1)
+        effective, workers = _scheduled_argv(self.argv, self.scheduler, group_size=1)
+        self.assertEqual(workers, 8)
         self.assertEqual(
-            effective[effective.index("--dynamic-prefetch-workers") + 1], "4"
+            effective[effective.index("--dynamic-prefetch-workers") + 1], "8"
         )
-        self.assertEqual(workers * self.applied["run_concurrency"], 8)
+        self.assertEqual(self.scheduler["strategy"], "serial-v1")
 
     def test_unpaired_tail_run_restores_all_eight_workers(self) -> None:
         effective, workers = _scheduled_argv(self.argv, self.scheduler, group_size=1)

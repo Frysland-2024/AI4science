@@ -1,5 +1,7 @@
 # XRD Robustness V9-T：跨 Codex 账号与台式机完整交接
 
+> **2026-07-26 最新执行覆盖（优先于下文旧台式机迁移说明）：** 用户已明确授权在当前 LENOVO 82WM 笔记本上执行且仅执行 V9-T 的 7-run Validation tuning。当前注册目标为 Ryzen 9 7945HX、RTX 4060 Laptop GPU、32 GB RAM；新硬件合同是 `configs/hardware.v9.laptop.7945hx_4060.json`。新鲜运行时和有界 BF16 审计已通过，单负载峰值约 1822 MB；双进程负载虽无 OOM，但聚合吞吐仅为串行的 0.838，因此注册调度为严格串行、每个 run 使用全部 8 个预取 worker。由于本机缺少可工作的 Triton，`torch.compile` 探针产生 0 个 compiled graph，故笔记本合同显式关闭编译，保留 BF16、TF32、fused AdamW、pinned memory 和 non-blocking H2D。7-run 必须由注册启动器从 optimizer step 0 开始；15-run、simulated Test、real XRD、真实适配和 V10 均未获授权。下文“笔记本不训练/等待台式机授权”的旧说明仅作为历史迁移记录，不再代表当前 7-run 权限。
+
 > **新账号必须从这里开始。** 本文件是接管入口，不是训练授权。先核验机器可读证据，再进行任何操作。
 
 ## 给下一个 Codex 的第一条指令（可直接复制）

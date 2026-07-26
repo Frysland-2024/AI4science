@@ -43,7 +43,7 @@ lambda_JS  ∈ {0.3, 3.0, 30.0}
 lambda_res ∈ {0.2, 2.0, 20.0}
 ```
 
-Train-only semantics, learned-state and candidate-grid gates have passed. This does not authorize training.
+Train-only semantics, learned-state and candidate-grid gates have passed. On 2026-07-26 the user explicitly authorized exactly the seven registered Validation-only tuning runs on the measured laptop; this authorization does not extend to the 15-run formal comparison or either locked test.
 
 ## 4. Simulation execution state
 
@@ -55,7 +55,9 @@ active authoritative checkpoints = 0
 active training processes = 0
 ```
 
-Formal desktop runs must start from optimizer step 0 after target-machine acceptance and explicit authorization.
+The registered tuning target is now the LENOVO 82WM laptop (Ryzen 9 7945HX, RTX 4060 Laptop GPU, 8 GB VRAM). Fresh checks passed for AC power, Python/Torch/CUDA, BF16, dependency integrity, GPU identity and bounded single-run memory. A bounded two-process probe was safe in memory but delivered only 0.838 times serial aggregate throughput, so the performance-maximizing registered scheduler is one run at a time with all eight prefetch workers. `torch.compile` is disabled on this target because a fresh probe found no working Triton installation and zero compiled graphs; eager BF16 and fused AdamW remain enabled.
+
+All seven tuning runs must start from optimizer step 0 through the registered launcher. Formal simulation, simulated Test, real XRD and V10 remain separately locked.
 
 ## 5. Real-domain research axis
 
@@ -187,8 +189,9 @@ The local full repository suite passed **179/179** tests on 2026-07-26.
 - implement approved simulation-checkpoint loading;
 - implement head-only adaptation training and adaptation-validation selection;
 - bind adapted checkpoint and result hashes;
-- finish target-desktop acceptance;
-- obtain separate authorizations for 7-run, adaptation train/validation and final real test.
+- launch and monitor the authorized seven-run laptop tuning registry;
+- after 7/7, stop and audit the registered Validation selection without starting the 15-run formal comparison;
+- obtain separate authorizations for adaptation train/validation, the 15-run formal comparison and final tests.
 
 Current locks:
 

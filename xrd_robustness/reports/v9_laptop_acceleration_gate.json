@@ -1,0 +1,214 @@
+{
+  "checks": {
+    "bf16_forward_backward_numerical_equivalence": true,
+    "effective_scheduler_worker_budget_is_registered": true,
+    "parallel_throughput_not_lower_than_serial_when_registered": true,
+    "registered_run_group_completed_without_error": true,
+    "registered_run_group_peak_vram_below_90_percent": true,
+    "target_gpu_name_and_memory_match": true,
+    "torch_compile_eager_numerical_equivalence_or_disabled": true,
+    "torch_compile_state_matches_profile": true
+  },
+  "configuration": {
+    "batch_size": 16,
+    "benchmark_iterations": 20,
+    "model": {
+      "branch_channels": 32,
+      "depth": 4,
+      "dropout": 0.1,
+      "embed_dim": 128,
+      "fusion_dim": 128,
+      "input_length": 3501,
+      "local_kernels": [
+        5,
+        11,
+        21
+      ],
+      "mlp_ratio": 4.0,
+      "num_classes": 7,
+      "num_heads": 4,
+      "patch_size": 16,
+      "patch_stride": 8,
+      "pooling": "mean",
+      "variant": "b3"
+    },
+    "no_checkpoint": true,
+    "no_dataset_access": true,
+    "no_optimizer_step": true,
+    "objectives": [
+      "dynamic_erm",
+      "dynamic_js",
+      "dynamic_residual"
+    ],
+    "parallel_processes": 1,
+    "seed": 20260719,
+    "thresholds": {
+      "bf16_eager_vs_compile": {
+        "gradient_cosine_min": 0.995,
+        "gradient_relative_l2_max": 0.05,
+        "logits_atol": 0.02,
+        "logits_rtol": 0.02,
+        "loss_atol": 0.01,
+        "loss_rtol": 0.01
+      },
+      "fp32_vs_bf16": {
+        "gradient_cosine_min": 0.97,
+        "gradient_relative_l2_max": 0.25,
+        "logits_atol": 0.08,
+        "logits_rtol": 0.08,
+        "loss_atol": 0.03,
+        "loss_rtol": 0.03
+      }
+    },
+    "warmup_iterations": 5
+  },
+  "contract": {
+    "path": "configs/algorithm.v9.method_transfer.json",
+    "sha256": "6C258482995E7BF0CA1391556E96F7478E655B8470887927E74A9886F8F4BECB"
+  },
+  "hardware_profile": {
+    "path": "configs/hardware.v9.laptop.7945hx_4060.json",
+    "sha256": "A961E8CD22A2E4CAF6F0ACA114F61BA4125BBE144578B0299874D2B07E386AB3"
+  },
+  "implementation_sha256": "32294E321E72A76F4584F9F192A773B808D4EC857CE04F956B888CBC52CF97B5",
+  "numerical_equivalence": {
+    "dynamic_erm": {
+      "bf16_eager_vs_compile": {
+        "not_applicable": "compile_disabled",
+        "passed": true
+      },
+      "fp32_vs_bf16": {
+        "absolute_loss_difference": 0.0015494823455810547,
+        "gradient_cosine": 0.9998616589865785,
+        "gradient_names_match": true,
+        "gradient_relative_l2": 0.016902986115176336,
+        "gradients_close": true,
+        "logits_close": true,
+        "loss_close": true,
+        "maximum_absolute_gradient_difference": 0.0016340184956789017,
+        "maximum_absolute_logit_difference": 0.003153696656227112,
+        "passed": true,
+        "thresholds": {
+          "gradient_cosine_min": 0.97,
+          "gradient_relative_l2_max": 0.25,
+          "logits_atol": 0.08,
+          "logits_rtol": 0.08,
+          "loss_atol": 0.03,
+          "loss_rtol": 0.03
+        }
+      },
+      "measurements": {
+        "bf16_compile_first_call_seconds": null,
+        "bf16_eager_seconds": 0.2299907999986317,
+        "compile_fallback_completed": false,
+        "compile_initialization_seconds": null,
+        "compile_unique_graphs": 0,
+        "fp32_seconds": 0.3182430000160821
+      }
+    },
+    "dynamic_js": {
+      "bf16_eager_vs_compile": {
+        "not_applicable": "compile_disabled",
+        "passed": true
+      },
+      "fp32_vs_bf16": {
+        "absolute_loss_difference": 0.0015494823455810547,
+        "gradient_cosine": 0.9998616473894236,
+        "gradient_names_match": true,
+        "gradient_relative_l2": 0.016903651259464747,
+        "gradients_close": true,
+        "logits_close": true,
+        "loss_close": true,
+        "maximum_absolute_gradient_difference": 0.001634005457162857,
+        "maximum_absolute_logit_difference": 0.003153696656227112,
+        "passed": true,
+        "thresholds": {
+          "gradient_cosine_min": 0.97,
+          "gradient_relative_l2_max": 0.25,
+          "logits_atol": 0.08,
+          "logits_rtol": 0.08,
+          "loss_atol": 0.03,
+          "loss_rtol": 0.03
+        }
+      },
+      "measurements": {
+        "bf16_compile_first_call_seconds": null,
+        "bf16_eager_seconds": 0.04973719999543391,
+        "compile_fallback_completed": false,
+        "compile_initialization_seconds": null,
+        "compile_unique_graphs": 0,
+        "fp32_seconds": 0.18038470001192763
+      }
+    },
+    "dynamic_residual": {
+      "bf16_eager_vs_compile": {
+        "not_applicable": "compile_disabled",
+        "passed": true
+      },
+      "fp32_vs_bf16": {
+        "absolute_loss_difference": 0.0006597042083740234,
+        "gradient_cosine": 0.9998619450025934,
+        "gradient_names_match": true,
+        "gradient_relative_l2": 0.01688171859417374,
+        "gradients_close": true,
+        "logits_close": true,
+        "loss_close": true,
+        "maximum_absolute_gradient_difference": 0.0016340184956789017,
+        "maximum_absolute_logit_difference": 0.003153696656227112,
+        "passed": true,
+        "thresholds": {
+          "gradient_cosine_min": 0.97,
+          "gradient_relative_l2_max": 0.25,
+          "logits_atol": 0.08,
+          "logits_rtol": 0.08,
+          "loss_atol": 0.03,
+          "loss_rtol": 0.03
+        }
+      },
+      "measurements": {
+        "bf16_compile_first_call_seconds": null,
+        "bf16_eager_seconds": 0.04491619998589158,
+        "compile_fallback_completed": false,
+        "compile_initialization_seconds": null,
+        "compile_unique_graphs": 0,
+        "fp32_seconds": 0.09113990000332706
+      }
+    }
+  },
+  "performance": {
+    "compile_warmup_excluded_from_steady_timing": true,
+    "observed_workload_peak_bytes": 1909981184,
+    "parallel_to_serial_aggregate_throughput_ratio": null,
+    "peak_vram_limit_bytes": 7726222540,
+    "registered_parallel_group": null,
+    "serial": {
+      "compile_warmup_seconds": 0.0,
+      "device_global_used_bytes": 1909981184,
+      "dynamo_counters": {},
+      "elapsed_seconds": 0.7474039999942761,
+      "peak_allocated_bytes": 650184704,
+      "peak_reserved_bytes": 723517440,
+      "spectra": 640,
+      "spectra_per_second": 856.2972636016149,
+      "unique_graphs": 0
+    }
+  },
+  "purpose": "bounded forward/backward numerical and throughput engineering gate; no optimizer step, checkpoint, dataset split evaluation, or formal training",
+  "runtime": {
+    "bf16_supported": true,
+    "cuda_available": true,
+    "gpu_memory_mb": 8187,
+    "gpu_name": "NVIDIA GeForce RTX 4060 Laptop GPU",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "python": "3.11.9",
+    "target_match": {
+      "bf16_supported": true,
+      "gpu_memory": true,
+      "gpu_name": true
+    },
+    "torch": "2.5.1+cu124",
+    "torch_cuda": "12.4"
+  },
+  "schema_version": "v9-target-acceleration-audit-v2",
+  "status": "pass"
+}

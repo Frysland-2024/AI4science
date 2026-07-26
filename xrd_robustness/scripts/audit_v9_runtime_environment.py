@@ -82,6 +82,7 @@ def main() -> int:
         text=True,
         timeout=120,
     )
+    compile_enabled = bool(profile["applied"]["torch_compile"]["enabled"])
     checks = {
         "python_version": sys.version.split()[0] == runtime["python_version"],
         "torch_version": str(torch.__version__) == runtime["torch_version"],
@@ -93,10 +94,12 @@ def main() -> int:
         "system_memory": system_memory_gb >= float(target["minimum_system_memory_gb"]),
         "logical_threads": os.cpu_count() == int(target["logical_threads"]),
         "pip_check": pip_check.returncode == 0,
-        "msvc_toolchain_discoverable": shutil.which("cl.exe") is not None,
+        "compile_toolchain_discoverable_or_disabled": (
+            shutil.which("cl.exe") is not None if compile_enabled else True
+        ),
     }
     report = {
-        "schema_version": "v9-desktop-runtime-environment-audit-v1",
+        "schema_version": "v9-target-runtime-environment-audit-v2",
         "status": "pass" if all(checks.values()) else "fail",
         "purpose": "fresh target runtime and dependency audit; no training",
         "contract": {

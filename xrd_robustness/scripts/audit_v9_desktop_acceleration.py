@@ -295,6 +295,7 @@ def _benchmark_workload(
     warmup_iterations: int,
     benchmark_iterations: int,
     seed: int,
+    compile_enabled: bool,
     barrier_timeout_seconds: int = 600,
     start_barrier: Any = None,
     finish_barrier: Any = None,
@@ -307,10 +308,11 @@ def _benchmark_workload(
     _reset_dynamo()
     cache_root = Path(tempfile.gettempdir()) / f"xrd_v9_inductor_{os.getpid()}"
     os.environ["TORCHINDUCTOR_CACHE_DIR"] = str(cache_root)
-    model.compile(backend="inductor", mode="default", fullgraph=False, dynamic=False)
-    residual_head.compile(
-        backend="inductor", mode="default", fullgraph=False, dynamic=False
-    )
+    if compile_enabled:
+        model.compile(backend="inductor", mode="default", fullgraph=False, dynamic=False)
+        residual_head.compile(
+            backend="inductor", mode="default", fullgraph=False, dynamic=False
+        )
     generator = torch.Generator(device="cpu").manual_seed(seed + 1)
     x1 = torch.rand(batch_size, model_config.input_length, generator=generator).to(device)
     x2 = torch.rand(batch_size, model_config.input_length, generator=generator).to(device)
@@ -329,7 +331,9 @@ def _benchmark_workload(
     for _ in range(warmup_iterations):
         step()
     torch.cuda.synchronize(device)
-    compile_warmup_seconds = time.perf_counter() - compile_warmup_started
+    compile_warmup_seconds = (
+        time.perf_counter() - compile_warmup_started if compile_enabled else 0.0
+    )
     if start_barrier is not None:
         start_barrier.wait(timeout=barrier_timeout_seconds)
     torch.cuda.reset_peak_memory_stats(device)
@@ -471,7 +475,7 @@ def main() -> int:
     model_config = PAMPTConfig(variant=str(contract["model"]["variant"]))
     output_path = Path(args.output).resolve()
     report: dict[str, Any] = {
-        "schema_version": "v9-desktop-acceleration-audit-v1",
+        "schema_version": "v9-target-acceleration-audit-v2",
         "purpose": (
             "bounded forward/backward numerical and throughput engineering gate; "
             "no optimizer step, checkpoint, dataset split evaluation, or formal training"
@@ -518,9 +522,22 @@ def main() -> int:
                         "gradient_scaler": False,
                         "fallback_to_float32": True,
                     },
-                    "registered_compile": applied["torch_compile"]["enabled"] is True,
-                    "registered_two_run_concurrency": applied["run_concurrency"] == 2,
-                    "registered_parallel_worker_budget": (
+                    "registered_compile_state": (
+                        applied["torch_compile"]["enabled"] is True
+                        or (
+                            applied["torch_compile"]["enabled"] is False
+                            and bool(
+                                str(
+                                    applied["torch_compile"].get(
+                                        "disabled_reason", ""
+                                    )
+                                ).strip()
+                            )
+                        )
+                    ),
+                    "registered_supported_concurrency": applied["run_concurrency"]
+                    in {1, 2},
+                    "registered_scheduler_worker_budget": (
                         applied["parallel_run_scheduler"][
                             "concurrent_run_prefetch_workers"
                         ]
@@ -570,6 +587,7 @@ def main() -> int:
     x1 = torch.rand(batch_size, model_config.input_length, generator=generator).to(device)
     x2 = torch.rand(batch_size, model_config.input_length, generator=generator).to(device)
     target = (torch.arange(batch_size, device=device) % model_config.num_classes).long()
+    compile_enabled = bool(applied["torch_compile"]["enabled"])
     numerical: dict[str, Any] = {}
     compile_graphs = []
     for mode in OBJECTIVES:
@@ -579,29 +597,48 @@ def main() -> int:
         bf16 = _run_numerical_case(
             mode, model_config, x1, x2, target, seed=args.seed, amp=True, compile_model=False
         )
-        compiled = _run_numerical_case(
-            mode, model_config, x1, x2, target, seed=args.seed, amp=True, compile_model=True
+        compiled = (
+            _run_numerical_case(
+                mode,
+                model_config,
+                x1,
+                x2,
+                target,
+                seed=args.seed,
+                amp=True,
+                compile_model=True,
+            )
+            if compile_enabled
+            else None
         )
-        compile_graphs.append(int(compiled["unique_graphs"]))
+        compile_graphs.append(int(compiled["unique_graphs"]) if compiled else 0)
         numerical[mode] = {
             "fp32_vs_bf16": compare_cases(
                 fp32, bf16, NUMERICAL_THRESHOLDS["fp32_vs_bf16"]
             ),
-            "bf16_eager_vs_compile": compare_cases(
-                bf16, compiled, NUMERICAL_THRESHOLDS["bf16_eager_vs_compile"]
+            "bf16_eager_vs_compile": (
+                compare_cases(
+                    bf16, compiled, NUMERICAL_THRESHOLDS["bf16_eager_vs_compile"]
+                )
+                if compiled is not None
+                else {"passed": True, "not_applicable": "compile_disabled"}
             ),
             "measurements": {
                 "fp32_seconds": fp32["elapsed_seconds"],
                 "bf16_eager_seconds": bf16["elapsed_seconds"],
-                "bf16_compile_first_call_seconds": compiled["elapsed_seconds"],
-                "compile_initialization_seconds": compiled[
-                    "compile_initialization_seconds"
-                ],
-                "compile_unique_graphs": compiled["unique_graphs"],
-                "compile_fallback_completed": True,
+                "bf16_compile_first_call_seconds": (
+                    compiled["elapsed_seconds"] if compiled else None
+                ),
+                "compile_initialization_seconds": (
+                    compiled["compile_initialization_seconds"] if compiled else None
+                ),
+                "compile_unique_graphs": compiled["unique_graphs"] if compiled else 0,
+                "compile_fallback_completed": bool(compiled),
             },
         }
-        del fp32, bf16, compiled
+        del fp32, bf16
+        if compiled is not None:
+            del compiled
         torch.cuda.empty_cache()
 
     settings = {
@@ -609,42 +646,67 @@ def main() -> int:
         "warmup_iterations": args.warmup_iterations,
         "benchmark_iterations": args.benchmark_iterations,
         "seed": args.seed + 100,
+        "compile_enabled": compile_enabled,
         "barrier_timeout_seconds": max(
             30, min(args.parallel_timeout_seconds - 10, 600)
         ),
     }
     serial = _benchmark_workload(asdict(model_config), **settings)
     torch.cuda.empty_cache()
-    parallel = _parallel_benchmark(
-        model_config, settings, timeout_seconds=args.parallel_timeout_seconds
+    run_concurrency = int(applied["run_concurrency"])
+    parallel = (
+        _parallel_benchmark(
+            model_config, settings, timeout_seconds=args.parallel_timeout_seconds
+        )
+        if run_concurrency == 2
+        else None
     )
-    throughput_ratio = parallel["aggregate_spectra_per_second"] / max(
-        serial["spectra_per_second"], 1e-12
+    throughput_ratio = (
+        parallel["aggregate_spectra_per_second"]
+        / max(serial["spectra_per_second"], 1e-12)
+        if parallel is not None
+        else None
     )
-    peak_limit_bytes = 15360 * 1024**2
+    peak_limit_bytes = int(observed_memory_mb * 0.90 * 1024**2)
+    workload_peak_bytes = (
+        int(parallel["maximum_device_global_used_bytes"])
+        if parallel is not None
+        else int(serial["device_global_used_bytes"])
+    )
+    run_group_completed = (
+        not parallel["timed_out"] and not parallel["errors"]
+        if parallel is not None
+        else True
+    )
+    run_group_compiled = (
+        int(parallel["minimum_unique_graphs"]) > 0
+        if parallel is not None
+        else True
+    )
     checks = {
         "target_gpu_name_and_memory_match": all(target_match.values()),
         "bf16_forward_backward_numerical_equivalence": all(
             item["fp32_vs_bf16"]["passed"] for item in numerical.values()
         ),
-        "torch_compile_eager_numerical_equivalence": all(
+        "torch_compile_eager_numerical_equivalence_or_disabled": all(
             item["bf16_eager_vs_compile"]["passed"] for item in numerical.values()
         ),
-        "compile_fallback_smoke_pass": all(
-            item["measurements"]["compile_fallback_completed"]
-            for item in numerical.values()
+        "torch_compile_state_matches_profile": (
+            min(compile_graphs, default=0) > 0
+            and int(serial["unique_graphs"]) > 0
+            and run_group_compiled
+            if compile_enabled
+            else min(compile_graphs, default=0) == 0
+            and int(serial["unique_graphs"]) == 0
         ),
-        "torch_compile_graph_executed": min(compile_graphs, default=0) > 0
-        and int(serial["unique_graphs"]) > 0
-        and int(parallel["minimum_unique_graphs"]) > 0,
-        "two_run_completed_without_error": (
-            not parallel["timed_out"] and not parallel["errors"]
+        "registered_run_group_completed_without_error": run_group_completed,
+        "registered_run_group_peak_vram_below_90_percent": (
+            workload_peak_bytes < peak_limit_bytes
         ),
-        "two_run_peak_vram_below_15360_mb": (
-            int(parallel["maximum_device_global_used_bytes"]) < peak_limit_bytes
+        "parallel_throughput_not_lower_than_serial_when_registered": (
+            throughput_ratio is None or throughput_ratio >= 0.95
         ),
-        "two_run_aggregate_throughput_not_lower_than_serial": throughput_ratio >= 0.95,
-        "effective_parallel_worker_budget_is_eight": (
+        "effective_scheduler_worker_budget_is_registered": (
             applied["parallel_run_scheduler"]["concurrent_run_prefetch_workers"]
             * applied["run_concurrency"]
             == applied["dynamic_prefetch"]["worker_processes"]
@@ -657,9 +719,10 @@ def main() -> int:
             "numerical_equivalence": numerical,
             "performance": {
                 "serial": serial,
-                "parallel": parallel,
+                "registered_parallel_group": parallel,
                 "parallel_to_serial_aggregate_throughput_ratio": throughput_ratio,
                 "peak_vram_limit_bytes": peak_limit_bytes,
+                "observed_workload_peak_bytes": workload_peak_bytes,
                 "compile_warmup_excluded_from_steady_timing": True,
             },
         }

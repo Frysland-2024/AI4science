@@ -589,8 +589,11 @@ def audit_contract_assets(contract: Mapping[str, Any], project_root: str | Path)
         raise ValueError("passed candidate-grid Gate must be followed by a frozen range")
 
     hardware_payload = json.loads(hardware_profile_path.read_text(encoding="utf-8"))
-    if hardware_payload.get("schema_version") != "v9-desktop-hardware-profile-v1":
-        raise ValueError("unsupported desktop hardware profile")
+    if hardware_payload.get("schema_version") not in {
+        "v9-desktop-hardware-profile-v1",
+        "v9-hardware-profile-v2",
+    }:
+        raise ValueError("unsupported V9 hardware profile")
     target = hardware_payload.get("target", {})
     applied = hardware_payload.get("applied", {})
     prefetch_profile = applied.get("dynamic_prefetch", {})
@@ -600,7 +603,10 @@ def audit_contract_assets(contract: Mapping[str, Any], project_root: str | Path)
     amp_profile = applied.get("automatic_mixed_precision", {})
     compile_profile = applied.get("torch_compile", {})
     parallel_scheduler = applied.get("parallel_run_scheduler", {})
-    measurement_gate = hardware_payload.get("desktop_measurement_gate", {})
+    measurement_gate = hardware_payload.get(
+        "target_measurement_gate",
+        hardware_payload.get("desktop_measurement_gate", {}),
+    )
     measurement_implementation = measurement_gate.get("implementation", {})
     expected_measurement_implementation = {
         "environment_bootstrap",
@@ -613,7 +619,7 @@ def audit_contract_assets(contract: Mapping[str, Any], project_root: str | Path)
         "readiness_audit",
     }
     if set(measurement_implementation) != expected_measurement_implementation:
-        raise ValueError("desktop measurement implementation paths must be complete")
+        raise ValueError("target measurement implementation paths must be complete")
     missing_measurement_implementation = [
         str(_project_path(root, str(path)))
         for path in measurement_implementation.values()
@@ -621,17 +627,20 @@ def audit_contract_assets(contract: Mapping[str, Any], project_root: str | Path)
     ]
     if missing_measurement_implementation:
         raise ValueError(
-            "missing desktop measurement implementations: "
+            "missing target measurement implementations: "
             f"{missing_measurement_implementation}"
         )
-    if "torch_compile_graph_executed" not in measurement_gate.get(
-        "required_checks", []
+    if compile_profile.get("enabled") is True and (
+        "torch_compile_graph_executed"
+        not in measurement_gate.get("required_checks", [])
     ):
-        raise ValueError("desktop measurement gate must prove an actual compiled graph")
-    if target.get("physical_cores") != 6 or target.get("logical_threads") != 12:
-        raise ValueError("desktop CPU profile must freeze the Ryzen 5 9600X 6C/12T layout")
+        raise ValueError("compiled target profiles must prove an actual compiled graph")
+    if int(target.get("physical_cores", 0)) <= 0 or int(
+        target.get("logical_threads", 0)
+    ) < int(target.get("physical_cores", 0)):
+        raise ValueError("hardware profile must freeze a valid CPU core/thread layout")
     if target.get("gpu") != contract["runtime"]["gpu_name"]:
-        raise ValueError("desktop hardware profile GPU does not match the frozen runtime")
+        raise ValueError("hardware profile GPU does not match the frozen runtime")
     if int(applied.get("evaluation_batch_size", 0)) != int(
         contract["experiment"]["evaluation_batch_size"]
     ):
@@ -658,38 +667,50 @@ def audit_contract_assets(contract: Mapping[str, Any], project_root: str | Path)
     if cuda_math.get("float32_matmul_precision") not in {"highest", "high", "medium"}:
         raise ValueError("hardware profile float32 matmul precision is invalid")
     if optimizer_profile.get("name") != "AdamW" or optimizer_profile.get("fused") is not True:
-        raise ValueError("desktop hardware profile must use fused AdamW")
+        raise ValueError("hardware profile must use fused AdamW")
     if amp_profile != {
         "enabled": True,
         "dtype": "bfloat16",
         "gradient_scaler": False,
         "fallback_to_float32": True,
     }:
-        raise ValueError("desktop hardware profile must register BF16 AMP with FP32 fallback")
-    if compile_profile.get("enabled") is not True:
-        raise ValueError("desktop hardware profile must enable torch.compile")
-    if compile_profile.get("backend") != "inductor":
-        raise ValueError("desktop hardware profile must use the Inductor compile backend")
-    if compile_profile.get("mode") not in {"default", "reduce-overhead", "max-autotune"}:
-        raise ValueError("desktop hardware profile torch.compile mode is invalid")
-    if compile_profile.get("fallback_to_eager") is not True:
-        raise ValueError("desktop hardware profile must keep the eager fallback enabled")
-    if int(applied.get("run_concurrency", 0)) != 2:
-        raise ValueError("desktop hardware profile must register two concurrent runs")
-    if parallel_scheduler != {
-        "strategy": "bounded-pairs-v1",
-        "concurrent_run_prefetch_workers": 4,
-        "serial_tail_prefetch_workers": 8,
-        "failure_policy": "finish-active-pair-then-stop",
-        "registry_write_policy": "parent-process-only",
-    }:
-        raise ValueError("desktop parallel-run scheduler does not match the registered policy")
+        raise ValueError("hardware profile must register BF16 AMP with FP32 fallback")
+    if not isinstance(compile_profile.get("enabled"), bool):
+        raise ValueError("hardware profile must explicitly enable or disable torch.compile")
+    if compile_profile.get("enabled") is True:
+        if compile_profile.get("backend") != "inductor":
+            raise ValueError("hardware profile must use the Inductor compile backend")
+        if compile_profile.get("mode") not in {
+            "default",
+            "reduce-overhead",
+            "max-autotune",
+        }:
+            raise ValueError("hardware profile torch.compile mode is invalid")
+        if compile_profile.get("fallback_to_eager") is not True:
+            raise ValueError("hardware profile must keep the eager fallback enabled")
+    elif not str(compile_profile.get("disabled_reason", "")).strip():
+        raise ValueError("disabled torch.compile requires a measured reason")
+    run_concurrency = int(applied.get("run_concurrency", 0))
+    if run_concurrency not in {1, 2}:
+        raise ValueError("hardware profile run concurrency must be one or two")
+    if parallel_scheduler.get("strategy") not in {"serial-v1", "bounded-pairs-v1"}:
+        raise ValueError("hardware scheduler strategy is invalid")
+    if parallel_scheduler.get("registry_write_policy") != "parent-process-only":
+        raise ValueError("hardware scheduler registry writes must remain parent-only")
+    if int(parallel_scheduler.get("serial_tail_prefetch_workers", 0)) != int(
+        prefetch_profile["worker_processes"]
+    ):
+        raise ValueError("serial scheduler must restore the full prefetch worker budget")
+    if run_concurrency == 1 and parallel_scheduler.get("strategy") != "serial-v1":
+        raise ValueError("single-run hardware profiles must use the serial scheduler")
+    if run_concurrency == 2 and parallel_scheduler.get("strategy") != "bounded-pairs-v1":
+        raise ValueError("two-run hardware profiles must use the bounded-pairs scheduler")
     if (
         int(parallel_scheduler["concurrent_run_prefetch_workers"])
-        * int(applied["run_concurrency"])
+        * run_concurrency
         != int(prefetch_profile["worker_processes"])
     ):
-        raise ValueError("parallel-run worker budget must equal the registered eight-worker budget")
+        raise ValueError("run scheduler worker budget must equal the registered prefetch budget")
 
     counts: Counter[str] = Counter()
     material_ids: set[str] = set()

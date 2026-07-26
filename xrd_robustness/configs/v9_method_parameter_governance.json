@@ -164,6 +164,17 @@
     "simulated_test_used": false,
     "real_xrd_used": false
   },
+  "validation_tuning_authorization": {
+    "authorized": true,
+    "authorization_date": "2026-07-26",
+    "authority": "explicit user instruction in the active Codex task",
+    "scope": "exactly seven registered Validation-only development tuning runs on the measured laptop target",
+    "machine": "LENOVO 82WM with NVIDIA GeForce RTX 4060 Laptop GPU",
+    "formal_experiment_authorized": false,
+    "simulated_test_authorized": false,
+    "real_xrd_authorized": false,
+    "v10_authorized": false
+  },
   "diagnostic_gradient_compensation_factors": {
     "lambda_js": 287400.6148373947,
     "lambda_res": 25557.669898619482,
@@ -212,6 +223,6 @@
     "selection_metric_seed_and_tie_breaker_unchanged": true,
     "simulated_test_and_real_test_untouched": true,
     "candidate_range_frozen_for_validation": true,
-    "development_tuning_execution_allowed": false
+    "development_tuning_execution_allowed": true
   }
 }

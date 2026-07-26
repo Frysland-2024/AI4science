@@ -65,7 +65,7 @@ class V9CandidateGridGateTests(unittest.TestCase):
                 for metric in candidate["summary"].values():
                     self.assertTrue(all(math.isfinite(value) for value in metric.values()))
 
-    def test_grid_is_frozen_but_tuning_remains_locked(self) -> None:
+    def test_historical_gate_stayed_read_only_and_current_user_authorization_is_explicit(self) -> None:
         gate = self.report["candidate_grid_gate"]
         self.assertTrue(gate["candidate_range_may_be_frozen"])
         self.assertFalse(gate["validation_tuning_authorized"])
@@ -78,17 +78,22 @@ class V9CandidateGridGateTests(unittest.TestCase):
             self.governance["one_revision_policy"]["completed_range_revisions"],
             1,
         )
-        self.assertFalse(
+        self.assertTrue(
             self.governance["tuning_gate"][
                 "development_tuning_execution_allowed"
             ]
         )
-        self.assertFalse(self.contract["development_tuning"]["execution_enabled"])
-        self.assertFalse(
+        self.assertTrue(self.contract["development_tuning"]["execution_enabled"])
+        self.assertTrue(
             self.contract["execution_policy"][
                 "development_tuning_execution_enabled"
             ]
         )
+        authorization = self.governance["validation_tuning_authorization"]
+        self.assertTrue(authorization["authorized"])
+        self.assertFalse(authorization["formal_experiment_authorized"])
+        self.assertFalse(authorization["simulated_test_authorized"])
+        self.assertFalse(authorization["real_xrd_authorized"])
 
 
 if __name__ == "__main__":

@@ -368,3 +368,14 @@ Pilot v1 因三条分支都接近七分类随机水平而返回 `HOLD`，无法�
 - 重启必须重新预注册 Train-only 协议、匹配 ERM/V9 对照，并获得新的明确科学决策授权。
 
 这一负结果把问题从“权重是否合适”推进为“无条件测量预测目标为何诱导 residual 重编码晶体语义”，同时避免用反复调参抹去可复现的失败证据。
+## 2026-07-26：把 7-run 执行目标从待验收台式机改为当前实测笔记本
+
+用户明确要求立即在笔记本上执行 V9-T 的七条 Validation-only 调参 run，并进一步要求最大化利用笔记本设备和条件。这是对旧“仅在目标台式机训练”位置决策的明确覆盖，但授权范围严格限定为预注册的 7-run；15-run 正式比较、simulated Test、real XRD、真实适配和 V10 均未随之开放。
+
+迁移没有直接复用台式机的 4070 Ti SUPER 双 run 配置。当前 LENOVO 82WM 实测为 Ryzen 9 7945HX（16C/32T）、RTX 4060 Laptop GPU（8188 MiB）、32 GB RAM，处于交流供电和性能模式。Python 3.11.9、Torch 2.5.1+cu124、CUDA 12.4、BF16 和依赖完整性均通过。旧的 8-worker/8-batch 预取与 evaluation batch 256 等价性证据继续适用。
+
+为确定“最大化利用”而不是凭显存容量猜测并发，执行了不含 optimizer step、checkpoint 或数据访问的有界前向/反向探针。两个并发负载完成且峰值显存安全，但聚合吞吐只有串行的 0.8377；新合同因此冻结为单 run 串行，每个 run 独占全部八个预取 worker。新鲜单负载 BF16 审计峰值约 1821.5 MiB，远低于 90% 显存门槛。
+
+同一探针也发现当前 Windows 环境没有可工作的 Triton，`torch.compile` 实际产生零个 compiled graph，并回退到 eager。继续请求编译只会为每个进程增加失败编译时间和警告，不会带来计算加速。因此笔记本硬件合同显式关闭 `torch.compile`，同时保留 BF16、TF32、fused AdamW、pinned memory、non-blocking H2D 和八进程预取。这个决定只改变工程执行效率，不改变模型、损失、候选网格、seed、训练步数、结构暴露或 Validation 选择规则。
+
+启动前状态仍为 0/7。所有 run 必须由注册计划和 run registry 从 optimizer step 0 启动；任一 run 失败后停止，不得自动进入后续正式或测试阶段。

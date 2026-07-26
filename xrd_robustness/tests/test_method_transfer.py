@@ -87,7 +87,7 @@ class MethodTransferContractTests(unittest.TestCase):
                 "candidate_range_frozen_for_validation"
             ]
         )
-        self.assertFalse(
+        self.assertTrue(
             self.method_parameter_governance["tuning_gate"][
                 "development_tuning_execution_allowed"
             ]
@@ -110,7 +110,7 @@ class MethodTransferContractTests(unittest.TestCase):
             "candidate_range_frozen_for_validation",
         )
         self.assertEqual(audit["method_parameter_candidate_range_gate"], "pass")
-        self.assertFalse(audit["method_parameter_tuning_execution_allowed"])
+        self.assertTrue(audit["method_parameter_tuning_execution_allowed"])
         self.assertEqual(
             audit["hashes"]["method_parameter_governance"],
             self.contract["method_parameter_governance"]["sha256"],
@@ -158,7 +158,7 @@ class MethodTransferContractTests(unittest.TestCase):
             plan["execution_enabled"],
             self.contract["execution_policy"]["development_tuning_execution_enabled"],
         )
-        self.assertFalse(plan["execution_enabled"])
+        self.assertTrue(plan["execution_enabled"])
         self.assertEqual(len({run["run_id"] for run in plan["runs"]}), 7)
         for run in plan["runs"]:
             self.assertIn("--development-only", run["argv"])
@@ -179,10 +179,7 @@ class MethodTransferContractTests(unittest.TestCase):
             self.assertIn("--amp", run["argv"])
             self.assertIn("--amp-dtype", run["argv"])
             self.assertIn("--amp-fallback-to-float32", run["argv"])
-            self.assertIn("--torch-compile", run["argv"])
-            self.assertIn("--torch-compile-backend", run["argv"])
-            self.assertIn("--torch-compile-mode", run["argv"])
-            self.assertIn("--torch-compile-fallback-to-eager", run["argv"])
+            self.assertNotIn("--torch-compile", run["argv"])
             worker_flag = run["argv"].index("--dynamic-prefetch-workers")
             batch_flag = run["argv"].index("--dynamic-prefetch-batches")
             native_thread_flag = run["argv"].index(
@@ -204,14 +201,6 @@ class MethodTransferContractTests(unittest.TestCase):
             )
             self.assertEqual(
                 run["argv"][run["argv"].index("--amp-dtype") + 1], "bfloat16"
-            )
-            self.assertEqual(
-                run["argv"][run["argv"].index("--torch-compile-backend") + 1],
-                "inductor",
-            )
-            self.assertEqual(
-                run["argv"][run["argv"].index("--torch-compile-mode") + 1],
-                "default",
             )
             self.assertNotIn("perturbation_supervised_residual", run["argv"])
             self.assertEqual(
