@@ -6,21 +6,31 @@
 
 > Current-state record only. Historical reasoning remains in `PROJECT_JOURNEY.md` and dated decision files.
 
-## 2026-07-26 pause after the first retuning run
+## 2026-07-26 queue paused after the first retuning run
 
-The user authorized the active first 10-epoch-Validation / patience-2 tuning
-run to finish, but requested that the queue pause before candidate 2 starts.
-The scheduler has no native stop-after-current flag, so only the inner
-`run_v9_method_transfer.py tune-run` scheduler process was suspended while its
-current `train_v7.py` child remained active. The first run must continue under
-the frozen contract; the suspended scheduler is intentional and must not be
-resumed automatically.
+The first 10-epoch-Validation / patience-2 tuning run,
+`ordinary_dynamic_augmentation__tuning_seed_20260710`, completed and the queue
+is now intentionally paused before candidate 2. Early stopping fired at epoch
+80 / optimizer step 49,280 after two checks without a primary improvement
+greater than `0.001`. The tie-break-selected checkpoint is epoch 70 / step
+43,120: mean single-factor Validation-OOD Macro-F1 `0.3300474407481531` and
+Validation-ID Macro-F1 `0.3875303685641823`.
 
-After the first `results.json` is complete and audited, leave the remaining six
-candidates unstarted and report the paused state. Do not run `tune-select`.
-When the user later authorizes continuation, terminate any stale suspended
-launcher processes and relaunch the registered serial `tune-run` command; it
-will detect the completed first result and continue with the remaining runs.
+The audited `results.json` SHA-256 is
+`80C48FF483CA08E4AA567281F1C76F38153E4369DC53889651B4775CD277D7DB`;
+the selected `best.ckpt` SHA-256 is
+`89D6EFEB6221A3CEA8BFAF73E86A49E2902A82321CAAD8EB7C866CE6FC8ADA73`.
+All result values are finite, the run is development/Validation-only, and
+simulated Test plus real Test remain locked. Both intentionally suspended
+launcher processes were terminated after the result audit; no trainer or
+candidate-2 output exists.
+
+The scheduler-owned registry remains `0/7` because the scheduler was suspended
+before it could ingest the completed child result. The filesystem has one
+audited result and six unstarted candidates. Do not run `tune-select`. When the
+user later authorizes continuation, relaunch the registered serial `tune-run`
+command; it will detect and register the completed first result before starting
+candidate 2.
 
 ## 2026-07-26 authoritative 10-epoch Validation override
 
