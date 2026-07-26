@@ -1,6 +1,6 @@
 # AI4science Current State
 
-**Canonical status date:** 2026-07-24  
+**Canonical status date:** 2026-07-26
 **Repository:** `Frysland-2024/AI4science`  
 **Active engineering root:** `xrd_robustness/`
 
@@ -168,12 +168,22 @@ The actual generated RRUFF split artifacts also passed the same local audit:
 - all seven registered support episodes balanced;
 - 14 validation and 35 final-test samples in every episode.
 
-The full repository test suite has not been run through the GitHub connector; it must be rerun in the local worktree.
+The strict local audit and deterministic plan artifacts are now synchronized:
+
+- `xrd_robustness/reports/v9_real_adaptation_contract_audit.json`
+  - status: `locked_contract_and_manifests_pass`;
+  - SHA-256: `B598B3E843C429B34F27DF3B2AB5143093ED3FA14298AFD736DEAC3C3611F84E`;
+- `xrd_robustness/reports/v9_real_adaptation_plan.json`
+  - status: `planned_not_started_execution_disabled`;
+  - SHA-256: `C97C02395CE8BA7C44245159F10B0A22A370DEEE9782FBCF3EC17FA38A4FCE4E`.
+
+Neither artifact loads a model or spectrum, performs adaptation, or accesses the
+final real test.
+
+The local full repository suite passed **179/179** tests on 2026-07-26.
 
 ## 10. Remaining blockers
 
-- copy the frozen manifests into the project Git-ignored path;
-- run strict `--require-local-data` preflight in `E:/AI4science`;
 - implement approved simulation-checkpoint loading;
 - implement head-only adaptation training and adaptation-validation selection;
 - bind adapted checkpoint and result hashes;
@@ -193,8 +203,8 @@ GTIIT is not part of RRUFF adaptation train, validation or final-test aggregate 
 
 ## 12. Immediate next commands
 
-After copying the two frozen manifests into
-`E:/AI4science/xrd_robustness/data/real_xrd/rruff70/manifests/`:
+The two frozen manifests are present in the Git-ignored local data path. The
+following commands are safe read-only verification or plan-generation commands:
 
 ```powershell
 $env:PYTHONPATH='E:\AI4science\xrd_robustness\src'
@@ -204,3 +214,44 @@ E:\AI4science\.venvs\xrd_tools\Scripts\python.exe -s -m unittest discover -s tes
 ```
 
 No real-data training or final-test inference is currently authorized.
+
+## 13. V10 Train-only diagnostic closure
+
+V10 completed a bounded Train-only evidence chain and is now frozen and
+archived:
+
+- the V10-P0 premise gate passed: the learned residual carried independently
+  decodable measurement information and crystal-system information;
+- Pilot v1 returned `HOLD` because all branches remained near chance;
+- Pilot v2 passed its learned-state gate and returned `PARTIAL`;
+- measurement-family and multiple measurement-strength signals remained
+  decodable, but crystal leakage increased relative to matched V9 residual
+  baselines after auxiliary supervision was activated.
+
+The current scientific conclusion is asymmetric: simulator-supervised
+measurement representation is feasible, but the unconditional V10 decoder
+increased total residual information rather than separating measurement
+information from crystal semantics. This is an architecture-level failure mode,
+not evidence that more epochs or scalar-weight search would solve the problem.
+
+`xrd_robustness/docs/V10_MODULE_ARCHIVE_AND_FUTURE_DIRECTIONS.md` is the
+authoritative archive record. V10 may not be reopened until the frozen V9
+validation program is completed and a new explicit scientific decision record
+is approved.
+
+## 14. Local literature and external resources
+
+The 2026-07-23 opXRD/SIMPOD acquisition was unpacked and classified locally on
+2026-07-26:
+
+- opXRD paper and supplement: core XRD perturbation / phase-identification zone;
+- SIMPOD paper: XRD AI / crystal-structure benchmark zone;
+- opXRD Zenodo archive: 92,552 JSON files and 3,612,139,779 bytes, with extracted
+  count and bytes exactly matching the ZIP payload;
+- opXRD and SIMPOD source archives: extracted into verified third-party reference
+  trees with exact count/byte agreement.
+
+The Git-safe metadata index is
+`00_project_context/LITERATURE_LOCAL_RESOURCE_INDEX.md`. PDFs, dataset files,
+ZIP archives, and external source trees remain Git-ignored local resources and
+have no active V9 role or execution authorization.

@@ -19,7 +19,7 @@
 
 项目仍不声称创造新的通用机器学习理论；核心是严格匹配条件下的跨领域方法迁移和 PXRD 特定验证。
 
-## 当前状态（2026-07-24）
+## 当前状态（2026-07-26）
 
 | 阶段 | 状态 |
 |---|---|
@@ -33,6 +33,7 @@
 | real-adaptation 合同审计与计划生成 | 已实现，禁止加载模型或谱图 |
 | real-adaptation 训练器 | 尚未实现 |
 | 真实适配与 final real test | 均锁定、未执行 |
+| V10 Train-only 诊断 | P0 `PASS`、Pilot v1 `HOLD`、Pilot v2 `PARTIAL`；已冻结归档 |
 
 ## 核心论文问题
 
@@ -80,11 +81,17 @@ GTIIT 不进入 RRUFF 主适配训练、验证或最终 Macro-F1。当前只保�
 - `docs/V9_METHOD_TRANSFER_ENGINEERING.md`：模拟算法迁移、lambda、五组实验、公平性和执行门禁；
 - `docs/V9_REAL_FEWSHOT_ADAPTATION_PROTOCOL.md`：RRUFF-70 的 21/14/35 划分、0/1/2/3-shot 与适配统计；
 - `docs/DATA_AND_SIMULATION_CONTRACT.md`：模拟与真实数据统一边界；
-- `docs/V9_SIMULATOR_SUPERVISED_RESIDUAL_ENGINEERING.md`：延期的 V10 备忘；
+- `docs/V9_SIMULATOR_SUPERVISED_RESIDUAL_ENGINEERING.md`：V10 工程备忘；
+- `docs/V10_MODULE_ARCHIVE_AND_FUTURE_DIRECTIONS.md`：V10 Train-only
+  负结果、架构级结论与重启条件；
 - `CODEX_HANDOFF.md`：模拟训练与台式机接管；
 - `CODEX_HANDOFF_REAL_ADAPTATION_ADDENDUM.md`：真实域新协议交接。
 
 机器可读配置、源代码和匹配哈希报告优先于解释性文档。真实适配训练器仍不存在，因此真实数据训练和 final-test 推理仍不能运行。
+
+本地新增 opXRD/SIMPOD 文献、数据和第三方源码的 Git-safe 元数据索引位于
+`../00_project_context/LITERATURE_LOCAL_RESOURCE_INDEX.md`。PDF、数据集、
+ZIP 和外部源码树不进入 Git，也不构成当前 V9 的训练或评测输入。
 
 ## 模拟数据流程
 

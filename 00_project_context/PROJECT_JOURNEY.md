@@ -351,3 +351,20 @@ Raman 数据表面上是两个 26 x 26 x 829 的空间—光谱立方体，共�
 - Validation-only tuning 仍须用户单独明确授权，simulated Test 与 real XRD 继续锁定。
 
 这一节点闭合了“方法原理—learned-state 数值尺度—人工预注册范围—直接 Train-only Gate”的前半条证据链，同时保留后半条“独立 Validation 选择—多 seed 敏感性—锁定 Test”的授权边界。
+
+## 2026-07-25：V10 的负结果形成架构级结论，并冻结归档
+
+V10 最初试图利用模拟器已知的测量标签，让 residual 保留测量信息、同时去除晶系信息。Train-only 的 P0 前提 Gate 首先证明 residual 并非纯噪声：测量家族、若干测量强度和晶系信息都可被独立 probe 解码，因此“测量语义表征”是一个值得检验的科学问题，但这一结果本身不构成正式训练授权。
+
+Pilot v1 因三条分支都接近七分类随机水平而返回 `HOLD`，无法区分机制失败和主干尚未学会。Pilot v2 因而先在完整冻结 Train split 上预训练主干，并要求 learned-state Gate 通过后才比较匹配的 ERM、V9 residual 和 V10 supervised residual。该 Gate 通过，V10 也保留了测量家族、背景、展宽和噪声强度信息；但辅助监督启用后，独立 detached probe 读出的晶系泄漏反而高于匹配 V9 residual。
+
+这形成了一个不对称但可操作的结论：正向测量监督可以增强 residual 的测量可解码性，却不会自动带来测量信息与晶体语义的解耦；在当前无条件 decoder 下，它更像增加 residual 的总信息量。内部 adversarial probe 接近随机而独立 probe 仍可解码晶系，也说明当前对抗头可以被规避，不能作为泄漏已消失的证据。
+
+因此项目决定：
+
+- 冻结并归档当前 V10，不继续追加 epoch、搜索标量权重或修改架构直到结果“通过”；
+- V9-T 仍是唯一主线，V10 不进入 7-run、15-run 或真实域协议；
+- 若 V9 validation 完成后重启 V10，优先研究带 stop-gradient 晶体语义上下文的条件测量 decoder，并继续保留独立 residual crystal probe；
+- 重启必须重新预注册 Train-only 协议、匹配 ERM/V9 对照，并获得新的明确科学决策授权。
+
+这一负结果把问题从“权重是否合适”推进为“无条件测量预测目标为何诱导 residual 重编码晶体语义”，同时避免用反复调参抹去可复现的失败证据。

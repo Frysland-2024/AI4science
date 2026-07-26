@@ -15,7 +15,7 @@
 
 ## 0. 一页结论：现在究竟到哪一步
 
-截至 2026-07-22，本项目的当前主线是 **V9-T：Algorithm Transfer for PXRD Robustness**。科学合同、数据划分、物理模拟范围、PAMPT-B3 主干、三种核心动态方法、公平性流审计、台式机硬件配置、迁移脚本和 7-run 计划均已建立。方法参数语义 Gate 与六候选 Train-only 梯度尺度 Gate 均已通过；JS `[0.3,3,30]`、Residual `[0.2,2,20]` 已在唯一一次人工修订后冻结。7-run 尚未获得执行授权。
+截至 2026-07-26，本项目的当前主线是 **V9-T：Algorithm Transfer for PXRD Robustness**。科学合同、数据划分、物理模拟范围、PAMPT-B3 主干、三种核心动态方法、公平性流审计、台式机硬件配置、迁移脚本和 7-run 计划均已建立。方法参数语义 Gate 与六候选 Train-only 梯度尺度 Gate 均已通过；JS `[0.3,3,30]`、Residual `[0.2,2,20]` 已在唯一一次人工修订后冻结。真实适配合同和确定性计划已经完成严格本地审计，但训练器仍未实现且执行锁关闭。V10 Train-only 诊断已形成负结果并冻结归档。7-run 尚未获得执行授权。
 
 当前执行状态必须表述为：
 
@@ -946,3 +946,75 @@ E:/AI4science/.venvs/xrd_tools/Scripts/python.exe scripts/audit_v9_candidate_gri
 ```powershell
 $env:PYTHONPATH='src'; E:/AI4science/.venvs/xrd_tools/Scripts/python.exe -m unittest tests.test_v9_candidate_grid_gate tests.test_method_transfer -v
 ```
+
+## 26. 2026-07-25 V10 Train-only 诊断闭环与归档
+
+V10 已完成受限的 Train-only 诊断链并冻结归档，当前 V9-T 主线不变。
+
+权威归档入口：
+
+```text
+docs/V10_MODULE_ARCHIVE_AND_FUTURE_DIRECTIONS.md
+```
+
+证据链：
+
+- `reports/v10_p0_measurement_information_gate.json`
+  - P0 premise Gate：`PASS`;
+  - SHA-256：`22EF5EFCFD63ABEA3AFE1848B0F7E1B12C3849B006B1FE091FE5918AD5AC2CAB`;
+- `reports/v10_train_only_pilot.json`
+  - Pilot v1：`HOLD`;
+  - SHA-256：`C3F1B64A8022B011F0997085A7D4F42A56CD28C95EAFBAF2B62263F7D326B1DB`;
+- `reports/v10_train_only_pilot_v2.json`
+  - Pilot v2：`PARTIAL`;
+  - SHA-256：`86762B1B0AD74C32AB8E7BA8A8E1A6BC366F2F0C8F6A245AE4856CE1B47B4228`.
+
+Pilot v2 的 learned-state Gate 通过：Train-only controlled-panel accuracy
+为 `31.43%`、CE 为 `1.7016`，高于七分类随机基线。V10 保留了测量家族、
+背景、展宽和噪声强度信息，且相对匹配 ERM 的分类 CE 代价仅
+`+0.00394`；但 signed residual 与 symmetric residual 的独立晶系泄漏
+分别比匹配 V9 高 `+0.01429` 和 `+0.03714` accuracy。
+
+当前结论不是“测量监督无效”，而是无条件 simulator supervision 增加了
+residual 的总信息量，没有完成测量信息与晶体语义的解耦。该问题按架构级
+失败处理，不能通过继续 epoch 或标量权重搜索自动推进。
+
+V10 只有在 V9 validation 完成、新 Train-only 协议预注册且用户重新明确
+批准科学方向后才能重启。7-run 仍为 `0/7`，15-run 仍为 `0/15`，
+Validation、simulated Test 和 real test 的锁均未改变。
+
+## 27. 2026-07-26 本地文献与外部资源清点
+
+opXRD/SIMPOD 新增归档已经在本地完成解压、哈希核验和科学角色分类。
+Git-safe 权威索引为：
+
+```text
+00_project_context/LITERATURE_LOCAL_RESOURCE_INDEX.md
+```
+
+本地资源边界：
+
+- opXRD 论文与补充材料归入核心 XRD 扰动/相识别文献区；
+- SIMPOD 论文归入 XRD AI/晶体结构 benchmark 文献区；
+- opXRD Zenodo 数据解压为 92,552 个 JSON、3,612,139,779 bytes，和 ZIP
+  payload 完全一致；
+- opXRD 与 SIMPOD 源码解压为第三方参考树，不是 V9 runtime dependency；
+- 原 ZIP 保留为 provenance/recovery 副本；
+- PDF、数据、ZIP 和第三方源码树均保持 Git ignored；
+- 所有新资源当前 V9 role 为 `none`，不授权训练、调参、validation 或 test。
+
+## 28. 真实适配审计产物同步
+
+两个不加载模型或谱图、也不执行 final real test 的机器可读产物已纳入交接：
+
+- `reports/v9_real_adaptation_contract_audit.json`
+  - status：`locked_contract_and_manifests_pass`;
+  - SHA-256：`B598B3E843C429B34F27DF3B2AB5143093ED3FA14298AFD736DEAC3C3611F84E`;
+- `reports/v9_real_adaptation_plan.json`
+  - status：`planned_not_started_execution_disabled`;
+  - SHA-256：`C97C02395CE8BA7C44245159F10B0A22A370DEEE9782FBCF3EC17FA38A4FCE4E`.
+
+合同审计确认 70 个样品、`21/14/35` 角色、七类各 `3/2/5`、七个 episode
+平衡且 final-test 隔离。计划仍只是 189 个 primary candidate run、63 个
+selection group 和 9 个 zero-shot evaluation 的确定性描述；执行器继续
+拒绝运行。
