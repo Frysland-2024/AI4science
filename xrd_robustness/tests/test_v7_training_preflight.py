@@ -2,6 +2,7 @@ import importlib.util
 import json
 from pathlib import Path
 import tempfile
+from types import SimpleNamespace
 import unittest
 from unittest.mock import ANY, patch
 
@@ -52,13 +53,29 @@ class V7TrainingPreflightTests(unittest.TestCase):
         self.assertTrue(all(character in "0123456789abcdef" for character in commit))
 
     def test_posthoc_train_probe_uses_the_train_scientific_split(self):
-        with patch.object(TRAINER, "build_parameter_stream", return_value=[]) as build:
+        initial_rows = [
+            SimpleNamespace(material_id="mp-1"),
+            SimpleNamespace(material_id="mp-1"),
+        ]
+        accepted_rows = [object(), object()]
+        with (
+            patch.object(
+                TRAINER, "build_parameter_stream", return_value=initial_rows
+            ) as build,
+            patch.object(
+                TRAINER,
+                "render_accepted_training_row",
+                side_effect=[(object(), accepted_rows[0]), (object(), accepted_rows[1])],
+            ) as render,
+        ):
             rows = TRAINER._build_posthoc_train_probe_rows(
                 ["mp-1"],
                 object(),
                 profile="train",
+                peaks={"mp-1": object()},
+                factory=object(),
             )
-        self.assertEqual(rows, [])
+        self.assertEqual(rows, accepted_rows)
         build.assert_called_once_with(
             ["mp-1"],
             ANY,
@@ -67,6 +84,7 @@ class V7TrainingPreflightTests(unittest.TestCase):
             steps_per_epoch=1,
             split="train",
         )
+        self.assertEqual(render.call_count, 2)
 
 
 if __name__ == "__main__":

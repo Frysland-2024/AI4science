@@ -48,7 +48,7 @@ Train-only semantics, learned-state and candidate-grid gates have passed. On 202
 ## 4. Simulation execution state
 
 ```text
-lambda tuning = 4/7 completed; run 5 recovery pending
+lambda tuning = 4/7 completed; run 5 second recovery pending
 formal simulation comparison = 0/15
 simulated Test = locked, not started
 active authoritative checkpoints = 1 verified recovery checkpoint
@@ -69,11 +69,19 @@ engineering root cause was an invalid manifest split label, `posthoc_train`,
 being passed to the perturbation strategy, whose scientific split contract only
 permits `train`, `validation`, or `test`. The failed run directory, traceback,
 full-step `last.ckpt`, history, manifests, and stream audit were preserved.
-The repair labels this Train-only diagnostic as `train`; it does not change the
-model, grid, seed, optimization budget, structure or spectrum exposure, or any
-training sampler/pair/parameter hash. The verified epoch-50 checkpoint may be
-resumed only after the repair is tested, committed, and pushed; the queue must
-then finish this same run before starting run 6.
+The first repair correctly relabeled this Train-only diagnostic as `train`, but
+the recovery exposed a second engineering defect: the posthoc manifest persisted
+the sampler's first candidate rows without applying the deterministic training
+quality-gate retry policy. Replay therefore stopped at `mp-1147626` when its
+first candidate failed `window_intensity_below_threshold`. The second failure
+evidence is preserved under
+`outputs/v9_method_transfer_tuning/failed_posthoc_recovery_evidence_20260726_143311`.
+The follow-up repair reuses the same deterministic accepted-row renderer as
+training before saving the posthoc manifest. It does not change the model, grid,
+seed, optimization budget, completed structure or spectrum exposure, or any
+training sampler/pair/parameter hash. The same verified epoch-50 checkpoint may
+be resumed only after the follow-up repair is tested, committed, and pushed; the
+queue must then finish this same run before starting run 6.
 
 ## 5. Real-domain research axis
 

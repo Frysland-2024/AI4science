@@ -76,6 +76,7 @@ from xrd_robustness.training_prefetch import (
     QUALITY_GATE_RETRY_VIEW_STRIDE,
     DynamicBatchPrefetcher,
     FixedBatchPrefetcher,
+    render_accepted_training_row,
     render_dynamic_batch,
     render_fixed_batch,
 )
@@ -800,9 +801,11 @@ def _build_posthoc_train_probe_rows(
     sampler: PhysicsParameterSampler,
     *,
     profile: str,
+    peaks: dict[str, Any],
+    factory: OnlineViewFactory,
 ) -> list[ViewManifestRow]:
-    """Build the train-only posthoc probe with a valid scientific split."""
-    return build_parameter_stream(
+    """Build a replayable train-only posthoc probe using the training quality gate."""
+    initial_rows = build_parameter_stream(
         train_ids,
         sampler,
         profile=profile,
@@ -810,6 +813,17 @@ def _build_posthoc_train_probe_rows(
         steps_per_epoch=1,
         split="train",
     )
+    accepted_rows = []
+    for row in initial_rows:
+        _, accepted_row = render_accepted_training_row(
+            peaks[row.material_id],
+            row,
+            factory=factory,
+            sampler=sampler,
+            profile=profile,
+        )
+        accepted_rows.append(accepted_row)
+    return accepted_rows
 
 
 def _evaluate_perturbation_decoder(
@@ -1847,6 +1861,8 @@ def main() -> int:
             train_ids,
             sampler,
             profile=active_train_profile,
+            peaks=peaks,
+            factory=factory,
         )
         posthoc_train_probe_hash = save_manifest(
             posthoc_train_probe_rows,

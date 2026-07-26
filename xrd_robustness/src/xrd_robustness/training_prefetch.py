@@ -77,7 +77,7 @@ def deterministic_worker_shard(material_id: str, worker_count: int) -> int:
     return int.from_bytes(digest[:8], "big", signed=False) % int(worker_count)
 
 
-def _render_accepted(
+def render_accepted_training_row(
     peak_table: Any,
     initial_row: ViewManifestRow,
     *,
@@ -128,14 +128,14 @@ def _render_items(
     rendered: list[tuple[Any, ...]] = []
     for offset, material_id, first_row, second_row in items:
         peak_table = peak_loader(material_id)
-        first_view, accepted_first = _render_accepted(
+        first_view, accepted_first = render_accepted_training_row(
             peak_table,
             first_row,
             factory=factory,
             sampler=sampler,
             profile=profile,
         )
-        second_view, accepted_second = _render_accepted(
+        second_view, accepted_second = render_accepted_training_row(
             peak_table,
             second_row,
             factory=factory,
