@@ -28,8 +28,16 @@ restart at experiment 1 from optimizer step zero.
 The restart is authorized. The authoritative `xrd_tools` Python 3.11.9 runtime
 is available again, and the fresh Train-only candidate-grid Gate passed on the
 exact new split without accessing Validation, simulated Test, or real XRD.
-New-split training remains `0/7` until experiment 1 is launched after this
-source/configuration change is committed and pushed.
+The source/configuration change was committed and pushed as
+`9eeb972d45574c9b6d49a34d0914879bc8133288`. The registered serial queue was
+then launched from the new seven-run plan. Experiment 1,
+`ordinary_dynamic_augmentation__tuning_seed_20260710`, is active from optimizer
+step zero under the new split and is writing its immutable run contracts and
+Validation-only view manifests beneath
+`outputs/v9_method_transfer_tuning_parent_structure_split_v1/`. The scheduler
+registry remains `0/7` until a run completes; this is an active run, not a
+completed result. Simulated Test, formal 15-run training, real XRD, real-domain
+adaptation, and V10 remain locked.
 
 ## 2026-07-26 queue paused after the first retuning run
 

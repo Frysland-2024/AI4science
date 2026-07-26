@@ -11,8 +11,16 @@
 > runs are cancelled; new-split tuning is `0/7` and restarts at experiment 1
 > from step zero. The restart is authorized; the authoritative Python 3.11.9
 > runtime is available and the Train-only candidate-grid Gate passed on this
-> exact split without Validation/Test access. No new-split run had started
-> when this contract snapshot was frozen.
+> exact split without Validation/Test access. The change was committed and
+> pushed as `9eeb972d45574c9b6d49a34d0914879bc8133288`; the registered serial queue
+> was then launched from
+> `reports/v9_method_transfer_tuning_plan_parent_structure_split_v1.json`.
+> Experiment 1, `ordinary_dynamic_augmentation__tuning_seed_20260710`, is
+> active from optimizer step zero and is writing its run contracts and
+> Validation-only manifests under
+> `outputs/v9_method_transfer_tuning_parent_structure_split_v1/`. Registry
+> completion remains `0/7` until this run finishes. Test, formal 15-run,
+> real-XRD, real adaptation, and V10 remain locked.
 
 > **2026-07-26 paused-after-first state (superseded by split reset):**
 > The first run, `ordinary_dynamic_augmentation__tuning_seed_20260710`,
