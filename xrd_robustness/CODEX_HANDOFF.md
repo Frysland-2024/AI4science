@@ -1,5 +1,22 @@
 # XRD Robustness V9-T：跨 Codex 账号与台式机完整交接
 
+> **2026-07-26 seven-run final-audit override:** All seven registered laptop
+> Validation-only tuning runs completed their frozen 50-epoch, 30,650-step
+> budgets and the queue exited with code 0. Final `tune-select` correctly
+> stopped on two engineering-only recovery issues: tuning prediction rows use
+> the producer's mode identity while the auditor expected the contract method
+> ID, and the full-step recovery for Residual lambda=0.2 overwrote its
+> prediction rows with an empty file after skipping the already-complete
+> training loop. Evidence is preserved at
+> `outputs/v9_method_transfer_tuning/failed_final_tuning_audit_evidence_20260726_1554`.
+> The checkpoint, history metrics, Validation manifests, posthoc manifest,
+> exposure counts, and sampler/pair/parameter hashes remain valid. The repair
+> aligns the audit identity with the producer and requires deterministic
+> prediction replay from the verified full-step checkpoint with exact metric
+> agreement. Test, commit, and push the repair; regenerate only the lambda=0.2
+> prediction artifact from that checkpoint; then rerun `tune-select`. Do not
+> start the 15-run comparison, simulated Test, real XRD, real adaptation, or V10.
+
 > **2026-07-26 run-5 second-recovery override:** The registered queue remains at 4/7. Residual lambda=0.2 completed all 50 epochs and 30,650 optimizer steps, but its first recovery exposed a second posthoc-only engineering defect after the invalid split-label repair: the regenerated Train probe persisted initial sampler rows without the deterministic training quality-gate retry policy, so replay rejected `mp-1147626` with `window_intensity_below_threshold`. The second traceback and regenerated manifest are preserved under `outputs/v9_method_transfer_tuning/failed_posthoc_recovery_evidence_20260726_143311`; no later run started. The follow-up repair builds the posthoc Train manifest with the same deterministic accepted-row renderer used by training, while preserving the frozen model/grid/seed/budget/completed exposure and all training hashes. Resume is authorized only from the same verified epoch-50 checkpoint after tests plus commit/push; finish this same run before runs 6-7. Formal 15-run, simulated Test, real XRD, real adaptation, and V10 remain locked.
 
 > **2026-07-26 最新执行覆盖（优先于下文旧台式机迁移说明）：** 用户已明确授权在当前 LENOVO 82WM 笔记本上执行且仅执行 V9-T 的 7-run Validation tuning。当前注册目标为 Ryzen 9 7945HX、RTX 4060 Laptop GPU、32 GB RAM；新硬件合同是 `configs/hardware.v9.laptop.7945hx_4060.json`。新鲜运行时和有界 BF16 审计已通过，单负载峰值约 1822 MB；双进程负载虽无 OOM，但聚合吞吐仅为串行的 0.838，因此注册调度为严格单 run。首轮实时采样确认原 8-worker 动态谱图预取会周期性饿住 GPU；严格等价扫描覆盖 8/8、12/12、16/16、20/20、24/24，最终冻结最快的 16-worker/16-batch 窗口。新鲜 128-batch 审计达到约 32.4 batch/s，且 manifest、材料顺序、参数、谱图、哈希和质量门计数逐项完全相同。由于本机缺少可工作的 Triton，`torch.compile` 探针产生 0 个 compiled graph，故笔记本合同显式关闭编译，保留 BF16、TF32、fused AdamW、pinned memory 和 non-blocking H2D。7-run 必须由注册启动器从 optimizer step 0 开始；15-run、simulated Test、real XRD、真实适配和 V10 均未获授权。下文“笔记本不训练/等待台式机授权”的旧说明仅作为历史迁移记录，不再代表当前 7-run 权限。

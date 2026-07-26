@@ -295,6 +295,7 @@ class SyntheticResultMixin:
         training_sampler_hash: str = HASH_A,
         pair_schedule_hash: str = HASH_B,
         parameter_pair_hash: str = HASH_C,
+        prediction_method_id: str | None = None,
         locked: bool = True,
     ) -> None:
         profiles = self.contract["simulation"]["development_ood_profiles"]
@@ -371,7 +372,7 @@ class SyntheticResultMixin:
                 probabilities[prediction] = 0.94
                 rows.append({
                     "seed": seed,
-                    "method_id": method["id"],
+                    "method_id": prediction_method_id or method["id"],
                     "profile": profile,
                     "material_id": f"mp-{family}",
                     "family_id": f"family-{family}",
@@ -423,6 +424,7 @@ class MethodTransferTuningTests(SyntheticResultMixin, unittest.TestCase):
                     subset_hash=self.contract["data"]["development_validation_manifest_sha256"],
                     in_range=0.80,
                     ood=ood,
+                    prediction_method_id=method["mode"],
                 )
             selection = evaluate_tuning_selection(self.contract, root, PROJECT_ROOT)
             self.assertEqual(selection["status"], "selected")
@@ -448,6 +450,7 @@ class MethodTransferTuningTests(SyntheticResultMixin, unittest.TestCase):
                     in_range=0.80,
                     ood=0.60,
                     training_sampler_hash=(HASH_B if run is plan["runs"][0] else HASH_A),
+                    prediction_method_id=method["mode"],
                 )
             with self.assertRaisesRegex(ValueError, "matched sampler"):
                 evaluate_tuning_selection(self.contract, root, PROJECT_ROOT)

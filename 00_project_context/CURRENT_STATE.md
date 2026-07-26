@@ -48,10 +48,10 @@ Train-only semantics, learned-state and candidate-grid gates have passed. On 202
 ## 4. Simulation execution state
 
 ```text
-lambda tuning = 4/7 completed; run 5 second recovery pending
+lambda tuning = 7/7 training and Validation evaluation completed; final artifact audit pending one engineering recovery
 formal simulation comparison = 0/15
 simulated Test = locked, not started
-active authoritative checkpoints = 1 verified recovery checkpoint
+active authoritative checkpoints = 7 completed tuning checkpoints
 active training processes = 0
 ```
 
@@ -82,6 +82,28 @@ seed, optimization budget, completed structure or spectrum exposure, or any
 training sampler/pair/parameter hash. The same verified epoch-50 checkpoint may
 be resumed only after the follow-up repair is tested, committed, and pushed; the
 queue must then finish this same run before starting run 6.
+
+All seven registered runs subsequently completed their frozen 50-epoch,
+30,650-step budgets and Validation-only evaluations with return code 0. The
+registered queue exited normally and no training process remains. The first
+final `tune-select` audit then failed closed on two recovery-path engineering
+assumptions. First, tuning prediction rows intentionally use the training mode
+(`dynamic_erm`, `dynamic_js`, or `dynamic_residual`) as their statistics identity,
+while the auditor incorrectly required the longer contract method ID. Second,
+the full-step recovery for Residual lambda=0.2 initialized an empty prediction
+sink, skipped the already-complete training loop, and overwrote
+`prediction_rows.jsonl` with zero rows. Its checkpoint, history metrics,
+Validation manifests, posthoc manifest, and frozen training-stream hashes remain
+intact. The audit failure is preserved under
+`outputs/v9_method_transfer_tuning/failed_final_tuning_audit_evidence_20260726_1554`.
+The engineering repair makes the auditor follow the producer's registered
+statistics identity and makes a full-step resume deterministically replay the
+completed Validation evaluation, fail unless its metrics exactly match history,
+and only then rewrite prediction rows. The repaired Residual lambda=0.2 artifact
+must be regenerated from its verified checkpoint after tests and commit/push,
+then the seven-run `tune-select` audit must pass before tuning is called closed.
+No 15-run formal comparison, simulated Test, real XRD, real adaptation, or V10
+execution is authorized.
 
 ## 5. Real-domain research axis
 

@@ -1331,7 +1331,16 @@ def _load_audited_result(
     )
     if len(prediction_rows) != int(prediction_metadata.get("row_count", -1)):
         raise ValueError(f"prediction-row count mismatch: {prediction_path}")
-    if any(row["seed"] != seed or row["method_id"] != str(method["id"]) for row in prediction_rows):
+    expected_prediction_method_id = (
+        run_id.rsplit("__seed_", 1)[0]
+        if "__seed_" in run_id
+        else str(method["mode"])
+    )
+    if any(
+        row["seed"] != seed
+        or row["method_id"] != expected_prediction_method_id
+        for row in prediction_rows
+    ):
         raise ValueError(f"prediction-row run identity mismatch: {prediction_path}")
     observed_profiles = {row["profile"] for row in prediction_rows}
     expected_profiles = {str(contract["simulation"]["in_range_profile"]), *map(str, contract["simulation"]["development_ood_profiles"])}

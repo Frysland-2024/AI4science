@@ -2008,6 +2008,56 @@ def main() -> int:
     )
     checkpoint_path = run_dir / "last.ckpt"
     prediction_rows_path = run_dir / "prediction_rows.jsonl"
+    if args.resume and not final_prediction_rows:
+        if (
+            not history
+            or int(history[-1].get("global_step", -1)) != target_optimizer_steps
+            or "in_range" not in history[-1]
+            or "ood" not in history[-1]
+        ):
+            raise SystemExit(
+                "full-step resume cannot regenerate prediction rows without a "
+                "completed development evaluation"
+            )
+        replayed_in_range = _evaluate(
+            model,
+            evaluation_ids,
+            records,
+            index=evaluation_index,
+            peaks=peaks,
+            factory=factory,
+            device=device,
+            evaluation_batch_size=args.evaluation_batch_size,
+            prediction_sink=final_prediction_rows,
+            prediction_seed=args.seed,
+            prediction_method_id=statistics_method_id,
+            prediction_profile=args.in_range_profile,
+        )
+        replayed_ood = {
+            profile: _evaluate(
+                model,
+                evaluation_ids,
+                records,
+                index=index,
+                peaks=peaks,
+                factory=factory,
+                device=device,
+                evaluation_batch_size=args.evaluation_batch_size,
+                prediction_sink=final_prediction_rows,
+                prediction_seed=args.seed,
+                prediction_method_id=statistics_method_id,
+                prediction_profile=profile,
+            )
+            for profile, index in ood_indexes.items()
+        }
+        if (
+            replayed_in_range != history[-1]["in_range"]
+            or replayed_ood != history[-1]["ood"]
+        ):
+            raise SystemExit(
+                "full-step resume prediction replay does not match the completed "
+                "development evaluation"
+            )
     prediction_rows_path.write_text(
         "".join(json.dumps(row, sort_keys=True) + "\n" for row in final_prediction_rows),
         encoding="utf-8",
