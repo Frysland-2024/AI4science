@@ -1,0 +1,158 @@
+{
+  "comparison": {
+    "delta_level0_macro_f1": 0.11941912330987436,
+    "delta_train_accuracy": 0.36150568181818177,
+    "primary_rule": "ResNet best level0 Macro-F1 minus PAMPT best level0 Macro-F1"
+  },
+  "interpretation_boundary": "Development-only matched-backbone evidence. Simulated Test, real XRD, the formal seven-run queue, and V10 remain locked.",
+  "next_action": "Freeze the CNN backbone for the next method comparison; only then reopen Dynamic training under a matched backbone contract.",
+  "pampt": {
+    "in_range_macro_f1": 0.09372537081270053,
+    "level0_macro_f1": 0.5327493446524134,
+    "mean_single_factor_ood_macro_f1": 0.2896757392715871,
+    "summary_path": "E:\\AI4science\\xrd_robustness\\outputs\\v9_foundation_diagnostics\\foundation_clean_erm_100e_es50p3d002__seed_20260710\\clean_early_stopping_summary.json",
+    "train_accuracy_at_stop": 0.6384943181818182
+  },
+  "resnet": {
+    "best_epoch": 100,
+    "best_global_step": 61600,
+    "compute_summary": {
+      "auxiliary_head_forward_views": 0,
+      "dynamic_prefetch_wait_fraction": null,
+      "dynamic_prefetch_wait_seconds": null,
+      "fixed_budget": true,
+      "gpu_hours": 1.1592565247777777,
+      "maximum_optimizer_steps": 61600,
+      "optimizer_steps": 61600,
+      "paired_offline_views": false,
+      "peak_gpu_memory_mb": 2873.525390625,
+      "per_step_cuda_scalar_synchronization": "epoch_aggregate_only",
+      "stopped_early": false,
+      "total_processed_spectra": 1971200,
+      "training_backbone_forward_views": 123200,
+      "training_prefetch_wait_fraction": 0.010972066008934743,
+      "training_prefetch_wait_seconds": 45.789980800140256,
+      "training_structure_exposures": 985600,
+      "training_view_exposures": 1971200,
+      "wall_clock_seconds": 4173.3234892
+    },
+    "in_range_macro_f1": 0.1827221290008457,
+    "level0_confusion_matrix": [
+      [
+        208,
+        72,
+        11,
+        2,
+        6,
+        1,
+        0
+      ],
+      [
+        70,
+        149,
+        56,
+        2,
+        19,
+        5,
+        1
+      ],
+      [
+        22,
+        44,
+        162,
+        24,
+        29,
+        22,
+        0
+      ],
+      [
+        2,
+        16,
+        28,
+        187,
+        33,
+        22,
+        13
+      ],
+      [
+        7,
+        15,
+        21,
+        17,
+        193,
+        31,
+        16
+      ],
+      [
+        0,
+        4,
+        19,
+        30,
+        35,
+        205,
+        8
+      ],
+      [
+        0,
+        0,
+        5,
+        7,
+        9,
+        9,
+        272
+      ]
+    ],
+    "level0_macro_f1": 0.6521684679622878,
+    "level0_per_class": [
+      {
+        "class": "triclinic",
+        "f1": 0.6830870279146142,
+        "recall": 0.6933333333333334
+      },
+      {
+        "class": "monoclinic",
+        "f1": 0.4950166112956811,
+        "recall": 0.49337748344370863
+      },
+      {
+        "class": "orthorhombic",
+        "f1": 0.5355371900826447,
+        "recall": 0.5346534653465347
+      },
+      {
+        "class": "tetragonal",
+        "f1": 0.6561403508771929,
+        "recall": 0.6212624584717608
+      },
+      {
+        "class": "trigonal",
+        "f1": 0.6185897435897435,
+        "recall": 0.6433333333333333
+      },
+      {
+        "class": "hexagonal",
+        "f1": 0.6879194630872484,
+        "recall": 0.6810631229235881
+      },
+      {
+        "class": "cubic",
+        "f1": 0.8888888888888888,
+        "recall": 0.9006622516556292
+      }
+    ],
+    "mean_single_factor_ood_macro_f1": 0.4031633595958851,
+    "model": {
+      "backbone_class_name": "ML4PXRDResNet1D",
+      "model_config_hash": "eab728587df5ea452c0b332fcf364a8480a6cd3f2aad80fb9ac1840c4cfddf07",
+      "parameter_count": 13008839
+    },
+    "run_dir": "E:\\AI4science\\xrd_robustness\\outputs\\v9_foundation_diagnostics\\foundation_gate3_ml4pxrd_resnet18_clean_100e_es50p3d002__seed_20260710",
+    "stop_epoch": null,
+    "stopped_early": false,
+    "train_accuracy_at_stop": 1.0,
+    "train_loss_at_stop": 2.047095364332563e-07
+  },
+  "sanity_report": "E:\\AI4science\\xrd_robustness\\outputs\\v9_foundation_diagnostics\\foundation_gate3_ml4pxrd_resnet18_sanity__seed_20260710\\gate3_resnet_sanity.json",
+  "schema_version": "gate3_pampt_vs_resnet.v1",
+  "verdict": "pampt_major_bottleneck"
+}
