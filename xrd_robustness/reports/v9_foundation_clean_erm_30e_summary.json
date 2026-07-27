@@ -1,0 +1,637 @@
+{
+  "evaluation": {
+    "best_in_range": {
+      "epoch": 30,
+      "global_step": 18480,
+      "id_to_ood_gap": -0.12125640917105313,
+      "in_range_macro_f1": 0.16144608538893324,
+      "in_range_per_class": [
+        {
+          "class": "triclinic",
+          "f1": 0.4344766930518909,
+          "recall": 0.8233333333333334
+        },
+        {
+          "class": "monoclinic",
+          "f1": 0.19805825242718447,
+          "recall": 0.33774834437086093
+        },
+        {
+          "class": "orthorhombic",
+          "f1": 0.1189710610932476,
+          "recall": 0.12211221122112212
+        },
+        {
+          "class": "tetragonal",
+          "f1": 0.0855614973262032,
+          "recall": 0.053156146179401995
+        },
+        {
+          "class": "trigonal",
+          "f1": 0.08457711442786069,
+          "recall": 0.056666666666666664
+        },
+        {
+          "class": "hexagonal",
+          "f1": 0.09667673716012085,
+          "recall": 0.053156146179401995
+        },
+        {
+          "class": "cubic",
+          "f1": 0.11180124223602485,
+          "recall": 0.059602649006622516
+        }
+      ],
+      "level0_macro_f1": 0.4807866342081146,
+      "level0_per_class": [
+        {
+          "class": "triclinic",
+          "f1": 0.5496535796766744,
+          "recall": 0.39666666666666667
+        },
+        {
+          "class": "monoclinic",
+          "f1": 0.5079825834542816,
+          "recall": 0.5794701986754967
+        },
+        {
+          "class": "orthorhombic",
+          "f1": 0.41590214067278286,
+          "recall": 0.44884488448844884
+        },
+        {
+          "class": "tetragonal",
+          "f1": 0.3716012084592145,
+          "recall": 0.40863787375415284
+        },
+        {
+          "class": "trigonal",
+          "f1": 0.37300177619893427,
+          "recall": 0.35
+        },
+        {
+          "class": "hexagonal",
+          "f1": 0.4504504504504504,
+          "recall": 0.4983388704318937
+        },
+        {
+          "class": "cubic",
+          "f1": 0.6969147005444647,
+          "recall": 0.6357615894039735
+        }
+      ],
+      "mean_single_factor_ood_macro_f1": 0.28270249455998636,
+      "train_accuracy": 0.49898538961038963,
+      "train_loss": 1.2502883672714233,
+      "worst_group_f1": 0.08457711442786069
+    },
+    "best_level0": {
+      "epoch": 30,
+      "global_step": 18480,
+      "id_to_ood_gap": -0.12125640917105313,
+      "in_range_macro_f1": 0.16144608538893324,
+      "in_range_per_class": [
+        {
+          "class": "triclinic",
+          "f1": 0.4344766930518909,
+          "recall": 0.8233333333333334
+        },
+        {
+          "class": "monoclinic",
+          "f1": 0.19805825242718447,
+          "recall": 0.33774834437086093
+        },
+        {
+          "class": "orthorhombic",
+          "f1": 0.1189710610932476,
+          "recall": 0.12211221122112212
+        },
+        {
+          "class": "tetragonal",
+          "f1": 0.0855614973262032,
+          "recall": 0.053156146179401995
+        },
+        {
+          "class": "trigonal",
+          "f1": 0.08457711442786069,
+          "recall": 0.056666666666666664
+        },
+        {
+          "class": "hexagonal",
+          "f1": 0.09667673716012085,
+          "recall": 0.053156146179401995
+        },
+        {
+          "class": "cubic",
+          "f1": 0.11180124223602485,
+          "recall": 0.059602649006622516
+        }
+      ],
+      "level0_macro_f1": 0.4807866342081146,
+      "level0_per_class": [
+        {
+          "class": "triclinic",
+          "f1": 0.5496535796766744,
+          "recall": 0.39666666666666667
+        },
+        {
+          "class": "monoclinic",
+          "f1": 0.5079825834542816,
+          "recall": 0.5794701986754967
+        },
+        {
+          "class": "orthorhombic",
+          "f1": 0.41590214067278286,
+          "recall": 0.44884488448844884
+        },
+        {
+          "class": "tetragonal",
+          "f1": 0.3716012084592145,
+          "recall": 0.40863787375415284
+        },
+        {
+          "class": "trigonal",
+          "f1": 0.37300177619893427,
+          "recall": 0.35
+        },
+        {
+          "class": "hexagonal",
+          "f1": 0.4504504504504504,
+          "recall": 0.4983388704318937
+        },
+        {
+          "class": "cubic",
+          "f1": 0.6969147005444647,
+          "recall": 0.6357615894039735
+        }
+      ],
+      "mean_single_factor_ood_macro_f1": 0.28270249455998636,
+      "train_accuracy": 0.49898538961038963,
+      "train_loss": 1.2502883672714233,
+      "worst_group_f1": 0.08457711442786069
+    },
+    "best_mean_single_factor_ood": {
+      "epoch": 30,
+      "global_step": 18480,
+      "id_to_ood_gap": -0.12125640917105313,
+      "in_range_macro_f1": 0.16144608538893324,
+      "in_range_per_class": [
+        {
+          "class": "triclinic",
+          "f1": 0.4344766930518909,
+          "recall": 0.8233333333333334
+        },
+        {
+          "class": "monoclinic",
+          "f1": 0.19805825242718447,
+          "recall": 0.33774834437086093
+        },
+        {
+          "class": "orthorhombic",
+          "f1": 0.1189710610932476,
+          "recall": 0.12211221122112212
+        },
+        {
+          "class": "tetragonal",
+          "f1": 0.0855614973262032,
+          "recall": 0.053156146179401995
+        },
+        {
+          "class": "trigonal",
+          "f1": 0.08457711442786069,
+          "recall": 0.056666666666666664
+        },
+        {
+          "class": "hexagonal",
+          "f1": 0.09667673716012085,
+          "recall": 0.053156146179401995
+        },
+        {
+          "class": "cubic",
+          "f1": 0.11180124223602485,
+          "recall": 0.059602649006622516
+        }
+      ],
+      "level0_macro_f1": 0.4807866342081146,
+      "level0_per_class": [
+        {
+          "class": "triclinic",
+          "f1": 0.5496535796766744,
+          "recall": 0.39666666666666667
+        },
+        {
+          "class": "monoclinic",
+          "f1": 0.5079825834542816,
+          "recall": 0.5794701986754967
+        },
+        {
+          "class": "orthorhombic",
+          "f1": 0.41590214067278286,
+          "recall": 0.44884488448844884
+        },
+        {
+          "class": "tetragonal",
+          "f1": 0.3716012084592145,
+          "recall": 0.40863787375415284
+        },
+        {
+          "class": "trigonal",
+          "f1": 0.37300177619893427,
+          "recall": 0.35
+        },
+        {
+          "class": "hexagonal",
+          "f1": 0.4504504504504504,
+          "recall": 0.4983388704318937
+        },
+        {
+          "class": "cubic",
+          "f1": 0.6969147005444647,
+          "recall": 0.6357615894039735
+        }
+      ],
+      "mean_single_factor_ood_macro_f1": 0.28270249455998636,
+      "train_accuracy": 0.49898538961038963,
+      "train_loss": 1.2502883672714233,
+      "worst_group_f1": 0.08457711442786069
+    },
+    "final": {
+      "epoch": 30,
+      "global_step": 18480,
+      "id_to_ood_gap": -0.12125640917105313,
+      "in_range_macro_f1": 0.16144608538893324,
+      "in_range_per_class": [
+        {
+          "class": "triclinic",
+          "f1": 0.4344766930518909,
+          "recall": 0.8233333333333334
+        },
+        {
+          "class": "monoclinic",
+          "f1": 0.19805825242718447,
+          "recall": 0.33774834437086093
+        },
+        {
+          "class": "orthorhombic",
+          "f1": 0.1189710610932476,
+          "recall": 0.12211221122112212
+        },
+        {
+          "class": "tetragonal",
+          "f1": 0.0855614973262032,
+          "recall": 0.053156146179401995
+        },
+        {
+          "class": "trigonal",
+          "f1": 0.08457711442786069,
+          "recall": 0.056666666666666664
+        },
+        {
+          "class": "hexagonal",
+          "f1": 0.09667673716012085,
+          "recall": 0.053156146179401995
+        },
+        {
+          "class": "cubic",
+          "f1": 0.11180124223602485,
+          "recall": 0.059602649006622516
+        }
+      ],
+      "level0_macro_f1": 0.4807866342081146,
+      "level0_per_class": [
+        {
+          "class": "triclinic",
+          "f1": 0.5496535796766744,
+          "recall": 0.39666666666666667
+        },
+        {
+          "class": "monoclinic",
+          "f1": 0.5079825834542816,
+          "recall": 0.5794701986754967
+        },
+        {
+          "class": "orthorhombic",
+          "f1": 0.41590214067278286,
+          "recall": 0.44884488448844884
+        },
+        {
+          "class": "tetragonal",
+          "f1": 0.3716012084592145,
+          "recall": 0.40863787375415284
+        },
+        {
+          "class": "trigonal",
+          "f1": 0.37300177619893427,
+          "recall": 0.35
+        },
+        {
+          "class": "hexagonal",
+          "f1": 0.4504504504504504,
+          "recall": 0.4983388704318937
+        },
+        {
+          "class": "cubic",
+          "f1": 0.6969147005444647,
+          "recall": 0.6357615894039735
+        }
+      ],
+      "mean_single_factor_ood_macro_f1": 0.28270249455998636,
+      "train_accuracy": 0.49898538961038963,
+      "train_loss": 1.2502883672714233,
+      "worst_group_f1": 0.08457711442786069
+    },
+    "trajectory": [
+      {
+        "epoch": 10,
+        "global_step": 6160,
+        "id_to_ood_gap": -0.08662912480766471,
+        "in_range_macro_f1": 0.09295842921219447,
+        "in_range_per_class": [
+          {
+            "class": "triclinic",
+            "f1": 0.3654891304347826,
+            "recall": 0.8966666666666666
+          },
+          {
+            "class": "monoclinic",
+            "f1": 0.14325581395348838,
+            "recall": 0.25496688741721857
+          },
+          {
+            "class": "orthorhombic",
+            "f1": 0.0535279805352798,
+            "recall": 0.036303630363036306
+          },
+          {
+            "class": "tetragonal",
+            "f1": 0.006514657980456026,
+            "recall": 0.0033222591362126247
+          },
+          {
+            "class": "trigonal",
+            "f1": 0.0125,
+            "recall": 0.006666666666666667
+          },
+          {
+            "class": "hexagonal",
+            "f1": 0.03215434083601287,
+            "recall": 0.016611295681063124
+          },
+          {
+            "class": "cubic",
+            "f1": 0.03726708074534162,
+            "recall": 0.019867549668874173
+          }
+        ],
+        "level0_macro_f1": 0.27180246542783904,
+        "level0_per_class": [
+          {
+            "class": "triclinic",
+            "f1": 0.5953307392996109,
+            "recall": 0.51
+          },
+          {
+            "class": "monoclinic",
+            "f1": 0.41920374707259955,
+            "recall": 0.5927152317880795
+          },
+          {
+            "class": "orthorhombic",
+            "f1": 0.1347708894878706,
+            "recall": 0.08250825082508251
+          },
+          {
+            "class": "tetragonal",
+            "f1": 0.006329113924050634,
+            "recall": 0.0033222591362126247
+          },
+          {
+            "class": "trigonal",
+            "f1": 0.2755681818181818,
+            "recall": 0.3233333333333333
+          },
+          {
+            "class": "hexagonal",
+            "f1": 0.05555555555555556,
+            "recall": 0.029900332225913623
+          },
+          {
+            "class": "cubic",
+            "f1": 0.4158590308370044,
+            "recall": 0.7814569536423841
+          }
+        ],
+        "mean_single_factor_ood_macro_f1": 0.17958755401985918,
+        "train_accuracy": 0.328226461038961,
+        "train_loss": 1.5936003923416138,
+        "worst_group_f1": 0.006514657980456026
+      },
+      {
+        "epoch": 20,
+        "global_step": 12320,
+        "id_to_ood_gap": -0.15591223568835938,
+        "in_range_macro_f1": 0.10449331102639524,
+        "in_range_per_class": [
+          {
+            "class": "triclinic",
+            "f1": 0.3592662871600253,
+            "recall": 0.9466666666666667
+          },
+          {
+            "class": "monoclinic",
+            "f1": 0.14007782101167315,
+            "recall": 0.17880794701986755
+          },
+          {
+            "class": "orthorhombic",
+            "f1": 0.08391608391608392,
+            "recall": 0.07920792079207921
+          },
+          {
+            "class": "tetragonal",
+            "f1": 0.04242424242424242,
+            "recall": 0.023255813953488372
+          },
+          {
+            "class": "trigonal",
+            "f1": 0.03529411764705883,
+            "recall": 0.02
+          },
+          {
+            "class": "hexagonal",
+            "f1": 0.03225806451612903,
+            "recall": 0.016611295681063124
+          },
+          {
+            "class": "cubic",
+            "f1": 0.038216560509554146,
+            "recall": 0.019867549668874173
+          }
+        ],
+        "level0_macro_f1": 0.4634767983547263,
+        "level0_per_class": [
+          {
+            "class": "triclinic",
+            "f1": 0.6487455197132617,
+            "recall": 0.6033333333333334
+          },
+          {
+            "class": "monoclinic",
+            "f1": 0.511318242343542,
+            "recall": 0.6357615894039735
+          },
+          {
+            "class": "orthorhombic",
+            "f1": 0.3741935483870968,
+            "recall": 0.38283828382838286
+          },
+          {
+            "class": "tetragonal",
+            "f1": 0.2934537246049661,
+            "recall": 0.2159468438538206
+          },
+          {
+            "class": "trigonal",
+            "f1": 0.3993855606758832,
+            "recall": 0.43333333333333335
+          },
+          {
+            "class": "hexagonal",
+            "f1": 0.44189852700490995,
+            "recall": 0.4485049833887043
+          },
+          {
+            "class": "cubic",
+            "f1": 0.5753424657534246,
+            "recall": 0.5562913907284768
+          }
+        ],
+        "mean_single_factor_ood_macro_f1": 0.26040554671475463,
+        "train_accuracy": 0.4281655844155844,
+        "train_loss": 1.4010313749313354,
+        "worst_group_f1": 0.03225806451612903
+      },
+      {
+        "epoch": 30,
+        "global_step": 18480,
+        "id_to_ood_gap": -0.12125640917105313,
+        "in_range_macro_f1": 0.16144608538893324,
+        "in_range_per_class": [
+          {
+            "class": "triclinic",
+            "f1": 0.4344766930518909,
+            "recall": 0.8233333333333334
+          },
+          {
+            "class": "monoclinic",
+            "f1": 0.19805825242718447,
+            "recall": 0.33774834437086093
+          },
+          {
+            "class": "orthorhombic",
+            "f1": 0.1189710610932476,
+            "recall": 0.12211221122112212
+          },
+          {
+            "class": "tetragonal",
+            "f1": 0.0855614973262032,
+            "recall": 0.053156146179401995
+          },
+          {
+            "class": "trigonal",
+            "f1": 0.08457711442786069,
+            "recall": 0.056666666666666664
+          },
+          {
+            "class": "hexagonal",
+            "f1": 0.09667673716012085,
+            "recall": 0.053156146179401995
+          },
+          {
+            "class": "cubic",
+            "f1": 0.11180124223602485,
+            "recall": 0.059602649006622516
+          }
+        ],
+        "level0_macro_f1": 0.4807866342081146,
+        "level0_per_class": [
+          {
+            "class": "triclinic",
+            "f1": 0.5496535796766744,
+            "recall": 0.39666666666666667
+          },
+          {
+            "class": "monoclinic",
+            "f1": 0.5079825834542816,
+            "recall": 0.5794701986754967
+          },
+          {
+            "class": "orthorhombic",
+            "f1": 0.41590214067278286,
+            "recall": 0.44884488448844884
+          },
+          {
+            "class": "tetragonal",
+            "f1": 0.3716012084592145,
+            "recall": 0.40863787375415284
+          },
+          {
+            "class": "trigonal",
+            "f1": 0.37300177619893427,
+            "recall": 0.35
+          },
+          {
+            "class": "hexagonal",
+            "f1": 0.4504504504504504,
+            "recall": 0.4983388704318937
+          },
+          {
+            "class": "cubic",
+            "f1": 0.6969147005444647,
+            "recall": 0.6357615894039735
+          }
+        ],
+        "mean_single_factor_ood_macro_f1": 0.28270249455998636,
+        "train_accuracy": 0.49898538961038963,
+        "train_loss": 1.2502883672714233,
+        "worst_group_f1": 0.08457711442786069
+      }
+    ]
+  },
+  "gates": {
+    "clean_level0": "fail",
+    "thresholds": {
+      "clean_partial_macro_f1": 0.65,
+      "clean_pass_macro_f1": 0.8,
+      "strong_underfit_train_accuracy": 0.6
+    }
+  },
+  "run": {
+    "data_manifest_hash": "b9d3b72e42ea0fd549dae34425ff61d2d650d5dd7fe6f337d747cb952cf43293",
+    "git_commit": "46dddd3fdf2d017079f7ccf2881f40cfefe4c898",
+    "run_dir": "E:\\AI4science\\xrd_robustness\\outputs\\v9_foundation_diagnostics\\foundation_clean_erm_30e__seed_20260710",
+    "simulation_config_hash": "af6e2fa400525ccf48aac18c9839cc8efe13dd3e4c056dd45a74b4dd43262558",
+    "training_sampler_contract_hash": "0b6098591d49c325493b3864e2e88aa7e214b6309fad161a35d6d4d58355f6aa"
+  },
+  "schema_version": "foundation_diagnostic_summary.v1",
+  "single_factor_profiles": [
+    "ood_shift_negative",
+    "ood_shift_positive",
+    "ood_broadening",
+    "ood_noise",
+    "ood_background",
+    "ood_texture"
+  ],
+  "training": {
+    "accuracy_slope_per_epoch": 0.004423701298701299,
+    "epochs_recorded": 30,
+    "final_accuracy": 0.49898538961038963,
+    "final_epoch": 30,
+    "final_global_step": 18480,
+    "final_loss": 1.2502883672714233,
+    "loss_slope_per_epoch": -0.01052544116973877,
+    "still_improving": true,
+    "strong_underfit_signal": true,
+    "trend_window": 5
+  }
+}
