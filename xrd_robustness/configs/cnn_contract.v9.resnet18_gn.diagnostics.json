@@ -1,0 +1,89 @@
+{
+  "schema_version": "v9-cnn-contract-diagnostics-v1",
+  "status": "clean_configuration_selection_authorized",
+  "architecture": {
+    "backbone": "ML4PXRDResNet1D",
+    "model_id": "18",
+    "model_config_hash": "eab728587df5ea452c0b332fcf364a8480a6cd3f2aad80fb9ac1840c4cfddf07",
+    "parameter_count": 13008839,
+    "input_length": 3501,
+    "num_classes": 7
+  },
+  "baseline": {
+    "run_id": "foundation_gate3_ml4pxrd_resnet18_clean_100e_es50p3d002__seed_20260710",
+    "preprocessing": "identity",
+    "optimizer": "adamw",
+    "lr_schedule": "constant",
+    "validation_level0_macro_f1": 0.6521684679622878,
+    "worst_class_f1": 0.49504950495049505,
+    "monoclinic_f1": 0.49504950495049505,
+    "orthorhombic_f1": 0.5355191256830601,
+    "mean_single_factor_ood_macro_f1": 0.4031633595958851,
+    "in_range_macro_f1": 0.1827221290008457
+  },
+  "selection_rule": {
+    "primary_metric": "Validation level0 Macro-F1",
+    "clear_improvement_absolute": 0.02,
+    "worst_class_f1_maximum_regression": 0.02,
+    "class_collapse_forbidden": true,
+    "tie_breaker": "prefer the simpler earlier configuration",
+    "auxiliary_metrics": [
+      "worst-class F1",
+      "monoclinic F1",
+      "orthorhombic F1",
+      "mean single-factor OOD Macro-F1"
+    ],
+    "maximum_new_clean_runs": 3,
+    "stop_when_clear_improvement_passes_guardrails": true
+  },
+  "ordered_clean_experiments": [
+    {
+      "id": "A",
+      "change": "preprocessing only",
+      "preprocessing": "sqrt",
+      "optimizer": "adamw",
+      "lr_schedule": "constant"
+    },
+    {
+      "id": "B",
+      "condition": "A does not clearly improve",
+      "change": "optimizer only",
+      "preprocessing": "best_so_far",
+      "optimizer": "adam",
+      "lr_schedule": "constant"
+    },
+    {
+      "id": "C",
+      "condition": "B does not clearly improve",
+      "change": "learning-rate schedule only",
+      "preprocessing": "best_so_far",
+      "optimizer": "best_so_far",
+      "lr_schedule": "linear_warmup_3080_steps_then_cosine_to_zero"
+    }
+  ],
+  "shared_budget": {
+    "train_seed": 20260710,
+    "evaluation_seed": 20260720,
+    "batch_size": 16,
+    "maximum_epochs": 100,
+    "maximum_optimizer_steps": 61600,
+    "validation_interval_steps": 6160,
+    "early_stopping_minimum_epochs": 50,
+    "early_stopping_patience": 3,
+    "early_stopping_min_delta": 0.002
+  },
+  "post_selection_gate": {
+    "run_count": 1,
+    "mode": "ordinary_dynamic",
+    "shared_configuration_required": true,
+    "js_forbidden": true,
+    "residual_forbidden": true
+  },
+  "locks": {
+    "seven_run": true,
+    "fifteen_run": true,
+    "simulated_test": true,
+    "real_xrd": true,
+    "v10": true
+  }
+}

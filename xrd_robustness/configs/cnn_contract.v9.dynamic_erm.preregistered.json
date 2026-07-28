@@ -1,0 +1,57 @@
+{
+  "schema_version": "v9-cnn-contract-dynamic-erm-preregistration-v1",
+  "status": "one_run_authorized",
+  "only_changed_scientific_factor": {
+    "from": "clean_erm",
+    "to": "ordinary_dynamic"
+  },
+  "frozen_shared_configuration": {
+    "backbone": "ML4PXRDResNet1D-18-GN",
+    "model_config_hash": "eab728587df5ea452c0b332fcf364a8480a6cd3f2aad80fb9ac1840c4cfddf07",
+    "parameter_count": 13008839,
+    "input_length": 3501,
+    "preprocessing": "identity",
+    "optimizer": "adamw",
+    "learning_rate_schedule": "constant",
+    "learning_rate": 0.0001,
+    "weight_decay": 0.0001,
+    "batch_size": 16,
+    "maximum_optimizer_steps": 61600,
+    "validation_interval_steps": 6160,
+    "train_seed": 20260710,
+    "evaluation_seed": 20260720,
+    "split_manifest_sha256": "b9d3b72e42ea0fd549dae34425ff61d2d650d5dd7fe6f337d747cb952cf43293",
+    "early_stopping": {
+      "minimum_epochs": 50,
+      "patience_validation_checks": 3,
+      "min_delta": 0.002,
+      "primary_profile": "level0"
+    }
+  },
+  "primary_comparison": [
+    "in_range_macro_f1",
+    "mean_single_factor_ood_macro_f1",
+    "level0_macro_f1"
+  ],
+  "secondary_comparison": [
+    "id_ood_gap",
+    "seven_class_f1",
+    "confusion_matrix",
+    "train_validation_gap"
+  ],
+  "interpretation_boundary": {
+    "js_forbidden": true,
+    "residual_forbidden": true,
+    "curriculum_forbidden": true,
+    "clean_anchor_forbidden": true,
+    "new_perturbation_parameters_forbidden": true,
+    "new_split_forbidden": true,
+    "simulated_test_forbidden": true,
+    "real_xrd_forbidden": true
+  },
+  "formal_runs": {
+    "seven_run": "0/7_locked",
+    "fifteen_run": "0/15_locked",
+    "v10": "locked"
+  }
+}
