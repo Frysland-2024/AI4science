@@ -1,6 +1,6 @@
 # AI4science Current State
 
-**Canonical status date:** 2026-07-28
+**Canonical status date:** 2026-07-29
 **Repository:** `Frysland-2024/AI4science`  
 **Active engineering root:** `xrd_robustness/`
 
@@ -38,6 +38,30 @@ rendering. Caching only those structure invariants improved matched 16x16
 prefetch throughput from `24.5265` to `31.3120` batches/s (`+27.67%`) and
 sequential rendering from `3.6794` to `5.4267` batches/s (`+47.49%`).
 
+## 2026-07-29 V9 ResNet JS four-run completed; lambda=60 selected (authoritative)
+
+The preregistered Validation-tuning matrix of one Dynamic ERM baseline and three
+JS Consistency candidates completed successfully. All four runs used the frozen
+ResNet-18-GN public contract and Validation-only selection protocol.
+
+Results:
+
+- Dynamic ERM: mean single-factor OOD Macro-F1 `0.666471`, in-range `0.714013`;
+- JS lambda=3: OOD `0.676134`, in-range `0.718417`;
+- JS lambda=30: OOD `0.676164`, in-range `0.716428`;
+- JS lambda=60: OOD `0.699742`, in-range `0.729806`.
+
+All three JS candidates passed the preregistered in-range guardrail. Under the
+frozen selection rule, JS lambda=60 is selected at best epoch 40 / optimizer
+step 24,640. Its OOD improvement over Dynamic ERM is `+0.033271`, while its
+in-range score also improves by `+0.015793`.
+
+The four-run Validation selection is complete and frozen. Residual-v1 remains
+archived. Simulated Test and real XRD were not accessed. The ten-run comparison
+is not authorized and must not start automatically.
+
+Authoritative report:
+`xrd_robustness/reports/v9_resnet_js_four_run_summary.json`.
 The optimization Gate passed exact accepted rows, material order, parameters,
 spectrum arrays, array hashes, and quality-Gate counts, with maximum spectrum
 difference `0.0`. No perturbed spectrum or random draw is cached. The complete
