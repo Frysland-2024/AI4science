@@ -624,3 +624,19 @@ larger Residual grid would not be scientifically justified.
 
 The Gate therefore fails closed. PAMPT lambda results stay archived, the
 ResNet candidate range remains unfrozen, and the seven-run remains at 0/7.
+
+## 2026-07-28 ResNet Residual stability Gate closes the probe-repair option
+
+The initial epoch-5 probe failure could have been a transient optimization
+effect, so the same fixed one-layer detached probe and thresholds were
+preregistered across three Train-only seeds at epochs 3, 5, and 10. The
+signal-demonstrated counts were `2/3`, `1/3`, and `2/3`. Because the protocol
+required at least `2/3` at both epochs 5 and 10, the result is
+`stable_signal_not_demonstrated`.
+
+The outcome is informative: the residual feature norm rose with training, but
+probe competence was seed- and milestone-dependent. It is therefore not
+scientifically defensible to repair the situation by changing only a threshold
+or extrapolating to larger Residual lambdas. Residual candidate reopening and
+the 7-run remain closed; a future attempt must be a separately approved,
+Train-only preregistered redesign of the residual representation/objective.

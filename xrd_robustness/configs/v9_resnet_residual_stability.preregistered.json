@@ -1,0 +1,39 @@
+{
+  "schema_version": "v9-resnet-residual-stability-preregistration-v1",
+  "scope": "train_only",
+  "backbone": "ML4PXRDResNet1D-18-GN",
+  "shared_contract": {
+    "preprocessing": "identity",
+    "optimizer": "AdamW",
+    "learning_rate": 0.0001,
+    "learning_rate_schedule": "constant",
+    "weight_decay": 0.0001,
+    "batch_size": 16,
+    "split": "active parent-structure Train only",
+    "simulator": "frozen V9 method-transfer simulator"
+  },
+  "seeds": [20260722, 20260723, 20260724],
+  "epochs": 10,
+  "milestones": [3, 5, 10],
+  "probe": {
+    "architecture": "one-layer linear ResidualClassifier",
+    "optimizer": "AdamW",
+    "learning_rate": 0.001,
+    "weight_decay": 0.0,
+    "epochs": 50,
+    "subsets": "three disjoint balanced 700-structure Train subsets"
+  },
+  "primary_decision_rule": "At both epochs 5 and 10, at least two of three fixed seeds must pass the unchanged accuracy, Macro-F1, and cross-entropy residual-probe Gate.",
+  "report": {
+    "must_include": ["per-class F1", "confusion matrix", "residual L2 norm", "JS and Residual backbone-gradient scales"],
+    "candidate_range_reopening_authorized": false,
+    "seven_run_started": false
+  },
+  "boundaries": {
+    "validation_used": false,
+    "simulated_test_used": false,
+    "real_xrd_used": false,
+    "checkpoint_written": false,
+    "seven_run_forbidden": true
+  }
+}

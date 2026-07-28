@@ -5,8 +5,11 @@
 > strong shared baseline; JS and Residual must use the identical contract.
 > PAMPT lambda evidence is archive-only. The Train-only ResNet Gate found that
 > old JS `[0.3,3,30]` spans negligible/weak/material and old Residual
-> `[0.2,2,20]` spans negligible/negligible/weak. The epoch-5 residual probe
-> competence Gate also failed. No ResNet grid is frozen and 7-run remains 0/7.
+> `[0.2,2,20]` spans negligible/negligible/weak. A fixed three-seed Train-only
+> stability follow-up measured residual-probe signals at epochs 3/5/10 of
+> `2/3`, `1/3`, and `2/3`; it therefore fails its required `>=2/3` at both
+> epochs 5 and 10. No ResNet grid is frozen, Residual reopening is forbidden,
+> and 7-run remains 0/7.
 > Do not start tuning or access Validation/Test/real XRD.
 
 > **2026-07-28 CNN Clean A/B/C override (latest and authoritative):**

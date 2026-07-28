@@ -34,8 +34,20 @@
   "train_only_gate_result": {
     "learned_state_report": "reports/v9_resnet_learned_state_scale_audit.json",
     "candidate_grid_report": "reports/v9_resnet_candidate_grid_gate.json",
+    "residual_stability_report": "reports/v9_resnet_residual_stability_audit.json",
     "classification_learned_state_demonstrated": true,
     "residual_probe_competence_demonstrated_at_epoch5": false,
+    "residual_stability": {
+      "preregistered_seeds": [20260722, 20260723, 20260724],
+      "milestone_pass_counts": {
+        "epoch_3": 2,
+        "epoch_5": 1,
+        "epoch_10": 2
+      },
+      "required_pass_count_at_epoch_5_and_epoch_10": 2,
+      "status": "stable_signal_not_demonstrated",
+      "candidate_range_reopening_authorized": false
+    },
     "lambda_js": {
       "grid": [0.3, 3.0, 30.0],
       "observed_bands": [
@@ -64,7 +76,7 @@
       ],
       "covers_weak_material_and_dominant": false
     },
-    "decision": "do_not_freeze_candidates_and_do_not_start_seven_run"
+    "decision": "do_not_freeze_candidates_do_not_reopen_residual_range_and_do_not_start_seven_run"
   },
   "gradient_ratio_influence_bands": {
     "negligible": {

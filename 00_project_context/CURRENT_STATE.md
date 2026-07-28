@@ -571,6 +571,22 @@ authoritative archive record. V10 may not be reopened until the frozen V9
 validation program is completed and a new explicit scientific decision record
 is approved.
 
+## 2026-07-28 ResNet Residual stability Gate
+
+The public ResNet-18-GN shared backbone remains frozen as identity preprocessing,
+AdamW, and constant learning rate. The Train-only follow-up for the fixed
+one-layer detached Residual probe used three preregistered seeds at epochs 3, 5,
+and 10. Signal-demonstrated counts were `2/3`, `1/3`, and `2/3`; the rule
+required at least `2/3` at both epochs 5 and 10. The result is
+`stable_signal_not_demonstrated`.
+
+This is completed diagnostic evidence, not a Validation result: no Validation,
+simulated Test, real XRD, checkpoint selection, or 7-run was used. The
+Residual path is not eligible for threshold adjustment or larger-lambda
+extrapolation. Candidate ranges remain unfrozen and the formal queue remains
+`0/7`; any further Residual redesign requires a new explicit scientific
+decision and Train-only preregistration.
+
 ## 14. Local literature and external resources
 
 The 2026-07-23 opXRD/SIMPOD acquisition was unpacked and classified locally on

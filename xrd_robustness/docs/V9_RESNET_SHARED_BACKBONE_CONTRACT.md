@@ -49,3 +49,17 @@ Therefore neither PAMPT-derived grid covers weak, material non-dominant, and
 dominant influence on ResNet. No ResNet candidate range is frozen, no larger
 Residual values are inferred from an incompetent probe state, and the 7-run
 remains disabled.
+
+## 2026-07-28 Residual stability follow-up
+
+The fixed one-layer detached residual probe was repeated on Train only at
+epochs 3, 5, and 10 for preregistered seeds `20260722`, `20260723`, and
+`20260724`. The signal-demonstrated counts were `2/3`, `1/3`, and `2/3`.
+The rule required at least `2/3` at both epochs 5 and 10, so the result is
+`stable_signal_not_demonstrated`.
+
+This rules out a threshold-only repair or an extrapolated larger Residual
+lambda range. Residual candidate reopening and all 7-run execution remain
+forbidden. The complete Train-only per-class F1, confusion matrices, residual
+norms, and gradient-scale record is
+`reports/v9_resnet_residual_stability_audit.json`.

@@ -49,7 +49,7 @@ class ResNetCandidateGridGateTests(unittest.TestCase):
         self.assertTrue(all(value is False for value in payload["execution"].values()))
         self.assertEqual(
             payload["train_only_gate_result"]["decision"],
-            "do_not_freeze_candidates_and_do_not_start_seven_run",
+            "do_not_freeze_candidates_do_not_reopen_residual_range_and_do_not_start_seven_run",
         )
 
 
