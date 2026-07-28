@@ -37,19 +37,27 @@ class ResNetCandidateGridGateTests(unittest.TestCase):
         self.assertEqual(gate._ratio_band(0.1), "material_non_dominant")
         self.assertEqual(gate._ratio_band(1.0), "dominant")
 
-    def test_final_governance_remains_fail_closed(self) -> None:
+    def test_final_governance_freezes_only_js_and_keeps_execution_closed(self) -> None:
         path = (
             PROJECT_ROOT
             / "configs"
             / "v9_resnet_method_parameter_governance.json"
         )
         payload = json.loads(path.read_text(encoding="utf-8"))
-        self.assertEqual(payload["status"], "candidate_range_gate_failed")
-        self.assertFalse(payload["candidate_range_frozen_for_validation"])
+        self.assertEqual(
+            payload["status"],
+            "js_candidate_range_frozen_four_run_not_authorized",
+        )
+        self.assertTrue(payload["candidate_range_frozen_for_validation"])
+        self.assertEqual(payload["frozen_js_candidate_grid"], [3.0, 30.0, 60.0])
+        self.assertEqual(
+            payload["shared_methods"],
+            ["ordinary_dynamic_augmentation", "js_consistency_transfer"],
+        )
         self.assertTrue(all(value is False for value in payload["execution"].values()))
         self.assertEqual(
             payload["train_only_gate_result"]["decision"],
-            "do_not_freeze_candidates_do_not_reopen_residual_range_and_do_not_start_seven_run",
+            "freeze_js_3_30_60_archive_residual_v1_and_do_not_start_four_run",
         )
 
 

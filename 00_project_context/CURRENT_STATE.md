@@ -587,6 +587,21 @@ extrapolation. Candidate ranges remain unfrozen and the formal queue remains
 `0/7`; any further Residual redesign requires a new explicit scientific
 decision and Train-only preregistration.
 
+## 2026-07-28 JS-only scale Gate
+
+The active V9 scientific scope is narrowed to Dynamic ERM versus JS
+Consistency. Residual-v1 remains archived as a preregistered negative result.
+The single permitted pre-Validation JS range revision `[3,30,60]` passed its
+Train-only scale Gate: median auxiliary-to-classification backbone-gradient
+ratios were `0.087859`, `0.877058`, and `1.754115`, covering
+weak/material-non-dominant/dominant. All finite-value, nonzero-gradient,
+combined-direction, and runaway guards passed.
+
+The JS candidate grid is frozen, but execution remains locked. No candidate
+training, Validation, simulated Test, real XRD, four-run, or ten-run execution
+occurred. The proposed `1 Dynamic + 3 JS` four-run tuning requires a new
+explicit authorization.
+
 ## 14. Local literature and external resources
 
 The 2026-07-23 opXRD/SIMPOD acquisition was unpacked and classified locally on

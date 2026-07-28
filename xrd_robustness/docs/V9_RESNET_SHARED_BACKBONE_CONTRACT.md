@@ -14,9 +14,9 @@ Dynamic ERM, JS Consistency, and Residual Class Decorrelation must share:
 - Validation every 6,160 steps;
 - minimum 50 epochs, patience 3, `min_delta=0.002`, primary profile `level0`.
 
-Dynamic/Paired ERM is the strong public baseline. JS and Residual may differ
-only by their registered auxiliary objective and the lambda selected under the
-same ResNet contract.
+Dynamic/Paired ERM is the strong public baseline. The active V9 comparison is
+now Dynamic ERM versus JS Consistency under this identical contract.
+Residual-v1 is archived after its preregistered stability Gate failed.
 
 ## Lambda Gate reset
 
@@ -63,3 +63,21 @@ lambda range. Residual candidate reopening and all 7-run execution remain
 forbidden. The complete Train-only per-class F1, confusion matrices, residual
 norms, and gradient-scale record is
 `reports/v9_resnet_residual_stability_audit.json`.
+
+## 2026-07-28 JS-only scale Gate
+
+The active paper scope was narrowed to Dynamic ERM versus JS Consistency.
+The one permitted pre-Validation range revision preregistered JS probes
+`[3, 30, 60]`. Existing Train-only autograd traces directly measured `3` and
+`30`; `60` was reconstructed exactly from the same `lambda=30` trace using
+`grad(lambda * loss) = lambda * grad(loss)`, with combined-gradient direction
+and runaway guards recomputed per batch.
+
+The observed median auxiliary-to-classification backbone-gradient ratios were
+`0.087859`, `0.877058`, and `1.754115`, covering weak, material non-dominant,
+and dominant bands. All guards passed, so the JS candidate range is frozen as
+`[3, 30, 60]`.
+
+This Gate did not train a candidate, access Validation/Test/real XRD, or start
+the proposed four-run tuning stage. Four-run execution still requires separate
+explicit authorization. Residual-v1 remains archived.

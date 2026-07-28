@@ -1,12 +1,12 @@
 # XRD Robustness V9-T
 
-> **2026-07-28 ResNet lambda Gate:** The shared backbone contract is frozen as
+> **2026-07-28 JS-only scale Gate:** The shared backbone contract is frozen as
 > ResNet-18-GN + identity + AdamW + constant LR, with Dynamic ERM as the strong
-> baseline. PAMPT lambda evidence is archive-only. A Train-only Gate found both
-> old JS and Residual grids insufficient. A fixed three-seed residual stability
-> follow-up passed only `1/3` at epoch 5 (required `2/3` at both epochs 5 and
-> 10), so Residual candidate reopening is prohibited. No ResNet lambda
-> candidates are frozen; 7-run remains 0/7.
+> baseline. Residual-v1 is archived after its stability Gate failed. The
+> Train-only JS revision `[3,30,60]` passed weak/material/dominant scale and
+> combined-gradient guards, so this JS grid is frozen. No candidate training,
+> Validation/Test/real-XRD access, or four-run tuning occurred; execution
+> remains disabled pending separate authorization.
 
 > **2026-07-28 CNN Clean diagnostics:** A/B/C single-factor search is complete.
 > Sqrt, Adam, and warm-up/cosine did not beat the ResNet identity + AdamW +

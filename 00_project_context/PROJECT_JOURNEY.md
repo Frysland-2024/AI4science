@@ -640,3 +640,21 @@ scientifically defensible to repair the situation by changing only a threshold
 or extrapolating to larger Residual lambdas. Residual candidate reopening and
 the 7-run remain closed; a future attempt must be a separately approved,
 Train-only preregistered redesign of the residual representation/objective.
+
+## 2026-07-28 V9 narrows to Dynamic ERM versus JS Consistency
+
+The Residual-v1 failure is treated as a valid preregistered negative result,
+not as a reason to weaken its Gate. The active paper question is narrowed to
+whether explicit JS prediction consistency improves OOD and later Sim-to-Real
+generalization over the matched Dynamic ERM baseline.
+
+One JS-only Train-scale revision was preregistered as `[3,30,60]`. Values `3`
+and `30` reuse direct ResNet autograd traces; `60` is an exact scalar
+reconstruction from the same `lambda=30` trace, with per-batch combined
+gradient direction and magnitude guards recomputed. The median ratios
+`0.087859/0.877058/1.754115` cover weak/material/dominant and all guards pass.
+
+This freezes only the JS candidate grid. It does not authorize or start the
+proposed four-run tuning. Residual-v1 stays archived, Residual-v2 remains a
+future separately preregistered research module, and Test/real-XRD locks are
+unchanged.
