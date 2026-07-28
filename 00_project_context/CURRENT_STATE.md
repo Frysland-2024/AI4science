@@ -6,26 +6,38 @@
 
 > Current-state record only. Historical reasoning remains in `PROJECT_JOURNEY.md` and dated decision files.
 
-## 2026-07-28 ResNet shared contract frozen; lambda Gate failed closed
+## Latest authoritative override: JS-only scope frozen; execution locked
 
-The V9 public backbone is now ML4pXRDs ResNet-18-GN with identity
-preprocessing, AdamW, constant learning rate, and the already frozen split,
-simulator, batch size, maximum budget, and early-stopping contract. Dynamic
-ERM is the public strong baseline; Dynamic ERM, JS, and Residual must all use
-this same backbone contract. PAMPT lambda evidence is archive-only.
+The V9 public backbone is frozen as ML4pXRDs ResNet-18-GN with identity
+preprocessing, AdamW, constant learning rate, and the frozen split, simulator,
+batch size, maximum budget, and early-stopping contract. Dynamic ERM is the
+public strong baseline.
 
-The minimal Train-only ResNet Gate completed without Validation, simulated
-Test, or real XRD. The classification learned-state Gate passed. The old JS
-grid `[0.3,3,30]` measured negligible/weak/material influence and lacked a
-dominant candidate. The old Residual grid `[0.2,2,20]` measured
-negligible/negligible/weak and lacked material and dominant candidates.
-Moreover, the epoch-5 independent residual probe competence Gate failed.
+The active scientific comparison is now **Dynamic ERM versus JS Consistency**.
+Residual-v1 was rejected by its preregistered stability Gate and is archived;
+it is not an active method and its lambda range may not be reopened.
 
-Consequently no ResNet lambda range is frozen and the 7-run must not start.
-The authoritative reports are
-`reports/v9_resnet_learned_state_scale_audit.json` and
-`reports/v9_resnet_candidate_grid_gate.json`. Formal 7-run remains `0/7`;
-15-run, simulated Test, real XRD, and V10 remain locked.
+The JS-only Train Gate passed. The candidate grid is frozen as `[3,30,60]`,
+with median auxiliary-to-classification backbone-gradient ratios
+`0.087859/0.877058/1.754115`, covering weak, material non-dominant, and
+dominant influence. All combined-gradient direction and runaway guards passed.
+
+No candidate model was trained and no Validation, simulated Test, or real XRD
+was accessed by this Gate. The former three-method 7-run is cancelled and
+retained only as historical status `0/7`. Its replacement is a proposed
+`1 Dynamic ERM + 3 JS` four-run tuning stage, currently **`0/4 locked`**:
+it is neither started nor authorized. The later ten-run comparison, simulated
+Test, real XRD, real adaptation, and V10 remain locked.
+
+Authoritative machine-readable records:
+
+- `xrd_robustness/configs/v9_resnet_method_parameter_governance.json`;
+- `xrd_robustness/reports/v9_resnet_js_only_scale_gate.json`;
+- `xrd_robustness/reports/v9_resnet_residual_stability_audit.json`.
+
+All lower dated sections preserve intermediate or historical evidence. If any
+lower section conflicts with this override, this override and the three
+machine-readable records above take precedence.
 
 ## 2026-07-28 CNN Clean A/B/C diagnostics completed (authoritative)
 
@@ -571,7 +583,7 @@ authoritative archive record. V10 may not be reopened until the frozen V9
 validation program is completed and a new explicit scientific decision record
 is approved.
 
-## 2026-07-28 ResNet Residual stability Gate
+## 2026-07-28 ResNet Residual stability Gate (intermediate decision)
 
 The public ResNet-18-GN shared backbone remains frozen as identity preprocessing,
 AdamW, and constant learning rate. The Train-only follow-up for the fixed
@@ -583,9 +595,10 @@ required at least `2/3` at both epochs 5 and 10. The result is
 This is completed diagnostic evidence, not a Validation result: no Validation,
 simulated Test, real XRD, checkpoint selection, or 7-run was used. The
 Residual path is not eligible for threshold adjustment or larger-lambda
-extrapolation. Candidate ranges remain unfrozen and the formal queue remains
-`0/7`; any further Residual redesign requires a new explicit scientific
-decision and Train-only preregistration.
+extrapolation. At this intermediate point no candidate range was frozen; the
+subsequent JS-only Gate below supersedes that state for JS only. Any further
+Residual redesign requires a new explicit scientific decision and Train-only
+preregistration.
 
 ## 2026-07-28 JS-only scale Gate
 
