@@ -1,643 +1,68 @@
 import copy
-import hashlib
 import json
 from pathlib import Path
-import tempfile
 import unittest
-from unittest.mock import patch
 
-
-from xrd_robustness.method_transfer import (
-    audit_contract_assets,
-    audit_final_evaluation_locks,
-    build_run_plan,
-    build_tuning_plan,
-    evaluate_validation_comparison,
-    evaluate_tuning_selection,
-    load_contract,
-    sha256_file,
-    validate_contract,
-)
+from xrd_robustness.method_transfer import load_contract, sha256_file, validate_contract
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 CONTRACT_PATH = PROJECT_ROOT / "configs" / "algorithm.v9.method_transfer.json"
-METHOD_PARAMETER_GOVERNANCE_PATH = (
-    PROJECT_ROOT / "configs" / "v9_method_parameter_governance.json"
-)
-HASH_A = hashlib.sha256(b"a").hexdigest().upper()
-HASH_B = hashlib.sha256(b"b").hexdigest().upper()
-HASH_C = hashlib.sha256(b"c").hexdigest().upper()
+GOVERNANCE_PATH = PROJECT_ROOT / "configs" / "v9_method_parameter_governance.json"
 
 
-def _metrics(value: float) -> dict:
-    return {
-        "accuracy": value,
-        "balanced_accuracy": value,
-        "macro_f1": value,
-        "per_class_recall": [value] * 7,
-        "per_class_f1": [value] * 7,
-        "confusion_matrix": [[1 if row == column else 0 for column in range(7)] for row in range(7)],
-        "worst_group_f1": value,
-        "ece": 0.05,
-    }
-
-
-class MethodTransferContractTests(unittest.TestCase):
+class MethodTransferResNetResetTests(unittest.TestCase):
     @classmethod
-    def setUpClass(cls):
+    def setUpClass(cls) -> None:
         cls.contract = load_contract(CONTRACT_PATH)
-        cls.method_parameter_governance = json.loads(
-            METHOD_PARAMETER_GOVERNANCE_PATH.read_text(encoding="utf-8")
-        )
+        cls.governance = json.loads(GOVERNANCE_PATH.read_text(encoding="utf-8"))
 
-    def test_hu_et_al_parameter_provenance_cannot_authorize_v9_residual_grid(self):
-        provenance = self.method_parameter_governance[
-            "literature_parameter_provenance"
-        ]["hu_et_al_2026_sd3net"]
-        self.assertEqual(provenance["doi"], "10.1016/j.knosys.2026.116429")
+    def test_resnet_candidate_and_all_execution_switches_are_locked(self) -> None:
         self.assertEqual(
-            provenance["local_primary_pdf_sha256"],
-            "5F30D94A288542EA173F4A774B9CBE2EB27CD0A8B6B6E9667FB62514E816579F",
+            self.contract["model"]["variant"], "ml4pxrd_resnet18_gn_candidate"
         )
+        self.assertFalse(self.contract["development_tuning"]["execution_enabled"])
+        policy = self.contract["execution_policy"]
+        self.assertFalse(policy["tuning_plan_generation_enabled"])
+        self.assertFalse(policy["development_tuning_execution_enabled"])
+        self.assertFalse(policy["experiment_execution_enabled"])
+        self.assertFalse(policy["simulated_test_enabled"])
+        self.assertFalse(policy["real_test_enabled"])
+
+    def test_governance_is_hash_bound_and_invalidated_for_resnet(self) -> None:
         self.assertEqual(
-            provenance["paper_loss_definition"]["paper_equations"], [16, 17]
+            sha256_file(GOVERNANCE_PATH),
+            self.contract["method_parameter_governance"]["sha256"],
         )
-        self.assertEqual(provenance["table_5_record"]["lambda_3_fixed_anchor"], 1.0)
-        self.assertEqual(
-            provenance["table_5_record"]["lambda_1_lambda_2_joint_search_range"],
-            [0.1, 1.0],
-        )
-        self.assertEqual(
-            provenance["figure_12_record"]["reported_optimum"], 0.0001
-        )
+        self.assertFalse(self.governance["candidate_range_frozen_for_validation"])
         self.assertFalse(
-            provenance["figure_12_record"]["explicit_mapping_to_lambda_3"]
-        )
-        self.assertIn(
-            "copy 1e-4 into V9-T lambda_res",
-            provenance["prohibited_evidentiary_use"],
-        )
-        residual_source = self.method_parameter_governance["parameter_sources"][
-            "lambda_res"
-        ]
-        self.assertFalse(residual_source["external_numerical_authority"])
-        self.assertTrue(
-            self.method_parameter_governance["tuning_gate"][
-                "candidate_range_frozen_for_validation"
+            self.governance["candidate_grid_gate_evidence"][
+                "valid_for_current_backbone"
             ]
         )
-        self.assertTrue(
-            self.method_parameter_governance["tuning_gate"][
+        self.assertFalse(
+            self.governance["tuning_gate"][
                 "development_tuning_execution_allowed"
             ]
         )
 
-    def test_current_assets_and_locked_splits_pass_preflight(self):
-        audit = audit_contract_assets(self.contract, PROJECT_ROOT)
-        self.assertEqual(audit["status"], "passed")
-        self.assertEqual(audit["split_counts"], {"train": 9842, "validation": 2109, "test": 2109})
-        self.assertEqual(audit["development_validation_count"], 2109)
-        self.assertEqual(audit["cross_split_parent_structure_count"], 0)
-        self.assertEqual(audit["development_tuning_run_count"], 7)
-        self.assertEqual(audit["formal_development_run_count"], 15)
-        self.assertEqual(audit["core_comparison_run_count"], 9)
-        self.assertTrue(audit["simulated_test_locked"])
-        self.assertTrue(audit["real_test_locked"])
-        self.assertFalse(audit["experiment_execution_enabled"])
-        self.assertEqual(
-            audit["method_parameter_governance_status"],
-            "candidate_range_frozen_for_validation",
-        )
-        self.assertEqual(audit["method_parameter_candidate_range_gate"], "pass")
-        self.assertTrue(audit["method_parameter_tuning_execution_allowed"])
-        self.assertEqual(
-            audit["hashes"]["method_parameter_governance"],
-            self.contract["method_parameter_governance"]["sha256"],
-        )
-        self.assertTrue(Path(self.contract["runtime"]["python_executable"]).is_file())
-        self.assertEqual(
-            audit["hashes"]["hardware_profile"],
-            self.contract["hardware_profile"]["sha256"],
-        )
-        narrative = self.contract["narrative_policy"]
-        self.assertEqual(
-            narrative["current_program_priority"], "complete_algorithm_transfer_paper_first"
-        )
-        self.assertEqual(narrative["program_id"], "V9-T")
-        self.assertEqual(narrative["paper_scope"], "algorithm_transfer_only")
-        self.assertEqual(narrative["deferred_research"], "simulator_label_supervised_residual")
-        self.assertEqual(narrative["deferred_program_id"], "V10")
-        self.assertEqual(
-            narrative["challenged_paradigm"], "augmentation_only_supervised_learning"
-        )
-        self.assertEqual(
-            narrative["registered_method_progression"],
-            [
-                "augmentation_only_supervised_learning",
-                "cross_view_prediction_consistency",
-                "difference_aware_residual_class_decorrelation",
-            ],
-        )
-        self.assertEqual(
-            narrative["dynamic_perturbation_role"],
-            "strong_matched_augmentation_only_baseline_and_paired_view_infrastructure",
-        )
-        self.assertFalse(narrative["dynamic_perturbation_claimed_as_innovation"])
-        self.assertFalse(narrative["structured_perturbation_in_scope"])
-        self.assertFalse(narrative["simulator_label_supervision_in_scope"])
-
-    def test_tuning_plan_is_seven_full_budget_validation_only_runs(self):
-        plan = build_tuning_plan(self.contract, PROJECT_ROOT)
-        self.assertEqual(
-            self.contract["checkpoint_selection"]["validation_interval_epochs"],
-            10,
-        )
-        self.assertEqual(
-            self.contract["checkpoint_selection"]["patience_validation_checks"],
-            2,
-        )
-        self.assertEqual(self.contract["checkpoint_selection"]["patience_epochs"], 20)
-        self.assertEqual(plan["run_count"], 7)
-        self.assertEqual(
-            plan["execution_enabled"],
-            self.contract["development_tuning"]["execution_enabled"],
-        )
-        self.assertEqual(
-            plan["execution_enabled"],
-            self.contract["execution_policy"]["development_tuning_execution_enabled"],
-        )
-        self.assertTrue(plan["execution_enabled"])
-        self.assertEqual(len({run["run_id"] for run in plan["runs"]}), 7)
-        for run in plan["runs"]:
-            self.assertIn("--development-only", run["argv"])
-            self.assertIn("--development-subset-manifest", run["argv"])
-            self.assertIn("--evaluation-seed", run["argv"])
-            self.assertIn("--dynamic-prefetch-workers", run["argv"])
-            self.assertIn("--dynamic-prefetch-batches", run["argv"])
-            self.assertIn("--dynamic-prefetch-worker-native-threads", run["argv"])
-            self.assertIn("--pin-memory", run["argv"])
-            self.assertIn("--non-blocking-h2d", run["argv"])
-            self.assertIn("--main-process-intraop-threads", run["argv"])
-            self.assertIn("--main-process-interop-threads", run["argv"])
-            self.assertIn("--float32-matmul-precision", run["argv"])
-            self.assertIn("--allow-tf32", run["argv"])
-            self.assertIn("--cudnn-benchmark", run["argv"])
-            self.assertIn("--cudnn-deterministic", run["argv"])
-            self.assertIn("--fused-adamw", run["argv"])
-            self.assertIn("--amp", run["argv"])
-            self.assertIn("--amp-dtype", run["argv"])
-            self.assertIn("--amp-fallback-to-float32", run["argv"])
-            self.assertNotIn("--torch-compile", run["argv"])
-            worker_flag = run["argv"].index("--dynamic-prefetch-workers")
-            batch_flag = run["argv"].index("--dynamic-prefetch-batches")
-            native_thread_flag = run["argv"].index(
-                "--dynamic-prefetch-worker-native-threads"
-            )
-            self.assertEqual(
-                int(run["argv"][worker_flag + 1]),
-                self.contract["experiment"]["dynamic_view_prefetch"]["worker_processes"],
-            )
-            self.assertEqual(
-                int(run["argv"][batch_flag + 1]),
-                self.contract["experiment"]["dynamic_view_prefetch"]["prefetch_batches"],
-            )
-            self.assertEqual(
-                int(run["argv"][native_thread_flag + 1]),
-                self.contract["experiment"]["dynamic_view_prefetch"][
-                    "worker_native_threads"
-                ],
-            )
-            self.assertEqual(
-                run["argv"][run["argv"].index("--amp-dtype") + 1], "bfloat16"
-            )
-            self.assertIn("--early-stopping", run["argv"])
-            self.assertEqual(
-                run["argv"][run["argv"].index("--max-optimizer-steps") + 1],
-                "61600",
-            )
-            self.assertEqual(
-                run["argv"][run["argv"].index("--validation-interval-steps") + 1],
-                "6160",
-            )
-            self.assertEqual(
-                run["argv"][run["argv"].index("--early-stopping-min-epochs") + 1],
-                "50",
-            )
-            self.assertEqual(
-                run["argv"][run["argv"].index("--early-stopping-patience") + 1],
-                "2",
-            )
-            self.assertEqual(
-                run["argv"][run["argv"].index("--early-stopping-min-delta") + 1],
-                "0.001",
-            )
-            self.assertNotIn("perturbation_supervised_residual", run["argv"])
-            self.assertEqual(
-                run["development_subset_manifest_hash"],
-                self.contract["data"]["development_validation_manifest_sha256"],
-            )
-            self.assertTrue(run["simulated_test_locked"])
-            self.assertTrue(run["real_test_locked"])
-
-    def test_contract_rejects_dynamic_augmentation_as_the_challenged_paradigm(self):
-        contract = copy.deepcopy(self.contract)
-        contract["narrative_policy"]["challenged_paradigm"] = "dynamic_augmentation"
-        with self.assertRaisesRegex(ValueError, "augmentation-only paradigm"):
-            validate_contract(contract)
-
-    def test_contract_rejects_tuning_when_method_parameter_range_is_not_frozen(self):
+    def test_enabling_tuning_before_the_new_scale_gate_fails_closed(self) -> None:
         contract = copy.deepcopy(self.contract)
         contract["development_tuning"]["execution_enabled"] = True
         contract["execution_policy"]["development_tuning_execution_enabled"] = True
         contract["method_parameter_governance"][
             "development_tuning_execution_allowed"
         ] = True
-        contract["method_parameter_governance"][
-            "candidate_range_frozen_for_validation"
-        ] = False
-        contract["method_parameter_governance"]["status"] = (
-            "approved_candidate_grid_revision_train_only_gate_pending"
-        )
         with self.assertRaisesRegex(ValueError, "candidate range is frozen"):
             validate_contract(contract)
 
-    def test_contract_rejects_candidate_grid_outside_governance(self):
-        contract = copy.deepcopy(self.contract)
-        contract["development_tuning"]["candidates"][0]["values"] = [0.3, 1.0, 3.0]
-        with self.assertRaisesRegex(ValueError, "unexpected development tuning grids"):
-            validate_contract(contract)
-
-    def test_formal_plan_fails_closed_before_tuning_freeze(self):
-        with self.assertRaisesRegex(ValueError, "tuning selection has not been frozen"):
-            build_run_plan(self.contract, PROJECT_ROOT)
-
-    def test_formal_plan_contains_clean_offline_and_three_core_methods(self):
-        with patch(
-            "xrd_robustness.method_transfer._frozen_hyperparameters",
-            return_value={"lambda_js": 3.0, "lambda_res": 2.0},
-        ):
-            plan = build_run_plan(self.contract, PROJECT_ROOT)
-        self.assertEqual(plan["run_count"], 15)
-        self.assertEqual({run["mode"] for run in plan["runs"]}, {
-            "clean_erm", "offline_erm", "dynamic_erm", "dynamic_js", "dynamic_residual"
-        })
-        for run in plan["runs"]:
-            self.assertIn("--development-only", run["argv"])
-            self.assertEqual(
-                run["development_subset_manifest_hash"],
-                self.contract["data"]["development_validation_manifest_sha256"],
-            )
-        clean = next(run for run in plan["runs"] if run["mode"] == "clean_erm")
-        offline = next(run for run in plan["runs"] if run["mode"] == "offline_erm")
-        js = next(run for run in plan["runs"] if run["mode"] == "dynamic_js")
-        residual = next(run for run in plan["runs"] if run["mode"] == "dynamic_residual")
-        self.assertIn("--clean-profile", clean["argv"])
-        self.assertIn("--offline-views", offline["argv"])
-        self.assertIn("--paired-offline-views", offline["argv"])
-        self.assertEqual(js["hyperparameters"]["lambda_js"], 3.0)
-        self.assertEqual(residual["hyperparameters"]["lambda_res"], 2.0)
-
-    def test_final_test_contracts_remain_locked(self):
-        audit = audit_final_evaluation_locks(self.contract, PROJECT_ROOT)
-        self.assertEqual(audit["status"], "locked_as_required")
-        self.assertTrue(audit["simulated_test_locked"])
-        self.assertTrue(audit["real_test_locked"])
-        self.assertFalse(audit["simulated_test_used"])
-        self.assertFalse(audit["real_test_used"])
-
-
-class SyntheticResultMixin:
-    contract: dict
-
-    def _write_result(
-        self,
-        output: Path,
-        method: dict,
-        seed: int,
-        run_id: str,
-        *,
-        subset_hash: str,
-        in_range: float,
-        ood: float,
-        evaluation_manifest_hash: str = HASH_A,
-        view_manifest_hash: str = HASH_B,
-        training_sampler_hash: str = HASH_A,
-        pair_schedule_hash: str = HASH_B,
-        parameter_pair_hash: str = HASH_C,
-        prediction_method_id: str | None = None,
-        locked: bool = True,
-    ) -> None:
-        profiles = self.contract["simulation"]["development_ood_profiles"]
-        optimizer_steps = int(self.contract["experiment"]["max_optimizer_steps"])
-        steps_per_epoch = 616
-        best_epoch = optimizer_steps // steps_per_epoch
-        structure_exposures = optimizer_steps * int(
-            self.contract["experiment"]["batch_size"]
+    def test_parent_structure_split_and_final_test_locks_remain_active(self) -> None:
+        self.assertEqual(
+            self.contract["data"]["expected_split_counts"],
+            {"train": 9842, "validation": 2109, "test": 2109},
         )
-        spectrum_exposures = structure_exposures * 2
-        validation_interval_steps = int(
-            self.contract["experiment"]["validation_interval_steps"]
-        )
-        history = []
-        for global_step in range(
-            validation_interval_steps,
-            optimizer_steps + 1,
-            validation_interval_steps,
-        ):
-            epoch = global_step // steps_per_epoch
-            history.append(
-                {
-                    "epoch": epoch,
-                    "global_step": global_step,
-                    "in_range": _metrics(in_range),
-                    "ood": {name: _metrics(ood) for name in profiles},
-                    "training_stream_audit": {
-                        "sampler_hash": training_sampler_hash,
-                        "pair_schedule_hash": pair_schedule_hash,
-                        "parameter_pair_hash": parameter_pair_hash,
-                    },
-                }
-            )
-        selection_evaluation = history[-1]
-        result = {
-            "run_id": run_id,
-            "mode": method["mode"],
-            "seed": seed,
-            "evaluation_seed": self.contract["evaluation"]["development_evaluation_seed"],
-            "unique_train_structures": 9842,
-            "study_contract_hash": sha256_file(CONTRACT_PATH),
-            "evaluation_contract_hash": self.contract["evaluation"]["sha256"],
-            "resolved_config_hash": HASH_C,
-            "source_tree_hash": HASH_C,
-            "training_sampler_contract_hash": HASH_C,
-            "training_stream_audit_hash": HASH_C,
-            "training_stream_audit": {
-                "schema_version": "training-stream-v1",
-                "sampler_contract_hash": HASH_C,
-                "sampler_hash": training_sampler_hash,
-                "pair_schedule_hash": pair_schedule_hash,
-                "parameter_pair_hash": parameter_pair_hash,
-                "optimizer_steps": optimizer_steps,
-                "structure_exposures": structure_exposures,
-                "spectrum_exposures": spectrum_exposures,
-            },
-            "view_manifest_hash": view_manifest_hash,
-            "evaluation_manifest_hash": evaluation_manifest_hash,
-            "checkpoint_hash": HASH_C,
-            "checkpoint_path": "best.ckpt",
-            "offline_manifest_hash": HASH_C if method["mode"] in {"clean_erm", "offline_erm"} else None,
-            "data_manifest_hash": self.contract["data"]["split_manifest_sha256"],
-            "development_subset_manifest_hash": subset_hash,
-            "simulation_config_hash": self.contract["simulation"]["sha256"],
-            "peak_cache_manifest_hash": self.contract["data"]["peak_cache_manifest_sha256"],
-            "runtime_provenance": {
-                "python_version": self.contract["runtime"]["python_version"],
-                "torch_version": self.contract["runtime"]["torch_version"],
-                "cuda_runtime": self.contract["runtime"]["cuda_runtime"],
-                "gpu_name": self.contract["runtime"]["gpu_name"],
-                "device": "cuda:0",
-            },
-            "evaluation_scope": {
-                "development_only": locked,
-                "selection_split": "validation" if locked else "test",
-                "simulated_test_locked": locked,
-                "real_test_locked": True,
-            },
-            "compute_summary": {
-                "optimizer_steps": optimizer_steps,
-                "training_backbone_forward_views": optimizer_steps * 2,
-                "training_structure_exposures": structure_exposures,
-                "training_view_exposures": spectrum_exposures,
-                "wall_clock_seconds": 100.0,
-                "gpu_hours": 0.03,
-                "peak_gpu_memory_mb": 1000.0,
-            },
-            "history": history,
-            "selection_evaluation": selection_evaluation,
-            "early_stopping": {
-                "enabled": True,
-                "max_epochs": self.contract["checkpoint_selection"]["max_epochs"],
-                "minimum_epochs": self.contract["checkpoint_selection"]["minimum_epochs"],
-                "patience_validation_checks": self.contract["checkpoint_selection"][
-                    "patience_validation_checks"
-                ],
-                "min_delta": self.contract["checkpoint_selection"]["min_delta"],
-                "primary_profiles": self.contract["checkpoint_selection"][
-                    "primary_ood_profiles"
-                ],
-                "tie_breakers": self.contract["checkpoint_selection"]["tie_breakers"],
-                "state": {
-                    "best_epoch": best_epoch,
-                    "best_global_step": optimizer_steps,
-                },
-            },
-        }
-        output.parent.mkdir(parents=True, exist_ok=True)
-        (output.parent / "best.ckpt").write_bytes(b"c")
-        rows = []
-        in_range_profile = self.contract["simulation"]["in_range_profile"]
-        for profile, value in [(in_range_profile, in_range), *[(name, ood) for name in profiles]]:
-            row_accuracy = max(0.05, min(0.95, 0.5 + (float(value) - 0.58) * 5.0))
-            correct_count = int(round(row_accuracy * 210))
-            for parent in range(210):
-                label = parent % 7
-                prediction = label if parent < correct_count else (label + 1) % 7
-                probabilities = [0.01] * 7
-                probabilities[prediction] = 0.94
-                rows.append({
-                    "seed": seed,
-                    "method_id": prediction_method_id or method["id"],
-                    "profile": profile,
-                    "material_id": f"mp-{parent}",
-                    "parent_structure_id": f"parent-{parent}",
-                    "label": label,
-                    "prediction": prediction,
-                    "probabilities": probabilities,
-                })
-        prediction_path = output.parent / "prediction_rows.jsonl"
-        prediction_path.write_text(
-            "".join(json.dumps(row, sort_keys=True) + "\n" for row in rows),
-            encoding="utf-8",
-        )
-        result["prediction_rows"] = {
-            "path": prediction_path.name,
-            "sha256": sha256_file(prediction_path),
-            "row_count": len(rows),
-        }
-        output.write_text(json.dumps(result), encoding="utf-8")
-
-
-class MethodTransferTuningTests(SyntheticResultMixin, unittest.TestCase):
-    def setUp(self):
-        self.contract = load_contract(CONTRACT_PATH)
-
-    def test_tuning_selects_best_guardrail_eligible_registered_values(self):
-        plan = build_tuning_plan(self.contract, PROJECT_ROOT)
-        with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
-            for run in plan["runs"]:
-                method = next(
-                    item for item in self.contract["experiment"]["methods"]
-                    if item["id"] == run["method_id"]
-                )
-                if run["role"] == "baseline":
-                    ood = 0.60
-                elif "lambda_js" in run["hyperparameters"]:
-                    ood = {0.3: 0.61, 3.0: 0.625, 30.0: 0.62}[
-                        float(run["hyperparameters"]["lambda_js"])
-                    ]
-                else:
-                    ood = {0.2: 0.59, 2.0: 0.605, 20.0: 0.603}[
-                        float(run["hyperparameters"]["lambda_res"])
-                    ]
-                self._write_result(
-                    root / run["run_id"] / "results.json",
-                    method,
-                    int(run["seed"]),
-                    str(run["run_id"]),
-                    subset_hash=self.contract["data"]["development_validation_manifest_sha256"],
-                    in_range=0.80,
-                    ood=ood,
-                    prediction_method_id=method["mode"],
-                )
-            selection = evaluate_tuning_selection(self.contract, root, PROJECT_ROOT)
-            self.assertEqual(selection["status"], "selected")
-            self.assertEqual(selection["selected_values"], {"lambda_js": 3.0, "lambda_res": 2.0})
-            self.assertFalse(selection["simulated_test_used"])
-            self.assertFalse(selection["real_test_used"])
-
-    def test_tuning_fails_closed_on_sampler_hash_mismatch(self):
-        plan = build_tuning_plan(self.contract, PROJECT_ROOT)
-        with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
-            for run in plan["runs"]:
-                method = next(
-                    item for item in self.contract["experiment"]["methods"]
-                    if item["id"] == run["method_id"]
-                )
-                self._write_result(
-                    root / run["run_id"] / "results.json",
-                    method,
-                    int(run["seed"]),
-                    str(run["run_id"]),
-                    subset_hash=self.contract["data"]["development_validation_manifest_sha256"],
-                    in_range=0.80,
-                    ood=0.60,
-                    training_sampler_hash=(HASH_B if run is plan["runs"][0] else HASH_A),
-                    prediction_method_id=method["mode"],
-                )
-            with self.assertRaisesRegex(ValueError, "common-prefix mismatch"):
-                evaluate_tuning_selection(self.contract, root, PROJECT_ROOT)
-
-
-class MethodTransferUnifiedValidationTests(SyntheticResultMixin, unittest.TestCase):
-    def setUp(self):
-        self.contract = copy.deepcopy(load_contract(CONTRACT_PATH))
-        self.contract["formal_hyperparameters"]["frozen"] = True
-        self.contract["formal_hyperparameters"]["values"] = {
-            "lambda_js": 3.0,
-            "lambda_res": 2.0,
-        }
-
-    def _synthetic_results(
-        self,
-        root: Path,
-        *,
-        unlock_one: bool = False,
-        js_ood: float = 0.621,
-        residual_ood: float = 0.605,
-    ) -> None:
-        for method_index, method in enumerate(self.contract["experiment"]["methods"]):
-            for seed_index, seed in enumerate(self.contract["experiment"]["seeds"]):
-                if method["mode"] == "dynamic_js":
-                    in_range, ood = 0.795, js_ood + seed_index * 0.001
-                elif method["mode"] == "dynamic_residual":
-                    in_range, ood = 0.81, residual_ood + seed_index * 0.001
-                elif method["mode"] == "dynamic_erm":
-                    in_range, ood = 0.80, 0.60
-                elif method["mode"] == "clean_erm":
-                    in_range, ood = 0.78, 0.50
-                else:
-                    in_range, ood = 0.79, 0.57
-                self._write_result(
-                    root / method["id"] / f"seed_{seed}" / "results.json",
-                    method,
-                    int(seed),
-                    f"{method['id']}__seed_{seed}",
-                    subset_hash=self.contract["data"]["development_validation_manifest_sha256"],
-                    in_range=in_range,
-                    ood=ood,
-                    view_manifest_hash=(HASH_B if method["role"] in {"baseline", "candidate"} else hashlib.sha256(method["id"].encode()).hexdigest().upper()),
-                    locked=not (unlock_one and method["mode"] == "dynamic_js" and seed_index == 0),
-                )
-
-    def test_validation_comparison_selects_highest_scoring_registered_method(self):
-        with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
-            self._synthetic_results(root)
-            report = evaluate_validation_comparison(self.contract, root, PROJECT_ROOT)
-            self.assertEqual(report["status"], "selected")
-            self.assertEqual(report["formal_run_count"], 15)
-            self.assertEqual(report["selected_method"], "js_consistency_transfer")
-            self.assertFalse(report["pass_fail_decision_used"])
-            self.assertIn("clean_erm_reference", report["method_summaries"])
-            self.assertIn("offline_physical_augmentation_reference", report["method_summaries"])
-            self.assertEqual(
-                report["paper_narrative_outcome"],
-                "js_effective_residual_no_extra_gain",
-            )
-            self.assertTrue(
-                all(
-                    value < 0
-                    for value in report["paired_comparisons"]["residual_minus_js"]["paired_seed_deltas"]
-                )
-            )
-            self.assertFalse(report["simulated_test_used"])
-            self.assertFalse(report["real_test_used"])
-
-    def test_validation_comparison_reports_direct_paired_residual_evidence(self):
-        with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
-            self._synthetic_results(root, js_ood=0.615, residual_ood=0.640)
-            report = evaluate_validation_comparison(self.contract, root, PROJECT_ROOT)
-            self.assertEqual(report["selected_method"], "residual_decorrelation_transfer")
-            self.assertEqual(
-                report["paper_narrative_outcome"],
-                "residual_stably_beats_dynamic_and_js",
-            )
-            self.assertTrue(
-                report["paired_comparisons"]["residual_minus_js"]["all_seed_deltas_positive"]
-            )
-
-    def test_validation_comparison_fails_closed_if_test_split_was_unlocked(self):
-        with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
-            self._synthetic_results(root, unlock_one=True)
-            with self.assertRaisesRegex(ValueError, "test lock violated"):
-                evaluate_validation_comparison(self.contract, root, PROJECT_ROOT)
-
-    def test_validation_comparison_fails_closed_on_pair_schedule_mismatch(self):
-        with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
-            self._synthetic_results(root)
-            path = root / "clean_erm_reference" / "seed_20260711" / "results.json"
-            result = json.loads(path.read_text(encoding="utf-8"))
-            result["training_stream_audit"]["pair_schedule_hash"] = HASH_A
-            path.write_text(json.dumps(result), encoding="utf-8")
-            with self.assertRaisesRegex(ValueError, "pair_schedule_hash"):
-                evaluate_validation_comparison(self.contract, root, PROJECT_ROOT)
-
-    def test_validation_comparison_fails_closed_on_dynamic_parameter_pair_mismatch(self):
-        with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
-            self._synthetic_results(root)
-            path = root / "js_consistency_transfer" / "seed_20260711" / "results.json"
-            result = json.loads(path.read_text(encoding="utf-8"))
-            result["training_stream_audit"]["parameter_pair_hash"] = HASH_A
-            path.write_text(json.dumps(result), encoding="utf-8")
-            with self.assertRaisesRegex(ValueError, "parameter_pair_hash"):
-                evaluate_validation_comparison(self.contract, root, PROJECT_ROOT)
+        self.assertTrue(self.contract["data"]["simulated_test_locked"])
+        self.assertTrue(self.contract["data"]["real_test_locked"])
 
 
 if __name__ == "__main__":

@@ -1,79 +1,33 @@
 {
-  "schema_version": "v9t-split-change-invalidation-v1",
-  "status": "all_pre_change_training_results_invalidated",
-  "decision_date": "2026-07-26",
-  "reason": "The active data split changed from chemistry-anonymous Wyckoff-family-disjoint assignment to parent-structure-level crystal-system-stratified random assignment.",
-  "old_split": {
-    "path": "data/formal_14060/manifests/split_manifest.v9t.family_v1.csv",
-    "sha256": "4304D5FA5A35082AFD6653647875074D207E3ACDC35123FFF8FD6E42BE1C672B",
-    "status": "retired_not_valid_for_training_selection_or_evaluation"
-  },
-  "new_split": {
-    "path": "data/formal_14060/manifests/split_manifest.json",
-    "sha256": "B9D3B72E42EA0FD549DAE34425FF61D2D650D5DD7FE6F337D747CB952CF43293",
+  "schema_version": "v9-split-change-invalidation-v2",
+  "status": "active_parent_structure_split_historical_results_invalidated",
+  "canonical_date": "2026-07-28",
+  "active_split": {
+    "unit": "parent_structure",
+    "method": "deterministic_random_stratified_by_crystal_system",
     "seed": 20260726,
-    "ratios": {
-      "train": 0.7,
-      "validation": 0.15,
-      "test": 0.15
+    "counts": {
+      "train": 9842,
+      "validation": 2109,
+      "test": 2109
     },
-    "split_unit": "parent_structure",
-    "stratification": "crystal_system"
+    "manifest_sha256": "B9D3B72E42EA0FD549DAE34425FF61D2D650D5DD7FE6F337D747CB952CF43293",
+    "parent_leakage": 0,
+    "material_leakage": 0
   },
-  "invalidated_artifacts": {
-    "historical_fixed_budget_root": {
-      "path": "outputs/v9_method_transfer_tuning",
-      "result_count": 7,
-      "results": [
-        {
-          "run_id": "js_consistency_transfer__lambda_js_0p3__tuning_seed_20260710",
-          "results_sha256": "E8F7D71C9A24D4FCA50828EEBB6ADF40B32A8CA2E4B5375307AA246E2D964CDB"
-        },
-        {
-          "run_id": "js_consistency_transfer__lambda_js_30p0__tuning_seed_20260710",
-          "results_sha256": "EB4B589EF147BDAA44356BAE806AD95AE53271C3B8B9629A4C18F8E1CCC8459B"
-        },
-        {
-          "run_id": "js_consistency_transfer__lambda_js_3p0__tuning_seed_20260710",
-          "results_sha256": "A85D78D164598FC88E3ABD0B0CD38C1BAD00D7ECABE0E8F651D26ADF4DDDECB9"
-        },
-        {
-          "run_id": "ordinary_dynamic_augmentation__tuning_seed_20260710",
-          "results_sha256": "1A72E85DB7F04947A19C3A3237A6EE7D73C668AC252B304DA9DB813C08F754E9"
-        },
-        {
-          "run_id": "residual_decorrelation_transfer__lambda_res_0p2__tuning_seed_20260710",
-          "results_sha256": "88A028ACE100AE4259C8BAF6B96AABB133522B29444754026E720B966E0C5797"
-        },
-        {
-          "run_id": "residual_decorrelation_transfer__lambda_res_20p0__tuning_seed_20260710",
-          "results_sha256": "63FC7E3146056D9B504F8538D056506C0B33DABC5C0F9783578770591F8FC74B"
-        },
-        {
-          "run_id": "residual_decorrelation_transfer__lambda_res_2p0__tuning_seed_20260710",
-          "results_sha256": "CC8BE63B2D0696EC038448BC57C7D74E9601C271915DD10DD09F11957F3E4BAB"
-        }
-      ],
-      "selection_artifact": {
-        "path": "reports/v9_method_transfer_tuning_selection.json",
-        "sha256": "98DF2CA4AB9CCB49A5ED65DE4CA2D52CCA30AB2C5909409340984B9B422C667E",
-        "status": "invalidated"
-      }
-    },
-    "superseded_100_epoch_root": {
-      "path": "outputs/v9_method_transfer_tuning_100e_10epoch_patience2",
-      "result_count": 1,
-      "run_id": "ordinary_dynamic_augmentation__tuning_seed_20260710",
-      "results_sha256": "80C48FF483CA08E4AA567281F1C76F38153E4369DC53889651B4775CD277D7DB",
-      "status": "invalidated_do_not_resume"
-    }
+  "retired_split": {
+    "unit": "wyckoff_family",
+    "status": "retired",
+    "all_results_and_checkpoints_invalid_for_selection_or_claims": true
   },
-  "execution_reset": {
-    "remaining_old_split_runs_must_not_start": 6,
-    "new_split_tuning_progress": "0/7",
-    "restart_from_optimizer_step_zero": true,
-    "first_run_id": "ordinary_dynamic_augmentation__tuning_seed_20260710",
-    "old_checkpoints_must_not_be_resumed": true
+  "backbone_reset": {
+    "previous_backbone": "PAMPT-B3",
+    "current_candidate": "ML4pXRDs ResNet-18-GN",
+    "pampt_method_weight_gates_and_validation_selections_invalid_for_resnet": true
   },
-  "retention_policy": "Invalidated artifacts are preserved only as historical provenance and must not be used for model selection, checkpoint resume, simulated Test, or paper results."
+  "test_boundaries": {
+    "simulated_test_locked": true,
+    "real_xrd_locked": true,
+    "v10_locked": true
+  }
 }
