@@ -1,5 +1,12 @@
 # XRD Robustness V9-T
 
+> **2026-07-28 online-generation optimization:** The user-authorized initial
+> Dynamic run was stopped before Validation at epoch 9 and excluded from
+> selection. Caching only structure-invariant HKL ordering and clean
+> quality-reference spectra increased matched 16x16 prefetch throughput by
+> `27.67%`, with bit-exact spectra, parameters, hashes, and quality decisions.
+> The four-run restarts from step zero under unchanged scientific settings.
+
 > **2026-07-28 four-run preregistration:** The frozen Validation-tuning matrix
 > is one Dynamic ERM plus JS `[3,30,60]`. Shared training budget, early
 > stopping, seeds, metrics, selection rule, hashes, and data boundaries are

@@ -69,6 +69,37 @@ class PeakTable:
         object.__setattr__(self, "multiplicities", multiplicities)
         object.__setattr__(self, "reciprocal_vectors", vectors)
         object.__setattr__(self, "reflection_peak_indices", indices)
+        # These reflection-derived values are structure invariants.  Compute
+        # them once when a worker loads the peak table instead of repeating
+        # Python-level HKL normalization and sorting for every dynamic view.
+        canonical_rows: list[tuple[int, int, int]] = []
+        hkl_to_indices: dict[tuple[int, int, int], list[int]] = {}
+        unique_first_indices: dict[tuple[int, int, int], int] = {}
+        for index, hkl in enumerate(hkls):
+            values = tuple(int(value) for value in hkl.tolist())
+            sign = next((-1 if value < 0 else 1 for value in values if value), None)
+            if sign is None:
+                raise ValueError("hkl=(0,0,0) is not a Bragg reflection")
+            canonical = tuple(sign * value for value in values)
+            canonical_rows.append(canonical)
+            hkl_to_indices.setdefault(canonical, []).append(index)
+            unique_first_indices.setdefault(canonical, index)
+        ranked = sorted(
+            unique_first_indices.values(),
+            key=lambda index: (
+                int(np.sum(np.abs(hkls[index]))),
+                int(np.max(np.abs(hkls[index]))),
+                float(positions[indices[index]]),
+                canonical_rows[index],
+            ),
+        )
+        object.__setattr__(self, "_canonical_hkls", tuple(canonical_rows))
+        object.__setattr__(
+            self,
+            "_hkl_to_indices",
+            {key: tuple(value) for key, value in hkl_to_indices.items()},
+        )
+        object.__setattr__(self, "_candidate_reflection_indices", tuple(ranked))
 
     @property
     def has_reflection_metadata(self) -> bool:

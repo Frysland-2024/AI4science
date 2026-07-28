@@ -1,0 +1,67 @@
+{
+  "schema_version": "v9-online-generation-optimization-audit-v1",
+  "status": "passed",
+  "reason": "User stopped the initial run at epoch 9 and authorized online-generation optimization before restarting the four-run from zero.",
+  "optimization": {
+    "cached_structure_invariants": [
+      "canonical_hkl_rows",
+      "preferred_orientation_candidate_order",
+      "preferred_hkl_to_reflection_indices",
+      "noise_free_background_free_quality_reference_profile"
+    ],
+    "not_cached": [
+      "perturbed_spectra",
+      "sampled_parameters",
+      "random_draws",
+      "quality_decisions"
+    ]
+  },
+  "benchmark": {
+    "configuration": {
+      "batches": 64,
+      "batch_size": 16,
+      "views": 2048,
+      "workers": 16,
+      "prefetch_batches": 16,
+      "machine": "LENOVO 82WM / Ryzen 9 7945HX / RTX 4060 Laptop GPU"
+    },
+    "before": {
+      "prefetch_batches_per_second": 24.526521255612405,
+      "sequential_batches_per_second": 3.6794285038060974,
+      "report": "reports/v9_online_generation_preoptimization_benchmark.json",
+      "audit_sha256": "FB57B2FEE68C2AA0272734B51E5F5D646712DEEEE0DC3AFEC1F7A85F10A27652"
+    },
+    "after": {
+      "prefetch_batches_per_second": 31.3119557806406,
+      "sequential_batches_per_second": 5.426665467374634,
+      "report": "reports/v9_online_generation_postoptimization_benchmark.json",
+      "audit_sha256": "6AEB3B96DF9596237619BDA26BBF8705227785BCFB9F7E625089C1B8F7217AFE"
+    },
+    "relative_gain": {
+      "prefetch_throughput": 0.2766570299273683,
+      "sequential_throughput": 0.4748663988880743
+    }
+  },
+  "strict_equivalence": {
+    "exact_accepted_manifest_rows": true,
+    "exact_material_order": true,
+    "exact_parameters": true,
+    "exact_spectrum_arrays": true,
+    "maximum_absolute_spectrum_difference": 0.0,
+    "quality_gate_counts_match": true,
+    "before_and_after_array_stream_hash": "7585A7DC73378A335AFB13DCE7619FB1E10805430B524B5D7D4FB4F96B18B611",
+    "before_and_after_parameter_pair_hash": "465DC474B55EAE09C950C09BB9FF49340C54E592E4A026C9F048CBAA967D31E5"
+  },
+  "interrupted_baseline": {
+    "archive": "outputs/v9_resnet_js_four_run_interrupted_preoptimization_20260728",
+    "last_epoch": 9,
+    "last_global_step": 5544,
+    "eligible_for_selection": false,
+    "restart_policy": "all four runs restart from optimizer step zero"
+  },
+  "boundaries": {
+    "validation_metrics_used_for_optimization": false,
+    "simulated_test_used": false,
+    "real_xrd_used": false
+  }
+}

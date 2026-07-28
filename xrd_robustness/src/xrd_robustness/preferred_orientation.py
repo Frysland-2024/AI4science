@@ -33,6 +33,9 @@ def march_dollase_factor(cos_alpha: np.ndarray, r: float) -> np.ndarray:
 
 def _candidate_reflections(table: PeakTable, count: int) -> list[int]:
     assert table.hkls is not None and table.reflection_peak_indices is not None
+    cached = getattr(table, "_candidate_reflection_indices", None)
+    if cached is not None:
+        return list(cached[: min(int(count), len(cached))])
     unique: dict[tuple[int, int, int], int] = {}
     for index, hkl in enumerate(table.hkls):
         key = canonical_hkl(hkl)
@@ -71,11 +74,16 @@ def resolve_preferred_orientation(
         preferred_hkl = canonical_hkl(table.hkls[selected])
     else:
         preferred_hkl = canonical_hkl(params.preferred_hkl)
-        matches = [
-            index
-            for index, hkl in enumerate(table.hkls)
-            if canonical_hkl(hkl) == preferred_hkl
-        ]
+        cached = getattr(table, "_hkl_to_indices", None)
+        matches = (
+            list(cached.get(preferred_hkl, ()))
+            if cached is not None
+            else [
+                index
+                for index, hkl in enumerate(table.hkls)
+                if canonical_hkl(hkl) == preferred_hkl
+            ]
+        )
         if not matches:
             raise ValueError(f"preferred_hkl {preferred_hkl} is absent from this peak table")
     resolved = replace(params, preferred_hkl=preferred_hkl)
@@ -107,11 +115,17 @@ def apply_preferred_orientation(
     assert table.reflection_peak_indices is not None
     assert resolved.preferred_hkl is not None
 
-    matching = [
-        index
-        for index, hkl in enumerate(table.hkls)
-        if canonical_hkl(hkl) == canonical_hkl(resolved.preferred_hkl)
-    ]
+    preferred_hkl = canonical_hkl(resolved.preferred_hkl)
+    cached = getattr(table, "_hkl_to_indices", None)
+    matching = (
+        list(cached.get(preferred_hkl, ()))
+        if cached is not None
+        else [
+            index
+            for index, hkl in enumerate(table.hkls)
+            if canonical_hkl(hkl) == preferred_hkl
+        ]
+    )
     axis_vector = table.reciprocal_vectors[matching[0]]
     axis_unit = axis_vector / np.linalg.norm(axis_vector)
     vectors = table.reciprocal_vectors

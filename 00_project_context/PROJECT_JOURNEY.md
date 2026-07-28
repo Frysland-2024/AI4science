@@ -674,3 +674,23 @@ Validation spectra or metrics, and loaded no model or checkpoint. The obsolete
 PAMPT seven-run switches were fail-closed to prevent accidental execution.
 Consequently the contract is auditable and launch-ready only after a separate
 human decision; scientific execution remains `0/4 locked`.
+
+## 2026-07-28 Online generation is optimized before restarting the four-run
+
+After authorizing execution, the user stopped the first Dynamic run at epoch 9,
+before any Validation check, to remove the online-rendering bottleneck. That
+partial run is preserved but excluded from all tuning and selection.
+
+Profiling showed repeated preferred-orientation HKL normalization/ranking and
+repeated rendering of the noise-free, background-free quality reference.
+Both are structure invariants, so workers now cache them while continuing to
+sample and render every perturbed spectrum independently. The matched
+64-batch, 2,048-view Gate improved 16-worker prefetch throughput by `27.67%`
+and sequential throughput by `47.49%`. Accepted manifest rows, material order,
+physics parameters, spectrum arrays and hashes, and quality-Gate counts are
+exactly unchanged; maximum absolute spectrum difference is zero.
+
+Because this is a verified engineering acceleration rather than a scientific
+factor change, the frozen model, optimizer, simulator parameters, random
+streams, budget, early stopping, metrics, and selection rule remain unchanged.
+The only valid next execution is a complete four-run restart from step zero.

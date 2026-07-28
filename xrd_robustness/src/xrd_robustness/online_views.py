@@ -78,6 +78,7 @@ class OnlineViewFactory:
         self.strategy = strategy or IndependentDynamicStrategy(sampler)
         self.quality_gate_checked_count = 0
         self.quality_gate_rejected_count = 0
+        self._quality_reference_profiles: dict[str, np.ndarray] = {}
 
     @staticmethod
     def effective_epoch(split: str, epoch: int) -> int:
@@ -323,14 +324,18 @@ class OnlineViewFactory:
                 background_type="flat",
                 severity_level=0,
             )
-            base_profile = simulate_from_peak_table(
-                peaks.positions,
-                peaks.intensities,
-                base_parameters,
-                rng_seed=row.simulation_seed,
-                grid=self.grid,
-                normalize=False,
-            )
+            base_profile = self._quality_reference_profiles.get(row.material_id)
+            if base_profile is None:
+                base_profile = simulate_from_peak_table(
+                    peaks.positions,
+                    peaks.intensities,
+                    base_parameters,
+                    rng_seed=0,
+                    grid=self.grid,
+                    normalize=False,
+                )
+                base_profile.setflags(write=False)
+                self._quality_reference_profiles[row.material_id] = base_profile
             profile, diagnostics = simulate_from_peak_table(
                 peaks.positions,
                 peaks.intensities,

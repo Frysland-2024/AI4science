@@ -6,7 +6,7 @@
 
 > Current-state record only. Historical reasoning remains in `PROJECT_JOURNEY.md` and dated decision files.
 
-## Latest authoritative override: four-run preregistered and preflight-passed; execution locked
+## Latest authoritative override: four-run authorized after exact online-generation optimization
 
 The V9 public backbone is frozen as ML4pXRDs ResNet-18-GN with identity
 preprocessing, AdamW, constant learning rate, and the frozen split, simulator,
@@ -30,17 +30,30 @@ guardrail, and deterministic tie-breaks. The launch preflight passed all 13
 checks: exact matrix, registered hashes, parent-level split isolation,
 Validation-manifest membership, absent output root, and Test/real locks.
 
-No model, checkpoint, Validation spectrum, or Validation metric was accessed,
-and no GPU training started. The historical PAMPT 7-run is explicitly
-fail-closed at `0/7`. The new four-run remains **`0/4 locked`** and requires
-separate human authorization. The later ten-run comparison, simulated Test,
-real XRD, real adaptation, and V10 remain locked.
+The user authorized serial four-run execution. The initial Dynamic run was
+stopped on request at epoch 9 / step 5,544 before its first Validation check
+and is archived as optimization-only evidence, ineligible for selection.
+Profiling identified repeated HKL ordering and repeated clean quality-reference
+rendering. Caching only those structure invariants improved matched 16x16
+prefetch throughput from `24.5265` to `31.3120` batches/s (`+27.67%`) and
+sequential rendering from `3.6794` to `5.4267` batches/s (`+47.49%`).
+
+The optimization Gate passed exact accepted rows, material order, parameters,
+spectrum arrays, array hashes, and quality-Gate counts, with maximum spectrum
+difference `0.0`. No perturbed spectrum or random draw is cached. The complete
+four-run is authorized to restart from optimizer step zero with the same
+scientific contract and optimized execution hashes. It remains incomplete
+until all four fresh runs and selection finish. The historical PAMPT 7-run,
+ten-run comparison, simulated Test, real XRD, real adaptation, and V10 remain
+locked.
 
 Authoritative machine-readable records:
 
 - `xrd_robustness/configs/v9_resnet_method_parameter_governance.json`;
 - `xrd_robustness/configs/v9_resnet_js_four_run.preregistered.json`;
 - `xrd_robustness/reports/v9_resnet_js_four_run_preflight.json`;
+- `xrd_robustness/configs/v9_resnet_js_four_run.authorization.json`;
+- `xrd_robustness/reports/v9_online_generation_optimization_audit.json`;
 - `xrd_robustness/reports/v9_resnet_js_only_scale_gate.json`;
 - `xrd_robustness/reports/v9_resnet_residual_stability_audit.json`.
 

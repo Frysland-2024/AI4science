@@ -1,5 +1,15 @@
 # XRD Robustness V9-T：跨 Codex 账号与台式机完整交接
 
+> **2026-07-28 optimized execution authorization (latest):** The user
+> authorized the serial four-run, then stopped the initial Dynamic run at
+> epoch 9 / step 5,544 before Validation to optimize online generation. The
+> interrupted run is archived and cannot enter selection. Structure-invariant
+> HKL ordering and clean quality-reference profiles are now cached; perturbed
+> spectra and random draws are not. A matched 64-batch Gate showed prefetch
+> `24.5265 -> 31.3120` batch/s and sequential `3.6794 -> 5.4267` batch/s while
+> preserving exact arrays, parameters, hashes, and quality counts. All four
+> runs must restart from step zero. Test, real XRD, and the ten-run stay locked.
+
 > **2026-07-28 four-run preregistration override (latest and authoritative):**
 > The ResNet Dynamic-versus-JS Validation tuning contract is frozen as one
 > Dynamic ERM plus JS `[3,30,60]`, with shared budget, early stopping, seeds,

@@ -38,6 +38,12 @@ def parse_args() -> argparse.Namespace:
         default=str(PROJECT_ROOT / "configs" / "algorithm.v9.method_transfer.json"),
     )
     parser.add_argument("--batches", type=int, default=16)
+    parser.add_argument(
+        "--repeat-passes",
+        type=int,
+        default=1,
+        help="repeat the same structure batches with new global steps to measure invariant caches",
+    )
     parser.add_argument("--workers", type=int, help="override the contract worker count for a benchmark")
     parser.add_argument(
         "--prefetch-batches",
@@ -66,6 +72,8 @@ def main() -> int:
     args = parse_args()
     if args.batches <= 1:
         raise SystemExit("--batches must be greater than one")
+    if args.repeat_passes <= 0:
+        raise SystemExit("--repeat-passes must be positive")
     contract_path = Path(args.contract).resolve()
     contract = load_contract(contract_path)
     experiment = contract["experiment"]
@@ -99,32 +107,39 @@ def main() -> int:
         strategy=strategy,
     )
     split_path = PROJECT_ROOT / contract["data"]["split_manifest"]
-    with split_path.open("r", encoding="utf-8", newline="") as handle:
-        train_ids = sorted(
-            str(row["material_id"])
-            for row in csv.DictReader(handle)
-            if row["split"] == "train"
-        )
+    if split_path.suffix.lower() == ".json":
+        split_payload = json.loads(split_path.read_text(encoding="utf-8"))
+        split_rows = split_payload["records"]
+    else:
+        with split_path.open("r", encoding="utf-8", newline="") as handle:
+            split_rows = list(csv.DictReader(handle))
+    train_ids = sorted(
+        str(row["material_id"])
+        for row in split_rows
+        if row["split"] == "train"
+    )
     epoch_order = deterministic_epoch_shuffle(train_ids, seed=tuning_seed, epoch=0)
     batches: list[tuple[int, tuple[str, ...], tuple[Any, ...]]] = []
-    for step in range(args.batches):
-        material_ids = select_epoch_batch(
-            epoch_order,
-            step=step,
-            batch_size=batch_size,
-            full_batch=True,
-        )
-        rows = tuple(
-            build_parameter_batch(
-                material_ids,
-                sampler,
-                profile=str(contract["simulation"]["train_profile"]),
-                epoch=0,
-                global_step=step,
-                split="train",
+    for pass_index in range(args.repeat_passes):
+        for step in range(args.batches):
+            material_ids = select_epoch_batch(
+                epoch_order,
+                step=step,
+                batch_size=batch_size,
+                full_batch=True,
             )
-        )
-        batches.append((step, material_ids, rows))
+            global_step = pass_index * args.batches + step
+            rows = tuple(
+                build_parameter_batch(
+                    material_ids,
+                    sampler,
+                    profile=str(contract["simulation"]["train_profile"]),
+                    epoch=pass_index,
+                    global_step=global_step,
+                    split="train",
+                )
+            )
+            batches.append((global_step, material_ids, rows))
 
     data_root = PROJECT_ROOT / contract["data"]["root"]
     peak_root = data_root / "mp_processed" / contract["data"]["peak_cache_name"]
@@ -236,9 +251,10 @@ def main() -> int:
         "configuration": {
             "seed": tuning_seed,
             "batch_size": batch_size,
-            "audited_batches": args.batches,
-            "audited_structures": args.batches * batch_size,
-            "audited_views": args.batches * batch_size * 2,
+            "audited_batches": len(batches),
+            "audited_structures": len(batches) * batch_size,
+            "audited_views": len(batches) * batch_size * 2,
+            "repeat_passes": args.repeat_passes,
             "worker_processes": worker_count,
             "worker_native_threads": worker_native_threads,
             "worker_thread_policy": prefetch["worker_thread_policy"],
@@ -272,7 +288,7 @@ def main() -> int:
             "prefetch_seconds": prefetch_seconds,
             "speedup": sequential_seconds / prefetch_seconds,
             "sequential_batches_per_second": args.batches / sequential_seconds,
-            "prefetch_batches_per_second": args.batches / prefetch_seconds,
+            "prefetch_batches_per_second": len(batches) / prefetch_seconds,
             "sequential_first_batch_seconds": sequential_batch_seconds[0],
             "prefetch_first_batch_wait_seconds": prefetch_batch_seconds[0],
             "sequential_steady_median_batch_seconds": float(

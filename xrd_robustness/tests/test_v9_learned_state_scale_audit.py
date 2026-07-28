@@ -122,10 +122,10 @@ class V9LearnedStateScaleAuditTests(unittest.TestCase):
             self.governance["one_revision_policy"]["completed_range_revisions"],
             1,
         )
-        self.assertTrue(
+        self.assertFalse(
             self.governance["tuning_gate"]["development_tuning_execution_allowed"]
         )
-        self.assertTrue(
+        self.assertFalse(
             self.contract["execution_policy"]["development_tuning_execution_enabled"]
         )
         decision = self.report["epoch5_decision"]
