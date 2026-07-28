@@ -1,0 +1,33 @@
+{
+  "schema_version": "v9-split-change-invalidation-v2",
+  "status": "active_parent_structure_split_historical_results_invalidated",
+  "canonical_date": "2026-07-28",
+  "active_split": {
+    "unit": "parent_structure",
+    "method": "deterministic_random_stratified_by_crystal_system",
+    "seed": 20260726,
+    "counts": {
+      "train": 9842,
+      "validation": 2109,
+      "test": 2109
+    },
+    "manifest_sha256": "B9D3B72E42EA0FD549DAE34425FF61D2D650D5DD7FE6F337D747CB952CF43293",
+    "parent_leakage": 0,
+    "material_leakage": 0
+  },
+  "retired_split": {
+    "unit": "wyckoff_family",
+    "status": "retired",
+    "all_results_and_checkpoints_invalid_for_selection_or_claims": true
+  },
+  "backbone_reset": {
+    "previous_backbone": "PAMPT-B3",
+    "current_candidate": "ML4pXRDs ResNet-18-GN",
+    "pampt_method_weight_gates_and_validation_selections_invalid_for_resnet": true
+  },
+  "test_boundaries": {
+    "simulated_test_locked": true,
+    "real_xrd_locked": true,
+    "v10_locked": true
+  }
+}

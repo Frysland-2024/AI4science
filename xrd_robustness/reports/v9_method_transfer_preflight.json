@@ -1,0 +1,26 @@
+{
+  "schema_version": "v9-method-transfer-preflight-resnet-reset-v1",
+  "status": "blocked_pending_resnet_contract_freeze",
+  "canonical_date": "2026-07-28",
+  "execution_allowed": false,
+  "checks": {
+    "parent_structure_split_audit_pass": true,
+    "simulation_contract_frozen": true,
+    "simulated_test_locked": true,
+    "real_xrd_locked": true,
+    "resnet_clean_gate3_completed": true,
+    "resnet_shared_training_contract_frozen": false,
+    "resnet_dynamic_erm_diagnostic_completed": false,
+    "resnet_method_parameter_scale_gate_completed": false
+  },
+  "next_action": "finish the bounded Clean configuration diagnostic, freeze the ResNet-18-GN training contract, and run exactly one matched Dynamic ERM diagnostic",
+  "forbidden": [
+    "PAMPT checkpoint reuse",
+    "PAMPT lambda reuse as ResNet evidence",
+    "seven-run Validation tuning",
+    "formal 15-run comparison",
+    "simulated Test",
+    "real XRD",
+    "V10 execution"
+  ]
+}
