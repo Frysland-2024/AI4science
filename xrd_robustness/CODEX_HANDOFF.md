@@ -1,6 +1,17 @@
 # XRD Robustness V9-T：跨 Codex 账号与台式机完整交接
 
-> **2026-07-27 split-pilot verdict override (latest and authoritative):**
+> **2026-07-27 Foundation Gate 3 override (latest and authoritative):**
+> The matched Clean-backbone comparison identifies PAMPT-B3 as a major
+> bottleneck. ML4pXRDs ResNet-18-GN achieved level-0 Macro-F1 `0.652168`,
+> mean single-factor OOD Macro-F1 `0.403163`, and Train accuracy `1.0`;
+> matched PAMPT achieved `0.532749`, `0.289676`, and `0.638494`.
+> The audited report is `reports/gate3_pampt_vs_resnet.json`. Freeze the CNN
+> backbone contract before any subsequent Dynamic/JS/Residual comparison.
+> This is development-only evidence: the formal seven-run queue remains
+> `0/7`, and simulated Test, the 15-run formal comparison, real XRD, real
+> adaptation, and V10 remain locked.
+
+> **2026-07-27 split-pilot verdict override:**
 > With the 7-run queue still interrupted at `0/7`, the user authorized two
 > pilots. The read-only dataset audit
 > (`scripts/audit_v9_split_dataset_pilot.py`,

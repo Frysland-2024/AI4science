@@ -1,10 +1,25 @@
 # AI4science Current State
 
-**Canonical status date:** 2026-07-26
+**Canonical status date:** 2026-07-28
 **Repository:** `Frysland-2024/AI4science`  
 **Active engineering root:** `xrd_robustness/`
 
 > Current-state record only. Historical reasoning remains in `PROJECT_JOURNEY.md` and dated decision files.
+
+## 2026-07-27 Foundation Gate 3 completed (authoritative)
+
+The matched Clean-backbone diagnostic identifies PAMPT-B3 as a major
+foundation bottleneck. The audited ML4pXRDs ResNet-18-GN port reached level-0
+Macro-F1 `0.652168`, mean single-factor OOD Macro-F1 `0.403163`, and Train
+accuracy `1.0` at the fixed 100-epoch / 61,600-step budget. The matched PAMPT
+diagnostic reached `0.532749`, `0.289676`, and `0.638494`, respectively.
+The level-0 Macro-F1 delta is `+0.119419` in favor of ResNet.
+
+This is development-only evidence. The next scientific action is to freeze the
+CNN backbone contract before reopening Dynamic/JS/Residual comparisons.
+The formal seven-run queue remains `0/7`; simulated Test, the 15-run formal
+comparison, real XRD, real adaptation, and V10 remain locked.
+Authoritative report: `xrd_robustness/reports/gate3_pampt_vs_resnet.json`.
 
 ## 2026-07-27 split pilots completed (authoritative)
 

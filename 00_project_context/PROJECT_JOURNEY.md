@@ -570,3 +570,17 @@ material ID。新划分的工程实现被排除为嫌疑。
 backbone 容量与特征表达、模拟数据质量、任务内在难度。该 pilot 为
 development-only 证据，不得用于模型选择或 checkpoint 复用；正式 7-run
 重启继续等待电脑修复（预计 2026 年 8 月）与新的显式授权。
+
+## 2026-07-27 Foundation Gate 3: backbone diagnosis changes the next comparison
+
+After the parent-structure split pilot ruled out split difficulty as the
+dominant explanation, the project tested backbone capacity under a matched
+Clean diagnostic. ML4pXRDs ResNet-18-GN improved level-0 Macro-F1 from
+PAMPT-B3's `0.532749` to `0.652168`, mean single-factor OOD Macro-F1 from
+`0.289676` to `0.403163`, and Train accuracy from `0.638494` to `1.0`.
+
+This evidence changes the next research direction: PAMPT-B3 is treated as a
+major foundation bottleneck, so the CNN backbone contract must be frozen
+before reopening matched Dynamic/JS/Residual comparisons. It does not prove a
+final model choice and does not authorize the formal seven-run queue,
+simulated Test, real XRD, real adaptation, or V10.
