@@ -87,7 +87,7 @@ class MethodTransferContractTests(unittest.TestCase):
                 "candidate_range_frozen_for_validation"
             ]
         )
-        self.assertTrue(
+        self.assertFalse(
             self.method_parameter_governance["tuning_gate"][
                 "development_tuning_execution_allowed"
             ]
@@ -110,7 +110,7 @@ class MethodTransferContractTests(unittest.TestCase):
             "candidate_range_frozen_for_validation",
         )
         self.assertEqual(audit["method_parameter_candidate_range_gate"], "pass")
-        self.assertTrue(audit["method_parameter_tuning_execution_allowed"])
+        self.assertFalse(audit["method_parameter_tuning_execution_allowed"])
         self.assertEqual(
             audit["hashes"]["method_parameter_governance"],
             self.contract["method_parameter_governance"]["sha256"],
@@ -167,7 +167,7 @@ class MethodTransferContractTests(unittest.TestCase):
             plan["execution_enabled"],
             self.contract["execution_policy"]["development_tuning_execution_enabled"],
         )
-        self.assertTrue(plan["execution_enabled"])
+        self.assertFalse(plan["execution_enabled"])
         self.assertEqual(len({run["run_id"] for run in plan["runs"]}), 7)
         for run in plan["runs"]:
             self.assertIn("--development-only", run["argv"])

@@ -1,6 +1,15 @@
 # XRD Robustness V9-T：跨 Codex 账号与台式机完整交接
 
-> **2026-07-28 JS-only Gate override (latest and authoritative):** The public method backbone is
+> **2026-07-28 four-run preregistration override (latest and authoritative):**
+> The ResNet Dynamic-versus-JS Validation tuning contract is frozen as one
+> Dynamic ERM plus JS `[3,30,60]`, with shared budget, early stopping, seeds,
+> metrics, guardrail, and tie-breaks. Its read-only preflight passed all 13
+> hash, split-isolation, manifest, and execution-boundary checks. The old PAMPT
+> seven-run is fail-closed. No model/checkpoint was loaded, no Validation
+> spectrum/metric was used, and no GPU training started. Status is `0/4 locked`;
+> only an explicit later authorization may open serial execution.
+
+> **2026-07-28 JS-only Gate override:** The public method backbone is
 > frozen as ResNet-18-GN + identity + AdamW + constant LR. Dynamic ERM is the
 > strong shared baseline. Residual-v1 is archived after its fixed three-seed
 > stability Gate failed. The active V9 comparison is Dynamic ERM versus JS.

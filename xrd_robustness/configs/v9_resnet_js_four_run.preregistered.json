@@ -1,0 +1,133 @@
+{
+  "schema_version": "v9-resnet-js-four-run-preregistration-v1",
+  "status": "preregistered_locked_not_authorized",
+  "scientific_question": "On the frozen ResNet public backbone and identical dynamic exposure, does JS consistency improve simulated Validation OOD robustness over Dynamic ERM without an unacceptable in-range drop?",
+  "shared_backbone_contract": {
+    "name": "ML4PXRDResNet1D-18-GN",
+    "preprocessing": "identity",
+    "optimizer": "AdamW",
+    "learning_rate": 0.0001,
+    "learning_rate_schedule": "constant",
+    "weight_decay": 0.0001,
+    "batch_size": 16
+  },
+  "training_budget": {
+    "maximum_epochs": 100,
+    "maximum_optimizer_steps": 61600,
+    "validation_interval_steps": 6160,
+    "early_stopping": {
+      "minimum_epochs": 50,
+      "patience_validation_checks": 3,
+      "min_delta": 0.002,
+      "metric": "mean_single_factor_ood_macro_f1",
+      "checkpoint_tie_break": "higher_in_range_macro_f1_then_earlier_epoch"
+    }
+  },
+  "seeds": {
+    "training": 20260710,
+    "evaluation": 20260720
+  },
+  "validation_metrics": {
+    "primary": "mean_single_factor_ood_macro_f1",
+    "single_factor_profiles": [
+      "ood_shift_negative",
+      "ood_shift_positive",
+      "ood_broadening",
+      "ood_noise",
+      "ood_background",
+      "ood_texture"
+    ],
+    "secondary": "in_range_macro_f1",
+    "diagnostics": [
+      "level0_macro_f1",
+      "worst_class_f1",
+      "per_crystal_system_f1"
+    ]
+  },
+  "selection_rule": {
+    "eligible_js_candidates": "in_range_macro_f1 >= dynamic_erm_in_range_macro_f1 - 0.01",
+    "rank": "highest_mean_single_factor_ood_macro_f1",
+    "tie_breaks": [
+      "highest_in_range_macro_f1",
+      "smallest_lambda_js"
+    ],
+    "no_eligible_candidate_decision": "retain_dynamic_erm_as_selected_method"
+  },
+  "runs": [
+    {
+      "run_id": "dynamic_erm",
+      "method": "ordinary_dynamic_augmentation",
+      "lambda_js": 0.0
+    },
+    {
+      "run_id": "js_lambda_3",
+      "method": "js_consistency_transfer",
+      "lambda_js": 3.0
+    },
+    {
+      "run_id": "js_lambda_30",
+      "method": "js_consistency_transfer",
+      "lambda_js": 30.0
+    },
+    {
+      "run_id": "js_lambda_60",
+      "method": "js_consistency_transfer",
+      "lambda_js": 60.0
+    }
+  ],
+  "data_boundaries": {
+    "train_allowed": true,
+    "simulated_validation_allowed_after_explicit_authorization": true,
+    "simulated_test_allowed": false,
+    "real_xrd_allowed": false,
+    "validation_manifest_metadata_may_be_audited_before_authorization": true,
+    "validation_spectra_or_metrics_allowed_before_authorization": false
+  },
+  "registered_inputs": {
+    "method_governance": {
+      "path": "configs/v9_resnet_method_parameter_governance.json",
+      "sha256": "6F842832AE064D4B1D8955B475884AB2512F6BF150DCF41FB157E534336EB647"
+    },
+    "simulation": {
+      "path": "configs/simulation.v9.method_transfer.frozen.json",
+      "sha256": "AF6E2FA400525CCF48AAC18C9839CC8EFE13DD3E4C056DD45A74B4DD43262558"
+    },
+    "evaluation": {
+      "path": "configs/evaluation.v9.method_transfer.json",
+      "sha256": "4B07EEBCF7F8E70391D9BB2365C7AFE63F0F044CDA644FF7EAA7FAD9CB9799A5"
+    },
+    "data_contract": {
+      "path": "configs/data.v9.method_transfer.structure_split.json",
+      "sha256": "C57A2C9C400518576B1D7776762B0C8BEBF72BDA4775E6173C3FD091D3A6855C"
+    },
+    "split_manifest": {
+      "path": "data/formal_14060/manifests/split_manifest.json",
+      "sha256": "B9D3B72E42EA0FD549DAE34425FF61D2D650D5DD7FE6F337D747CB952CF43293"
+    },
+    "validation_manifest": {
+      "path": "data/formal_14060/manifests/v9_method_transfer_validation.csv",
+      "sha256": "82BF44DB866CE5776FBD8CCD8E0D316501C15E7F920AC972E94F8C2E4CD6D7F6"
+    },
+    "backbone_source": {
+      "path": "src/xrd_robustness/models/ml4pxrd_resnet1d.py",
+      "sha256": "132408396D1905E542D1D1CF52235E7240F88658B6168CEC80484BDCED52FC2C"
+    },
+    "objective_source": {
+      "path": "src/xrd_robustness/training/objectives.py",
+      "sha256": "09D0E99BA70AEF8C095C7FA41519917A21C6C6BBB80748C3807346F2109420AF"
+    },
+    "trainer_source": {
+      "path": "src/xrd_robustness/training/trainer_factory.py",
+      "sha256": "AC4571BD9A8CB515D746FB8F88937983DA2D74B55D01B635C5B18E58EF6AACFC"
+    }
+  },
+  "output_root": "outputs/v9_resnet_js_four_run_tuning_v1",
+  "execution": {
+    "plan_generation_enabled": true,
+    "four_run_enabled": false,
+    "ten_run_enabled": false,
+    "simulated_test_enabled": false,
+    "real_xrd_enabled": false,
+    "explicit_human_authorization_required": true
+  }
+}

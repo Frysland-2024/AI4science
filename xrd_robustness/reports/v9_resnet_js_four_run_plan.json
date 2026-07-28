@@ -1,0 +1,42 @@
+{
+  "schema_version": "v9-resnet-js-four-run-plan-v1",
+  "status": "planned_not_started_locked",
+  "contract_path": "configs/v9_resnet_js_four_run.preregistered.json",
+  "contract_sha256": "790054E91B297CA1572A9E035122D8E91C7873D044E3592C9CE700C99DBE7E1A",
+  "runs": [
+    {
+      "run_id": "dynamic_erm",
+      "method": "ordinary_dynamic_augmentation",
+      "lambda_js": 0.0,
+      "training_seed": 20260710,
+      "evaluation_seed": 20260720,
+      "state": "planned_not_started"
+    },
+    {
+      "run_id": "js_lambda_3",
+      "method": "js_consistency_transfer",
+      "lambda_js": 3.0,
+      "training_seed": 20260710,
+      "evaluation_seed": 20260720,
+      "state": "planned_not_started"
+    },
+    {
+      "run_id": "js_lambda_30",
+      "method": "js_consistency_transfer",
+      "lambda_js": 30.0,
+      "training_seed": 20260710,
+      "evaluation_seed": 20260720,
+      "state": "planned_not_started"
+    },
+    {
+      "run_id": "js_lambda_60",
+      "method": "js_consistency_transfer",
+      "lambda_js": 60.0,
+      "training_seed": 20260710,
+      "evaluation_seed": 20260720,
+      "state": "planned_not_started"
+    }
+  ],
+  "execution_authorized": false,
+  "four_run_started": false
+}

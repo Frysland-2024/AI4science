@@ -177,7 +177,7 @@
   },
   "method_parameter_governance": {
     "path": "configs/v9_method_parameter_governance.json",
-    "sha256": "211C886127E4D3EF5AD515663E8EC8F84256E52F952394113F684154BC9355D6",
+    "sha256": "609F5323AA89D2233D30BAD17C3FDB5068365505DD2180F599BFEFCEAD0F3ED7",
     "status": "candidate_range_frozen_for_validation",
     "registered_candidate_grids": {
       "lambda_js": [0.3, 3.0, 30.0],
@@ -185,11 +185,11 @@
     },
     "candidate_range_frozen_for_validation": true,
     "current_split_gate_valid": true,
-    "development_tuning_execution_allowed": true
+    "development_tuning_execution_allowed": false
   },
   "development_tuning": {
     "name": "parent_structure_split_validation_only_development_tuning",
-    "execution_enabled": true,
+    "execution_enabled": false,
     "seed": 20260710,
     "epochs": 100,
     "max_optimizer_steps": 61600,
@@ -407,14 +407,14 @@
     "real_test_results_cannot_change_selected_method": true
   },
   "execution_policy": {
-    "tuning_plan_generation_enabled": true,
-    "development_tuning_execution_enabled": true,
+    "tuning_plan_generation_enabled": false,
+    "development_tuning_execution_enabled": false,
     "formal_plan_generation_requires_frozen_tuning_selection": true,
     "experiment_execution_enabled": false,
     "formal_scientific_conclusions_enabled": false,
     "simulated_test_enabled": false,
     "real_test_enabled": false,
-    "experiment_blocker": "The parent-structure-split seven-run Validation retraining is authorized and its current-split Train-only and runtime gates pass; start at run 1 from optimizer step zero.",
+    "experiment_blocker": "Superseded by the locked ResNet Dynamic-versus-JS four-run preregistration; this historical PAMPT seven-run contract must not execute.",
     "formal_blocker": "All results produced under the retired family-disjoint split are invalid; the parent-structure-split tuning selection, 15 formal development runs, unified Validation comparison, and locked final evaluations are incomplete."
   }
 }

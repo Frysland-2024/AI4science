@@ -6,7 +6,7 @@
 
 > Current-state record only. Historical reasoning remains in `PROJECT_JOURNEY.md` and dated decision files.
 
-## Latest authoritative override: JS-only scope frozen; execution locked
+## Latest authoritative override: four-run preregistered and preflight-passed; execution locked
 
 The V9 public backbone is frozen as ML4pXRDs ResNet-18-GN with identity
 preprocessing, AdamW, constant learning rate, and the frozen split, simulator,
@@ -22,16 +22,25 @@ with median auxiliary-to-classification backbone-gradient ratios
 `0.087859/0.877058/1.754115`, covering weak, material non-dominant, and
 dominant influence. All combined-gradient direction and runaway guards passed.
 
-No candidate model was trained and no Validation, simulated Test, or real XRD
-was accessed by this Gate. The former three-method 7-run is cancelled and
-retained only as historical status `0/7`. Its replacement is a proposed
-`1 Dynamic ERM + 3 JS` four-run tuning stage, currently **`0/4 locked`**:
-it is neither started nor authorized. The later ten-run comparison, simulated
-Test, real XRD, real adaptation, and V10 remain locked.
+The `1 Dynamic ERM + 3 JS` Validation-tuning contract is now preregistered.
+It freezes the shared 100-epoch/61,600-step budget, checks every 6,160 steps,
+minimum epoch 50, patience 3, `0.002` minimum delta, training/evaluation seeds
+`20260710/20260720`, mean single-factor OOD Macro-F1 primary metric, in-range
+guardrail, and deterministic tie-breaks. The launch preflight passed all 13
+checks: exact matrix, registered hashes, parent-level split isolation,
+Validation-manifest membership, absent output root, and Test/real locks.
+
+No model, checkpoint, Validation spectrum, or Validation metric was accessed,
+and no GPU training started. The historical PAMPT 7-run is explicitly
+fail-closed at `0/7`. The new four-run remains **`0/4 locked`** and requires
+separate human authorization. The later ten-run comparison, simulated Test,
+real XRD, real adaptation, and V10 remain locked.
 
 Authoritative machine-readable records:
 
 - `xrd_robustness/configs/v9_resnet_method_parameter_governance.json`;
+- `xrd_robustness/configs/v9_resnet_js_four_run.preregistered.json`;
+- `xrd_robustness/reports/v9_resnet_js_four_run_preflight.json`;
 - `xrd_robustness/reports/v9_resnet_js_only_scale_gate.json`;
 - `xrd_robustness/reports/v9_resnet_residual_stability_audit.json`.
 

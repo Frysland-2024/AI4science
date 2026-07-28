@@ -658,3 +658,19 @@ This freezes only the JS candidate grid. It does not authorize or start the
 proposed four-run tuning. Residual-v1 stays archived, Residual-v2 remains a
 future separately preregistered research module, and Test/real-XRD locks are
 unchanged.
+
+## 2026-07-28 Four-run Validation contract is preregistered without execution
+
+The narrowed research question is operationalized as exactly one matched
+Dynamic ERM baseline and three JS candidates at `[3,30,60]`. To avoid
+post-result flexibility, the shared 100-epoch/61,600-step budget, validation
+cadence, early-stopping rule, seeds, OOD-primary selection metric, in-range
+guardrail, and tie-breaks were frozen before any candidate training.
+
+A read-only preflight verified registered file hashes, exact parent-level split
+isolation, exact Validation-manifest membership, absence of the output root,
+and continued Test/real-data locks. It inspected only manifest metadata, not
+Validation spectra or metrics, and loaded no model or checkpoint. The obsolete
+PAMPT seven-run switches were fail-closed to prevent accidental execution.
+Consequently the contract is auditable and launch-ready only after a separate
+human decision; scientific execution remains `0/4 locked`.

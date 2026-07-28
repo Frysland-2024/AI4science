@@ -228,6 +228,6 @@
     "selection_metric_seed_and_tie_breaker_unchanged": true,
     "simulated_test_and_real_test_untouched": true,
     "candidate_range_frozen_for_validation": true,
-    "development_tuning_execution_allowed": true
+    "development_tuning_execution_allowed": false
   }
 }

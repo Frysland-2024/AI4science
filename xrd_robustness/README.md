@@ -1,5 +1,13 @@
 # XRD Robustness V9-T
 
+> **2026-07-28 four-run preregistration:** The frozen Validation-tuning matrix
+> is one Dynamic ERM plus JS `[3,30,60]`. Shared training budget, early
+> stopping, seeds, metrics, selection rule, hashes, and data boundaries are
+> preregistered. The read-only launch audit passed all 13 checks, while the
+> historical PAMPT seven-run was fail-closed. No training or Validation metric
+> access occurred; current status remains `0/4 locked` pending explicit
+> authorization.
+
 > **2026-07-28 JS-only scale Gate:** The shared backbone contract is frozen as
 > ResNet-18-GN + identity + AdamW + constant LR, with Dynamic ERM as the strong
 > baseline. Residual-v1 is archived after its stability Gate failed. The
