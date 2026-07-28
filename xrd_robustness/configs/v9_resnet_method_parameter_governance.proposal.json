@@ -1,0 +1,74 @@
+{
+  "schema_version": "v9-resnet-method-parameter-governance-v1",
+  "status": "candidate_range_audit_pending",
+  "backbone_contract": {
+    "name": "ML4PXRDResNet1D-18-GN",
+    "preprocessing": "identity",
+    "optimizer": "AdamW",
+    "learning_rate": 0.0001,
+    "learning_rate_schedule": "constant",
+    "weight_decay": 0.0001,
+    "batch_size": 16,
+    "maximum_epochs": 100,
+    "maximum_optimizer_steps": 61600,
+    "validation_interval_steps": 6160,
+    "early_stopping": {
+      "minimum_epochs": 50,
+      "patience_validation_checks": 3,
+      "min_delta": 0.002,
+      "primary_profile": "level0"
+    }
+  },
+  "shared_methods": [
+    "ordinary_dynamic_augmentation",
+    "js_consistency_transfer",
+    "residual_decorrelation_transfer"
+  ],
+  "strong_public_baseline": "ordinary_dynamic_augmentation",
+  "candidate_range_frozen_for_validation": false,
+  "audit_probe_grids": {
+    "lambda_js": [0.3, 3.0, 30.0],
+    "lambda_res": [0.2, 2.0, 20.0]
+  },
+  "audit_probe_grid_interpretation": "PAMPT-derived values are evaluated only as Train-only scale probes; they are not inherited, selected, or authorized ResNet hyperparameters.",
+  "gradient_ratio_influence_bands": {
+    "negligible": {
+      "lower_inclusive": null,
+      "upper_exclusive": 0.01
+    },
+    "weak": {
+      "lower_inclusive": 0.01,
+      "upper_exclusive": 0.1
+    },
+    "material_non_dominant": {
+      "lower_inclusive": 0.1,
+      "upper_exclusive": 1.0
+    },
+    "dominant": {
+      "lower_inclusive": 1.0,
+      "upper_exclusive": null
+    }
+  },
+  "one_revision_policy": {
+    "maximum_range_revisions_before_validation": 1,
+    "completed_range_revisions": 0
+  },
+  "historical_pampt_gate": {
+    "status": "archive_only_not_transferable",
+    "selected_lambda_js": 3.0,
+    "selected_lambda_res": 2.0
+  },
+  "data_boundaries": {
+    "train_only_gate": true,
+    "validation_used": false,
+    "simulated_test_used": false,
+    "real_xrd_used": false
+  },
+  "execution": {
+    "seven_run_enabled": false,
+    "fifteen_run_enabled": false,
+    "simulated_test_enabled": false,
+    "real_xrd_enabled": false,
+    "v10_enabled": false
+  }
+}

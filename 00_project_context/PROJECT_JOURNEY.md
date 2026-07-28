@@ -606,3 +606,21 @@ Dynamic collapse was therefore primarily a backbone interaction, not evidence
 that the frozen perturbation stream is intrinsically destructive. This opens
 review of a shared ResNet method-comparison contract, but does not itself
 authorize JS, Residual, the formal seven-run, Test, or real XRD.
+
+## 2026-07-28 ResNet lambda Gate reset
+
+Changing the public backbone invalidates PAMPT-derived auxiliary-loss scale
+evidence. Backbone-independent semantic and engineering Gates remain valid,
+but learned-state, auxiliary-loss scale, backbone-gradient influence, and
+lambda tuning must be repeated on ResNet.
+
+The shared ResNet contract is frozen before method comparison. A Train-only
+Gate then directly tested the PAMPT grids as scale probes. JS
+`[0.3,3,30]` produced negligible/weak/material influence; Residual
+`[0.2,2,20]` produced negligible/negligible/weak influence. Neither spans the
+required weak/material/dominant bands. The independent residual probe also
+failed its preregistered epoch-5 competence criterion, so extrapolating a much
+larger Residual grid would not be scientifically justified.
+
+The Gate therefore fails closed. PAMPT lambda results stay archived, the
+ResNet candidate range remains unfrozen, and the seven-run remains at 0/7.

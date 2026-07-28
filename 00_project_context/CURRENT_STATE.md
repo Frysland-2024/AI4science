@@ -6,6 +6,27 @@
 
 > Current-state record only. Historical reasoning remains in `PROJECT_JOURNEY.md` and dated decision files.
 
+## 2026-07-28 ResNet shared contract frozen; lambda Gate failed closed
+
+The V9 public backbone is now ML4pXRDs ResNet-18-GN with identity
+preprocessing, AdamW, constant learning rate, and the already frozen split,
+simulator, batch size, maximum budget, and early-stopping contract. Dynamic
+ERM is the public strong baseline; Dynamic ERM, JS, and Residual must all use
+this same backbone contract. PAMPT lambda evidence is archive-only.
+
+The minimal Train-only ResNet Gate completed without Validation, simulated
+Test, or real XRD. The classification learned-state Gate passed. The old JS
+grid `[0.3,3,30]` measured negligible/weak/material influence and lacked a
+dominant candidate. The old Residual grid `[0.2,2,20]` measured
+negligible/negligible/weak and lacked material and dominant candidates.
+Moreover, the epoch-5 independent residual probe competence Gate failed.
+
+Consequently no ResNet lambda range is frozen and the 7-run must not start.
+The authoritative reports are
+`reports/v9_resnet_learned_state_scale_audit.json` and
+`reports/v9_resnet_candidate_grid_gate.json`. Formal 7-run remains `0/7`;
+15-run, simulated Test, real XRD, and V10 remain locked.
+
 ## 2026-07-28 CNN Clean A/B/C diagnostics completed (authoritative)
 
 The preregistered ResNet-18-GN Clean search is closed after exactly three

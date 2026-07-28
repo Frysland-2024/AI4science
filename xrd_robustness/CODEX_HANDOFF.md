@@ -1,5 +1,14 @@
 # XRD Robustness V9-T：跨 Codex 账号与台式机完整交接
 
+> **2026-07-28 ResNet lambda-Gate override:** The public method backbone is
+> frozen as ResNet-18-GN + identity + AdamW + constant LR. Dynamic ERM is the
+> strong shared baseline; JS and Residual must use the identical contract.
+> PAMPT lambda evidence is archive-only. The Train-only ResNet Gate found that
+> old JS `[0.3,3,30]` spans negligible/weak/material and old Residual
+> `[0.2,2,20]` spans negligible/negligible/weak. The epoch-5 residual probe
+> competence Gate also failed. No ResNet grid is frozen and 7-run remains 0/7.
+> Do not start tuning or access Validation/Test/real XRD.
+
 > **2026-07-28 CNN Clean A/B/C override (latest and authoritative):**
 > Exactly three preregistered single-factor ResNet Clean diagnostics are
 > complete. Sqrt (`0.645539`), Adam (`0.620014`), and warm-up/cosine
