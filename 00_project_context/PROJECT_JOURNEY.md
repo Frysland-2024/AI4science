@@ -584,3 +584,25 @@ major foundation bottleneck, so the CNN backbone contract must be frozen
 before reopening matched Dynamic/JS/Residual comparisons. It does not prove a
 final model choice and does not authorize the formal seven-run queue,
 simulated Test, real XRD, real adaptation, or V10.
+
+## 2026-07-28 ResNet Clean contract selection
+
+Three preregistered single-factor Clean diagnostics tested sqrt preprocessing,
+Adam, and 5-epoch warm-up plus cosine. None improved the primary level0
+Macro-F1 over the original identity + AdamW + constant-LR ResNet baseline,
+and none reached the fixed `+0.02` threshold. The search therefore stops
+without a fourth configuration and restores the simplest original best.
+
+This evidence changes the diagnosis: PAMPT-B3 was a major learnability
+bottleneck, but replacing it did not remove the severe parent-structure
+train-to-validation gap. ResNet can fit Train essentially perfectly while
+Clean Validation remains near `0.65`.
+
+The subsequent single matched Dynamic ERM diagnostic answered the controlled
+question positively. Dynamic training improved level0 from `0.6522` to
+`0.7197`, in-range from `0.1827` to `0.7179`, mean single-factor OOD from
+`0.4032` to `0.6563`, and worst-class F1 from `0.4950` to `0.5810`. The old
+Dynamic collapse was therefore primarily a backbone interaction, not evidence
+that the frozen perturbation stream is intrinsically destructive. This opens
+review of a shared ResNet method-comparison contract, but does not itself
+authorize JS, Residual, the formal seven-run, Test, or real XRD.

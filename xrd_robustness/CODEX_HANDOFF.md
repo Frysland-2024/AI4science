@@ -1,6 +1,20 @@
 # XRD Robustness V9-T：跨 Codex 账号与台式机完整交接
 
-> **2026-07-27 Foundation Gate 3 override (latest and authoritative):**
+> **2026-07-28 CNN Clean A/B/C override (latest and authoritative):**
+> Exactly three preregistered single-factor ResNet Clean diagnostics are
+> complete. Sqrt (`0.645539`), Adam (`0.620014`), and warm-up/cosine
+> (`0.610826`) did not beat the original identity + AdamW + constant-LR
+> baseline (`0.652168`) or reach the fixed `0.672168` threshold. Clean search
+> is closed and the original baseline is the shared Clean candidate. The one
+> matched Dynamic ERM diagnostic is complete: best epoch 80 / step 49,280
+> achieved level0 `0.719724`, in-range `0.717942`, mean single-factor OOD
+> `0.656316`, and worst-class F1 `0.580952`. This passes the CNN foundation
+> diagnostic Gate and identifies Dynamic training as effective regularization
+> on ResNet. No fourth Clean run, JS, Residual, curriculum, clean anchor,
+> simulated Test, real XRD, or V10 is authorized; formal 7-run remains 0/7.
+> Next review a shared ResNet method-comparison contract before execution.
+
+> **2026-07-27 Foundation Gate 3 result (superseded for the next action):**
 > The matched Clean-backbone comparison identifies PAMPT-B3 as a major
 > bottleneck. ML4pXRDs ResNet-18-GN achieved level-0 Macro-F1 `0.652168`,
 > mean single-factor OOD Macro-F1 `0.403163`, and Train accuracy `1.0`;

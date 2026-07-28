@@ -6,6 +6,28 @@
 
 > Current-state record only. Historical reasoning remains in `PROJECT_JOURNEY.md` and dated decision files.
 
+## 2026-07-28 CNN Clean A/B/C diagnostics completed (authoritative)
+
+The preregistered ResNet-18-GN Clean search is closed after exactly three
+single-factor runs. Baseline identity + AdamW + constant LR remains selected
+at level0 Macro-F1 `0.652168`. Sqrt preprocessing reached `0.645539`, Adam
+reached `0.620014`, and 5-epoch warm-up + cosine reached `0.610826`; none met
+the fixed `0.672168` selection threshold.
+
+The matched ResNet Dynamic ERM diagnostic is also complete. Its best checkpoint
+(epoch 80, step 49,280) reached level0 `0.719724`, in-range `0.717942`, mean
+single-factor OOD `0.656316`, and worst-class F1 `0.580952`. Relative to Clean,
+the deltas are `+0.067555`, `+0.535220`, `+0.253153`, and `+0.085936`.
+The existing dynamic stream therefore acts as effective regularization on the
+mature CNN rather than causing the earlier collapse.
+
+Authoritative reports are `xrd_robustness/reports/cnn_contract_clean_abc_summary.json`
+and `xrd_robustness/reports/cnn_contract_dynamic_erm_summary.json`. The CNN
+foundation diagnostic Gate passes, but no fourth Clean search, JS, Residual,
+curriculum, or clean anchor is open. Formal 7-run remains `0/7`; simulated
+Test, real XRD, 15-run, and V10 remain locked. Next review and freeze a shared
+method-comparison contract; do not immediately execute it.
+
 ## 2026-07-27 Foundation Gate 3 completed (authoritative)
 
 The matched Clean-backbone diagnostic identifies PAMPT-B3 as a major

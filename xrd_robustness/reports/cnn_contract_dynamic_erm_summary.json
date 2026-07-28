@@ -1,0 +1,228 @@
+{
+  "clean_reference": {
+    "best_epoch": 100,
+    "best_global_step": 61600,
+    "class_collapse": false,
+    "configuration": {
+      "learning_rate_schedule": "constant",
+      "optimizer": "adamw",
+      "preprocessing": "identity"
+    },
+    "in_range_macro_f1": 0.1827221290008457,
+    "level0_confusion_matrix": [
+      [
+        208,
+        72,
+        11,
+        2,
+        6,
+        1,
+        0
+      ],
+      [
+        70,
+        149,
+        56,
+        2,
+        19,
+        5,
+        1
+      ],
+      [
+        22,
+        44,
+        162,
+        24,
+        29,
+        22,
+        0
+      ],
+      [
+        2,
+        16,
+        28,
+        187,
+        33,
+        22,
+        13
+      ],
+      [
+        7,
+        15,
+        21,
+        17,
+        193,
+        31,
+        16
+      ],
+      [
+        0,
+        4,
+        19,
+        30,
+        35,
+        205,
+        8
+      ],
+      [
+        0,
+        0,
+        5,
+        7,
+        9,
+        9,
+        272
+      ]
+    ],
+    "level0_macro_f1": 0.6521684679622878,
+    "maximum_budget_reached": true,
+    "mean_single_factor_ood_macro_f1": 0.4031633595958851,
+    "only_changed_factor": "none",
+    "per_class_f1": {
+      "cubic": 0.8888888888888888,
+      "hexagonal": 0.6879194630872484,
+      "monoclinic": 0.4950166112956811,
+      "orthorhombic": 0.5355371900826447,
+      "tetragonal": 0.6561403508771929,
+      "triclinic": 0.6830870279146142,
+      "trigonal": 0.6185897435897435
+    },
+    "run_id": "baseline",
+    "stop_epoch": null,
+    "stopped_early": false,
+    "train_accuracy_at_stop": 1.0,
+    "train_loss_at_stop": 2.047095364332563e-07,
+    "worst_class_f1": 0.4950166112956811
+  },
+  "dynamic_erm": {
+    "best_epoch": 80,
+    "best_global_step": 49280,
+    "early_stopping_state": {
+      "best_epoch": 80,
+      "best_global_step": 49280,
+      "best_id": 0.7179419256466444,
+      "best_primary": 0.7197238353489348,
+      "checks_without_primary_improvement": 2,
+      "primary_improvement_reference": 0.7197238353489348,
+      "stop_epoch": null,
+      "stop_reason": null,
+      "stopped": false,
+      "validation_checks": 10
+    },
+    "in_range_macro_f1": 0.7179419256466444,
+    "level0_confusion_matrix": [
+      [
+        214,
+        60,
+        15,
+        4,
+        6,
+        1,
+        0
+      ],
+      [
+        47,
+        183,
+        48,
+        11,
+        7,
+        6,
+        0
+      ],
+      [
+        9,
+        51,
+        191,
+        25,
+        14,
+        13,
+        0
+      ],
+      [
+        1,
+        7,
+        24,
+        232,
+        17,
+        15,
+        5
+      ],
+      [
+        7,
+        21,
+        14,
+        19,
+        192,
+        34,
+        13
+      ],
+      [
+        0,
+        5,
+        12,
+        16,
+        36,
+        228,
+        4
+      ],
+      [
+        0,
+        1,
+        3,
+        11,
+        8,
+        3,
+        276
+      ]
+    ],
+    "level0_macro_f1": 0.7197238353489348,
+    "maximum_budget_reached": true,
+    "mean_single_factor_ood_macro_f1": 0.6563160523489141,
+    "per_class_f1": {
+      "cubic": 0.92,
+      "hexagonal": 0.7587354409317804,
+      "monoclinic": 0.580952380952381,
+      "orthorhombic": 0.6262295081967214,
+      "tetragonal": 0.7495961227786753,
+      "triclinic": 0.740484429065744,
+      "trigonal": 0.6620689655172415
+    },
+    "run_id": "cnn_contract_dynamic_erm_identity_adamw_constant__seed_20260710",
+    "train_accuracy_at_best": 0.9983766233766234,
+    "train_accuracy_at_stop": 0.9980722402597403,
+    "train_loss_at_best": 0.00846435222774744,
+    "train_loss_at_stop": 0.011122375726699829,
+    "worst_class_f1": 0.580952380952381
+  },
+  "dynamic_minus_clean": {
+    "in_range_macro_f1": 0.5352197966457987,
+    "level0_macro_f1": 0.06755536738664703,
+    "mean_single_factor_ood_macro_f1": 0.253152692753029,
+    "worst_class_f1": 0.08593576965669991
+  },
+  "gaps": {
+    "clean_level0_minus_in_range": 0.46944633896144206,
+    "clean_level0_minus_mean_single_ood": 0.24900510836640266,
+    "clean_train_accuracy_minus_level0": 0.3478315320377122,
+    "dynamic_level0_minus_in_range": 0.0017819097022904185,
+    "dynamic_level0_minus_mean_single_ood": 0.0634077830000207,
+    "dynamic_train_accuracy_at_best_minus_level0": 0.27865278802768856
+  },
+  "interpretation": "Matched dynamic perturbation training improves level0, in-range, mean single-factor OOD, and worst-class F1. The CNN common foundation passes this diagnostic Gate, but the formal seven-run remains locked pending a separately reviewed shared-method contract.",
+  "locks": {
+    "clean_anchor_run": false,
+    "curriculum_run": false,
+    "fifteen_run": "0/15_locked",
+    "formal_seven_run": "0/7_locked",
+    "js_run": false,
+    "real_xrd_used": false,
+    "residual_run": false,
+    "simulated_test_used": false,
+    "v10": "locked"
+  },
+  "only_changed_scientific_factor": "clean_erm_to_dynamic_erm",
+  "schema_version": "v9-cnn-contract-dynamic-erm-summary-v1",
+  "scope": "development-only Validation evidence",
+  "status": "complete",
+  "verdict": "dynamic_regularization_recovers_id_and_ood"
+}

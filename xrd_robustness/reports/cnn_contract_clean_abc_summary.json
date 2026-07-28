@@ -1,0 +1,489 @@
+{
+  "baseline": {
+    "best_epoch": 100,
+    "best_global_step": 61600,
+    "class_collapse": false,
+    "configuration": {
+      "learning_rate_schedule": "constant",
+      "optimizer": "adamw",
+      "preprocessing": "identity"
+    },
+    "in_range_macro_f1": 0.1827221290008457,
+    "level0_confusion_matrix": [
+      [
+        208,
+        72,
+        11,
+        2,
+        6,
+        1,
+        0
+      ],
+      [
+        70,
+        149,
+        56,
+        2,
+        19,
+        5,
+        1
+      ],
+      [
+        22,
+        44,
+        162,
+        24,
+        29,
+        22,
+        0
+      ],
+      [
+        2,
+        16,
+        28,
+        187,
+        33,
+        22,
+        13
+      ],
+      [
+        7,
+        15,
+        21,
+        17,
+        193,
+        31,
+        16
+      ],
+      [
+        0,
+        4,
+        19,
+        30,
+        35,
+        205,
+        8
+      ],
+      [
+        0,
+        0,
+        5,
+        7,
+        9,
+        9,
+        272
+      ]
+    ],
+    "level0_macro_f1": 0.6521684679622878,
+    "maximum_budget_reached": true,
+    "mean_single_factor_ood_macro_f1": 0.4031633595958851,
+    "only_changed_factor": "none",
+    "per_class_f1": {
+      "cubic": 0.8888888888888888,
+      "hexagonal": 0.6879194630872484,
+      "monoclinic": 0.4950166112956811,
+      "orthorhombic": 0.5355371900826447,
+      "tetragonal": 0.6561403508771929,
+      "triclinic": 0.6830870279146142,
+      "trigonal": 0.6185897435897435
+    },
+    "run_id": "baseline",
+    "stop_epoch": null,
+    "stopped_early": false,
+    "train_accuracy_at_stop": 1.0,
+    "train_loss_at_stop": 2.047095364332563e-07,
+    "worst_class_f1": 0.4950166112956811
+  },
+  "evidence_scope": "development-only Validation evidence",
+  "experiments": [
+    {
+      "best_epoch": 20,
+      "best_global_step": 12320,
+      "class_collapse": false,
+      "configuration": {
+        "learning_rate_schedule": "constant",
+        "optimizer": "adamw",
+        "preprocessing": "sqrt"
+      },
+      "decision": "NOT_SELECTED",
+      "in_range_macro_f1": 0.2399106730292762,
+      "level0_confusion_matrix": [
+        [
+          203,
+          75,
+          16,
+          5,
+          1,
+          0,
+          0
+        ],
+        [
+          56,
+          147,
+          66,
+          16,
+          9,
+          7,
+          1
+        ],
+        [
+          19,
+          34,
+          145,
+          63,
+          12,
+          28,
+          2
+        ],
+        [
+          1,
+          4,
+          24,
+          208,
+          23,
+          36,
+          5
+        ],
+        [
+          2,
+          7,
+          22,
+          54,
+          149,
+          54,
+          12
+        ],
+        [
+          0,
+          1,
+          9,
+          43,
+          11,
+          233,
+          4
+        ],
+        [
+          0,
+          0,
+          1,
+          9,
+          1,
+          9,
+          282
+        ]
+      ],
+      "level0_macro_f1": 0.6455386120876369,
+      "level0_predicted_class_counts": [
+        281,
+        268,
+        283,
+        398,
+        206,
+        367,
+        306
+      ],
+      "maximum_budget_reached": false,
+      "mean_single_factor_ood_macro_f1": 0.34229271492706914,
+      "only_changed_factor": "preprocessing",
+      "per_class_f1": {
+        "cubic": 0.9276315789473684,
+        "hexagonal": 0.6976047904191617,
+        "monoclinic": 0.5157894736842106,
+        "orthorhombic": 0.49488054607508536,
+        "tetragonal": 0.5951359084406295,
+        "triclinic": 0.6987951807228916,
+        "trigonal": 0.5889328063241106
+      },
+      "run_contract": {
+        "exit_code": 0,
+        "lr_schedule": "constant",
+        "lr_warmup_steps": 0,
+        "optimizer": "adamw",
+        "preprocessing": "sqrt",
+        "preregistration_path": "E:\\AI4science_resnet_freeze_20260728\\xrd_robustness\\configs\\cnn_contract.v9.resnet18_gn.diagnostics.json",
+        "preregistration_sha256": "7c88c76a0896db6ff2228adda3d2bad59b9408da8d87cef8c9af7f6898c037b8",
+        "schema_version": "v9-cnn-contract-diagnostic-run-v1",
+        "status": "completed",
+        "total_steps": 61600
+      },
+      "run_id": "A",
+      "selection_checks": {
+        "level0_threshold": false,
+        "no_class_collapse": true,
+        "worst_class_guardrail": true
+      },
+      "stop_epoch": 50,
+      "stopped_early": true,
+      "train_accuracy_at_stop": 0.9814326298701299,
+      "train_loss_at_stop": 0.05250261351466179,
+      "worst_class_f1": 0.49488054607508536
+    },
+    {
+      "best_epoch": 20,
+      "best_global_step": 12320,
+      "class_collapse": false,
+      "configuration": {
+        "learning_rate_schedule": "constant",
+        "optimizer": "adam",
+        "preprocessing": "identity"
+      },
+      "decision": "NOT_SELECTED",
+      "in_range_macro_f1": 0.18967208720461531,
+      "level0_confusion_matrix": [
+        [
+          218,
+          58,
+          13,
+          4,
+          7,
+          0,
+          0
+        ],
+        [
+          66,
+          126,
+          79,
+          4,
+          23,
+          3,
+          1
+        ],
+        [
+          21,
+          28,
+          166,
+          30,
+          35,
+          21,
+          2
+        ],
+        [
+          2,
+          8,
+          24,
+          174,
+          36,
+          38,
+          19
+        ],
+        [
+          7,
+          8,
+          20,
+          29,
+          186,
+          27,
+          23
+        ],
+        [
+          0,
+          2,
+          18,
+          33,
+          38,
+          180,
+          30
+        ],
+        [
+          0,
+          0,
+          2,
+          13,
+          13,
+          8,
+          266
+        ]
+      ],
+      "level0_macro_f1": 0.6200142615463491,
+      "level0_predicted_class_counts": [
+        314,
+        230,
+        322,
+        287,
+        338,
+        277,
+        341
+      ],
+      "maximum_budget_reached": false,
+      "mean_single_factor_ood_macro_f1": 0.3843125568628863,
+      "only_changed_factor": "optimizer",
+      "per_class_f1": {
+        "cubic": 0.827371695178849,
+        "hexagonal": 0.6228373702422145,
+        "monoclinic": 0.47368421052631576,
+        "orthorhombic": 0.5312,
+        "tetragonal": 0.5918367346938777,
+        "triclinic": 0.7100977198697069,
+        "trigonal": 0.5830721003134797
+      },
+      "run_contract": {
+        "exit_code": 0,
+        "lr_schedule": "constant",
+        "lr_warmup_steps": 0,
+        "optimizer": "adam",
+        "preprocessing": "identity",
+        "preregistration_path": "E:\\AI4science_resnet_freeze_20260728\\xrd_robustness\\configs\\cnn_contract.v9.resnet18_gn.diagnostics.json",
+        "preregistration_sha256": "7c88c76a0896db6ff2228adda3d2bad59b9408da8d87cef8c9af7f6898c037b8",
+        "schema_version": "v9-cnn-contract-diagnostic-run-v1",
+        "status": "completed",
+        "total_steps": 61600
+      },
+      "run_id": "B",
+      "selection_checks": {
+        "level0_threshold": false,
+        "no_class_collapse": true,
+        "worst_class_guardrail": false
+      },
+      "stop_epoch": 50,
+      "stopped_early": true,
+      "train_accuracy_at_stop": 0.9916801948051948,
+      "train_loss_at_stop": 0.027103058993816376,
+      "worst_class_f1": 0.47368421052631576
+    },
+    {
+      "best_epoch": 100,
+      "best_global_step": 61600,
+      "class_collapse": false,
+      "configuration": {
+        "learning_rate_schedule": "linear_warmup_3080_steps_then_cosine_to_zero",
+        "optimizer": "adamw",
+        "preprocessing": "identity"
+      },
+      "decision": "NOT_SELECTED",
+      "in_range_macro_f1": 0.17624517616107396,
+      "level0_confusion_matrix": [
+        [
+          216,
+          63,
+          12,
+          2,
+          6,
+          1,
+          0
+        ],
+        [
+          78,
+          137,
+          60,
+          5,
+          16,
+          5,
+          1
+        ],
+        [
+          29,
+          50,
+          139,
+          29,
+          33,
+          22,
+          1
+        ],
+        [
+          2,
+          11,
+          36,
+          178,
+          34,
+          31,
+          9
+        ],
+        [
+          5,
+          19,
+          22,
+          26,
+          174,
+          33,
+          21
+        ],
+        [
+          0,
+          4,
+          12,
+          36,
+          39,
+          190,
+          20
+        ],
+        [
+          0,
+          0,
+          5,
+          18,
+          12,
+          9,
+          258
+        ]
+      ],
+      "level0_macro_f1": 0.6107716020006893,
+      "level0_predicted_class_counts": [
+        330,
+        284,
+        286,
+        294,
+        314,
+        291,
+        310
+      ],
+      "maximum_budget_reached": true,
+      "mean_single_factor_ood_macro_f1": 0.3901614029408494,
+      "only_changed_factor": "learning_rate_schedule",
+      "per_class_f1": {
+        "cubic": 0.8431372549019609,
+        "hexagonal": 0.641891891891892,
+        "monoclinic": 0.46757679180887374,
+        "orthorhombic": 0.47198641765704585,
+        "tetragonal": 0.5983193277310924,
+        "triclinic": 0.6857142857142857,
+        "trigonal": 0.5667752442996742
+      },
+      "run_contract": {
+        "exit_code": 0,
+        "lr_schedule": "warmup_cosine",
+        "lr_warmup_steps": 3080,
+        "optimizer": "adamw",
+        "preprocessing": "identity",
+        "preregistration_path": "E:\\AI4science_resnet_freeze_20260728\\xrd_robustness\\configs\\cnn_contract.v9.resnet18_gn.diagnostics.json",
+        "preregistration_sha256": "7c88c76a0896db6ff2228adda3d2bad59b9408da8d87cef8c9af7f6898c037b8",
+        "schema_version": "v9-cnn-contract-diagnostic-run-v1",
+        "status": "completed",
+        "total_steps": 61600
+      },
+      "run_id": "C",
+      "selection_checks": {
+        "level0_threshold": false,
+        "no_class_collapse": true,
+        "worst_class_guardrail": false
+      },
+      "stop_epoch": null,
+      "stopped_early": false,
+      "train_accuracy_at_stop": 1.0,
+      "train_loss_at_stop": 2.832672052477392e-08,
+      "worst_class_f1": 0.46757679180887374
+    }
+  ],
+  "locks": {
+    "fifteen_run_progress": "0/15",
+    "formal_seven_run_progress": "0/7",
+    "formal_seven_run_started": false,
+    "real_xrd_used": false,
+    "simulated_test_used": false,
+    "v10_used": false
+  },
+  "schema_version": "v9-cnn-contract-clean-abc-summary-v1",
+  "scientific_interpretation": "PAMPT was a major backbone bottleneck, but the remaining dominant problem is a severe parent-structure train-to-validation generalization gap.",
+  "selected_clean_configuration": {
+    "learning_rate_schedule": "constant",
+    "optimizer": "adamw",
+    "preprocessing": "identity"
+  },
+  "selection_reason": "No new Clean experiment met the preregistered level0 improvement threshold; search stops after A/B/C and reverts to the original best.",
+  "selection_thresholds": {
+    "class_collapse_forbidden": true,
+    "level0_macro_f1_minimum": 0.6721684679622878,
+    "post_hoc_threshold_change": false,
+    "worst_class_f1_minimum": 0.47501661129568107
+  },
+  "status": "complete"
+}

@@ -1,5 +1,12 @@
 # XRD Robustness V9-T
 
+> **2026-07-28 CNN Clean diagnostics:** A/B/C single-factor search is complete.
+> Sqrt, Adam, and warm-up/cosine did not beat the ResNet identity + AdamW +
+> constant-LR baseline. Clean search is closed. The one matched Dynamic ERM
+> diagnostic then improved level0/in-range/mean single-factor OOD to
+> `0.7197/0.7179/0.6563`, passing the CNN foundation diagnostic Gate. Formal
+> 7-run, Test, real XRD, and V10 remain locked pending shared-contract review.
+
 > **2026-07-26 split reset:** The active split is a deterministic 70/15/15
 > parent-structure-level random split stratified by crystal system (seed
 > `20260726`). All results from the retired family-disjoint split are invalid.
