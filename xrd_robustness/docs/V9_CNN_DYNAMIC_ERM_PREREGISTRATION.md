@@ -1,7 +1,8 @@
 # V9 CNN Dynamic ERM diagnostic preregistration
 
 Only one scientific factor changes relative to the selected Clean reference:
-`clean_erm` becomes `ordinary_dynamic`. The ResNet-18-GN architecture, identity
+`clean_erm` becomes CLI mode `dynamic_erm` (registered method ID
+`ordinary_dynamic_augmentation`). The ResNet-18-GN architecture, identity
 input representation, AdamW optimizer, constant learning rate, parent-structure
 split, seeds, batch size, optimizer-step budget, validation interval, evaluation
 panels, dynamic stream contract, and early-stopping rule are fixed.

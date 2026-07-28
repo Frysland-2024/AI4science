@@ -195,8 +195,8 @@ def _write_run_contract(custom: dict[str, str | None], exit_code: int) -> None:
 
 def main() -> int:
     custom = _extract_custom_arguments()
-    if _argument_value("--mode") not in {"clean_erm", "ordinary_dynamic"}:
-        raise SystemExit("CNN-contract diagnostics permit only clean_erm or ordinary_dynamic")
+    if _argument_value("--mode") not in {"clean_erm", "dynamic_erm"}:
+        raise SystemExit("CNN-contract diagnostics permit only clean_erm or dynamic_erm")
     if _argument_value("--variant") not in {None, "b3"}:
         raise SystemExit("ResNet wrapper requires legacy argument --variant b3")
     if custom["cnn_total_steps"] is None or custom["cnn_preregistration"] is None:

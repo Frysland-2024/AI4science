@@ -3,7 +3,8 @@
   "status": "one_run_authorized",
   "only_changed_scientific_factor": {
     "from": "clean_erm",
-    "to": "ordinary_dynamic"
+    "to": "dynamic_erm",
+    "registered_method_id": "ordinary_dynamic_augmentation"
   },
   "frozen_shared_configuration": {
     "backbone": "ML4PXRDResNet1D-18-GN",
