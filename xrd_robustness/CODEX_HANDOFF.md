@@ -24,11 +24,22 @@ V9 的正式方法比较已经收敛为：
 Residual-v1 已经因预注册稳定性 Gate 失败而归档，不得重新开放其 lambda
 范围。JS lambda 也不得因本次结果继续调参。
 
+one-shot simulated-Test 合同现已冻结：
+
+`configs/v9_resnet_js_simulated_test.preregistered.json`
+
+人类可读说明：
+
+`reports/v9_resnet_js_simulated_test_contract_20260801.md`
+
+合同状态为 `preregistered_locked_not_authorized`。用户本次“冻结”指令只授权
+锁定合同，没有授权执行 Test。
+
 ## 十轮实验状态
 
 五组 paired seeds、每组 Dynamic ERM 与 JS lambda=60，共十次运行，已全部
-完成。训练 seeds 为 `20260711` 至 `20260715`，evaluation seed 固定为
-`20260720`。
+完成。训练 seeds 为 `20260711` 至 `20260715`，Validation evaluation seed 固定
+为 `20260720`。
 
 权威机器结果：
 
@@ -60,23 +71,57 @@ In-range paired-bootstrap 95% interval：
 五组 paired seeds 的 OOD delta 全部为正，in-range delta 也全部为正；
 预注册 in-range guardrail 通过。
 
+## 已冻结的 simulated-Test 执行规则
+
+Test 阶段保留全部五组 paired training seeds，并独立评估十个已经由
+Validation 选出的 checkpoint。不得重新训练、替换、平均、集成或根据 Test
+结果选择 checkpoint。
+
+冻结 checkpoint：
+
+| seed | Dynamic ERM | JS lambda=60 |
+|---:|---|---|
+| 20260711 | epoch 80 / step 49280 | epoch 40 / step 24640 |
+| 20260712 | epoch 90 / step 55440 | epoch 80 / step 49280 |
+| 20260713 | epoch 100 / step 61600 | epoch 80 / step 49280 |
+| 20260714 | epoch 90 / step 55440 | epoch 30 / step 18480 |
+| 20260715 | epoch 80 / step 49280 | epoch 60 / step 36960 |
+
+Test split 固定为 2,109 个 held-out parent structures。deterministic evaluation
+seeds 为：
+
+- `20260721`；
+- `20260722`；
+- `20260723`。
+
+Primary endpoint 为：先在每个 checkpoint 内平均 6 个 single-factor OOD
+profiles × 3 个 evaluation seeds，再计算五组 JS-minus-ERM paired deltas。
+评测 seed、profile 和谱图不得被当成额外训练 replicate；主要置信区间在五组
+matched training-seed pairs 上进行 paired bootstrap。
+
+旧 `evaluation.v9.method_transfer.json` 中的“三个 checkpoint hashes”是早期
+占位条目，历史文件不改写。新 Test 合同明确取代该占位规则，要求十个
+Validation-selected checkpoints。
+
 ## 必须保留的诊断风险
 
-seed `20260714` 的 worst-class F1 delta 为 `-0.061139`，其余四组为正。
-因此不能写成“JS 对每个 seed、每个类别都一致改善”。下一阶段需要定位：
+seed `20260714` 的 Validation worst-class F1 delta 为 `-0.061139`，其余四组
+为正。因此不能写成“JS 对每个 seed、每个类别都一致改善”。Test 合同要求定位：
 
 1. 哪个 crystal system 形成 worst class；
-2. 该下降来自哪个 in-range condition；
-3. 是否与 epoch 30 的 selected checkpoint 有关；
-4. 在不重新选模型、不重新调 lambda 的前提下如何呈现该限制。
+2. 该下降来自哪个 condition/profile；
+3. Test 上是否出现相同模式；
+4. 如何在不重新选模型、不重新调 lambda 的前提下呈现该限制。
 
-该异常不改变预注册 primary OOD conclusion，但必须进入论文 limitation 和
-secondary diagnostic。
+该异常不改变预注册 primary Validation-OOD conclusion，但必须进入论文
+limitation 和 secondary diagnostic。
 
 ## 当前进程与产物
 
 - ten-run 已结束；
-- 当前没有需要继续恢复的 ten-run；
+- simulated-Test 合同已冻结；
+- simulated-Test 尚未授权或执行；
+- 当前没有需要继续恢复的训练；
 - 不应重复启动相同十轮矩阵；
 - 不应重新选择 seed；
 - 不应继续搜索 lambda；
@@ -88,32 +133,36 @@ secondary diagnostic。
 
 以下资源仍锁定：
 
-- simulated Test；
+- simulated-Test inference；
 - real XRD；
 - real-domain adaptation；
 - V10；
 - 任何新的 Validation-guided method selection。
 
-本次 summary 明确记录：
+当前状态明确为：
 
 - `simulated_test_used = false`；
+- `simulated_test_contract_frozen = true`；
+- `simulated_test_authorized = false`；
 - `real_xrd_used = false`；
 - `lambda_retuned = false`；
 - `seed_excluded_posthoc = false`。
 
-任何后续 Codex/GPT 会话不得把本次结果描述为 Test、sim-to-real 或真实实验
-验证。
+任何后续 Codex/GPT 会话不得把 Validation 结果描述为 Test、sim-to-real 或
+真实实验验证，也不得把合同冻结解释为 Test 执行授权。
 
 ## 下一阶段的正确顺序
 
-1. 先编写 simulated-Test preregistration / authorization 文件；
-2. 冻结 evaluation checkpoint rule、指标、随机性与输出目录；
-3. 做 read-only preflight，确认 Test 尚未被访问；
-4. 用户明确授权后，进行一次性 simulated-Test evaluation；
-5. 生成审计与结果报告后停止；
-6. 再单独设计 real-XRD external validation。
+1. 根据冻结合同实现或审查 read-only preflight 与 serial Test runner；
+2. 不运行 inference，仅验证配置解析、路径、输出边界和审计字段；
+3. 在本地定位十个 checkpoint，并在 preflight 中记录 SHA-256、epoch、step；
+4. 生成三份 deterministic Test manifest 并在 inference 前冻结哈希；
+5. 确认 Test 未被访问、输出目录为空、real XRD 仍锁定；
+6. 获得用户新的明确执行授权；
+7. 一次性运行 simulated-Test，生成审计与结果报告后停止；
+8. 冻结 Test 报告以后，再单独设计 real-XRD external validation。
 
-在新的 Test 合同完成并获得明确授权前，不得执行 Test 命令。
+在新的执行授权文件完成前，不得执行 Test 命令。
 
 ## 新会话读取顺序
 
@@ -122,12 +171,14 @@ secondary diagnostic。
 3. 本文件
 4. `reports/v9_resnet_js_ten_run_results_20260801.md`
 5. `reports/v9_resnet_js_ten_run_summary.json`
-6. `configs/v9_resnet_js_ten_run.preregistered.json`
-7. `configs/v9_resnet_js_ten_run.authorization.json`
+6. `configs/v9_resnet_js_simulated_test.preregistered.json`
+7. `reports/v9_resnet_js_simulated_test_contract_20260801.md`
+8. `configs/v9_resnet_js_ten_run.preregistered.json`
+9. `configs/v9_resnet_js_ten_run.authorization.json`
 
 ## 当前明确下一动作
 
-当前不是继续训练。当前动作是：
+当前不是执行 Test。当前动作是：
 
-> 起草并审查 one-shot simulated-Test evaluation contract；在获得新的明确
-> 授权前保持 Test 和 real XRD 锁定。
+> 按冻结合同实现和审查 read-only preflight / serial runner；在新的明确执行
+> 授权前保持 simulated Test 和 real XRD 锁定。
