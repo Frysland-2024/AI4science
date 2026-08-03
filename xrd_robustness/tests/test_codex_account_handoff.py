@@ -15,16 +15,20 @@ class CodexAccountHandoffTests(unittest.TestCase):
         self.assertIn("CODEX_HANDOFF.md", COPY_ROOTS)
         self.assertIn("CODEX_HANDOFF.md", ARTIFACT_ROLES)
 
-    def test_handoff_declares_current_test_retry_boundaries(self) -> None:
+    def test_handoff_declares_completed_test_and_closed_retry_boundaries(self) -> None:
         text = (PROJECT_ROOT / "CODEX_HANDOFF.md").read_text(encoding="utf-8")
         required_phrases = (
             "Validation-only replication completed",
             "没有观察到 Test 指标",
             "`simulated_test_accessed = true`",
-            "`simulated_test_result_available = false`",
-            "`identical_retry_started = false`",
+            "`simulated_test_result_available = true`",
+            "`identical_retry_started = true`",
+            "`identical_retry_completed = true`",
             "`identical_retry_authorized = true`",
-            "batch 128",
+            "10/10 checkpoints",
+            "94.25%",
+            "不得重跑",
+            "reports/v9_resnet_js_simulated_test_results_20260803.md",
             "real XRD",
         )
         for phrase in required_phrases:

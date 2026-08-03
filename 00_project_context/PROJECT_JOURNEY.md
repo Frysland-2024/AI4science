@@ -747,3 +747,30 @@ attempt but cannot silently become a modified attempt. Checkpoints, scientific
 profiles, evaluation seeds, metrics, primary endpoint, and method-selection
 closure remain unchanged. The identical retry is authorized but has not begun;
 real XRD remains locked.
+
+## 2026-08-03 Frozen simulated-Test confirmation
+
+The authorized identical retry completed all ten Validation-selected
+checkpoints against the unchanged 2,109-parent simulated-Test split, six
+single-factor OOD profiles, and three deterministic evaluation-panel seeds.
+The engineering amendment behaved as intended: 75,924 unique frozen spectra
+were rendered once into a hashed local cache and reused serially across all ten
+models. A sustained inference sample averaged 94.25% GPU utilization; the
+CPU-bound cache phase remained scientifically and operationally separate.
+
+All five preregistered JS-minus-Dynamic-ERM paired OOD Macro-F1 deltas are
+positive. Their mean is `+0.054600`, sample SD is `0.007271`, and the frozen
+paired-bootstrap 95% interval is `[+0.048944, +0.060255]`. All five in-range
+deltas are also positive. This confirms the simulated-domain robustness claim
+without changing the selected method, lambda, checkpoints, seeds, profiles, or
+endpoint.
+
+The preregistered seed-20260714 secondary diagnostic remains informative. Its
+aggregate Test worst-class delta is slightly positive (`+0.005531`), so the
+Validation decline did not reproduce at the aggregate level; however,
+monoclinic remains the worst-class bottleneck and negative/positive shift plus
+texture retain profile-level declines. The result therefore supports aggregate
+robustness improvement, not uniform improvement for every class and condition.
+The Test report is now frozen, repeat Test access and Test-guided retuning are
+closed, and real XRD remains unused pending a separately designed and authorized
+external-validation stage.

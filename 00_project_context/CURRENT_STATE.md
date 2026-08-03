@@ -133,15 +133,18 @@ The V9 method-selection question is closed:
 The completed evidence supports the statement that JS Consistency produced a
 repeatable positive paired effect on mean single-factor Validation-OOD
 Macro-F1 while also improving mean in-range Macro-F1 across the five registered
-training seeds. It does not yet support a simulated-Test or real-XRD claim.
+training seeds. The frozen simulated Test independently confirmed the direction:
+the mean five-pair OOD Macro-F1 delta is `+0.054600`, with all five pair deltas
+positive and a paired-bootstrap 95% interval of `[+0.048944, +0.060255]`. This
+still does not support a real-XRD or sim-to-real claim.
 
 ## Boundary status
 
 The following boundaries remain authoritative:
 
-- simulated Test accessed: **yes, aborted infrastructure attempt**;
-- simulated-Test result available: **no**;
-- identical retry started: **no**;
+- simulated Test accessed: **yes**;
+- simulated-Test result available: **yes, completed 10/10 checkpoints**;
+- identical retry started: **yes, completed**;
 - simulated-Test contract frozen: **yes**;
 - identical simulated-Test retry authorized: **yes**;
 - real XRD used: **no**;
@@ -155,29 +158,26 @@ simulated-Test result, a sim-to-real result, or a final external-validity claim.
 
 ## Current blocker
 
-The ten checkpoints, three manifests, hashes, authorization, and optimized
-runner are present locally. Train-only/synthetic benchmarking selected serial
-one-time rendering plus evaluation batch 128. It measured 98.27% mean sustained
-GPU utilization during the inference phase and exact old-versus-cached input
-probabilities on the shared Train prefix. No Test spectrum or metric was used
-for that benchmark.
+No simulated-Test engineering or execution blocker remains. The authorized
+identical retry completed all 10 checkpoints with the frozen three manifests
+and 2,109 Test parents. The completed audit verifies one-time spectrum reuse,
+serial checkpoint evaluation, the panel-cache index hash, and the final summary
+hash. A sustained 12-second inference sample averaged 94.25% GPU utilization
+(91-97%), above the requested 88-90% execution target.
 
-No engineering blocker remains. The final v2 preflight passed with 10
-checkpoints, 3 manifests, 2,109 Test parents, matching runner source hash, and
-an unstarted identical retry. The runner must write its atomic `run_state.json`
-before loading Test spectra; only the same source/input bindings and batch size
-may resume an interrupted attempt.
+The remaining scientific boundary is external validity: real XRD and
+real-domain adaptation have not been used. The seed-20260714 Test diagnosis also
+shows that aggregate improvement is not uniform across every class/profile;
+monoclinic remains the principal worst-class bottleneck.
 
 ## Next actions
 
-1. Launch the identical retry with batch 128; allow the one-time cache phase to
-   finish even though GPU utilization is expected to be low during CPU rendering.
-2. Resume only through the bound `run_state.json` if infrastructure interrupts
-   the same attempt; do not change source, inputs, or batch size mid-run.
-3. Freeze the Test report and diagnose the seed-20260714 worst-class result as a
-   secondary analysis.
-4. Only after the simulated-Test report is frozen, design the real-XRD external
-   validation stage.
+1. Preserve the frozen simulated-Test report and local hashed raw evidence; do
+   not rerun, retune, exclude seeds, or select checkpoints from Test outcomes.
+2. Carry the monoclinic shift/texture limitation into publication claims and
+   any future error analysis.
+3. Design and separately authorize the real-XRD external-validation stage
+   without reopening the V9 method or lambda decision.
 
 ## Authoritative records
 
@@ -192,6 +192,9 @@ may resume an interrupted attempt.
 - `xrd_robustness/configs/v9_resnet_js_simulated_test.retry_authorization.json`
 - `xrd_robustness/reports/v9_resnet_js_simulated_test_performance_audit_20260803.json`
 - `xrd_robustness/reports/v9_resnet_js_simulated_test_contract_20260801.md`
+- `xrd_robustness/reports/v9_resnet_js_simulated_test_summary.json`
+- `xrd_robustness/reports/v9_resnet_js_simulated_test_audit.json`
+- `xrd_robustness/reports/v9_resnet_js_simulated_test_results_20260803.md`
 - Validation result commit `868b079c1b410e6afe877330b7defc4262d82969`
 - Test-contract commits begin at `1a2d180baf10e47a4b8732b14549522cfdaf48d2`
 

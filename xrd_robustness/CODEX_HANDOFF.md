@@ -123,12 +123,28 @@ seed `20260714` 的 Validation worst-class F1 delta 为 `-0.061139`，其余四�
 该异常不改变预注册 primary Validation-OOD conclusion，但必须进入论文
 limitation 和 secondary diagnostic。
 
+## simulated-Test 已完成结果
+
+完全相同的 authorized retry 已于 2026-08-03 完成，10/10 checkpoints 均已
+写入带哈希的原子 run state。主要结果为五组 paired single-factor OOD
+Macro-F1 delta 均为正，平均 `+0.054600`，sample SD `0.007271`，paired-bootstrap
+95% 区间 `[+0.048944, +0.060255]`。五组 in-range delta 也全部为正。
+
+推理阶段连续 12 秒 GPU 样本平均 94.25%（范围 91-97%）；CPU-bound 缓存
+阶段不纳入该利用率口径。完整清点与 secondary diagnosis 见
+`reports/v9_resnet_js_simulated_test_results_20260803.md`。
+
+seed `20260714` 的 Test worst-class paired delta 为 `+0.005531`，未复现
+Validation 上的 aggregate decline；但 monoclinic 仍是主要瓶颈，positive/
+negative shift 和 texture 条件仍出现 worst-class 下降。因此只能主张 aggregate
+robustness improvement，不能主张每个类别和扰动条件都一致改善。
+
 ## 当前进程与产物
 
 - ten-run 已结束；
 - simulated-Test 合同已冻结；
-- simulated-Test 首次本地启动已因工程瓶颈中止，未产生任何 run result；
-- 完全相同的 retry 已授权但尚未启动；
+- simulated-Test 首次本地启动因工程瓶颈中止，未产生任何 run result；
+- 完全相同的 retry 已授权并完成 10/10 checkpoints；
 - 本地十个 checkpoint 与三份 frozen manifest 已通过 preflight；
 - 优化 runner、retry authorization 与性能审计已完成；
 - 当前没有需要继续恢复的训练；
@@ -143,7 +159,7 @@ limitation 和 secondary diagnostic。
 
 以下资源仍锁定：
 
-- simulated-Test inference；
+- 任何 simulated-Test 重跑、Test-guided selection 或 retuning；
 - real XRD；
 - real-domain adaptation；
 - V10；
@@ -152,8 +168,9 @@ limitation 和 secondary diagnostic。
 当前状态明确为：
 
 - `simulated_test_accessed = true`；
-- `simulated_test_result_available = false`；
-- `identical_retry_started = false`；
+- `simulated_test_result_available = true`；
+- `identical_retry_started = true`；
+- `identical_retry_completed = true`；
 - `simulated_test_contract_frozen = true`；
 - `identical_retry_authorized = true`；
 - `real_xrd_used = false`；
@@ -165,15 +182,10 @@ limitation 和 secondary diagnostic。
 
 ## 下一阶段的正确顺序
 
-1. 在 runner 源码最终冻结后刷新 v2 preflight，并复核 source、checkpoint、
-   manifest、split 与 peak-cache hashes；
-2. 使用 batch 128 启动已授权的 identical retry；
-3. 先串行生成 75,924 条唯一冻结谱图并逐文件记录 SHA-256；该阶段 GPU 空闲
-   是预期行为；
-4. 十个 checkpoint 复用同一缓存、串行评测；推理阶段本机实测持续 GPU
-   utilization 平均 98.27%；
-5. 如基础设施中断，只允许通过同一 `run_state.json`、同一源码与 batch 续跑；
-6. 生成审计与结果报告后停止；冻结 Test 报告以后再设计 real-XRD validation。
+1. 冻结并保留 Test summary、audit、结果报告与本地 hashed raw evidence；
+2. 不得重跑 Test、重新选择 checkpoint、排除 seed 或重新调 lambda；
+3. 把 monoclinic shift/texture limitation 纳入论文限制；
+4. 另行设计和授权 real-XRD external validation，保持 V9 方法选择关闭。
 
 ## 新会话读取顺序
 
@@ -184,12 +196,14 @@ limitation 和 secondary diagnostic。
 5. `reports/v9_resnet_js_ten_run_summary.json`
 6. `configs/v9_resnet_js_simulated_test.preregistered.json`
 7. `reports/v9_resnet_js_simulated_test_contract_20260801.md`
-8. `configs/v9_resnet_js_ten_run.preregistered.json`
-9. `configs/v9_resnet_js_ten_run.authorization.json`
+8. `reports/v9_resnet_js_simulated_test_results_20260803.md`
+9. `reports/v9_resnet_js_simulated_test_summary.json`
+10. `configs/v9_resnet_js_ten_run.preregistered.json`
+11. `configs/v9_resnet_js_ten_run.authorization.json`
 
 ## 当前明确下一动作
 
 当前动作是：
 
-> 最终 v2 preflight 已通过；下一步以 batch 128 启动完全相同的 retry。
-> 缓存阶段不得误判为 GPU 故障；推理阶段应接近满载。real XRD 仍锁定。
+> simulated Test 已完成并冻结；不得重跑或 Test-guided retuning。下一步是
+> 单独设计和授权 real-XRD external validation。real XRD 目前仍未使用。
