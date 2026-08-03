@@ -1,5 +1,10 @@
 # V9-T 真实域少样本适配交接补充
 
+> **2026-08-03 supersession notice:** 本文件是历史 v1（21/14/35）交接，
+> 仍为 execution disabled。当前 RRUFF-371 方向为 RRUFF-70 全部承担开发与
+> few-shot adaptation、301 条 extension 承担外部评测；v2 角色/episode 合同
+> 尚未冻结，不能用本文件授权运行。
+
 状态日期：2026-07-24。
 
 > 本补充覆盖 RRUFF 真实域设计与工程状态。原 `CODEX_HANDOFF.md` 中关于模拟训练、台式机迁移、lambda Gate、0/7 和 0/15 的内容继续有效。

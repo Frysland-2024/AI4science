@@ -1,16 +1,29 @@
 # XRD Robustness V9-T：当前工程交接
 
-## 2026-08-03 RRUFF-350 data handoff
+## 2026-08-03 RRUFF-371 data handoff
 
-- Local dataset: `data/real_xrd/rruff350/` (Git-ignored, not publishable data).
-- Frozen identity: `rruff-real-pxrd-350-v1`.
-- Composition: 350 unique RRUFF sample IDs; 50 per crystal system; 70 frozen
-  RRUFF-70 spectra plus 280 model-blind extensions.
-- Rebuild: `scripts/build_rruff350.py` using the five official archives in
-  `data/real_xrd/rruff350/source_archives/`.
-- Audit: `reports/rruff350_build_audit.json`.
-- Boundary: this does not authorize real-XRD inference or redefine the frozen
-  21/14/35 roles within RRUFF-70.
+- Current local dataset: `data/real_xrd/rruff371/` (Git-ignored, not
+  publishable data).
+- Frozen identity: `rruff-real-pxrd-371-v2`.
+- Composition: 371 unique RRUFF sample IDs; 53 per crystal system; 70 frozen
+  legacy spectra plus a 301-sample model-blind extension (43 per class).
+- Preservation: `rruff-real-pxrd-350-v1` remains intact. All 350 IDs and their
+  canonical-spectrum, RAW, and DIF hashes are preserved in v2; the 21 additions
+  are balanced at three per class.
+- Rebuild: parameterized `scripts/build_rruff350.py` using the five official
+  archives retained in `data/real_xrd/rruff350/source_archives/`, with
+  `--target-per-class 53 --dataset-version 2`.
+- Audits: `reports/rruff371_build_audit.json` and
+  `reports/rruff371_expansion_audit.json`.
+- Intended roles: legacy RRUFF-70 is development/few-shot data; the extension
+  is the 301-sample external evaluation cohort. The replacement role/episode
+  manifests are not yet frozen and real-XRD execution remains disabled.
+- Design recommendation: replace the obsolete 21/14/35 split with 35 support
+  and 35 adaptation-validation samples (five per class each), supporting a
+  nested 0/1/2/3/5-shot curve.
+- Scope caveat: 34 extension samples share 23 normalized mineral names with the
+  legacy 70. Primary claims are measurement-domain transfer; unseen-mineral
+  claims require a separately frozen group-disjoint sensitivity cohort.
 
 **交接状态日期：2026-08-03**
 **仓库：** `Frysland-2024/AI4science`  

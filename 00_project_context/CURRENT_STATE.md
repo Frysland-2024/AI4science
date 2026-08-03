@@ -21,23 +21,42 @@ Validation replication has completed: five matched training seeds, two methods
 per seed, ten runs total. No seed was excluded post hoc and lambda was not
 retuned.
 
-## 2026-08-03 RRUFF-350 collection completed
+## 2026-08-03 RRUFF-371 collection completed
 
-The local measured-PXRD expansion asset is now frozen as
-`rruff-real-pxrd-350-v1`: 350 unique RRUFF sample IDs, balanced at 50 samples
-for each of the seven crystal systems. It preserves all 70 frozen RRUFF-70
-canonical spectrum hashes and adds 280 model-blind samples selected from the
-official RRUFF powder archives using measurement, label, DIF, quality, and
+The current local measured-PXRD asset is frozen as
+`rruff-real-pxrd-371-v2`: 371 unique RRUFF sample IDs, balanced at 53 samples
+for each of the seven crystal systems. It contains the 70-sample legacy set and
+a 301-sample extension, balanced at 43 extension samples per crystal system.
+Selection used official measured-powder, identification, DIF, quality, and
 spectral-redundancy evidence only.
 
-The archives and spectra remain under the ignored local data root
-`xrd_robustness/data/real_xrd/rruff350/`; datasets are not committed. The
-reproducible builder is `xrd_robustness/scripts/build_rruff350.py`, and the
-tracked audit is `xrd_robustness/reports/rruff350_build_audit.json`.
+The previous `rruff-real-pxrd-350-v1` asset remains intact and versioned. An
+independent expansion audit verifies that all 350 prior IDs are present in v2,
+that their canonical-spectrum, RAW, and DIF hashes are unchanged, and that the
+21 additions contribute exactly three samples per crystal system. The largest
+new-sample correlation at inclusion is `0.9760145098338745`.
 
-RRUFF-350 is an expansion/evaluation asset, not a new independent 350-sample
-final test: the embedded RRUFF-70 roles remain frozen and explicitly labelled.
-No model was loaded and no real-XRD inference was run while constructing it.
+The ignored local data root is
+`xrd_robustness/data/real_xrd/rruff371/`; datasets are not committed. The
+parameterized builder is `xrd_robustness/scripts/build_rruff350.py`. Tracked
+evidence is in `xrd_robustness/reports/rruff371_build_audit.json` and
+`xrd_robustness/reports/rruff371_expansion_audit.json`.
+
+The approved scientific direction is to use the legacy RRUFF-70 only for
+real-domain interface development and few-shot adaptation, while reserving the
+301-sample extension for external evaluation. The old 21/14/35 role contract is
+therefore historical and remains execution-disabled; the replacement
+development allocation has not yet been frozen. The recommended replacement is
+35 support samples and 35 adaptation-validation samples (five per crystal
+system in each), enabling a nested 0/1/2/3/5-shot curve and making validation
+less unstable than two samples per class.
+
+The extension shares a normalized mineral name with RRUFF-70 for 34 samples
+across 23 mineral names. Consequently, the 301-sample primary cohort measures
+transfer to the experimental measurement domain, not guaranteed generalization
+to unseen minerals. A prespecified mineral-group-disjoint sensitivity cohort is
+required for any unseen-mineral statement. No model was loaded and no real-XRD
+inference was run during collection or audit.
 
 The confirmatory one-shot simulated-Test protocol is now also frozen in:
 
@@ -184,9 +203,12 @@ hash. A sustained 12-second inference sample averaged 94.25% GPU utilization
 (91-97%), above the requested 88-90% execution target.
 
 The remaining scientific boundary is external validity: real XRD and
-real-domain adaptation have not been used. The seed-20260714 Test diagnosis also
-shows that aggregate improvement is not uniform across every class/profile;
-monoclinic remains the principal worst-class bottleneck.
+real-domain adaptation have not been used. Before execution, the replacement
+RRUFF-70 development split, nested few-shot episodes, preprocessing interface,
+and 301-sample external-test contract must be frozen and audited. The
+seed-20260714 Test diagnosis also shows that aggregate improvement is not
+uniform across every class/profile; monoclinic remains the principal
+worst-class bottleneck.
 
 ## Next actions
 
@@ -194,8 +216,13 @@ monoclinic remains the principal worst-class bottleneck.
    not rerun, retune, exclude seeds, or select checkpoints from Test outcomes.
 2. Carry the monoclinic shift/texture limitation into publication claims and
    any future error analysis.
-3. Design and separately authorize the real-XRD external-validation stage
-   without reopening the V9 method or lambda decision.
+3. Freeze the RRUFF-70 development allocation and nested few-shot episodes;
+   the current recommendation is 35 support / 35 adaptation validation.
+4. Freeze the shared real-domain preprocessing interface and both the
+   301-sample measurement-domain endpoint and mineral-group-disjoint sensitivity
+   endpoint before any model access.
+5. Separately authorize real adaptation and external evaluation without
+   reopening the V9 method or lambda decision.
 
 ## Authoritative records
 
@@ -213,6 +240,8 @@ monoclinic remains the principal worst-class bottleneck.
 - `xrd_robustness/reports/v9_resnet_js_simulated_test_summary.json`
 - `xrd_robustness/reports/v9_resnet_js_simulated_test_audit.json`
 - `xrd_robustness/reports/v9_resnet_js_simulated_test_results_20260803.md`
+- `xrd_robustness/reports/rruff371_build_audit.json`
+- `xrd_robustness/reports/rruff371_expansion_audit.json`
 - Validation result commit `868b079c1b410e6afe877330b7defc4262d82969`
 - Test-contract commits begin at `1a2d180baf10e47a4b8732b14549522cfdaf48d2`
 

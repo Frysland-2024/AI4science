@@ -65,7 +65,7 @@
 | 正式模拟实验 | **0/15，未开始** |
 | simulated Test | 锁定、未执行 |
 | RRUFF-70 样品组成 | 冻结 |
-| RRUFF 真实域角色划分 | 冻结：21 train / 14 validation / 35 final test |
+| RRUFF 真实域角色划分 | v1 的 21/14/35 已退出当前设计；v2 开发/外测合同待冻结 |
 | real-adaptation 合同审计与计划生成 | 已实现，禁止加载模型或谱图 |
 | real-adaptation 训练器 | 尚未实现 |
 | 真实适配与 final real test | 均锁定、未执行 |
@@ -85,24 +85,34 @@
 - 同一优化与 early-stopping 规则；
 - final real test 完全隔离。
 
-## RRUFF-70 真实域协议
+## RRUFF 真实域协议
 
-### RRUFF-350 扩展资产（2026-08-03）
+### RRUFF-371 扩展资产（2026-08-03）
 
-本地已建立 `rruff-real-pxrd-350-v1`：七晶系各 50 条，共 350 个唯一
-RRUFF 样本编号。其中旧 RRUFF-70 的规范谱图按字节哈希原样保留，另增
-280 条基于官方 measured-powder、XRD identification、配对 DIF、谱图质量和
-冗余约束筛选的样本。该资产不是重新定义的 350 条独立 final test；旧
-RRUFF-70 的 21/14/35 角色不变。
+本地已冻结 `rruff-real-pxrd-371-v2`：七晶系各 53 条，共 371 个唯一 RRUFF
+样本编号。其中旧 RRUFF-70 的规范谱图按字节哈希原样保留，extension 为
+301 条、每晶系 43 条。上一版 `rruff-real-pxrd-350-v1` 继续独立保留；审计
+确认 v1 的 350 个 ID 及 canonical spectrum、RAW、DIF 哈希全部被 v2 原样
+继承，新增 21 条正好每晶系 3 条。
 
-数据与官方压缩包位于 Git 忽略的 `data/real_xrd/rruff350/`，构建器为
-`scripts/build_rruff350.py`，可提交审计为
-`reports/rruff350_build_audit.json`。构建过程不加载模型，也不授权或执行
-real-XRD inference。
+数据位于 Git 忽略的 `data/real_xrd/rruff371/`，构建器为可配置的
+`scripts/build_rruff350.py`。可提交审计为
+`reports/rruff371_build_audit.json` 与
+`reports/rruff371_expansion_audit.json`。构建和审计均未加载模型、未读取
+checkpoint 或预测结果，也未执行 real-XRD inference。
+
+当前科学方向是：RRUFF-70 只承担真实域接口开发和 few-shot adaptation；
+301 条 extension 承担外部评测。旧 21/14/35 合同仍保留为历史 v1 且禁止
+执行，替代的 v2 角色和 episode manifest 尚待冻结。
+
+301 条中有 34 条与 RRUFF-70 共享矿物名称，共涉及 23 个名称。因此 primary
+endpoint 的准确定位是 measurement-domain transfer，而不是 unseen-mineral
+generalization；若要主张后者，必须提前冻结 mineral-name group-disjoint 的
+sensitivity cohort。
 
 来源语料：`rruff-real-pxrd-70-v1.0-final`，七晶系各 10 条。
 
-模型访问前按固定 SHA-256 规则冻结为：
+历史 v1 在模型访问前曾按固定 SHA-256 规则冻结为：
 
 | 角色 | 每晶系 | 总数 |
 |---|---:|---:|
@@ -110,7 +120,10 @@ real-XRD inference。
 | adaptation validation | 2 | 14 |
 | final real test | 5 | 35 |
 
-少样本预算为 0/1/2/3-shot。1-shot 和 2-shot 各有 3 个固定 support episode；3-shot 使用全部 21 条 adaptation train。
+这份 21/14/35 划分不再是当前拟执行设计。当前建议把完整 RRUFF-70 平衡
+改为 35 support / 35 adaptation validation（均为每晶系 5 条），并使用
+0/1/2/3/5-shot 的 episode 内嵌套学习曲线。该建议必须在任何真实谱模型
+访问前版本化为 v2 manifest 和合同；在此之前不能启动真实域训练。
 
 主适配实验固定为：冻结 encoder、只更新 classifier head、cross-entropy only。全模型 CE 微调作为预注册次要分析。
 

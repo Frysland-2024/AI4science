@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Build a provenance-preserving 350-sample RRUFF measured-PXRD collection.
+"""Build a provenance-preserving balanced RRUFF measured-PXRD collection.
 
 The collection retains the frozen RRUFF-70 samples as a labelled legacy subset
-and adds forty measured samples per crystal system. Selection is model-blind:
-only source metadata, measurement quality, paired DIF/refinement evidence, and
-pairwise spectrum redundancy are used.
+and adds a configurable number of measured samples per crystal system. Selection
+is model-blind: only source metadata, measurement quality, paired DIF/refinement
+evidence, and pairwise spectrum redundancy are used.
 """
 
 from __future__ import annotations
@@ -271,7 +271,18 @@ def main() -> int:
     parser.add_argument("--legacy-root", type=Path, required=True)
     parser.add_argument("--output-root", type=Path, required=True)
     parser.add_argument("--report", type=Path, required=True)
+    parser.add_argument("--target-per-class", type=int, default=50)
+    parser.add_argument("--dataset-version", type=int, default=1)
     args = parser.parse_args()
+    if args.target_per_class < 10:
+        raise ValueError("target-per-class cannot be smaller than frozen legacy count 10")
+    if args.dataset_version < 1:
+        raise ValueError("dataset-version must be positive")
+    target_per_class = int(args.target_per_class)
+    total_samples = target_per_class * len(CLASS_ORDER)
+    collection_name = f"rruff{total_samples}"
+    extension_role = f"{collection_name}_extension"
+    dataset_id = f"rruff-real-pxrd-{total_samples}-v{args.dataset_version}"
     source_root = args.source_root.resolve()
     legacy_root = args.legacy_root.resolve()
     output_root = args.output_root.resolve()
@@ -498,14 +509,14 @@ def main() -> int:
             (x for x in class_candidates if not x["legacy"]), key=selection_key
         )
         for correlation_limit in (0.95, MAX_PAIRWISE_PEARSON, 0.995):
-            if len(class_selected) >= 50:
+            if len(class_selected) >= target_per_class:
                 break
             if correlation_limit > 0.95:
                 selection_relaxations[crystal_system].append(
                     f"pairwise Pearson ceiling relaxed to {correlation_limit:.3f} to fill quota"
                 )
             for item in pool:
-                if len(class_selected) >= 50 or item in class_selected:
+                if len(class_selected) >= target_per_class or item in class_selected:
                     continue
                 if mineral_counts.get(item["mineral_name"], 0) >= MAX_PER_MINERAL:
                     continue
@@ -517,13 +528,13 @@ def main() -> int:
                 mineral_counts[item["mineral_name"]] = (
                     mineral_counts.get(item["mineral_name"], 0) + 1
                 )
-        if len(class_selected) < 50:
+        if len(class_selected) < target_per_class:
             selection_relaxations[crystal_system].append(
                 "maximum samples for one mineral name relaxed from 3 to 4; "
                 "pairwise Pearson ceiling remains 0.995"
             )
             for item in pool:
-                if len(class_selected) >= 50 or item in class_selected:
+                if len(class_selected) >= target_per_class or item in class_selected:
                     continue
                 if mineral_counts.get(item["mineral_name"], 0) >= 4:
                     continue
@@ -535,9 +546,10 @@ def main() -> int:
                 mineral_counts[item["mineral_name"]] = (
                     mineral_counts.get(item["mineral_name"], 0) + 1
                 )
-        if len(class_selected) != 50:
+        if len(class_selected) != target_per_class:
             raise RuntimeError(
-                f"{crystal_system}: quality/diversity rules selected {len(class_selected)}, not 50"
+                f"{crystal_system}: quality/diversity rules selected "
+                f"{len(class_selected)}, not {target_per_class}"
             )
         selected.extend(class_selected)
 
@@ -574,7 +586,7 @@ def main() -> int:
             refinement_target = str(target.relative_to(output_root)).replace("\\", "/")
         evidence = {
             "dataset_role": (
-                "legacy_rruff70" if item["legacy"] else "rruff350_extension"
+                "legacy_rruff70" if item["legacy"] else extension_role
             ),
             "dif_archive_member": item["dif_member"],
             "dif_sha256": item["dif_sha256"],
@@ -623,25 +635,25 @@ def main() -> int:
                 "max_selected_pearson_at_inclusion": item.get(
                     "max_selected_pearson_at_inclusion", "legacy_frozen"
                 ),
-                "selection_status": "FROZEN_RRUFF350_MASTER",
+                "selection_status": f"FROZEN_RRUFF{total_samples}_MASTER",
             }
         )
 
-    manifest_path = manifest_dir / "rruff350_master_manifest.csv"
+    manifest_path = manifest_dir / f"{collection_name}_master_manifest.csv"
     with manifest_path.open("w", encoding="utf-8", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=list(manifest_rows[0]))
         writer.writeheader()
         writer.writerows(manifest_rows)
     archive_hashes = {name: sha256_file(path) for name, path in archive_paths.items()}
     class_counts = {name: 0 for name in CLASS_ORDER}
-    role_counts = {"legacy_rruff70": 0, "rruff350_extension": 0}
+    role_counts = {"legacy_rruff70": 0, extension_role: 0}
     for row in manifest_rows:
         class_counts[row["crystal_system"]] += 1
         role_counts[row["dataset_role"]] += 1
     new_correlations = [
         float(row["max_selected_pearson_at_inclusion"])
         for row in manifest_rows
-        if row["dataset_role"] == "rruff350_extension"
+        if row["dataset_role"] == extension_role
     ]
     mineral_counts: dict[tuple[str, str], int] = {}
     for row in manifest_rows:
@@ -657,8 +669,8 @@ def main() -> int:
         for legacy in legacy_rows
     )
     contract = {
-        "schema_version": "rruff350-measured-pxrd-v1",
-        "dataset_id": "rruff-real-pxrd-350-v1",
+        "schema_version": f"{collection_name}-measured-pxrd-v{args.dataset_version}",
+        "dataset_id": dataset_id,
         "status": "FROZEN_MODEL_BLIND_DATASET",
         "sample_count": len(manifest_rows),
         "class_counts": class_counts,
@@ -701,10 +713,11 @@ def main() -> int:
         citation, encoding="utf-8"
     )
     report = {
-        "schema_version": "rruff350-build-audit-v1",
+        "schema_version": f"{collection_name}-build-audit-v{args.dataset_version}",
         "status": (
             "pass"
-            if len(manifest_rows) == 350 and set(class_counts.values()) == {50}
+            if len(manifest_rows) == total_samples
+            and set(class_counts.values()) == {target_per_class}
             else "fail"
         ),
         "dataset_id": contract["dataset_id"],

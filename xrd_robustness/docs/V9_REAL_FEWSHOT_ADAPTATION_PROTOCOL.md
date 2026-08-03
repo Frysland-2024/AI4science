@@ -1,5 +1,10 @@
 # V9-T 真实域少样本适配协议
 
+> **2026-08-03 supersession notice:** 本文件记录历史 v1（21/14/35）设计，
+> 继续保持 execution disabled。当前数据资产已扩为 RRUFF-371，科学方向改为
+> RRUFF-70 全部用于开发/适配、301 条 extension 用于外部评测。替代的 v2
+> 角色与 episode manifest 尚未冻结；不得按本文件启动真实域训练或测试。
+
 状态日期：2026-07-24  
 协议状态：**scientific design frozen; role assignment frozen; execution disabled**
 

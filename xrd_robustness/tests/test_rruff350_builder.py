@@ -51,3 +51,12 @@ def test_parse_dif_extracts_space_group_and_peaks():
     assert space_group == "P 21/c"
     assert np.allclose(positions, [20.1, 30.2])
     assert np.allclose(intensities, [100.0, 25.0])
+
+
+def test_builder_exposes_balanced_collection_size_options():
+    source = SCRIPT.read_text(encoding="utf-8")
+
+    assert 'parser.add_argument("--target-per-class", type=int, default=50)' in source
+    assert 'parser.add_argument("--dataset-version", type=int, default=1)' in source
+    assert 'total_samples = target_per_class * len(CLASS_ORDER)' in source
+    assert 'dataset_id = f"rruff-real-pxrd-{total_samples}-v{args.dataset_version}"' in source

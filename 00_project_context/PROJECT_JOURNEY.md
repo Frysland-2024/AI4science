@@ -793,3 +793,35 @@ correlation at inclusion among the 280 new samples was 0.957184. One frozen
 sample, R230005 Edwindavisite, was absent from the current official archive and
 was retained only after its local frozen spectrum and DIF hashes matched the
 RRUFF-70 manifest. No model outputs or real-XRD inference were used.
+
+## 2026-08-03 — RRUFF-371 expansion and real-domain role revision
+
+Before any model accessed RRUFF spectra, the user authorized enlarging the
+external evaluation cohort beyond 300 while retaining exact class balance. The
+new version is `rruff-real-pxrd-371-v2`: 70 legacy development samples plus 301
+model-blind extension samples, with 53 total and 43 extension samples in each of
+the seven crystal systems. The previous `rruff-real-pxrd-350-v1` was not
+overwritten. An independent manifest audit confirms that all 350 parent IDs and
+their canonical-spectrum, RAW, and DIF hashes are unchanged; the 21 additions
+are exactly three per crystal system.
+
+The scientific role also changed prospectively. The legacy RRUFF-70 is now
+reserved for real-domain interface development and few-shot adaptation, while
+the 301-sample extension is reserved for external evaluation. This makes the
+old 21/14/35 contract historical; it remains execution-disabled and is not to
+be silently edited or reused as the current protocol.
+
+Two samples per class in the old adaptation-validation set are too unstable for
+learning-rate and early-stopping selection: one changed classification alters a
+class recall by 50 percentage points. The recommended replacement is therefore
+five support and five validation samples per class (35/35), enabling nested
+0/1/2/3/5-shot learning curves and reducing per-class validation granularity to
+20 percentage points. This allocation is a design recommendation, not yet a
+frozen v2 role manifest or authorization to train.
+
+The model-blind overlap audit found that 34 of the 301 extension samples share
+23 normalized mineral names with the legacy 70. The primary 301-sample endpoint
+therefore measures experimental measurement-domain transfer, not guaranteed
+generalization to unseen minerals. Any unseen-mineral claim must use a
+separately prespecified mineral-group-disjoint sensitivity cohort. No model,
+checkpoint, prediction, or real-XRD inference was used for these decisions.
