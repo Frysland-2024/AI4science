@@ -1,5 +1,25 @@
 # XRD Robustness V9-T：跨 Codex 账号与台式机完整交接
 
+> **2026-08-03 ten-run recovery override (latest):** The cloud-executed
+> paired ten-run is locally recovered under the Git-ignored
+> `reports/ten_run_output/` evidence root. `COMPLETE_EXPORT.sha256` has 12
+> entries; all 12 SHA-256 values were recomputed and match. The assembled
+> checkpoint archive contains exactly 10 `best.ckpt` files: Dynamic ERM and
+> JS lambda=60 for each seed 20260711--20260715. Embedded metadata confirms
+> every stored epoch/optimizer-step pair against its expected pair. This is
+> completed artifact-integrity evidence only: the local export does not contain
+> the five-seed aggregate metrics or per-run histories, so no final metric,
+> Test claim, or selection conclusion may be inferred from it. Recover the
+> cloud summary/history and audit it against the archive hashes before making
+> scientific claims. The former `.venvs/xrd_tools` launcher is broken after the
+> C-drive reinstall because its base Python path belonged to the old account;
+> preserve it. A clean ignored `.venvs/xrd_test` environment now has Python
+> 3.11.9 and all declared science/test dependencies. The historical four-run
+> *pre-execution* test now asserts the correct post-completion behavior: the
+> preflight must refuse the existing output root while all other locks/checks
+> pass and `four_run_started=false`. The complete unit suite passes; do not use
+> this preflight itself as a post-completion Gate.
+
 > **2026-07-28 optimized execution authorization (latest):** The user
 > authorized the serial four-run, then stopped the initial Dynamic run at
 > epoch 9 / step 5,544 before Validation to optimize online generation. The

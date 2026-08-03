@@ -694,3 +694,19 @@ Because this is a verified engineering acceleration rather than a scientific
 factor change, the frozen model, optimizer, simulator parameters, random
 streams, budget, early stopping, metrics, and selection rule remain unchanged.
 The only valid next execution is a complete four-run restart from step zero.
+
+## 2026-08-03 Ten-run recovery: artifact completion is not a metric result
+
+The cloud-executed paired ten-run was recovered after the local system repair
+as a Git-ignored archive. A full manifest audit recomputed all 12 supplied
+SHA-256 entries successfully. The archive contains exactly ten best
+checkpoints, covering the five frozen seeds and both paired methods, and the
+embedded metadata confirms every expected epoch and optimizer step.
+
+This is sufficient to establish that the checkpoint artifact set was exported
+intact. It is not sufficient to state a five-seed performance comparison:
+the recovered local export does not include an aggregate summary or individual
+metric histories. The research record therefore separates the engineering fact
+of completed, integrity-verified checkpoints from the unresolved scientific
+task of recovering and auditing the frozen-evaluation summaries. No Test or
+method-selection claim is opened by this recovery alone.

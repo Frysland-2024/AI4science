@@ -1,10 +1,53 @@
 # AI4science Current State
 
-**Canonical status date:** 2026-07-29
+**Canonical status date:** 2026-08-03
 **Repository:** `Frysland-2024/AI4science`  
 **Active engineering root:** `xrd_robustness/`
 
 > Current-state record only. Historical reasoning remains in `PROJECT_JOURNEY.md` and dated decision files.
+
+## 2026-08-03 V9 ten-run recovery inventory and test-readiness status (authoritative)
+
+The cloud-executed paired ten-run has been recovered locally as a Git-ignored
+evidence archive at `xrd_robustness/reports/ten_run_output/`. The recovery
+inventory is complete at the artifact-integrity level: the `COMPLETE_EXPORT`
+manifest contains 12 files and all 12 SHA-256 values were recomputed locally
+and matched on 2026-08-03. This includes the five checkpoint archive parts,
+the assembled checkpoint archive, formal-14060 data archive, and recovery
+metadata archive.
+
+The assembled `v9_best_checkpoints_20260802.tar` contains exactly ten
+`best.ckpt` artifacts: Dynamic ERM and JS lambda=60 for each seed
+`20260711` through `20260715`. The embedded checkpoint metadata records the
+expected stored epoch and optimizer step for all ten artifacts; every stored
+value matches its corresponding expected value. The checkpoint archive's
+SHA-256 is `a6f9defb8ba63a541543252006e9b95f0b89fae031f8a597dbacd91856dc1ab0`;
+the formal-data and recovery-metadata archives also match their supplied
+sidecars.
+
+This establishes recovered completion and artifact integrity, **not** the
+scientific result table: the local export has no five-seed aggregate summary
+and no per-run metric histories. Do not infer final OOD, in-range, Test, or
+method-selection metrics from checkpoint presence alone. The next evidence
+action is to recover or regenerate the cloud run summary/history under the
+frozen evaluation contract, then audit it against the ten checkpoint hashes.
+
+Test readiness after the C-drive reinstall is restored. Git 2.55.0 and Python
+3.11.9 are installed. The preserved `.venvs/xrd_tools` launcher remains
+unusable because it references the removed `C:\Users\81504` Python 3.11
+installation; it is retained as recovery evidence. A clean ignored environment
+`.venvs/xrd_test` now contains the declared `science` and test dependencies
+(`numpy`, `pytest`, `mp-api`, `pymatgen`, and CPU `torch`). Source compilation
+passes. The historical four-run *pre-execution* test was revised to assert the
+correct post-completion behavior: the preflight must refuse an existing output
+root while every other lock/check still passes and `four_run_started=false`.
+The complete unit suite passed on 2026-08-03 after that revision. The
+reproducible command is:
+
+```powershell
+cd E:\AI4science\xrd_robustness
+$env:PYTHONPATH='src'; E:\AI4science\.venvs\xrd_test\Scripts\python.exe -s -m unittest discover -s tests -p 'test_*.py' -v
+```
 
 ## Latest authoritative override: four-run authorized after exact online-generation optimization
 

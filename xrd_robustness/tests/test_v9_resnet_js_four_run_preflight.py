@@ -16,10 +16,18 @@ SPEC.loader.exec_module(MODULE)
 
 
 class FourRunPreflightTest(unittest.TestCase):
-    def test_locked_contract_and_preflight_pass(self) -> None:
+    def test_locked_contract_refuses_completed_output_root(self) -> None:
         contract = ROOT / "configs" / "v9_resnet_js_four_run.preregistered.json"
         plan, report = MODULE.run_audit(contract)
-        self.assertEqual(report["status"], "pass")
+        self.assertEqual(report["status"], "fail")
+        self.assertFalse(report["checks"]["no_four_run_output_root_exists"])
+        self.assertTrue(
+            all(
+                passed
+                for name, passed in report["checks"].items()
+                if name != "no_four_run_output_root_exists"
+            )
+        )
         self.assertFalse(report["four_run_started"])
         self.assertEqual(len(plan["runs"]), 4)
         self.assertEqual(
