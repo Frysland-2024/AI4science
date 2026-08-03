@@ -710,3 +710,14 @@ metric histories. The research record therefore separates the engineering fact
 of completed, integrity-verified checkpoints from the unresolved scientific
 task of recovering and auditing the frozen-evaluation summaries. No Test or
 method-selection claim is opened by this recovery alone.
+
+## 2026-08-03 Correction after authoritative repository synchronization
+
+The recovered local archive by itself remains insufficient to establish aggregate
+metrics. Synchronization with the authoritative project repository recovered the
+version-controlled ten-run summary and result record, which resolve that
+archive-only limitation: all five preregistered paired seeds favor JS
+`lambda=60` on the Validation OOD primary metric. This does not open the
+simulated Test or real-XRD locks; both remain frozen and unused. The archive is
+therefore retained as integrity and checkpoint-recovery evidence, not as the
+sole source of scientific metrics.

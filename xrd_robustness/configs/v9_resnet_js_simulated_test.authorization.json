@@ -1,0 +1,42 @@
+{
+  "schema_version": "v9-resnet-js-simulated-test-authorization-v1",
+  "status": "authorized_for_one_shot_simulated_test",
+  "authorized_at": "2026-08-02T12:43:00+08:00",
+  "authorization_basis": "Explicit user instruction in the AI4science project conversation: '都通通上传，快点开始实验吧'. This authorizes execution of the already frozen one-shot simulated-Test contract after all fail-closed preflight gates pass.",
+  "preregistered_contract": {
+    "path": "configs/v9_resnet_js_simulated_test.preregistered.json",
+    "git_blob_sha": "b8dcf4df3da838dff597c9701a683e206b4b4312",
+    "expected_schema_version": "v9-resnet-js-simulated-test-preregistration-v1",
+    "expected_status": "preregistered_locked_not_authorized"
+  },
+  "scope": {
+    "comparison": [
+      "ordinary_dynamic_augmentation",
+      "js_consistency_transfer"
+    ],
+    "lambda_js": 60.0,
+    "training_seed_pairs": 5,
+    "checkpoint_count": 10,
+    "evaluation_seeds": [
+      20260721,
+      20260722,
+      20260723
+    ],
+    "execution": "serial_one_shot_confirmatory_test"
+  },
+  "preflight_requirement": "Execution is authorized only if every required gate in the frozen preregistration passes. Any mismatch, missing checkpoint, dirty source ambiguity, manifest inconsistency, prior Test output, or authorization-contract mismatch must stop execution before inference.",
+  "boundaries": {
+    "simulated_test_allowed_after_preflight": true,
+    "real_xrd_allowed": false,
+    "real_domain_adaptation_allowed": false,
+    "retraining_allowed": false,
+    "lambda_retuning_allowed": false,
+    "checkpoint_substitution_allowed": false,
+    "checkpoint_ensembling_allowed": false,
+    "posthoc_seed_exclusion_allowed": false,
+    "test_guided_debugging_allowed": false,
+    "test_guided_method_modification_allowed": false,
+    "second_modified_test_attempt_allowed": false
+  },
+  "stop_rule": "After the frozen Test panel is evaluated and the audit and result reports are generated, stop. Report the observed result without reopening method selection."
+}
