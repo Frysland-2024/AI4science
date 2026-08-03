@@ -1,6 +1,6 @@
 # XRD Robustness V9-T：当前工程交接
 
-**交接状态日期：2026-08-01**  
+**交接状态日期：2026-08-03**
 **仓库：** `Frysland-2024/AI4science`  
 **分支：** `main`
 
@@ -32,8 +32,15 @@ one-shot simulated-Test 合同现已冻结：
 
 `reports/v9_resnet_js_simulated_test_contract_20260801.md`
 
-合同状态为 `preregistered_locked_not_authorized`。用户本次“冻结”指令只授权
-锁定合同，没有授权执行 Test。
+合同文件继续保留 `preregistered_locked_not_authorized`，以固定执行前科学
+选择；独立执行授权已于 2026-08-02 记录。2026-08-03 的第一次本地启动因
+runner 对每个 checkpoint 重复生成相同冻结谱图而形成 CPU 瓶颈，用户在任何
+checkpoint 结果或 summary 写出前将其停止。没有观察到 Test 指标，但必须如实
+记录已经发生过部分 Test 访问。
+
+用户随后明确指令“重搞”，授权一次完全相同的工程重试。新增 retry
+authorization 只允许 render-once 哈希缓存、原子状态和同一 attempt 的断点续跑；
+checkpoint、manifest、profile、evaluation seed、metric 和选择规则均不得改变。
 
 ## 十轮实验状态
 
@@ -120,7 +127,10 @@ limitation 和 secondary diagnostic。
 
 - ten-run 已结束；
 - simulated-Test 合同已冻结；
-- simulated-Test 尚未授权或执行；
+- simulated-Test 首次本地启动已因工程瓶颈中止，未产生任何 run result；
+- 完全相同的 retry 已授权但尚未启动；
+- 本地十个 checkpoint 与三份 frozen manifest 已通过 preflight；
+- 优化 runner、retry authorization 与性能审计已完成；
 - 当前没有需要继续恢复的训练；
 - 不应重复启动相同十轮矩阵；
 - 不应重新选择 seed；
@@ -141,9 +151,11 @@ limitation 和 secondary diagnostic。
 
 当前状态明确为：
 
-- `simulated_test_used = false`；
+- `simulated_test_accessed = true`；
+- `simulated_test_result_available = false`；
+- `identical_retry_started = false`；
 - `simulated_test_contract_frozen = true`；
-- `simulated_test_authorized = false`；
+- `identical_retry_authorized = true`；
 - `real_xrd_used = false`；
 - `lambda_retuned = false`；
 - `seed_excluded_posthoc = false`。
@@ -153,16 +165,15 @@ limitation 和 secondary diagnostic。
 
 ## 下一阶段的正确顺序
 
-1. 根据冻结合同实现或审查 read-only preflight 与 serial Test runner；
-2. 不运行 inference，仅验证配置解析、路径、输出边界和审计字段；
-3. 在本地定位十个 checkpoint，并在 preflight 中记录 SHA-256、epoch、step；
-4. 生成三份 deterministic Test manifest 并在 inference 前冻结哈希；
-5. 确认 Test 未被访问、输出目录为空、real XRD 仍锁定；
-6. 获得用户新的明确执行授权；
-7. 一次性运行 simulated-Test，生成审计与结果报告后停止；
-8. 冻结 Test 报告以后，再单独设计 real-XRD external validation。
-
-在新的执行授权文件完成前，不得执行 Test 命令。
+1. 在 runner 源码最终冻结后刷新 v2 preflight，并复核 source、checkpoint、
+   manifest、split 与 peak-cache hashes；
+2. 使用 batch 128 启动已授权的 identical retry；
+3. 先串行生成 75,924 条唯一冻结谱图并逐文件记录 SHA-256；该阶段 GPU 空闲
+   是预期行为；
+4. 十个 checkpoint 复用同一缓存、串行评测；推理阶段本机实测持续 GPU
+   utilization 平均 98.27%；
+5. 如基础设施中断，只允许通过同一 `run_state.json`、同一源码与 batch 续跑；
+6. 生成审计与结果报告后停止；冻结 Test 报告以后再设计 real-XRD validation。
 
 ## 新会话读取顺序
 
@@ -178,7 +189,7 @@ limitation 和 secondary diagnostic。
 
 ## 当前明确下一动作
 
-当前不是执行 Test。当前动作是：
+当前动作是：
 
-> 按冻结合同实现和审查 read-only preflight / serial runner；在新的明确执行
-> 授权前保持 simulated Test 和 real XRD 锁定。
+> 最终 v2 preflight 已通过；下一步以 batch 128 启动完全相同的 retry。
+> 缓存阶段不得误判为 GPU 故障；推理阶段应接近满载。real XRD 仍锁定。

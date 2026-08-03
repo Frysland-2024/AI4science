@@ -1,0 +1,37 @@
+{
+  "schema_version": "v9-resnet-js-simulated-test-identical-retry-authorization-v1",
+  "status": "authorized_identical_retry_after_infrastructure_abort",
+  "authorized_at": "2026-08-03T13:30:00+08:00",
+  "authorization_basis": "The user explicitly instructed '重搞' after observing poor GPU utilization in the first local launch.",
+  "contract_sha256": "361B183DFFC977F4520EB16C79D04034A30ED1E8A4B912677537F98196581709",
+  "prior_attempt": {
+    "status": "aborted_before_any_checkpoint_result",
+    "reason": "The original runner regenerated every frozen spectrum for every checkpoint, causing CPU-bound GPU starvation. The user stopped the inefficient launch.",
+    "result_json_written": false,
+    "summary_written": false,
+    "test_metric_observed": false
+  },
+  "scientific_contract": {
+    "checkpoints_unchanged": true,
+    "manifest_rows_unchanged": true,
+    "evaluation_seeds_unchanged": true,
+    "profiles_unchanged": true,
+    "metrics_unchanged": true,
+    "method_selection_reopened": false
+  },
+  "engineering_amendment": {
+    "render_each_frozen_spectrum_once": true,
+    "reuse_hash_verified_panel_cache_across_checkpoints": true,
+    "serial_checkpoint_evaluation": true,
+    "atomic_run_state_and_checkpoint_level_resume": true,
+    "batch_size_selected_on_non_test_data": 128
+  },
+  "boundaries": {
+    "real_xrd_allowed": false,
+    "retraining_allowed": false,
+    "lambda_retuning_allowed": false,
+    "checkpoint_substitution_allowed": false,
+    "posthoc_seed_exclusion_allowed": false,
+    "test_guided_method_modification_allowed": false
+  }
+}

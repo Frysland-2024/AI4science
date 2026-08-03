@@ -4,7 +4,6 @@ import json
 from pathlib import Path
 import unittest
 
-
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 
 from scripts.prepare_codex_account_handoff import ARTIFACT_ROLES
@@ -16,16 +15,17 @@ class CodexAccountHandoffTests(unittest.TestCase):
         self.assertIn("CODEX_HANDOFF.md", COPY_ROOTS)
         self.assertIn("CODEX_HANDOFF.md", ARTIFACT_ROLES)
 
-    def test_handoff_declares_required_stop_rules(self) -> None:
+    def test_handoff_declares_current_test_retry_boundaries(self) -> None:
         text = (PROJECT_ROOT / "CODEX_HANDOFF.md").read_text(encoding="utf-8")
         required_phrases = (
-            "0/7",
-            "optimizer step 0",
-            "ready_for_explicit_tuning_authorization",
-            "--confirm-development-tuning",
-            "simulated test",
-            "real test",
-            "没有独立 Git 元数据",
+            "Validation-only replication completed",
+            "没有观察到 Test 指标",
+            "`simulated_test_accessed = true`",
+            "`simulated_test_result_available = false`",
+            "`identical_retry_started = false`",
+            "`identical_retry_authorized = true`",
+            "batch 128",
+            "real XRD",
         )
         for phrase in required_phrases:
             with self.subTest(phrase=phrase):

@@ -1,6 +1,6 @@
 # AI4science Current State
 
-**Canonical status date:** 2026-08-01  
+**Canonical status date:** 2026-08-03
 **Repository:** `Frysland-2024/AI4science`  
 **Active engineering root:** `xrd_robustness/`
 
@@ -29,9 +29,19 @@ Human-readable contract:
 
 `xrd_robustness/reports/v9_resnet_js_simulated_test_contract_20260801.md`
 
-Its status is `preregistered_locked_not_authorized`. The user's instruction to
-freeze the contract did not authorize Test inference. Simulated Test therefore
-remains unused and execution-disabled.
+The contract itself remains `preregistered_locked_not_authorized`, preserving
+the pre-execution scientific choices. A separate authorization was recorded on
+2026-08-02. The first local launch on 2026-08-03 was stopped by the user before
+any checkpoint result or summary was written because the runner regenerated
+the same deterministic spectra for every checkpoint and starved the GPU.
+
+No Test metric was observed. Test access has nevertheless occurred and is
+recorded as an aborted infrastructure attempt. The user's subsequent explicit
+instruction `重搞` authorizes one identical retry: checkpoints, manifests,
+profiles, seeds, metrics, and selection rules remain unchanged. Only the
+execution implementation changes to a hash-verified, render-once panel cache,
+atomic run state, and checkpoint-level resume. The retry is authorized but has
+not started.
 
 ## 2026-08-01 five-seed paired replication completed
 
@@ -129,9 +139,11 @@ training seeds. It does not yet support a simulated-Test or real-XRD claim.
 
 The following boundaries remain authoritative:
 
-- simulated Test used: **no**;
+- simulated Test accessed: **yes, aborted infrastructure attempt**;
+- simulated-Test result available: **no**;
+- identical retry started: **no**;
 - simulated-Test contract frozen: **yes**;
-- simulated-Test execution authorized: **no**;
+- identical simulated-Test retry authorized: **yes**;
 - real XRD used: **no**;
 - real-domain adaptation used: **no**;
 - lambda retuned after replication: **no**;
@@ -143,34 +155,28 @@ simulated-Test result, a sim-to-real result, or a final external-validity claim.
 
 ## Current blocker
 
-The scientific Test design is no longer the blocker: the one-shot protocol is
-frozen. The remaining blockers before execution are:
+The ten checkpoints, three manifests, hashes, authorization, and optimized
+runner are present locally. Train-only/synthetic benchmarking selected serial
+one-time rendering plus evaluation batch 128. It measured 98.27% mean sustained
+GPU utilization during the inference phase and exact old-versus-cached input
+probabilities on the shared Train prefix. No Test spectrum or metric was used
+for that benchmark.
 
-1. implement or review the contract-conforming read-only preflight and serial
-   evaluation runner;
-2. locate all ten local Validation-selected checkpoint binaries;
-3. record checkpoint SHA-256 values and verify epoch/global-step matches;
-4. generate and freeze the three deterministic Test manifest hashes before
-   inference;
-5. verify that simulated Test has not previously been accessed and that the
-   output root is empty;
-6. obtain a separate explicit user authorization to execute the frozen contract.
-
-Missing checkpoints may not be silently regenerated or replaced under the
-current contract.
+No engineering blocker remains. The final v2 preflight passed with 10
+checkpoints, 3 manifests, 2,109 Test parents, matching runner source hash, and
+an unstarted identical retry. The runner must write its atomic `run_state.json`
+before loading Test spectra; only the same source/input bindings and batch size
+may resume an interrupted attempt.
 
 ## Next actions
 
-1. Implement and review the read-only preflight and Test evaluation runner
-   against the frozen machine-readable contract, without running inference.
-2. Run documentation/configuration validation and inspect the planned manifest,
-   checkpoint, provenance, and output paths.
-3. Obtain a separate explicit execution authorization.
-4. Only after all preflight gates pass, perform the one-shot simulated-Test
-   evaluation and stop for audit.
-5. Freeze the Test report and diagnose the seed-20260714 worst-class result as a
+1. Launch the identical retry with batch 128; allow the one-time cache phase to
+   finish even though GPU utilization is expected to be low during CPU rendering.
+2. Resume only through the bound `run_state.json` if infrastructure interrupts
+   the same attempt; do not change source, inputs, or batch size mid-run.
+3. Freeze the Test report and diagnose the seed-20260714 worst-class result as a
    secondary analysis.
-6. Only after the simulated-Test report is frozen, design the real-XRD external
+4. Only after the simulated-Test report is frozen, design the real-XRD external
    validation stage.
 
 ## Authoritative records
@@ -182,6 +188,9 @@ current contract.
 - `xrd_robustness/reports/v9_resnet_js_ten_run_summary.json`
 - `xrd_robustness/reports/v9_resnet_js_ten_run_results_20260801.md`
 - `xrd_robustness/configs/v9_resnet_js_simulated_test.preregistered.json`
+- `xrd_robustness/configs/v9_resnet_js_simulated_test.authorization.json`
+- `xrd_robustness/configs/v9_resnet_js_simulated_test.retry_authorization.json`
+- `xrd_robustness/reports/v9_resnet_js_simulated_test_performance_audit_20260803.json`
 - `xrd_robustness/reports/v9_resnet_js_simulated_test_contract_20260801.md`
 - Validation result commit `868b079c1b410e6afe877330b7defc4262d82969`
 - Test-contract commits begin at `1a2d180baf10e47a4b8732b14549522cfdaf48d2`

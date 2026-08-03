@@ -1,0 +1,129 @@
+{
+  "estimated_work": {
+    "checkpoint_inference_count": 759240,
+    "optimized_gpu_seconds": 131.1974431030587,
+    "optimized_render_count": 75924,
+    "optimized_render_seconds": 152.51847416712675,
+    "original_redundant_render_count": 759240,
+    "unique_frozen_spectra": 75924
+  },
+  "gpu": {
+    "cuda_runtime": "12.6",
+    "fastest_batch_size": 128,
+    "gpu": "NVIDIA GeForce RTX 4060 Laptop GPU",
+    "old_vs_cached_input_equivalence": {
+      "allclose_at_1e_6": true,
+      "maximum_probability_difference": 0.0,
+      "predicted_classes_identical": true,
+      "sample_count": 128,
+      "split": "train",
+      "test_structure_accessed": false
+    },
+    "results": {
+      "1024": {
+        "peak_allocated_mib": 1606.30419921875,
+        "peak_reserved_mib": 2152.0,
+        "seconds": 2.0003296999998383,
+        "spectra_per_second": 5119.156107116156,
+        "status": "pass"
+      },
+      "128": {
+        "peak_allocated_mib": 252.62841796875,
+        "peak_reserved_mib": 302.0,
+        "seconds": 0.22118529999988823,
+        "spectra_per_second": 5787.003024164114,
+        "status": "pass"
+      },
+      "256": {
+        "peak_allocated_mib": 446.54736328125,
+        "peak_reserved_mib": 528.0,
+        "seconds": 0.45819060000007994,
+        "spectra_per_second": 5587.19449940604,
+        "status": "pass"
+      },
+      "512": {
+        "peak_allocated_mib": 833.59130859375,
+        "peak_reserved_mib": 884.0,
+        "seconds": 0.9850198999999975,
+        "spectra_per_second": 5197.864530452646,
+        "status": "pass"
+      },
+      "768": {
+        "peak_allocated_mib": 1219.12841796875,
+        "peak_reserved_mib": 1458.0,
+        "seconds": 1.4857630999999856,
+        "spectra_per_second": 5169.060935757574,
+        "status": "pass"
+      }
+    },
+    "status": "pass",
+    "sustained_utilization": {
+      "maximum_percent": 100,
+      "mean_percent": 98.26666666666667,
+      "minimum_percent": 98,
+      "samples_percent": [
+        100,
+        98,
+        98,
+        98,
+        99,
+        99,
+        98,
+        98,
+        98,
+        98,
+        98,
+        98,
+        98,
+        98,
+        98
+      ],
+      "seconds": 8.0,
+      "spectra_processed": 50560
+    },
+    "synthetic_input_only": true,
+    "test_structure_accessed": false,
+    "torch": "2.13.0+cu126"
+  },
+  "rendering": {
+    "fastest_worker_count": 1,
+    "profile": "in_range",
+    "results": {
+      "1": {
+        "bit_exact_to_serial": true,
+        "seconds": 0.5142606999997952,
+        "sha256": "CA06AB657F330623CBAB01737A0DCD93B46FE9853851F737C2528B8C2301D4D0",
+        "spectra_per_second": 497.8019903136716
+      },
+      "16": {
+        "bit_exact_to_serial": true,
+        "seconds": 0.7649910000000091,
+        "sha256": "CA06AB657F330623CBAB01737A0DCD93B46FE9853851F737C2528B8C2301D4D0",
+        "spectra_per_second": 334.64445986945856
+      },
+      "4": {
+        "bit_exact_to_serial": true,
+        "seconds": 0.7634938000001057,
+        "sha256": "CA06AB657F330623CBAB01737A0DCD93B46FE9853851F737C2528B8C2301D4D0",
+        "spectra_per_second": 335.300692684033
+      },
+      "8": {
+        "bit_exact_to_serial": true,
+        "seconds": 0.7788838000001306,
+        "sha256": "CA06AB657F330623CBAB01737A0DCD93B46FE9853851F737C2528B8C2301D4D0",
+        "spectra_per_second": 328.6754712319823
+      }
+    },
+    "sample_count": 256,
+    "split": "train",
+    "test_structure_accessed": false
+  },
+  "schema_version": "v9-resnet-js-simulated-test-performance-audit-v1",
+  "scope": "Train-only renderer and synthetic GPU throughput benchmark; no Test spectrum or metric used",
+  "selection": {
+    "evaluation_batch_size": 128,
+    "reason": "highest measured end-to-end throughput on this machine",
+    "renderer_workers": 1
+  },
+  "status": "pass"
+}

@@ -721,3 +721,29 @@ archive-only limitation: all five preregistered paired seeds favor JS
 simulated Test or real-XRD locks; both remain frozen and unused. The archive is
 therefore retained as integrity and checkpoint-recovery evidence, not as the
 sole source of scientific metrics.
+
+## 2026-08-03 Simulated-Test infrastructure abort and identical retry amendment
+
+The first authorized local simulated-Test launch exposed an engineering flaw:
+the evaluator serially regenerated all 75,924 deterministic panel spectra for
+each of ten checkpoints and synchronized GPU output after every small batch.
+The GPU therefore waited on redundant CPU work. The user stopped the launch
+before any checkpoint result or aggregate metric was written. No Test outcome
+was available for inspection, but the partial Test access is recorded rather
+than relabeled as unused.
+
+Optimization decisions were made exclusively on 256 Train structures and
+synthetic ResNet inputs. Serial rendering was fastest at roughly 500 spectra/s;
+4, 8, and 16 threads were slower while remaining bit-exact. Batch 128 was the
+fastest GPU candidate at roughly 5.9k spectra/s, and an eight-second sustained
+forward sample held 98-100% utilization. Direct and cached-input probabilities
+were exactly identical on a 128-spectrum Train prefix.
+
+The retry amendment changes engineering only. Each frozen spectrum is rendered
+once into a SHA-256-verified local cache and reused across the unchanged ten
+checkpoints. Atomic run state binds source, manifests, simulator, split,
+peak-cache manifest, and batch size so an interruption can resume the same
+attempt but cannot silently become a modified attempt. Checkpoints, scientific
+profiles, evaluation seeds, metrics, primary endpoint, and method-selection
+closure remain unchanged. The identical retry is authorized but has not begun;
+real XRD remains locked.
