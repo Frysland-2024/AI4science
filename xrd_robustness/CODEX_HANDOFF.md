@@ -1,5 +1,17 @@
 # XRD Robustness V9-T：当前工程交接
 
+## 2026-08-03 RRUFF-350 data handoff
+
+- Local dataset: `data/real_xrd/rruff350/` (Git-ignored, not publishable data).
+- Frozen identity: `rruff-real-pxrd-350-v1`.
+- Composition: 350 unique RRUFF sample IDs; 50 per crystal system; 70 frozen
+  RRUFF-70 spectra plus 280 model-blind extensions.
+- Rebuild: `scripts/build_rruff350.py` using the five official archives in
+  `data/real_xrd/rruff350/source_archives/`.
+- Audit: `reports/rruff350_build_audit.json`.
+- Boundary: this does not authorize real-XRD inference or redefine the frozen
+  21/14/35 roles within RRUFF-70.
+
 **交接状态日期：2026-08-03**
 **仓库：** `Frysland-2024/AI4science`  
 **分支：** `main`

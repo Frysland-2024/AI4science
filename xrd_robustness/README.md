@@ -87,6 +87,19 @@
 
 ## RRUFF-70 真实域协议
 
+### RRUFF-350 扩展资产（2026-08-03）
+
+本地已建立 `rruff-real-pxrd-350-v1`：七晶系各 50 条，共 350 个唯一
+RRUFF 样本编号。其中旧 RRUFF-70 的规范谱图按字节哈希原样保留，另增
+280 条基于官方 measured-powder、XRD identification、配对 DIF、谱图质量和
+冗余约束筛选的样本。该资产不是重新定义的 350 条独立 final test；旧
+RRUFF-70 的 21/14/35 角色不变。
+
+数据与官方压缩包位于 Git 忽略的 `data/real_xrd/rruff350/`，构建器为
+`scripts/build_rruff350.py`，可提交审计为
+`reports/rruff350_build_audit.json`。构建过程不加载模型，也不授权或执行
+real-XRD inference。
+
 来源语料：`rruff-real-pxrd-70-v1.0-final`，七晶系各 10 条。
 
 模型访问前按固定 SHA-256 规则冻结为：

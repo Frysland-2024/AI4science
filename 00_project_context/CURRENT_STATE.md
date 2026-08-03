@@ -21,6 +21,24 @@ Validation replication has completed: five matched training seeds, two methods
 per seed, ten runs total. No seed was excluded post hoc and lambda was not
 retuned.
 
+## 2026-08-03 RRUFF-350 collection completed
+
+The local measured-PXRD expansion asset is now frozen as
+`rruff-real-pxrd-350-v1`: 350 unique RRUFF sample IDs, balanced at 50 samples
+for each of the seven crystal systems. It preserves all 70 frozen RRUFF-70
+canonical spectrum hashes and adds 280 model-blind samples selected from the
+official RRUFF powder archives using measurement, label, DIF, quality, and
+spectral-redundancy evidence only.
+
+The archives and spectra remain under the ignored local data root
+`xrd_robustness/data/real_xrd/rruff350/`; datasets are not committed. The
+reproducible builder is `xrd_robustness/scripts/build_rruff350.py`, and the
+tracked audit is `xrd_robustness/reports/rruff350_build_audit.json`.
+
+RRUFF-350 is an expansion/evaluation asset, not a new independent 350-sample
+final test: the embedded RRUFF-70 roles remain frozen and explicitly labelled.
+No model was loaded and no real-XRD inference was run while constructing it.
+
 The confirmatory one-shot simulated-Test protocol is now also frozen in:
 
 `xrd_robustness/configs/v9_resnet_js_simulated_test.preregistered.json`

@@ -774,3 +774,22 @@ robustness improvement, not uniform improvement for every class and condition.
 The Test report is now frozen, repeat Test access and Test-guided retuning are
 closed, and real XRD remains unused pending a separately designed and authorized
 external-validation stage.
+
+## 2026-08-03 — RRUFF-350 expansion collection frozen
+
+The user requested expansion of the measured RRUFF evidence pool to 350. The
+scientific decision is to preserve the existing RRUFF-70 byte-for-byte and label
+it as `legacy_rruff70`, while adding 280 model-blind samples labelled
+`rruff350_extension`, yielding 50 samples per crystal system. The 350-sample
+asset is not represented as a fresh independent final test and does not change
+the frozen 21/14/35 roles of RRUFF-70.
+
+Official archive scarcity makes unique mineral names impossible at 50 samples
+per class. Selection therefore uses unique RRUFF sample IDs, normally caps a
+mineral at three samples per crystal system, and records the single required
+hexagonal relaxation to four Vanadinite samples. Although the staged policy
+allowed a Pearson ceiling up to 0.995 if required, the largest actual
+correlation at inclusion among the 280 new samples was 0.957184. One frozen
+sample, R230005 Edwindavisite, was absent from the current official archive and
+was retained only after its local frozen spectrum and DIF hashes matched the
+RRUFF-70 manifest. No model outputs or real-XRD inference were used.
