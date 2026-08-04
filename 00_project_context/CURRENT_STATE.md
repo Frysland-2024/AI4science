@@ -1,6 +1,6 @@
 # AI4science Current State
 
-**Canonical status date:** 2026-08-03
+**Canonical status date:** 2026-08-04
 **Repository:** `Frysland-2024/AI4science`  
 **Active engineering root:** `xrd_robustness/`
 
@@ -223,6 +223,33 @@ worst-class bottleneck.
    endpoint before any model access.
 5. Separately authorize real adaptation and external evaluation without
    reopening the V9 method or lambda decision.
+
+## 2026-08-04 opXRD ferroelectric feasibility audit (NO_GO)
+
+The opXRD ferroelectric-related ceramic PXRD data feasibility audit is complete.
+Result: **NO_GO**.
+
+- opXRD (92,552 experimental spectra) contains **zero** ferroelectric oxide
+  ceramic materials with usable structural labels.
+- The only labeled contributor EMPA (770 files) studies halide perovskites and
+  metal nitrides — not ferroelectric oxides.
+- LBNL (70,012) and INT (19,796) — 97% of the dataset — have empty phases arrays.
+- Zero candidate records across all seven crystal systems.
+
+New audit assets:
+- `configs/opxrd_ferroelectric_family_rules_v1.yaml`
+- `configs/opxrd_feasibility_filters_v1.yaml`
+- `scripts/download_opxrd_metadata.py` and 4 companion scripts
+- `tests/test_opxrd_*.py` (53 tests, all passing)
+- `reports/opxrd_ferroelectric_feasibility_v1.md`
+- `reports/opxrd_ferroelectric_feasibility_v1_summary.json`
+
+All audit constraints respected: no model loaded, no real-XRD inference run,
+RRUFF-371 not modified, JS/V9/simulated-Test contracts not reopened.
+
+The recommended path forward is to proceed with RRUFF-371 real-domain
+adaptation as originally designed. opXRD remains a future resource for broader
+PXRD ML research but cannot support the ferroelectric ceramics domain task.
 
 ## Authoritative records
 

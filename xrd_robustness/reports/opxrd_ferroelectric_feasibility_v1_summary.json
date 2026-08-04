@@ -1,0 +1,72 @@
+{
+  "audit_version": "opxrd-ferroelectric-feasibility-v1",
+  "timestamp": "2026-08-04T19:50:00+08:00",
+  "status": "NO_GO",
+  "decision": "NO_GO",
+  "seven_class_pass": false,
+  "five_class_pass": false,
+  "reduced_class_pass": false,
+  "blocked_components": [],
+  "completed_components": [
+    "metadata_extraction",
+    "family_rule_matching",
+    "crystal_system_labeling",
+    "quality_filtering",
+    "contributor_sampling",
+    "gate_decision"
+  ],
+  "unverified_components": [
+    "HKUST_full_census",
+    "IKFT_full_census",
+    "USC_full_census",
+    "LBNL_deep_scan_for_labeled_subset",
+    "INT_deep_scan_for_labeled_subset"
+  ],
+  "next_required_action": "No further opXRD sampling needed. Proceed with RRUFF-371 real-domain adaptation.",
+  "opxrd_source": {
+    "zenodo_record": "14254270",
+    "doi": "10.1002/aidi.202500044",
+    "archive_sha256": "38B62BCDDF976DEBB3E41D2597D3F14AC6C1F1C8A33565A84A98EF38BA3B6044",
+    "total_files": 92552,
+    "extraction_date": "2026-07-26"
+  },
+  "metadata_sample": {
+    "files_processed": 5770,
+    "fraction_of_total": 0.062,
+    "by_contributor": {
+      "CNRS": {"files": 1052, "space_group": 0, "composition": 0, "phases_labeled": "lattice_only"},
+      "EMPA": {"files": 770, "space_group": 486, "composition": 768, "phases_labeled": "all"},
+      "HKUST": {"files": 178, "space_group": 0, "composition": 0, "phases_labeled": "unknown"},
+      "INT": {"files": 3000, "space_group": 0, "composition": 0, "phases_labeled": "ALL_EMPTY"},
+      "LBNL": {"files": 770, "space_group": 0, "composition": 0, "phases_labeled": "ALL_EMPTY"}
+    }
+  },
+  "candidate_summary": {
+    "total_candidates": 0,
+    "strict_ferroelectric": 0,
+    "ferroelectric_related": 0,
+    "per_crystal_system": {
+      "triclinic": 0,
+      "monoclinic": 0,
+      "orthorhombic": 0,
+      "tetragonal": 0,
+      "trigonal": 0,
+      "hexagonal": 0,
+      "cubic": 0
+    }
+  },
+  "empa_composition_analysis": {
+    "total_unique_compositions": 103,
+    "categories": {
+      "halide_perovskites": ["PbBr2", "PbI2", "Csx(CH5N2)1-xPbI3", "CH3NHPbI3", "CH5N2PbI3"],
+      "transition_metal_nitrides": ["VNx", "ZnNx", "Zn-V-N series"],
+      "ferroelectric_oxides": []
+    }
+  },
+  "root_cause": "opXRD contains no ferroelectric-related oxide/ceramic experimental PXRD spectra. The only labeled contributor (EMPA, 770 files) studies halide perovskites and metal nitrides. The two largest contributors (LBNL 70,012 and INT 19,796) have empty phases arrays with zero structural labels.",
+  "alternative_path": "RRUFF-371 remains the only viable real-PXRD asset for real-domain adaptation. Proceed with RRUFF-70 few-shot adaptation and RRUFF-301 external evaluation as previously designed.",
+  "model_loaded": false,
+  "real_xrd_inference_run": false,
+  "rruff371_modified": false,
+  "v9_contracts_reopened": false
+}

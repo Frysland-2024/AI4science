@@ -825,3 +825,30 @@ therefore measures experimental measurement-domain transfer, not guaranteed
 generalization to unseen minerals. Any unseen-mineral claim must use a
 separately prespecified mineral-group-disjoint sensitivity cohort. No model,
 checkpoint, prediction, or real-XRD inference was used for these decisions.
+
+## 19. 2026-08-04 opXRD 铁电可行性审计：NO_GO
+
+项目曾探索是否可以从统一实验 PXRD 数据库 opXRD（92,552 条谱）建立
+"铁电及相关功能氧化物/陶瓷材料域的晶系分类真实谱数据集"，实现"广域模拟
+七晶系预训练 → 少量目标域真实谱 few-shot adaptation"的路径。
+
+经过完整模型盲审计后，结论为 **NO_GO**：
+
+opXRD 的数据组成与铁电陶瓷域完全不匹配：
+- 唯一有结构标签的贡献者 EMPA（770 条）研究卤化物钙钛矿和金属氮化物，
+  而非铁电氧化物陶瓷；
+- 最大两个贡献者 LBNL（70,012 条）和 INT（19,796 条）的相信息字段为空，
+  无化学组成、无空间群标签；
+- 在 5,770 条采样文件中，零条记录匹配 19 个铁电材料家族规则。
+
+这个结果不是筛选阈值过于严格导致的——而是 oppXRD 的数据采集对象与铁电
+陶瓷晶体学分类任务之间不存在可行的交集。即使降低标准，也不应宣称 opXRD
+中存在可用的铁电陶瓷数据集。
+
+科学决策：放弃 opXRD 路径，按原设计继续推进 RRUFF-371 真实域适配路线。
+opXRD 保留为未来更广泛的 PXRD ML 研究资源，但其贡献者数据和材料类型
+不适用于铁电陶瓷域任务。
+
+审计遵守了所有模型盲约束：未加载 checkpoint、未执行真实谱推理、未修改
+RRUFF-371、未重新打开 V9/JS/simulated-Test 合约。所有新代码（5 个脚本、
+4 个测试文件、2 个配置文件、2 个报告）均已测试通过并提交。

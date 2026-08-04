@@ -232,3 +232,28 @@ robustness improvement，不能主张每个类别和扰动条件都一致改善�
 
 > simulated Test 已完成并冻结；不得重跑或 Test-guided retuning。下一步是
 > 单独设计和授权 real-XRD external validation。real XRD 目前仍未使用。
+
+## 2026-08-04 opXRD 铁电可行性审计（NO_GO）
+
+opXRD 铁电相关陶瓷 PXRD 数据可行性审计已完成。结论为 **NO_GO**：
+
+- opXRD（92,552 条实验谱）中 **不存在** 铁电氧化物陶瓷材料
+- 唯一有结构标签的贡献者 EMPA（770 条）研究的是卤化物钙钛矿和金属氮化物
+- 两大贡献者 LBNL（70,012 条）和 INT（19,796 条）的 phases 数组均为空，无结构标签
+- 零候选记录通过所有筛选条件
+
+新增审计资产：
+
+- `configs/opxrd_ferroelectric_family_rules_v1.yaml`：19 个铁电材料家族匹配规则
+- `configs/opxrd_feasibility_filters_v1.yaml`：晶系映射、质量筛选、Gate 配置
+- `scripts/download_opxrd_metadata.py` 等 5 个审计脚本
+- `tests/test_opxrd_*.py`：53 个测试全部通过
+- `reports/opxrd_ferroelectric_feasibility_v1.md`：完整审计报告
+- `reports/opxrd_ferroelectric_feasibility_v1_summary.json`：机器可读摘要
+
+审计约束全部遵守：未加载模型、未执行真实谱推理、未修改 RRUFF-371、
+未重新打开 JS/V9/simulated-Test 合约。
+
+建议：按原设计继续推进 RRUFF-371 真实域适配路径。opXRD 保留为未来
+更广泛 PXRD ML 研究的资源，但不适用于铁电陶瓷域。
+

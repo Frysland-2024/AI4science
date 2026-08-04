@@ -1,0 +1,196 @@
+# opXRD Feasibility Filter Configuration v1
+# ============================================================
+# Schema version: opxrd-feasibility-filters-v1
+# Created: 2026-08-04
+# Purpose: Define experimental PXRD spectrum quality filters,
+#   crystal-system mapping, and exclusion criteria for the
+#   opXRD ferroelectric feasibility audit.
+
+schema_version: "opxrd-feasibility-filters-v1"
+
+# ----------------------------------------------------------
+# Space group number to crystal system mapping
+# ----------------------------------------------------------
+space_group_mapping:
+  triclinic:    [1, 2]
+  monoclinic:   [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+  orthorhombic: [16, 74]
+  tetragonal:   [75, 142]
+  trigonal:     [143, 167]
+  hexagonal:    [168, 194]
+  cubic:        [195, 230]
+
+# Space group symbol prefix mapping (for string-based labels)
+space_group_symbol_map:
+  triclinic:    ["P1", "P-1"]
+  monoclinic:   ["P2", "P2_1", "C2", "Pm", "Pc", "Cm", "Cc",
+                  "P2/m", "P2_1/m", "C2/m", "P2/c", "P2_1/c", "C2/c"]
+  orthorhombic: ["P222", "P2_1", "P2_12_12", "C222", "F222", "I222",
+                  "Pmm", "Pmc", "Pcc", "Pma", "Pca", "Pnc", "Pmn",
+                  "Pba", "Pna", "Pnn", "Cmm", "Cmc", "Ccc", "Cma",
+                  "Fmm", "Fdd", "Imm", "Iba", "Ima",
+                  "Pmmm", "Pnnn", "Pccm", "Pban", "Pmma", "Pnna",
+                  "Pmna", "Pcca", "Pbam", "Pccn", "Pbcm", "Pnnm",
+                  "Pmmn", "Pbcn", "Pbca", "Pnma",
+                  "Cmmm", "Cmcm", "Cmca", "Cccm", "Cmma", "Ccca",
+                  "Fmmm", "Fddd", "Immm", "Ibam", "Ibca", "Imma"]
+  tetragonal:   ["P4", "P4_1", "P4_2", "P4_3", "I4", "I4_1",
+                  "P-4", "I-4",
+                  "P4/m", "P4_2/m", "P4/n", "P4_2/n",
+                  "I4/m", "I4_1/a",
+                  "P4mm", "P4bm", "P4_2cm", "P4_2nm", "P4cc",
+                  "P4nc", "P4_2mc", "P4_2bc",
+                  "I4mm", "I4cm", "I4_1md", "I4_1cd",
+                  "P-4m", "P-4c", "P-4b", "P-4n",
+                  "I-4m", "I-4c",
+                  "P4/mmm", "P4/mcc", "P4/nbm", "P4/nnc",
+                  "P4/mbm", "P4/mnc", "P4/nmm", "P4/ncc",
+                  "P4_2/mmc", "P4_2/mcm", "P4_2/nbc", "P4_2/nnm",
+                  "P4_2/mbc", "P4_2/mnm", "P4_2/nmc", "P4_2/ncm",
+                  "I4/mmm", "I4/mcm", "I4_1/amd", "I4_1/acd"]
+  trigonal:     ["P3", "P3_1", "P3_2", "R3",
+                  "P-3", "R-3",
+                  "P3m", "P3c", "R3m", "R3c",
+                  "P-3m", "P-3c", "R-3m", "R-3c"]
+  hexagonal:    ["P6", "P6_1", "P6_5", "P6_2", "P6_4", "P6_3",
+                  "P-6",
+                  "P6/m", "P6_3/m",
+                  "P6mm", "P6cc", "P6_3cm", "P6_3mc",
+                  "P-6m", "P-6c",
+                  "P6/mmm", "P6/mcc", "P6_3/mcm", "P6_3/mmc"]
+  cubic:        ["P2_13", "I2_13", "F2_13",
+                  "Pm-3", "Pn-3", "Fm-3", "Fd-3", "Im-3", "Pa-3", "Ia-3",
+                  "P-43m", "F-43m", "I-43m", "P-43n", "F-43c", "I-43d",
+                  "Pm-3m", "Pn-3n", "Pm-3n", "Pn-3m",
+                  "Fm-3m", "Fm-3c", "Fd-3m", "Fd-3c",
+                  "Im-3m", "Ia-3d"]
+
+# ----------------------------------------------------------
+# Experimental spectrum quality filters
+# ----------------------------------------------------------
+quality_filters:
+  minimum_data_points: 50
+  minimum_2theta_range: 5.0    # degrees
+  minimum_max_2theta: 20.0     # degrees
+  maximum_min_2theta: 15.0     # degrees
+  require_monotonic_axis: true
+  require_nonzero_intensity: true
+  require_finite_intensity: true
+  max_zero_fraction: 0.95      # max fraction of zero intensity points
+
+  # Overlap with model input range [5, 60] degrees
+  model_2theta_min: 5.0
+  model_2theta_max: 60.0
+  require_overlap: true
+  min_overlap_fraction: 0.3    # at least 30% of data points inside model range
+
+# ----------------------------------------------------------
+# Label reliability tiers
+# ----------------------------------------------------------
+label_tiers:
+  tier_1_reliable:
+    description: "Space group number from CIF or reliable source, no conflict"
+    requires:
+      - space_group_number is not null
+      - label_source in ["cif", "database"]
+      - no label_conflict
+  tier_2_probable:
+    description: "Space group symbol that can be mapped, or single source"
+    requires:
+      - space_group_symbol is not null
+      - label_confidence >= "medium"
+  tier_3_uncertain:
+    description: "Label exists but cannot be reliably verified"
+    requires:
+      - any_structure_label_exists
+  tier_4_unlabeled:
+    description: "No structure label available"
+    requires:
+      - no_structure_label
+
+# ----------------------------------------------------------
+# Exclusion reasons (for reporting)
+# ----------------------------------------------------------
+exclusion_reasons:
+  - reason_id: "simulated_pattern"
+    description: "Simulated/computed pattern, not experimental PXRD"
+    priority: 1
+  - reason_id: "no_two_theta"
+    description: "Missing two_theta_values"
+    priority: 2
+  - reason_id: "no_intensity"
+    description: "Missing or all-zero intensity values"
+    priority: 3
+  - reason_id: "insufficient_points"
+    description: "Too few data points"
+    priority: 4
+  - reason_id: "narrow_2theta_range"
+    description: "2theta range too narrow"
+    priority: 5
+  - reason_id: "non_monotonic_axis"
+    description: "2theta axis is not monotonic"
+    priority: 6
+  - reason_id: "too_many_zeros"
+    description: "Too high fraction of zero intensity points"
+    priority: 7
+  - reason_id: "no_overlap_with_model_range"
+    description: "Insufficient overlap with model input [5,60] degrees"
+    priority: 8
+  - reason_id: "no_space_group_label"
+    description: "No space group number or symbol available"
+    priority: 9
+  - reason_id: "label_conflict"
+    description: "Conflicting structure labels cannot be resolved"
+    priority: 10
+  - reason_id: "multiphase_uncertain"
+    description: "Multiple phases without clear target phase label"
+    priority: 11
+  - reason_id: "not_target_domain"
+    description: "Does not match any ferroelectric-related family"
+    priority: 12
+  - reason_id: "global_exclusion_rule"
+    description: "Excluded by global exclusion rules"
+    priority: 13
+  - reason_id: "parse_error"
+    description: "JSON parse or structure extraction error"
+    priority: 14
+  - reason_id: "missing_metadata"
+    description: "Essential metadata fields missing"
+    priority: 15
+
+# ----------------------------------------------------------
+# Grouping configuration
+# ----------------------------------------------------------
+grouping:
+  # Similarity threshold for duplicate detection via spectrum correlation
+  correlation_threshold: 0.99
+  # Hash types to compute
+  hash_types:
+    - "file_sha256"
+    - "normalized_spectrum_sha256"
+  # Time-series detection
+  time_series:
+    max_time_gap_seconds: 86400   # 24 hours
+    min_series_length: 3          # minimum consecutive scans for series
+  # Composition grouping
+  composition:
+    normalize: true                # normalize formula strings
+    tolerance: 0.01                # stoichiometry tolerance for float comparison
+
+# ----------------------------------------------------------
+# Split proposal parameters
+# ----------------------------------------------------------
+split_proposal:
+  seven_class:
+    support_per_class: 5
+    adaptation_validation_per_class_min: 5
+    adaptation_validation_per_class_target: 10
+    external_test_per_class_min: 15
+    external_test_per_class_target: 20
+  five_class:
+    support_per_class: 5
+    adaptation_validation_per_class_min: 5
+    external_test_per_class_min: 15
+  seed: 20260804
+  min_families_per_class: 3
+  max_samples_per_group_in_split: 1   # No cross-split sample groups
