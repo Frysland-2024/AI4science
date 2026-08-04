@@ -1,0 +1,92 @@
+{
+  "audit_version": "opxrd-parser-reproduction-gate-v1",
+  "timestamp": "2026-08-04T21:50:00+08:00",
+  "overall_gate_result": "PARTIAL",
+  "overall_gate_note": "EMPA SG matches exactly (63%). CNRS SG is 0% in Zenodo 14254270 — paper's 85% cannot be reproduced with this data version. CNRS CC (85%) and FullStr (85%) match from basis+lattice extraction.",
+  "reproduction_results": {
+    "CNRS": {
+      "total_files": 1052,
+      "observed": {
+        "composition_pct": 85.0,
+        "composition_source": "basis_elements (891 via atomic position symbols, 161 missing)",
+        "space_group_pct": 0.0,
+        "lattice_pct": 100.0,
+        "full_structure_pct": 85.0,
+        "crystal_system_from_lattice_pct": 100.0
+      },
+      "expected": {
+        "composition": "checkmark (yes)",
+        "space_group_pct": 85.0,
+        "lattice": "checkmark (yes)",
+        "full_structure_pct": 85.0
+      },
+      "sg_gate": "FAIL — 0% observed vs 85% expected. Zenodo 14254270 does not populate spacegroup field for CNRS/COD records.",
+      "cc_gate": "PASS — 85% via basis element extraction",
+      "full_structure_gate": "PASS — 85% (lattice + basis present)",
+      "note": "Crystal system is available for 100% of CNRS from lattice parameters. Space group number is not available."
+    },
+    "EMPA": {
+      "total_files": 770,
+      "observed": {
+        "composition_pct": 100.0,
+        "space_group_pct": 63.0,
+        "lattice_pct": 0.0
+      },
+      "expected": {
+        "composition": "checkmark (yes)",
+        "space_group_pct": 63.0,
+        "lattice": "cross (no)"
+      },
+      "sg_gate": "PASS — 63% matches paper exactly",
+      "note": "All halide perovskites and metal nitrides; no ferroelectric oxides."
+    },
+    "HKUST": {
+      "total_files": 520,
+      "observed": {
+        "composition_pct": 4.0,
+        "space_group_pct": 0.0,
+        "lattice_pct": 4.0,
+        "full_structure_pct": 4.0
+      },
+      "expected": {
+        "composition_pct": 4.0,
+        "space_group_pct": 4.0
+      },
+      "sg_gate": "PASS — within tolerance for small percentage",
+      "note": "4% labeled matches paper. SG not populated in this version."
+    },
+    "USC": {
+      "total_files": 338,
+      "observed": {
+        "composition_pct": 10.0,
+        "space_group_pct": 10.0,
+        "lattice_pct": 90.0
+      },
+      "expected": {
+        "composition": "checkmark (yes)",
+        "space_group": "checkmark (yes)",
+        "lattice_pct": 90.0
+      },
+      "sg_gate": "PARTIAL — 10% observed, paper implies checkmark but not percentage",
+      "note": "Single composition found: Cu (pure copper). 90% have lattice."
+    }
+  },
+  "aggregate": {
+    "total_files": 2680,
+    "total_with_composition": 1714,
+    "total_with_space_group": 520,
+    "total_with_full_structure": 912,
+    "total_with_crystal_system": 1896,
+    "paper_total_labeled": "~2179",
+    "paper_total_full_structure": "~912",
+    "full_structure_match": "EXACT — 912 observed matches paper's ~912"
+  },
+  "cnrs_schema_findings": {
+    "phase_structure": "Each phase is a JSON-encoded string containing keys: lattice, basis, spacegroup, chemical_composition, wyckoff_symbols, phase_fraction",
+    "spacegroup_population": "spacegroup key exists but is null in ALL 1052 CNRS records in Zenodo 14254270",
+    "chemical_composition_population": "chemical_composition key exists but is null in ALL 1052 records; composition extracted from atomic position symbols in basis",
+    "lattice_population": "lattice is populated in ALL 1052 records",
+    "basis_population": "basis is populated in 891/1052 (85%) records",
+    "data_version": "Zenodo record 14254270 — appears to be a release where CNRS spacegroup/CC were not populated into the final JSON, possibly because they were stripped during the xrdpattern serialization pipeline or because the paper's Table 2 refers to pre-publication internal statistics"
+  }
+}

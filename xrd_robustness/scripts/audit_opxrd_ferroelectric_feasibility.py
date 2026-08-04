@@ -331,6 +331,11 @@ class CrystalSystemLabeler:
             "manual_review_required": False,
         }
 
+        # Fallback: crystal_system_from_lattice
+        cs_lattice = record.get("crystal_system_from_lattice", "")
+        if cs_lattice and cs_lattice.strip():
+            cs_lattice = cs_lattice.strip()
+
         sg_num = record.get("space_group_number")
         sg_sym = record.get("space_group_symbol")
 
@@ -371,6 +376,10 @@ class CrystalSystemLabeler:
             result["label_confidence"] = "high" if sg_num_int is not None else "medium"
         elif system_from_sym:
             result["crystal_system"] = system_from_sym
+            result["label_confidence"] = "medium"
+        elif cs_lattice:
+            result["crystal_system"] = cs_lattice
+            result["label_source"] = "lattice_parameters"
             result["label_confidence"] = "medium"
 
         return result

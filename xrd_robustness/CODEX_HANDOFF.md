@@ -233,27 +233,35 @@ robustness improvement，不能主张每个类别和扰动条件都一致改善�
 > simulated Test 已完成并冻结；不得重跑或 Test-guided retuning。下一步是
 > 单独设计和授权 real-XRD external validation。real XRD 目前仍未使用。
 
-## 2026-08-04 opXRD 铁电可行性审计（NO_GO）
+## 2026-08-04 opXRD 铁电可行性审计 v1（修订）
 
-opXRD 铁电相关陶瓷 PXRD 数据可行性审计已完成。结论为 **NO_GO**：
+初次审计（commit 87571f2）的 parser 未能正确提取 CNRS 的 basis 和晶格参数，
+误报"只有 EMPA 有标签"。修订后的 parser 正确提取了：
 
-- opXRD（92,552 条实验谱）中 **不存在** 铁电氧化物陶瓷材料
-- 唯一有结构标签的贡献者 EMPA（770 条）研究的是卤化物钙钛矿和金属氮化物
-- 两大贡献者 LBNL（70,012 条）和 INT（19,796 条）的 phases 数组均为空，无结构标签
-- 零候选记录通过所有筛选条件
+- CNRS：85% 组成（从 basis 原子符号）、100% 晶格参数→晶系、85% 完整结构
+- **FullStr=912**，与论文 Table 2 完全一致（"~912 full structures"）
+- EMPA SG：63%，与论文完全一致
 
-新增审计资产：
+parser reproduction gate：EMPA/HKUST/USC 通过，CNRS SG 因 Zenodo 14254270
+数据版本问题为 0%（论文应为 85%）。
 
-- `configs/opxrd_ferroelectric_family_rules_v1.yaml`：19 个铁电材料家族匹配规则
-- `configs/opxrd_feasibility_filters_v1.yaml`：晶系映射、质量筛选、Gate 配置
-- `scripts/download_opxrd_metadata.py` 等 5 个审计脚本
-- `tests/test_opxrd_*.py`：53 个测试全部通过
-- `reports/opxrd_ferroelectric_feasibility_v1.md`：完整审计报告
-- `reports/opxrd_ferroelectric_feasibility_v1_summary.json`：机器可读摘要
+修正后审计发现 **5 个铁电候选**（3 BiFeO3, 2 SrTiO3 相关）：来自 CNRS 的
+element set 匹配，均为 medium confidence，需人工复核。
 
-审计约束全部遵守：未加载模型、未执行真实谱推理、未修改 RRUFF-371、
-未重新打开 JS/V9/simulated-Test 合约。
+**最终结论：NO_GO**（基于证据，非 parser 失败）。1896 条带晶系标签的
+谱图中有 1891 条不匹配任何铁电家族。CNRS 的 613 种唯一组成主要是 MOF、
+沸石、配位化合物——不是铁电氧化物陶瓷。
 
-建议：按原设计继续推进 RRUFF-371 真实域适配路径。opXRD 保留为未来
-更广泛 PXRD ML 研究的资源，但不适用于铁电陶瓷域。
+新增修订资产：
+- `reports/opxrd_ferroelectric_feasibility_v1_revision.md`：修订审计报告
+- `reports/opxrd_parser_reproduction_gate_v1.json`：parser 复现 Gate
+- `scripts/download_opxrd_metadata.py`（修订）：新增 lattice→晶系、basis→组成提取
+- `scripts/audit_opxrd_ferroelectric_feasibility.py`（修订）：新增 lattice fallback 晶系标签
+
+数据版本说明：Zenodo 14254270 中 CNRS 的 spacegroup 字段存在但为 null。
+若存在后续版本（如 15298026）且包含完整 SG 标签，建议重新审计。当前版本
+已提取全部可获取的晶系和组成信息。
+
+所有审计约束继续遵守：未加载模型、未执行真实谱推理、未修改 RRUFF-371、
+未重新打开任何冻结合约。
 

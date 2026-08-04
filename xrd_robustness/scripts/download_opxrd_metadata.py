@@ -19,6 +19,7 @@ import csv
 import hashlib
 import json
 import os
+import re
 import sys
 import time
 from pathlib import Path
@@ -55,9 +56,14 @@ MANIFEST_COLUMNS = [
     "is_simulated",
     "num_phases",
     "chemical_composition",
+    "composition_source",
     "space_group_number",
     "space_group_symbol",
     "lattice_params",
+    "crystal_system_from_lattice",
+    "full_structure_present",
+    "has_basis",
+    "label_source",
     "crystallite_size_nm",
     "temp_K",
     "primary_wavelength",
@@ -135,6 +141,85 @@ def safe_json_parse(raw: Any) -> Tuple[Optional[Dict], Optional[str]]:
     return None, f"unexpected_type: {type(raw).__name__}"
 
 
+def lattice_to_crystal_system(lat_str: str) -> Optional[str]:
+    """Infer crystal system from lattice parameters string '(a,b,c,alpha,beta,gamma)'."""
+    try:
+        nums = [float(x.strip()) for x in lat_str.strip("()[]").split(",")]
+        if len(nums) != 6:
+            return None
+        a, b, c, alpha, beta, gamma = nums
+    except (ValueError, IndexError):
+        return None
+
+    tol_angle = 1.5
+    tol_len = 0.02
+    a90 = all(abs(x - 90) < tol_angle for x in [alpha, beta, gamma])
+    eq_ratio = lambda x, y: abs(x - y) < tol_len * max(abs(x), abs(y), 1.0)
+    a_eq_b = eq_ratio(a, b)
+    b_eq_c = eq_ratio(b, c)
+    a_eq_c = eq_ratio(a, c)
+    all90_except_gamma = abs(alpha - 90) < tol_angle and abs(beta - 90) < tol_angle
+
+    if a90:
+        if a_eq_b and b_eq_c:
+            return "cubic"
+        elif a_eq_b and not b_eq_c:
+            return "tetragonal"
+        elif not a_eq_b and not b_eq_c and not a_eq_c:
+            return "orthorhombic"
+        elif not a_eq_b and not b_eq_c and a_eq_c:
+            return "tetragonal"
+        else:
+            return "orthorhombic"
+    elif all90_except_gamma and a_eq_b:
+        if abs(gamma - 120) < tol_angle:
+            return "hexagonal"
+        return "monoclinic"
+    elif sum(1 for x in [alpha, beta, gamma] if abs(x - 90) > tol_angle) >= 2:
+        return "triclinic"
+    else:
+        return "monoclinic"
+
+
+def extract_elements_from_basis(basis_raw: Any) -> Optional[str]:
+    """Extract element symbols from atomic basis data. Returns sorted formula fragment."""
+    if basis_raw is None:
+        return None
+    if isinstance(basis_raw, str):
+        parsed, _ = safe_json_parse(basis_raw)
+        if parsed is not None:
+            basis_raw = parsed
+    if not isinstance(basis_raw, list):
+        return None
+
+    elements = {}
+    for atom in basis_raw[:500]:  # sample first 500 atoms
+        if isinstance(atom, str):
+            a, _ = safe_json_parse(atom)
+            if a is not None:
+                atom = a
+        if isinstance(atom, dict):
+            sym = atom.get("symbol", "")
+            if sym and isinstance(sym, str):
+                # Clean oxidation state: "Ba0+" -> "Ba", "O2-" -> "O"
+                clean = re.sub(r'[0-9+\-]', '', sym).strip()
+                if clean and len(clean) <= 2 and clean[0].isupper():
+                    elements[clean] = elements.get(clean, 0) + 1
+
+    if not elements:
+        return None
+
+    # Sort by element symbol
+    sorted_elems = sorted(elements.items())
+    formula_parts = []
+    for elem, count in sorted_elems:
+        if count == 1:
+            formula_parts.append(elem)
+        else:
+            formula_parts.append(f"{elem}{count}")
+    return "".join(formula_parts)
+
+
 def extract_phase_info(phase_raw: Any) -> Dict[str, Any]:
     """Extract structured info from a single phase entry, handling nested JSON strings."""
     phase = phase_raw
@@ -146,7 +231,7 @@ def extract_phase_info(phase_raw: Any) -> Dict[str, Any]:
         return {}
 
     result = {}
-    # chemical_composition
+    # chemical_composition — explicit
     cc = phase.get("chemical_composition")
     if cc is not None and isinstance(cc, str) and cc.strip():
         result["chemical_composition"] = cc.strip()
@@ -158,7 +243,6 @@ def extract_phase_info(phase_raw: Any) -> Dict[str, Any]:
             result["space_group_number"] = int(sg)
         elif isinstance(sg, str) and sg.strip():
             sg_str = sg.strip()
-            # Try to parse as number first
             try:
                 result["space_group_number"] = int(sg_str)
             except ValueError:
@@ -166,8 +250,32 @@ def extract_phase_info(phase_raw: Any) -> Dict[str, Any]:
 
     # lattice
     lattice = phase.get("lattice")
-    if lattice is not None:
+    if lattice is not None and isinstance(lattice, str) and lattice.strip():
         result["lattice_params"] = str(lattice)[:200]
+        # Infer crystal system from lattice
+        cs = lattice_to_crystal_system(lattice)
+        if cs:
+            result["crystal_system_from_lattice"] = cs
+            # If we have crystal system but not spacegroup, use it
+            if result.get("space_group_number") is None and result.get("space_group_symbol") is None:
+                result["label_source"] = "lattice_parameters"
+
+    # basis / atomic coordinates — extract elements
+    basis = phase.get("basis")
+    if basis is not None:
+        result["has_basis"] = True
+        elems = extract_elements_from_basis(basis)
+        if elems and not result.get("chemical_composition"):
+            result["chemical_composition"] = elems
+            result["composition_source"] = "basis_elements"
+    else:
+        result["has_basis"] = False
+
+    # full structure = has lattice + basis + (SG or CC)
+    result["full_structure_present"] = (
+        result.get("lattice_params") is not None and
+        result.get("has_basis", False)
+    )
 
     return result
 
@@ -178,13 +286,19 @@ def extract_label_info(label_raw: Any) -> Dict[str, Any]:
         "is_simulated": None,
         "num_phases": 0,
         "chemical_composition": None,
+        "composition_source": None,
         "space_group_number": None,
         "space_group_symbol": None,
         "lattice_params": None,
+        "crystal_system_from_lattice": None,
+        "full_structure_present": False,
+        "has_basis": False,
+        "label_source": None,
         "crystallite_size_nm": None,
         "temp_K": None,
         "primary_wavelength": None,
     }
+    # NOTE: these default False values are overwritten by phase_info below
 
     label, parse_err = safe_json_parse(label_raw)
     if parse_err:
@@ -212,7 +326,18 @@ def extract_label_info(label_raw: Any) -> Dict[str, Any]:
         result["num_phases"] = len(phases)
         if phases:
             phase_info = extract_phase_info(phases[0])
-            result.update({k: v for k, v in phase_info.items() if v is not None and result.get(k) is None})
+            # Apply phase_info: for nullable fields, only overwrite if result is None;
+            # for boolean fields (full_structure_present, has_basis), always overwrite
+            nullable_keys = {"chemical_composition", "space_group_number", "space_group_symbol",
+                             "lattice_params", "crystal_system_from_lattice",
+                             "label_source", "composition_source"}
+            for k, v in phase_info.items():
+                if v is not None:
+                    if k in nullable_keys:
+                        if result.get(k) is None:
+                            result[k] = v
+                    else:
+                        result[k] = v
 
     return result
 
