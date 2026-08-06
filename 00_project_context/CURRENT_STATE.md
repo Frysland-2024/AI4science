@@ -210,19 +210,117 @@ seed-20260714 Test diagnosis also shows that aggregate improvement is not
 uniform across every class/profile; monoclinic remains the principal
 worst-class bottleneck.
 
+## 2026-08-06 — Strategic redefinition: Tan Lab perovskite ceramic domain
+
+The opXRD NO_GO audit confirmed that no public database contains ferroelectric
+oxide ceramic XRD with usable structural labels for the target task. The
+project therefore makes a formal strategic decision:
+
+**Real domain is no longer sourced from public databases.** The target domain
+is redefined as:
+
+> **GTIIT / Tan Lab perovskite functional-ceramic XRD domain**
+
+The corresponding downstream task is redefined from:
+
+> seven-crystal-system classification on ferroelectric ceramics
+
+to:
+
+> **few-shot phase-state / phase-coexistence recognition**
+
+### Task taxonomy
+
+Recommended three-class scheme:
+
+| Class | Meaning | Lab examples |
+|---|---|---|
+| **Single phase** | Dominant perovskite phase, no significant second phase | Low-doping, phase-pure ceramics |
+| **Polymorphic coexistence** | Multiple perovskite symmetries, e.g. R–T, T–PC, R–T–C | PSNZT, BNBT |
+| **Secondary phase** | Perovskite main phase + non-perovskite second phase | BCZT–SBT tungsten bronze |
+
+If three-class data is insufficient, simplify first to:
+
+```text
+single-phase  vs  multiphase
+```
+
+This taxonomy is not ad hoc. BCZT–SBT work already established single/multiphase
+ML labels, and BNBT work explicitly involves R–T–C polymorphic coexistence.
+
+### Two-phase architecture
+
+- **Phase 1 (frozen):** General simulated pretraining with Dynamic ERM and JS
+  Consistency on seven-crystal-system simulated task, RRUFF-371 external
+  evaluation. This phase is complete; V9 method selection is closed.
+- **Phase 2 (new):** Replace the seven-crystal-system classification head with
+  the Tan Lab phase-state head. Compare three initialization strategies:
+  Scratch, ERM-pretrained, and JS-pretrained, each with K=1,2,5,10 real-sample
+  budgets. The core claim to test: **does JS-learned measurement-robust
+  representation transfer to Tan Lab ceramic phase-state recognition with fewer
+  real XRD samples?**
+
+### Existing data
+
+The uploaded GTIIT laboratory archive contains:
+- PLZT–13PNN spectra at varying La content
+- PLZT–13PNN variable-temperature XRD
+- Calcined powder data
+- PZT ceramic data
+- BaTiO3 and related samples
+- Numerous GTIIT instrument `.raw`, `.txt`, `.rasx` files
+
+PLZT–PNN currently has approximately 10–20 independent raw spectra — sufficient
+for pipeline validation and few-shot pilot, insufficient as a standalone
+benchmark.
+
+### Data feasibility thresholds
+
+Before formal training, a lab-internal data audit must confirm:
+
+| Condition | Recommended threshold |
+|---|---|
+| Independent physical samples | ≥20 per class, ideally ≥30 |
+| Material systems | Each label must not correspond to a single material family |
+| Raw data format | `.raw/.txt/.xy` required; no paper-cropped images |
+| Labels | From Rietveld, phase analysis, or explicit experimental records |
+| Split | By formulation–batch–sample; repeated scans must not cross sets |
+
+Target published and in-progress Tan Lab ceramic systems:
+PLZT–PNN, PSNZT–ZnO, BCZT–SBT, BCZT–BNZN, BNBT, and other
+BNT/KNN/BaTiO3-based energy-storage ceramics.
+
+### Boundary status
+
+The following are NOT changed by this decision:
+- V9 method selection remains closed;
+- JS lambda=60 remains frozen;
+- simulated Test remains completed and frozen;
+- RRUFF-371 remains the external mineral-domain evaluation asset;
+- real XRD and real-domain adaptation remain unused and locked.
+
+The following are newly opened:
+- Tan Lab phase-state taxonomy definition;
+- lab-internal data audit pipeline;
+- few-shot adaptation protocol (support/query split, K-shot episodes);
+- ERM-pretrained vs JS-pretrained vs Scratch comparison design.
+
 ## Next actions
 
 1. Preserve the frozen simulated-Test report and local hashed raw evidence; do
    not rerun, retune, exclude seeds, or select checkpoints from Test outcomes.
 2. Carry the monoclinic shift/texture limitation into publication claims and
    any future error analysis.
-3. Freeze the RRUFF-70 development allocation and nested few-shot episodes;
-   the current recommendation is 35 support / 35 adaptation validation.
-4. Freeze the shared real-domain preprocessing interface and both the
-   301-sample measurement-domain endpoint and mineral-group-disjoint sensitivity
-   endpoint before any model access.
-5. Separately authorize real adaptation and external evaluation without
-   reopening the V9 method or lambda decision.
+3. Conduct Tan Lab internal data audit: inventory all available raw XRD files,
+   phase labels, and experimental metadata across published systems.
+4. Freeze the phase-state taxonomy (two-class or three-class) based on audit
+   results.
+5. Freeze the few-shot adaptation protocol: support/query split, K-shot
+   episodes, preprocessing interface, evaluation metrics.
+6. Design and preregister the Phase 2 comparison: Scratch vs ERM-pretrained vs
+   JS-pretrained, before any model access to Tan Lab spectra.
+7. RRUFF-70 development allocation remains a separate real-domain interface
+   track; do not conflate mineral-domain and ceramic-domain adaptation.
 
 ## 2026-08-04 opXRD ferroelectric feasibility audit (NO_GO)
 

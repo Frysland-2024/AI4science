@@ -230,8 +230,47 @@ robustness improvement，不能主张每个类别和扰动条件都一致改善�
 
 当前动作是：
 
-> simulated Test 已完成并冻结；不得重跑或 Test-guided retuning。下一步是
-> 单独设计和授权 real-XRD external validation。real XRD 目前仍未使用。
+> simulated Test 已完成并冻结；不得重跑或 Test-guided retuning。real-XRD
+> external validation 的方向已经明确：目标域从公共数据库铁电七晶系分类
+> 重构为 **GTIIT/Tan Lab 钙钛矿功能陶瓷少样本相态识别**。
+>
+> 当前优先级最高的下一步是：**组内数据审计**——梳理所有已发表和在研
+> 陶瓷体系的原始 XRD 文件、相标签和实验元数据，确认各类别独立物理样品
+> 数是否达到 ≥20 条门槛。审计完成后冻结相态分类体系（二分类或三分类）
+> 和 few-shot adaptation 协议，然后预注册 Phase 2 比较设计。
+>
+> real XRD 目前仍未使用。RRUFF-70 真实域适配路线作为独立轨道继续保留，
+> 不与谭启组相态识别任务混淆。
+
+## 2026-08-06 — 目标域与下游任务重构
+
+simulated-Test 证据链闭合后，项目面对的核心问题是：真实域适配应该适配到
+哪个域、哪个任务？此前默认的"铁电陶瓷七晶系分类"已经被 opXRD NO_GO
+审计从根本上否定——不是因为筛选不够努力，而是因为任何公共数据库都不是
+为功能陶瓷相态分类而采集的。
+
+本次决策将真实域定义为：
+
+```
+GTIIT / Tan Lab perovskite functional-ceramic XRD domain
+```
+
+将下游任务定义为：
+
+```
+few-shot phase-state / phase-coexistence recognition
+  (single-phase / polymorphic coexistence / secondary phase)
+```
+
+而不是：
+
+```
+ferroelectric ceramic seven-crystal-system classification
+```
+
+两阶段架构保持不变：阶段一（通用模拟预训练）已完成并冻结；阶段二
+（谭启组少样本相态适配）为新增研究轴。V9 方法选择、JS lambda、simulated
+Test、RRUFF-371 资产均不受影响。当前首要任务是组内数据审计。
 
 ## 2026-08-04 opXRD 铁电可行性审计 v1（修订）
 
