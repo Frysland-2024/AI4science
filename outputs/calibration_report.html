@@ -1,0 +1,1678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>V9 Calibration Analysis — ECE, NLL, Brier, Confidence</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+         max-width: 1100px; margin: 0 auto; padding: 20px; color: #222; background: #fff; }
+  h1, h2, h3, h4 { color: #333; }
+  table { border-collapse: collapse; width: 100%; margin: 10px 0 20px 0; font-size: 13px; }
+  th, td { border: 1px solid #ddd; padding: 6px 10px; text-align: right; }
+  th { background: #f5f5f5; }
+  td.method { text-align: left; font-weight: 600; font-family: monospace; font-size: 12px; }
+  .chart-container { margin: 30px 0; }
+  details { margin: 15px 0; }
+  details summary { cursor: pointer; font-size: 15px; padding: 4px 0; }
+  .section { margin: 40px 0; }
+  .note { font-size: 13px; color: #666; }
+  .metric-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+</style>
+</head>
+<body>
+
+<h1>V9 Calibration Analysis</h1>
+<p class="note">All metrics computed from existing prediction_rows.jsonl — no retraining.
+ECE: Expected Calibration Error (15 bins). MCE: Maximum Calibration Error.
+NLL: Negative Log-Likelihood. Brier: Multi-class Brier Score.</p>
+
+<div class="section">
+  <h2>1. Overall Metrics</h2>
+  <table>
+    <thead><tr>
+      <th>Method</th><th>N</th><th>Accuracy</th><th>ECE ↓</th><th>MCE ↓</th>
+      <th>NLL ↓</th><th>Brier ↓</th>
+      <th>Conf (Correct)</th><th>Conf (Incorrect)</th>
+    </tr></thead>
+    <tbody><tr>
+    <td class="method">v9_4run_erm</td>
+    <td>25308</td>
+    <td>0.6340</td>
+    <td>0.2744</td>
+    <td>0.4720</td>
+    <td>2.4826</td>
+    <td>0.6201</td>
+    <td>0.9488 ± 0.1161</td>
+    <td>0.8380 ± 0.1757</td>
+</tr><tr>
+    <td class="method">v9_4run_js3</td>
+    <td>25308</td>
+    <td>0.6405</td>
+    <td>0.2816</td>
+    <td>0.5088</td>
+    <td>2.6199</td>
+    <td>0.6171</td>
+    <td>0.9597 ± 0.1034</td>
+    <td>0.8549 ± 0.1709</td>
+</tr><tr>
+    <td class="method">v9_4run_js30</td>
+    <td>25308</td>
+    <td>0.6418</td>
+    <td>0.1807</td>
+    <td>0.2978</td>
+    <td>1.3992</td>
+    <td>0.5295</td>
+    <td>0.8869 ± 0.1561</td>
+    <td>0.7068 ± 0.1852</td>
+</tr><tr>
+    <td class="method">v9_4run_js60</td>
+    <td>25308</td>
+    <td>0.6596</td>
+    <td>0.2040</td>
+    <td>0.4008</td>
+    <td>1.4942</td>
+    <td>0.5262</td>
+    <td>0.9189 ± 0.1372</td>
+    <td>0.7561 ± 0.1850</td>
+</tr><tr>
+    <td class="method">transfer_erm</td>
+    <td>23199</td>
+    <td>0.2917</td>
+    <td>0.2358</td>
+    <td>0.3875</td>
+    <td>2.3917</td>
+    <td>0.8826</td>
+    <td>0.5763 ± 0.1695</td>
+    <td>0.5075 ± 0.1226</td>
+</tr><tr>
+    <td class="method">transfer_js3</td>
+    <td>23199</td>
+    <td>0.3255</td>
+    <td>0.2952</td>
+    <td>0.4298</td>
+    <td>2.4975</td>
+    <td>0.9003</td>
+    <td>0.6821 ± 0.1839</td>
+    <td>0.5910 ± 0.1473</td>
+</tr><tr>
+    <td class="method">transfer_js30</td>
+    <td>23199</td>
+    <td>0.2776</td>
+    <td>0.1691</td>
+    <td>0.5003</td>
+    <td>2.1502</td>
+    <td>0.8499</td>
+    <td>0.5003 ± 0.1884</td>
+    <td>0.4252 ± 0.1243</td>
+</tr><tr>
+    <td class="method">foundation_30e</td>
+    <td>25308</td>
+    <td>0.2845</td>
+    <td>0.2353</td>
+    <td>0.4552</td>
+    <td>2.7418</td>
+    <td>0.9236</td>
+    <td>0.5534 ± 0.1687</td>
+    <td>0.5063 ± 0.1246</td>
+</tr></tbody>
+  </table>
+</div>
+
+<div class="section">
+  <h2>2. Calibration Metrics Comparison</h2>
+  <div class="metric-grid">
+    <div class="chart-container">
+      <h4>ECE (Expected Calibration Error) ↓</h4>
+      <canvas id="ece_bar" height="250"></canvas>
+    </div>
+    <div class="chart-container">
+      <h4>NLL (Negative Log-Likelihood) ↓</h4>
+      <canvas id="nll_bar" height="250"></canvas>
+    </div>
+    <div class="chart-container">
+      <h4>Brier Score ↓</h4>
+      <canvas id="brier_bar" height="250"></canvas>
+    </div>
+    <div class="chart-container">
+      <h4>Accuracy</h4>
+      <canvas id="acc_bar" height="250"></canvas>
+    </div>
+  </div>
+</div>
+
+<script>
+var labels = ["v9_4run_erm", "v9_4run_js3", "v9_4run_js30", "v9_4run_js60", "transfer_erm", "transfer_js3", "transfer_js30", "foundation_30e"];
+
+new Chart(document.getElementById('ece_bar'), {
+  type: 'bar', data: { labels: labels, datasets: [{ label: 'ECE', data: [0.274422, 0.281616, 0.180704, 0.204018, 0.235816, 0.295161, 0.169082, 0.235271],
+    backgroundColor: labels.map(function(_,i) { return ['rgba(31,119,180,1)','rgba(255,127,14,1)','rgba(44,160,44,1)','rgba(148,103,189,1)','rgba(140,86,75,1)','rgba(227,119,194,1)','rgba(127,127,127,1)','rgba(188,189,34,1)'][i%8]; })
+  }] },
+  options: { responsive: true, plugins: { legend: { display: false } } }
+});
+
+new Chart(document.getElementById('nll_bar'), {
+  type: 'bar', data: { labels: labels, datasets: [{ label: 'NLL', data: [2.482633, 2.619934, 1.399246, 1.494234, 2.391715, 2.497484, 2.150181, 2.741805],
+    backgroundColor: labels.map(function(_,i) { return ['rgba(31,119,180,1)','rgba(255,127,14,1)','rgba(44,160,44,1)','rgba(148,103,189,1)','rgba(140,86,75,1)','rgba(227,119,194,1)','rgba(127,127,127,1)','rgba(188,189,34,1)'][i%8]; })
+  }] },
+  options: { responsive: true, plugins: { legend: { display: false } } }
+});
+
+new Chart(document.getElementById('brier_bar'), {
+  type: 'bar', data: { labels: labels, datasets: [{ label: 'Brier', data: [0.620099, 0.617133, 0.52953, 0.526236, 0.882638, 0.900257, 0.849868, 0.923568],
+    backgroundColor: labels.map(function(_,i) { return ['rgba(31,119,180,1)','rgba(255,127,14,1)','rgba(44,160,44,1)','rgba(148,103,189,1)','rgba(140,86,75,1)','rgba(227,119,194,1)','rgba(127,127,127,1)','rgba(188,189,34,1)'][i%8]; })
+  }] },
+  options: { responsive: true, plugins: { legend: { display: false } } }
+});
+
+var acc_values = [0.63395, 0.640469, 0.641813, 0.659554, 0.291737, 0.325488, 0.277641, 0.284456];
+new Chart(document.getElementById('acc_bar'), {
+  type: 'bar', data: { labels: labels, datasets: [{ label: 'Accuracy', data: acc_values,
+    backgroundColor: labels.map(function(_,i) { return ['rgba(31,119,180,1)','rgba(255,127,14,1)','rgba(44,160,44,1)','rgba(148,103,189,1)','rgba(140,86,75,1)','rgba(227,119,194,1)','rgba(127,127,127,1)','rgba(188,189,34,1)'][i%8]; })
+  }] },
+  options: { responsive: true, plugins: { legend: { display: false } } }
+});
+</script>
+
+<div class="section">
+  <h2>3. Per-Profile Breakdown</h2>
+  <details open>
+<summary><strong>in_range</strong></summary>
+<table><thead><tr><th>Method</th><th>N</th><th>Acc</th><th>ECE</th><th>MCE</th><th>NLL</th><th>Brier</th></tr></thead>
+<tbody><tr>
+    <td class="method">v9_4run_erm</td>
+    <td>2109</td>
+    <td>0.7146</td>
+    <td>0.2092</td>
+    <td>0.5073</td>
+    <td>1.7395</td>
+    <td>0.4759</td>
+</tr><tr>
+    <td class="method">v9_4run_js3</td>
+    <td>2109</td>
+    <td>0.7188</td>
+    <td>0.2160</td>
+    <td>0.5187</td>
+    <td>1.7875</td>
+    <td>0.4735</td>
+</tr><tr>
+    <td class="method">v9_4run_js30</td>
+    <td>2109</td>
+    <td>0.7131</td>
+    <td>0.1333</td>
+    <td>0.2745</td>
+    <td>1.0258</td>
+    <td>0.4234</td>
+</tr><tr>
+    <td class="method">v9_4run_js60</td>
+    <td>2109</td>
+    <td>0.7269</td>
+    <td>0.1626</td>
+    <td>0.3802</td>
+    <td>1.1097</td>
+    <td>0.4236</td>
+</tr><tr>
+    <td class="method">transfer_erm</td>
+    <td>2109</td>
+    <td>0.3793</td>
+    <td>0.1476</td>
+    <td>0.2774</td>
+    <td>1.6132</td>
+    <td>0.7572</td>
+</tr><tr>
+    <td class="method">transfer_js3</td>
+    <td>2109</td>
+    <td>0.3936</td>
+    <td>0.2350</td>
+    <td>0.3824</td>
+    <td>1.7277</td>
+    <td>0.7818</td>
+</tr><tr>
+    <td class="method">transfer_js30</td>
+    <td>2109</td>
+    <td>0.3357</td>
+    <td>0.0962</td>
+    <td>0.1733</td>
+    <td>1.5590</td>
+    <td>0.7436</td>
+</tr><tr>
+    <td class="method">foundation_30e</td>
+    <td>2109</td>
+    <td>0.2148</td>
+    <td>0.2524</td>
+    <td>0.2867</td>
+    <td>2.9233</td>
+    <td>0.9586</td>
+</tr></tbody></table>
+</details><details open>
+<summary><strong>level0</strong></summary>
+<table><thead><tr><th>Method</th><th>N</th><th>Acc</th><th>ECE</th><th>MCE</th><th>NLL</th><th>Brier</th></tr></thead>
+<tbody><tr>
+    <td class="method">v9_4run_erm</td>
+    <td>2109</td>
+    <td>0.7131</td>
+    <td>0.2101</td>
+    <td>0.4754</td>
+    <td>1.7275</td>
+    <td>0.4748</td>
+</tr><tr>
+    <td class="method">v9_4run_js3</td>
+    <td>2109</td>
+    <td>0.7193</td>
+    <td>0.2193</td>
+    <td>0.5392</td>
+    <td>1.8131</td>
+    <td>0.4786</td>
+</tr><tr>
+    <td class="method">v9_4run_js30</td>
+    <td>2109</td>
+    <td>0.7084</td>
+    <td>0.1428</td>
+    <td>0.7454</td>
+    <td>1.0276</td>
+    <td>0.4271</td>
+</tr><tr>
+    <td class="method">v9_4run_js60</td>
+    <td>2109</td>
+    <td>0.7288</td>
+    <td>0.1617</td>
+    <td>0.3481</td>
+    <td>1.0964</td>
+    <td>0.4200</td>
+</tr><tr><td class="method">transfer_erm</td><td colspan="6">—</td></tr><tr><td class="method">transfer_js3</td><td colspan="6">—</td></tr><tr><td class="method">transfer_js30</td><td colspan="6">—</td></tr><tr>
+    <td class="method">foundation_30e</td>
+    <td>2109</td>
+    <td>0.4742</td>
+    <td>0.0341</td>
+    <td>0.1236</td>
+    <td>1.3093</td>
+    <td>0.6419</td>
+</tr></tbody></table>
+</details><details open>
+<summary><strong>ood_all</strong></summary>
+<table><thead><tr><th>Method</th><th>N</th><th>Acc</th><th>ECE</th><th>MCE</th><th>NLL</th><th>Brier</th></tr></thead>
+<tbody><tr>
+    <td class="method">v9_4run_erm</td>
+    <td>2109</td>
+    <td>0.3855</td>
+    <td>0.4710</td>
+    <td>0.5397</td>
+    <td>4.4396</td>
+    <td>1.0425</td>
+</tr><tr>
+    <td class="method">v9_4run_js3</td>
+    <td>2109</td>
+    <td>0.3589</td>
+    <td>0.5197</td>
+    <td>0.7340</td>
+    <td>5.6169</td>
+    <td>1.1145</td>
+</tr><tr>
+    <td class="method">v9_4run_js30</td>
+    <td>2109</td>
+    <td>0.3860</td>
+    <td>0.3571</td>
+    <td>0.4835</td>
+    <td>3.0354</td>
+    <td>0.9180</td>
+</tr><tr>
+    <td class="method">v9_4run_js60</td>
+    <td>2109</td>
+    <td>0.3826</td>
+    <td>0.4015</td>
+    <td>0.7337</td>
+    <td>3.3895</td>
+    <td>0.9540</td>
+</tr><tr>
+    <td class="method">transfer_erm</td>
+    <td>2109</td>
+    <td>0.1465</td>
+    <td>0.4941</td>
+    <td>0.5709</td>
+    <td>5.0484</td>
+    <td>1.2334</td>
+</tr><tr>
+    <td class="method">transfer_js3</td>
+    <td>2109</td>
+    <td>0.1612</td>
+    <td>0.4857</td>
+    <td>0.6001</td>
+    <td>5.2462</td>
+    <td>1.2121</td>
+</tr><tr>
+    <td class="method">transfer_js30</td>
+    <td>2109</td>
+    <td>0.1422</td>
+    <td>0.5204</td>
+    <td>0.5660</td>
+    <td>4.5834</td>
+    <td>1.2405</td>
+</tr><tr>
+    <td class="method">foundation_30e</td>
+    <td>2109</td>
+    <td>0.1422</td>
+    <td>0.5691</td>
+    <td>0.6022</td>
+    <td>4.4569</td>
+    <td>1.2868</td>
+</tr></tbody></table>
+</details><details open>
+<summary><strong>ood_background</strong></summary>
+<table><thead><tr><th>Method</th><th>N</th><th>Acc</th><th>ECE</th><th>MCE</th><th>NLL</th><th>Brier</th></tr></thead>
+<tbody><tr>
+    <td class="method">v9_4run_erm</td>
+    <td>2109</td>
+    <td>0.7032</td>
+    <td>0.2203</td>
+    <td>0.7109</td>
+    <td>1.8227</td>
+    <td>0.5026</td>
+</tr><tr>
+    <td class="method">v9_4run_js3</td>
+    <td>2109</td>
+    <td>0.7093</td>
+    <td>0.2270</td>
+    <td>0.4754</td>
+    <td>1.8649</td>
+    <td>0.4949</td>
+</tr><tr>
+    <td class="method">v9_4run_js30</td>
+    <td>2109</td>
+    <td>0.7046</td>
+    <td>0.1431</td>
+    <td>0.2934</td>
+    <td>1.0459</td>
+    <td>0.4341</td>
+</tr><tr>
+    <td class="method">v9_4run_js60</td>
+    <td>2109</td>
+    <td>0.7245</td>
+    <td>0.1619</td>
+    <td>0.3343</td>
+    <td>1.1241</td>
+    <td>0.4292</td>
+</tr><tr>
+    <td class="method">transfer_erm</td>
+    <td>2109</td>
+    <td>0.2508</td>
+    <td>0.2663</td>
+    <td>0.5178</td>
+    <td>2.5330</td>
+    <td>0.9220</td>
+</tr><tr>
+    <td class="method">transfer_js3</td>
+    <td>2109</td>
+    <td>0.3765</td>
+    <td>0.2524</td>
+    <td>0.4490</td>
+    <td>1.8742</td>
+    <td>0.8235</td>
+</tr><tr>
+    <td class="method">transfer_js30</td>
+    <td>2109</td>
+    <td>0.3001</td>
+    <td>0.1216</td>
+    <td>0.1784</td>
+    <td>1.7876</td>
+    <td>0.7948</td>
+</tr><tr>
+    <td class="method">foundation_30e</td>
+    <td>2109</td>
+    <td>0.1854</td>
+    <td>0.3247</td>
+    <td>0.4314</td>
+    <td>3.5747</td>
+    <td>1.0667</td>
+</tr></tbody></table>
+</details><details open>
+<summary><strong>ood_broadening</strong></summary>
+<table><thead><tr><th>Method</th><th>N</th><th>Acc</th><th>ECE</th><th>MCE</th><th>NLL</th><th>Brier</th></tr></thead>
+<tbody><tr>
+    <td class="method">v9_4run_erm</td>
+    <td>2109</td>
+    <td>0.5116</td>
+    <td>0.3882</td>
+    <td>0.5889</td>
+    <td>4.1390</td>
+    <td>0.8453</td>
+</tr><tr>
+    <td class="method">v9_4run_js3</td>
+    <td>2109</td>
+    <td>0.5296</td>
+    <td>0.3865</td>
+    <td>0.5776</td>
+    <td>4.1679</td>
+    <td>0.8275</td>
+</tr><tr>
+    <td class="method">v9_4run_js30</td>
+    <td>2109</td>
+    <td>0.5771</td>
+    <td>0.2344</td>
+    <td>0.3903</td>
+    <td>1.8170</td>
+    <td>0.6310</td>
+</tr><tr>
+    <td class="method">v9_4run_js60</td>
+    <td>2109</td>
+    <td>0.6131</td>
+    <td>0.2356</td>
+    <td>0.3695</td>
+    <td>1.7935</td>
+    <td>0.6000</td>
+</tr><tr>
+    <td class="method">transfer_erm</td>
+    <td>2109</td>
+    <td>0.2205</td>
+    <td>0.2881</td>
+    <td>0.3509</td>
+    <td>2.9567</td>
+    <td>0.9671</td>
+</tr><tr>
+    <td class="method">transfer_js3</td>
+    <td>2109</td>
+    <td>0.2470</td>
+    <td>0.3699</td>
+    <td>0.6082</td>
+    <td>3.2932</td>
+    <td>1.0292</td>
+</tr><tr>
+    <td class="method">transfer_js30</td>
+    <td>2109</td>
+    <td>0.2319</td>
+    <td>0.2049</td>
+    <td>0.2679</td>
+    <td>2.2223</td>
+    <td>0.8730</td>
+</tr><tr>
+    <td class="method">foundation_30e</td>
+    <td>2109</td>
+    <td>0.1422</td>
+    <td>0.4403</td>
+    <td>0.4700</td>
+    <td>4.1597</td>
+    <td>1.1713</td>
+</tr></tbody></table>
+</details><details open>
+<summary><strong>ood_combo_background_noise</strong></summary>
+<table><thead><tr><th>Method</th><th>N</th><th>Acc</th><th>ECE</th><th>MCE</th><th>NLL</th><th>Brier</th></tr></thead>
+<tbody><tr>
+    <td class="method">v9_4run_erm</td>
+    <td>2109</td>
+    <td>0.6434</td>
+    <td>0.2611</td>
+    <td>0.4710</td>
+    <td>2.1797</td>
+    <td>0.5938</td>
+</tr><tr>
+    <td class="method">v9_4run_js3</td>
+    <td>2109</td>
+    <td>0.6396</td>
+    <td>0.2726</td>
+    <td>0.4475</td>
+    <td>2.3734</td>
+    <td>0.6091</td>
+</tr><tr>
+    <td class="method">v9_4run_js30</td>
+    <td>2109</td>
+    <td>0.6311</td>
+    <td>0.1805</td>
+    <td>0.3452</td>
+    <td>1.4005</td>
+    <td>0.5472</td>
+</tr><tr>
+    <td class="method">v9_4run_js60</td>
+    <td>2109</td>
+    <td>0.6226</td>
+    <td>0.2251</td>
+    <td>0.7341</td>
+    <td>1.6116</td>
+    <td>0.5847</td>
+</tr><tr>
+    <td class="method">transfer_erm</td>
+    <td>2109</td>
+    <td>0.2262</td>
+    <td>0.2862</td>
+    <td>0.5610</td>
+    <td>2.8917</td>
+    <td>0.9679</td>
+</tr><tr>
+    <td class="method">transfer_js3</td>
+    <td>2109</td>
+    <td>0.2532</td>
+    <td>0.3455</td>
+    <td>0.4699</td>
+    <td>2.9038</td>
+    <td>0.9959</td>
+</tr><tr>
+    <td class="method">transfer_js30</td>
+    <td>2109</td>
+    <td>0.2039</td>
+    <td>0.2825</td>
+    <td>0.8012</td>
+    <td>3.0177</td>
+    <td>1.0020</td>
+</tr><tr>
+    <td class="method">foundation_30e</td>
+    <td>2109</td>
+    <td>0.1840</td>
+    <td>0.3272</td>
+    <td>0.4419</td>
+    <td>3.6153</td>
+    <td>1.0706</td>
+</tr></tbody></table>
+</details><details open>
+<summary><strong>ood_combo_shift_broadening</strong></summary>
+<table><thead><tr><th>Method</th><th>N</th><th>Acc</th><th>ECE</th><th>MCE</th><th>NLL</th><th>Brier</th></tr></thead>
+<tbody><tr>
+    <td class="method">v9_4run_erm</td>
+    <td>2109</td>
+    <td>0.4936</td>
+    <td>0.4026</td>
+    <td>0.6259</td>
+    <td>4.2729</td>
+    <td>0.8744</td>
+</tr><tr>
+    <td class="method">v9_4run_js3</td>
+    <td>2109</td>
+    <td>0.5178</td>
+    <td>0.3877</td>
+    <td>0.6161</td>
+    <td>4.2487</td>
+    <td>0.8441</td>
+</tr><tr>
+    <td class="method">v9_4run_js30</td>
+    <td>2109</td>
+    <td>0.5548</td>
+    <td>0.2466</td>
+    <td>0.3657</td>
+    <td>1.9333</td>
+    <td>0.6659</td>
+</tr><tr>
+    <td class="method">v9_4run_js60</td>
+    <td>2109</td>
+    <td>0.5875</td>
+    <td>0.2528</td>
+    <td>0.4243</td>
+    <td>1.8607</td>
+    <td>0.6338</td>
+</tr><tr>
+    <td class="method">transfer_erm</td>
+    <td>2109</td>
+    <td>0.2138</td>
+    <td>0.2921</td>
+    <td>0.3599</td>
+    <td>3.0174</td>
+    <td>0.9742</td>
+</tr><tr>
+    <td class="method">transfer_js3</td>
+    <td>2109</td>
+    <td>0.2442</td>
+    <td>0.3661</td>
+    <td>0.4911</td>
+    <td>3.3399</td>
+    <td>1.0221</td>
+</tr><tr>
+    <td class="method">transfer_js30</td>
+    <td>2109</td>
+    <td>0.2466</td>
+    <td>0.1860</td>
+    <td>0.2418</td>
+    <td>2.2410</td>
+    <td>0.8751</td>
+</tr><tr>
+    <td class="method">foundation_30e</td>
+    <td>2109</td>
+    <td>0.1422</td>
+    <td>0.4377</td>
+    <td>0.4755</td>
+    <td>4.1406</td>
+    <td>1.1694</td>
+</tr></tbody></table>
+</details><details open>
+<summary><strong>ood_combo_texture_shift</strong></summary>
+<table><thead><tr><th>Method</th><th>N</th><th>Acc</th><th>ECE</th><th>MCE</th><th>NLL</th><th>Brier</th></tr></thead>
+<tbody><tr>
+    <td class="method">v9_4run_erm</td>
+    <td>2109</td>
+    <td>0.6605</td>
+    <td>0.2446</td>
+    <td>0.4215</td>
+    <td>2.0831</td>
+    <td>0.5718</td>
+</tr><tr>
+    <td class="method">v9_4run_js3</td>
+    <td>2109</td>
+    <td>0.6762</td>
+    <td>0.2439</td>
+    <td>0.4846</td>
+    <td>1.9893</td>
+    <td>0.5448</td>
+</tr><tr>
+    <td class="method">v9_4run_js30</td>
+    <td>2109</td>
+    <td>0.6695</td>
+    <td>0.1498</td>
+    <td>0.2844</td>
+    <td>1.1333</td>
+    <td>0.4822</td>
+</tr><tr>
+    <td class="method">v9_4run_js60</td>
+    <td>2109</td>
+    <td>0.6927</td>
+    <td>0.1765</td>
+    <td>0.3505</td>
+    <td>1.2245</td>
+    <td>0.4721</td>
+</tr><tr>
+    <td class="method">transfer_erm</td>
+    <td>2109</td>
+    <td>0.3333</td>
+    <td>0.1830</td>
+    <td>0.4029</td>
+    <td>1.7209</td>
+    <td>0.8056</td>
+</tr><tr>
+    <td class="method">transfer_js3</td>
+    <td>2109</td>
+    <td>0.3698</td>
+    <td>0.2468</td>
+    <td>0.4898</td>
+    <td>1.8582</td>
+    <td>0.8287</td>
+</tr><tr>
+    <td class="method">transfer_js30</td>
+    <td>2109</td>
+    <td>0.3229</td>
+    <td>0.0809</td>
+    <td>0.1306</td>
+    <td>1.5790</td>
+    <td>0.7526</td>
+</tr><tr>
+    <td class="method">foundation_30e</td>
+    <td>2109</td>
+    <td>0.3585</td>
+    <td>0.1320</td>
+    <td>0.3618</td>
+    <td>1.6957</td>
+    <td>0.7740</td>
+</tr></tbody></table>
+</details><details open>
+<summary><strong>ood_noise</strong></summary>
+<table><thead><tr><th>Method</th><th>N</th><th>Acc</th><th>ECE</th><th>MCE</th><th>NLL</th><th>Brier</th></tr></thead>
+<tbody><tr>
+    <td class="method">v9_4run_erm</td>
+    <td>2109</td>
+    <td>0.6875</td>
+    <td>0.2258</td>
+    <td>0.4747</td>
+    <td>1.8444</td>
+    <td>0.5186</td>
+</tr><tr>
+    <td class="method">v9_4run_js3</td>
+    <td>2109</td>
+    <td>0.6932</td>
+    <td>0.2358</td>
+    <td>0.4997</td>
+    <td>1.9400</td>
+    <td>0.5213</td>
+</tr><tr>
+    <td class="method">v9_4run_js30</td>
+    <td>2109</td>
+    <td>0.6747</td>
+    <td>0.1557</td>
+    <td>0.3065</td>
+    <td>1.1464</td>
+    <td>0.4729</td>
+</tr><tr>
+    <td class="method">v9_4run_js60</td>
+    <td>2109</td>
+    <td>0.6899</td>
+    <td>0.1780</td>
+    <td>0.3252</td>
+    <td>1.2643</td>
+    <td>0.4771</td>
+</tr><tr>
+    <td class="method">transfer_erm</td>
+    <td>2109</td>
+    <td>0.3566</td>
+    <td>0.1575</td>
+    <td>0.3562</td>
+    <td>1.6572</td>
+    <td>0.7677</td>
+</tr><tr>
+    <td class="method">transfer_js3</td>
+    <td>2109</td>
+    <td>0.3594</td>
+    <td>0.2494</td>
+    <td>0.3504</td>
+    <td>1.9763</td>
+    <td>0.8289</td>
+</tr><tr>
+    <td class="method">transfer_js30</td>
+    <td>2109</td>
+    <td>0.2812</td>
+    <td>0.1471</td>
+    <td>0.1877</td>
+    <td>1.9641</td>
+    <td>0.8260</td>
+</tr><tr>
+    <td class="method">foundation_30e</td>
+    <td>2109</td>
+    <td>0.4448</td>
+    <td>0.0521</td>
+    <td>0.1239</td>
+    <td>1.4151</td>
+    <td>0.6682</td>
+</tr></tbody></table>
+</details><details open>
+<summary><strong>ood_shift_negative</strong></summary>
+<table><thead><tr><th>Method</th><th>N</th><th>Acc</th><th>ECE</th><th>MCE</th><th>NLL</th><th>Brier</th></tr></thead>
+<tbody><tr>
+    <td class="method">v9_4run_erm</td>
+    <td>2109</td>
+    <td>0.7079</td>
+    <td>0.2173</td>
+    <td>0.7077</td>
+    <td>1.8664</td>
+    <td>0.4974</td>
+</tr><tr>
+    <td class="method">v9_4run_js3</td>
+    <td>2109</td>
+    <td>0.7226</td>
+    <td>0.2102</td>
+    <td>0.4120</td>
+    <td>1.8273</td>
+    <td>0.4793</td>
+</tr><tr>
+    <td class="method">v9_4run_js30</td>
+    <td>2109</td>
+    <td>0.7070</td>
+    <td>0.1360</td>
+    <td>0.7391</td>
+    <td>1.0309</td>
+    <td>0.4315</td>
+</tr><tr>
+    <td class="method">v9_4run_js60</td>
+    <td>2109</td>
+    <td>0.7212</td>
+    <td>0.1614</td>
+    <td>0.3319</td>
+    <td>1.1325</td>
+    <td>0.4285</td>
+</tr><tr>
+    <td class="method">transfer_erm</td>
+    <td>2109</td>
+    <td>0.3826</td>
+    <td>0.1427</td>
+    <td>0.3092</td>
+    <td>1.5642</td>
+    <td>0.7509</td>
+</tr><tr>
+    <td class="method">transfer_js3</td>
+    <td>2109</td>
+    <td>0.4101</td>
+    <td>0.2155</td>
+    <td>0.3921</td>
+    <td>1.6801</td>
+    <td>0.7728</td>
+</tr><tr>
+    <td class="method">transfer_js30</td>
+    <td>2109</td>
+    <td>0.3319</td>
+    <td>0.0916</td>
+    <td>0.2045</td>
+    <td>1.5630</td>
+    <td>0.7468</td>
+</tr><tr>
+    <td class="method">foundation_30e</td>
+    <td>2109</td>
+    <td>0.4732</td>
+    <td>0.0308</td>
+    <td>0.1974</td>
+    <td>1.3261</td>
+    <td>0.6477</td>
+</tr></tbody></table>
+</details><details open>
+<summary><strong>ood_shift_positive</strong></summary>
+<table><thead><tr><th>Method</th><th>N</th><th>Acc</th><th>ECE</th><th>MCE</th><th>NLL</th><th>Brier</th></tr></thead>
+<tbody><tr>
+    <td class="method">v9_4run_erm</td>
+    <td>2109</td>
+    <td>0.7122</td>
+    <td>0.2130</td>
+    <td>0.4709</td>
+    <td>1.7127</td>
+    <td>0.4878</td>
+</tr><tr>
+    <td class="method">v9_4run_js3</td>
+    <td>2109</td>
+    <td>0.7165</td>
+    <td>0.2242</td>
+    <td>0.4826</td>
+    <td>1.8770</td>
+    <td>0.4910</td>
+</tr><tr>
+    <td class="method">v9_4run_js30</td>
+    <td>2109</td>
+    <td>0.6984</td>
+    <td>0.1420</td>
+    <td>0.2659</td>
+    <td>1.0639</td>
+    <td>0.4462</td>
+</tr><tr>
+    <td class="method">v9_4run_js60</td>
+    <td>2109</td>
+    <td>0.7245</td>
+    <td>0.1614</td>
+    <td>0.3293</td>
+    <td>1.1266</td>
+    <td>0.4310</td>
+</tr><tr>
+    <td class="method">transfer_erm</td>
+    <td>2109</td>
+    <td>0.3618</td>
+    <td>0.1602</td>
+    <td>0.2317</td>
+    <td>1.5894</td>
+    <td>0.7600</td>
+</tr><tr>
+    <td class="method">transfer_js3</td>
+    <td>2109</td>
+    <td>0.3973</td>
+    <td>0.2252</td>
+    <td>0.3986</td>
+    <td>1.7139</td>
+    <td>0.7783</td>
+</tr><tr>
+    <td class="method">transfer_js30</td>
+    <td>2109</td>
+    <td>0.3272</td>
+    <td>0.1009</td>
+    <td>0.2004</td>
+    <td>1.5650</td>
+    <td>0.7472</td>
+</tr><tr>
+    <td class="method">foundation_30e</td>
+    <td>2109</td>
+    <td>0.4410</td>
+    <td>0.0473</td>
+    <td>0.0768</td>
+    <td>1.3986</td>
+    <td>0.6734</td>
+</tr></tbody></table>
+</details><details open>
+<summary><strong>ood_texture</strong></summary>
+<table><thead><tr><th>Method</th><th>N</th><th>Acc</th><th>ECE</th><th>MCE</th><th>NLL</th><th>Brier</th></tr></thead>
+<tbody><tr>
+    <td class="method">v9_4run_erm</td>
+    <td>2109</td>
+    <td>0.6743</td>
+    <td>0.2328</td>
+    <td>0.7288</td>
+    <td>1.9641</td>
+    <td>0.5562</td>
+</tr><tr>
+    <td class="method">v9_4run_js3</td>
+    <td>2109</td>
+    <td>0.6837</td>
+    <td>0.2374</td>
+    <td>0.4306</td>
+    <td>1.9333</td>
+    <td>0.5268</td>
+</tr><tr>
+    <td class="method">v9_4run_js30</td>
+    <td>2109</td>
+    <td>0.6771</td>
+    <td>0.1482</td>
+    <td>0.7447</td>
+    <td>1.1309</td>
+    <td>0.4748</td>
+</tr><tr>
+    <td class="method">v9_4run_js60</td>
+    <td>2109</td>
+    <td>0.7003</td>
+    <td>0.1726</td>
+    <td>0.3325</td>
+    <td>1.1974</td>
+    <td>0.4607</td>
+</tr><tr>
+    <td class="method">transfer_erm</td>
+    <td>2109</td>
+    <td>0.3376</td>
+    <td>0.1815</td>
+    <td>0.3387</td>
+    <td>1.7169</td>
+    <td>0.8032</td>
+</tr><tr>
+    <td class="method">transfer_js3</td>
+    <td>2109</td>
+    <td>0.3679</td>
+    <td>0.2579</td>
+    <td>0.3935</td>
+    <td>1.8589</td>
+    <td>0.8297</td>
+</tr><tr>
+    <td class="method">transfer_js30</td>
+    <td>2109</td>
+    <td>0.3305</td>
+    <td>0.0789</td>
+    <td>0.0988</td>
+    <td>1.5699</td>
+    <td>0.7471</td>
+</tr><tr>
+    <td class="method">foundation_30e</td>
+    <td>2109</td>
+    <td>0.2110</td>
+    <td>0.2405</td>
+    <td>0.2977</td>
+    <td>2.8865</td>
+    <td>0.9541</td>
+</tr></tbody></table>
+</details>
+</div>
+
+<div class="section">
+  <h2>4. Reliability Diagrams</h2>
+  <p class="note">Blue bars = empirical accuracy per confidence bin. Line = average model confidence.
+  Gap between bar height and line = calibration error. Perfect calibration: bars = line.</p>
+  
+<div class="chart-container">
+  <h4>v9_4run_erm — Reliability Diagram (ECE=0.2744)</h4>
+  <canvas id="reliability_0" height="300"></canvas>
+</div>
+<script>
+new Chart(document.getElementById('reliability_0'), {
+  type: 'bar',
+  data: {
+    labels: ["0.00", "0.07", "0.13", "0.20", "0.27", "0.33", "0.40", "0.47", "0.53", "0.60", "0.67", "0.73", "0.80", "0.87", "0.93"],
+    datasets: [
+      {
+        label: 'Accuracy',
+        data: [null, null, null, null, 0.4, 0.2035, 0.2847, 0.3056, 0.3373, 0.3517, 0.3567, 0.3506, 0.3888, 0.4309, 0.7553],
+        backgroundColor: 'rgba(31,119,180,1)',
+        borderColor: 'rgba(31,119,180,1)',
+        borderWidth: 1,
+        order: 2,
+      },
+      {
+        label: 'Avg Confidence',
+        data: [null, null, null, null, 0.3069, 0.3724, 0.4368, 0.5061, 0.5667, 0.6334, 0.6994, 0.7663, 0.8339, 0.9029, 0.9919],
+        type: 'line',
+        borderColor: 'rgba(31,119,180,0.15)'.replace('0.15','0.8'),
+        backgroundColor: 'transparent',
+        borderWidth: 2,
+        pointRadius: 4,
+        tension: 0.3,
+        order: 1,
+      },
+    ]
+  },
+  options: {
+    responsive: true,
+    scales: {
+      x: { title: { display: true, text: 'Confidence bin' } },
+      y: { min: 0, max: 1, title: { display: true, text: 'Accuracy / Confidence' } }
+    },
+    plugins: {
+      tooltip: {
+        callbacks: {
+          footer: function(items) {
+            var counts = [0, 0, 0, 0, 15, 113, 274, 697, 833, 907, 928, 1041, 1245, 1845, 17410];
+            var idx = items[0].dataIndex;
+            return 'Count: ' + counts[idx];
+          }
+        }
+      }
+    }
+  }
+});
+</script>
+<div class="chart-container">
+  <h4>v9_4run_js3 — Reliability Diagram (ECE=0.2816)</h4>
+  <canvas id="reliability_1" height="300"></canvas>
+</div>
+<script>
+new Chart(document.getElementById('reliability_1'), {
+  type: 'bar',
+  data: {
+    labels: ["0.00", "0.07", "0.13", "0.20", "0.27", "0.33", "0.40", "0.47", "0.53", "0.60", "0.67", "0.73", "0.80", "0.87", "0.93"],
+    datasets: [
+      {
+        label: 'Accuracy',
+        data: [null, null, null, 0.5, 0.2, 0.1895, 0.2284, 0.2891, 0.3173, 0.3133, 0.3399, 0.3418, 0.3777, 0.394, 0.7494],
+        backgroundColor: 'rgba(255,127,14,1)',
+        borderColor: 'rgba(255,127,14,1)',
+        borderWidth: 1,
+        order: 2,
+      },
+      {
+        label: 'Avg Confidence',
+        data: [null, null, null, 0.2583, 0.3111, 0.3732, 0.4367, 0.5068, 0.5676, 0.6313, 0.7002, 0.7679, 0.835, 0.9028, 0.993],
+        type: 'line',
+        borderColor: 'rgba(255,127,14,0.15)'.replace('0.15','0.8'),
+        backgroundColor: 'transparent',
+        borderWidth: 2,
+        pointRadius: 4,
+        tension: 0.3,
+        order: 1,
+      },
+    ]
+  },
+  options: {
+    responsive: true,
+    scales: {
+      x: { title: { display: true, text: 'Confidence bin' } },
+      y: { min: 0, max: 1, title: { display: true, text: 'Accuracy / Confidence' } }
+    },
+    plugins: {
+      tooltip: {
+        callbacks: {
+          footer: function(items) {
+            var counts = [0, 0, 0, 4, 20, 95, 197, 543, 709, 782, 815, 904, 1104, 1627, 18508];
+            var idx = items[0].dataIndex;
+            return 'Count: ' + counts[idx];
+          }
+        }
+      }
+    }
+  }
+});
+</script>
+<div class="chart-container">
+  <h4>v9_4run_js30 — Reliability Diagram (ECE=0.1807)</h4>
+  <canvas id="reliability_2" height="300"></canvas>
+</div>
+<script>
+new Chart(document.getElementById('reliability_2'), {
+  type: 'bar',
+  data: {
+    labels: ["0.00", "0.07", "0.13", "0.20", "0.27", "0.33", "0.40", "0.47", "0.53", "0.60", "0.67", "0.73", "0.80", "0.87", "0.93"],
+    datasets: [
+      {
+        label: 'Accuracy',
+        data: [null, null, null, 0.4444, 0.1188, 0.2403, 0.2803, 0.3229, 0.3667, 0.4203, 0.4472, 0.4892, 0.5412, 0.6044, 0.8854],
+        backgroundColor: 'rgba(44,160,44,1)',
+        borderColor: 'rgba(44,160,44,1)',
+        borderWidth: 1,
+        order: 2,
+      },
+      {
+        label: 'Avg Confidence',
+        data: [null, null, null, 0.2489, 0.3108, 0.3727, 0.4373, 0.5021, 0.5661, 0.6343, 0.7, 0.7674, 0.8344, 0.9022, 0.985],
+        type: 'line',
+        borderColor: 'rgba(44,160,44,0.15)'.replace('0.15','0.8'),
+        backgroundColor: 'transparent',
+        borderWidth: 2,
+        pointRadius: 4,
+        tension: 0.3,
+        order: 1,
+      },
+    ]
+  },
+  options: {
+    responsive: true,
+    scales: {
+      x: { title: { display: true, text: 'Confidence bin' } },
+      y: { min: 0, max: 1, title: { display: true, text: 'Accuracy / Confidence' } }
+    },
+    plugins: {
+      tooltip: {
+        callbacks: {
+          footer: function(items) {
+            var counts = [0, 0, 0, 9, 101, 387, 842, 1496, 1617, 1568, 1601, 1799, 2088, 2783, 11017];
+            var idx = items[0].dataIndex;
+            return 'Count: ' + counts[idx];
+          }
+        }
+      }
+    }
+  }
+});
+</script>
+<div class="chart-container">
+  <h4>v9_4run_js60 — Reliability Diagram (ECE=0.2040)</h4>
+  <canvas id="reliability_3" height="300"></canvas>
+</div>
+<script>
+new Chart(document.getElementById('reliability_3'), {
+  type: 'bar',
+  data: {
+    labels: ["0.00", "0.07", "0.13", "0.20", "0.27", "0.33", "0.40", "0.47", "0.53", "0.60", "0.67", "0.73", "0.80", "0.87", "0.93"],
+    datasets: [
+      {
+        label: 'Accuracy',
+        data: [null, null, null, 0.6667, 0.1273, 0.2447, 0.2524, 0.3383, 0.3428, 0.3669, 0.4097, 0.4473, 0.4697, 0.5653, 0.851],
+        backgroundColor: 'rgba(148,103,189,1)',
+        borderColor: 'rgba(148,103,189,1)',
+        borderWidth: 1,
+        order: 2,
+      },
+      {
+        label: 'Avg Confidence',
+        data: [null, null, null, 0.2658, 0.31, 0.3717, 0.4359, 0.5039, 0.567, 0.6331, 0.7003, 0.7665, 0.8346, 0.9028, 0.9876],
+        type: 'line',
+        borderColor: 'rgba(148,103,189,0.15)'.replace('0.15','0.8'),
+        backgroundColor: 'transparent',
+        borderWidth: 2,
+        pointRadius: 4,
+        tension: 0.3,
+        order: 1,
+      },
+    ]
+  },
+  options: {
+    responsive: true,
+    scales: {
+      x: { title: { display: true, text: 'Confidence bin' } },
+      y: { min: 0, max: 1, title: { display: true, text: 'Accuracy / Confidence' } }
+    },
+    plugins: {
+      tooltip: {
+        callbacks: {
+          footer: function(items) {
+            var counts = [0, 0, 0, 3, 55, 237, 523, 1070, 1237, 1213, 1379, 1451, 1748, 2528, 13864];
+            var idx = items[0].dataIndex;
+            return 'Count: ' + counts[idx];
+          }
+        }
+      }
+    }
+  }
+});
+</script>
+<div class="chart-container">
+  <h4>transfer_erm — Reliability Diagram (ECE=0.2358)</h4>
+  <canvas id="reliability_4" height="300"></canvas>
+</div>
+<script>
+new Chart(document.getElementById('reliability_4'), {
+  type: 'bar',
+  data: {
+    labels: ["0.00", "0.07", "0.13", "0.20", "0.27", "0.33", "0.40", "0.47", "0.53", "0.60", "0.67", "0.73", "0.80", "0.87", "0.93"],
+    datasets: [
+      {
+        label: 'Accuracy',
+        data: [null, null, 0.0, 0.1429, 0.1751, 0.2005, 0.242, 0.2873, 0.288, 0.3061, 0.3132, 0.3739, 0.5395, 0.7638, 0.9304],
+        backgroundColor: 'rgba(140,86,75,1)',
+        borderColor: 'rgba(140,86,75,1)',
+        borderWidth: 1,
+        order: 2,
+      },
+      {
+        label: 'Avg Confidence',
+        data: [null, null, 0.1841, 0.252, 0.3083, 0.3694, 0.436, 0.4984, 0.5643, 0.6311, 0.6965, 0.7614, 0.8289, 0.9003, 0.9752],
+        type: 'line',
+        borderColor: 'rgba(140,86,75,0.15)'.replace('0.15','0.8'),
+        backgroundColor: 'transparent',
+        borderWidth: 2,
+        pointRadius: 4,
+        tension: 0.3,
+        order: 1,
+      },
+    ]
+  },
+  options: {
+    responsive: true,
+    scales: {
+      x: { title: { display: true, text: 'Confidence bin' } },
+      y: { min: 0, max: 1, title: { display: true, text: 'Accuracy / Confidence' } }
+    },
+    plugins: {
+      tooltip: {
+        callbacks: {
+          footer: function(items) {
+            var counts = [0, 0, 1, 98, 1131, 2903, 3976, 5516, 3635, 2470, 1574, 797, 367, 271, 460];
+            var idx = items[0].dataIndex;
+            return 'Count: ' + counts[idx];
+          }
+        }
+      }
+    }
+  }
+});
+</script>
+<div class="chart-container">
+  <h4>transfer_js3 — Reliability Diagram (ECE=0.2952)</h4>
+  <canvas id="reliability_5" height="300"></canvas>
+</div>
+<script>
+new Chart(document.getElementById('reliability_5'), {
+  type: 'bar',
+  data: {
+    labels: ["0.00", "0.07", "0.13", "0.20", "0.27", "0.33", "0.40", "0.47", "0.53", "0.60", "0.67", "0.73", "0.80", "0.87", "0.93"],
+    datasets: [
+      {
+        label: 'Accuracy',
+        data: [null, null, null, 0.1905, 0.1896, 0.2084, 0.2121, 0.2626, 0.2699, 0.3164, 0.3161, 0.3409, 0.4004, 0.5305, 0.8359],
+        backgroundColor: 'rgba(227,119,194,1)',
+        borderColor: 'rgba(227,119,194,1)',
+        borderWidth: 1,
+        order: 2,
+      },
+      {
+        label: 'Avg Confidence',
+        data: [null, null, null, 0.2502, 0.309, 0.3714, 0.4366, 0.5015, 0.5658, 0.6326, 0.699, 0.7643, 0.8302, 0.8987, 0.978],
+        type: 'line',
+        borderColor: 'rgba(227,119,194,0.15)'.replace('0.15','0.8'),
+        backgroundColor: 'transparent',
+        borderWidth: 2,
+        pointRadius: 4,
+        tension: 0.3,
+        order: 1,
+      },
+    ]
+  },
+  options: {
+    responsive: true,
+    scales: {
+      x: { title: { display: true, text: 'Confidence bin' } },
+      y: { min: 0, max: 1, title: { display: true, text: 'Accuracy / Confidence' } }
+    },
+    plugins: {
+      tooltip: {
+        callbacks: {
+          footer: function(items) {
+            var counts = [0, 0, 0, 42, 443, 1329, 2305, 3747, 3653, 3217, 2828, 2068, 1391, 884, 1292];
+            var idx = items[0].dataIndex;
+            return 'Count: ' + counts[idx];
+          }
+        }
+      }
+    }
+  }
+});
+</script>
+<div class="chart-container">
+  <h4>transfer_js30 — Reliability Diagram (ECE=0.1691)</h4>
+  <canvas id="reliability_6" height="300"></canvas>
+</div>
+<script>
+new Chart(document.getElementById('reliability_6'), {
+  type: 'bar',
+  data: {
+    labels: ["0.00", "0.07", "0.13", "0.20", "0.27", "0.33", "0.40", "0.47", "0.53", "0.60", "0.67", "0.73", "0.80", "0.87", "0.93"],
+    datasets: [
+      {
+        label: 'Accuracy',
+        data: [null, null, 0.5, 0.1857, 0.1929, 0.2175, 0.2754, 0.3436, 0.3707, 0.2631, 0.1997, 0.4102, 0.7287, 0.8693, 0.9879],
+        backgroundColor: 'rgba(127,127,127,1)',
+        borderColor: 'rgba(127,127,127,1)',
+        borderWidth: 1,
+        order: 2,
+      },
+      {
+        label: 'Avg Confidence',
+        data: [null, null, 0.1987, 0.2502, 0.3052, 0.3654, 0.4347, 0.4917, 0.5657, 0.6337, 0.7, 0.7589, 0.832, 0.8997, 0.9709],
+        type: 'line',
+        borderColor: 'rgba(127,127,127,0.15)'.replace('0.15','0.8'),
+        backgroundColor: 'transparent',
+        borderWidth: 2,
+        pointRadius: 4,
+        tension: 0.3,
+        order: 1,
+      },
+    ]
+  },
+  options: {
+    responsive: true,
+    scales: {
+      x: { title: { display: true, text: 'Confidence bin' } },
+      y: { min: 0, max: 1, title: { display: true, text: 'Accuracy / Confidence' } }
+    },
+    plugins: {
+      tooltip: {
+        callbacks: {
+          footer: function(items) {
+            var counts = [0, 0, 2, 657, 4877, 5118, 4140, 4165, 920, 954, 1232, 334, 188, 199, 413];
+            var idx = items[0].dataIndex;
+            return 'Count: ' + counts[idx];
+          }
+        }
+      }
+    }
+  }
+});
+</script>
+<div class="chart-container">
+  <h4>foundation_30e — Reliability Diagram (ECE=0.2353)</h4>
+  <canvas id="reliability_7" height="300"></canvas>
+</div>
+<script>
+new Chart(document.getElementById('reliability_7'), {
+  type: 'bar',
+  data: {
+    labels: ["0.00", "0.07", "0.13", "0.20", "0.27", "0.33", "0.40", "0.47", "0.53", "0.60", "0.67", "0.73", "0.80", "0.87", "0.93"],
+    datasets: [
+      {
+        label: 'Accuracy',
+        data: [null, null, 0.0, 0.1444, 0.2055, 0.2547, 0.2959, 0.2722, 0.2254, 0.3017, 0.2517, 0.3053, 0.7982, 0.8728, 0.9392],
+        backgroundColor: 'rgba(188,189,34,1)',
+        borderColor: 'rgba(188,189,34,1)',
+        borderWidth: 1,
+        order: 2,
+      },
+      {
+        label: 'Avg Confidence',
+        data: [null, null, 0.1944, 0.2452, 0.3051, 0.3691, 0.4372, 0.4995, 0.5607, 0.6309, 0.6999, 0.7604, 0.8286, 0.9039, 0.971],
+        type: 'line',
+        borderColor: 'rgba(188,189,34,0.15)'.replace('0.15','0.8'),
+        backgroundColor: 'transparent',
+        borderWidth: 2,
+        pointRadius: 4,
+        tension: 0.3,
+        order: 1,
+      },
+    ]
+  },
+  options: {
+    responsive: true,
+    scales: {
+      x: { title: { display: true, text: 'Confidence bin' } },
+      y: { min: 0, max: 1, title: { display: true, text: 'Accuracy / Confidence' } }
+    },
+    plugins: {
+      tooltip: {
+        callbacks: {
+          footer: function(items) {
+            var counts = [0, 0, 9, 367, 1460, 2811, 4651, 6000, 4033, 2231, 1605, 1307, 228, 228, 378];
+            var idx = items[0].dataIndex;
+            return 'Count: ' + counts[idx];
+          }
+        }
+      }
+    }
+  }
+});
+</script>
+</div>
+
+<div class="section">
+  <h2>5. Confidence Distribution — Correct vs Incorrect</h2>
+  <p class="note">Green = correct predictions, Red = incorrect predictions.
+  Well-calibrated model: correct predictions cluster at high confidence, incorrect at low confidence.</p>
+  
+<div class="chart-container">
+  <h4>v9_4run_erm — Confidence Distribution (Correct vs Incorrect)</h4>
+  <canvas id="confdist_0" height="280"></canvas>
+</div>
+<script>
+new Chart(document.getElementById('confdist_0'), {
+  type: 'bar',
+  data: {
+    labels: ["0.0-0.1", "0.1-0.2", "0.2-0.3", "0.3-0.4", "0.4-0.5", "0.5-0.6", "0.6-0.7", "0.7-0.8", "0.8-0.9", "0.9-1.0"],
+    datasets: [
+      {
+        label: 'Correct (n=16044)',
+        data: [0, 0, 3, 26, 150, 422, 486, 529, 830, 13598],
+        backgroundColor: 'rgba(44,160,44,0.6)',
+        borderColor: 'rgba(44,160,44,1)',
+        borderWidth: 1,
+      },
+      {
+        label: 'Incorrect (n=9264)',
+        data: [0, 0, 1, 98, 362, 870, 891, 970, 1212, 4860],
+        backgroundColor: 'rgba(214,39,40,0.6)',
+        borderColor: 'rgba(214,39,40,1)',
+        borderWidth: 1,
+      },
+    ]
+  },
+  options: {
+    responsive: true,
+    scales: {
+      x: { title: { display: true, text: 'Confidence bin' } },
+      y: { title: { display: true, text: 'Count' } }
+    }
+  }
+});
+</script>
+<div class="chart-container">
+  <h4>v9_4run_js3 — Confidence Distribution (Correct vs Incorrect)</h4>
+  <canvas id="confdist_1" height="280"></canvas>
+</div>
+<script>
+new Chart(document.getElementById('confdist_1'), {
+  type: 'bar',
+  data: {
+    labels: ["0.0-0.1", "0.1-0.2", "0.2-0.3", "0.3-0.4", "0.4-0.5", "0.5-0.6", "0.6-0.7", "0.7-0.8", "0.8-0.9", "0.9-1.0"],
+    datasets: [
+      {
+        label: 'Correct (n=16209)',
+        data: [0, 0, 4, 20, 92, 335, 384, 447, 693, 14234],
+        backgroundColor: 'rgba(44,160,44,0.6)',
+        borderColor: 'rgba(44,160,44,1)',
+        borderWidth: 1,
+      },
+      {
+        label: 'Incorrect (n=9099)',
+        data: [0, 0, 8, 87, 285, 737, 806, 864, 1121, 5191],
+        backgroundColor: 'rgba(214,39,40,0.6)',
+        borderColor: 'rgba(214,39,40,1)',
+        borderWidth: 1,
+      },
+    ]
+  },
+  options: {
+    responsive: true,
+    scales: {
+      x: { title: { display: true, text: 'Confidence bin' } },
+      y: { title: { display: true, text: 'Count' } }
+    }
+  }
+});
+</script>
+<div class="chart-container">
+  <h4>v9_4run_js30 — Confidence Distribution (Correct vs Incorrect)</h4>
+  <canvas id="confdist_2" height="280"></canvas>
+</div>
+<script>
+new Chart(document.getElementById('confdist_2'), {
+  type: 'bar',
+  data: {
+    labels: ["0.0-0.1", "0.1-0.2", "0.2-0.3", "0.3-0.4", "0.4-0.5", "0.5-0.6", "0.6-0.7", "0.7-0.8", "0.8-0.9", "0.9-1.0"],
+    datasets: [
+      {
+        label: 'Correct (n=16243)',
+        data: [0, 0, 8, 101, 428, 884, 1017, 1238, 1850, 10717],
+        backgroundColor: 'rgba(44,160,44,0.6)',
+        borderColor: 'rgba(44,160,44,1)',
+        borderWidth: 1,
+      },
+      {
+        label: 'Incorrect (n=9065)',
+        data: [0, 0, 28, 360, 1089, 1554, 1350, 1363, 1490, 1831],
+        backgroundColor: 'rgba(214,39,40,0.6)',
+        borderColor: 'rgba(214,39,40,1)',
+        borderWidth: 1,
+      },
+    ]
+  },
+  options: {
+    responsive: true,
+    scales: {
+      x: { title: { display: true, text: 'Confidence bin' } },
+      y: { title: { display: true, text: 'Count' } }
+    }
+  }
+});
+</script>
+<div class="chart-container">
+  <h4>v9_4run_js60 — Confidence Distribution (Correct vs Incorrect)</h4>
+  <canvas id="confdist_3" height="280"></canvas>
+</div>
+<script>
+new Chart(document.getElementById('confdist_3'), {
+  type: 'bar',
+  data: {
+    labels: ["0.0-0.1", "0.1-0.2", "0.2-0.3", "0.3-0.4", "0.4-0.5", "0.5-0.6", "0.6-0.7", "0.7-0.8", "0.8-0.9", "0.9-1.0"],
+    datasets: [
+      {
+        label: 'Correct (n=16692)',
+        data: [0, 0, 5, 62, 272, 646, 704, 955, 1404, 12644],
+        backgroundColor: 'rgba(44,160,44,0.6)',
+        borderColor: 'rgba(44,160,44,1)',
+        borderWidth: 1,
+      },
+      {
+        label: 'Incorrect (n=8616)',
+        data: [0, 0, 14, 214, 671, 1241, 1183, 1201, 1448, 2644],
+        backgroundColor: 'rgba(214,39,40,0.6)',
+        borderColor: 'rgba(214,39,40,1)',
+        borderWidth: 1,
+      },
+    ]
+  },
+  options: {
+    responsive: true,
+    scales: {
+      x: { title: { display: true, text: 'Confidence bin' } },
+      y: { title: { display: true, text: 'Count' } }
+    }
+  }
+});
+</script>
+<div class="chart-container">
+  <h4>transfer_erm — Confidence Distribution (Correct vs Incorrect)</h4>
+  <canvas id="confdist_4" height="280"></canvas>
+</div>
+<script>
+new Chart(document.getElementById('confdist_4'), {
+  type: 'bar',
+  data: {
+    labels: ["0.0-0.1", "0.1-0.2", "0.2-0.3", "0.3-0.4", "0.4-0.5", "0.5-0.6", "0.6-0.7", "0.7-0.8", "0.8-0.9", "0.9-1.0"],
+    datasets: [
+      {
+        label: 'Correct (n=6768)',
+        data: [0, 0, 87, 707, 1793, 1801, 1043, 504, 299, 534],
+        backgroundColor: 'rgba(44,160,44,0.6)',
+        borderColor: 'rgba(44,160,44,1)',
+        borderWidth: 1,
+      },
+      {
+        label: 'Incorrect (n=16431)',
+        data: [0, 1, 366, 2972, 5170, 4363, 2317, 977, 203, 62],
+        backgroundColor: 'rgba(214,39,40,0.6)',
+        borderColor: 'rgba(214,39,40,1)',
+        borderWidth: 1,
+      },
+    ]
+  },
+  options: {
+    responsive: true,
+    scales: {
+      x: { title: { display: true, text: 'Confidence bin' } },
+      y: { title: { display: true, text: 'Count' } }
+    }
+  }
+});
+</script>
+<div class="chart-container">
+  <h4>transfer_js3 — Confidence Distribution (Correct vs Incorrect)</h4>
+  <canvas id="confdist_5" height="280"></canvas>
+</div>
+<script>
+new Chart(document.getElementById('confdist_5'), {
+  type: 'bar',
+  data: {
+    labels: ["0.0-0.1", "0.1-0.2", "0.2-0.3", "0.3-0.4", "0.4-0.5", "0.5-0.6", "0.6-0.7", "0.7-0.8", "0.8-0.9", "0.9-1.0"],
+    datasets: [
+      {
+        label: 'Correct (n=7551)',
+        data: [0, 0, 28, 341, 916, 1543, 1485, 1132, 787, 1319],
+        backgroundColor: 'rgba(44,160,44,0.6)',
+        borderColor: 'rgba(44,160,44,1)',
+        borderWidth: 1,
+      },
+      {
+        label: 'Incorrect (n=15648)',
+        data: [0, 0, 152, 1293, 3145, 4101, 3234, 2262, 1070, 391],
+        backgroundColor: 'rgba(214,39,40,0.6)',
+        borderColor: 'rgba(214,39,40,1)',
+        borderWidth: 1,
+      },
+    ]
+  },
+  options: {
+    responsive: true,
+    scales: {
+      x: { title: { display: true, text: 'Confidence bin' } },
+      y: { title: { display: true, text: 'Count' } }
+    }
+  }
+});
+</script>
+<div class="chart-container">
+  <h4>transfer_js30 — Confidence Distribution (Correct vs Incorrect)</h4>
+  <canvas id="confdist_6" height="280"></canvas>
+</div>
+<script>
+new Chart(document.getElementById('confdist_6'), {
+  type: 'bar',
+  data: {
+    labels: ["0.0-0.1", "0.1-0.2", "0.2-0.3", "0.3-0.4", "0.4-0.5", "0.5-0.6", "0.6-0.7", "0.7-0.8", "0.8-0.9", "0.9-1.0"],
+    datasets: [
+      {
+        label: 'Correct (n=6441)',
+        data: [0, 1, 486, 1690, 2154, 758, 375, 259, 217, 501],
+        backgroundColor: 'rgba(44,160,44,0.6)',
+        borderColor: 'rgba(44,160,44,1)',
+        borderWidth: 1,
+      },
+      {
+        label: 'Incorrect (n=16758)',
+        data: [0, 1, 1989, 6487, 4961, 1352, 1165, 721, 67, 15],
+        backgroundColor: 'rgba(214,39,40,0.6)',
+        borderColor: 'rgba(214,39,40,1)',
+        borderWidth: 1,
+      },
+    ]
+  },
+  options: {
+    responsive: true,
+    scales: {
+      x: { title: { display: true, text: 'Confidence bin' } },
+      y: { title: { display: true, text: 'Count' } }
+    }
+  }
+});
+</script>
+<div class="chart-container">
+  <h4>foundation_30e — Confidence Distribution (Correct vs Incorrect)</h4>
+  <canvas id="confdist_7" height="280"></canvas>
+</div>
+<script>
+new Chart(document.getElementById('confdist_7'), {
+  type: 'bar',
+  data: {
+    labels: ["0.0-0.1", "0.1-0.2", "0.2-0.3", "0.3-0.4", "0.4-0.5", "0.5-0.6", "0.6-0.7", "0.7-0.8", "0.8-0.9", "0.9-1.0"],
+    datasets: [
+      {
+        label: 'Correct (n=7199)',
+        data: [0, 0, 155, 914, 2275, 1643, 881, 595, 259, 477],
+        backgroundColor: 'rgba(44,160,44,0.6)',
+        borderColor: 'rgba(44,160,44,1)',
+        borderWidth: 1,
+      },
+      {
+        label: 'Incorrect (n=18109)',
+        data: [0, 9, 804, 2765, 5433, 5333, 2148, 1519, 58, 40],
+        backgroundColor: 'rgba(214,39,40,0.6)',
+        borderColor: 'rgba(214,39,40,1)',
+        borderWidth: 1,
+      },
+    ]
+  },
+  options: {
+    responsive: true,
+    scales: {
+      x: { title: { display: true, text: 'Confidence bin' } },
+      y: { title: { display: true, text: 'Count' } }
+    }
+  }
+});
+</script>
+</div>
+
+</body>
+</html>
