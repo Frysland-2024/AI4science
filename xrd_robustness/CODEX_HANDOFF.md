@@ -1,306 +1,218 @@
-# XRD Robustness V9-T：当前工程交接
+# XRD Robustness V9-T — Current Handoff
 
-## 2026-08-03 RRUFF-371 data handoff
+**Status date:** 2026-08-08  
+**Repository:** `Frysland-2024/AI4science`  
+**Branch:** `main`
 
-- Current local dataset: `data/real_xrd/rruff371/` (Git-ignored, not
-  publishable data).
-- Frozen identity: `rruff-real-pxrd-371-v2`.
-- Composition: 371 unique RRUFF sample IDs; 53 per crystal system; 70 frozen
-  legacy spectra plus a 301-sample model-blind extension (43 per class).
-- Preservation: `rruff-real-pxrd-350-v1` remains intact. All 350 IDs and their
-  canonical-spectrum, RAW, and DIF hashes are preserved in v2; the 21 additions
-  are balanced at three per class.
-- Rebuild: parameterized `scripts/build_rruff350.py` using the five official
-  archives retained in `data/real_xrd/rruff350/source_archives/`, with
-  `--target-per-class 53 --dataset-version 2`.
-- Audits: `reports/rruff371_build_audit.json` and
-  `reports/rruff371_expansion_audit.json`.
-- Intended roles: legacy RRUFF-70 is development/few-shot data; the extension
-  is the 301-sample external evaluation cohort. The replacement role/episode
-  manifests are not yet frozen and real-XRD execution remains disabled.
-- Design recommendation: replace the obsolete 21/14/35 split with 35 support
-  and 35 adaptation-validation samples (five per class each), supporting a
-  nested 0/1/2/3/5-shot curve.
-- Scope caveat: 34 extension samples share 23 normalized mineral names with the
-  legacy 70. Primary claims are measurement-domain transfer; unseen-mineral
-  claims require a separately frozen group-disjoint sensitivity cohort.
+> Current mode is **evidence freeze / manuscript building**. This handoff is intentionally concise. Historical engineering details remain in Git history, dated reports, `00_project_context/PROJECT_JOURNEY.md`, and the RRUFF-301 audit trail.
 
-**交接状态日期：2026-08-03**
-**仓库：** `Frysland-2024/AI4science`  
-**分支：** `main`
+## 1. Current instruction to any new Codex/GPT session
 
-> 本文件只保留当前可执行状态。旧阶段的完整细节仍保存在 Git 历史、
-> `00_project_context/PROJECT_JOURNEY.md` 和日期化报告中。
+Do **not** begin by proposing another training run.
 
-## 当前结论
-
-V9 的正式方法比较已经收敛为：
-
-- baseline：Dynamic ERM；
-- selected method：JS Consistency；
-- fixed weight：`lambda_js = 60`；
-- backbone：ResNet-18-GN；
-- preprocessing：identity；
-- optimizer：AdamW；
-- learning-rate schedule：constant；
-- split：parent-structure 70/15/15；
-- evaluation role：Validation-only replication completed。
-
-Residual-v1 已经因预注册稳定性 Gate 失败而归档，不得重新开放其 lambda
-范围。JS lambda 也不得因本次结果继续调参。
-
-one-shot simulated-Test 合同现已冻结：
-
-`configs/v9_resnet_js_simulated_test.preregistered.json`
-
-人类可读说明：
-
-`reports/v9_resnet_js_simulated_test_contract_20260801.md`
-
-合同文件继续保留 `preregistered_locked_not_authorized`，以固定执行前科学
-选择；独立执行授权已于 2026-08-02 记录。2026-08-03 的第一次本地启动因
-runner 对每个 checkpoint 重复生成相同冻结谱图而形成 CPU 瓶颈，用户在任何
-checkpoint 结果或 summary 写出前将其停止。没有观察到 Test 指标，但必须如实
-记录已经发生过部分 Test 访问。
-
-用户随后明确指令“重搞”，授权一次完全相同的工程重试。新增 retry
-authorization 只允许 render-once 哈希缓存、原子状态和同一 attempt 的断点续跑；
-checkpoint、manifest、profile、evaluation seed、metric 和选择规则均不得改变。
-
-## 十轮实验状态
-
-五组 paired seeds、每组 Dynamic ERM 与 JS lambda=60，共十次运行，已全部
-完成。训练 seeds 为 `20260711` 至 `20260715`，Validation evaluation seed 固定
-为 `20260720`。
-
-权威机器结果：
-
-`reports/v9_resnet_js_ten_run_summary.json`
-
-人类可读报告：
-
-`reports/v9_resnet_js_ten_run_results_20260801.md`
-
-结果文件最初提交于：
-
-`868b079c1b410e6afe877330b7defc4262d82969`
-
-## 核心结果
-
-| Metric | Dynamic ERM | JS lambda=60 | Paired mean delta |
-|---|---:|---:|---:|
-| Mean single-factor OOD Macro-F1 | 0.658495 | 0.705064 | +0.046569 |
-| In-range Macro-F1 | 0.705112 | 0.733103 | +0.027991 |
-| Level-0 Macro-F1 | 0.706891 | 0.734648 | +0.027757 |
-| Worst-class F1 | 0.574014 | 0.593611 | +0.019597 |
-
-Primary OOD paired-bootstrap 95% interval：
-`[0.038145, 0.052834]`。
-
-In-range paired-bootstrap 95% interval：
-`[0.014028, 0.041954]`。
-
-五组 paired seeds 的 OOD delta 全部为正，in-range delta 也全部为正；
-预注册 in-range guardrail 通过。
-
-## 已冻结的 simulated-Test 执行规则
-
-Test 阶段保留全部五组 paired training seeds，并独立评估十个已经由
-Validation 选出的 checkpoint。不得重新训练、替换、平均、集成或根据 Test
-结果选择 checkpoint。
-
-冻结 checkpoint：
-
-| seed | Dynamic ERM | JS lambda=60 |
-|---:|---|---|
-| 20260711 | epoch 80 / step 49280 | epoch 40 / step 24640 |
-| 20260712 | epoch 90 / step 55440 | epoch 80 / step 49280 |
-| 20260713 | epoch 100 / step 61600 | epoch 80 / step 49280 |
-| 20260714 | epoch 90 / step 55440 | epoch 30 / step 18480 |
-| 20260715 | epoch 80 / step 49280 | epoch 60 / step 36960 |
-
-Test split 固定为 2,109 个 held-out parent structures。deterministic evaluation
-seeds 为：
-
-- `20260721`；
-- `20260722`；
-- `20260723`。
-
-Primary endpoint 为：先在每个 checkpoint 内平均 6 个 single-factor OOD
-profiles × 3 个 evaluation seeds，再计算五组 JS-minus-ERM paired deltas。
-评测 seed、profile 和谱图不得被当成额外训练 replicate；主要置信区间在五组
-matched training-seed pairs 上进行 paired bootstrap。
-
-旧 `evaluation.v9.method_transfer.json` 中的“三个 checkpoint hashes”是早期
-占位条目，历史文件不改写。新 Test 合同明确取代该占位规则，要求十个
-Validation-selected checkpoints。
-
-## 必须保留的诊断风险
-
-seed `20260714` 的 Validation worst-class F1 delta 为 `-0.061139`，其余四组
-为正。因此不能写成“JS 对每个 seed、每个类别都一致改善”。Test 合同要求定位：
-
-1. 哪个 crystal system 形成 worst class；
-2. 该下降来自哪个 condition/profile；
-3. Test 上是否出现相同模式；
-4. 如何在不重新选模型、不重新调 lambda 的前提下呈现该限制。
-
-该异常不改变预注册 primary Validation-OOD conclusion，但必须进入论文
-limitation 和 secondary diagnostic。
-
-## simulated-Test 已完成结果
-
-完全相同的 authorized retry 已于 2026-08-03 完成，10/10 checkpoints 均已
-写入带哈希的原子 run state。主要结果为五组 paired single-factor OOD
-Macro-F1 delta 均为正，平均 `+0.054600`，sample SD `0.007271`，paired-bootstrap
-95% 区间 `[+0.048944, +0.060255]`。五组 in-range delta 也全部为正。
-
-推理阶段连续 12 秒 GPU 样本平均 94.25%（范围 91-97%）；CPU-bound 缓存
-阶段不纳入该利用率口径。完整清点与 secondary diagnosis 见
-`reports/v9_resnet_js_simulated_test_results_20260803.md`。
-
-seed `20260714` 的 Test worst-class paired delta 为 `+0.005531`，未复现
-Validation 上的 aggregate decline；但 monoclinic 仍是主要瓶颈，positive/
-negative shift 和 texture 条件仍出现 worst-class 下降。因此只能主张 aggregate
-robustness improvement，不能主张每个类别和扰动条件都一致改善。
-
-## 当前进程与产物
-
-- ten-run 已结束；
-- simulated-Test 合同已冻结；
-- simulated-Test 首次本地启动因工程瓶颈中止，未产生任何 run result；
-- 完全相同的 retry 已授权并完成 10/10 checkpoints；
-- 本地十个 checkpoint 与三份 frozen manifest 已通过 preflight；
-- 优化 runner、retry authorization 与性能审计已完成；
-- 当前没有需要继续恢复的训练；
-- 不应重复启动相同十轮矩阵；
-- 不应重新选择 seed；
-- 不应继续搜索 lambda；
-- checkpoint、outputs、generated spectra 和 caches 不进入 Git。
-
-仓库中的 summary 只记录结果与哈希，不替代本地完整训练产物。
-
-## 访问边界
-
-以下资源仍锁定：
-
-- 任何 simulated-Test 重跑、Test-guided selection 或 retuning；
-- real XRD；
-- real-domain adaptation；
-- V10；
-- 任何新的 Validation-guided method selection。
-
-当前状态明确为：
-
-- `simulated_test_accessed = true`；
-- `simulated_test_result_available = true`；
-- `identical_retry_started = true`；
-- `identical_retry_completed = true`；
-- `simulated_test_contract_frozen = true`；
-- `identical_retry_authorized = true`；
-- `real_xrd_used = false`；
-- `lambda_retuned = false`；
-- `seed_excluded_posthoc = false`。
-
-任何后续 Codex/GPT 会话不得把 Validation 结果描述为 Test、sim-to-real 或
-真实实验验证，也不得把合同冻结解释为 Test 执行授权。
-
-## 下一阶段的正确顺序
-
-1. 冻结并保留 Test summary、audit、结果报告与本地 hashed raw evidence；
-2. 不得重跑 Test、重新选择 checkpoint、排除 seed 或重新调 lambda；
-3. 把 monoclinic shift/texture limitation 纳入论文限制；
-4. 另行设计和授权 real-XRD external validation，保持 V9 方法选择关闭。
-
-## 新会话读取顺序
+Read in this order:
 
 1. `AGENTS.md`
 2. `00_project_context/CURRENT_STATE.md`
-3. 本文件
-4. `reports/v9_resnet_js_ten_run_results_20260801.md`
-5. `reports/v9_resnet_js_ten_run_summary.json`
-6. `configs/v9_resnet_js_simulated_test.preregistered.json`
-7. `reports/v9_resnet_js_simulated_test_contract_20260801.md`
-8. `reports/v9_resnet_js_simulated_test_results_20260803.md`
-9. `reports/v9_resnet_js_simulated_test_summary.json`
-10. `configs/v9_resnet_js_ten_run.preregistered.json`
-11. `configs/v9_resnet_js_ten_run.authorization.json`
+3. `00_project_context/EVIDENCE_FREEZE_V1_20260808.md`
+4. this file
+5. `xrd_robustness/MANUSCRIPT_DRAFT_V1_20260808.md`
+6. `00_project_context/APPLICATION_RESEARCH_NARRATIVE_V1_20260808.md`
+7. `00_project_context/PROJECT_JOURNEY.md`
 
-## 当前明确下一动作
+The current task is to transform frozen evidence into a manuscript and application-ready research narrative without silently reopening method selection.
 
-当前动作是：
+## 2. Frozen active method
 
-> simulated Test 已完成并冻结；不得重跑或 Test-guided retuning。real-XRD
-> external validation 的方向已经明确：目标域从公共数据库铁电七晶系分类
-> 重构为 **GTIIT/Tan Lab 钙钛矿功能陶瓷少样本相态识别**。
->
-> 当前优先级最高的下一步是：**组内数据审计**——梳理所有已发表和在研
-> 陶瓷体系的原始 XRD 文件、相标签和实验元数据，确认各类别独立物理样品
-> 数是否达到 ≥20 条门槛。审计完成后冻结相态分类体系（二分类或三分类）
-> 和 few-shot adaptation 协议，然后预注册 Phase 2 比较设计。
->
-> real XRD 目前仍未使用。RRUFF-70 真实域适配路线作为独立轨道继续保留，
-> 不与谭启组相态识别任务混淆。
+- task: seven-crystal-system PXRD classification;
+- split: parent-structure 70/15/15 = 9,842 / 2,109 / 2,109;
+- backbone: ResNet-18-GN;
+- preprocessing: identity;
+- optimizer: AdamW;
+- baseline: Dynamic ERM;
+- selected method: Dynamic JS Consistency;
+- selected weight: `lambda_js = 60`;
+- same two online physical views for ERM and JS;
+- JS differs only by the added prediction-consistency objective.
 
-## 2026-08-06 — 目标域与下游任务重构
+Residual-v1 is archived. V10 is archived as a partial/negative mechanism study. PAMPT is historical foundation/backbone evidence. None should be reintroduced into the current main comparison unless a new project version is explicitly opened.
 
-simulated-Test 证据链闭合后，项目面对的核心问题是：真实域适配应该适配到
-哪个域、哪个任务？此前默认的"铁电陶瓷七晶系分类"已经被 opXRD NO_GO
-审计从根本上否定——不是因为筛选不够努力，而是因为任何公共数据库都不是
-为功能陶瓷相态分类而采集的。
+## 3. Simulated Validation evidence
 
-本次决策将真实域定义为：
+Authoritative files:
 
-```
-GTIIT / Tan Lab perovskite functional-ceramic XRD domain
-```
+- `reports/v9_resnet_js_ten_run_summary.json`
+- `reports/v9_resnet_js_ten_run_results_20260801.md`
 
-将下游任务定义为：
+Five matched training-seed pairs:
 
-```
-few-shot phase-state / phase-coexistence recognition
-  (single-phase / polymorphic coexistence / secondary phase)
-```
+- OOD Macro-F1 paired mean Δ = **+0.046569**;
+- paired-bootstrap 95% interval = `[0.038145, 0.052834]`;
+- all five paired seeds positive;
+- in-range paired mean Δ = **+0.027991**;
+- in-range guardrail passed.
 
-而不是：
+This stage closed method selection and froze `lambda_js=60`.
 
-```
-ferroelectric ceramic seven-crystal-system classification
-```
+## 4. Frozen simulated Test evidence
 
-两阶段架构保持不变：阶段一（通用模拟预训练）已完成并冻结；阶段二
-（谭启组少样本相态适配）为新增研究轴。V9 方法选择、JS lambda、simulated
-Test、RRUFF-371 资产均不受影响。当前首要任务是组内数据审计。
+Authoritative files:
 
-## 2026-08-04 opXRD 铁电可行性审计 v1（修订）
+- `reports/v9_resnet_js_simulated_test_summary.json`
+- `reports/v9_resnet_js_simulated_test_results_20260803.md`
+- `reports/v9_resnet_js_simulated_test_audit.json`
 
-初次审计（commit 87571f2）的 parser 未能正确提取 CNRS 的 basis 和晶格参数，
-误报"只有 EMPA 有标签"。修订后的 parser 正确提取了：
+Primary result:
 
-- CNRS：85% 组成（从 basis 原子符号）、100% 晶格参数→晶系、85% 完整结构
-- **FullStr=912**，与论文 Table 2 完全一致（"~912 full structures"）
-- EMPA SG：63%，与论文完全一致
+- mean five-pair single-factor OOD Macro-F1 Δ = **+0.054600**;
+- sample SD = `0.007271`;
+- paired-bootstrap 95% interval = `[+0.048944, +0.060255]`;
+- all five paired OOD effects positive;
+- all five in-range effects positive.
 
-parser reproduction gate：EMPA/HKUST/USC 通过，CNRS SG 因 Zenodo 14254270
-数据版本问题为 0%（论文应为 85%）。
+No repeated Test access or Test-guided method modification is allowed for the current manuscript.
 
-修正后审计发现 **5 个铁电候选**（3 BiFeO3, 2 SrTiO3 相关）：来自 CNRS 的
-element set 匹配，均为 medium confidence，需人工复核。
+Secondary limitation: improvement is aggregate, not uniform. Monoclinic remains a difficult class and selected shift/texture profiles retain local declines.
 
-**最终结论：NO_GO**（基于证据，非 parser 失败）。1896 条带晶系标签的
-谱图中有 1891 条不匹配任何铁电家族。CNRS 的 613 种唯一组成主要是 MOF、
-沸石、配位化合物——不是铁电氧化物陶瓷。
+## 5. Real-domain evidence — RRUFF-301 v2 is now primary
 
-新增修订资产：
-- `reports/opxrd_ferroelectric_feasibility_v1_revision.md`：修订审计报告
-- `reports/opxrd_parser_reproduction_gate_v1.json`：parser 复现 Gate
-- `scripts/download_opxrd_metadata.py`（修订）：新增 lattice→晶系、basis→组成提取
-- `scripts/audit_opxrd_ferroelectric_feasibility.py`（修订）：新增 lattice fallback 晶系标签
+RRUFF-70 is exploratory only.
 
-数据版本说明：Zenodo 14254270 中 CNRS 的 spacegroup 字段存在但为 null。
-若存在后续版本（如 15298026）且包含完整 SG 标签，建议重新审计。当前版本
-已提取全部可获取的晶系和组成信息。
+The current strongest experimental-domain evidence is the preregistered RRUFF-301 confirmatory v2 lineage in commit:
 
-所有审计约束继续遵守：未加载模型、未执行真实谱推理、未修改 RRUFF-371、
-未重新打开任何冻结合约。
+`24d8c8511bdea9df8b52cdf779b04420bebffafc`
 
+Authoritative files:
+
+- `reports/rruff301_confirmatory_full_report_20260807.md`
+- `reports/rruff301_representation_analysis_20260807.md`
+- `reports/rruff301_v1_audit_trail_20260807.md`
+
+Protocol:
+
+- 301 spectra, 43/class;
+- 70 adaptation-pool spectra, 10/class;
+- 231 locked-test spectra, 33/class;
+- K = 1/2/5;
+- five pretraining seeds × five episode seeds;
+- frozen convolutional backbone;
+- trainable projection + head;
+- paired JS-pretrained versus ERM-pretrained comparison.
+
+Results:
+
+| K | ERM Macro-F1 | JS Macro-F1 | Paired mean Δ | Positive/25 |
+|---:|---:|---:|---:|---:|
+| 1 | 0.2847 | 0.3280 | **+0.0433** | 21 |
+| 2 | 0.3026 | 0.3486 | **+0.0460** | 23 |
+| 5 | 0.3555 | 0.4099 | **+0.0545** | 24 |
+
+**68/75 paired comparisons are positive.**
+
+Fixed-200-step sensitivity at K=1 and K=5 preserves the direction.
+
+## 6. RRUFF-301 v1 bug handling
+
+The first confirmatory execution must never be cited as valid v2 evidence.
+
+Bug:
+
+- RRUFF CELL PARAMETERS convention caused trigonal samples to be absorbed into hexagonal during label construction;
+- v1 therefore had an invalid trigonal/hexagonal split.
+
+Governance response:
+
+1. invalidate v1 for confirmatory claims;
+2. preserve the audit trail;
+3. rebuild labels from DIF `space_group` plus `pymatgen.SpaceGroup` mapping;
+4. verify 70 adaptation + 231 test, 33/class, zero overlap;
+5. rerun the complete confirmatory experiment as v2.
+
+This is a research-integrity event, not a result to hide.
+
+## 7. Representation and calibration evidence
+
+RRUFF-301 representation report includes:
+
+- fix/break patterns;
+- confidence dynamics;
+- confusion asymmetry;
+- per-class effects.
+
+Calibration commit:
+
+`a1966ba939f16b291dad2dd4d48e79bfedfc7b8f`
+
+Assets:
+
+- `../outputs/calibration_metrics.json`
+- `../outputs/calibration_report.html`
+
+Calibration covers ECE, NLL, Brier, and confidence distributions. Default placement is Supplementary.
+
+## 8. Frozen paper figures
+
+### Fig. 1 — Method
+
+Parent structure → paired online physical views → matched Dynamic ERM vs Dynamic JS. Show simulator provenance as measurement-equivalence supervision.
+
+### Fig. 2 — Simulated evidence
+
+Paired five-seed Validation OOD effects + frozen-Test paired effects. Include in-range guardrail concisely.
+
+### Fig. 3 — Real-domain evidence
+
+RRUFF-301 v2 K=1/2/5 Macro-F1 ERM vs JS plus paired deltas / positive-pair counts.
+
+### Fig. 4 — Heterogeneity / diagnostic
+
+Per-class effects plus one coherent fix/break/confidence diagnostic. Message: gains are broad but not uniform.
+
+### Supplementary
+
+Calibration, full profiles, full class tables, fixed-step sensitivity, zero-shot diagnostics, v1 audit trail, implementation details.
+
+## 9. Claim boundary
+
+Allowed:
+
+> Parent-structure provenance from the online simulator can be used as measurement-equivalence supervision; under a matched two-view design, JS consistency improves aggregate simulated OOD robustness and experimental-domain few-shot adaptation efficiency relative to Dynamic ERM.
+
+Do not claim:
+
+- JS itself is algorithmically novel;
+- universal PXRD Sim2Real solution;
+- every class/profile improves;
+- RRUFF is all experimental PXRD;
+- semantic/measurement disentanglement is proven;
+- Residual methods are impossible for PXRD.
+
+## 10. Current manuscript files
+
+- evidence freeze: `../00_project_context/EVIDENCE_FREEZE_V1_20260808.md`
+- manuscript draft: `MANUSCRIPT_DRAFT_V1_20260808.md`
+- application narrative: `../00_project_context/APPLICATION_RESEARCH_NARRATIVE_V1_20260808.md`
+
+## 11. Current next actions
+
+1. Generate publication-quality versions of the four frozen main figures from existing artifacts.
+2. Write Introduction with literature support; do not rewrite the literature history as if JS or on-the-fly simulation were invented here.
+3. Extract exact Method parameters from frozen configs and audits.
+4. Write Results in order: Validation → simulated Test → RRUFF-301 v2 → heterogeneity.
+5. Put calibration and detailed diagnostics into Supplementary by default.
+6. Draft Discussion and Limitations before polishing the abstract.
+7. Keep the application narrative synchronized with `PROJECT_JOURNEY.md`.
+
+## 12. New experiment policy
+
+No new training by default.
+
+A new experiment may be opened only if manuscript drafting or external review identifies one concrete reviewer-critical question that the frozen evidence cannot answer. Such an experiment must be named prospectively and must not:
+
+- retune `lambda_js`;
+- exclude or replace seeds;
+- rerun the frozen simulated Test to improve a number;
+- modify the locked RRUFF-301 v2 evidence;
+- reopen Residual/PAMPT as if they were part of the current paper.
+
+Tan Lab phase-state adaptation, Residual-v2, physics-guided lattice losses, backbone–augmentation compatibility, and Raman remain future projects rather than current-paper blockers.
