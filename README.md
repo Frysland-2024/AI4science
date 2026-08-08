@@ -72,11 +72,14 @@ RRUFF-70 现明确降级为 exploratory evidence；RRUFF-301 v2 是当前论文�
 
 Calibration（ECE / NLL / Brier / confidence distributions）默认进入 Supplementary。
 
-## 写作入口
+## 写作与历史入口
 
 - 论文初稿：[`xrd_robustness/MANUSCRIPT_DRAFT_V1_20260808.md`](xrd_robustness/MANUSCRIPT_DRAFT_V1_20260808.md)
 - 申请用研究叙事：[`00_project_context/APPLICATION_RESEARCH_NARRATIVE_V1_20260808.md`](00_project_context/APPLICATION_RESEARCH_NARRATIVE_V1_20260808.md)
-- 项目历史：[`00_project_context/PROJECT_JOURNEY.md`](00_project_context/PROJECT_JOURNEY.md)
+- 原项目历史：[`00_project_context/PROJECT_JOURNEY.md`](00_project_context/PROJECT_JOURNEY.md)
+- 2026-08-07→08-08 正式续篇：[`00_project_context/PROJECT_JOURNEY_CONTINUATION_20260807_20260808.md`](00_project_context/PROJECT_JOURNEY_CONTINUATION_20260807_20260808.md)
+
+`PROJECT_JOURNEY.md + PROJECT_JOURNEY_CONTINUATION_20260807_20260808.md` 共同构成当前连续的项目心路记录；旧历史不因证据冻结而删除。
 
 ## RRUFF-301 权威结果
 
@@ -98,7 +101,8 @@ Calibration commit `a1966ba939f16b291dad2dd4d48e79bfedfc7b8f`：
 | [`00_project_context/CURRENT_STATE.md`](00_project_context/CURRENT_STATE.md) | 当前科学状态、边界与下一步 |
 | [`00_project_context/EVIDENCE_FREEZE_V1_20260808.md`](00_project_context/EVIDENCE_FREEZE_V1_20260808.md) | 当前论文证据层级、图表与 claim boundary |
 | [`xrd_robustness/CODEX_HANDOFF.md`](xrd_robustness/CODEX_HANDOFF.md) | 当前工程/写作交接 |
-| [`00_project_context/PROJECT_JOURNEY.md`](00_project_context/PROJECT_JOURNEY.md) | 从 FerroAI 到当前 XRD 项目的完整研究演变 |
+| [`00_project_context/PROJECT_JOURNEY.md`](00_project_context/PROJECT_JOURNEY.md) | 2026-08-06 以前的完整研究演变 |
+| [`00_project_context/PROJECT_JOURNEY_CONTINUATION_20260807_20260808.md`](00_project_context/PROJECT_JOURNEY_CONTINUATION_20260807_20260808.md) | exploratory→confirmatory→bug audit→evidence freeze 的续篇 |
 | [`AGENTS.md`](AGENTS.md) | Codex/GPT 仓库工作规范 |
 
 ## 当前默认动作
