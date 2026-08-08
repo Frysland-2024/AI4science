@@ -1,89 +1,116 @@
 # AI4Science 本地工作区
 
-本仓库是 `E:/AI4science` 的 GitHub 同步入口。当前可运行主线位于
-`xrd_robustness/`，研究版本为 **V9-T Algorithm Transfer for PXRD
-Robustness**。
+本仓库是 `E:/AI4science` 的 GitHub 同步入口。当前成熟主线位于 `xrd_robustness/`，研究版本为 **V9-T / JS Consistency for robust PXRD learning**。
 
-## 当前状态（2026-08-01）
+## 当前状态（2026-08-08）
 
-- `formal_14060` 的冻结 parent-structure split 为 train 9,842、Validation
-  2,109、Test 2,109。
-- 公共 backbone 已冻结为 ResNet-18-GN，使用 identity preprocessing、AdamW
-  和 constant learning rate。
-- Residual-v1 已因预注册稳定性 Gate 失败而归档。
-- Dynamic ERM versus JS Consistency 的方法比较已经完成。
-- JS `lambda_js = 60` 是冻结的 selected method；不得继续调 lambda。
-- 五组 paired seeds、共十次 Validation replication 已全部完成。
-- JS 相对 Dynamic ERM 的 paired mean OOD Macro-F1 delta 为 `+0.046569`，
-  paired-bootstrap 95% interval 为 `[0.038145, 0.052834]`。
-- paired mean in-range Macro-F1 delta 为 `+0.027991`，95% interval 为
-  `[0.014028, 0.041954]`，guardrail 通过。
-- one-shot simulated-Test evaluation contract 已冻结，但执行尚未授权。
-- simulated Test、real XRD、real-domain adaptation 和 V10 仍未使用或开启。
+项目已经从 **experiment-building** 切换到 **evidence freeze → manuscript building**。
 
-## 最新结果与冻结合同
+当前论文级主问题已经关闭：
 
-- 机器可读 Validation summary：
-  [`xrd_robustness/reports/v9_resnet_js_ten_run_summary.json`](xrd_robustness/reports/v9_resnet_js_ten_run_summary.json)
-- 人类可读 Validation 报告：
-  [`xrd_robustness/reports/v9_resnet_js_ten_run_results_20260801.md`](xrd_robustness/reports/v9_resnet_js_ten_run_results_20260801.md)
-- 机器可读 simulated-Test 预注册合同：
-  [`xrd_robustness/configs/v9_resnet_js_simulated_test.preregistered.json`](xrd_robustness/configs/v9_resnet_js_simulated_test.preregistered.json)
-- 人类可读 simulated-Test 合同：
-  [`xrd_robustness/reports/v9_resnet_js_simulated_test_contract_20260801.md`](xrd_robustness/reports/v9_resnet_js_simulated_test_contract_20260801.md)
-- ten-run 结果首次提交：`868b079c1b410e6afe877330b7defc4262d82969`
+> 在线 PXRD 模拟器除了持续生成物理扰动样本，能否利用其保留的 parent-structure provenance，把“同一晶体的不同测量视图”转化为 measurement-equivalence supervision，并在相同数据暴露下比 Dynamic ERM 获得更好的鲁棒性与实验域少样本适配效率？
 
-本次 replication 的 primary OOD delta 在五组 paired seeds 中全部为正，
-in-range delta 也全部为正。需要保留的次要风险是 seed `20260714` 的
-worst-class F1 delta 为 `-0.061139`；该异常需要诊断，但不能用于重新调参或
-重新选择方法。
+### 冻结方法
 
-simulated-Test 合同冻结全部五组 paired seeds 和十个 Validation-selected
-checkpoints，固定三个 deterministic evaluation seeds、Test profiles、指标、
-paired aggregation、bootstrap 和 no-retuning policy。用户本次“冻结”指令不等于
-Test 执行授权。
+- backbone：ResNet-18-GN；
+- baseline：Dynamic ERM；
+- selected method：Dynamic JS Consistency；
+- `lambda_js = 60`；
+- parent-structure split：Train 9,842 / Validation 2,109 / Test 2,109；
+- Residual-v1、V10、PAMPT 等均保留为历史/未来研究模块，不进入当前论文主线。
+
+### 核心模拟证据
+
+五组 paired seeds、十次 Validation replication：
+
+- mean single-factor OOD Macro-F1 Δ = **+0.046569**；
+- paired-bootstrap 95% interval = `[0.038145, 0.052834]`；
+- 五组 paired seeds 的 OOD delta 全部为正；
+- in-range Macro-F1 paired mean Δ = **+0.027991**。
+
+冻结 simulated Test 独立确认：
+
+- mean five-pair OOD Macro-F1 Δ = **+0.054600**；
+- paired-bootstrap 95% interval = `[+0.048944, +0.060255]`；
+- 五组 paired OOD delta 全部为正。
+
+### 当前最强真实域确认性证据：RRUFF-301 v2
+
+RRUFF-301 的 confirmatory v2 使用：
+
+- 301 条实验 RRUFF PXRD；
+- 70 条 adaptation pool（10/class）；
+- 231 条 locked test（33/class）；
+- K = 1 / 2 / 5；
+- 5 个 pretraining seeds × 5 个 episode seeds；
+- frozen convolutional backbone + trainable projection/head。
+
+Macro-F1 paired mean Δ（JS − ERM）：
+
+| K | ΔMacro-F1 | Positive pairs |
+|---:|---:|---:|
+| 1 | **+0.0433** | 21/25 |
+| 2 | **+0.0460** | 23/25 |
+| 5 | **+0.0545** | 24/25 |
+
+合计 **68/75 paired comparisons 为正**。
+
+RRUFF-70 现明确降级为 exploratory evidence；RRUFF-301 v2 是当前论文的真实域 confirmatory evidence。RRUFF-301 v1 因 trigonal/hexagonal 标签构建 bug 被作废用于确认性结论，bug、修复与完整重跑均保存在 audit trail 中。
+
+## Evidence freeze
+
+论文证据层级、允许主张、图表冻结和新增实验边界见：
+
+- [`00_project_context/EVIDENCE_FREEZE_V1_20260808.md`](00_project_context/EVIDENCE_FREEZE_V1_20260808.md)
+
+冻结的四张主图：
+
+1. method / simulator provenance / ERM vs JS；
+2. simulated Validation + locked Test paired effects；
+3. RRUFF-301 K=1/2/5 paired few-shot；
+4. per-class + fix/break/confidence diagnostic。
+
+Calibration（ECE / NLL / Brier / confidence distributions）默认进入 Supplementary。
+
+## 写作入口
+
+- 论文初稿：[`xrd_robustness/MANUSCRIPT_DRAFT_V1_20260808.md`](xrd_robustness/MANUSCRIPT_DRAFT_V1_20260808.md)
+- 申请用研究叙事：[`00_project_context/APPLICATION_RESEARCH_NARRATIVE_V1_20260808.md`](00_project_context/APPLICATION_RESEARCH_NARRATIVE_V1_20260808.md)
+- 项目历史：[`00_project_context/PROJECT_JOURNEY.md`](00_project_context/PROJECT_JOURNEY.md)
+
+## RRUFF-301 权威结果
+
+commit `24d8c8511bdea9df8b52cdf779b04420bebffafc`：
+
+- [`xrd_robustness/reports/rruff301_confirmatory_full_report_20260807.md`](xrd_robustness/reports/rruff301_confirmatory_full_report_20260807.md)
+- [`xrd_robustness/reports/rruff301_representation_analysis_20260807.md`](xrd_robustness/reports/rruff301_representation_analysis_20260807.md)
+- [`xrd_robustness/reports/rruff301_v1_audit_trail_20260807.md`](xrd_robustness/reports/rruff301_v1_audit_trail_20260807.md)
+
+Calibration commit `a1966ba939f16b291dad2dd4d48e79bfedfc7b8f`：
+
+- `outputs/calibration_metrics.json`
+- `outputs/calibration_report.html`
 
 ## 权威入口
 
 | 入口 | 用途 |
 |---|---|
-| [`00_project_context/CURRENT_STATE.md`](00_project_context/CURRENT_STATE.md) | 当前科学主线、实验状态、边界、阻塞与下一步；新会话优先读取 |
-| [`AGENTS.md`](AGENTS.md) | Codex/GPT 在仓库中的工作规范与自动同步责任 |
-| [`xrd_robustness/CODEX_HANDOFF.md`](xrd_robustness/CODEX_HANDOFF.md) | 当前工程交接、执行边界和下一阶段顺序 |
-| [`00_project_context/PROJECT_JOURNEY.md`](00_project_context/PROJECT_JOURNEY.md) | 从 FerroAI、因果不变性思考到 XRD 与 V9-T 的研究演变历程 |
-| [`00_project_context/SYNC_PROTOCOL.md`](00_project_context/SYNC_PROTOCOL.md) | 本地与 GitHub 同步检查、提交和冲突处理规范 |
-| [`xrd_robustness/README.md`](xrd_robustness/README.md) | 当前代码、配置、数据、测试与运行边界 |
-| [`01_literature/README.md`](01_literature/README.md) | 文献分区、阅读审计和论文—代码映射 |
-| [`02_code_repositories/README.md`](02_code_repositories/README.md) | 本地外部代码资产及复用边界 |
+| [`00_project_context/CURRENT_STATE.md`](00_project_context/CURRENT_STATE.md) | 当前科学状态、边界与下一步 |
+| [`00_project_context/EVIDENCE_FREEZE_V1_20260808.md`](00_project_context/EVIDENCE_FREEZE_V1_20260808.md) | 当前论文证据层级、图表与 claim boundary |
+| [`xrd_robustness/CODEX_HANDOFF.md`](xrd_robustness/CODEX_HANDOFF.md) | 当前工程/写作交接 |
+| [`00_project_context/PROJECT_JOURNEY.md`](00_project_context/PROJECT_JOURNEY.md) | 从 FerroAI 到当前 XRD 项目的完整研究演变 |
+| [`AGENTS.md`](AGENTS.md) | Codex/GPT 仓库工作规范 |
 
-## 文档层级
+## 当前默认动作
 
-1. 当前配置、源代码、机器可读清单和匹配的验证报告决定实际可运行状态。
-2. `xrd_robustness/reports/v9_resnet_js_ten_run_summary.json` 是 ten-run
-   Validation replication 的权威结果记录。
-3. `xrd_robustness/configs/v9_resnet_js_simulated_test.preregistered.json` 是
-   下一阶段 Test 设计的权威合同；其当前状态不授权执行。
-4. `xrd_robustness/CODEX_HANDOFF.md` 规定工程接管、授权和 Test/real-XRD
-   访问边界。
-5. `00_project_context/CURRENT_STATE.md` 汇总当前科学身份、实验进度、阻塞
-   与下一步。
-6. `00_project_context/PROJECT_JOURNEY.md` 记录方案为什么改变；历史内容不得
-   因当前方案改变而删除。
-7. 日期化报告与 Git 历史保留中间状态，但不得覆盖当前权威记录。
-8. `04_external_lab_data/` 是 Git 忽略的本地外部实验资料区；原始光谱、PDF、
-   图片、实验表单和外部脚本不得提交。
-9. datasets、outputs、checkpoints、generated spectra、caches、环境目录和凭据
-   不进入 Git。
+**不再默认启动训练。**
 
-## 下一阶段
+下一阶段是：
 
-当前不应重复训练 ten-run，也不应继续调参或执行 Test。下一步是按照冻结合同
-实现和审查 read-only preflight 与 serial Test runner，核对十个本地 checkpoint、
-三个 Test manifests、哈希、split 隔离和输出边界。只有获得新的明确授权后，
-才能执行一次性 simulated-Test evaluation。real XRD 必须作为更后的独立
-external-validation stage。
+1. 从现有 artifacts 生成四张论文核心图；
+2. 按冻结配置和审计报告写 Methods；
+3. 用现有结果写 Results / Discussion / Limitations；
+4. 整理 literature-backed Introduction；
+5. 同步完善 application-ready research narrative。
 
-## 历史报告
-
-- [`00_project_context/archive/PROJECT_ORGANIZATION_REPORT_2026-07-04.md`](00_project_context/archive/PROJECT_ORGANIZATION_REPORT_2026-07-04.md)：早期项目组织与 MVP 设计。
-- [`01_literature/literature_audit/READING_SYNTHESIS_2026-06-28.md`](01_literature/literature_audit/READING_SYNTHESIS_2026-06-28.md)：早期跨方向阅读综述。
+只有当论文写作或外部 review 暴露出一个明确、 reviewer-critical、无法由现有证据回答的问题时，才允许提出新的、预先命名的补充实验。不得重新打开 `lambda_js`、排除 seed、重跑 frozen Test 或根据结果修改当前确认性结论。
