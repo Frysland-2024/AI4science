@@ -1,5 +1,11 @@
 # Application-Ready Research Narrative V1 — 2026-08-08
 
+> **Supersession notice (2026-08-11):** This application draft is retained as a
+> historical narrative, not as the current evidence contract. Before reuse,
+> reconcile it with `CURRENT_STATE.md`: the implemented task is robust seven-class
+> PXRD classification rather than physical-parameter inversion, the split is only
+> exact-parent-disjoint, and RRUFF-301 is retrospective rather than confirmatory.
+
 ## Short positioning
 
 I began the project as a materials-science student trying to make simulated PXRD classifiers robust to experimental perturbations. Over time, the project changed from a conventional “generate more realistic synthetic data and train a model” workflow into a machine-learning question: **what additional supervision is hidden in the scientific data-generation process, and can that structure improve robustness and data efficiency?**

@@ -1,0 +1,4821 @@
+{
+  "contract_path": "configs/rruff301_retrospective_replay.v1.json",
+  "contract_sha256": "69ED376893B291D9F82D31B2F4D8F88C4236EC56A6AC1BA07039F867AEE5BB6F",
+  "episode_count": 15,
+  "episodes": [
+    {
+      "K": 1,
+      "episode_id": "K1_seed42",
+      "episode_seed": 42,
+      "locked_test_set_sha256": "E7B7C6500F35D5BA8DCA624C4D058AE4FB2AD97D2BDB612FB9CA20FDCA224F44",
+      "support": [
+        {
+          "class_index": 0,
+          "crystal_system": "triclinic",
+          "role": "support",
+          "rruff_id": "R050160",
+          "source_split_rank": 8,
+          "spectrum_path": "spectra_10_80_step_002/R050160_Bikitaite.csv",
+          "spectrum_sha256": "F01002169849BA9EC0C819136642D4811293913C374B0C2F2829CD23C071D580",
+          "support_rank": 1
+        },
+        {
+          "class_index": 1,
+          "crystal_system": "monoclinic",
+          "role": "support",
+          "rruff_id": "R050136",
+          "source_split_rank": 4,
+          "spectrum_path": "spectra_10_80_step_002/R050136_Datolite.csv",
+          "spectrum_sha256": "FB401B797A87E4009D72E08381523B662A39730D4568F57B5ED06CCEAD51FA54",
+          "support_rank": 1
+        },
+        {
+          "class_index": 2,
+          "crystal_system": "orthorhombic",
+          "role": "support",
+          "rruff_id": "R050200",
+          "source_split_rank": 8,
+          "spectrum_path": "spectra_10_80_step_002/R050200_Topaz.csv",
+          "spectrum_sha256": "2522E457F00C7B2C11B1C928CA63BFA3B7798667F38D7D7F012963BDF104F9F8",
+          "support_rank": 1
+        },
+        {
+          "class_index": 3,
+          "crystal_system": "tetragonal",
+          "role": "support",
+          "rruff_id": "R050208",
+          "source_split_rank": 8,
+          "spectrum_path": "spectra_10_80_step_002/R050208_Chalcopyrite.csv",
+          "spectrum_sha256": "340709BD83768127D6CC4E3FF7BC35211D65943B6588FE1B53C6DEC53F35F062",
+          "support_rank": 1
+        },
+        {
+          "class_index": 4,
+          "crystal_system": "trigonal",
+          "role": "support",
+          "rruff_id": "R050484",
+          "source_split_rank": 10,
+          "spectrum_path": "spectra_10_80_step_002/R050484_Benstonite.csv",
+          "spectrum_sha256": "9EDB9D2A2DFF67A95179D60B563A6FF049E432133E1FB7312A846E6616907AEE",
+          "support_rank": 1
+        },
+        {
+          "class_index": 5,
+          "crystal_system": "hexagonal",
+          "role": "support",
+          "rruff_id": "R060359",
+          "source_split_rank": 9,
+          "spectrum_path": "spectra_10_80_step_002/R060359_Bastnasite-_Ce.csv",
+          "spectrum_sha256": "61CA246813127482FD98B4573446A13409223F300A407F7B63B21C3FBD1F8C4A",
+          "support_rank": 1
+        },
+        {
+          "class_index": 6,
+          "crystal_system": "cubic",
+          "role": "support",
+          "rruff_id": "R060033",
+          "source_split_rank": 6,
+          "spectrum_path": "spectra_10_80_step_002/R060033_Tsaregorodtsevite.csv",
+          "spectrum_sha256": "11B1166F499079D2E4F90D0F935525C70C5EB888F6230245696FC4662FB1AAD5",
+          "support_rank": 1
+        }
+      ],
+      "support_count": 7,
+      "support_set_sha256": "4AF926207C3CBA27F8B61814C42D877FEA649D8EEEE0192A75FE5C1241CC7936"
+    },
+    {
+      "K": 1,
+      "episode_id": "K1_seed123",
+      "episode_seed": 123,
+      "locked_test_set_sha256": "E7B7C6500F35D5BA8DCA624C4D058AE4FB2AD97D2BDB612FB9CA20FDCA224F44",
+      "support": [
+        {
+          "class_index": 0,
+          "crystal_system": "triclinic",
+          "role": "support",
+          "rruff_id": "R040006",
+          "source_split_rank": 9,
+          "spectrum_path": "spectra_10_80_step_002/R040006_Amblygonite.csv",
+          "spectrum_sha256": "FC43C7EAD610A2C70BB1428C65433683C911DC376B880BF21D2F147C86B64D68",
+          "support_rank": 1
+        },
+        {
+          "class_index": 1,
+          "crystal_system": "monoclinic",
+          "role": "support",
+          "rruff_id": "R070589",
+          "source_split_rank": 8,
+          "spectrum_path": "spectra_10_80_step_002/R070589_Starkeyite.csv",
+          "spectrum_sha256": "B2EC071988D72739EE1094E59EF6215DD9EBAB1CAEE4A6302FBB123FA3DBA93D",
+          "support_rank": 1
+        },
+        {
+          "class_index": 2,
+          "crystal_system": "orthorhombic",
+          "role": "support",
+          "rruff_id": "R060042",
+          "source_split_rank": 2,
+          "spectrum_path": "spectra_10_80_step_002/R060042_Brassite.csv",
+          "spectrum_sha256": "BA940A8A8E7338F197A64B9B54B014D41B1FEF8250E5D6785343FAC2F85CFBF0",
+          "support_rank": 1
+        },
+        {
+          "class_index": 3,
+          "crystal_system": "tetragonal",
+          "role": "support",
+          "rruff_id": "R060745",
+          "source_split_rank": 3,
+          "spectrum_path": "spectra_10_80_step_002/R060745_Rutile.csv",
+          "spectrum_sha256": "E7EE4D252B4DA0865C0245BCC8653F2A45005F55A4D1CE73FE0B1BE4BA0C4759",
+          "support_rank": 1
+        },
+        {
+          "class_index": 4,
+          "crystal_system": "trigonal",
+          "role": "support",
+          "rruff_id": "R050137",
+          "source_split_rank": 6,
+          "spectrum_path": "spectra_10_80_step_002/R050137_Phenakite.csv",
+          "spectrum_sha256": "2801B75C6E946F898BDE7FD5E45B2D9CAC8DAAA17980772CBBC35CCDB653663A",
+          "support_rank": 1
+        },
+        {
+          "class_index": 5,
+          "crystal_system": "hexagonal",
+          "role": "support",
+          "rruff_id": "R050675",
+          "source_split_rank": 7,
+          "spectrum_path": "spectra_10_80_step_002/R050675_Gaudefroyite.csv",
+          "spectrum_sha256": "A1F833A18F4D7CC1C039BC3F299EE3A41472AB54BD7020B9D04C3B535C8C7B4B",
+          "support_rank": 1
+        },
+        {
+          "class_index": 6,
+          "crystal_system": "cubic",
+          "role": "support",
+          "rruff_id": "R040142",
+          "source_split_rank": 4,
+          "spectrum_path": "spectra_10_80_step_002/R040142_Cubic_zirconia.csv",
+          "spectrum_sha256": "0C4E4A08D99BB36DC3D4D5B86F6DD76035864C5A2DE063651794C4958B60C7F9",
+          "support_rank": 1
+        }
+      ],
+      "support_count": 7,
+      "support_set_sha256": "3FD26298279E2E1CA8716499E4211600810685B3D94FB3A82820B45FF4EABA23"
+    },
+    {
+      "K": 1,
+      "episode_id": "K1_seed456",
+      "episode_seed": 456,
+      "locked_test_set_sha256": "E7B7C6500F35D5BA8DCA624C4D058AE4FB2AD97D2BDB612FB9CA20FDCA224F44",
+      "support": [
+        {
+          "class_index": 0,
+          "crystal_system": "triclinic",
+          "role": "support",
+          "rruff_id": "R040006",
+          "source_split_rank": 9,
+          "spectrum_path": "spectra_10_80_step_002/R040006_Amblygonite.csv",
+          "spectrum_sha256": "FC43C7EAD610A2C70BB1428C65433683C911DC376B880BF21D2F147C86B64D68",
+          "support_rank": 1
+        },
+        {
+          "class_index": 1,
+          "crystal_system": "monoclinic",
+          "role": "support",
+          "rruff_id": "R050284",
+          "source_split_rank": 9,
+          "spectrum_path": "spectra_10_80_step_002/R050284_Probertite.csv",
+          "spectrum_sha256": "641780E63721544326765630CFDEB7DD58560C1B6F737BC87C5CB56AA8BCB5D5",
+          "support_rank": 1
+        },
+        {
+          "class_index": 2,
+          "crystal_system": "orthorhombic",
+          "role": "support",
+          "rruff_id": "R050397",
+          "source_split_rank": 9,
+          "spectrum_path": "spectra_10_80_step_002/R050397_Vuagnatite.csv",
+          "spectrum_sha256": "FB741A198638BCE11AC18359BB6BA13FC56D4045CC938CCBDF788C8D8B57EFF4",
+          "support_rank": 1
+        },
+        {
+          "class_index": 3,
+          "crystal_system": "tetragonal",
+          "role": "support",
+          "rruff_id": "R050024",
+          "source_split_rank": 5,
+          "spectrum_path": "spectra_10_80_step_002/R050024_Wulfenite.csv",
+          "spectrum_sha256": "E3D080F143E6C02C8BCCF51BFD434168BAA59E9C5118BCD58EF0114D76019724",
+          "support_rank": 1
+        },
+        {
+          "class_index": 4,
+          "crystal_system": "trigonal",
+          "role": "support",
+          "rruff_id": "R060020",
+          "source_split_rank": 9,
+          "spectrum_path": "spectra_10_80_step_002/R060020_Corundum.csv",
+          "spectrum_sha256": "ED45AB98D17972E4F35DF28011DD60AC1155FAC2D21ECFD9B984F9122BDEDD57",
+          "support_rank": 1
+        },
+        {
+          "class_index": 5,
+          "crystal_system": "hexagonal",
+          "role": "support",
+          "rruff_id": "R050291",
+          "source_split_rank": 6,
+          "spectrum_path": "spectra_10_80_step_002/R050291_Hanksite.csv",
+          "spectrum_sha256": "63684D9DFB1C133AE17FC8D3A30914A54779A5896B0215EAEF6CD5103E6730F5",
+          "support_rank": 1
+        },
+        {
+          "class_index": 6,
+          "crystal_system": "cubic",
+          "role": "support",
+          "rruff_id": "R070325",
+          "source_split_rank": 3,
+          "spectrum_path": "spectra_10_80_step_002/R070325_Galena.csv",
+          "spectrum_sha256": "AD9D21526ACA3056DF6573ECCF7C22ABDAA95BCC3376015A8DFFD52605255E58",
+          "support_rank": 1
+        }
+      ],
+      "support_count": 7,
+      "support_set_sha256": "CA64DFFA573ABBEB758003EFC2F59570EA8B62CCE19475CBD59A98E0C0F0EB37"
+    },
+    {
+      "K": 1,
+      "episode_id": "K1_seed789",
+      "episode_seed": 789,
+      "locked_test_set_sha256": "E7B7C6500F35D5BA8DCA624C4D058AE4FB2AD97D2BDB612FB9CA20FDCA224F44",
+      "support": [
+        {
+          "class_index": 0,
+          "crystal_system": "triclinic",
+          "role": "support",
+          "rruff_id": "R040006",
+          "source_split_rank": 9,
+          "spectrum_path": "spectra_10_80_step_002/R040006_Amblygonite.csv",
+          "spectrum_sha256": "FC43C7EAD610A2C70BB1428C65433683C911DC376B880BF21D2F147C86B64D68",
+          "support_rank": 1
+        },
+        {
+          "class_index": 1,
+          "crystal_system": "monoclinic",
+          "role": "support",
+          "rruff_id": "R050083",
+          "source_split_rank": 1,
+          "spectrum_path": "spectra_10_80_step_002/R050083_Scolecite.csv",
+          "spectrum_sha256": "9E46F367DCBFA96E33B5389C9E1FCE3136C3A2A15900C9C020ECB9DE867F0ED8",
+          "support_rank": 1
+        },
+        {
+          "class_index": 2,
+          "crystal_system": "orthorhombic",
+          "role": "support",
+          "rruff_id": "R060195",
+          "source_split_rank": 10,
+          "spectrum_path": "spectra_10_80_step_002/R060195_Aragonite.csv",
+          "spectrum_sha256": "3A92160A385C971C90CB6F21280959EA044EC76C8F8856E117DFA380F5CF7EAF",
+          "support_rank": 1
+        },
+        {
+          "class_index": 3,
+          "crystal_system": "tetragonal",
+          "role": "support",
+          "rruff_id": "R050024",
+          "source_split_rank": 5,
+          "spectrum_path": "spectra_10_80_step_002/R050024_Wulfenite.csv",
+          "spectrum_sha256": "E3D080F143E6C02C8BCCF51BFD434168BAA59E9C5118BCD58EF0114D76019724",
+          "support_rank": 1
+        },
+        {
+          "class_index": 4,
+          "crystal_system": "trigonal",
+          "role": "support",
+          "rruff_id": "R060683",
+          "source_split_rank": 3,
+          "spectrum_path": "spectra_10_80_step_002/R060683_Philipsbornite.csv",
+          "spectrum_sha256": "813C379BB33B83151E4D73813963ADD646DD49FFC63E700477549F77DD44089A",
+          "support_rank": 1
+        },
+        {
+          "class_index": 5,
+          "crystal_system": "hexagonal",
+          "role": "support",
+          "rruff_id": "R060283",
+          "source_split_rank": 4,
+          "spectrum_path": "spectra_10_80_step_002/R060283_Hydroxylbastnasite-_Ce.csv",
+          "spectrum_sha256": "033963FA861169F552BF0E2FE3368261D47B3FF19856EEB601F2DFF7B2C2B9D2",
+          "support_rank": 1
+        },
+        {
+          "class_index": 6,
+          "crystal_system": "cubic",
+          "role": "support",
+          "rruff_id": "R060005",
+          "source_split_rank": 10,
+          "spectrum_path": "spectra_10_80_step_002/R060005_Sphalerite.csv",
+          "spectrum_sha256": "6690F0DE93BA6EA0CB447FD6AD05F256ED7BE3ED1E73DDE2126459E0D0337CCD",
+          "support_rank": 1
+        }
+      ],
+      "support_count": 7,
+      "support_set_sha256": "581AE995CD2A522C813172A5988F187646706C7A9D8D397B9683850759C90D0D"
+    },
+    {
+      "K": 1,
+      "episode_id": "K1_seed1024",
+      "episode_seed": 1024,
+      "locked_test_set_sha256": "E7B7C6500F35D5BA8DCA624C4D058AE4FB2AD97D2BDB612FB9CA20FDCA224F44",
+      "support": [
+        {
+          "class_index": 0,
+          "crystal_system": "triclinic",
+          "role": "support",
+          "rruff_id": "R040119",
+          "source_split_rank": 6,
+          "spectrum_path": "spectra_10_80_step_002/R040119_Kyanite.csv",
+          "spectrum_sha256": "71C032457EC632ECCF0D213E40DD0347B63CE9D365841B7B7043B7A750DBA9EC",
+          "support_rank": 1
+        },
+        {
+          "class_index": 1,
+          "crystal_system": "monoclinic",
+          "role": "support",
+          "rruff_id": "R060039",
+          "source_split_rank": 3,
+          "spectrum_path": "spectra_10_80_step_002/R060039_Spodumene.csv",
+          "spectrum_sha256": "0931E931C5EB2EAAF712FE58320381DC21E67ECA7973F8392F176770F775A327",
+          "support_rank": 1
+        },
+        {
+          "class_index": 2,
+          "crystal_system": "orthorhombic",
+          "role": "support",
+          "rruff_id": "R060042",
+          "source_split_rank": 2,
+          "spectrum_path": "spectra_10_80_step_002/R060042_Brassite.csv",
+          "spectrum_sha256": "BA940A8A8E7338F197A64B9B54B014D41B1FEF8250E5D6785343FAC2F85CFBF0",
+          "support_rank": 1
+        },
+        {
+          "class_index": 3,
+          "crystal_system": "tetragonal",
+          "role": "support",
+          "rruff_id": "R040113",
+          "source_split_rank": 4,
+          "spectrum_path": "spectra_10_80_step_002/R040113_Marialite.csv",
+          "spectrum_sha256": "22B3C58CB57BD56675C0A82610A34178A3A8576AD06DF810211821DA8FB4285D",
+          "support_rank": 1
+        },
+        {
+          "class_index": 4,
+          "crystal_system": "trigonal",
+          "role": "support",
+          "rruff_id": "R050654",
+          "source_split_rank": 5,
+          "spectrum_path": "spectra_10_80_step_002/R050654_Antimony.csv",
+          "spectrum_sha256": "6897F2A7CD774C5DC33FCF74315CE8C811BA2BDA87448A971F0F52340F5C19EB",
+          "support_rank": 1
+        },
+        {
+          "class_index": 5,
+          "crystal_system": "hexagonal",
+          "role": "support",
+          "rruff_id": "R050503",
+          "source_split_rank": 2,
+          "spectrum_path": "spectra_10_80_step_002/R050503_Graphite.csv",
+          "spectrum_sha256": "8C75D5615787F985000F4C1A4056FA9587B1EFDAF245446AE944CBA003503A11",
+          "support_rank": 1
+        },
+        {
+          "class_index": 6,
+          "crystal_system": "cubic",
+          "role": "support",
+          "rruff_id": "R060151",
+          "source_split_rank": 9,
+          "spectrum_path": "spectra_10_80_step_002/R060151_Pyrochlore.csv",
+          "spectrum_sha256": "9AC14569BCE3DAE4564E9BB8D761EA8C64CF4460FB65AF5C71A6A9F78B7E4BFE",
+          "support_rank": 1
+        }
+      ],
+      "support_count": 7,
+      "support_set_sha256": "6EB269D660532E8ED2D3EA1BDA2537AC6ACC98D8EF292EEF58862CC80FD2304B"
+    },
+    {
+      "K": 2,
+      "episode_id": "K2_seed42",
+      "episode_seed": 42,
+      "locked_test_set_sha256": "E7B7C6500F35D5BA8DCA624C4D058AE4FB2AD97D2BDB612FB9CA20FDCA224F44",
+      "support": [
+        {
+          "class_index": 0,
+          "crystal_system": "triclinic",
+          "role": "support",
+          "rruff_id": "R050160",
+          "source_split_rank": 8,
+          "spectrum_path": "spectra_10_80_step_002/R050160_Bikitaite.csv",
+          "spectrum_sha256": "F01002169849BA9EC0C819136642D4811293913C374B0C2F2829CD23C071D580",
+          "support_rank": 1
+        },
+        {
+          "class_index": 0,
+          "crystal_system": "triclinic",
+          "role": "support",
+          "rruff_id": "R050193",
+          "source_split_rank": 4,
+          "spectrum_path": "spectra_10_80_step_002/R050193_Microcline.csv",
+          "spectrum_sha256": "B605E81734A10B33E90AA560D6BE6E4285579BF953C961E634DF68BE1DFE4CE1",
+          "support_rank": 2
+        },
+        {
+          "class_index": 1,
+          "crystal_system": "monoclinic",
+          "role": "support",
+          "rruff_id": "R050136",
+          "source_split_rank": 4,
+          "spectrum_path": "spectra_10_80_step_002/R050136_Datolite.csv",
+          "spectrum_sha256": "FB401B797A87E4009D72E08381523B662A39730D4568F57B5ED06CCEAD51FA54",
+          "support_rank": 1
+        },
+        {
+          "class_index": 1,
+          "crystal_system": "monoclinic",
+          "role": "support",
+          "rruff_id": "R060460",
+          "source_split_rank": 6,
+          "spectrum_path": "spectra_10_80_step_002/R060460_Celsian.csv",
+          "spectrum_sha256": "0E13424D853D0D52131C9A732E61EFA84B725D6BA250B7E3759CA7DB4F7E068C",
+          "support_rank": 2
+        },
+        {
+          "class_index": 2,
+          "crystal_system": "orthorhombic",
+          "role": "support",
+          "rruff_id": "R050200",
+          "source_split_rank": 8,
+          "spectrum_path": "spectra_10_80_step_002/R050200_Topaz.csv",
+          "spectrum_sha256": "2522E457F00C7B2C11B1C928CA63BFA3B7798667F38D7D7F012963BDF104F9F8",
+          "support_rank": 1
+        },
+        {
+          "class_index": 2,
+          "crystal_system": "orthorhombic",
+          "role": "support",
+          "rruff_id": "R040004",
+          "source_split_rank": 6,
+          "spectrum_path": "spectra_10_80_step_002/R040004_Anglesite.csv",
+          "spectrum_sha256": "13CD0FCDE4B42F39547D00E6A13632DB342D7AED95F1084147E5FF7520D7C7EB",
+          "support_rank": 2
+        },
+        {
+          "class_index": 3,
+          "crystal_system": "tetragonal",
+          "role": "support",
+          "rruff_id": "R050208",
+          "source_split_rank": 8,
+          "spectrum_path": "spectra_10_80_step_002/R050208_Chalcopyrite.csv",
+          "spectrum_sha256": "340709BD83768127D6CC4E3FF7BC35211D65943B6588FE1B53C6DEC53F35F062",
+          "support_rank": 1
+        },
+        {
+          "class_index": 3,
+          "crystal_system": "tetragonal",
+          "role": "support",
+          "rruff_id": "R050488",
+          "source_split_rank": 9,
+          "spectrum_path": "spectra_10_80_step_002/R050488_Zircon.csv",
+          "spectrum_sha256": "0F01C5F65A419A1910377C61768AB2DA4BA008180DE24BDEF7F34D2729FAC887",
+          "support_rank": 2
+        },
+        {
+          "class_index": 4,
+          "crystal_system": "trigonal",
+          "role": "support",
+          "rruff_id": "R050484",
+          "source_split_rank": 10,
+          "spectrum_path": "spectra_10_80_step_002/R050484_Benstonite.csv",
+          "spectrum_sha256": "9EDB9D2A2DFF67A95179D60B563A6FF049E432133E1FB7312A846E6616907AEE",
+          "support_rank": 1
+        },
+        {
+          "class_index": 4,
+          "crystal_system": "trigonal",
+          "role": "support",
+          "rruff_id": "R070375",
+          "source_split_rank": 7,
+          "spectrum_path": "spectra_10_80_step_002/R070375_Bismuth.csv",
+          "spectrum_sha256": "52BFA15B4D12D5D188A177B7DD64D3A43E4E7598E32BF959F26F131989FCBD3F",
+          "support_rank": 2
+        },
+        {
+          "class_index": 5,
+          "crystal_system": "hexagonal",
+          "role": "support",
+          "rruff_id": "R060359",
+          "source_split_rank": 9,
+          "spectrum_path": "spectra_10_80_step_002/R060359_Bastnasite-_Ce.csv",
+          "spectrum_sha256": "61CA246813127482FD98B4573446A13409223F300A407F7B63B21C3FBD1F8C4A",
+          "support_rank": 1
+        },
+        {
+          "class_index": 5,
+          "crystal_system": "hexagonal",
+          "role": "support",
+          "rruff_id": "R070623",
+          "source_split_rank": 1,
+          "spectrum_path": "spectra_10_80_step_002/R070623_Sugilite.csv",
+          "spectrum_sha256": "64234B6409FB108B8673C64E531136D540FD051BE5AA7725B5F1554D766B943E",
+          "support_rank": 2
+        },
+        {
+          "class_index": 6,
+          "crystal_system": "cubic",
+          "role": "support",
+          "rruff_id": "R060033",
+          "source_split_rank": 6,
+          "spectrum_path": "spectra_10_80_step_002/R060033_Tsaregorodtsevite.csv",
+          "spectrum_sha256": "11B1166F499079D2E4F90D0F935525C70C5EB888F6230245696FC4662FB1AAD5",
+          "support_rank": 1
+        },
+        {
+          "class_index": 6,
+          "crystal_system": "cubic",
+          "role": "support",
+          "rruff_id": "R060636",
+          "source_split_rank": 8,
+          "spectrum_path": "spectra_10_80_step_002/R060636_Sphalerite.csv",
+          "spectrum_sha256": "ABF87CDCACC44056959BF41F8D31E2ED18206444FDBAE9A16ACDD2AD75D97AA9",
+          "support_rank": 2
+        }
+      ],
+      "support_count": 14,
+      "support_set_sha256": "6E86E8DC5BDCE922C0628620CFC4747D58BDBD63918DB7809DF6D2BAF3C0A00A"
+    },
+    {
+      "K": 2,
+      "episode_id": "K2_seed123",
+      "episode_seed": 123,
+      "locked_test_set_sha256": "E7B7C6500F35D5BA8DCA624C4D058AE4FB2AD97D2BDB612FB9CA20FDCA224F44",
+      "support": [
+        {
+          "class_index": 0,
+          "crystal_system": "triclinic",
+          "role": "support",
+          "rruff_id": "R040006",
+          "source_split_rank": 9,
+          "spectrum_path": "spectra_10_80_step_002/R040006_Amblygonite.csv",
+          "spectrum_sha256": "FC43C7EAD610A2C70BB1428C65433683C911DC376B880BF21D2F147C86B64D68",
+          "support_rank": 1
+        },
+        {
+          "class_index": 0,
+          "crystal_system": "triclinic",
+          "role": "support",
+          "rruff_id": "R050160",
+          "source_split_rank": 8,
+          "spectrum_path": "spectra_10_80_step_002/R050160_Bikitaite.csv",
+          "spectrum_sha256": "F01002169849BA9EC0C819136642D4811293913C374B0C2F2829CD23C071D580",
+          "support_rank": 2
+        },
+        {
+          "class_index": 1,
+          "crystal_system": "monoclinic",
+          "role": "support",
+          "rruff_id": "R070589",
+          "source_split_rank": 8,
+          "spectrum_path": "spectra_10_80_step_002/R070589_Starkeyite.csv",
+          "spectrum_sha256": "B2EC071988D72739EE1094E59EF6215DD9EBAB1CAEE4A6302FBB123FA3DBA93D",
+          "support_rank": 1
+        },
+        {
+          "class_index": 1,
+          "crystal_system": "monoclinic",
+          "role": "support",
+          "rruff_id": "R050520",
+          "source_split_rank": 7,
+          "spectrum_path": "spectra_10_80_step_002/R050520_Hydroxylherderite.csv",
+          "spectrum_sha256": "D0CE2ADBC3C61E3C4B12F86ACD37D88A2B5D3F809B8B8CA6BCA384B855DCC9D0",
+          "support_rank": 2
+        },
+        {
+          "class_index": 2,
+          "crystal_system": "orthorhombic",
+          "role": "support",
+          "rruff_id": "R060042",
+          "source_split_rank": 2,
+          "spectrum_path": "spectra_10_80_step_002/R060042_Brassite.csv",
+          "spectrum_sha256": "BA940A8A8E7338F197A64B9B54B014D41B1FEF8250E5D6785343FAC2F85CFBF0",
+          "support_rank": 1
+        },
+        {
+          "class_index": 2,
+          "crystal_system": "orthorhombic",
+          "role": "support",
+          "rruff_id": "R050397",
+          "source_split_rank": 9,
+          "spectrum_path": "spectra_10_80_step_002/R050397_Vuagnatite.csv",
+          "spectrum_sha256": "FB741A198638BCE11AC18359BB6BA13FC56D4045CC938CCBDF788C8D8B57EFF4",
+          "support_rank": 2
+        },
+        {
+          "class_index": 3,
+          "crystal_system": "tetragonal",
+          "role": "support",
+          "rruff_id": "R060745",
+          "source_split_rank": 3,
+          "spectrum_path": "spectra_10_80_step_002/R060745_Rutile.csv",
+          "spectrum_sha256": "E7EE4D252B4DA0865C0245BCC8653F2A45005F55A4D1CE73FE0B1BE4BA0C4759",
+          "support_rank": 1
+        },
+        {
+          "class_index": 3,
+          "crystal_system": "tetragonal",
+          "role": "support",
+          "rruff_id": "R040113",
+          "source_split_rank": 4,
+          "spectrum_path": "spectra_10_80_step_002/R040113_Marialite.csv",
+          "spectrum_sha256": "22B3C58CB57BD56675C0A82610A34178A3A8576AD06DF810211821DA8FB4285D",
+          "support_rank": 2
+        },
+        {
+          "class_index": 4,
+          "crystal_system": "trigonal",
+          "role": "support",
+          "rruff_id": "R050137",
+          "source_split_rank": 6,
+          "spectrum_path": "spectra_10_80_step_002/R050137_Phenakite.csv",
+          "spectrum_sha256": "2801B75C6E946F898BDE7FD5E45B2D9CAC8DAAA17980772CBBC35CCDB653663A",
+          "support_rank": 1
+        },
+        {
+          "class_index": 4,
+          "crystal_system": "trigonal",
+          "role": "support",
+          "rruff_id": "R050658",
+          "source_split_rank": 2,
+          "spectrum_path": "spectra_10_80_step_002/R050658_Nitratine.csv",
+          "spectrum_sha256": "0B8B3ED5621B6DCD35B9C5F0395D49C672FA6DBDCFD03391738BEFBDB2DD6589",
+          "support_rank": 2
+        },
+        {
+          "class_index": 5,
+          "crystal_system": "hexagonal",
+          "role": "support",
+          "rruff_id": "R050675",
+          "source_split_rank": 7,
+          "spectrum_path": "spectra_10_80_step_002/R050675_Gaudefroyite.csv",
+          "spectrum_sha256": "A1F833A18F4D7CC1C039BC3F299EE3A41472AB54BD7020B9D04C3B535C8C7B4B",
+          "support_rank": 1
+        },
+        {
+          "class_index": 5,
+          "crystal_system": "hexagonal",
+          "role": "support",
+          "rruff_id": "R050503",
+          "source_split_rank": 2,
+          "spectrum_path": "spectra_10_80_step_002/R050503_Graphite.csv",
+          "spectrum_sha256": "8C75D5615787F985000F4C1A4056FA9587B1EFDAF245446AE944CBA003503A11",
+          "support_rank": 2
+        },
+        {
+          "class_index": 6,
+          "crystal_system": "cubic",
+          "role": "support",
+          "rruff_id": "R040142",
+          "source_split_rank": 4,
+          "spectrum_path": "spectra_10_80_step_002/R040142_Cubic_zirconia.csv",
+          "spectrum_sha256": "0C4E4A08D99BB36DC3D4D5B86F6DD76035864C5A2DE063651794C4958B60C7F9",
+          "support_rank": 1
+        },
+        {
+          "class_index": 6,
+          "crystal_system": "cubic",
+          "role": "support",
+          "rruff_id": "R070325",
+          "source_split_rank": 3,
+          "spectrum_path": "spectra_10_80_step_002/R070325_Galena.csv",
+          "spectrum_sha256": "AD9D21526ACA3056DF6573ECCF7C22ABDAA95BCC3376015A8DFFD52605255E58",
+          "support_rank": 2
+        }
+      ],
+      "support_count": 14,
+      "support_set_sha256": "96EF14B3A9CD7C2D1211A59AF498EDE5829DD0E7B7C1FF100E6A8069CB49657D"
+    },
+    {
+      "K": 2,
+      "episode_id": "K2_seed456",
+      "episode_seed": 456,
+      "locked_test_set_sha256": "E7B7C6500F35D5BA8DCA624C4D058AE4FB2AD97D2BDB612FB9CA20FDCA224F44",
+      "support": [
+        {
+          "class_index": 0,
+          "crystal_system": "triclinic",
+          "role": "support",
+          "rruff_id": "R040006",
+          "source_split_rank": 9,
+          "spectrum_path": "spectra_10_80_step_002/R040006_Amblygonite.csv",
+          "spectrum_sha256": "FC43C7EAD610A2C70BB1428C65433683C911DC376B880BF21D2F147C86B64D68",
+          "support_rank": 1
+        },
+        {
+          "class_index": 0,
+          "crystal_system": "triclinic",
+          "role": "support",
+          "rruff_id": "R061082",
+          "source_split_rank": 3,
+          "spectrum_path": "spectra_10_80_step_002/R061082_Arsenopyrite.csv",
+          "spectrum_sha256": "4B7E222CC084D3F59B4621454487C02F26F8BCFF194A93FD4F4BDECE43A872BF",
+          "support_rank": 2
+        },
+        {
+          "class_index": 1,
+          "crystal_system": "monoclinic",
+          "role": "support",
+          "rruff_id": "R050284",
+          "source_split_rank": 9,
+          "spectrum_path": "spectra_10_80_step_002/R050284_Probertite.csv",
+          "spectrum_sha256": "641780E63721544326765630CFDEB7DD58560C1B6F737BC87C5CB56AA8BCB5D5",
+          "support_rank": 1
+        },
+        {
+          "class_index": 1,
+          "crystal_system": "monoclinic",
+          "role": "support",
+          "rruff_id": "R050520",
+          "source_split_rank": 7,
+          "spectrum_path": "spectra_10_80_step_002/R050520_Hydroxylherderite.csv",
+          "spectrum_sha256": "D0CE2ADBC3C61E3C4B12F86ACD37D88A2B5D3F809B8B8CA6BCA384B855DCC9D0",
+          "support_rank": 2
+        },
+        {
+          "class_index": 2,
+          "crystal_system": "orthorhombic",
+          "role": "support",
+          "rruff_id": "R050397",
+          "source_split_rank": 9,
+          "spectrum_path": "spectra_10_80_step_002/R050397_Vuagnatite.csv",
+          "spectrum_sha256": "FB741A198638BCE11AC18359BB6BA13FC56D4045CC938CCBDF788C8D8B57EFF4",
+          "support_rank": 1
+        },
+        {
+          "class_index": 2,
+          "crystal_system": "orthorhombic",
+          "role": "support",
+          "rruff_id": "R050052",
+          "source_split_rank": 1,
+          "spectrum_path": "spectra_10_80_step_002/R050052_Anglesite.csv",
+          "spectrum_sha256": "7916D20BE55FCD528B34CD2D5B7E10CA8EC76F2F28C4740E2D485EC5D5F61242",
+          "support_rank": 2
+        },
+        {
+          "class_index": 3,
+          "crystal_system": "tetragonal",
+          "role": "support",
+          "rruff_id": "R050024",
+          "source_split_rank": 5,
+          "spectrum_path": "spectra_10_80_step_002/R050024_Wulfenite.csv",
+          "spectrum_sha256": "E3D080F143E6C02C8BCCF51BFD434168BAA59E9C5118BCD58EF0114D76019724",
+          "support_rank": 1
+        },
+        {
+          "class_index": 3,
+          "crystal_system": "tetragonal",
+          "role": "support",
+          "rruff_id": "R050385",
+          "source_split_rank": 2,
+          "spectrum_path": "spectra_10_80_step_002/R050385_Braunite.csv",
+          "spectrum_sha256": "9FA21DBEC2E04F9A353847C7F37A3D30A39CB7A2ADBB0B7B6635431D7279C50B",
+          "support_rank": 2
+        },
+        {
+          "class_index": 4,
+          "crystal_system": "trigonal",
+          "role": "support",
+          "rruff_id": "R060020",
+          "source_split_rank": 9,
+          "spectrum_path": "spectra_10_80_step_002/R060020_Corundum.csv",
+          "spectrum_sha256": "ED45AB98D17972E4F35DF28011DD60AC1155FAC2D21ECFD9B984F9122BDEDD57",
+          "support_rank": 1
+        },
+        {
+          "class_index": 4,
+          "crystal_system": "trigonal",
+          "role": "support",
+          "rruff_id": "R070375",
+          "source_split_rank": 7,
+          "spectrum_path": "spectra_10_80_step_002/R070375_Bismuth.csv",
+          "spectrum_sha256": "52BFA15B4D12D5D188A177B7DD64D3A43E4E7598E32BF959F26F131989FCBD3F",
+          "support_rank": 2
+        },
+        {
+          "class_index": 5,
+          "crystal_system": "hexagonal",
+          "role": "support",
+          "rruff_id": "R050291",
+          "source_split_rank": 6,
+          "spectrum_path": "spectra_10_80_step_002/R050291_Hanksite.csv",
+          "spectrum_sha256": "63684D9DFB1C133AE17FC8D3A30914A54779A5896B0215EAEF6CD5103E6730F5",
+          "support_rank": 1
+        },
+        {
+          "class_index": 5,
+          "crystal_system": "hexagonal",
+          "role": "support",
+          "rruff_id": "R050503",
+          "source_split_rank": 2,
+          "spectrum_path": "spectra_10_80_step_002/R050503_Graphite.csv",
+          "spectrum_sha256": "8C75D5615787F985000F4C1A4056FA9587B1EFDAF245446AE944CBA003503A11",
+          "support_rank": 2
+        },
+        {
+          "class_index": 6,
+          "crystal_system": "cubic",
+          "role": "support",
+          "rruff_id": "R070325",
+          "source_split_rank": 3,
+          "spectrum_path": "spectra_10_80_step_002/R070325_Galena.csv",
+          "spectrum_sha256": "AD9D21526ACA3056DF6573ECCF7C22ABDAA95BCC3376015A8DFFD52605255E58",
+          "support_rank": 1
+        },
+        {
+          "class_index": 6,
+          "crystal_system": "cubic",
+          "role": "support",
+          "rruff_id": "R060300",
+          "source_split_rank": 7,
+          "spectrum_path": "spectra_10_80_step_002/R060300_Leucite.csv",
+          "spectrum_sha256": "0A8C6C96BC2574C2C37D781EA6D1936441EA24B98A0A18D8982A8B9E7679EAA8",
+          "support_rank": 2
+        }
+      ],
+      "support_count": 14,
+      "support_set_sha256": "8E4DB69BF66BF7F645181998A1054D3021E5D868593C7E539CD1FE383B7B730E"
+    },
+    {
+      "K": 2,
+      "episode_id": "K2_seed789",
+      "episode_seed": 789,
+      "locked_test_set_sha256": "E7B7C6500F35D5BA8DCA624C4D058AE4FB2AD97D2BDB612FB9CA20FDCA224F44",
+      "support": [
+        {
+          "class_index": 0,
+          "crystal_system": "triclinic",
+          "role": "support",
+          "rruff_id": "R040006",
+          "source_split_rank": 9,
+          "spectrum_path": "spectra_10_80_step_002/R040006_Amblygonite.csv",
+          "spectrum_sha256": "FC43C7EAD610A2C70BB1428C65433683C911DC376B880BF21D2F147C86B64D68",
+          "support_rank": 1
+        },
+        {
+          "class_index": 0,
+          "crystal_system": "triclinic",
+          "role": "support",
+          "rruff_id": "R050105",
+          "source_split_rank": 7,
+          "spectrum_path": "spectra_10_80_step_002/R050105_Kurnakovite.csv",
+          "spectrum_sha256": "373F078EEC556194F6D670241239230A8E69906B5C1AA2250C03286FCB9FBC2B",
+          "support_rank": 2
+        },
+        {
+          "class_index": 1,
+          "crystal_system": "monoclinic",
+          "role": "support",
+          "rruff_id": "R050083",
+          "source_split_rank": 1,
+          "spectrum_path": "spectra_10_80_step_002/R050083_Scolecite.csv",
+          "spectrum_sha256": "9E46F367DCBFA96E33B5389C9E1FCE3136C3A2A15900C9C020ECB9DE867F0ED8",
+          "support_rank": 1
+        },
+        {
+          "class_index": 1,
+          "crystal_system": "monoclinic",
+          "role": "support",
+          "rruff_id": "R070589",
+          "source_split_rank": 8,
+          "spectrum_path": "spectra_10_80_step_002/R070589_Starkeyite.csv",
+          "spectrum_sha256": "B2EC071988D72739EE1094E59EF6215DD9EBAB1CAEE4A6302FBB123FA3DBA93D",
+          "support_rank": 2
+        },
+        {
+          "class_index": 2,
+          "crystal_system": "orthorhombic",
+          "role": "support",
+          "rruff_id": "R060195",
+          "source_split_rank": 10,
+          "spectrum_path": "spectra_10_80_step_002/R060195_Aragonite.csv",
+          "spectrum_sha256": "3A92160A385C971C90CB6F21280959EA044EC76C8F8856E117DFA380F5CF7EAF",
+          "support_rank": 1
+        },
+        {
+          "class_index": 2,
+          "crystal_system": "orthorhombic",
+          "role": "support",
+          "rruff_id": "R050052",
+          "source_split_rank": 1,
+          "spectrum_path": "spectra_10_80_step_002/R050052_Anglesite.csv",
+          "spectrum_sha256": "7916D20BE55FCD528B34CD2D5B7E10CA8EC76F2F28C4740E2D485EC5D5F61242",
+          "support_rank": 2
+        },
+        {
+          "class_index": 3,
+          "crystal_system": "tetragonal",
+          "role": "support",
+          "rruff_id": "R050024",
+          "source_split_rank": 5,
+          "spectrum_path": "spectra_10_80_step_002/R050024_Wulfenite.csv",
+          "spectrum_sha256": "E3D080F143E6C02C8BCCF51BFD434168BAA59E9C5118BCD58EF0114D76019724",
+          "support_rank": 1
+        },
+        {
+          "class_index": 3,
+          "crystal_system": "tetragonal",
+          "role": "support",
+          "rruff_id": "R050385",
+          "source_split_rank": 2,
+          "spectrum_path": "spectra_10_80_step_002/R050385_Braunite.csv",
+          "spectrum_sha256": "9FA21DBEC2E04F9A353847C7F37A3D30A39CB7A2ADBB0B7B6635431D7279C50B",
+          "support_rank": 2
+        },
+        {
+          "class_index": 4,
+          "crystal_system": "trigonal",
+          "role": "support",
+          "rruff_id": "R060683",
+          "source_split_rank": 3,
+          "spectrum_path": "spectra_10_80_step_002/R060683_Philipsbornite.csv",
+          "spectrum_sha256": "813C379BB33B83151E4D73813963ADD646DD49FFC63E700477549F77DD44089A",
+          "support_rank": 1
+        },
+        {
+          "class_index": 4,
+          "crystal_system": "trigonal",
+          "role": "support",
+          "rruff_id": "R070375",
+          "source_split_rank": 7,
+          "spectrum_path": "spectra_10_80_step_002/R070375_Bismuth.csv",
+          "spectrum_sha256": "52BFA15B4D12D5D188A177B7DD64D3A43E4E7598E32BF959F26F131989FCBD3F",
+          "support_rank": 2
+        },
+        {
+          "class_index": 5,
+          "crystal_system": "hexagonal",
+          "role": "support",
+          "rruff_id": "R060283",
+          "source_split_rank": 4,
+          "spectrum_path": "spectra_10_80_step_002/R060283_Hydroxylbastnasite-_Ce.csv",
+          "spectrum_sha256": "033963FA861169F552BF0E2FE3368261D47B3FF19856EEB601F2DFF7B2C2B9D2",
+          "support_rank": 1
+        },
+        {
+          "class_index": 5,
+          "crystal_system": "hexagonal",
+          "role": "support",
+          "rruff_id": "R060928",
+          "source_split_rank": 3,
+          "spectrum_path": "spectra_10_80_step_002/R060928_Breithauptite.csv",
+          "spectrum_sha256": "39B2D933D59CA9A099DD61DE3E61DFD490BAA49B5E1C0A61D49ED35C17943119",
+          "support_rank": 2
+        },
+        {
+          "class_index": 6,
+          "crystal_system": "cubic",
+          "role": "support",
+          "rruff_id": "R060005",
+          "source_split_rank": 10,
+          "spectrum_path": "spectra_10_80_step_002/R060005_Sphalerite.csv",
+          "spectrum_sha256": "6690F0DE93BA6EA0CB447FD6AD05F256ED7BE3ED1E73DDE2126459E0D0337CCD",
+          "support_rank": 1
+        },
+        {
+          "class_index": 6,
+          "crystal_system": "cubic",
+          "role": "support",
+          "rruff_id": "R040134",
+          "source_split_rank": 5,
+          "spectrum_path": "spectra_10_80_step_002/R040134_Alum-_K.csv",
+          "spectrum_sha256": "114FC209BEB906A292FE7AC7C631C797048F5B5BAF3102EB0416EDC068A2BCBB",
+          "support_rank": 2
+        }
+      ],
+      "support_count": 14,
+      "support_set_sha256": "E3118447CB9710385CD87476E2846C57C51EFF0DBB4EEEA467EDADEF5B83B38B"
+    },
+    {
+      "K": 2,
+      "episode_id": "K2_seed1024",
+      "episode_seed": 1024,
+      "locked_test_set_sha256": "E7B7C6500F35D5BA8DCA624C4D058AE4FB2AD97D2BDB612FB9CA20FDCA224F44",
+      "support": [
+        {
+          "class_index": 0,
+          "crystal_system": "triclinic",
+          "role": "support",
+          "rruff_id": "R040119",
+          "source_split_rank": 6,
+          "spectrum_path": "spectra_10_80_step_002/R040119_Kyanite.csv",
+          "spectrum_sha256": "71C032457EC632ECCF0D213E40DD0347B63CE9D365841B7B7043B7A750DBA9EC",
+          "support_rank": 1
+        },
+        {
+          "class_index": 0,
+          "crystal_system": "triclinic",
+          "role": "support",
+          "rruff_id": "R060645",
+          "source_split_rank": 2,
+          "spectrum_path": "spectra_10_80_step_002/R060645_Ezcurrite.csv",
+          "spectrum_sha256": "8374307179D1406458B4237D4D69D9B99C5C230213CC8A13962D1F85B77102DD",
+          "support_rank": 2
+        },
+        {
+          "class_index": 1,
+          "crystal_system": "monoclinic",
+          "role": "support",
+          "rruff_id": "R060039",
+          "source_split_rank": 3,
+          "spectrum_path": "spectra_10_80_step_002/R060039_Spodumene.csv",
+          "spectrum_sha256": "0931E931C5EB2EAAF712FE58320381DC21E67ECA7973F8392F176770F775A327",
+          "support_rank": 1
+        },
+        {
+          "class_index": 1,
+          "crystal_system": "monoclinic",
+          "role": "support",
+          "rruff_id": "R050033",
+          "source_split_rank": 5,
+          "spectrum_path": "spectra_10_80_step_002/R050033_Datolite.csv",
+          "spectrum_sha256": "96B0AC249CE81D97A7BF3D7CFFB7A24C0CBA7D8107A03C508F90BCEADDB627C1",
+          "support_rank": 2
+        },
+        {
+          "class_index": 2,
+          "crystal_system": "orthorhombic",
+          "role": "support",
+          "rruff_id": "R060042",
+          "source_split_rank": 2,
+          "spectrum_path": "spectra_10_80_step_002/R060042_Brassite.csv",
+          "spectrum_sha256": "BA940A8A8E7338F197A64B9B54B014D41B1FEF8250E5D6785343FAC2F85CFBF0",
+          "support_rank": 1
+        },
+        {
+          "class_index": 2,
+          "crystal_system": "orthorhombic",
+          "role": "support",
+          "rruff_id": "R050052",
+          "source_split_rank": 1,
+          "spectrum_path": "spectra_10_80_step_002/R050052_Anglesite.csv",
+          "spectrum_sha256": "7916D20BE55FCD528B34CD2D5B7E10CA8EC76F2F28C4740E2D485EC5D5F61242",
+          "support_rank": 2
+        },
+        {
+          "class_index": 3,
+          "crystal_system": "tetragonal",
+          "role": "support",
+          "rruff_id": "R040113",
+          "source_split_rank": 4,
+          "spectrum_path": "spectra_10_80_step_002/R040113_Marialite.csv",
+          "spectrum_sha256": "22B3C58CB57BD56675C0A82610A34178A3A8576AD06DF810211821DA8FB4285D",
+          "support_rank": 1
+        },
+        {
+          "class_index": 3,
+          "crystal_system": "tetragonal",
+          "role": "support",
+          "rruff_id": "R050024",
+          "source_split_rank": 5,
+          "spectrum_path": "spectra_10_80_step_002/R050024_Wulfenite.csv",
+          "spectrum_sha256": "E3D080F143E6C02C8BCCF51BFD434168BAA59E9C5118BCD58EF0114D76019724",
+          "support_rank": 2
+        },
+        {
+          "class_index": 4,
+          "crystal_system": "trigonal",
+          "role": "support",
+          "rruff_id": "R050654",
+          "source_split_rank": 5,
+          "spectrum_path": "spectra_10_80_step_002/R050654_Antimony.csv",
+          "spectrum_sha256": "6897F2A7CD774C5DC33FCF74315CE8C811BA2BDA87448A971F0F52340F5C19EB",
+          "support_rank": 1
+        },
+        {
+          "class_index": 4,
+          "crystal_system": "trigonal",
+          "role": "support",
+          "rruff_id": "R050137",
+          "source_split_rank": 6,
+          "spectrum_path": "spectra_10_80_step_002/R050137_Phenakite.csv",
+          "spectrum_sha256": "2801B75C6E946F898BDE7FD5E45B2D9CAC8DAAA17980772CBBC35CCDB653663A",
+          "support_rank": 2
+        },
+        {
+          "class_index": 5,
+          "crystal_system": "hexagonal",
+          "role": "support",
+          "rruff_id": "R050503",
+          "source_split_rank": 2,
+          "spectrum_path": "spectra_10_80_step_002/R050503_Graphite.csv",
+          "spectrum_sha256": "8C75D5615787F985000F4C1A4056FA9587B1EFDAF245446AE944CBA003503A11",
+          "support_rank": 1
+        },
+        {
+          "class_index": 5,
+          "crystal_system": "hexagonal",
+          "role": "support",
+          "rruff_id": "R060928",
+          "source_split_rank": 3,
+          "spectrum_path": "spectra_10_80_step_002/R060928_Breithauptite.csv",
+          "spectrum_sha256": "39B2D933D59CA9A099DD61DE3E61DFD490BAA49B5E1C0A61D49ED35C17943119",
+          "support_rank": 2
+        },
+        {
+          "class_index": 6,
+          "crystal_system": "cubic",
+          "role": "support",
+          "rruff_id": "R060151",
+          "source_split_rank": 9,
+          "spectrum_path": "spectra_10_80_step_002/R060151_Pyrochlore.csv",
+          "spectrum_sha256": "9AC14569BCE3DAE4564E9BB8D761EA8C64CF4460FB65AF5C71A6A9F78B7E4BFE",
+          "support_rank": 1
+        },
+        {
+          "class_index": 6,
+          "crystal_system": "cubic",
+          "role": "support",
+          "rruff_id": "R070325",
+          "source_split_rank": 3,
+          "spectrum_path": "spectra_10_80_step_002/R070325_Galena.csv",
+          "spectrum_sha256": "AD9D21526ACA3056DF6573ECCF7C22ABDAA95BCC3376015A8DFFD52605255E58",
+          "support_rank": 2
+        }
+      ],
+      "support_count": 14,
+      "support_set_sha256": "32C9F7CF98DAC58E34261EAC1E407CC6F06345F6EA154E598A818A3BA9F266C5"
+    },
+    {
+      "K": 5,
+      "episode_id": "K5_seed42",
+      "episode_seed": 42,
+      "locked_test_set_sha256": "E7B7C6500F35D5BA8DCA624C4D058AE4FB2AD97D2BDB612FB9CA20FDCA224F44",
+      "support": [
+        {
+          "class_index": 0,
+          "crystal_system": "triclinic",
+          "role": "support",
+          "rruff_id": "R050160",
+          "source_split_rank": 8,
+          "spectrum_path": "spectra_10_80_step_002/R050160_Bikitaite.csv",
+          "spectrum_sha256": "F01002169849BA9EC0C819136642D4811293913C374B0C2F2829CD23C071D580",
+          "support_rank": 1
+        },
+        {
+          "class_index": 0,
+          "crystal_system": "triclinic",
+          "role": "support",
+          "rruff_id": "R050193",
+          "source_split_rank": 4,
+          "spectrum_path": "spectra_10_80_step_002/R050193_Microcline.csv",
+          "spectrum_sha256": "B605E81734A10B33E90AA560D6BE6E4285579BF953C961E634DF68BE1DFE4CE1",
+          "support_rank": 2
+        },
+        {
+          "class_index": 0,
+          "crystal_system": "triclinic",
+          "role": "support",
+          "rruff_id": "R061082",
+          "source_split_rank": 3,
+          "spectrum_path": "spectra_10_80_step_002/R061082_Arsenopyrite.csv",
+          "spectrum_sha256": "4B7E222CC084D3F59B4621454487C02F26F8BCFF194A93FD4F4BDECE43A872BF",
+          "support_rank": 3
+        },
+        {
+          "class_index": 0,
+          "crystal_system": "triclinic",
+          "role": "support",
+          "rruff_id": "R040006",
+          "source_split_rank": 9,
+          "spectrum_path": "spectra_10_80_step_002/R040006_Amblygonite.csv",
+          "spectrum_sha256": "FC43C7EAD610A2C70BB1428C65433683C911DC376B880BF21D2F147C86B64D68",
+          "support_rank": 4
+        },
+        {
+          "class_index": 0,
+          "crystal_system": "triclinic",
+          "role": "support",
+          "rruff_id": "R040119",
+          "source_split_rank": 6,
+          "spectrum_path": "spectra_10_80_step_002/R040119_Kyanite.csv",
+          "spectrum_sha256": "71C032457EC632ECCF0D213E40DD0347B63CE9D365841B7B7043B7A750DBA9EC",
+          "support_rank": 5
+        },
+        {
+          "class_index": 1,
+          "crystal_system": "monoclinic",
+          "role": "support",
+          "rruff_id": "R050136",
+          "source_split_rank": 4,
+          "spectrum_path": "spectra_10_80_step_002/R050136_Datolite.csv",
+          "spectrum_sha256": "FB401B797A87E4009D72E08381523B662A39730D4568F57B5ED06CCEAD51FA54",
+          "support_rank": 1
+        },
+        {
+          "class_index": 1,
+          "crystal_system": "monoclinic",
+          "role": "support",
+          "rruff_id": "R060460",
+          "source_split_rank": 6,
+          "spectrum_path": "spectra_10_80_step_002/R060460_Celsian.csv",
+          "spectrum_sha256": "0E13424D853D0D52131C9A732E61EFA84B725D6BA250B7E3759CA7DB4F7E068C",
+          "support_rank": 2
+        },
+        {
+          "class_index": 1,
+          "crystal_system": "monoclinic",
+          "role": "support",
+          "rruff_id": "R060039",
+          "source_split_rank": 3,
+          "spectrum_path": "spectra_10_80_step_002/R060039_Spodumene.csv",
+          "spectrum_sha256": "0931E931C5EB2EAAF712FE58320381DC21E67ECA7973F8392F176770F775A327",
+          "support_rank": 3
+        },
+        {
+          "class_index": 1,
+          "crystal_system": "monoclinic",
+          "role": "support",
+          "rruff_id": "R050033",
+          "source_split_rank": 5,
+          "spectrum_path": "spectra_10_80_step_002/R050033_Datolite.csv",
+          "spectrum_sha256": "96B0AC249CE81D97A7BF3D7CFFB7A24C0CBA7D8107A03C508F90BCEADDB627C1",
+          "support_rank": 4
+        },
+        {
+          "class_index": 1,
+          "crystal_system": "monoclinic",
+          "role": "support",
+          "rruff_id": "R050499",
+          "source_split_rank": 2,
+          "spectrum_path": "spectra_10_80_step_002/R050499_Trona.csv",
+          "spectrum_sha256": "4FE9B343EA99BBB733A710BC99493F2B2B7C9EE57380E2BFFD15C1EE0F8401D8",
+          "support_rank": 5
+        },
+        {
+          "class_index": 2,
+          "crystal_system": "orthorhombic",
+          "role": "support",
+          "rruff_id": "R050200",
+          "source_split_rank": 8,
+          "spectrum_path": "spectra_10_80_step_002/R050200_Topaz.csv",
+          "spectrum_sha256": "2522E457F00C7B2C11B1C928CA63BFA3B7798667F38D7D7F012963BDF104F9F8",
+          "support_rank": 1
+        },
+        {
+          "class_index": 2,
+          "crystal_system": "orthorhombic",
+          "role": "support",
+          "rruff_id": "R040004",
+          "source_split_rank": 6,
+          "spectrum_path": "spectra_10_80_step_002/R040004_Anglesite.csv",
+          "spectrum_sha256": "13CD0FCDE4B42F39547D00E6A13632DB342D7AED95F1084147E5FF7520D7C7EB",
+          "support_rank": 2
+        },
+        {
+          "class_index": 2,
+          "crystal_system": "orthorhombic",
+          "role": "support",
+          "rruff_id": "R050052",
+          "source_split_rank": 1,
+          "spectrum_path": "spectra_10_80_step_002/R050052_Anglesite.csv",
+          "spectrum_sha256": "7916D20BE55FCD528B34CD2D5B7E10CA8EC76F2F28C4740E2D485EC5D5F61242",
+          "support_rank": 3
+        },
+        {
+          "class_index": 2,
+          "crystal_system": "orthorhombic",
+          "role": "support",
+          "rruff_id": "R050599",
+          "source_split_rank": 3,
+          "spectrum_path": "spectra_10_80_step_002/R050599_Stibiotantalite.csv",
+          "spectrum_sha256": "AC26AB3CF6AA55F9525EC4D2DECAEF33CCE2CFD31CCAAF2CD0D2D71C19C38F25",
+          "support_rank": 4
+        },
+        {
+          "class_index": 2,
+          "crystal_system": "orthorhombic",
+          "role": "support",
+          "rruff_id": "R040102",
+          "source_split_rank": 5,
+          "spectrum_path": "spectra_10_80_step_002/R040102_Natrolite.csv",
+          "spectrum_sha256": "AB16A5595E692D7E1E0397FAA54FC3DC33093B8FB718DC4ED830DC2FD8FC5A7E",
+          "support_rank": 5
+        },
+        {
+          "class_index": 3,
+          "crystal_system": "tetragonal",
+          "role": "support",
+          "rruff_id": "R050208",
+          "source_split_rank": 8,
+          "spectrum_path": "spectra_10_80_step_002/R050208_Chalcopyrite.csv",
+          "spectrum_sha256": "340709BD83768127D6CC4E3FF7BC35211D65943B6588FE1B53C6DEC53F35F062",
+          "support_rank": 1
+        },
+        {
+          "class_index": 3,
+          "crystal_system": "tetragonal",
+          "role": "support",
+          "rruff_id": "R050488",
+          "source_split_rank": 9,
+          "spectrum_path": "spectra_10_80_step_002/R050488_Zircon.csv",
+          "spectrum_sha256": "0F01C5F65A419A1910377C61768AB2DA4BA008180DE24BDEF7F34D2729FAC887",
+          "support_rank": 2
+        },
+        {
+          "class_index": 3,
+          "crystal_system": "tetragonal",
+          "role": "support",
+          "rruff_id": "R040113",
+          "source_split_rank": 4,
+          "spectrum_path": "spectra_10_80_step_002/R040113_Marialite.csv",
+          "spectrum_sha256": "22B3C58CB57BD56675C0A82610A34178A3A8576AD06DF810211821DA8FB4285D",
+          "support_rank": 3
+        },
+        {
+          "class_index": 3,
+          "crystal_system": "tetragonal",
+          "role": "support",
+          "rruff_id": "R060417",
+          "source_split_rank": 1,
+          "spectrum_path": "spectra_10_80_step_002/R060417_Scheelite.csv",
+          "spectrum_sha256": "1CAA8A62954E45D710FF34AA7B53247706A07E3E1B76604BA01A9D77FDD8F7DA",
+          "support_rank": 4
+        },
+        {
+          "class_index": 3,
+          "crystal_system": "tetragonal",
+          "role": "support",
+          "rruff_id": "R060745",
+          "source_split_rank": 3,
+          "spectrum_path": "spectra_10_80_step_002/R060745_Rutile.csv",
+          "spectrum_sha256": "E7EE4D252B4DA0865C0245BCC8653F2A45005F55A4D1CE73FE0B1BE4BA0C4759",
+          "support_rank": 5
+        },
+        {
+          "class_index": 4,
+          "crystal_system": "trigonal",
+          "role": "support",
+          "rruff_id": "R050484",
+          "source_split_rank": 10,
+          "spectrum_path": "spectra_10_80_step_002/R050484_Benstonite.csv",
+          "spectrum_sha256": "9EDB9D2A2DFF67A95179D60B563A6FF049E432133E1FB7312A846E6616907AEE",
+          "support_rank": 1
+        },
+        {
+          "class_index": 4,
+          "crystal_system": "trigonal",
+          "role": "support",
+          "rruff_id": "R070375",
+          "source_split_rank": 7,
+          "spectrum_path": "spectra_10_80_step_002/R070375_Bismuth.csv",
+          "spectrum_sha256": "52BFA15B4D12D5D188A177B7DD64D3A43E4E7598E32BF959F26F131989FCBD3F",
+          "support_rank": 2
+        },
+        {
+          "class_index": 4,
+          "crystal_system": "trigonal",
+          "role": "support",
+          "rruff_id": "R040070",
+          "source_split_rank": 8,
+          "spectrum_path": "spectra_10_80_step_002/R040070_Calcite.csv",
+          "spectrum_sha256": "9353B008337CC1B38A1D0B2E29938AB614EE7EBA2C459C0853A0AA5F1FA39F42",
+          "support_rank": 3
+        },
+        {
+          "class_index": 4,
+          "crystal_system": "trigonal",
+          "role": "support",
+          "rruff_id": "R050010",
+          "source_split_rank": 4,
+          "spectrum_path": "spectra_10_80_step_002/R050010_Dioptase.csv",
+          "spectrum_sha256": "DF71B47E644FD23DAE5CA54C15E28E71BCF6F6E16BD654EC0567A25D03F54BA8",
+          "support_rank": 4
+        },
+        {
+          "class_index": 4,
+          "crystal_system": "trigonal",
+          "role": "support",
+          "rruff_id": "R050357",
+          "source_split_rank": 1,
+          "spectrum_path": "spectra_10_80_step_002/R050357_Dolomite.csv",
+          "spectrum_sha256": "4293900EC664290D32690FA6ED992DF2FA3B8894BC90C990A787C4536DD661F5",
+          "support_rank": 5
+        },
+        {
+          "class_index": 5,
+          "crystal_system": "hexagonal",
+          "role": "support",
+          "rruff_id": "R060359",
+          "source_split_rank": 9,
+          "spectrum_path": "spectra_10_80_step_002/R060359_Bastnasite-_Ce.csv",
+          "spectrum_sha256": "61CA246813127482FD98B4573446A13409223F300A407F7B63B21C3FBD1F8C4A",
+          "support_rank": 1
+        },
+        {
+          "class_index": 5,
+          "crystal_system": "hexagonal",
+          "role": "support",
+          "rruff_id": "R070623",
+          "source_split_rank": 1,
+          "spectrum_path": "spectra_10_80_step_002/R070623_Sugilite.csv",
+          "spectrum_sha256": "64234B6409FB108B8673C64E531136D540FD051BE5AA7725B5F1554D766B943E",
+          "support_rank": 2
+        },
+        {
+          "class_index": 5,
+          "crystal_system": "hexagonal",
+          "role": "support",
+          "rruff_id": "R060283",
+          "source_split_rank": 4,
+          "spectrum_path": "spectra_10_80_step_002/R060283_Hydroxylbastnasite-_Ce.csv",
+          "spectrum_sha256": "033963FA861169F552BF0E2FE3368261D47B3FF19856EEB601F2DFF7B2C2B9D2",
+          "support_rank": 3
+        },
+        {
+          "class_index": 5,
+          "crystal_system": "hexagonal",
+          "role": "support",
+          "rruff_id": "R060928",
+          "source_split_rank": 3,
+          "spectrum_path": "spectra_10_80_step_002/R060928_Breithauptite.csv",
+          "spectrum_sha256": "39B2D933D59CA9A099DD61DE3E61DFD490BAA49B5E1C0A61D49ED35C17943119",
+          "support_rank": 4
+        },
+        {
+          "class_index": 5,
+          "crystal_system": "hexagonal",
+          "role": "support",
+          "rruff_id": "R050409",
+          "source_split_rank": 8,
+          "spectrum_path": "spectra_10_80_step_002/R050409_Bastnasite-_Ce.csv",
+          "spectrum_sha256": "0F2E8585567F6074BA10EE2EFA97784C41C4E894C2E542D6AD191B3DAF9224E7",
+          "support_rank": 5
+        },
+        {
+          "class_index": 6,
+          "crystal_system": "cubic",
+          "role": "support",
+          "rruff_id": "R060033",
+          "source_split_rank": 6,
+          "spectrum_path": "spectra_10_80_step_002/R060033_Tsaregorodtsevite.csv",
+          "spectrum_sha256": "11B1166F499079D2E4F90D0F935525C70C5EB888F6230245696FC4662FB1AAD5",
+          "support_rank": 1
+        },
+        {
+          "class_index": 6,
+          "crystal_system": "cubic",
+          "role": "support",
+          "rruff_id": "R060636",
+          "source_split_rank": 8,
+          "spectrum_path": "spectra_10_80_step_002/R060636_Sphalerite.csv",
+          "spectrum_sha256": "ABF87CDCACC44056959BF41F8D31E2ED18206444FDBAE9A16ACDD2AD75D97AA9",
+          "support_rank": 2
+        },
+        {
+          "class_index": 6,
+          "crystal_system": "cubic",
+          "role": "support",
+          "rruff_id": "R040134",
+          "source_split_rank": 5,
+          "spectrum_path": "spectra_10_80_step_002/R040134_Alum-_K.csv",
+          "spectrum_sha256": "114FC209BEB906A292FE7AC7C631C797048F5B5BAF3102EB0416EDC068A2BCBB",
+          "support_rank": 3
+        },
+        {
+          "class_index": 6,
+          "crystal_system": "cubic",
+          "role": "support",
+          "rruff_id": "R060005",
+          "source_split_rank": 10,
+          "spectrum_path": "spectra_10_80_step_002/R060005_Sphalerite.csv",
+          "spectrum_sha256": "6690F0DE93BA6EA0CB447FD6AD05F256ED7BE3ED1E73DDE2126459E0D0337CCD",
+          "support_rank": 4
+        },
+        {
+          "class_index": 6,
+          "crystal_system": "cubic",
+          "role": "support",
+          "rruff_id": "R060151",
+          "source_split_rank": 9,
+          "spectrum_path": "spectra_10_80_step_002/R060151_Pyrochlore.csv",
+          "spectrum_sha256": "9AC14569BCE3DAE4564E9BB8D761EA8C64CF4460FB65AF5C71A6A9F78B7E4BFE",
+          "support_rank": 5
+        }
+      ],
+      "support_count": 35,
+      "support_set_sha256": "E07CCDA216748D8B70A12F7E10318922BFE2132C7EBE327E7FA99F4FA074B72B"
+    },
+    {
+      "K": 5,
+      "episode_id": "K5_seed123",
+      "episode_seed": 123,
+      "locked_test_set_sha256": "E7B7C6500F35D5BA8DCA624C4D058AE4FB2AD97D2BDB612FB9CA20FDCA224F44",
+      "support": [
+        {
+          "class_index": 0,
+          "crystal_system": "triclinic",
+          "role": "support",
+          "rruff_id": "R040006",
+          "source_split_rank": 9,
+          "spectrum_path": "spectra_10_80_step_002/R040006_Amblygonite.csv",
+          "spectrum_sha256": "FC43C7EAD610A2C70BB1428C65433683C911DC376B880BF21D2F147C86B64D68",
+          "support_rank": 1
+        },
+        {
+          "class_index": 0,
+          "crystal_system": "triclinic",
+          "role": "support",
+          "rruff_id": "R050160",
+          "source_split_rank": 8,
+          "spectrum_path": "spectra_10_80_step_002/R050160_Bikitaite.csv",
+          "spectrum_sha256": "F01002169849BA9EC0C819136642D4811293913C374B0C2F2829CD23C071D580",
+          "support_rank": 2
+        },
+        {
+          "class_index": 0,
+          "crystal_system": "triclinic",
+          "role": "support",
+          "rruff_id": "R040119",
+          "source_split_rank": 6,
+          "spectrum_path": "spectra_10_80_step_002/R040119_Kyanite.csv",
+          "spectrum_sha256": "71C032457EC632ECCF0D213E40DD0347B63CE9D365841B7B7043B7A750DBA9EC",
+          "support_rank": 3
+        },
+        {
+          "class_index": 0,
+          "crystal_system": "triclinic",
+          "role": "support",
+          "rruff_id": "R050061",
+          "source_split_rank": 10,
+          "spectrum_path": "spectra_10_80_step_002/R050061_Axinite-_Fe.csv",
+          "spectrum_sha256": "267B9DF97E19D151B34B0D39DF8D27707F5D82324F1C80D4656FE72576C92C1B",
+          "support_rank": 4
+        },
+        {
+          "class_index": 0,
+          "crystal_system": "triclinic",
+          "role": "support",
+          "rruff_id": "R061082",
+          "source_split_rank": 3,
+          "spectrum_path": "spectra_10_80_step_002/R061082_Arsenopyrite.csv",
+          "spectrum_sha256": "4B7E222CC084D3F59B4621454487C02F26F8BCFF194A93FD4F4BDECE43A872BF",
+          "support_rank": 5
+        },
+        {
+          "class_index": 1,
+          "crystal_system": "monoclinic",
+          "role": "support",
+          "rruff_id": "R070589",
+          "source_split_rank": 8,
+          "spectrum_path": "spectra_10_80_step_002/R070589_Starkeyite.csv",
+          "spectrum_sha256": "B2EC071988D72739EE1094E59EF6215DD9EBAB1CAEE4A6302FBB123FA3DBA93D",
+          "support_rank": 1
+        },
+        {
+          "class_index": 1,
+          "crystal_system": "monoclinic",
+          "role": "support",
+          "rruff_id": "R050520",
+          "source_split_rank": 7,
+          "spectrum_path": "spectra_10_80_step_002/R050520_Hydroxylherderite.csv",
+          "spectrum_sha256": "D0CE2ADBC3C61E3C4B12F86ACD37D88A2B5D3F809B8B8CA6BCA384B855DCC9D0",
+          "support_rank": 2
+        },
+        {
+          "class_index": 1,
+          "crystal_system": "monoclinic",
+          "role": "support",
+          "rruff_id": "R050136",
+          "source_split_rank": 4,
+          "spectrum_path": "spectra_10_80_step_002/R050136_Datolite.csv",
+          "spectrum_sha256": "FB401B797A87E4009D72E08381523B662A39730D4568F57B5ED06CCEAD51FA54",
+          "support_rank": 3
+        },
+        {
+          "class_index": 1,
+          "crystal_system": "monoclinic",
+          "role": "support",
+          "rruff_id": "R050033",
+          "source_split_rank": 5,
+          "spectrum_path": "spectra_10_80_step_002/R050033_Datolite.csv",
+          "spectrum_sha256": "96B0AC249CE81D97A7BF3D7CFFB7A24C0CBA7D8107A03C508F90BCEADDB627C1",
+          "support_rank": 4
+        },
+        {
+          "class_index": 1,
+          "crystal_system": "monoclinic",
+          "role": "support",
+          "rruff_id": "R050499",
+          "source_split_rank": 2,
+          "spectrum_path": "spectra_10_80_step_002/R050499_Trona.csv",
+          "spectrum_sha256": "4FE9B343EA99BBB733A710BC99493F2B2B7C9EE57380E2BFFD15C1EE0F8401D8",
+          "support_rank": 5
+        },
+        {
+          "class_index": 2,
+          "crystal_system": "orthorhombic",
+          "role": "support",
+          "rruff_id": "R060042",
+          "source_split_rank": 2,
+          "spectrum_path": "spectra_10_80_step_002/R060042_Brassite.csv",
+          "spectrum_sha256": "BA940A8A8E7338F197A64B9B54B014D41B1FEF8250E5D6785343FAC2F85CFBF0",
+          "support_rank": 1
+        },
+        {
+          "class_index": 2,
+          "crystal_system": "orthorhombic",
+          "role": "support",
+          "rruff_id": "R050397",
+          "source_split_rank": 9,
+          "spectrum_path": "spectra_10_80_step_002/R050397_Vuagnatite.csv",
+          "spectrum_sha256": "FB741A198638BCE11AC18359BB6BA13FC56D4045CC938CCBDF788C8D8B57EFF4",
+          "support_rank": 2
+        },
+        {
+          "class_index": 2,
+          "crystal_system": "orthorhombic",
+          "role": "support",
+          "rruff_id": "R040004",
+          "source_split_rank": 6,
+          "spectrum_path": "spectra_10_80_step_002/R040004_Anglesite.csv",
+          "spectrum_sha256": "13CD0FCDE4B42F39547D00E6A13632DB342D7AED95F1084147E5FF7520D7C7EB",
+          "support_rank": 3
+        },
+        {
+          "class_index": 2,
+          "crystal_system": "orthorhombic",
+          "role": "support",
+          "rruff_id": "R050564",
+          "source_split_rank": 7,
+          "spectrum_path": "spectra_10_80_step_002/R050564_Strontianite.csv",
+          "spectrum_sha256": "3060B15ADA9230F059EEF6EC7971A4B3917D1ED404F9A994EBF439964B0A3A1E",
+          "support_rank": 4
+        },
+        {
+          "class_index": 2,
+          "crystal_system": "orthorhombic",
+          "role": "support",
+          "rruff_id": "R040102",
+          "source_split_rank": 5,
+          "spectrum_path": "spectra_10_80_step_002/R040102_Natrolite.csv",
+          "spectrum_sha256": "AB16A5595E692D7E1E0397FAA54FC3DC33093B8FB718DC4ED830DC2FD8FC5A7E",
+          "support_rank": 5
+        },
+        {
+          "class_index": 3,
+          "crystal_system": "tetragonal",
+          "role": "support",
+          "rruff_id": "R060745",
+          "source_split_rank": 3,
+          "spectrum_path": "spectra_10_80_step_002/R060745_Rutile.csv",
+          "spectrum_sha256": "E7EE4D252B4DA0865C0245BCC8653F2A45005F55A4D1CE73FE0B1BE4BA0C4759",
+          "support_rank": 1
+        },
+        {
+          "class_index": 3,
+          "crystal_system": "tetragonal",
+          "role": "support",
+          "rruff_id": "R040113",
+          "source_split_rank": 4,
+          "spectrum_path": "spectra_10_80_step_002/R040113_Marialite.csv",
+          "spectrum_sha256": "22B3C58CB57BD56675C0A82610A34178A3A8576AD06DF810211821DA8FB4285D",
+          "support_rank": 2
+        },
+        {
+          "class_index": 3,
+          "crystal_system": "tetragonal",
+          "role": "support",
+          "rruff_id": "R050501",
+          "source_split_rank": 10,
+          "spectrum_path": "spectra_10_80_step_002/R050501_Wulfenite.csv",
+          "spectrum_sha256": "FEE2BB0DF7D730D3D4D48D3D2D2D28B07CE50068979BDE117DF8F7F61F0CB639",
+          "support_rank": 3
+        },
+        {
+          "class_index": 3,
+          "crystal_system": "tetragonal",
+          "role": "support",
+          "rruff_id": "R050024",
+          "source_split_rank": 5,
+          "spectrum_path": "spectra_10_80_step_002/R050024_Wulfenite.csv",
+          "spectrum_sha256": "E3D080F143E6C02C8BCCF51BFD434168BAA59E9C5118BCD58EF0114D76019724",
+          "support_rank": 4
+        },
+        {
+          "class_index": 3,
+          "crystal_system": "tetragonal",
+          "role": "support",
+          "rruff_id": "R050488",
+          "source_split_rank": 9,
+          "spectrum_path": "spectra_10_80_step_002/R050488_Zircon.csv",
+          "spectrum_sha256": "0F01C5F65A419A1910377C61768AB2DA4BA008180DE24BDEF7F34D2729FAC887",
+          "support_rank": 5
+        },
+        {
+          "class_index": 4,
+          "crystal_system": "trigonal",
+          "role": "support",
+          "rruff_id": "R050137",
+          "source_split_rank": 6,
+          "spectrum_path": "spectra_10_80_step_002/R050137_Phenakite.csv",
+          "spectrum_sha256": "2801B75C6E946F898BDE7FD5E45B2D9CAC8DAAA17980772CBBC35CCDB653663A",
+          "support_rank": 1
+        },
+        {
+          "class_index": 4,
+          "crystal_system": "trigonal",
+          "role": "support",
+          "rruff_id": "R050658",
+          "source_split_rank": 2,
+          "spectrum_path": "spectra_10_80_step_002/R050658_Nitratine.csv",
+          "spectrum_sha256": "0B8B3ED5621B6DCD35B9C5F0395D49C672FA6DBDCFD03391738BEFBDB2DD6589",
+          "support_rank": 2
+        },
+        {
+          "class_index": 4,
+          "crystal_system": "trigonal",
+          "role": "support",
+          "rruff_id": "R050484",
+          "source_split_rank": 10,
+          "spectrum_path": "spectra_10_80_step_002/R050484_Benstonite.csv",
+          "spectrum_sha256": "9EDB9D2A2DFF67A95179D60B563A6FF049E432133E1FB7312A846E6616907AEE",
+          "support_rank": 3
+        },
+        {
+          "class_index": 4,
+          "crystal_system": "trigonal",
+          "role": "support",
+          "rruff_id": "R060020",
+          "source_split_rank": 9,
+          "spectrum_path": "spectra_10_80_step_002/R060020_Corundum.csv",
+          "spectrum_sha256": "ED45AB98D17972E4F35DF28011DD60AC1155FAC2D21ECFD9B984F9122BDEDD57",
+          "support_rank": 4
+        },
+        {
+          "class_index": 4,
+          "crystal_system": "trigonal",
+          "role": "support",
+          "rruff_id": "R060683",
+          "source_split_rank": 3,
+          "spectrum_path": "spectra_10_80_step_002/R060683_Philipsbornite.csv",
+          "spectrum_sha256": "813C379BB33B83151E4D73813963ADD646DD49FFC63E700477549F77DD44089A",
+          "support_rank": 5
+        },
+        {
+          "class_index": 5,
+          "crystal_system": "hexagonal",
+          "role": "support",
+          "rruff_id": "R050675",
+          "source_split_rank": 7,
+          "spectrum_path": "spectra_10_80_step_002/R050675_Gaudefroyite.csv",
+          "spectrum_sha256": "A1F833A18F4D7CC1C039BC3F299EE3A41472AB54BD7020B9D04C3B535C8C7B4B",
+          "support_rank": 1
+        },
+        {
+          "class_index": 5,
+          "crystal_system": "hexagonal",
+          "role": "support",
+          "rruff_id": "R050503",
+          "source_split_rank": 2,
+          "spectrum_path": "spectra_10_80_step_002/R050503_Graphite.csv",
+          "spectrum_sha256": "8C75D5615787F985000F4C1A4056FA9587B1EFDAF245446AE944CBA003503A11",
+          "support_rank": 2
+        },
+        {
+          "class_index": 5,
+          "crystal_system": "hexagonal",
+          "role": "support",
+          "rruff_id": "R060928",
+          "source_split_rank": 3,
+          "spectrum_path": "spectra_10_80_step_002/R060928_Breithauptite.csv",
+          "spectrum_sha256": "39B2D933D59CA9A099DD61DE3E61DFD490BAA49B5E1C0A61D49ED35C17943119",
+          "support_rank": 3
+        },
+        {
+          "class_index": 5,
+          "crystal_system": "hexagonal",
+          "role": "support",
+          "rruff_id": "R050409",
+          "source_split_rank": 8,
+          "spectrum_path": "spectra_10_80_step_002/R050409_Bastnasite-_Ce.csv",
+          "spectrum_sha256": "0F2E8585567F6074BA10EE2EFA97784C41C4E894C2E542D6AD191B3DAF9224E7",
+          "support_rank": 4
+        },
+        {
+          "class_index": 5,
+          "crystal_system": "hexagonal",
+          "role": "support",
+          "rruff_id": "R060296",
+          "source_split_rank": 5,
+          "spectrum_path": "spectra_10_80_step_002/R060296_Thaumasite.csv",
+          "spectrum_sha256": "858D6051897C11E3575277B3904383B3D5D14AF4BEAAA34E7AA389C5464FD2C2",
+          "support_rank": 5
+        },
+        {
+          "class_index": 6,
+          "crystal_system": "cubic",
+          "role": "support",
+          "rruff_id": "R040142",
+          "source_split_rank": 4,
+          "spectrum_path": "spectra_10_80_step_002/R040142_Cubic_zirconia.csv",
+          "spectrum_sha256": "0C4E4A08D99BB36DC3D4D5B86F6DD76035864C5A2DE063651794C4958B60C7F9",
+          "support_rank": 1
+        },
+        {
+          "class_index": 6,
+          "crystal_system": "cubic",
+          "role": "support",
+          "rruff_id": "R070325",
+          "source_split_rank": 3,
+          "spectrum_path": "spectra_10_80_step_002/R070325_Galena.csv",
+          "spectrum_sha256": "AD9D21526ACA3056DF6573ECCF7C22ABDAA95BCC3376015A8DFFD52605255E58",
+          "support_rank": 2
+        },
+        {
+          "class_index": 6,
+          "crystal_system": "cubic",
+          "role": "support",
+          "rruff_id": "R060005",
+          "source_split_rank": 10,
+          "spectrum_path": "spectra_10_80_step_002/R060005_Sphalerite.csv",
+          "spectrum_sha256": "6690F0DE93BA6EA0CB447FD6AD05F256ED7BE3ED1E73DDE2126459E0D0337CCD",
+          "support_rank": 3
+        },
+        {
+          "class_index": 6,
+          "crystal_system": "cubic",
+          "role": "support",
+          "rruff_id": "R060636",
+          "source_split_rank": 8,
+          "spectrum_path": "spectra_10_80_step_002/R060636_Sphalerite.csv",
+          "spectrum_sha256": "ABF87CDCACC44056959BF41F8D31E2ED18206444FDBAE9A16ACDD2AD75D97AA9",
+          "support_rank": 4
+        },
+        {
+          "class_index": 6,
+          "crystal_system": "cubic",
+          "role": "support",
+          "rruff_id": "R050045",
+          "source_split_rank": 2,
+          "spectrum_path": "spectra_10_80_step_002/R050045_Fluorite.csv",
+          "spectrum_sha256": "97197256225F081EA286ED9667DCFCE364EB68001B1EF2C5794A6FA577466338",
+          "support_rank": 5
+        }
+      ],
+      "support_count": 35,
+      "support_set_sha256": "317AC3F9C24C22121F8405A055012D3D0BBAFFB56ACCBF8D0716837F08DD8A91"
+    },
+    {
+      "K": 5,
+      "episode_id": "K5_seed456",
+      "episode_seed": 456,
+      "locked_test_set_sha256": "E7B7C6500F35D5BA8DCA624C4D058AE4FB2AD97D2BDB612FB9CA20FDCA224F44",
+      "support": [
+        {
+          "class_index": 0,
+          "crystal_system": "triclinic",
+          "role": "support",
+          "rruff_id": "R040006",
+          "source_split_rank": 9,
+          "spectrum_path": "spectra_10_80_step_002/R040006_Amblygonite.csv",
+          "spectrum_sha256": "FC43C7EAD610A2C70BB1428C65433683C911DC376B880BF21D2F147C86B64D68",
+          "support_rank": 1
+        },
+        {
+          "class_index": 0,
+          "crystal_system": "triclinic",
+          "role": "support",
+          "rruff_id": "R061082",
+          "source_split_rank": 3,
+          "spectrum_path": "spectra_10_80_step_002/R061082_Arsenopyrite.csv",
+          "spectrum_sha256": "4B7E222CC084D3F59B4621454487C02F26F8BCFF194A93FD4F4BDECE43A872BF",
+          "support_rank": 2
+        },
+        {
+          "class_index": 0,
+          "crystal_system": "triclinic",
+          "role": "support",
+          "rruff_id": "R060645",
+          "source_split_rank": 2,
+          "spectrum_path": "spectra_10_80_step_002/R060645_Ezcurrite.csv",
+          "spectrum_sha256": "8374307179D1406458B4237D4D69D9B99C5C230213CC8A13962D1F85B77102DD",
+          "support_rank": 3
+        },
+        {
+          "class_index": 0,
+          "crystal_system": "triclinic",
+          "role": "support",
+          "rruff_id": "R050555",
+          "source_split_rank": 5,
+          "spectrum_path": "spectra_10_80_step_002/R050555_Melanovanadite.csv",
+          "spectrum_sha256": "0D2A27FE1911FE9F4CB4A11D1EB5CF6A6DF641DDE1311D5734AED849C2D0D0B9",
+          "support_rank": 4
+        },
+        {
+          "class_index": 0,
+          "crystal_system": "triclinic",
+          "role": "support",
+          "rruff_id": "R060102",
+          "source_split_rank": 1,
+          "spectrum_path": "spectra_10_80_step_002/R060102_Chalcanthite.csv",
+          "spectrum_sha256": "554A3CAFD577DF65A18FFD0D7A34237993FAA315A6CCE53395711A889672BF16",
+          "support_rank": 5
+        },
+        {
+          "class_index": 1,
+          "crystal_system": "monoclinic",
+          "role": "support",
+          "rruff_id": "R050284",
+          "source_split_rank": 9,
+          "spectrum_path": "spectra_10_80_step_002/R050284_Probertite.csv",
+          "spectrum_sha256": "641780E63721544326765630CFDEB7DD58560C1B6F737BC87C5CB56AA8BCB5D5",
+          "support_rank": 1
+        },
+        {
+          "class_index": 1,
+          "crystal_system": "monoclinic",
+          "role": "support",
+          "rruff_id": "R050520",
+          "source_split_rank": 7,
+          "spectrum_path": "spectra_10_80_step_002/R050520_Hydroxylherderite.csv",
+          "spectrum_sha256": "D0CE2ADBC3C61E3C4B12F86ACD37D88A2B5D3F809B8B8CA6BCA384B855DCC9D0",
+          "support_rank": 2
+        },
+        {
+          "class_index": 1,
+          "crystal_system": "monoclinic",
+          "role": "support",
+          "rruff_id": "R050033",
+          "source_split_rank": 5,
+          "spectrum_path": "spectra_10_80_step_002/R050033_Datolite.csv",
+          "spectrum_sha256": "96B0AC249CE81D97A7BF3D7CFFB7A24C0CBA7D8107A03C508F90BCEADDB627C1",
+          "support_rank": 3
+        },
+        {
+          "class_index": 1,
+          "crystal_system": "monoclinic",
+          "role": "support",
+          "rruff_id": "R060039",
+          "source_split_rank": 3,
+          "spectrum_path": "spectra_10_80_step_002/R060039_Spodumene.csv",
+          "spectrum_sha256": "0931E931C5EB2EAAF712FE58320381DC21E67ECA7973F8392F176770F775A327",
+          "support_rank": 4
+        },
+        {
+          "class_index": 1,
+          "crystal_system": "monoclinic",
+          "role": "support",
+          "rruff_id": "R050083",
+          "source_split_rank": 1,
+          "spectrum_path": "spectra_10_80_step_002/R050083_Scolecite.csv",
+          "spectrum_sha256": "9E46F367DCBFA96E33B5389C9E1FCE3136C3A2A15900C9C020ECB9DE867F0ED8",
+          "support_rank": 5
+        },
+        {
+          "class_index": 2,
+          "crystal_system": "orthorhombic",
+          "role": "support",
+          "rruff_id": "R050397",
+          "source_split_rank": 9,
+          "spectrum_path": "spectra_10_80_step_002/R050397_Vuagnatite.csv",
+          "spectrum_sha256": "FB741A198638BCE11AC18359BB6BA13FC56D4045CC938CCBDF788C8D8B57EFF4",
+          "support_rank": 1
+        },
+        {
+          "class_index": 2,
+          "crystal_system": "orthorhombic",
+          "role": "support",
+          "rruff_id": "R050052",
+          "source_split_rank": 1,
+          "spectrum_path": "spectra_10_80_step_002/R050052_Anglesite.csv",
+          "spectrum_sha256": "7916D20BE55FCD528B34CD2D5B7E10CA8EC76F2F28C4740E2D485EC5D5F61242",
+          "support_rank": 2
+        },
+        {
+          "class_index": 2,
+          "crystal_system": "orthorhombic",
+          "role": "support",
+          "rruff_id": "R060042",
+          "source_split_rank": 2,
+          "spectrum_path": "spectra_10_80_step_002/R060042_Brassite.csv",
+          "spectrum_sha256": "BA940A8A8E7338F197A64B9B54B014D41B1FEF8250E5D6785343FAC2F85CFBF0",
+          "support_rank": 3
+        },
+        {
+          "class_index": 2,
+          "crystal_system": "orthorhombic",
+          "role": "support",
+          "rruff_id": "R060195",
+          "source_split_rank": 10,
+          "spectrum_path": "spectra_10_80_step_002/R060195_Aragonite.csv",
+          "spectrum_sha256": "3A92160A385C971C90CB6F21280959EA044EC76C8F8856E117DFA380F5CF7EAF",
+          "support_rank": 4
+        },
+        {
+          "class_index": 2,
+          "crystal_system": "orthorhombic",
+          "role": "support",
+          "rruff_id": "R040004",
+          "source_split_rank": 6,
+          "spectrum_path": "spectra_10_80_step_002/R040004_Anglesite.csv",
+          "spectrum_sha256": "13CD0FCDE4B42F39547D00E6A13632DB342D7AED95F1084147E5FF7520D7C7EB",
+          "support_rank": 5
+        },
+        {
+          "class_index": 3,
+          "crystal_system": "tetragonal",
+          "role": "support",
+          "rruff_id": "R050024",
+          "source_split_rank": 5,
+          "spectrum_path": "spectra_10_80_step_002/R050024_Wulfenite.csv",
+          "spectrum_sha256": "E3D080F143E6C02C8BCCF51BFD434168BAA59E9C5118BCD58EF0114D76019724",
+          "support_rank": 1
+        },
+        {
+          "class_index": 3,
+          "crystal_system": "tetragonal",
+          "role": "support",
+          "rruff_id": "R050385",
+          "source_split_rank": 2,
+          "spectrum_path": "spectra_10_80_step_002/R050385_Braunite.csv",
+          "spectrum_sha256": "9FA21DBEC2E04F9A353847C7F37A3D30A39CB7A2ADBB0B7B6635431D7279C50B",
+          "support_rank": 2
+        },
+        {
+          "class_index": 3,
+          "crystal_system": "tetragonal",
+          "role": "support",
+          "rruff_id": "R050208",
+          "source_split_rank": 8,
+          "spectrum_path": "spectra_10_80_step_002/R050208_Chalcopyrite.csv",
+          "spectrum_sha256": "340709BD83768127D6CC4E3FF7BC35211D65943B6588FE1B53C6DEC53F35F062",
+          "support_rank": 3
+        },
+        {
+          "class_index": 3,
+          "crystal_system": "tetragonal",
+          "role": "support",
+          "rruff_id": "R040113",
+          "source_split_rank": 4,
+          "spectrum_path": "spectra_10_80_step_002/R040113_Marialite.csv",
+          "spectrum_sha256": "22B3C58CB57BD56675C0A82610A34178A3A8576AD06DF810211821DA8FB4285D",
+          "support_rank": 4
+        },
+        {
+          "class_index": 3,
+          "crystal_system": "tetragonal",
+          "role": "support",
+          "rruff_id": "R050242",
+          "source_split_rank": 7,
+          "spectrum_path": "spectra_10_80_step_002/R050242_Weddellite.csv",
+          "spectrum_sha256": "267F160183931FBD710DD9B6A725D211230BE15AFB5A4A0D0A9D29D9472BEB58",
+          "support_rank": 5
+        },
+        {
+          "class_index": 4,
+          "crystal_system": "trigonal",
+          "role": "support",
+          "rruff_id": "R060020",
+          "source_split_rank": 9,
+          "spectrum_path": "spectra_10_80_step_002/R060020_Corundum.csv",
+          "spectrum_sha256": "ED45AB98D17972E4F35DF28011DD60AC1155FAC2D21ECFD9B984F9122BDEDD57",
+          "support_rank": 1
+        },
+        {
+          "class_index": 4,
+          "crystal_system": "trigonal",
+          "role": "support",
+          "rruff_id": "R070375",
+          "source_split_rank": 7,
+          "spectrum_path": "spectra_10_80_step_002/R070375_Bismuth.csv",
+          "spectrum_sha256": "52BFA15B4D12D5D188A177B7DD64D3A43E4E7598E32BF959F26F131989FCBD3F",
+          "support_rank": 2
+        },
+        {
+          "class_index": 4,
+          "crystal_system": "trigonal",
+          "role": "support",
+          "rruff_id": "R050357",
+          "source_split_rank": 1,
+          "spectrum_path": "spectra_10_80_step_002/R050357_Dolomite.csv",
+          "spectrum_sha256": "4293900EC664290D32690FA6ED992DF2FA3B8894BC90C990A787C4536DD661F5",
+          "support_rank": 3
+        },
+        {
+          "class_index": 4,
+          "crystal_system": "trigonal",
+          "role": "support",
+          "rruff_id": "R050654",
+          "source_split_rank": 5,
+          "spectrum_path": "spectra_10_80_step_002/R050654_Antimony.csv",
+          "spectrum_sha256": "6897F2A7CD774C5DC33FCF74315CE8C811BA2BDA87448A971F0F52340F5C19EB",
+          "support_rank": 4
+        },
+        {
+          "class_index": 4,
+          "crystal_system": "trigonal",
+          "role": "support",
+          "rruff_id": "R050484",
+          "source_split_rank": 10,
+          "spectrum_path": "spectra_10_80_step_002/R050484_Benstonite.csv",
+          "spectrum_sha256": "9EDB9D2A2DFF67A95179D60B563A6FF049E432133E1FB7312A846E6616907AEE",
+          "support_rank": 5
+        },
+        {
+          "class_index": 5,
+          "crystal_system": "hexagonal",
+          "role": "support",
+          "rruff_id": "R050291",
+          "source_split_rank": 6,
+          "spectrum_path": "spectra_10_80_step_002/R050291_Hanksite.csv",
+          "spectrum_sha256": "63684D9DFB1C133AE17FC8D3A30914A54779A5896B0215EAEF6CD5103E6730F5",
+          "support_rank": 1
+        },
+        {
+          "class_index": 5,
+          "crystal_system": "hexagonal",
+          "role": "support",
+          "rruff_id": "R050503",
+          "source_split_rank": 2,
+          "spectrum_path": "spectra_10_80_step_002/R050503_Graphite.csv",
+          "spectrum_sha256": "8C75D5615787F985000F4C1A4056FA9587B1EFDAF245446AE944CBA003503A11",
+          "support_rank": 2
+        },
+        {
+          "class_index": 5,
+          "crystal_system": "hexagonal",
+          "role": "support",
+          "rruff_id": "R060359",
+          "source_split_rank": 9,
+          "spectrum_path": "spectra_10_80_step_002/R060359_Bastnasite-_Ce.csv",
+          "spectrum_sha256": "61CA246813127482FD98B4573446A13409223F300A407F7B63B21C3FBD1F8C4A",
+          "support_rank": 3
+        },
+        {
+          "class_index": 5,
+          "crystal_system": "hexagonal",
+          "role": "support",
+          "rruff_id": "R040123",
+          "source_split_rank": 10,
+          "spectrum_path": "spectra_10_80_step_002/R040123_Mimetite.csv",
+          "spectrum_sha256": "450F77919D60F4AECEE1EFCE4F3D3D6E64EB513195C4B995297915C603414964",
+          "support_rank": 4
+        },
+        {
+          "class_index": 5,
+          "crystal_system": "hexagonal",
+          "role": "support",
+          "rruff_id": "R060283",
+          "source_split_rank": 4,
+          "spectrum_path": "spectra_10_80_step_002/R060283_Hydroxylbastnasite-_Ce.csv",
+          "spectrum_sha256": "033963FA861169F552BF0E2FE3368261D47B3FF19856EEB601F2DFF7B2C2B9D2",
+          "support_rank": 5
+        },
+        {
+          "class_index": 6,
+          "crystal_system": "cubic",
+          "role": "support",
+          "rruff_id": "R070325",
+          "source_split_rank": 3,
+          "spectrum_path": "spectra_10_80_step_002/R070325_Galena.csv",
+          "spectrum_sha256": "AD9D21526ACA3056DF6573ECCF7C22ABDAA95BCC3376015A8DFFD52605255E58",
+          "support_rank": 1
+        },
+        {
+          "class_index": 6,
+          "crystal_system": "cubic",
+          "role": "support",
+          "rruff_id": "R060300",
+          "source_split_rank": 7,
+          "spectrum_path": "spectra_10_80_step_002/R060300_Leucite.csv",
+          "spectrum_sha256": "0A8C6C96BC2574C2C37D781EA6D1936441EA24B98A0A18D8982A8B9E7679EAA8",
+          "support_rank": 2
+        },
+        {
+          "class_index": 6,
+          "crystal_system": "cubic",
+          "role": "support",
+          "rruff_id": "R060033",
+          "source_split_rank": 6,
+          "spectrum_path": "spectra_10_80_step_002/R060033_Tsaregorodtsevite.csv",
+          "spectrum_sha256": "11B1166F499079D2E4F90D0F935525C70C5EB888F6230245696FC4662FB1AAD5",
+          "support_rank": 3
+        },
+        {
+          "class_index": 6,
+          "crystal_system": "cubic",
+          "role": "support",
+          "rruff_id": "R050045",
+          "source_split_rank": 2,
+          "spectrum_path": "spectra_10_80_step_002/R050045_Fluorite.csv",
+          "spectrum_sha256": "97197256225F081EA286ED9667DCFCE364EB68001B1EF2C5794A6FA577466338",
+          "support_rank": 4
+        },
+        {
+          "class_index": 6,
+          "crystal_system": "cubic",
+          "role": "support",
+          "rruff_id": "R060005",
+          "source_split_rank": 10,
+          "spectrum_path": "spectra_10_80_step_002/R060005_Sphalerite.csv",
+          "spectrum_sha256": "6690F0DE93BA6EA0CB447FD6AD05F256ED7BE3ED1E73DDE2126459E0D0337CCD",
+          "support_rank": 5
+        }
+      ],
+      "support_count": 35,
+      "support_set_sha256": "24D0285D6C0471328C28301FFE0CFF0FB624177FB49452DA4E278F31F5BBACA9"
+    },
+    {
+      "K": 5,
+      "episode_id": "K5_seed789",
+      "episode_seed": 789,
+      "locked_test_set_sha256": "E7B7C6500F35D5BA8DCA624C4D058AE4FB2AD97D2BDB612FB9CA20FDCA224F44",
+      "support": [
+        {
+          "class_index": 0,
+          "crystal_system": "triclinic",
+          "role": "support",
+          "rruff_id": "R040006",
+          "source_split_rank": 9,
+          "spectrum_path": "spectra_10_80_step_002/R040006_Amblygonite.csv",
+          "spectrum_sha256": "FC43C7EAD610A2C70BB1428C65433683C911DC376B880BF21D2F147C86B64D68",
+          "support_rank": 1
+        },
+        {
+          "class_index": 0,
+          "crystal_system": "triclinic",
+          "role": "support",
+          "rruff_id": "R050105",
+          "source_split_rank": 7,
+          "spectrum_path": "spectra_10_80_step_002/R050105_Kurnakovite.csv",
+          "spectrum_sha256": "373F078EEC556194F6D670241239230A8E69906B5C1AA2250C03286FCB9FBC2B",
+          "support_rank": 2
+        },
+        {
+          "class_index": 0,
+          "crystal_system": "triclinic",
+          "role": "support",
+          "rruff_id": "R040119",
+          "source_split_rank": 6,
+          "spectrum_path": "spectra_10_80_step_002/R040119_Kyanite.csv",
+          "spectrum_sha256": "71C032457EC632ECCF0D213E40DD0347B63CE9D365841B7B7043B7A750DBA9EC",
+          "support_rank": 3
+        },
+        {
+          "class_index": 0,
+          "crystal_system": "triclinic",
+          "role": "support",
+          "rruff_id": "R061082",
+          "source_split_rank": 3,
+          "spectrum_path": "spectra_10_80_step_002/R061082_Arsenopyrite.csv",
+          "spectrum_sha256": "4B7E222CC084D3F59B4621454487C02F26F8BCFF194A93FD4F4BDECE43A872BF",
+          "support_rank": 4
+        },
+        {
+          "class_index": 0,
+          "crystal_system": "triclinic",
+          "role": "support",
+          "rruff_id": "R050555",
+          "source_split_rank": 5,
+          "spectrum_path": "spectra_10_80_step_002/R050555_Melanovanadite.csv",
+          "spectrum_sha256": "0D2A27FE1911FE9F4CB4A11D1EB5CF6A6DF641DDE1311D5734AED849C2D0D0B9",
+          "support_rank": 5
+        },
+        {
+          "class_index": 1,
+          "crystal_system": "monoclinic",
+          "role": "support",
+          "rruff_id": "R050083",
+          "source_split_rank": 1,
+          "spectrum_path": "spectra_10_80_step_002/R050083_Scolecite.csv",
+          "spectrum_sha256": "9E46F367DCBFA96E33B5389C9E1FCE3136C3A2A15900C9C020ECB9DE867F0ED8",
+          "support_rank": 1
+        },
+        {
+          "class_index": 1,
+          "crystal_system": "monoclinic",
+          "role": "support",
+          "rruff_id": "R070589",
+          "source_split_rank": 8,
+          "spectrum_path": "spectra_10_80_step_002/R070589_Starkeyite.csv",
+          "spectrum_sha256": "B2EC071988D72739EE1094E59EF6215DD9EBAB1CAEE4A6302FBB123FA3DBA93D",
+          "support_rank": 2
+        },
+        {
+          "class_index": 1,
+          "crystal_system": "monoclinic",
+          "role": "support",
+          "rruff_id": "R050499",
+          "source_split_rank": 2,
+          "spectrum_path": "spectra_10_80_step_002/R050499_Trona.csv",
+          "spectrum_sha256": "4FE9B343EA99BBB733A710BC99493F2B2B7C9EE57380E2BFFD15C1EE0F8401D8",
+          "support_rank": 3
+        },
+        {
+          "class_index": 1,
+          "crystal_system": "monoclinic",
+          "role": "support",
+          "rruff_id": "R050520",
+          "source_split_rank": 7,
+          "spectrum_path": "spectra_10_80_step_002/R050520_Hydroxylherderite.csv",
+          "spectrum_sha256": "D0CE2ADBC3C61E3C4B12F86ACD37D88A2B5D3F809B8B8CA6BCA384B855DCC9D0",
+          "support_rank": 4
+        },
+        {
+          "class_index": 1,
+          "crystal_system": "monoclinic",
+          "role": "support",
+          "rruff_id": "R060460",
+          "source_split_rank": 6,
+          "spectrum_path": "spectra_10_80_step_002/R060460_Celsian.csv",
+          "spectrum_sha256": "0E13424D853D0D52131C9A732E61EFA84B725D6BA250B7E3759CA7DB4F7E068C",
+          "support_rank": 5
+        },
+        {
+          "class_index": 2,
+          "crystal_system": "orthorhombic",
+          "role": "support",
+          "rruff_id": "R060195",
+          "source_split_rank": 10,
+          "spectrum_path": "spectra_10_80_step_002/R060195_Aragonite.csv",
+          "spectrum_sha256": "3A92160A385C971C90CB6F21280959EA044EC76C8F8856E117DFA380F5CF7EAF",
+          "support_rank": 1
+        },
+        {
+          "class_index": 2,
+          "crystal_system": "orthorhombic",
+          "role": "support",
+          "rruff_id": "R050052",
+          "source_split_rank": 1,
+          "spectrum_path": "spectra_10_80_step_002/R050052_Anglesite.csv",
+          "spectrum_sha256": "7916D20BE55FCD528B34CD2D5B7E10CA8EC76F2F28C4740E2D485EC5D5F61242",
+          "support_rank": 2
+        },
+        {
+          "class_index": 2,
+          "crystal_system": "orthorhombic",
+          "role": "support",
+          "rruff_id": "R050599",
+          "source_split_rank": 3,
+          "spectrum_path": "spectra_10_80_step_002/R050599_Stibiotantalite.csv",
+          "spectrum_sha256": "AC26AB3CF6AA55F9525EC4D2DECAEF33CCE2CFD31CCAAF2CD0D2D71C19C38F25",
+          "support_rank": 3
+        },
+        {
+          "class_index": 2,
+          "crystal_system": "orthorhombic",
+          "role": "support",
+          "rruff_id": "R050564",
+          "source_split_rank": 7,
+          "spectrum_path": "spectra_10_80_step_002/R050564_Strontianite.csv",
+          "spectrum_sha256": "3060B15ADA9230F059EEF6EC7971A4B3917D1ED404F9A994EBF439964B0A3A1E",
+          "support_rank": 4
+        },
+        {
+          "class_index": 2,
+          "crystal_system": "orthorhombic",
+          "role": "support",
+          "rruff_id": "R050397",
+          "source_split_rank": 9,
+          "spectrum_path": "spectra_10_80_step_002/R050397_Vuagnatite.csv",
+          "spectrum_sha256": "FB741A198638BCE11AC18359BB6BA13FC56D4045CC938CCBDF788C8D8B57EFF4",
+          "support_rank": 5
+        },
+        {
+          "class_index": 3,
+          "crystal_system": "tetragonal",
+          "role": "support",
+          "rruff_id": "R050024",
+          "source_split_rank": 5,
+          "spectrum_path": "spectra_10_80_step_002/R050024_Wulfenite.csv",
+          "spectrum_sha256": "E3D080F143E6C02C8BCCF51BFD434168BAA59E9C5118BCD58EF0114D76019724",
+          "support_rank": 1
+        },
+        {
+          "class_index": 3,
+          "crystal_system": "tetragonal",
+          "role": "support",
+          "rruff_id": "R050385",
+          "source_split_rank": 2,
+          "spectrum_path": "spectra_10_80_step_002/R050385_Braunite.csv",
+          "spectrum_sha256": "9FA21DBEC2E04F9A353847C7F37A3D30A39CB7A2ADBB0B7B6635431D7279C50B",
+          "support_rank": 2
+        },
+        {
+          "class_index": 3,
+          "crystal_system": "tetragonal",
+          "role": "support",
+          "rruff_id": "R050208",
+          "source_split_rank": 8,
+          "spectrum_path": "spectra_10_80_step_002/R050208_Chalcopyrite.csv",
+          "spectrum_sha256": "340709BD83768127D6CC4E3FF7BC35211D65943B6588FE1B53C6DEC53F35F062",
+          "support_rank": 3
+        },
+        {
+          "class_index": 3,
+          "crystal_system": "tetragonal",
+          "role": "support",
+          "rruff_id": "R060417",
+          "source_split_rank": 1,
+          "spectrum_path": "spectra_10_80_step_002/R060417_Scheelite.csv",
+          "spectrum_sha256": "1CAA8A62954E45D710FF34AA7B53247706A07E3E1B76604BA01A9D77FDD8F7DA",
+          "support_rank": 4
+        },
+        {
+          "class_index": 3,
+          "crystal_system": "tetragonal",
+          "role": "support",
+          "rruff_id": "R040113",
+          "source_split_rank": 4,
+          "spectrum_path": "spectra_10_80_step_002/R040113_Marialite.csv",
+          "spectrum_sha256": "22B3C58CB57BD56675C0A82610A34178A3A8576AD06DF810211821DA8FB4285D",
+          "support_rank": 5
+        },
+        {
+          "class_index": 4,
+          "crystal_system": "trigonal",
+          "role": "support",
+          "rruff_id": "R060683",
+          "source_split_rank": 3,
+          "spectrum_path": "spectra_10_80_step_002/R060683_Philipsbornite.csv",
+          "spectrum_sha256": "813C379BB33B83151E4D73813963ADD646DD49FFC63E700477549F77DD44089A",
+          "support_rank": 1
+        },
+        {
+          "class_index": 4,
+          "crystal_system": "trigonal",
+          "role": "support",
+          "rruff_id": "R070375",
+          "source_split_rank": 7,
+          "spectrum_path": "spectra_10_80_step_002/R070375_Bismuth.csv",
+          "spectrum_sha256": "52BFA15B4D12D5D188A177B7DD64D3A43E4E7598E32BF959F26F131989FCBD3F",
+          "support_rank": 2
+        },
+        {
+          "class_index": 4,
+          "crystal_system": "trigonal",
+          "role": "support",
+          "rruff_id": "R050357",
+          "source_split_rank": 1,
+          "spectrum_path": "spectra_10_80_step_002/R050357_Dolomite.csv",
+          "spectrum_sha256": "4293900EC664290D32690FA6ED992DF2FA3B8894BC90C990A787C4536DD661F5",
+          "support_rank": 3
+        },
+        {
+          "class_index": 4,
+          "crystal_system": "trigonal",
+          "role": "support",
+          "rruff_id": "R050654",
+          "source_split_rank": 5,
+          "spectrum_path": "spectra_10_80_step_002/R050654_Antimony.csv",
+          "spectrum_sha256": "6897F2A7CD774C5DC33FCF74315CE8C811BA2BDA87448A971F0F52340F5C19EB",
+          "support_rank": 4
+        },
+        {
+          "class_index": 4,
+          "crystal_system": "trigonal",
+          "role": "support",
+          "rruff_id": "R050137",
+          "source_split_rank": 6,
+          "spectrum_path": "spectra_10_80_step_002/R050137_Phenakite.csv",
+          "spectrum_sha256": "2801B75C6E946F898BDE7FD5E45B2D9CAC8DAAA17980772CBBC35CCDB653663A",
+          "support_rank": 5
+        },
+        {
+          "class_index": 5,
+          "crystal_system": "hexagonal",
+          "role": "support",
+          "rruff_id": "R060283",
+          "source_split_rank": 4,
+          "spectrum_path": "spectra_10_80_step_002/R060283_Hydroxylbastnasite-_Ce.csv",
+          "spectrum_sha256": "033963FA861169F552BF0E2FE3368261D47B3FF19856EEB601F2DFF7B2C2B9D2",
+          "support_rank": 1
+        },
+        {
+          "class_index": 5,
+          "crystal_system": "hexagonal",
+          "role": "support",
+          "rruff_id": "R060928",
+          "source_split_rank": 3,
+          "spectrum_path": "spectra_10_80_step_002/R060928_Breithauptite.csv",
+          "spectrum_sha256": "39B2D933D59CA9A099DD61DE3E61DFD490BAA49B5E1C0A61D49ED35C17943119",
+          "support_rank": 2
+        },
+        {
+          "class_index": 5,
+          "crystal_system": "hexagonal",
+          "role": "support",
+          "rruff_id": "R060359",
+          "source_split_rank": 9,
+          "spectrum_path": "spectra_10_80_step_002/R060359_Bastnasite-_Ce.csv",
+          "spectrum_sha256": "61CA246813127482FD98B4573446A13409223F300A407F7B63B21C3FBD1F8C4A",
+          "support_rank": 3
+        },
+        {
+          "class_index": 5,
+          "crystal_system": "hexagonal",
+          "role": "support",
+          "rruff_id": "R070623",
+          "source_split_rank": 1,
+          "spectrum_path": "spectra_10_80_step_002/R070623_Sugilite.csv",
+          "spectrum_sha256": "64234B6409FB108B8673C64E531136D540FD051BE5AA7725B5F1554D766B943E",
+          "support_rank": 4
+        },
+        {
+          "class_index": 5,
+          "crystal_system": "hexagonal",
+          "role": "support",
+          "rruff_id": "R050291",
+          "source_split_rank": 6,
+          "spectrum_path": "spectra_10_80_step_002/R050291_Hanksite.csv",
+          "spectrum_sha256": "63684D9DFB1C133AE17FC8D3A30914A54779A5896B0215EAEF6CD5103E6730F5",
+          "support_rank": 5
+        },
+        {
+          "class_index": 6,
+          "crystal_system": "cubic",
+          "role": "support",
+          "rruff_id": "R060005",
+          "source_split_rank": 10,
+          "spectrum_path": "spectra_10_80_step_002/R060005_Sphalerite.csv",
+          "spectrum_sha256": "6690F0DE93BA6EA0CB447FD6AD05F256ED7BE3ED1E73DDE2126459E0D0337CCD",
+          "support_rank": 1
+        },
+        {
+          "class_index": 6,
+          "crystal_system": "cubic",
+          "role": "support",
+          "rruff_id": "R040134",
+          "source_split_rank": 5,
+          "spectrum_path": "spectra_10_80_step_002/R040134_Alum-_K.csv",
+          "spectrum_sha256": "114FC209BEB906A292FE7AC7C631C797048F5B5BAF3102EB0416EDC068A2BCBB",
+          "support_rank": 2
+        },
+        {
+          "class_index": 6,
+          "crystal_system": "cubic",
+          "role": "support",
+          "rruff_id": "R040142",
+          "source_split_rank": 4,
+          "spectrum_path": "spectra_10_80_step_002/R040142_Cubic_zirconia.csv",
+          "spectrum_sha256": "0C4E4A08D99BB36DC3D4D5B86F6DD76035864C5A2DE063651794C4958B60C7F9",
+          "support_rank": 3
+        },
+        {
+          "class_index": 6,
+          "crystal_system": "cubic",
+          "role": "support",
+          "rruff_id": "R060033",
+          "source_split_rank": 6,
+          "spectrum_path": "spectra_10_80_step_002/R060033_Tsaregorodtsevite.csv",
+          "spectrum_sha256": "11B1166F499079D2E4F90D0F935525C70C5EB888F6230245696FC4662FB1AAD5",
+          "support_rank": 4
+        },
+        {
+          "class_index": 6,
+          "crystal_system": "cubic",
+          "role": "support",
+          "rruff_id": "R060636",
+          "source_split_rank": 8,
+          "spectrum_path": "spectra_10_80_step_002/R060636_Sphalerite.csv",
+          "spectrum_sha256": "ABF87CDCACC44056959BF41F8D31E2ED18206444FDBAE9A16ACDD2AD75D97AA9",
+          "support_rank": 5
+        }
+      ],
+      "support_count": 35,
+      "support_set_sha256": "1646A374DCD0A027F7A9AA157D1DA2AB5C8FD2A91EE084C4C98082AFF43F60B9"
+    },
+    {
+      "K": 5,
+      "episode_id": "K5_seed1024",
+      "episode_seed": 1024,
+      "locked_test_set_sha256": "E7B7C6500F35D5BA8DCA624C4D058AE4FB2AD97D2BDB612FB9CA20FDCA224F44",
+      "support": [
+        {
+          "class_index": 0,
+          "crystal_system": "triclinic",
+          "role": "support",
+          "rruff_id": "R040119",
+          "source_split_rank": 6,
+          "spectrum_path": "spectra_10_80_step_002/R040119_Kyanite.csv",
+          "spectrum_sha256": "71C032457EC632ECCF0D213E40DD0347B63CE9D365841B7B7043B7A750DBA9EC",
+          "support_rank": 1
+        },
+        {
+          "class_index": 0,
+          "crystal_system": "triclinic",
+          "role": "support",
+          "rruff_id": "R060645",
+          "source_split_rank": 2,
+          "spectrum_path": "spectra_10_80_step_002/R060645_Ezcurrite.csv",
+          "spectrum_sha256": "8374307179D1406458B4237D4D69D9B99C5C230213CC8A13962D1F85B77102DD",
+          "support_rank": 2
+        },
+        {
+          "class_index": 0,
+          "crystal_system": "triclinic",
+          "role": "support",
+          "rruff_id": "R040006",
+          "source_split_rank": 9,
+          "spectrum_path": "spectra_10_80_step_002/R040006_Amblygonite.csv",
+          "spectrum_sha256": "FC43C7EAD610A2C70BB1428C65433683C911DC376B880BF21D2F147C86B64D68",
+          "support_rank": 3
+        },
+        {
+          "class_index": 0,
+          "crystal_system": "triclinic",
+          "role": "support",
+          "rruff_id": "R050193",
+          "source_split_rank": 4,
+          "spectrum_path": "spectra_10_80_step_002/R050193_Microcline.csv",
+          "spectrum_sha256": "B605E81734A10B33E90AA560D6BE6E4285579BF953C961E634DF68BE1DFE4CE1",
+          "support_rank": 4
+        },
+        {
+          "class_index": 0,
+          "crystal_system": "triclinic",
+          "role": "support",
+          "rruff_id": "R050061",
+          "source_split_rank": 10,
+          "spectrum_path": "spectra_10_80_step_002/R050061_Axinite-_Fe.csv",
+          "spectrum_sha256": "267B9DF97E19D151B34B0D39DF8D27707F5D82324F1C80D4656FE72576C92C1B",
+          "support_rank": 5
+        },
+        {
+          "class_index": 1,
+          "crystal_system": "monoclinic",
+          "role": "support",
+          "rruff_id": "R060039",
+          "source_split_rank": 3,
+          "spectrum_path": "spectra_10_80_step_002/R060039_Spodumene.csv",
+          "spectrum_sha256": "0931E931C5EB2EAAF712FE58320381DC21E67ECA7973F8392F176770F775A327",
+          "support_rank": 1
+        },
+        {
+          "class_index": 1,
+          "crystal_system": "monoclinic",
+          "role": "support",
+          "rruff_id": "R050033",
+          "source_split_rank": 5,
+          "spectrum_path": "spectra_10_80_step_002/R050033_Datolite.csv",
+          "spectrum_sha256": "96B0AC249CE81D97A7BF3D7CFFB7A24C0CBA7D8107A03C508F90BCEADDB627C1",
+          "support_rank": 2
+        },
+        {
+          "class_index": 1,
+          "crystal_system": "monoclinic",
+          "role": "support",
+          "rruff_id": "R050083",
+          "source_split_rank": 1,
+          "spectrum_path": "spectra_10_80_step_002/R050083_Scolecite.csv",
+          "spectrum_sha256": "9E46F367DCBFA96E33B5389C9E1FCE3136C3A2A15900C9C020ECB9DE867F0ED8",
+          "support_rank": 3
+        },
+        {
+          "class_index": 1,
+          "crystal_system": "monoclinic",
+          "role": "support",
+          "rruff_id": "R050136",
+          "source_split_rank": 4,
+          "spectrum_path": "spectra_10_80_step_002/R050136_Datolite.csv",
+          "spectrum_sha256": "FB401B797A87E4009D72E08381523B662A39730D4568F57B5ED06CCEAD51FA54",
+          "support_rank": 4
+        },
+        {
+          "class_index": 1,
+          "crystal_system": "monoclinic",
+          "role": "support",
+          "rruff_id": "R070589",
+          "source_split_rank": 8,
+          "spectrum_path": "spectra_10_80_step_002/R070589_Starkeyite.csv",
+          "spectrum_sha256": "B2EC071988D72739EE1094E59EF6215DD9EBAB1CAEE4A6302FBB123FA3DBA93D",
+          "support_rank": 5
+        },
+        {
+          "class_index": 2,
+          "crystal_system": "orthorhombic",
+          "role": "support",
+          "rruff_id": "R060042",
+          "source_split_rank": 2,
+          "spectrum_path": "spectra_10_80_step_002/R060042_Brassite.csv",
+          "spectrum_sha256": "BA940A8A8E7338F197A64B9B54B014D41B1FEF8250E5D6785343FAC2F85CFBF0",
+          "support_rank": 1
+        },
+        {
+          "class_index": 2,
+          "crystal_system": "orthorhombic",
+          "role": "support",
+          "rruff_id": "R050052",
+          "source_split_rank": 1,
+          "spectrum_path": "spectra_10_80_step_002/R050052_Anglesite.csv",
+          "spectrum_sha256": "7916D20BE55FCD528B34CD2D5B7E10CA8EC76F2F28C4740E2D485EC5D5F61242",
+          "support_rank": 2
+        },
+        {
+          "class_index": 2,
+          "crystal_system": "orthorhombic",
+          "role": "support",
+          "rruff_id": "R050397",
+          "source_split_rank": 9,
+          "spectrum_path": "spectra_10_80_step_002/R050397_Vuagnatite.csv",
+          "spectrum_sha256": "FB741A198638BCE11AC18359BB6BA13FC56D4045CC938CCBDF788C8D8B57EFF4",
+          "support_rank": 3
+        },
+        {
+          "class_index": 2,
+          "crystal_system": "orthorhombic",
+          "role": "support",
+          "rruff_id": "R060195",
+          "source_split_rank": 10,
+          "spectrum_path": "spectra_10_80_step_002/R060195_Aragonite.csv",
+          "spectrum_sha256": "3A92160A385C971C90CB6F21280959EA044EC76C8F8856E117DFA380F5CF7EAF",
+          "support_rank": 4
+        },
+        {
+          "class_index": 2,
+          "crystal_system": "orthorhombic",
+          "role": "support",
+          "rruff_id": "R040102",
+          "source_split_rank": 5,
+          "spectrum_path": "spectra_10_80_step_002/R040102_Natrolite.csv",
+          "spectrum_sha256": "AB16A5595E692D7E1E0397FAA54FC3DC33093B8FB718DC4ED830DC2FD8FC5A7E",
+          "support_rank": 5
+        },
+        {
+          "class_index": 3,
+          "crystal_system": "tetragonal",
+          "role": "support",
+          "rruff_id": "R040113",
+          "source_split_rank": 4,
+          "spectrum_path": "spectra_10_80_step_002/R040113_Marialite.csv",
+          "spectrum_sha256": "22B3C58CB57BD56675C0A82610A34178A3A8576AD06DF810211821DA8FB4285D",
+          "support_rank": 1
+        },
+        {
+          "class_index": 3,
+          "crystal_system": "tetragonal",
+          "role": "support",
+          "rruff_id": "R050024",
+          "source_split_rank": 5,
+          "spectrum_path": "spectra_10_80_step_002/R050024_Wulfenite.csv",
+          "spectrum_sha256": "E3D080F143E6C02C8BCCF51BFD434168BAA59E9C5118BCD58EF0114D76019724",
+          "support_rank": 2
+        },
+        {
+          "class_index": 3,
+          "crystal_system": "tetragonal",
+          "role": "support",
+          "rruff_id": "R050208",
+          "source_split_rank": 8,
+          "spectrum_path": "spectra_10_80_step_002/R050208_Chalcopyrite.csv",
+          "spectrum_sha256": "340709BD83768127D6CC4E3FF7BC35211D65943B6588FE1B53C6DEC53F35F062",
+          "support_rank": 3
+        },
+        {
+          "class_index": 3,
+          "crystal_system": "tetragonal",
+          "role": "support",
+          "rruff_id": "R050242",
+          "source_split_rank": 7,
+          "spectrum_path": "spectra_10_80_step_002/R050242_Weddellite.csv",
+          "spectrum_sha256": "267F160183931FBD710DD9B6A725D211230BE15AFB5A4A0D0A9D29D9472BEB58",
+          "support_rank": 4
+        },
+        {
+          "class_index": 3,
+          "crystal_system": "tetragonal",
+          "role": "support",
+          "rruff_id": "R050355",
+          "source_split_rank": 6,
+          "spectrum_path": "spectra_10_80_step_002/R050355_Powellite.csv",
+          "spectrum_sha256": "AF77E8C249439AFE977152A2F733592ECE5957161F0C812AD105ABC5681E596D",
+          "support_rank": 5
+        },
+        {
+          "class_index": 4,
+          "crystal_system": "trigonal",
+          "role": "support",
+          "rruff_id": "R050654",
+          "source_split_rank": 5,
+          "spectrum_path": "spectra_10_80_step_002/R050654_Antimony.csv",
+          "spectrum_sha256": "6897F2A7CD774C5DC33FCF74315CE8C811BA2BDA87448A971F0F52340F5C19EB",
+          "support_rank": 1
+        },
+        {
+          "class_index": 4,
+          "crystal_system": "trigonal",
+          "role": "support",
+          "rruff_id": "R050137",
+          "source_split_rank": 6,
+          "spectrum_path": "spectra_10_80_step_002/R050137_Phenakite.csv",
+          "spectrum_sha256": "2801B75C6E946F898BDE7FD5E45B2D9CAC8DAAA17980772CBBC35CCDB653663A",
+          "support_rank": 2
+        },
+        {
+          "class_index": 4,
+          "crystal_system": "trigonal",
+          "role": "support",
+          "rruff_id": "R070375",
+          "source_split_rank": 7,
+          "spectrum_path": "spectra_10_80_step_002/R070375_Bismuth.csv",
+          "spectrum_sha256": "52BFA15B4D12D5D188A177B7DD64D3A43E4E7598E32BF959F26F131989FCBD3F",
+          "support_rank": 3
+        },
+        {
+          "class_index": 4,
+          "crystal_system": "trigonal",
+          "role": "support",
+          "rruff_id": "R050357",
+          "source_split_rank": 1,
+          "spectrum_path": "spectra_10_80_step_002/R050357_Dolomite.csv",
+          "spectrum_sha256": "4293900EC664290D32690FA6ED992DF2FA3B8894BC90C990A787C4536DD661F5",
+          "support_rank": 4
+        },
+        {
+          "class_index": 4,
+          "crystal_system": "trigonal",
+          "role": "support",
+          "rruff_id": "R050658",
+          "source_split_rank": 2,
+          "spectrum_path": "spectra_10_80_step_002/R050658_Nitratine.csv",
+          "spectrum_sha256": "0B8B3ED5621B6DCD35B9C5F0395D49C672FA6DBDCFD03391738BEFBDB2DD6589",
+          "support_rank": 5
+        },
+        {
+          "class_index": 5,
+          "crystal_system": "hexagonal",
+          "role": "support",
+          "rruff_id": "R050503",
+          "source_split_rank": 2,
+          "spectrum_path": "spectra_10_80_step_002/R050503_Graphite.csv",
+          "spectrum_sha256": "8C75D5615787F985000F4C1A4056FA9587B1EFDAF245446AE944CBA003503A11",
+          "support_rank": 1
+        },
+        {
+          "class_index": 5,
+          "crystal_system": "hexagonal",
+          "role": "support",
+          "rruff_id": "R060928",
+          "source_split_rank": 3,
+          "spectrum_path": "spectra_10_80_step_002/R060928_Breithauptite.csv",
+          "spectrum_sha256": "39B2D933D59CA9A099DD61DE3E61DFD490BAA49B5E1C0A61D49ED35C17943119",
+          "support_rank": 2
+        },
+        {
+          "class_index": 5,
+          "crystal_system": "hexagonal",
+          "role": "support",
+          "rruff_id": "R050675",
+          "source_split_rank": 7,
+          "spectrum_path": "spectra_10_80_step_002/R050675_Gaudefroyite.csv",
+          "spectrum_sha256": "A1F833A18F4D7CC1C039BC3F299EE3A41472AB54BD7020B9D04C3B535C8C7B4B",
+          "support_rank": 3
+        },
+        {
+          "class_index": 5,
+          "crystal_system": "hexagonal",
+          "role": "support",
+          "rruff_id": "R060296",
+          "source_split_rank": 5,
+          "spectrum_path": "spectra_10_80_step_002/R060296_Thaumasite.csv",
+          "spectrum_sha256": "858D6051897C11E3575277B3904383B3D5D14AF4BEAAA34E7AA389C5464FD2C2",
+          "support_rank": 4
+        },
+        {
+          "class_index": 5,
+          "crystal_system": "hexagonal",
+          "role": "support",
+          "rruff_id": "R040123",
+          "source_split_rank": 10,
+          "spectrum_path": "spectra_10_80_step_002/R040123_Mimetite.csv",
+          "spectrum_sha256": "450F77919D60F4AECEE1EFCE4F3D3D6E64EB513195C4B995297915C603414964",
+          "support_rank": 5
+        },
+        {
+          "class_index": 6,
+          "crystal_system": "cubic",
+          "role": "support",
+          "rruff_id": "R060151",
+          "source_split_rank": 9,
+          "spectrum_path": "spectra_10_80_step_002/R060151_Pyrochlore.csv",
+          "spectrum_sha256": "9AC14569BCE3DAE4564E9BB8D761EA8C64CF4460FB65AF5C71A6A9F78B7E4BFE",
+          "support_rank": 1
+        },
+        {
+          "class_index": 6,
+          "crystal_system": "cubic",
+          "role": "support",
+          "rruff_id": "R070325",
+          "source_split_rank": 3,
+          "spectrum_path": "spectra_10_80_step_002/R070325_Galena.csv",
+          "spectrum_sha256": "AD9D21526ACA3056DF6573ECCF7C22ABDAA95BCC3376015A8DFFD52605255E58",
+          "support_rank": 2
+        },
+        {
+          "class_index": 6,
+          "crystal_system": "cubic",
+          "role": "support",
+          "rruff_id": "R060453",
+          "source_split_rank": 1,
+          "spectrum_path": "spectra_10_80_step_002/R060453_Grossular.csv",
+          "spectrum_sha256": "92F18E752BE7475E4AD74CA13871726793799F0D03CA96364318BEF09B998B23",
+          "support_rank": 3
+        },
+        {
+          "class_index": 6,
+          "crystal_system": "cubic",
+          "role": "support",
+          "rruff_id": "R040142",
+          "source_split_rank": 4,
+          "spectrum_path": "spectra_10_80_step_002/R040142_Cubic_zirconia.csv",
+          "spectrum_sha256": "0C4E4A08D99BB36DC3D4D5B86F6DD76035864C5A2DE063651794C4958B60C7F9",
+          "support_rank": 4
+        },
+        {
+          "class_index": 6,
+          "crystal_system": "cubic",
+          "role": "support",
+          "rruff_id": "R060300",
+          "source_split_rank": 7,
+          "spectrum_path": "spectra_10_80_step_002/R060300_Leucite.csv",
+          "spectrum_sha256": "0A8C6C96BC2574C2C37D781EA6D1936441EA24B98A0A18D8982A8B9E7679EAA8",
+          "support_rank": 5
+        }
+      ],
+      "support_count": 35,
+      "support_set_sha256": "EA0DA102A68A38F45C0D2A93331EF45AAF37A2A0994D553F3538220EE61710F8"
+    }
+  ],
+  "evidence_role": "reproducibility_replay_not_confirmatory",
+  "historical_plan_claim": false,
+  "locked_test": [
+    {
+      "class_index": 0,
+      "crystal_system": "triclinic",
+      "rruff_id": "R050062",
+      "source_split_rank": 1,
+      "spectrum_path": "spectra_10_80_step_002/R050062_Ulexite.csv",
+      "spectrum_sha256": "5225F48D693FF5B3FD13A1E64D0F236078C3D1679386E0D2A4A5215551BC84A5"
+    },
+    {
+      "class_index": 0,
+      "crystal_system": "triclinic",
+      "rruff_id": "R050026",
+      "source_split_rank": 2,
+      "spectrum_path": "spectra_10_80_step_002/R050026_Axinite-_Fe.csv",
+      "spectrum_sha256": "96FA4A65144401C4DA6FACB5DB4CD90E3BCB91F3A4E245606E31B946F505B13E"
+    },
+    {
+      "class_index": 0,
+      "crystal_system": "triclinic",
+      "rruff_id": "R050054",
+      "source_split_rank": 3,
+      "spectrum_path": "spectra_10_80_step_002/R050054_Microcline.csv",
+      "spectrum_sha256": "F41050DAD75303732A8D494CFCCF5F3EC02FF9A0FC853020DEDA6CE0BBB1C71A"
+    },
+    {
+      "class_index": 0,
+      "crystal_system": "triclinic",
+      "rruff_id": "R040129",
+      "source_split_rank": 4,
+      "spectrum_path": "spectra_10_80_step_002/R040129_Albite.csv",
+      "spectrum_sha256": "C4D04A60B972294CBAC3B96CE1C7E9C4FBC98A35F860CA8DD15EB67CD6905B3E"
+    },
+    {
+      "class_index": 0,
+      "crystal_system": "triclinic",
+      "rruff_id": "R050468",
+      "source_split_rank": 5,
+      "spectrum_path": "spectra_10_80_step_002/R050468_Paravauxite.csv",
+      "spectrum_sha256": "729981FAD346735109D51DE0A8462E3B239216D4FCAD518664C250E04C49F312"
+    },
+    {
+      "class_index": 0,
+      "crystal_system": "triclinic",
+      "rruff_id": "R060598",
+      "source_split_rank": 6,
+      "spectrum_path": "spectra_10_80_step_002/R060598_Metarossite.csv",
+      "spectrum_sha256": "76F9F9B2E429E3CE8C9F6527CBBE1C6EBA1A113B762D08F15320D27062EE2B6C"
+    },
+    {
+      "class_index": 0,
+      "crystal_system": "triclinic",
+      "rruff_id": "R060275",
+      "source_split_rank": 7,
+      "spectrum_path": "spectra_10_80_step_002/R060275_Anorthite.csv",
+      "spectrum_sha256": "B52BBE27E9493E9E200305409B2A8A9838B31FAC7F64B141A4E773BA0234C228"
+    },
+    {
+      "class_index": 0,
+      "crystal_system": "triclinic",
+      "rruff_id": "R050150",
+      "source_split_rank": 8,
+      "spectrum_path": "spectra_10_80_step_002/R050150_Microcline.csv",
+      "spectrum_sha256": "4700454A51007BC93A9D504390E340D319A638903DAC194710D2F11EB6B4601E"
+    },
+    {
+      "class_index": 0,
+      "crystal_system": "triclinic",
+      "rruff_id": "R050261",
+      "source_split_rank": 9,
+      "spectrum_path": "spectra_10_80_step_002/R050261_Serandite.csv",
+      "spectrum_sha256": "F5D2280DC098D8C4A69C7C46590C6C651050BC398D010E4E861126BA29F04441"
+    },
+    {
+      "class_index": 0,
+      "crystal_system": "triclinic",
+      "rruff_id": "R050657",
+      "source_split_rank": 10,
+      "spectrum_path": "spectra_10_80_step_002/R050657_Gearksutite.csv",
+      "spectrum_sha256": "7B6F4A2912FA1765962223932189F117CB3692BC8DF6E0EF24DEE10C73D15B6E"
+    },
+    {
+      "class_index": 0,
+      "crystal_system": "triclinic",
+      "rruff_id": "R060101",
+      "source_split_rank": 11,
+      "spectrum_path": "spectra_10_80_step_002/R060101_Pectolite.csv",
+      "spectrum_sha256": "8EBE4905008793B4839136112EE915AC1D5EC0CF58ED562873DE64E764AEAC59"
+    },
+    {
+      "class_index": 0,
+      "crystal_system": "triclinic",
+      "rruff_id": "R060193",
+      "source_split_rank": 12,
+      "spectrum_path": "spectra_10_80_step_002/R060193_Anorthite.csv",
+      "spectrum_sha256": "FD8B6188FC07E696616B34BB675AA19A95D1EA2CDE8607EC5C7A80A3E100D6FA"
+    },
+    {
+      "class_index": 0,
+      "crystal_system": "triclinic",
+      "rruff_id": "R050576",
+      "source_split_rank": 13,
+      "spectrum_path": "spectra_10_80_step_002/R050576_Sigloite.csv",
+      "spectrum_sha256": "8FF8F4F0141B16C1866CD8FC2F7F56325603DCED11079458809240FADB24E67F"
+    },
+    {
+      "class_index": 0,
+      "crystal_system": "triclinic",
+      "rruff_id": "R050539",
+      "source_split_rank": 14,
+      "spectrum_path": "spectra_10_80_step_002/R050539_Fairfieldite.csv",
+      "spectrum_sha256": "D3B0FAC05225B650A4283C0528D8955C5281CD543E23342E7E07F312A49945A7"
+    },
+    {
+      "class_index": 0,
+      "crystal_system": "triclinic",
+      "rruff_id": "R070562",
+      "source_split_rank": 15,
+      "spectrum_path": "spectra_10_80_step_002/R070562_Ussingite.csv",
+      "spectrum_sha256": "56E5AF34D8B0B8825ED506A973A363D4FC414EB516DC226004BC5DE0BD9DE909"
+    },
+    {
+      "class_index": 0,
+      "crystal_system": "triclinic",
+      "rruff_id": "R040179",
+      "source_split_rank": 16,
+      "spectrum_path": "spectra_10_80_step_002/R040179_Paravauxite.csv",
+      "spectrum_sha256": "C104A87FD5BD4323253AC2CD4BF5F7D0BE9468B354C8409807E659632F2656A5"
+    },
+    {
+      "class_index": 0,
+      "crystal_system": "triclinic",
+      "rruff_id": "R050293",
+      "source_split_rank": 17,
+      "spectrum_path": "spectra_10_80_step_002/R050293_Chalcanthite.csv",
+      "spectrum_sha256": "A133FBF258558797C3D95547B358980D012E72FFDA462A27F31F32DD5833E399"
+    },
+    {
+      "class_index": 0,
+      "crystal_system": "triclinic",
+      "rruff_id": "R040014",
+      "source_split_rank": 18,
+      "spectrum_path": "spectra_10_80_step_002/R040014_Bustamite.csv",
+      "spectrum_sha256": "7B1878D31C19C92AEEA02BE9F3BDE606F7B27528D4403285FAD5C13DAD03B529"
+    },
+    {
+      "class_index": 0,
+      "crystal_system": "triclinic",
+      "rruff_id": "R050354",
+      "source_split_rank": 19,
+      "spectrum_path": "spectra_10_80_step_002/R050354_Chalcanthite.csv",
+      "spectrum_sha256": "3DF78A1380EDECDE6E88CC4F419A6494EC5628FECC22A5348E437A44F79F954B"
+    },
+    {
+      "class_index": 0,
+      "crystal_system": "triclinic",
+      "rruff_id": "R090030",
+      "source_split_rank": 20,
+      "spectrum_path": "spectra_10_80_step_002/R090030_Inesite.csv",
+      "spectrum_sha256": "517DAB8CB5787B1DD27D068F11C2E0622664FF0744557B18D82748AB5A5AC8AC"
+    },
+    {
+      "class_index": 0,
+      "crystal_system": "triclinic",
+      "rruff_id": "R070209",
+      "source_split_rank": 21,
+      "spectrum_path": "spectra_10_80_step_002/R070209_Polyhalite.csv",
+      "spectrum_sha256": "554B4F2671457805F92C50B55144C7138CA0B3CA0B4FE1B9DBA51518B1F9C2E7"
+    },
+    {
+      "class_index": 0,
+      "crystal_system": "triclinic",
+      "rruff_id": "R040068",
+      "source_split_rank": 22,
+      "spectrum_path": "spectra_10_80_step_002/R040068_Albite.csv",
+      "spectrum_sha256": "92307B40911ADA5E7C79111AFF5D74E8A3589159E696DBADA468E8FD92B0242E"
+    },
+    {
+      "class_index": 0,
+      "crystal_system": "triclinic",
+      "rruff_id": "R070268",
+      "source_split_rank": 23,
+      "spectrum_path": "spectra_10_80_step_002/R070268_Albite.csv",
+      "spectrum_sha256": "2A22E5C3279F1BFD0732CB29D5ADE2A741855A593F1969BD07EF082AFB79C59C"
+    },
+    {
+      "class_index": 0,
+      "crystal_system": "triclinic",
+      "rruff_id": "R060558",
+      "source_split_rank": 24,
+      "spectrum_path": "spectra_10_80_step_002/R060558_Axinite-_Fe.csv",
+      "spectrum_sha256": "6F0AD76A9B23C475971F4C276344ABBE1D7A8438316B2F64FF90426B8CC032E5"
+    },
+    {
+      "class_index": 0,
+      "crystal_system": "triclinic",
+      "rruff_id": "R050299",
+      "source_split_rank": 25,
+      "spectrum_path": "spectra_10_80_step_002/R050299_Axinite-_Mn.csv",
+      "spectrum_sha256": "343D692803B9732B79BF98C73F63B4AB6454722791455A6EC36D65000BCDBB31"
+    },
+    {
+      "class_index": 0,
+      "crystal_system": "triclinic",
+      "rruff_id": "R060082",
+      "source_split_rank": 26,
+      "spectrum_path": "spectra_10_80_step_002/R060082_Anorthite.csv",
+      "spectrum_sha256": "A34BE4A46F8DE8D0341572A8E36EBFF1E29DA8D8E2976124BAEFBF7DA5E913D9"
+    },
+    {
+      "class_index": 0,
+      "crystal_system": "triclinic",
+      "rruff_id": "R050577",
+      "source_split_rank": 27,
+      "spectrum_path": "spectra_10_80_step_002/R050577_Paravauxite.csv",
+      "spectrum_sha256": "3BADDEFE241F0EE742AD72E358AC1FBFD01719E3AF4A7DB248923F2659764C0A"
+    },
+    {
+      "class_index": 0,
+      "crystal_system": "triclinic",
+      "rruff_id": "R050393",
+      "source_split_rank": 28,
+      "spectrum_path": "spectra_10_80_step_002/R050393_Kurnakovite.csv",
+      "spectrum_sha256": "75E2E6E12778DACF05DD1D567C67DB6E6DF7B64B00B5B17EEB91E7E17D7CB1F8"
+    },
+    {
+      "class_index": 0,
+      "crystal_system": "triclinic",
+      "rruff_id": "R040062",
+      "source_split_rank": 29,
+      "spectrum_path": "spectra_10_80_step_002/R040062_Montebrasite.csv",
+      "spectrum_sha256": "A6ECF96C6C05FDC7C9358767C484583ADF163C8FCFB3BA92BE4B2C266DCB9676"
+    },
+    {
+      "class_index": 0,
+      "crystal_system": "triclinic",
+      "rruff_id": "R050621",
+      "source_split_rank": 30,
+      "spectrum_path": "spectra_10_80_step_002/R050621_Tarbuttite.csv",
+      "spectrum_sha256": "86F637007A17E88C4C7F1A64A5123A55A1E0078349847C91B80AE8A7D244A0D6"
+    },
+    {
+      "class_index": 0,
+      "crystal_system": "triclinic",
+      "rruff_id": "R050491",
+      "source_split_rank": 31,
+      "spectrum_path": "spectra_10_80_step_002/R050491_Ulexite.csv",
+      "spectrum_sha256": "F8B8F6F69ECE04FF32138C735E23107C8CFF0EE2FEC22A88EEAF18B3A6BCAD3B"
+    },
+    {
+      "class_index": 0,
+      "crystal_system": "triclinic",
+      "rruff_id": "R050463",
+      "source_split_rank": 32,
+      "spectrum_path": "spectra_10_80_step_002/R050463_Parahopeite.csv",
+      "spectrum_sha256": "AA6AB57D6F1BCE31ED7F3506E505B8545D83B363A65C27AD97E7AFD8AC1F9272"
+    },
+    {
+      "class_index": 0,
+      "crystal_system": "triclinic",
+      "rruff_id": "R040060",
+      "source_split_rank": 33,
+      "spectrum_path": "spectra_10_80_step_002/R040060_Montebrasite.csv",
+      "spectrum_sha256": "2AE773C9168EB97CBEFD5DFEF1844502E94C01B25472658AC24CB475B094260E"
+    },
+    {
+      "class_index": 1,
+      "crystal_system": "monoclinic",
+      "rruff_id": "R050275",
+      "source_split_rank": 1,
+      "spectrum_path": "spectra_10_80_step_002/R050275_Wohlerite.csv",
+      "spectrum_sha256": "4544A4CF76E17B2DA675BC13ABB3595BF6B64687E66032E1D7ACB04800E1911E"
+    },
+    {
+      "class_index": 1,
+      "crystal_system": "monoclinic",
+      "rruff_id": "R050398",
+      "source_split_rank": 2,
+      "spectrum_path": "spectra_10_80_step_002/R050398_Wendwilsonite.csv",
+      "spectrum_sha256": "236306899074BE513515C25D3AB4F8D2C5EEE057CEF8B5BFA6FD782A67542B43"
+    },
+    {
+      "class_index": 1,
+      "crystal_system": "monoclinic",
+      "rruff_id": "R050668",
+      "source_split_rank": 3,
+      "spectrum_path": "spectra_10_80_step_002/R050668_Prosopite.csv",
+      "spectrum_sha256": "002CA4F5ED25A1773FD4F736B9814843F331F3F2876D1E7E54B74649BE036B46"
+    },
+    {
+      "class_index": 1,
+      "crystal_system": "monoclinic",
+      "rruff_id": "R050114",
+      "source_split_rank": 4,
+      "spectrum_path": "spectra_10_80_step_002/R050114_Titanite.csv",
+      "spectrum_sha256": "658D120626A3D5ED52A9F8640039CD693D687337523F89A75419BF3A9D1CDAE5"
+    },
+    {
+      "class_index": 1,
+      "crystal_system": "monoclinic",
+      "rruff_id": "R070015",
+      "source_split_rank": 5,
+      "spectrum_path": "spectra_10_80_step_002/R070015_Harmotome.csv",
+      "spectrum_sha256": "3BB819EF88355265BC8E04F268ACAA7254B94FA4AFACE6415F4352D6159C629E"
+    },
+    {
+      "class_index": 1,
+      "crystal_system": "monoclinic",
+      "rruff_id": "R050416",
+      "source_split_rank": 6,
+      "spectrum_path": "spectra_10_80_step_002/R050416_Clinohedrite.csv",
+      "spectrum_sha256": "4121076AA816A80A4D2356E54B8479D4048C3526BA47ADA5A44C551340D696D6"
+    },
+    {
+      "class_index": 1,
+      "crystal_system": "monoclinic",
+      "rruff_id": "R060016",
+      "source_split_rank": 7,
+      "spectrum_path": "spectra_10_80_step_002/R060016_Baddeleyite.csv",
+      "spectrum_sha256": "ECC38206BA6DECBDE91639F99BBD458E180708AA301B3CE923D6074ED345710D"
+    },
+    {
+      "class_index": 1,
+      "crystal_system": "monoclinic",
+      "rruff_id": "R070561",
+      "source_split_rank": 8,
+      "spectrum_path": "spectra_10_80_step_002/R070561_Clinohumite.csv",
+      "spectrum_sha256": "41D37DE5A15909957EE183F905CE326B8A229885DA190669F8389168BC61FE8D"
+    },
+    {
+      "class_index": 1,
+      "crystal_system": "monoclinic",
+      "rruff_id": "R050638",
+      "source_split_rank": 9,
+      "spectrum_path": "spectra_10_80_step_002/R050638_Azurite.csv",
+      "spectrum_sha256": "29EA1646BD3B6C91560B68481227EF49431FE39B90811EDA5D8650F787E1A5EC"
+    },
+    {
+      "class_index": 1,
+      "crystal_system": "monoclinic",
+      "rruff_id": "R060578",
+      "source_split_rank": 10,
+      "spectrum_path": "spectra_10_80_step_002/R060578_Gorgeyite.csv",
+      "spectrum_sha256": "8D4DD4F8F2794A8723917EF9910D69FDDB9454BCEE03217693E77D7CE69329F1"
+    },
+    {
+      "class_index": 1,
+      "crystal_system": "monoclinic",
+      "rruff_id": "R060365",
+      "source_split_rank": 11,
+      "spectrum_path": "spectra_10_80_step_002/R060365_Petalite.csv",
+      "spectrum_sha256": "84C76082E486A5397448E2F893E84CDD8B151523B96C7EB2D6D78C1F5BDFF1FE"
+    },
+    {
+      "class_index": 1,
+      "crystal_system": "monoclinic",
+      "rruff_id": "R060078",
+      "source_split_rank": 12,
+      "spectrum_path": "spectra_10_80_step_002/R060078_Baddeleyite.csv",
+      "spectrum_sha256": "5970B5A5DF1D992AF6295D87BF936C2494F8F77B8E90F61D752EEBDEC3AAE0ED"
+    },
+    {
+      "class_index": 1,
+      "crystal_system": "monoclinic",
+      "rruff_id": "R060052",
+      "source_split_rank": 13,
+      "spectrum_path": "spectra_10_80_step_002/R060052_Viitaniemiite.csv",
+      "spectrum_sha256": "5A26BD92283CAA3E9FCD5E1C1C8F8A2CE7503131D30C919BC86725FCE965A464"
+    },
+    {
+      "class_index": 1,
+      "crystal_system": "monoclinic",
+      "rruff_id": "R050420",
+      "source_split_rank": 14,
+      "spectrum_path": "spectra_10_80_step_002/R050420_Priceite.csv",
+      "spectrum_sha256": "9EB9A101D509D9244F2D92C132B88EB38C225D35A52BB3251FCDCC6A4C0A4876"
+    },
+    {
+      "class_index": 1,
+      "crystal_system": "monoclinic",
+      "rruff_id": "R060299",
+      "source_split_rank": 15,
+      "spectrum_path": "spectra_10_80_step_002/R060299_Beryllonite.csv",
+      "spectrum_sha256": "99F37B69A6DACF9715A626DEC32402F26EE93E4EEB0C29AC6D8EC02BF9B551DD"
+    },
+    {
+      "class_index": 1,
+      "crystal_system": "monoclinic",
+      "rruff_id": "R070249",
+      "source_split_rank": 16,
+      "spectrum_path": "spectra_10_80_step_002/R070249_Beryllonite.csv",
+      "spectrum_sha256": "4F7C4ADB797326803C25CE0A4DA01AE5F91DB5B3F635795E3AF360FFAA559AE0"
+    },
+    {
+      "class_index": 1,
+      "crystal_system": "monoclinic",
+      "rruff_id": "R060198",
+      "source_split_rank": 17,
+      "spectrum_path": "spectra_10_80_step_002/R060198_Catapleiite.csv",
+      "spectrum_sha256": "8D77A597CDA92ABA2B2C41A41F8AC14B2B52D12CB8C0A2F193398FE35DFCAD35"
+    },
+    {
+      "class_index": 1,
+      "crystal_system": "monoclinic",
+      "rruff_id": "R060276",
+      "source_split_rank": 18,
+      "spectrum_path": "spectra_10_80_step_002/R060276_Diopside.csv",
+      "spectrum_sha256": "6730B6555C39BAC220105C5333DD8A353A451066D359480B676B3F6FDF3A3EEC"
+    },
+    {
+      "class_index": 1,
+      "crystal_system": "monoclinic",
+      "rruff_id": "R050044",
+      "source_split_rank": 19,
+      "spectrum_path": "spectra_10_80_step_002/R050044_Crocoite.csv",
+      "spectrum_sha256": "4B57EEFBE701F37720635046AF5F2BE6918483297E381DCB24571491CBD20608"
+    },
+    {
+      "class_index": 1,
+      "crystal_system": "monoclinic",
+      "rruff_id": "R070322",
+      "source_split_rank": 20,
+      "spectrum_path": "spectra_10_80_step_002/R070322_Glauberite.csv",
+      "spectrum_sha256": "3432909C55D9CC5D5261967054612CD715F7A3776598A89F15433904C996210F"
+    },
+    {
+      "class_index": 1,
+      "crystal_system": "monoclinic",
+      "rruff_id": "R050532",
+      "source_split_rank": 21,
+      "spectrum_path": "spectra_10_80_step_002/R050532_Olivenite.csv",
+      "spectrum_sha256": "13F6E5E22B100889D3CD33CC22941E4DDA7CAADDC96AEF23C39E83BC03563BE9"
+    },
+    {
+      "class_index": 1,
+      "crystal_system": "monoclinic",
+      "rruff_id": "R040181",
+      "source_split_rank": 22,
+      "spectrum_path": "spectra_10_80_step_002/R040181_Olivenite.csv",
+      "spectrum_sha256": "4FAB3B9AE0E276C4F162C21C0467417FCC1053FCAB9D8F98656CCD876687E42C"
+    },
+    {
+      "class_index": 1,
+      "crystal_system": "monoclinic",
+      "rruff_id": "R100218",
+      "source_split_rank": 23,
+      "spectrum_path": "spectra_10_80_step_002/R100218_Tugarinovite.csv",
+      "spectrum_sha256": "3C25526A142087442200CEEBC9140ACE2C1E8ED48E93352A5FDADCF34FD23234"
+    },
+    {
+      "class_index": 1,
+      "crystal_system": "monoclinic",
+      "rruff_id": "R050287",
+      "source_split_rank": 24,
+      "spectrum_path": "spectra_10_80_step_002/R050287_Cryolite.csv",
+      "spectrum_sha256": "3F9A92B75E69FAEF4B6565F1FC7F999C6795739D3B0E2DF9E4F5436423E72D1D"
+    },
+    {
+      "class_index": 1,
+      "crystal_system": "monoclinic",
+      "rruff_id": "R050367",
+      "source_split_rank": 25,
+      "spectrum_path": "spectra_10_80_step_002/R050367_Orthoclase.csv",
+      "spectrum_sha256": "146E3920379A28712795EA5D037B3B9C2B833A7562ED15E1390164B792A65F29"
+    },
+    {
+      "class_index": 1,
+      "crystal_system": "monoclinic",
+      "rruff_id": "R050269",
+      "source_split_rank": 26,
+      "spectrum_path": "spectra_10_80_step_002/R050269_Lazulite.csv",
+      "spectrum_sha256": "5AE72CBBA4480464ADC52A508AFF0CF5A976F27DD3E5C0B2930FFDDAC8F83B6B"
+    },
+    {
+      "class_index": 1,
+      "crystal_system": "monoclinic",
+      "rruff_id": "R050316",
+      "source_split_rank": 27,
+      "spectrum_path": "spectra_10_80_step_002/R050316_Augelite.csv",
+      "spectrum_sha256": "18B6272BAE049CF17A09F7BAB3C69A262815276AC89AB1178B0410C4225E3582"
+    },
+    {
+      "class_index": 1,
+      "crystal_system": "monoclinic",
+      "rruff_id": "R050124",
+      "source_split_rank": 28,
+      "spectrum_path": "spectra_10_80_step_002/R050124_Titanite.csv",
+      "spectrum_sha256": "4432B0B2845D984D7280764A2F6A98D7D9179CE63AFB5113DFDD2B21FE4142ED"
+    },
+    {
+      "class_index": 1,
+      "crystal_system": "monoclinic",
+      "rruff_id": "R050341",
+      "source_split_rank": 29,
+      "spectrum_path": "spectra_10_80_step_002/R050341_Blodite.csv",
+      "spectrum_sha256": "193D3EC674D31D9FB378150DD452FCBE88A033413636D0B38055538EC22A55F9"
+    },
+    {
+      "class_index": 1,
+      "crystal_system": "monoclinic",
+      "rruff_id": "R070195",
+      "source_split_rank": 30,
+      "spectrum_path": "spectra_10_80_step_002/R070195_Merwinite.csv",
+      "spectrum_sha256": "B3D0095FAE9B4A26A321FAA46C8886C0B0B6363026DB1321CF1DE8547E5FCC62"
+    },
+    {
+      "class_index": 1,
+      "crystal_system": "monoclinic",
+      "rruff_id": "R050240",
+      "source_split_rank": 31,
+      "spectrum_path": "spectra_10_80_step_002/R050240_Whewellite.csv",
+      "spectrum_sha256": "AC11A76E6EF45D9A191BE27C919FE88903FD3BEE64C7DBF0338358B862D597EC"
+    },
+    {
+      "class_index": 1,
+      "crystal_system": "monoclinic",
+      "rruff_id": "R060130",
+      "source_split_rank": 32,
+      "spectrum_path": "spectra_10_80_step_002/R060130_Linarite.csv",
+      "spectrum_sha256": "D5FDC95900B5771060E1FC4208C112FDCF886064207798547245DD090EB2442F"
+    },
+    {
+      "class_index": 1,
+      "crystal_system": "monoclinic",
+      "rruff_id": "R050526",
+      "source_split_rank": 33,
+      "spectrum_path": "spectra_10_80_step_002/R050526_Whewellite.csv",
+      "spectrum_sha256": "30AA0E17573D6A6ED94388B7CFB2756F351B8C3114D05EF5A8D9CE515382F556"
+    },
+    {
+      "class_index": 2,
+      "crystal_system": "orthorhombic",
+      "rruff_id": "R040135",
+      "source_split_rank": 1,
+      "spectrum_path": "spectra_10_80_step_002/R040135_Sulphur.csv",
+      "spectrum_sha256": "376BBF05C85FD2C3710FE4DF76E44057FCB7C9E37C48C03CD5F3ED62BFA3611F"
+    },
+    {
+      "class_index": 2,
+      "crystal_system": "orthorhombic",
+      "rruff_id": "R070536",
+      "source_split_rank": 2,
+      "spectrum_path": "spectra_10_80_step_002/R070536_Hemimorphite.csv",
+      "spectrum_sha256": "7118B750F7EC2526075FC40B38D7DD07084B0A548C2671EE9D03343E52B13CF4"
+    },
+    {
+      "class_index": 2,
+      "crystal_system": "orthorhombic",
+      "rruff_id": "R130034",
+      "source_split_rank": 3,
+      "spectrum_path": "spectra_10_80_step_002/R130034_Vladimirivanovite.csv",
+      "spectrum_sha256": "28765B3AA0B058AE08D3A6D3FD970EC69F232E4D87ED576EBBEBB46948888CD2"
+    },
+    {
+      "class_index": 2,
+      "crystal_system": "orthorhombic",
+      "rruff_id": "R040052",
+      "source_split_rank": 4,
+      "spectrum_path": "spectra_10_80_step_002/R040052_Forsterite.csv",
+      "spectrum_sha256": "E9726FE744FA3D2373E51EA989136017A078374969EC3DD16B805CE0D70526CB"
+    },
+    {
+      "class_index": 2,
+      "crystal_system": "orthorhombic",
+      "rruff_id": "R050239",
+      "source_split_rank": 5,
+      "spectrum_path": "spectra_10_80_step_002/R050239_Senegalite.csv",
+      "spectrum_sha256": "742E34446DD48A09AA14A41ECF8240D796E3F60483379797044B656B18D07D5F"
+    },
+    {
+      "class_index": 2,
+      "crystal_system": "orthorhombic",
+      "rruff_id": "R040183",
+      "source_split_rank": 6,
+      "spectrum_path": "spectra_10_80_step_002/R040183_Thenardite.csv",
+      "spectrum_sha256": "9F002022F0A5CD9CDE219A73380079B081C7A484F3D53BB0B58D5789901DC72B"
+    },
+    {
+      "class_index": 2,
+      "crystal_system": "orthorhombic",
+      "rruff_id": "R050298",
+      "source_split_rank": 7,
+      "spectrum_path": "spectra_10_80_step_002/R050298_Cerussite.csv",
+      "spectrum_sha256": "C05367C8B9663A401B49ABA87439F79E560639C92E8ED4C39BFE5D8E74E6FFFA"
+    },
+    {
+      "class_index": 2,
+      "crystal_system": "orthorhombic",
+      "rruff_id": "R050248",
+      "source_split_rank": 8,
+      "spectrum_path": "spectra_10_80_step_002/R050248_Shortite.csv",
+      "spectrum_sha256": "FBB0E064FBBF2BFB8E9254346A95D5DB538894EF37603950ECFF5D9FB8BB88C8"
+    },
+    {
+      "class_index": 2,
+      "crystal_system": "orthorhombic",
+      "rruff_id": "R050148",
+      "source_split_rank": 9,
+      "spectrum_path": "spectra_10_80_step_002/R050148_Witherite.csv",
+      "spectrum_sha256": "6E466905761EEA04ED848C9AC9B387C72A67A7C0673E905A94AC6F20C3B270E5"
+    },
+    {
+      "class_index": 2,
+      "crystal_system": "orthorhombic",
+      "rruff_id": "R040117",
+      "source_split_rank": 10,
+      "spectrum_path": "spectra_10_80_step_002/R040117_Hemimorphite.csv",
+      "spectrum_sha256": "B7ECE1BA660D17AA40629668D30021A7465A9495BE4119D7D25F1ADD38D5F22B"
+    },
+    {
+      "class_index": 2,
+      "crystal_system": "orthorhombic",
+      "rruff_id": "R040037",
+      "source_split_rank": 11,
+      "spectrum_path": "spectra_10_80_step_002/R040037_Strontianite.csv",
+      "spectrum_sha256": "0521A4E8B98FD9063916C8746A786A6030721401D3CDB0CA99E35CFC5D221080"
+    },
+    {
+      "class_index": 2,
+      "crystal_system": "orthorhombic",
+      "rruff_id": "R050449",
+      "source_split_rank": 12,
+      "spectrum_path": "spectra_10_80_step_002/R050449_Andalusite.csv",
+      "spectrum_sha256": "1C1E6917579E2090BC8003F0EE531E96D5BBCBAC5593B69E0806822B1BC1E6DA"
+    },
+    {
+      "class_index": 2,
+      "crystal_system": "orthorhombic",
+      "rruff_id": "R050476",
+      "source_split_rank": 13,
+      "spectrum_path": "spectra_10_80_step_002/R050476_Strontianite.csv",
+      "spectrum_sha256": "D8BFEEABE4D59175C619DA9C4E3B3E2FD176B52CECC5FE93889036F8E69022F6"
+    },
+    {
+      "class_index": 2,
+      "crystal_system": "orthorhombic",
+      "rruff_id": "R060908",
+      "source_split_rank": 14,
+      "spectrum_path": "spectra_10_80_step_002/R060908_Stromeyerite.csv",
+      "spectrum_sha256": "D60089BB8B955DDC480653E05C733C103ED46D92439188AD4EC88F1859C5C661"
+    },
+    {
+      "class_index": 2,
+      "crystal_system": "orthorhombic",
+      "rruff_id": "R050442",
+      "source_split_rank": 15,
+      "spectrum_path": "spectra_10_80_step_002/R050442_Enargite.csv",
+      "spectrum_sha256": "2FE255F96C89CF3A3479640D505D5F749A364626EC9E1BB67113ED9C31DD9791"
+    },
+    {
+      "class_index": 2,
+      "crystal_system": "orthorhombic",
+      "rruff_id": "R090034",
+      "source_split_rank": 16,
+      "spectrum_path": "spectra_10_80_step_002/R090034_Heklaite.csv",
+      "spectrum_sha256": "1B3044AEC5EDF5B9E67BDA89BD5F54063DA8A543AC99AF957B1F39DDA6ED3238"
+    },
+    {
+      "class_index": 2,
+      "crystal_system": "orthorhombic",
+      "rruff_id": "R050509",
+      "source_split_rank": 17,
+      "spectrum_path": "spectra_10_80_step_002/R050509_Descloizite.csv",
+      "spectrum_sha256": "5BB950B9A98C1384AF1C1A441B17536DA2B4A4F8D6F37710FF7488BF6AC0BF6E"
+    },
+    {
+      "class_index": 2,
+      "crystal_system": "orthorhombic",
+      "rruff_id": "R050456",
+      "source_split_rank": 18,
+      "spectrum_path": "spectra_10_80_step_002/R050456_Perovskite.csv",
+      "spectrum_sha256": "3B53E18C70CC1088420A45363144557DD06C4AEA8B43C5637951BAFE6B8F420E"
+    },
+    {
+      "class_index": 2,
+      "crystal_system": "orthorhombic",
+      "rruff_id": "R060561",
+      "source_split_rank": 19,
+      "spectrum_path": "spectra_10_80_step_002/R060561_Natrolite.csv",
+      "spectrum_sha256": "27456F1F5DABB128C791EB08B7A678309479C6E89BB13826E6011616A31B5FA2"
+    },
+    {
+      "class_index": 2,
+      "crystal_system": "orthorhombic",
+      "rruff_id": "R050405",
+      "source_split_rank": 20,
+      "spectrum_path": "spectra_10_80_step_002/R050405_Topaz.csv",
+      "spectrum_sha256": "1953FA99F745A3C56BF0EA2B55A7CA60347DD97C1F8557E0526E09E93646CBEB"
+    },
+    {
+      "class_index": 2,
+      "crystal_system": "orthorhombic",
+      "rruff_id": "R050020",
+      "source_split_rank": 21,
+      "spectrum_path": "spectra_10_80_step_002/R050020_Adamite.csv",
+      "spectrum_sha256": "AAF9AD3F904D1BBDE75620F8BCA3BB0074290731D8C29B4B3195E989441C3736"
+    },
+    {
+      "class_index": 2,
+      "crystal_system": "orthorhombic",
+      "rruff_id": "R040184",
+      "source_split_rank": 22,
+      "spectrum_path": "spectra_10_80_step_002/R040184_Shortite.csv",
+      "spectrum_sha256": "74B4FF6185B28BF742F2BFD8966C21D8EF1DDE63483E0B1BA907015D410E3947"
+    },
+    {
+      "class_index": 2,
+      "crystal_system": "orthorhombic",
+      "rruff_id": "R050591",
+      "source_split_rank": 23,
+      "spectrum_path": "spectra_10_80_step_002/R050591_Brookite.csv",
+      "spectrum_sha256": "C3ACBC50C547F73F7240405A288650901FA1CC437DD21C7C1E7000A942470FC5"
+    },
+    {
+      "class_index": 2,
+      "crystal_system": "orthorhombic",
+      "rruff_id": "R050521",
+      "source_split_rank": 24,
+      "spectrum_path": "spectra_10_80_step_002/R050521_Mottramite.csv",
+      "spectrum_sha256": "E6496200B3966D2D77A17C41B6FADF174387DAA4D5060D0CC6CBA273EA8F714F"
+    },
+    {
+      "class_index": 2,
+      "crystal_system": "orthorhombic",
+      "rruff_id": "R060917",
+      "source_split_rank": 25,
+      "spectrum_path": "spectra_10_80_step_002/R060917_Suolunite.csv",
+      "spectrum_sha256": "69CD4F2B0D5FAE4C9BEAA88FF9F517D7A56F61728EC130BCCBD38D9192CAFB4A"
+    },
+    {
+      "class_index": 2,
+      "crystal_system": "orthorhombic",
+      "rruff_id": "R050008",
+      "source_split_rank": 26,
+      "spectrum_path": "spectra_10_80_step_002/R050008_Celestine.csv",
+      "spectrum_sha256": "C6EE2E1C8315A297F26F4035DB5655BE0061E8130B3B15D957F96C43808E742C"
+    },
+    {
+      "class_index": 2,
+      "crystal_system": "orthorhombic",
+      "rruff_id": "R040073",
+      "source_split_rank": 27,
+      "spectrum_path": "spectra_10_80_step_002/R040073_Chrysoberyl.csv",
+      "spectrum_sha256": "E543F2414B91A4E8E79F20AA4EAE29CF08989E486376CE8EC978A02F522F4CF4"
+    },
+    {
+      "class_index": 2,
+      "crystal_system": "orthorhombic",
+      "rruff_id": "R040112",
+      "source_split_rank": 28,
+      "spectrum_path": "spectra_10_80_step_002/R040112_Natrolite.csv",
+      "spectrum_sha256": "862134656B294E122E20B7655D6F865CA9157778AD88F748A168A28EC2D8A5CD"
+    },
+    {
+      "class_index": 2,
+      "crystal_system": "orthorhombic",
+      "rruff_id": "R050174",
+      "source_split_rank": 29,
+      "spectrum_path": "spectra_10_80_step_002/R050174_Cerussite.csv",
+      "spectrum_sha256": "A2FF3286F0C37CC2CCB4D39783AB43055A446F6A6C5306C13F6FFAE7D609FF58"
+    },
+    {
+      "class_index": 2,
+      "crystal_system": "orthorhombic",
+      "rruff_id": "R050517",
+      "source_split_rank": 30,
+      "spectrum_path": "spectra_10_80_step_002/R050517_Mottramite.csv",
+      "spectrum_sha256": "17EE9B0B8DDD4622F58DF483A73989FB7D3571ACE0FEB15C8D061CE0C47412CD"
+    },
+    {
+      "class_index": 2,
+      "crystal_system": "orthorhombic",
+      "rruff_id": "R040130",
+      "source_split_rank": 31,
+      "spectrum_path": "spectra_10_80_step_002/R040130_Adamite.csv",
+      "spectrum_sha256": "F14A0C82F506E9CF9413CF68FBDC74EC02CAFCB840DD11EC4C959B2A10CE1EB9"
+    },
+    {
+      "class_index": 2,
+      "crystal_system": "orthorhombic",
+      "rruff_id": "R050042",
+      "source_split_rank": 32,
+      "spectrum_path": "spectra_10_80_step_002/R050042_Lawsonite.csv",
+      "spectrum_sha256": "5C2924F8DBAA6DB91BEA5F130DCC574F12573B048FFF0F1C0185B051F2851006"
+    },
+    {
+      "class_index": 2,
+      "crystal_system": "orthorhombic",
+      "rruff_id": "R040069",
+      "source_split_rank": 33,
+      "spectrum_path": "spectra_10_80_step_002/R040069_Cerussite.csv",
+      "spectrum_sha256": "CCAD4F0A275A735CD0C4566D7CD1DBC63EE6D216ACB3E887BAD90A30671B7A04"
+    },
+    {
+      "class_index": 3,
+      "crystal_system": "tetragonal",
+      "rruff_id": "R040172",
+      "source_split_rank": 1,
+      "spectrum_path": "spectra_10_80_step_002/R040172_Scheelite.csv",
+      "spectrum_sha256": "99D90A1B711DE3EE0C1EAD3A63E1E302ED87E97A2EA89E5354A491ED57B05069"
+    },
+    {
+      "class_index": 3,
+      "crystal_system": "tetragonal",
+      "rruff_id": "R061100",
+      "source_split_rank": 2,
+      "spectrum_path": "spectra_10_80_step_002/R061100_Akermanite.csv",
+      "spectrum_sha256": "FF43D80D0A03126C5AC85CECAA10B7C5FEBEA76CBB403CFC416BC07310F8129E"
+    },
+    {
+      "class_index": 3,
+      "crystal_system": "tetragonal",
+      "rruff_id": "R040017",
+      "source_split_rank": 3,
+      "spectrum_path": "spectra_10_80_step_002/R040017_Cassiterite.csv",
+      "spectrum_sha256": "99F283437DE655306636978A3A4AEE7AC10E4851BA8D9AF2B729B10E5E970CD2"
+    },
+    {
+      "class_index": 3,
+      "crystal_system": "tetragonal",
+      "rruff_id": "R060428",
+      "source_split_rank": 4,
+      "spectrum_path": "spectra_10_80_step_002/R060428_Xenotime-_Y.csv",
+      "spectrum_sha256": "5ACC213EA4B7C8A6C09F2E5D321E1F700F7266B4CE816DCA8E700F8BA5E8417F"
+    },
+    {
+      "class_index": 3,
+      "crystal_system": "tetragonal",
+      "rruff_id": "R040107",
+      "source_split_rank": 5,
+      "spectrum_path": "spectra_10_80_step_002/R040107_Leucite.csv",
+      "spectrum_sha256": "792AED6D1272A7956C3A9FDE6473A950EAD1C220DB04D8976EE8BB8F9851A184"
+    },
+    {
+      "class_index": 3,
+      "crystal_system": "tetragonal",
+      "rruff_id": "R060526",
+      "source_split_rank": 6,
+      "spectrum_path": "spectra_10_80_step_002/R060526_Marialite.csv",
+      "spectrum_sha256": "4178C72A8FE268164C29B53B7AC9CAB6D35C01457E1011F1B2410CAFE5D94E4F"
+    },
+    {
+      "class_index": 3,
+      "crystal_system": "tetragonal",
+      "rruff_id": "R050035",
+      "source_split_rank": 7,
+      "spectrum_path": "spectra_10_80_step_002/R050035_Vesuvianite.csv",
+      "spectrum_sha256": "54AA985253F08F2BB8954EBEDC707AD0E3D579E2A0748A9AE323006FD9FF5415"
+    },
+    {
+      "class_index": 3,
+      "crystal_system": "tetragonal",
+      "rruff_id": "R050417",
+      "source_split_rank": 8,
+      "spectrum_path": "spectra_10_80_step_002/R050417_Rutile.csv",
+      "spectrum_sha256": "79A519FB6E2A3196D0D78D6EC6CCBC029D0E48FD60F83E6984EA43284892D664"
+    },
+    {
+      "class_index": 3,
+      "crystal_system": "tetragonal",
+      "rruff_id": "R050489",
+      "source_split_rank": 9,
+      "spectrum_path": "spectra_10_80_step_002/R050489_Vesuvianite.csv",
+      "spectrum_sha256": "E569B385735BEC12E192225E0AC276B89FD86720AFDCE42CBBE96B5A204A60D2"
+    },
+    {
+      "class_index": 3,
+      "crystal_system": "tetragonal",
+      "rruff_id": "R040169",
+      "source_split_rank": 10,
+      "spectrum_path": "spectra_10_80_step_002/R040169_Meionite.csv",
+      "spectrum_sha256": "22A31FCBF180CC9F442EBC5F18C86582475611DEDABF52D3677F21E28098C1CC"
+    },
+    {
+      "class_index": 3,
+      "crystal_system": "tetragonal",
+      "rruff_id": "R050031",
+      "source_split_rank": 11,
+      "spectrum_path": "spectra_10_80_step_002/R050031_Rutile.csv",
+      "spectrum_sha256": "2F192E0858E53C12318F2803A665E30E07B26889AA755D412D51D0337CA077A1"
+    },
+    {
+      "class_index": 3,
+      "crystal_system": "tetragonal",
+      "rruff_id": "R050034",
+      "source_split_rank": 12,
+      "spectrum_path": "spectra_10_80_step_002/R050034_Zircon.csv",
+      "spectrum_sha256": "DCCBDD03611E0F7335B0BC8A4EAB53C6BD5DAF662EC54FCB32EB6B6ACA98176D"
+    },
+    {
+      "class_index": 3,
+      "crystal_system": "tetragonal",
+      "rruff_id": "R050433",
+      "source_split_rank": 13,
+      "spectrum_path": "spectra_10_80_step_002/R050433_Renierite.csv",
+      "spectrum_sha256": "B1239F9EB2A29796AB08E36D624A51E72212CF460FD7534D42CD7CA50D14A399"
+    },
+    {
+      "class_index": 3,
+      "crystal_system": "tetragonal",
+      "rruff_id": "R040128",
+      "source_split_rank": 14,
+      "spectrum_path": "spectra_10_80_step_002/R040128_Analcime.csv",
+      "spectrum_sha256": "BDA28D63681B4B9382B66A271E08F4B5AD037D52519D0EE9E89F745F0D751C79"
+    },
+    {
+      "class_index": 3,
+      "crystal_system": "tetragonal",
+      "rruff_id": "R060023",
+      "source_split_rank": 15,
+      "spectrum_path": "spectra_10_80_step_002/R060023_Analcime.csv",
+      "spectrum_sha256": "68B0AE31749EEF9CC00180B81FFDF34A5E966E8B838EFC8CC4E4D1B6F5691142"
+    },
+    {
+      "class_index": 3,
+      "crystal_system": "tetragonal",
+      "rruff_id": "R050270",
+      "source_split_rank": 16,
+      "spectrum_path": "spectra_10_80_step_002/R050270_Diaboleite.csv",
+      "spectrum_sha256": "7D27620A2B133020C5B3F775DD7259B38DBFD4F1402C15E2CC30CF588A831330"
+    },
+    {
+      "class_index": 3,
+      "crystal_system": "tetragonal",
+      "rruff_id": "R050428",
+      "source_split_rank": 17,
+      "spectrum_path": "spectra_10_80_step_002/R050428_Renierite.csv",
+      "spectrum_sha256": "15C4F7300060C49A6F5BD3F690DC045B387583C1C1B964CB9F7FD1F9C29D5E65"
+    },
+    {
+      "class_index": 3,
+      "crystal_system": "tetragonal",
+      "rruff_id": "R050178",
+      "source_split_rank": 18,
+      "spectrum_path": "spectra_10_80_step_002/R050178_Xenotime-_Y.csv",
+      "spectrum_sha256": "7CE7CFA614AFECC277B3937522C303DA80413E1F455E8EBAD704770F0B768FCF"
+    },
+    {
+      "class_index": 3,
+      "crystal_system": "tetragonal",
+      "rruff_id": "R040171",
+      "source_split_rank": 19,
+      "spectrum_path": "spectra_10_80_step_002/R040171_Metatorbernite.csv",
+      "spectrum_sha256": "09FF51C3990B5DA46079002416E2BB6C763F3421037EC6B1706C3F366ACF4F8F"
+    },
+    {
+      "class_index": 3,
+      "crystal_system": "tetragonal",
+      "rruff_id": "R061085",
+      "source_split_rank": 20,
+      "spectrum_path": "spectra_10_80_step_002/R061085_Akermanite.csv",
+      "spectrum_sha256": "550707E186DA6FDEF2DCC7B311BCA676263C0CD8716AB30B1904EFEE96C8F545"
+    },
+    {
+      "class_index": 3,
+      "crystal_system": "tetragonal",
+      "rruff_id": "R050149",
+      "source_split_rank": 21,
+      "spectrum_path": "spectra_10_80_step_002/R050149_Wulfenite.csv",
+      "spectrum_sha256": "061C240FA7D2059E34EE11ABCE2B6D57E524375A11416E70799C9335AE4F223C"
+    },
+    {
+      "class_index": 3,
+      "crystal_system": "tetragonal",
+      "rruff_id": "R060786",
+      "source_split_rank": 22,
+      "spectrum_path": "spectra_10_80_step_002/R060786_Meliphanite.csv",
+      "spectrum_sha256": "3FDB82866724692BDB4B17A44827F372BDEC5774AD4DAC335F4325D35B0E9BFE"
+    },
+    {
+      "class_index": 3,
+      "crystal_system": "tetragonal",
+      "rruff_id": "R050426",
+      "source_split_rank": 23,
+      "spectrum_path": "spectra_10_80_step_002/R050426_Minium.csv",
+      "spectrum_sha256": "3F2EA15B7C48B945690A3D134F3F286FACBB11A2D2EDCD340B8D27B6D813E5B9"
+    },
+    {
+      "class_index": 3,
+      "crystal_system": "tetragonal",
+      "rruff_id": "R060377",
+      "source_split_rank": 24,
+      "spectrum_path": "spectra_10_80_step_002/R060377_Manganvesuvianite.csv",
+      "spectrum_sha256": "4748E975EBB2FAF4511D22B8BD4455568A8C22CB5DAF45B02EF1F8226EBE347C"
+    },
+    {
+      "class_index": 3,
+      "crystal_system": "tetragonal",
+      "rruff_id": "R050203",
+      "source_split_rank": 25,
+      "spectrum_path": "spectra_10_80_step_002/R050203_Zircon.csv",
+      "spectrum_sha256": "E6C7307DBAD1EB26F57BC93F90F1C109BF8027B1714EB69749D5EBF1ED7518B6"
+    },
+    {
+      "class_index": 3,
+      "crystal_system": "tetragonal",
+      "rruff_id": "R050094",
+      "source_split_rank": 26,
+      "spectrum_path": "spectra_10_80_step_002/R050094_Analcime.csv",
+      "spectrum_sha256": "64D4D73FB049ABCDC5D311C9EF515620C9577531F8D2ED3E11D2D3621528048A"
+    },
+    {
+      "class_index": 3,
+      "crystal_system": "tetragonal",
+      "rruff_id": "R060648",
+      "source_split_rank": 27,
+      "spectrum_path": "spectra_10_80_step_002/R060648_Cristobalite.csv",
+      "spectrum_sha256": "D21C4B063A31ABB27B270A46B310F441A3A21E54C6C1E0BD755BFA06E368E9F4"
+    },
+    {
+      "class_index": 3,
+      "crystal_system": "tetragonal",
+      "rruff_id": "R060458",
+      "source_split_rank": 28,
+      "spectrum_path": "spectra_10_80_step_002/R060458_Marialite.csv",
+      "spectrum_sha256": "B2D25B6439F8052A0AAF77F92904E7D0C937954227579CDCF9E383C0C8B2B672"
+    },
+    {
+      "class_index": 3,
+      "crystal_system": "tetragonal",
+      "rruff_id": "R060513",
+      "source_split_rank": 29,
+      "spectrum_path": "spectra_10_80_step_002/R060513_Wiluite.csv",
+      "spectrum_sha256": "302B7154C5E2138E7C9D7CD1901833D25C0FE722D750B00EE609531CB00F3909"
+    },
+    {
+      "class_index": 3,
+      "crystal_system": "tetragonal",
+      "rruff_id": "R050222",
+      "source_split_rank": 30,
+      "spectrum_path": "spectra_10_80_step_002/R050222_Chalcopyrite.csv",
+      "spectrum_sha256": "189E468A16D461289DC745E70573D929BA2D91D6CD3B782A8A49BE93F3BD10BB"
+    },
+    {
+      "class_index": 3,
+      "crystal_system": "tetragonal",
+      "rruff_id": "R060563",
+      "source_split_rank": 31,
+      "spectrum_path": "spectra_10_80_step_002/R060563_Cassiterite.csv",
+      "spectrum_sha256": "19D1B1B97E13D0B849529D61FE0E2A8CE890DE1D0F0BD314642D8B2C50E01D9C"
+    },
+    {
+      "class_index": 3,
+      "crystal_system": "tetragonal",
+      "rruff_id": "R040026",
+      "source_split_rank": 32,
+      "spectrum_path": "spectra_10_80_step_002/R040026_Hardystonite.csv",
+      "spectrum_sha256": "285BFA7C996E7FCE2B6488C612A057AB41F27C23D1C3F9680355D709BE487800"
+    },
+    {
+      "class_index": 3,
+      "crystal_system": "tetragonal",
+      "rruff_id": "R050559",
+      "source_split_rank": 33,
+      "spectrum_path": "spectra_10_80_step_002/R050559_Chalcopyrite.csv",
+      "spectrum_sha256": "608549E1D5156BCA61A01FC04A81B610F9A0AB549FC88E4F18BC0E7B5668EC66"
+    },
+    {
+      "class_index": 4,
+      "crystal_system": "trigonal",
+      "rruff_id": "R060136",
+      "source_split_rank": 1,
+      "spectrum_path": "spectra_10_80_step_002/R060136_Tellurium.csv",
+      "spectrum_sha256": "58E586B6DFBB2AA24081C60F66370CB7340093E80B0E3D930C777ABE699E41B2"
+    },
+    {
+      "class_index": 4,
+      "crystal_system": "trigonal",
+      "rruff_id": "R060406",
+      "source_split_rank": 2,
+      "spectrum_path": "spectra_10_80_step_002/R060406_Natroalunite.csv",
+      "spectrum_sha256": "2748B595E98711B60AB02305C68E519A6953F42F14B6481E2FF5DA011189FF65"
+    },
+    {
+      "class_index": 4,
+      "crystal_system": "trigonal",
+      "rruff_id": "R040114",
+      "source_split_rank": 3,
+      "spectrum_path": "spectra_10_80_step_002/R040114_Magnesite.csv",
+      "spectrum_sha256": "2B3BE7DD5F32D0BF38B71FB26A2A74C790487DE0EEEA379A31C06610F155E79B"
+    },
+    {
+      "class_index": 4,
+      "crystal_system": "trigonal",
+      "rruff_id": "R050676",
+      "source_split_rank": 4,
+      "spectrum_path": "spectra_10_80_step_002/R050676_Magnesite.csv",
+      "spectrum_sha256": "CEE2F54985066B2AE6A791C2CDDE067B4E9DD9756547462D1ADAD96710E1E78C"
+    },
+    {
+      "class_index": 4,
+      "crystal_system": "trigonal",
+      "rruff_id": "R060560",
+      "source_split_rank": 5,
+      "spectrum_path": "spectra_10_80_step_002/R060560_Elbaite.csv",
+      "spectrum_sha256": "6ECF2920AF4A082C5B487D280FC1C8A7D502D63EC0137E74F5234FC6705B03A6"
+    },
+    {
+      "class_index": 4,
+      "crystal_system": "trigonal",
+      "rruff_id": "R050487",
+      "source_split_rank": 6,
+      "spectrum_path": "spectra_10_80_step_002/R050487_Elbaite.csv",
+      "spectrum_sha256": "F1056A0974C08889CAAF21E0F426DA25B241740897721B0388DB996225549522"
+    },
+    {
+      "class_index": 4,
+      "crystal_system": "trigonal",
+      "rruff_id": "R050318",
+      "source_split_rank": 7,
+      "spectrum_path": "spectra_10_80_step_002/R050318_Pyrargyrite.csv",
+      "spectrum_sha256": "BE4E9C343FA27DE819684877978C28CA7F9853594E9CAC20E03C93D0AC7C0A08"
+    },
+    {
+      "class_index": 4,
+      "crystal_system": "trigonal",
+      "rruff_id": "R040030",
+      "source_split_rank": 8,
+      "spectrum_path": "spectra_10_80_step_002/R040030_Dolomite.csv",
+      "spectrum_sha256": "6F5CEA2C908C0CFB8FEEF0AF391D20E1631F322A9C2E263747C92CDEEB98DD65"
+    },
+    {
+      "class_index": 4,
+      "crystal_system": "trigonal",
+      "rruff_id": "R060366",
+      "source_split_rank": 9,
+      "spectrum_path": "spectra_10_80_step_002/R060366_Gaspeite.csv",
+      "spectrum_sha256": "96243A6543B8F0B2B2109A409AA488EB84B94C47E917379EE3F0EA38944550F4"
+    },
+    {
+      "class_index": 4,
+      "crystal_system": "trigonal",
+      "rruff_id": "R050127",
+      "source_split_rank": 10,
+      "spectrum_path": "spectra_10_80_step_002/R050127_Calcite.csv",
+      "spectrum_sha256": "938D5A78355EB836E56AD642E1144A69A3DF293F385DC25B069082EC9C2F5DE5"
+    },
+    {
+      "class_index": 4,
+      "crystal_system": "trigonal",
+      "rruff_id": "R050443",
+      "source_split_rank": 11,
+      "spectrum_path": "spectra_10_80_step_002/R050443_Magnesite.csv",
+      "spectrum_sha256": "9DAA7D10D91D6EABE18717E6754942DD51E350CA4FD78FE3F130A07F9789CA83"
+    },
+    {
+      "class_index": 4,
+      "crystal_system": "trigonal",
+      "rruff_id": "R070376",
+      "source_split_rank": 12,
+      "spectrum_path": "spectra_10_80_step_002/R070376_Tellurium.csv",
+      "spectrum_sha256": "802FE9EB296CF07C144F656AD6919BBD25AB8D7B7EB1BD88E3D3CE96AE15949D"
+    },
+    {
+      "class_index": 4,
+      "crystal_system": "trigonal",
+      "rruff_id": "R050059",
+      "source_split_rank": 13,
+      "spectrum_path": "spectra_10_80_step_002/R050059_Dravite.csv",
+      "spectrum_sha256": "84103103BB46FB6FBD12EBFBAFBB71A32F544505426C82668E97FE05FC7E11D7"
+    },
+    {
+      "class_index": 4,
+      "crystal_system": "trigonal",
+      "rruff_id": "R040051",
+      "source_split_rank": 14,
+      "spectrum_path": "spectra_10_80_step_002/R040051_Smithsonite.csv",
+      "spectrum_sha256": "A72A7FC5648BDBA3FA15DB0C80475955E0AFEF8C478EF05C3CAD7709B2FFCD2D"
+    },
+    {
+      "class_index": 4,
+      "crystal_system": "trigonal",
+      "rruff_id": "R060583",
+      "source_split_rank": 15,
+      "spectrum_path": "spectra_10_80_step_002/R060583_Pezzottaite.csv",
+      "spectrum_sha256": "1901A98C2D8CEA76EDD37362EF2A08444C8A488ABA41E9695ABEB6EF033C1228"
+    },
+    {
+      "class_index": 4,
+      "crystal_system": "trigonal",
+      "rruff_id": "R050458",
+      "source_split_rank": 16,
+      "spectrum_path": "spectra_10_80_step_002/R050458_Plumbogummite.csv",
+      "spectrum_sha256": "AF250F094E56B75D4561F6B6077BAC72ED429E81F2FE67D4A134B25A245F674E"
+    },
+    {
+      "class_index": 4,
+      "crystal_system": "trigonal",
+      "rruff_id": "R040028",
+      "source_split_rank": 17,
+      "spectrum_path": "spectra_10_80_step_002/R040028_Dioptase.csv",
+      "spectrum_sha256": "E3DE65CBE394EE1CBF3DD5DEF4C8D33E902C097D5B8146B02DD637A7681B7CC9"
+    },
+    {
+      "class_index": 4,
+      "crystal_system": "trigonal",
+      "rruff_id": "R040096",
+      "source_split_rank": 18,
+      "spectrum_path": "spectra_10_80_step_002/R040096_Corundum.csv",
+      "spectrum_sha256": "FAECAE0BCCD438DE6C15749CC982048811DA1E5A0A156561FE9D770E26782B55"
+    },
+    {
+      "class_index": 4,
+      "crystal_system": "trigonal",
+      "rruff_id": "R050370",
+      "source_split_rank": 19,
+      "spectrum_path": "spectra_10_80_step_002/R050370_Dolomite.csv",
+      "spectrum_sha256": "05ED7FC3FE49F5B403C786B1863C1E890C6EF6F37546B6AE60FFBCCEFD58664C"
+    },
+    {
+      "class_index": 4,
+      "crystal_system": "trigonal",
+      "rruff_id": "R060520",
+      "source_split_rank": 20,
+      "spectrum_path": "spectra_10_80_step_002/R060520_Woodhouseite.csv",
+      "spectrum_sha256": "16D1DB38015282DD8F08A9541708F53EACCBBD98F1C7BAB93666CA42FA119A78"
+    },
+    {
+      "class_index": 4,
+      "crystal_system": "trigonal",
+      "rruff_id": "R060422",
+      "source_split_rank": 21,
+      "spectrum_path": "spectra_10_80_step_002/R060422_Afghanite.csv",
+      "spectrum_sha256": "72B244E8249D069CB9D45393F81135EE5B0747AAFEB88D37CA49E0C99C0E1422"
+    },
+    {
+      "class_index": 4,
+      "crystal_system": "trigonal",
+      "rruff_id": "R040126",
+      "source_split_rank": 22,
+      "spectrum_path": "spectra_10_80_step_002/R040126_Huntite.csv",
+      "spectrum_sha256": "C9A9491418C10D23318CB57C0BC5ECA1DB35207B1A10D2E8B414BD87C2311CC6"
+    },
+    {
+      "class_index": 4,
+      "crystal_system": "trigonal",
+      "rruff_id": "R050009",
+      "source_split_rank": 23,
+      "spectrum_path": "spectra_10_80_step_002/R050009_Calcite.csv",
+      "spectrum_sha256": "7EEEAEBB05149745D1ADE18F996CBBE3547E6CC0867502F95351FBE7F27210A1"
+    },
+    {
+      "class_index": 4,
+      "crystal_system": "trigonal",
+      "rruff_id": "R050629",
+      "source_split_rank": 24,
+      "spectrum_path": "spectra_10_80_step_002/R050629_Simpsonite.csv",
+      "spectrum_sha256": "31FBA91FB9077E421F510C41152BA1BAA122D2603BE0F81162EC0E24859B6693"
+    },
+    {
+      "class_index": 4,
+      "crystal_system": "trigonal",
+      "rruff_id": "R060400",
+      "source_split_rank": 25,
+      "spectrum_path": "spectra_10_80_step_002/R060400_Beaverite-_Cu.csv",
+      "spectrum_sha256": "324542E711631322EABD73DDD8A8C0BC354137456FA539A210F33209D83C37BA"
+    },
+    {
+      "class_index": 4,
+      "crystal_system": "trigonal",
+      "rruff_id": "R050181",
+      "source_split_rank": 26,
+      "spectrum_path": "spectra_10_80_step_002/R050181_Ankerite.csv",
+      "spectrum_sha256": "0F2E23B93D98E42AF0BA20EC40B5F55BF64F31E9EF0164B30C064F67801E89CD"
+    },
+    {
+      "class_index": 4,
+      "crystal_system": "trigonal",
+      "rruff_id": "R050677",
+      "source_split_rank": 27,
+      "spectrum_path": "spectra_10_80_step_002/R050677_Otavite.csv",
+      "spectrum_sha256": "48D1E63D5FA463DA94B1646ED975600261B83740D6E55CED41072CD4CCBBC2BC"
+    },
+    {
+      "class_index": 4,
+      "crystal_system": "trigonal",
+      "rruff_id": "R040088",
+      "source_split_rank": 28,
+      "spectrum_path": "spectra_10_80_step_002/R040088_Dravite.csv",
+      "spectrum_sha256": "36DD7A681188FDAA572BFA591772414E34EC76A15B8DC437DE649C2D16303FB6"
+    },
+    {
+      "class_index": 4,
+      "crystal_system": "trigonal",
+      "rruff_id": "R040035",
+      "source_split_rank": 29,
+      "spectrum_path": "spectra_10_80_step_002/R040035_Smithsonite.csv",
+      "spectrum_sha256": "C25FA98199B61DA24DF104226EBD7A64922BA57848FF16BDBA054FE880BBB2D3"
+    },
+    {
+      "class_index": 4,
+      "crystal_system": "trigonal",
+      "rruff_id": "R050072",
+      "source_split_rank": 30,
+      "spectrum_path": "spectra_10_80_step_002/R050072_Cinnabar.csv",
+      "spectrum_sha256": "733BD3E5A501B02B4584AD3197114B303597E700334484FB8CEC5B90F094E589"
+    },
+    {
+      "class_index": 4,
+      "crystal_system": "trigonal",
+      "rruff_id": "R040077",
+      "source_split_rank": 31,
+      "spectrum_path": "spectra_10_80_step_002/R040077_Brucite.csv",
+      "spectrum_sha256": "B33C769C2A3140C6285EDF2AC97FFB5C98D45F4C3CF4F13B8AC1D2F112B6C2F3"
+    },
+    {
+      "class_index": 4,
+      "crystal_system": "trigonal",
+      "rruff_id": "R050652",
+      "source_split_rank": 32,
+      "spectrum_path": "spectra_10_80_step_002/R050652_Willemite.csv",
+      "spectrum_sha256": "0E28F6260D15DDB1F780CCE8C386B04C4842BBC52607DE2A70DE7E7D01BC5086"
+    },
+    {
+      "class_index": 4,
+      "crystal_system": "trigonal",
+      "rruff_id": "R050495",
+      "source_split_rank": 33,
+      "spectrum_path": "spectra_10_80_step_002/R050495_Foitite.csv",
+      "spectrum_sha256": "A16FDAD63C9D340B92C39597968D73568C9BE04C4EA255F87B1F2FC23784991D"
+    },
+    {
+      "class_index": 5,
+      "crystal_system": "hexagonal",
+      "rruff_id": "R060957",
+      "source_split_rank": 1,
+      "spectrum_path": "spectra_10_80_step_002/R060957_Painite.csv",
+      "spectrum_sha256": "7F5DD6A91A3406789617075AEA148331E0F0BA0C5CCC80A5F72AC2A86529CFFC"
+    },
+    {
+      "class_index": 5,
+      "crystal_system": "hexagonal",
+      "rruff_id": "R050376",
+      "source_split_rank": 2,
+      "spectrum_path": "spectra_10_80_step_002/R050376_Vanadinite.csv",
+      "spectrum_sha256": "BD16730520FA99416A3AC9D39AAEC68D382E709DB10C3312EF0F7307D5306B49"
+    },
+    {
+      "class_index": 5,
+      "crystal_system": "hexagonal",
+      "rruff_id": "R050371",
+      "source_split_rank": 3,
+      "spectrum_path": "spectra_10_80_step_002/R050371_Gmelinite-Na.csv",
+      "spectrum_sha256": "46C734B081435B253A4B66F4C21A54057C05C9B92CE176E7ECA6CD922E5B0EB1"
+    },
+    {
+      "class_index": 5,
+      "crystal_system": "hexagonal",
+      "rruff_id": "R050015",
+      "source_split_rank": 4,
+      "spectrum_path": "spectra_10_80_step_002/R050015_Pyromorphite.csv",
+      "spectrum_sha256": "ED98CFA04E3AB1CBE38F84CAF5CF36844EB0C3B43F32A431C20343FEBDDA14A4"
+    },
+    {
+      "class_index": 5,
+      "crystal_system": "hexagonal",
+      "rruff_id": "R050419",
+      "source_split_rank": 5,
+      "spectrum_path": "spectra_10_80_step_002/R050419_Zincite.csv",
+      "spectrum_sha256": "E7249F82BDF32610B66D42DF87BDC6E7F238B908D047A966F7399A92D4836838"
+    },
+    {
+      "class_index": 5,
+      "crystal_system": "hexagonal",
+      "rruff_id": "R060121",
+      "source_split_rank": 6,
+      "spectrum_path": "spectra_10_80_step_002/R060121_Nickeline.csv",
+      "spectrum_sha256": "0CCD749303F69FB7BDAF4C9589E51A18C5ABD3581A647CD201689E20C876B936"
+    },
+    {
+      "class_index": 5,
+      "crystal_system": "hexagonal",
+      "rruff_id": "R040098",
+      "source_split_rank": 7,
+      "spectrum_path": "spectra_10_80_step_002/R040098_Fluorapatite.csv",
+      "spectrum_sha256": "57CD437747640F1F478D3AEB89C7D830CA008ECD4B8841ACC5B95D9797F942C4"
+    },
+    {
+      "class_index": 5,
+      "crystal_system": "hexagonal",
+      "rruff_id": "R061069",
+      "source_split_rank": 8,
+      "spectrum_path": "spectra_10_80_step_002/R061069_Hibonite.csv",
+      "spectrum_sha256": "191A3613C47690B0D6C7B8922E00E3E63FF56E73D7BEFCBBD206D72FBA4DD2ED"
+    },
+    {
+      "class_index": 5,
+      "crystal_system": "hexagonal",
+      "rruff_id": "R060129",
+      "source_split_rank": 9,
+      "spectrum_path": "spectra_10_80_step_002/R060129_Covellite.csv",
+      "spectrum_sha256": "BD564BFA4B17E76A0D3F0F4CA02C4B10CA006855968E2EA1438AF5FF8F82A482"
+    },
+    {
+      "class_index": 5,
+      "crystal_system": "hexagonal",
+      "rruff_id": "R060027",
+      "source_split_rank": 10,
+      "spectrum_path": "spectra_10_80_step_002/R060027_Zincite.csv",
+      "spectrum_sha256": "4DCC276A6D0903B3C2B7AA417C339995E6A49CDAE4D13D3D70DAB391AE057215"
+    },
+    {
+      "class_index": 5,
+      "crystal_system": "hexagonal",
+      "rruff_id": "R040025",
+      "source_split_rank": 11,
+      "spectrum_path": "spectra_10_80_step_002/R040025_Nepheline.csv",
+      "spectrum_sha256": "C68AF376CBC9D77766720D0525079790637AA773D05371422C38AFBD98289DFA"
+    },
+    {
+      "class_index": 5,
+      "crystal_system": "hexagonal",
+      "rruff_id": "R050007",
+      "source_split_rank": 12,
+      "spectrum_path": "spectra_10_80_step_002/R050007_Mimetite.csv",
+      "spectrum_sha256": "A2AF314F7A05229BD53552914DBF1F458FEFD6B5C726B6503F3933EA30E3A5EC"
+    },
+    {
+      "class_index": 5,
+      "crystal_system": "hexagonal",
+      "rruff_id": "R060180",
+      "source_split_rank": 13,
+      "spectrum_path": "spectra_10_80_step_002/R060180_Hydroxylapatite.csv",
+      "spectrum_sha256": "C3C8A22864861594B5F519B8387137269120AA061FFD0D27C0BA902AEE493591"
+    },
+    {
+      "class_index": 5,
+      "crystal_system": "hexagonal",
+      "rruff_id": "R050122",
+      "source_split_rank": 14,
+      "spectrum_path": "spectra_10_80_step_002/R050122_Fluorapatite.csv",
+      "spectrum_sha256": "869318136FFEEB1B23864A9F513E9C729DEA39F5565B3C86BC44628E8B9DF1A5"
+    },
+    {
+      "class_index": 5,
+      "crystal_system": "hexagonal",
+      "rruff_id": "R050320",
+      "source_split_rank": 15,
+      "spectrum_path": "spectra_10_80_step_002/R050320_Benitoite.csv",
+      "spectrum_sha256": "1AD761F779C86AFCC8ACFEA910054D0175D9149870ACDB1A3C16AC565D301B5C"
+    },
+    {
+      "class_index": 5,
+      "crystal_system": "hexagonal",
+      "rruff_id": "R050171",
+      "source_split_rank": 16,
+      "spectrum_path": "spectra_10_80_step_002/R050171_Vanadinite.csv",
+      "spectrum_sha256": "8F2DA6FDF4E061AB3791BFF0E6A46F96E0FC0848FC32FDB5AF4B4EDF19E7FC40"
+    },
+    {
+      "class_index": 5,
+      "crystal_system": "hexagonal",
+      "rruff_id": "R050533",
+      "source_split_rank": 17,
+      "spectrum_path": "spectra_10_80_step_002/R050533_Vanadinite.csv",
+      "spectrum_sha256": "12F8CD8D541AFC0434C60946E922C19485D79844E82A24C6CA6D75F53FA36B7D"
+    },
+    {
+      "class_index": 5,
+      "crystal_system": "hexagonal",
+      "rruff_id": "R050305",
+      "source_split_rank": 18,
+      "spectrum_path": "spectra_10_80_step_002/R050305_Beryl.csv",
+      "spectrum_sha256": "6D00E5D8B49355B47E35186ED13F6C06505F07CED0EE28EAC36E25B696165E8D"
+    },
+    {
+      "class_index": 5,
+      "crystal_system": "hexagonal",
+      "rruff_id": "R060306",
+      "source_split_rank": 19,
+      "spectrum_path": "spectra_10_80_step_002/R060306_Covellite.csv",
+      "spectrum_sha256": "5188E071BFAAB6BF2174A30AABDE1E4A21A2AF9890DA0CA1A876568605233103"
+    },
+    {
+      "class_index": 5,
+      "crystal_system": "hexagonal",
+      "rruff_id": "R060550",
+      "source_split_rank": 20,
+      "spectrum_path": "spectra_10_80_step_002/R060550_Bastnasite-_Ce.csv",
+      "spectrum_sha256": "6E2ED90AA2B77263868F5439BE91995FD33EEC3CD8412068A4F26EB9F6F0EF99"
+    },
+    {
+      "class_index": 5,
+      "crystal_system": "hexagonal",
+      "rruff_id": "R050065",
+      "source_split_rank": 21,
+      "spectrum_path": "spectra_10_80_step_002/R050065_Beryl.csv",
+      "spectrum_sha256": "321ACBDB1E5558F606EBFEECE8106ED16BFEFBA2D0EF45F06825552872E5755E"
+    },
+    {
+      "class_index": 5,
+      "crystal_system": "hexagonal",
+      "rruff_id": "R050648",
+      "source_split_rank": 22,
+      "spectrum_path": "spectra_10_80_step_002/R050648_Sogdianite.csv",
+      "spectrum_sha256": "F55F1142087926AC2EB8DF490B63EC1D9D9124C2E7B8A18D77149731B8925719"
+    },
+    {
+      "class_index": 5,
+      "crystal_system": "hexagonal",
+      "rruff_id": "R050121",
+      "source_split_rank": 23,
+      "spectrum_path": "spectra_10_80_step_002/R050121_Beryl.csv",
+      "spectrum_sha256": "91FF697E13C1B3EA89F2A8E7647AC9F5A435FC5204663C4E04A86C194355EB39"
+    },
+    {
+      "class_index": 5,
+      "crystal_system": "hexagonal",
+      "rruff_id": "R060533",
+      "source_split_rank": 24,
+      "spectrum_path": "spectra_10_80_step_002/R060533_Jeremejevite.csv",
+      "spectrum_sha256": "D9A1FA7912A6173E0279A596E3B73B2358EA1BD4AC9F107DFDFA7B258E5327F6"
+    },
+    {
+      "class_index": 5,
+      "crystal_system": "hexagonal",
+      "rruff_id": "R060737",
+      "source_split_rank": 25,
+      "spectrum_path": "spectra_10_80_step_002/R060737_Bastnasite-_Ce.csv",
+      "spectrum_sha256": "CBFBC87433E8E7E57AD61E6F89B25512BB5A57D6E07A85C566A9000F8C6C0836"
+    },
+    {
+      "class_index": 5,
+      "crystal_system": "hexagonal",
+      "rruff_id": "R050274",
+      "source_split_rank": 26,
+      "spectrum_path": "spectra_10_80_step_002/R050274_Fluorapatite.csv",
+      "spectrum_sha256": "F24F5DD2B0C4F94D565C36C6824E5BD6F64328061A949115524F67AB12122914"
+    },
+    {
+      "class_index": 5,
+      "crystal_system": "hexagonal",
+      "rruff_id": "R050209",
+      "source_split_rank": 27,
+      "spectrum_path": "spectra_10_80_step_002/R050209_Molybdenite.csv",
+      "spectrum_sha256": "FFC0F2CD5C0613B779A15B3C2002B5300737983E00F7595370E567972514F909"
+    },
+    {
+      "class_index": 5,
+      "crystal_system": "hexagonal",
+      "rruff_id": "R050027",
+      "source_split_rank": 28,
+      "spectrum_path": "spectra_10_80_step_002/R050027_Pyromorphite.csv",
+      "spectrum_sha256": "2DACAD5C36F81CAF62C75B14E26B73E399B32C79CE19D67DD81D9285131A0E1A"
+    },
+    {
+      "class_index": 5,
+      "crystal_system": "hexagonal",
+      "rruff_id": "R060074",
+      "source_split_rank": 29,
+      "spectrum_path": "spectra_10_80_step_002/R060074_Magnetoplumbite.csv",
+      "spectrum_sha256": "C40BF997085F1B8D4264551C4B1BBDB11A834FCE8E561F54506408AFD840D7B3"
+    },
+    {
+      "class_index": 5,
+      "crystal_system": "hexagonal",
+      "rruff_id": "R060070",
+      "source_split_rank": 30,
+      "spectrum_path": "spectra_10_80_step_002/R060070_Fluorapatite.csv",
+      "spectrum_sha256": "410A782B8984D4271D7DC05235634C0B71604774455D8BAB40C377C666B986FA"
+    },
+    {
+      "class_index": 5,
+      "crystal_system": "hexagonal",
+      "rruff_id": "R060143",
+      "source_split_rank": 31,
+      "spectrum_path": "spectra_10_80_step_002/R060143_Covellite.csv",
+      "spectrum_sha256": "5D93B7DC24C2166C565C517EE1DB0D358314C29DA0D39A5382C5EAE465B24AF0"
+    },
+    {
+      "class_index": 5,
+      "crystal_system": "hexagonal",
+      "rruff_id": "R050347",
+      "source_split_rank": 32,
+      "spectrum_path": "spectra_10_80_step_002/R050347_Beryl.csv",
+      "spectrum_sha256": "13F09EFC3250F394A3881A6DD695D85A9D9F741B72B2C5CC2169F65A25471D0B"
+    },
+    {
+      "class_index": 5,
+      "crystal_system": "hexagonal",
+      "rruff_id": "R060906",
+      "source_split_rank": 33,
+      "spectrum_path": "spectra_10_80_step_002/R060906_Nickeline.csv",
+      "spectrum_sha256": "617E1CE1938B6FE1C73FDE87438520490C4E099D4E898CB89C325CAE5560C330"
+    },
+    {
+      "class_index": 6,
+      "crystal_system": "cubic",
+      "rruff_id": "R040159",
+      "source_split_rank": 1,
+      "spectrum_path": "spectra_10_80_step_002/R040159_Pyrope.csv",
+      "spectrum_sha256": "ECF71BC09D4EAD9EFB3E36111B09507DE1F7462828137BF264CD1D29BBD51FFD"
+    },
+    {
+      "class_index": 6,
+      "crystal_system": "cubic",
+      "rruff_id": "R070394",
+      "source_split_rank": 2,
+      "spectrum_path": "spectra_10_80_step_002/R070394_Galkhaite.csv",
+      "spectrum_sha256": "73C0ACE57F6CF99B801BED0123489BE6C8D3D65D2ED92585B7A5F591B0E72BCA"
+    },
+    {
+      "class_index": 6,
+      "crystal_system": "cubic",
+      "rruff_id": "R060849",
+      "source_split_rank": 3,
+      "spectrum_path": "spectra_10_80_step_002/R060849_Thorianite.csv",
+      "spectrum_sha256": "DD80058EB5120F30A436031ADD4A608BC9F12E0E76FC05D10032F74214DF2AC1"
+    },
+    {
+      "class_index": 6,
+      "crystal_system": "cubic",
+      "rruff_id": "R050276",
+      "source_split_rank": 4,
+      "spectrum_path": "spectra_10_80_step_002/R050276_Tschermigite.csv",
+      "spectrum_sha256": "BABCED7841877F721875B930927B0E5A8A850262C53E3A9065C596F1AE933B25"
+    },
+    {
+      "class_index": 6,
+      "crystal_system": "cubic",
+      "rruff_id": "R050383",
+      "source_split_rank": 5,
+      "spectrum_path": "spectra_10_80_step_002/R050383_Arsenolite.csv",
+      "spectrum_sha256": "1DA10A555A7588B1A05BDCD7F1ABD20C27329E8C9415DF6FD3CEB1A8108B8101"
+    },
+    {
+      "class_index": 6,
+      "crystal_system": "cubic",
+      "rruff_id": "R050005",
+      "source_split_rank": 6,
+      "spectrum_path": "spectra_10_80_step_002/R050005_Sphalerite.csv",
+      "spectrum_sha256": "A871ED734BD659DD9C61BFC2CE54DDA54E29A56FFBA116DC43F83F8E508F76DB"
+    },
+    {
+      "class_index": 6,
+      "crystal_system": "cubic",
+      "rruff_id": "R050625",
+      "source_split_rank": 7,
+      "spectrum_path": "spectra_10_80_step_002/R050625_Fluorcalciomicrolite.csv",
+      "spectrum_sha256": "EC0081C19DD6CCA5C52DA9CA6387B8056A251BEF4CB33D2DEF248DD39921CF47"
+    },
+    {
+      "class_index": 6,
+      "crystal_system": "cubic",
+      "rruff_id": "R070254",
+      "source_split_rank": 8,
+      "spectrum_path": "spectra_10_80_step_002/R070254_Petzite.csv",
+      "spectrum_sha256": "6829D046C91AF0F8F4A26D0E1822CDEBCCEF3E40C7B20D23482E778E87010B1B"
+    },
+    {
+      "class_index": 6,
+      "crystal_system": "cubic",
+      "rruff_id": "R130079",
+      "source_split_rank": 9,
+      "spectrum_path": "spectra_10_80_step_002/R130079_Ammoniomagnesiovoltaite.csv",
+      "spectrum_sha256": "F3C8CE4B951040B8313313C91BBE7B72F5E13199C1BFFA7294EA4BAE3B51CBCA"
+    },
+    {
+      "class_index": 6,
+      "crystal_system": "cubic",
+      "rruff_id": "R050550",
+      "source_split_rank": 10,
+      "spectrum_path": "spectra_10_80_step_002/R050550_Tiemannite.csv",
+      "spectrum_sha256": "9915F09998B33672C9E26CC5703BF9DB21FE0D70259B49490BF3CC0D697692A3"
+    },
+    {
+      "class_index": 6,
+      "crystal_system": "cubic",
+      "rruff_id": "R070747",
+      "source_split_rank": 11,
+      "spectrum_path": "spectra_10_80_step_002/R070747_Uraninite.csv",
+      "spectrum_sha256": "10B856E0922C12E0A91307ECF65FA932A961D75711C1B7098E9EE7E0A4BA94D6"
+    },
+    {
+      "class_index": 6,
+      "crystal_system": "cubic",
+      "rruff_id": "R050609",
+      "source_split_rank": 12,
+      "spectrum_path": "spectra_10_80_step_002/R050609_Polydymite.csv",
+      "spectrum_sha256": "D31A6D10188882C506C9DB46B5248C283429C6507D15D1FD3D8484420AE7BDD4"
+    },
+    {
+      "class_index": 6,
+      "crystal_system": "cubic",
+      "rruff_id": "R060354",
+      "source_split_rank": 13,
+      "spectrum_path": "spectra_10_80_step_002/R060354_Sodalite.csv",
+      "spectrum_sha256": "FA6D0E8714CDD746F741EBC87067095DAD460FB31B26A34766E7AF8D97BB7219"
+    },
+    {
+      "class_index": 6,
+      "crystal_system": "cubic",
+      "rruff_id": "R060916",
+      "source_split_rank": 14,
+      "spectrum_path": "spectra_10_80_step_002/R060916_Villiaumite.csv",
+      "spectrum_sha256": "25A7698A5B4259A720207635090DD82AA16A310B24101F7763FBBD5013DE029F"
+    },
+    {
+      "class_index": 6,
+      "crystal_system": "cubic",
+      "rruff_id": "R061041",
+      "source_split_rank": 15,
+      "spectrum_path": "spectra_10_80_step_002/R061041_Uvarovite.csv",
+      "spectrum_sha256": "351457350EA33C07B01EE67A2E2A9A86A22D4E9B377E01F350D583C1F6CAEE7E"
+    },
+    {
+      "class_index": 6,
+      "crystal_system": "cubic",
+      "rruff_id": "R060416",
+      "source_split_rank": 16,
+      "spectrum_path": "spectra_10_80_step_002/R060416_Sodalite.csv",
+      "spectrum_sha256": "D763EC0FF8C406F585FE63A40627D16B8AFAD13B80EEB52DA27A896EF5057BAB"
+    },
+    {
+      "class_index": 6,
+      "crystal_system": "cubic",
+      "rruff_id": "R040099",
+      "source_split_rank": 17,
+      "spectrum_path": "spectra_10_80_step_002/R040099_Fluorite.csv",
+      "spectrum_sha256": "7D9A845E1730C80889E460501E9EEEDD3836067866BE16BFF1ACCD09F9DCC068"
+    },
+    {
+      "class_index": 6,
+      "crystal_system": "cubic",
+      "rruff_id": "R050184",
+      "source_split_rank": 18,
+      "spectrum_path": "spectra_10_80_step_002/R050184_Spinel.csv",
+      "spectrum_sha256": "6936D062473C9FF5E08D38BBA189DA0C18C2D30AF490791FA7C33F9D35F1A118"
+    },
+    {
+      "class_index": 6,
+      "crystal_system": "cubic",
+      "rruff_id": "R140763",
+      "source_split_rank": 19,
+      "spectrum_path": "spectra_10_80_step_002/R140763_Cuprite.csv",
+      "spectrum_sha256": "F0B21AF15379F95E3CC08E5794569487AA60C3630B5CE6194919283836EB2E24"
+    },
+    {
+      "class_index": 6,
+      "crystal_system": "cubic",
+      "rruff_id": "R050046",
+      "source_split_rank": 20,
+      "spectrum_path": "spectra_10_80_step_002/R050046_Fluorite.csv",
+      "spectrum_sha256": "B9D4892D5CA8C648FE94F12F1CB6E0D09CD654B28DC95111F41480156F9D99AC"
+    },
+    {
+      "class_index": 6,
+      "crystal_system": "cubic",
+      "rruff_id": "R050392",
+      "source_split_rank": 21,
+      "spectrum_path": "spectra_10_80_step_002/R050392_Spinel.csv",
+      "spectrum_sha256": "31DCE669EA5ABCCF1A48B18AA86C3A07804C370CD377425D30C5EAB369177ABE"
+    },
+    {
+      "class_index": 6,
+      "crystal_system": "cubic",
+      "rruff_id": "R060452",
+      "source_split_rank": 22,
+      "spectrum_path": "spectra_10_80_step_002/R060452_Grossular.csv",
+      "spectrum_sha256": "1909091F96C48BA8318EBDC3B84CD03CC481AC8878357BE7B866270C6A3417CF"
+    },
+    {
+      "class_index": 6,
+      "crystal_system": "cubic",
+      "rruff_id": "R060521",
+      "source_split_rank": 23,
+      "spectrum_path": "spectra_10_80_step_002/R060521_Salammoniac.csv",
+      "spectrum_sha256": "06DF7E4B3CC905E1BAE668AB9E52781C1F24FB57A4B2D87CAF1634E28DA5541C"
+    },
+    {
+      "class_index": 6,
+      "crystal_system": "cubic",
+      "rruff_id": "R050166",
+      "source_split_rank": 24,
+      "spectrum_path": "spectra_10_80_step_002/R050166_Sylvite.csv",
+      "spectrum_sha256": "2822EFBF3C4F27644639ECAB40D858D9E74247538EB3882DCD908FF75A7CA8D0"
+    },
+    {
+      "class_index": 6,
+      "crystal_system": "cubic",
+      "rruff_id": "R050247",
+      "source_split_rank": 25,
+      "spectrum_path": "spectra_10_80_step_002/R050247_Ullmannite.csv",
+      "spectrum_sha256": "F8D061A7F5805728B28C484A22A211F3FFA9D555DBB7E2276BCFE569F5B31A0F"
+    },
+    {
+      "class_index": 6,
+      "crystal_system": "cubic",
+      "rruff_id": "R100216",
+      "source_split_rank": 26,
+      "spectrum_path": "spectra_10_80_step_002/R100216_Molybdenum.csv",
+      "spectrum_sha256": "0DF660D72666DBC49D7390BD1210C746AAC06313A32C6C9F147E1C51A19CF755"
+    },
+    {
+      "class_index": 6,
+      "crystal_system": "cubic",
+      "rruff_id": "R050145",
+      "source_split_rank": 27,
+      "spectrum_path": "spectra_10_80_step_002/R050145_Silicon.csv",
+      "spectrum_sha256": "FDE65FE761FDDFF9E932FAE65DE61D379BEFE5BCB73C942E3990A03F551BE7A5"
+    },
+    {
+      "class_index": 6,
+      "crystal_system": "cubic",
+      "rruff_id": "R070292",
+      "source_split_rank": 28,
+      "spectrum_path": "spectra_10_80_step_002/R070292_Halite.csv",
+      "spectrum_sha256": "8F758DB0BA66099229576DB510D8D50FA1D50F97EA6113055C7BF6AFD00AD62B"
+    },
+    {
+      "class_index": 6,
+      "crystal_system": "cubic",
+      "rruff_id": "R040027",
+      "source_split_rank": 29,
+      "spectrum_path": "spectra_10_80_step_002/R040027_Gahnite.csv",
+      "spectrum_sha256": "BE854ACC39CBAA2B87D9270CC31D2EEE58C1AB1D8BB47E8DD6E9361093C0AFEB"
+    },
+    {
+      "class_index": 6,
+      "crystal_system": "cubic",
+      "rruff_id": "R061003",
+      "source_split_rank": 30,
+      "spectrum_path": "spectra_10_80_step_002/R061003_Fluorcalciopyrochlore.csv",
+      "spectrum_sha256": "E1CD3A1FFD901E5FDA32309D4EAFC1082E4492280B9E5842699122204B5EAC01"
+    },
+    {
+      "class_index": 6,
+      "crystal_system": "cubic",
+      "rruff_id": "R050344",
+      "source_split_rank": 31,
+      "spectrum_path": "spectra_10_80_step_002/R050344_Pollucite.csv",
+      "spectrum_sha256": "2E6606DFA7DDED94AD0AF6C6887995DC317E91AA91A367AF48841E6A178C5372"
+    },
+    {
+      "class_index": 6,
+      "crystal_system": "cubic",
+      "rruff_id": "R060436",
+      "source_split_rank": 32,
+      "spectrum_path": "spectra_10_80_step_002/R060436_Sodalite.csv",
+      "spectrum_sha256": "24623C08DBA7BBB9E30296E419AA8E03CE298EBBD6B3E01B5324A60D8F4889DF"
+    },
+    {
+      "class_index": 6,
+      "crystal_system": "cubic",
+      "rruff_id": "R050606",
+      "source_split_rank": 33,
+      "spectrum_path": "spectra_10_80_step_002/R050606_Hauyne.csv",
+      "spectrum_sha256": "3E7D4E779DCEEF7F6B91E742647DECD7939FCF711781164F4C1FC9C39EE17415"
+    }
+  ],
+  "locked_test_count": 231,
+  "model_loaded": false,
+  "plan_content_sha256": "1800A57DD86BB311CC17B201EBA568E40719B34709ED62AA13E0F174DC053539",
+  "planner_module_path": "src/xrd_robustness/evaluation/rruff301_replay.py",
+  "planner_module_sha256": "79E0C766B40D59D9621DE635B07899D731DF700CA1EED6FF4F1B446CADC09FA5",
+  "schema_version": "rruff301-retrospective-replay-v1",
+  "selection_algorithm": "rruff70_compatible_python_random_v1",
+  "source_master_manifest_sha256": "EBF6B35ABAF78C716498D327CDD02EF3FFC3E53662AFC56A5CB009A10B96B142",
+  "source_split_sha256": "9FEDCB1ABDF3F84349DFC8479D233FBD953E6552D7478DAC3680737E460BBE35",
+  "spectra_loaded": false,
+  "status": "retrospective_replay_plan_generated_not_authorized",
+  "support_assignment_count": 280
+}

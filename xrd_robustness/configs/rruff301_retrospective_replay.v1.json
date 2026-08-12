@@ -1,0 +1,150 @@
+{
+  "schema_version": "rruff301-retrospective-replay-contract-v1",
+  "experiment_id": "rruff301_retrospective_replay_v1",
+  "status": "RETROSPECTIVE_REPLAY_NOT_AUTHORIZED",
+  "evidence_role": "reproducibility_replay_not_confirmatory",
+  "historical_execution_claim": false,
+  "description": "A fail-closed contract for auditing existing RRUFF-301 artifacts and planning a new retrospective replay. It does not authorize execution and does not reconstruct confirmatory provenance.",
+  "authorization": {
+    "execution_enabled": false,
+    "independent_authorization_required": true,
+    "authorization_path": null,
+    "authorization_must_bind": [
+      "contract_sha256",
+      "episode_plan_sha256",
+      "runner_sha256",
+      "git_commit",
+      "checkpoint_sha256_by_run",
+      "output_root"
+    ]
+  },
+  "historical_lineage": {
+    "original_preregistration": {
+      "path": "configs/rruff301_confirmatory_fewshot.preregistered.json",
+      "sha256": "BE7D320088ED8E5FA6C2EE8F37C2B19E49C122C91AC171A7DA61B78F6F8589D9",
+      "recorded_status": "PREREGISTERED_LOCKED_NOT_AUTHORIZED"
+    },
+    "unrecoverable_from_available_artifacts": [
+      "independent pre-execution authorization",
+      "original RRUFF-301 runner source and runner hash",
+      "original execution log and runtime manifest",
+      "original episode plan and support sample identifiers",
+      "original code commit and dirty-worktree state"
+    ],
+    "allowed_interpretation": "Existing outputs may be checked for internal consistency. Any newly generated plan or result is retrospective replay evidence only.",
+    "forbidden_interpretation": "Do not describe existing or replayed RRUFF-301 results as confirmatory, preregistration-authorized, or an exact reconstruction of the historical execution."
+  },
+  "dataset": {
+    "canonical_split": {
+      "path": "data/real_xrd/rruff371/splits/rruff301_adaptation_test_split.csv",
+      "sha256": "9FEDCB1ABDF3F84349DFC8479D233FBD953E6552D7478DAC3680737E460BBE35",
+      "required_columns": ["rruff_id", "crystal_system", "split", "rank"],
+      "total": 301,
+      "roles": {
+        "adaptation_pool": {"per_class": 10, "total": 70},
+        "locked_test": {"per_class": 33, "total": 231}
+      }
+    },
+    "split_manifest": {
+      "path": "data/real_xrd/rruff371/splits/rruff301_manifest.json",
+      "sha256": "AA82727DFF6B3016D53FF15934841EA5DF5F1AA93E7A991283D237B7CA66F8B6"
+    },
+    "master_manifest": {
+      "path": "data/real_xrd/rruff371/manifests/rruff371_master_manifest.csv",
+      "sha256": "EBF6B35ABAF78C716498D327CDD02EF3FFC3E53662AFC56A5CB009A10B96B142",
+      "required_dataset_role": "rruff371_extension"
+    },
+    "forbidden_inputs": [
+      {
+        "path": "data/real_xrd/rruff371/results/rruff301_split.csv",
+        "sha256": "15B7E2CA94AD78E796B4FB8DF9B1EDA90A661AAB8D142BFF5C4ECCA454D72E1D",
+        "reason": "Invalid v1 split: 60 adaptation and 241 test samples with the trigonal class absent from adaptation."
+      }
+    ]
+  },
+  "preprocessing": {
+    "contract_path": "data/real_xrd/rruff70/contracts/preprocessing_contract.json",
+    "contract_sha256": "90DCBDC89F641A876DA2E8A927499A3E7225934AE38E820D70AD26640113C9CC",
+    "two_theta_min": 10.0,
+    "two_theta_max": 80.0,
+    "step": 0.02,
+    "points": 3501,
+    "interpolation": "linear",
+    "normalization": "max",
+    "out_of_range_fill": 0.0
+  },
+  "checkpoints": {
+    "base_path": "outputs/v9_resnet_js_simulated_test_checkpoints/checkpoints",
+    "count": 10,
+    "items": [
+      {"train_seed": "20260711", "method": "dynamic_erm", "path": "outputs/v9_resnet_js_simulated_test_checkpoints/checkpoints/seed_20260711_dynamic_erm/best.ckpt", "sha256": "E8BDE2871520AEDE1502E99B1BA5B761358C63B0A98EBAC36DB384B276F3D40B", "epoch": 80, "global_step": 49280},
+      {"train_seed": "20260711", "method": "js_lambda_60", "path": "outputs/v9_resnet_js_simulated_test_checkpoints/checkpoints/seed_20260711_js_lambda_60/best.ckpt", "sha256": "3EE1BEB8831E46A8D7014352D5C1ADFAC49B7FE8959894811C1CB559B2CC6B49", "epoch": 40, "global_step": 24640},
+      {"train_seed": "20260712", "method": "dynamic_erm", "path": "outputs/v9_resnet_js_simulated_test_checkpoints/checkpoints/seed_20260712_dynamic_erm/best.ckpt", "sha256": "F8A025902A72E75DFA7AED00796912A3EF49C6B1BFEB320EB4C32FDCB71668C9", "epoch": 90, "global_step": 55440},
+      {"train_seed": "20260712", "method": "js_lambda_60", "path": "outputs/v9_resnet_js_simulated_test_checkpoints/checkpoints/seed_20260712_js_lambda_60/best.ckpt", "sha256": "AF06D30712879BDFE02D9C82E6C713BE6A66F1BD50937B2954EC66EE7A11171C", "epoch": 80, "global_step": 49280},
+      {"train_seed": "20260713", "method": "dynamic_erm", "path": "outputs/v9_resnet_js_simulated_test_checkpoints/checkpoints/seed_20260713_dynamic_erm/best.ckpt", "sha256": "87B7C264B5818F45E388293FA03E9BCFBE165182B2B75FCE0304A6911339EF98", "epoch": 100, "global_step": 61600},
+      {"train_seed": "20260713", "method": "js_lambda_60", "path": "outputs/v9_resnet_js_simulated_test_checkpoints/checkpoints/seed_20260713_js_lambda_60/best.ckpt", "sha256": "2FCF8698E07D47D15B78C6B61A0986DC3976F8960AAB26F633306F27E1E5638A", "epoch": 80, "global_step": 49280},
+      {"train_seed": "20260714", "method": "dynamic_erm", "path": "outputs/v9_resnet_js_simulated_test_checkpoints/checkpoints/seed_20260714_dynamic_erm/best.ckpt", "sha256": "149C20E32D35565D305B3CCCF3CA981118ECC5BCBBA29B04F99FD7C0CEC4C4FB", "epoch": 90, "global_step": 55440},
+      {"train_seed": "20260714", "method": "js_lambda_60", "path": "outputs/v9_resnet_js_simulated_test_checkpoints/checkpoints/seed_20260714_js_lambda_60/best.ckpt", "sha256": "C3AC158084FE6B2E1E2A28EB8B010C43532F7612E6C99F1B6C305F66A374BE18", "epoch": 30, "global_step": 18480},
+      {"train_seed": "20260715", "method": "dynamic_erm", "path": "outputs/v9_resnet_js_simulated_test_checkpoints/checkpoints/seed_20260715_dynamic_erm/best.ckpt", "sha256": "A52A34AEE62B71365E45E39742DA55E76648C32099EB8D1D7F0DEB854F0A33AC", "epoch": 80, "global_step": 49280},
+      {"train_seed": "20260715", "method": "js_lambda_60", "path": "outputs/v9_resnet_js_simulated_test_checkpoints/checkpoints/seed_20260715_js_lambda_60/best.ckpt", "sha256": "87F2516402635EA010AF00E987172560BB178F024937E2F57A57C9DB331DF0D6", "epoch": 60, "global_step": 36960}
+    ]
+  },
+  "episode_plan": {
+    "status": "TO_BE_GENERATED_FOR_NEW_RETROSPECTIVE_REPLAY",
+    "historical_plan_claim": false,
+    "selection_algorithm": "rruff70_compatible_python_random_v1",
+    "selection_algorithm_definition": "For every (K, episode_seed), create one local random.Random(episode_seed); visit crystal systems in class_order; sort that class's adaptation rows by split rank; shuffle each class pool sequentially with the same RNG; select the first K rows.",
+    "class_order": ["triclinic", "monoclinic", "orthorhombic", "tetragonal", "trigonal", "hexagonal", "cubic"],
+    "K_values": [1, 2, 5],
+    "episode_seeds": [42, 123, 456, 789, 1024],
+    "support_sets_nested_across_K": true,
+    "locked_test_fixed_across_all_runs": true
+  },
+  "protocol": {
+    "train_seeds": ["20260711", "20260712", "20260713", "20260714", "20260715"],
+    "methods": ["dynamic_erm", "js_lambda_60"],
+    "trainable_modules": ["embedding", "head"],
+    "trainable_parameter_count": 1837063,
+    "optimizer": {
+      "algorithm": "AdamW",
+      "learning_rate": 0.0001,
+      "betas": [0.9, 0.999],
+      "eps": 1e-8,
+      "weight_decay": 0.01,
+      "amsgrad": false,
+      "maximize": false,
+      "capturable": false,
+      "differentiable": false,
+      "schedule": "constant"
+    },
+    "training": {
+      "batching": "full_support_set",
+      "max_optimizer_steps": 200,
+      "early_stopping": {
+        "implementation": "post_update_support_ce_v1",
+        "criterion": "support_cross_entropy_only",
+        "min_delta": 0.0001,
+        "patience_optimizer_steps": 20,
+        "min_optimizer_steps": 20,
+        "restore_best": true,
+        "query_access_forbidden": true
+      }
+    },
+    "primary_metric": "macro_f1"
+  },
+  "existing_artifacts": {
+    "expected_interpretation": "internal_consistency_only_historical_provenance_incomplete",
+    "items": {
+      "fewshot_runs": {"path": "data/real_xrd/rruff371/results/rruff301_fewshot_runs.json", "sha256": "78839694E53B8944643EA1A24F82F011F8E86A2C5100D7FD9F8EAD94F152DBC3", "record_count": 150},
+      "predictions": {"path": "data/real_xrd/rruff371/results/rruff301_predictions.json", "sha256": "D0D68E35B1AB2B9D528DBD8978FD97B27B70F71C51719BFF4B0D635534A2D6C9", "record_count": 34650},
+      "fixed200": {"path": "data/real_xrd/rruff371/results/rruff301_fixed200.json", "sha256": "6B13BD8EB1E62DC1C9E88AE53B2906675BB778D46A26F5CC5FEAC6E2BA5815B2", "record_count": 100},
+      "zero_shot": {"path": "data/real_xrd/rruff371/results/rruff301_zero_shot.json", "sha256": "86DCDFA29C8E9FE4F468B52B4BBB0A5B683B0D7B47B4EC34F1280B1C884FAB2A", "record_count": 10}
+    }
+  },
+  "replay_output": {
+    "must_use_new_empty_root": true,
+    "may_overwrite_existing_artifacts": false,
+    "required_evidence_role": "reproducibility_replay_not_confirmatory",
+    "completion_marker_written_last": "COMPLETED.json"
+  }
+}

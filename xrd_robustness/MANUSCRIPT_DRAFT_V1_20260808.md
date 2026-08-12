@@ -1,5 +1,11 @@
 # Manuscript Draft V1 — Measurement-Equivalence Supervision for Robust PXRD Learning
 
+> **Supersession notice (2026-08-11):** This draft is preserved for provenance.
+> Use `../00_project_context/CURRENT_STATE.md` and the 2026-08-11 audit sidecars
+> for current claims. Any RRUFF-301 “confirmatory” wording below is superseded by
+> retrospective-validation language; the simulated Validation/Test primary
+> results remain frozen and unchanged.
+
 **Draft date:** 2026-08-08  
 **Status:** manuscript-building from frozen evidence  
 **Do not use this draft to reopen method selection or trigger unregistered experiments.**

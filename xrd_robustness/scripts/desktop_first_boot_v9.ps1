@@ -54,21 +54,13 @@ else {
     $PythonExecutable = [System.IO.Path]::GetFullPath($PythonExecutable)
 }
 if ([string]::IsNullOrWhiteSpace($AcceptanceRoot)) {
-    $AcceptanceRoot = Join-Path $ProjectRoot "reports\desktop_acceptance"
+    $AcceptanceRoot = Join-Path $ProjectRoot "outputs\desktop_acceptance"
 }
 else {
     $AcceptanceRoot = [System.IO.Path]::GetFullPath($AcceptanceRoot)
 }
 
 $Steps = @(
-    @{
-        Name = "migration_verification"
-        Arguments = @(
-            "-s", "scripts\verify_v9_desktop_migration.py",
-            "--root", $ProjectRoot,
-            "--output", (Join-Path $AcceptanceRoot "migration_verification.json")
-        )
-    },
     @{
         Name = "runtime_environment"
         Arguments = @(
@@ -141,7 +133,6 @@ $Steps = @(
         Arguments = @(
             "-s", "scripts\audit_v9_desktop_readiness.py",
             "--acceptance-root", $AcceptanceRoot,
-            "--migration-verification", (Join-Path $AcceptanceRoot "migration_verification.json"),
             "--output", (Join-Path $AcceptanceRoot "desktop_readiness.json")
         )
     }

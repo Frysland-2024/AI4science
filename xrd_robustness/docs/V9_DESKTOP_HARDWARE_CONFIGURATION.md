@@ -4,7 +4,7 @@
 
 目标机器固定为 AMD Ryzen 5 9600X（6 核 12 线程）、NVIDIA GeForce RTX 4070 Ti SUPER（16 GB）和至少 32 GB 系统内存。7-run lambda 调参只包含 Dynamic/Paired ERM、JS 和 Residual；科学合同继续固定 `batch_size=16`、`max_optimizer_steps=30650` 和每结构两视图，不能用扩大训练 batch 的方式改变方法暴露量。
 
-机器可读的唯一配置源是 `configs/hardware.v9.desktop.9600x_4070tis.json`，其 SHA-256 冻结在 `configs/algorithm.v9.method_transfer.json`。计划、实现、硬件审计或迁移清单与当前合同不一致时必须拒绝放行。
+当前 V9-T 合同实际冻结的是 `configs/hardware.v9.laptop.7945hx_4060.json` 及其 SHA-256；不得为仓库清理改写该 profile。`configs/hardware.v9.desktop.9600x_4070tis.json` 保存台式机目标配置与复核依据，但不是当前 `algorithm.v9.method_transfer.json` 中绑定的 profile。当前研究已进入 evidence freeze，本页只保存硬件工程 provenance，不构成新的训练授权。
 
 ## 已注册的硬件配置
 
@@ -32,19 +32,18 @@
 
 首启门只做有界工程测试，不做 optimizer step，不保存 checkpoint，不访问 test split，也不启动 7-run：
 
-1. 校验迁移文件逐文件 SHA-256。
-2. 首启时即时重查 Python 3.11.9、PyTorch 2.5.1+cu124、CUDA 12.4、`pip check`、BF16、目标 GPU/显存、系统内存和 MSVC C++ 工具链；不复用可能过期的安装报告。
-3. 重跑 `8×8` 与双 run 对应的 `4×8` 确定性等价审计。
-4. 对 `4/6/8/10 workers × 6/8/10 windows` 做两次完整矩阵复测。只有全部数组、参数、质量门和 pair hash 等价才生成性能建议；脚本不会自动改合同。
-5. 对评估 batch `128/256/512` 做真实 B3 合成输入前向、数值前缀、显存和吞吐检查，不访问任何验证/测试结构。
-6. 检查 pinned/non-blocking H2D。
-7. 对 Dynamic、JS、Residual 做 FP32/BF16/compiled BF16 的 B3 forward/backward 数值比较；要求检测到真实编译图。
-8. 比较单进程与两个并发进程的 compiled BF16 吞吐和全局显存；峰值必须低于 15,360 MiB，聚合吞吐不得低于串行的 95%。
-9. 汇总为 `ready_for_explicit_tuning_authorization` 或 `blocked`。即使 ready，也仍需用户另行明确授权后才能启动调参。
+1. 首启时即时重查 Python 3.11.9、PyTorch 2.5.1+cu124、CUDA 12.4、`pip check`、BF16、目标 GPU/显存、系统内存和 MSVC C++ 工具链；不复用可能过期的安装报告。
+2. 重跑 `8×8` 与双 run 对应的 `4×8` 确定性等价审计。
+3. 对 `4/6/8/10 workers × 6/8/10 windows` 做两次完整矩阵复测。只有全部数组、参数、质量门和 pair hash 等价才生成性能建议；脚本不会自动改合同。
+4. 对评估 batch `128/256/512` 做真实 B3 合成输入前向、数值前缀、显存和吞吐检查，不访问任何验证/测试结构。
+5. 检查 pinned/non-blocking H2D。
+6. 对 Dynamic、JS、Residual 做 FP32/BF16/compiled BF16 的 B3 forward/backward 数值比较；要求检测到真实编译图。
+7. 比较单进程与两个并发进程的 compiled BF16 吞吐和全局显存；峰值必须低于 15,360 MiB，聚合吞吐不得低于串行的 95%。
+8. 汇总为 `ready_for_explicit_tuning_authorization` 或 `blocked`。即使 ready，也仍需用户另行明确授权后才能启动调参。
 
 ## 命令
 
-迁移到台式机后，先创建冻结环境：
+在目标台式机创建冻结环境：
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File scripts\bootstrap_v9_desktop_environment.ps1
@@ -62,6 +61,6 @@ powershell -ExecutionPolicy Bypass -File scripts\desktop_first_boot_v9.ps1 -Plan
 powershell -ExecutionPolicy Bypass -File scripts\desktop_first_boot_v9.ps1
 ```
 
-最终证据写入 `reports/desktop_acceptance/desktop_readiness.json`。首启脚本不包含任何训练命令。
+工程诊断写入 Git 忽略的 `outputs/desktop_acceptance/`。首启脚本不包含任何训练命令，也不再依赖已经退休的一次性 migration payload。
 
 Windows 上的 Inductor 能力以目标机实测为准。配置中的 eager fallback 只用于保留可诊断性，不能替代 `torch_compile_graph_executed=true` 的证据。

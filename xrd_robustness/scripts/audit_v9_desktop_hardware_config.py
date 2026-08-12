@@ -27,7 +27,9 @@ from xrd_robustness.method_transfer import (  # noqa: E402
 
 
 DEFAULT_CONTRACT = PROJECT_ROOT / "configs" / "algorithm.v9.method_transfer.json"
-DEFAULT_OUTPUT = PROJECT_ROOT / "reports" / "v9_desktop_hardware_config_audit.json"
+DEFAULT_OUTPUT = (
+    PROJECT_ROOT / "outputs" / "desktop_acceptance" / "hardware_config_audit.json"
+)
 
 
 def _sha256(path: Path) -> str:

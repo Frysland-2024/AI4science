@@ -1,6 +1,6 @@
 # XRD Robustness V9-T — Current Handoff
 
-**Status date:** 2026-08-08  
+**Status date:** 2026-08-11
 **Repository:** `Frysland-2024/AI4science`  
 **Branch:** `main`
 
@@ -74,11 +74,11 @@ No repeated Test access or Test-guided method modification is allowed for the cu
 
 Secondary limitation: improvement is aggregate, not uniform. Monoclinic remains a difficult class and selected shift/texture profiles retain local declines.
 
-## 5. Real-domain evidence — RRUFF-301 v2 is now primary
+## 5. Real-domain evidence — RRUFF-301 v2 is retrospective
 
 RRUFF-70 is exploratory only.
 
-The current strongest experimental-domain evidence is the preregistered RRUFF-301 confirmatory v2 lineage in commit:
+The strongest recorded experimental-domain signal is the RRUFF-301 v2 artifact set in commit:
 
 `24d8c8511bdea9df8b52cdf779b04420bebffafc`
 
@@ -87,6 +87,14 @@ Authoritative files:
 - `reports/rruff301_confirmatory_full_report_20260807.md`
 - `reports/rruff301_representation_analysis_20260807.md`
 - `reports/rruff301_v1_audit_trail_20260807.md`
+- `reports/rruff301_existing_artifact_lineage_audit.json`
+
+The first three filenames are historical. Do not inherit their confirmatory label.
+The current audit verifies the 150 few-shot metrics from 34,650 prediction rows and
+the fixed 231-spectrum test membership; fixed-200 and zero-shot artifacts have only
+the narrower verification levels recorded in the audit. Missing authorization,
+runner, episode-support, execution-log, code-state, and runtime provenance cannot be
+reconstructed after the fact. Treat all RRUFF-301 results as retrospective evidence.
 
 Protocol:
 
@@ -113,7 +121,7 @@ Fixed-200-step sensitivity at K=1 and K=5 preserves the direction.
 
 ## 6. RRUFF-301 v1 bug handling
 
-The first confirmatory execution must never be cited as valid v2 evidence.
+The first intended confirmatory execution must never be cited as valid v2 evidence.
 
 Bug:
 
@@ -126,7 +134,8 @@ Governance response:
 2. preserve the audit trail;
 3. rebuild labels from DIF `space_group` plus `pymatgen.SpaceGroup` mapping;
 4. verify 70 adaptation + 231 test, 33/class, zero overlap;
-5. rerun the complete confirmatory experiment as v2.
+5. rerun the complete experiment as v2; its numerical artifacts remain useful, but
+   the available lineage is insufficient for a confirmatory claim.
 
 This is a research-integrity event, not a result to hide.
 
@@ -174,9 +183,15 @@ Calibration, full profiles, full class tables, fixed-step sensitivity, zero-shot
 
 ## 9. Claim boundary
 
-Allowed:
+Allowed strong simulated-domain claim:
 
-> Parent-structure provenance from the online simulator can be used as measurement-equivalence supervision; under a matched two-view design, JS consistency improves aggregate simulated OOD robustness and experimental-domain few-shot adaptation efficiency relative to Dynamic ERM.
+> Parent-structure provenance from the online simulator can be used as measurement-equivalence supervision; under a matched two-view design, JS consistency improves aggregate simulated OOD robustness relative to Dynamic ERM.
+
+Allowed descriptive RRUFF claim:
+
+> The recorded RRUFF-301 artifacts show higher mean few-shot Macro-F1 for
+> JS-pretrained than matched ERM-pretrained models at K=1/2/5. This is retrospective
+> validation with incomplete historical provenance, not confirmatory evidence.
 
 Do not claim:
 
@@ -216,3 +231,104 @@ A new experiment may be opened only if manuscript drafting or external review id
 - reopen Residual/PAMPT as if they were part of the current paper.
 
 Tan Lab phase-state adaptation, Residual-v2, physics-guided lattice losses, backbone–augmentation compatibility, and Raman remain future projects rather than current-paper blockers.
+
+## 13. Repository workflow update (2026-08-10)
+
+The repository-wide mandatory `check-journal-indexing` startup requirement was
+removed. The skill is now optional and should be used only for tasks that explicitly
+require SCIE, EI Compendex, or CSCD coverage verification. This change does not alter
+the frozen experiment contract, evidence, or execution authorization.
+
+## 14. Repair audit and current authority (2026-08-11)
+
+When earlier sections conflict with this section, use this section and the bound
+JSON audits.
+
+### Implemented task and claim boundary
+
+The current code implements robust seven-class PXRD crystal-system classification,
+not physical-parameter inversion. It demonstrates forward perturbation simulation,
+classification robustness, and few-shot adaptation workflows. Do not describe it as
+completed lattice/phase/strain/texture estimation, TCAD, PDE inversion, or a general
+inverse solver.
+
+### Repairs and authoritative audits
+
+- `reports/v9_resnet_js_simulated_test_class_metric_correction.json`: 360/360
+  legacy `per_crystal_system_f1` records are defective. Correct full-panel class F1
+  is already present as `per_class_f1`; primary and aggregate metrics are unchanged.
+  No frozen Test result was edited or rerun.
+- `reports/v9_formal_split_identity_overlap_audit.json`: exact parents are disjoint
+  across splits, but 47 exact formulas / 585 records cross splits and 12 formulas
+  cross all three. Never call the active split family-, formula-, prototype-, or
+  symmetry-equivalence-disjoint.
+- `reports/rruff301_existing_artifact_lineage_audit.json`: registered hashes and ten
+  checkpoint hashes pass; 150 few-shot metrics are recomputed from 34,650 prediction
+  rows with fixed 231-ID test membership. Fixed-200 and zero-shot verification is
+  explicitly narrower and recorded per artifact.
+- `reports/rruff301_retrospective_replay_episode_plan.json`: a new deterministic
+  15-episode / 280-support-assignment plan with a fixed 231-spectrum test set. It
+  has `historical_plan_claim=false` and is not authorized for execution.
+
+### Hard execution boundary
+
+`scripts/run_rruff301_retrospective_replay.py run-replay` must return
+`refused_execution_not_authorized` before model or spectrum access. Supplying any
+path via `--authorization` cannot enable this v1 repair runner. The historical
+RRUFF-301 outputs are retrospective evidence because the original runner, support
+IDs, authorization, execution log, and code/runtime bindings are unavailable.
+
+### Current commands
+
+```powershell
+cd E:\AI4science\xrd_robustness
+python -s scripts/audit_v9_simulated_test_class_metrics.py --check-only
+python -s scripts/audit_formal_split_identity_overlap.py --check-only
+python -s scripts/run_rruff301_retrospective_replay.py audit-existing --verify-checkpoints --check-only
+python -s scripts/run_rruff301_retrospective_replay.py plan-replay --check-only
+python -s -m pytest -q
+```
+
+Current blocker: historical RRUFF-301 governance provenance is unrecoverable. A
+confirmatory real-domain claim requires a newly authorized prospective execution in
+a new empty output root. No training or inference was run during this repair.
+
+## 15. Repository cleanup handoff (2026-08-11)
+
+The active repository surface is now intentionally smaller:
+
+- current entrypoints are `../README.md`, `README.md`,
+  `../00_project_context/CURRENT_STATE.md`, and this file;
+- the duplicated extracted context pack, old static inventories, and legacy
+  account-handoff generator/manifest/DOCX bundle were removed; their committed
+  versions remain recoverable from Git history;
+- one-time desktop migration packaging and its payload inventory were removed;
+  frozen hardware profiles, bootstrap, first-boot orchestration, and all eight
+  implementation paths required by the method-transfer contract were retained;
+- first-boot/readiness now performs the engineering acceptance checks directly and
+  no longer depends on the retired migration verification payload;
+- obsolete laptop/runtime snapshots, generated XML/empty failure tables, and the
+  duplicate `gate3_resnet_summary` report pair were removed;
+- `tests/test_project_state_contract.py` now checks the completed simulated-Test
+  summary/hash, closed post-hoc boundaries, live audit references, and absence of
+  retired handoff links;
+- the 2026-08-08 freeze, manuscript, and application documents remain as historical
+  records with a 2026-08-11 supersession notice rather than being silently deleted.
+
+Do not recreate the retired account-handoff or migration-packaging bundles unless a
+concrete new delivery requirement appears. Do not delete the active desktop-contract
+implementation, V10, Residual, PAMPT, opXRD, RRUFF, or
+other negative-result records merely because they are outside the current runtime
+path. No data, checkpoint, frozen result, training, inference, or authorization
+state changed during cleanup.
+
+Cleanup verification: `283 passed, 39 subtests passed`; all current Markdown links
+resolve; no active deleted-file references remain; the Test-metric, split-scope,
+and RRUFF lineage auditors pass at their declared levels; desktop first-boot
+`-PlanOnly` reports `formal_training_commands=0`.
+
+Publication decision (2026-08-13): the user authorized synchronization of the
+reviewed source, configuration, audit, documentation, and cleanup changes to
+`origin/main`. Local `outputs/` artifacts and unreviewed personal application drafts
+remain excluded. After synchronization, continue manuscript construction within the
+frozen evidence and claim boundaries above.

@@ -1,5 +1,12 @@
 # V9 Evidence Freeze V1 — 2026-08-08
 
+> **Supersession notice (2026-08-11):** This is a preserved historical freeze.
+> `CURRENT_STATE.md` and the 2026-08-11 metric, split, and RRUFF lineage audits
+> are authoritative where they conflict with this document. In particular, all
+> RRUFF-301 “confirmatory” wording below is superseded: the recorded numerical
+> results are retrospective validation with incomplete historical provenance.
+> The frozen simulated Validation/Test primary metrics are unchanged.
+
 **Status:** evidence frozen for manuscript preparation  
 **Repository:** `Frysland-2024/AI4science`  
 **Active method:** Dynamic JS Consistency, `lambda_js = 60`  

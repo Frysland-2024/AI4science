@@ -78,3 +78,23 @@ def test_cache_bindings_are_ordered_by_manifest_path() -> None:
         "manifest-a.csv": "manifest-a",
         "manifest-b.csv": "manifest-b",
     }
+
+
+def test_named_crystal_system_f1_uses_full_confusion_matrix() -> None:
+    labels = np.repeat(np.arange(7), 2)
+    predictions = labels.copy()
+    predictions[0] = 1
+
+    metrics = runner.classification_metrics(labels, predictions, num_classes=7)
+    named = runner.add_named_crystal_system_f1(metrics)
+
+    assert named["per_crystal_system_f1"] == {
+        system: pytest.approx(metrics["per_class_f1"][index])
+        for index, system in enumerate(runner.CRYSTAL_SYSTEMS)
+    }
+    assert named["per_crystal_system_f1"]["monoclinic"] > 1.0 / 7.0
+
+
+def test_named_crystal_system_f1_rejects_incomplete_class_vector() -> None:
+    with pytest.raises(ValueError, match="one value for every"):
+        runner.add_named_crystal_system_f1({"per_class_f1": [1.0] * 6})

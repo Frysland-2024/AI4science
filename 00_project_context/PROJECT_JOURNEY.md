@@ -1,6 +1,6 @@
 # 项目心路历程
 
-> **时效说明（2026-07-19）：**本文记录项目为什么改变，而不是当前执行合同。文中的 V8/V9.2、9,800/2,130/2,130 等表述是日期化历史状态，已由 V9-T 及 family-aware 9,842/2,109/2,109 划分取代。当前状态、可运行范围和授权边界必须以 `E:/AI4science/xrd_robustness/CODEX_HANDOFF.md`、冻结配置与当前审计报告为准；旧方案保留只是为了说明研究问题如何逐步收敛。
+> **时效说明（2026-08-11）：**本文记录项目为什么改变，而不是当前执行合同。文中的 V8/V9.2、9,800/2,130/2,130 等表述是日期化历史状态，已由 V9-T 及 exact-parent-disjoint 9,842/2,109/2,109 划分取代；该划分不保证 formula/family/prototype disjoint。当前状态、可运行范围和授权边界必须以 `E:/AI4science/xrd_robustness/CODEX_HANDOFF.md`、冻结配置与当前审计报告为准；旧方案保留只是为了说明研究问题如何逐步收敛。
 
 ## 0. 从 FerroAI 到 XRD：领域选择与研究方法形成
 
@@ -942,3 +942,36 @@ JS lambda=60、simulated Test 证据、RRUFF-371 外部评估资产——全部�
 - 组内数据审计管线；
 - Few-shot adaptation 协议（support/query 划分、K-shot episodes）；
 - ERM-pretrained vs JS-pretrained vs Scratch 比较设计。
+
+## 2026-08-11：从代码与原始产物反校正文档叙事
+
+本次不采用项目说明文字作为结论，而是逐项检查了模型输出、目标函数、模拟器、
+split manifest、confusion matrix、逐条预测和哈希绑定。由此做出三项需要保留
+在研究历程中的校正。
+
+第一，当前已完成任务是七晶系分类鲁棒性，而不是物理参数反演。模拟器中的
+位移、展宽、背景、噪声和择优取向是生成观测视图的 nuisance variables；模型
+没有输出晶格常数、相分数、应变或其他反演量。因此申请叙事可以强调
+"现实测量—物理模拟—稳健学习—Sim2Real 评估"，但不能把本项目包装成已经完成
+的 inverse solver。
+
+第二，发现 simulated-Test runner 的一个诊断字段实现错误：它先按真实晶系筛成
+单类子集，再计算七类 Macro-F1，导致命名后的 `per_crystal_system_f1` 被压低并
+丢失来自其他真实类的 false positives。决定只修未来 runner，并从完整 confusion
+matrix 独立生成纠错 sidecar；不改 10 个哈希冻结的 per-run JSON，也不重跑 Test。
+360/360 个 profile 的旧命名字段需要纠正，但正确 `per_class_f1`、主 Macro-F1、
+worst-class、配对差值和 bootstrap 均不受影响。
+
+第三，证据范围必须降到实际可审计的层级。正式 split 的 exact parent fingerprint
+跨集合为 0，但有 47 个 exact formula 跨集合、涉及 585 条记录，12 个 formula
+同时出现在 train/validation/test；因此撤回 "family-aware/family-disjoint" 的当前
+表述，保留 exact-parent-disjoint 结论。RRUFF-301 的 150 个 few-shot 指标可由
+34,650 条 prediction rows 重算，固定 231-ID test membership 也可核验，但原 runner、
+support IDs、预执行授权、执行日志及 code/runtime binding 缺失。旧结果改归类为
+retrospective validation，不能继续称为 confirmatory evidence。
+
+工程上新增了 fail-closed retrospective contract、逐 artifact 验证等级和确定性
+episode plan。计划是新的复现计划，不冒充历史计划；`run-replay` 即使收到任意
+authorization path 也必须在加载模型或谱图之前拒绝。若论文必须提出 confirmatory
+真实域结论，唯一合规路径是未来另行审查并授权一次 prospective execution；不能
+通过补文档或重命名旧产物来恢复不存在的历史 provenance。

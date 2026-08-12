@@ -307,6 +307,32 @@ def valid_cache_entry(entry: dict[str, Any]) -> bool:
     return list(array.shape) == entry.get("shape") and str(array.dtype) == "float32"
 
 
+def add_named_crystal_system_f1(metrics: dict[str, Any]) -> dict[str, Any]:
+    """Attach class F1 values to their canonical crystal-system names.
+
+    A crystal system is the target class in this task.  Its F1 must therefore
+    come from the full-panel confusion matrix, where both false positives and
+    false negatives are observable.  Computing a seven-class Macro-F1 after
+    filtering the panel to one true class incorrectly inserts six zero-F1
+    classes and discards false positives from the other true classes.
+    """
+
+    values = metrics.get("per_class_f1")
+    if not isinstance(values, (list, tuple)) or len(values) != len(CRYSTAL_SYSTEMS):
+        raise ValueError(
+            "per_class_f1 must contain one value for every canonical crystal system"
+        )
+    output = dict(metrics)
+    output["per_crystal_system_f1"] = {
+        system: float(value)
+        for system, value in zip(CRYSTAL_SYSTEMS, values, strict=True)
+    }
+    output["per_crystal_system_f1_semantics"] = (
+        "full_panel_one_vs_rest_f1_by_canonical_class_v2"
+    )
+    return output
+
+
 def build_panel_cache(
     records: dict[str, dict[str, Any]],
     gate: dict[str, Any],
@@ -415,16 +441,14 @@ def evaluate_cached(
                 probability = torch.softmax(logits, dim=-1).float().cpu().numpy()
             probabilities[start:stop] = probability
         predictions = probabilities.argmax(axis=1)
-        metrics = classification_metrics(
-            labels, predictions, probabilities=probabilities, num_classes=7
+        metrics = add_named_crystal_system_f1(
+            classification_metrics(
+                labels,
+                predictions,
+                probabilities=probabilities,
+                num_classes=7,
+            )
         )
-        by_system = {}
-        for system in CRYSTAL_SYSTEMS:
-            mask = np.asarray([records[mid]["crystal_system"] == system for mid in ids])
-            by_system[system] = classification_metrics(
-                labels[mask], predictions[mask], num_classes=7
-            )["macro_f1"]
-        metrics["per_crystal_system_f1"] = by_system
         metrics["worst_class_f1"] = metrics["worst_group_f1"]
         profiles[profile] = metrics
     return profiles
@@ -484,7 +508,7 @@ def execute(batch_size: int) -> None:
     device = torch.device("cuda")
     raw_path = OUTPUT_ROOT / "raw_results.json"
     raw: dict[str, Any] = {
-        "schema_version": "v9-resnet-js-simulated-test-output-v1",
+        "schema_version": "v9-resnet-js-simulated-test-output-v2",
         "runs": {},
     }
     for completed_run in state["completed_runs"]:

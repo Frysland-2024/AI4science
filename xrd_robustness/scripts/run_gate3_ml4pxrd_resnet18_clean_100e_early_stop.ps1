@@ -192,18 +192,13 @@ try {
       --run-dir $OutputDir `
       --pampt-summary $PamptSummary `
       --sanity-report $SanityReport `
-      --output-json (Join-Path $OutputDir 'gate3_resnet_summary.json') `
-      --output-md (Join-Path $OutputDir 'gate3_resnet_summary.md')
+      --output-json (Join-Path $OutputDir 'gate3_pampt_vs_resnet.json') `
+      --output-md (Join-Path $OutputDir 'gate3_pampt_vs_resnet.md')
 
     $SummaryExitCode = $LASTEXITCODE
     if ($SummaryExitCode -ne 0) {
         throw "Gate-3 training finished, but summarization failed with exit code $SummaryExitCode"
     }
-
-    Copy-Item -LiteralPath (Join-Path $OutputDir 'gate3_resnet_summary.json') `
-      -Destination (Join-Path $OutputDir 'gate3_pampt_vs_resnet.json')
-    Copy-Item -LiteralPath (Join-Path $OutputDir 'gate3_resnet_summary.md') `
-      -Destination (Join-Path $OutputDir 'gate3_pampt_vs_resnet.md')
 
     Write-Host '=== Foundation Gate 3 completed ==='
     Write-Host (Join-Path $OutputDir 'gate3_pampt_vs_resnet.md')

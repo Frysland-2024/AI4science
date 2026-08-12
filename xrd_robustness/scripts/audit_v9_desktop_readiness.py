@@ -24,7 +24,7 @@ from xrd_robustness.method_transfer import (  # noqa: E402
 )
 
 
-DEFAULT_ACCEPTANCE_ROOT = PROJECT_ROOT / "reports" / "desktop_acceptance"
+DEFAULT_ACCEPTANCE_ROOT = PROJECT_ROOT / "outputs" / "desktop_acceptance"
 
 
 def parse_args() -> argparse.Namespace:
@@ -34,10 +34,6 @@ def parse_args() -> argparse.Namespace:
         default=str(PROJECT_ROOT / "configs" / "algorithm.v9.method_transfer.json"),
     )
     parser.add_argument("--acceptance-root", default=str(DEFAULT_ACCEPTANCE_ROOT))
-    parser.add_argument(
-        "--migration-verification",
-        default=str(DEFAULT_ACCEPTANCE_ROOT / "migration_verification.json"),
-    )
     parser.add_argument(
         "--output", default=str(DEFAULT_ACCEPTANCE_ROOT / "desktop_readiness.json")
     )
@@ -137,8 +133,6 @@ def build_readiness(
                 "msvc_toolchain_discoverable",
             )
         ),
-        "migration_payload_verified_on_desktop": reports["migration"].get("status")
-        == "pass",
         "contract_assets_current": (
             preflight.get("status") == "passed"
             and preflight.get("hashes") == asset_audit.get("hashes")
@@ -233,7 +227,6 @@ def main() -> int:
     plan = _load(plan_path)
     report_paths = {
         "environment": acceptance_root / "environment.json",
-        "migration": Path(args.migration_verification).resolve(),
         "preflight": acceptance_root / "preflight.json",
         "hardware": acceptance_root / "hardware_config.json",
         "prefetch_8x8": acceptance_root / "prefetch_8x8.json",

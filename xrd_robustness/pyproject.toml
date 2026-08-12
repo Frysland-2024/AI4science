@@ -1,13 +1,23 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "xrd-robustness"
 version = "0.1.0"
 description = "Physics-grounded robustness experiments for 1D powder XRD"
 requires-python = ">=3.10"
-dependencies = ["numpy>=1.24"]
+dependencies = ["numpy>=1.24", "torch>=2.0"]
 
 [project.optional-dependencies]
-science = ["mp-api", "pymatgen", "torch"]
-test = ["pytest"]
+science = ["mp-api", "pymatgen", "scipy>=1.10", "PyYAML>=6"]
+test = ["pytest>=8", "scipy>=1.10", "PyYAML>=6", "pymatgen"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
 
 [tool.unittest]
 start-directory = "tests"

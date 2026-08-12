@@ -81,7 +81,6 @@ class DesktopReadinessTests(unittest.TestCase):
         }
         self.reports = {
             "environment": {"status": "pass", "checks": runtime_checks},
-            "migration": {"status": "pass"},
             "preflight": {
                 "status": "passed",
                 "hashes": self.asset_audit["hashes"],
@@ -145,8 +144,9 @@ class DesktopReadinessTests(unittest.TestCase):
         self.assertIn('formal_training_commands=0', source)
         self.assertNotIn('"train_v7.py"', source)
         self.assertNotIn('"tune-run"', source)
+        self.assertNotIn("migration", source.lower())
+        self.assertNotIn("account", source.lower())
         for required in (
-            "verify_v9_desktop_migration.py",
             "audit_v9_runtime_environment.py",
             "audit_v9_dynamic_prefetch.py",
             "audit_v9_prefetch_matrix.py",

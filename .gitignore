@@ -3,6 +3,12 @@
 venv/
 __pycache__/
 *.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+.coverage
+htmlcov/
 
 # Temporary files
 tmp/
@@ -14,6 +20,7 @@ tmp/
 02_code_repositories/
 03_tools_and_packages/
 04_external_lab_data/
+/outputs/
 
 # Secrets
 .env
@@ -26,11 +33,18 @@ secrets.json
 # OS / IDE
 .vscode/
 .idea/
+.workbuddy/
+.qoder/
 Thumbs.db
 .DS_Store
 
 # Generated PDF text extracts
 00_project_context/pdf_reading_extracts/
+
+# Local application drafts pending claim-boundary review
+/00_project_context/AI4Science_Project_Handoff_for_Admissions_AI_2026-08-07.docx
+/00_project_context/AI4Science_Project_Handoff_for_Admissions_AI_2026-08-07.md
+/00_project_context/RESEARCH_INTERESTS.md
 
 # Additional local virtual environments
 .venvs/

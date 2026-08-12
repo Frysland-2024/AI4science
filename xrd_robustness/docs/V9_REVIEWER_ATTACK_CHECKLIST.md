@@ -1,8 +1,13 @@
 # V9 Reviewer Attack Checklist
 
+> **Historical pre-run checklist.** Current experiment status and claim boundaries
+> are maintained in `../CODEX_HANDOFF.md` and
+> `../../00_project_context/CURRENT_STATE.md`; the status column below records the
+> state when this checklist was written.
+
 Use this before interpreting any formal result. An item is closed only by a current artifact or hash, not by intent.
 
-| Likely challenge | Required answer/evidence | Current status before formal runs |
+| Likely challenge | Required answer/evidence | Historical status before formal runs |
 |---|---|---|
 | Did one method simply see more spectra? | Shared structure exposures, paired-view exposures, optimizer steps, accepted parameter pairs, and pair-schedule hashes. | Interface ready; formal evidence pending. |
 | Why these λ values? | Registered engineering candidates plus Train-only numerical scale audit; final choice on unified Validation only. | Scale audit complete; selection pending. |
@@ -17,7 +22,7 @@ Use this before interpreting any formal result. An item is closed only by a curr
 | Was Residual superiority inferred indirectly? | Compute the direct `Residual - JS` contrast and hierarchical 95% interval. | Implemented. |
 | Did quality-gate retries bias methods differently? | Same accepted rows and retry algorithm; stream hashes and rejection counts. | Formal evidence pending. |
 | Were negative smoke results used to redesign the hypothesis? | Smoke and numerical audits are engineering evidence only. | Prohibited by protocol. |
-| Can the result be replayed on a new machine? | Migration manifest, hash verification, first-boot acceptance, self-contained checkpoint stream state. | Laptop rehearsal required after final changes. |
+| Can the result be replayed on a new machine? | Frozen contract/profile hashes, first-boot acceptance, and self-contained checkpoint stream state. | The one-time migration package is retired; use Git history plus the current contract and acceptance checks. |
 
 ## Stop conditions
 

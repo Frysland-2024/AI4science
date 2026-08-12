@@ -1,215 +1,75 @@
 # XRD Robustness V9-T
 
-> **2026-07-28 online-generation optimization:** The user-authorized initial
-> Dynamic run was stopped before Validation at epoch 9 and excluded from
-> selection. Caching only structure-invariant HKL ordering and clean
-> quality-reference spectra increased matched 16x16 prefetch throughput by
-> `27.67%`, with bit-exact spectra, parameters, hashes, and quality decisions.
-> The four-run restarts from step zero under unchanged scientific settings.
+本目录实现基于在线物理扰动的七晶系 PXRD 鲁棒分类。核心比较是 matched Dynamic ERM 与 Dynamic JS Consistency；当前选择为 ResNet-18-GN、identity preprocessing、AdamW、constant LR、`lambda_js=60`。
 
-> **2026-07-28 four-run preregistration:** The frozen Validation-tuning matrix
-> is one Dynamic ERM plus JS `[3,30,60]`. Shared training budget, early
-> stopping, seeds, metrics, selection rule, hashes, and data boundaries are
-> preregistered. The read-only launch audit passed all 13 checks, while the
-> historical PAMPT seven-run was fail-closed. No training or Validation metric
-> access occurred; current status remains `0/4 locked` pending explicit
-> authorization.
+> 当前模式：**evidence freeze / manuscript building**。不要默认启动训练、重跑 frozen Test 或重做方法选择。完整当前状态见 [`CODEX_HANDOFF.md`](CODEX_HANDOFF.md) 和 [`../00_project_context/CURRENT_STATE.md`](../00_project_context/CURRENT_STATE.md)。
 
-> **2026-07-28 JS-only scale Gate:** The shared backbone contract is frozen as
-> ResNet-18-GN + identity + AdamW + constant LR, with Dynamic ERM as the strong
-> baseline. Residual-v1 is archived after its stability Gate failed. The
-> Train-only JS revision `[3,30,60]` passed weak/material/dominant scale and
-> combined-gradient guards, so this JS grid is frozen. No candidate training,
-> Validation/Test/real-XRD access, or four-run tuning occurred; execution
-> remains disabled pending separate authorization.
+## 科学边界
 
-> **2026-07-28 CNN Clean diagnostics:** A/B/C single-factor search is complete.
-> Sqrt, Adam, and warm-up/cosine did not beat the ResNet identity + AdamW +
-> constant-LR baseline. Clean search is closed. The one matched Dynamic ERM
-> diagnostic then improved level0/in-range/mean single-factor OOD to
-> `0.7197/0.7179/0.6563`, passing the CNN foundation diagnostic Gate. Formal
-> 7-run, Test, real XRD, and V10 remain locked pending shared-contract review.
+- 模型输出 7 个晶系 logits；当前代码没有晶格常数、相分数、应变、峰宽、织构等回归目标。
+- 在线模拟器生成配对物理扰动视图；JS 项约束同一 parent structure 的预测一致性。
+- active split 为 Train 9,842 / Validation 2,109 / Test 2,109，并且只证明 exact-parent-disjoint。
+- frozen simulated Test 的主结果为 mean single-factor OOD Macro-F1 Δ `+0.054600`，5/5 training-seed pairs 为正。
+- 旧 `per_crystal_system_f1` diagnostic 的实现有误；正确 class F1 已由 full-panel confusion matrix 复核，主 Macro-F1、worst-class F1 和 summary 不受影响。
+- RRUFF-301 few-shot 结果可作为 retrospective validation；历史执行 provenance 不完整，不能表述为 confirmatory evidence。
 
-> **2026-07-26 split reset:** The active split is a deterministic 70/15/15
-> parent-structure-level random split stratified by crystal system (seed
-> `20260726`). All results from the retired family-disjoint split are invalid.
-> New tuning is reset to 0/7 and restarts from experiment 1. The current-split
-> Train-only Gate and authoritative runtime checks pass.
+## 代码地图
 
-> 跨机器、跨 Codex 账号接管先阅读 [`CODEX_HANDOFF.md`](CODEX_HANDOFF.md)；真实域少样本设计再阅读 [`CODEX_HANDOFF_REAL_ADAPTATION_ADDENDUM.md`](CODEX_HANDOFF_REAL_ADAPTATION_ADDENDUM.md)。这些文档均不构成训练或测试授权。
-
-## 当前研究身份
-
-当前唯一主线仍是 **V9-T：Algorithm Transfer for PXRD Robustness**。
-
-模拟阶段比较三种核心学习原则：
-
-1. Dynamic/Paired ERM：单纯动态增广监督；
-2. JS Consistency：跨视图预测一致性；
-3. Residual Class Decorrelation：差异感知的残差类别去相关。
-
-论文现在包含两层真实域证据：
-
-- **0-shot real robustness**：完全不使用真实标签；
-- **few-shot real adaptation**：三方法使用完全相同的少量真实标签后，比较相对增益和标签效率。
-
-项目仍不声称创造新的通用机器学习理论；核心是严格匹配条件下的跨领域方法迁移和 PXRD 特定验证。
-
-## 当前状态（2026-07-26）
-
-| 阶段 | 状态 |
+| 路径 | 作用 |
 |---|---|
-| 14,060 结构 parent-structure 随机分层划分 | 冻结：Train 9,842 / Validation 2,109 / Test 2,109 |
-| 方法参数候选范围 | 冻结：JS `[0.3,3,30]`；Residual `[0.2,2,20]` |
-| Simulation Validation tuning | **旧 50-epoch endpoint 7/7 已归档；新合同为最多 100 epoch、每 10 epoch Validation、patience 2，完整网格从 0/7 重启** |
-| 正式模拟实验 | **0/15，未开始** |
-| simulated Test | 锁定、未执行 |
-| RRUFF-70 样品组成 | 冻结 |
-| RRUFF 真实域角色划分 | v1 的 21/14/35 已退出当前设计；v2 开发/外测合同待冻结 |
-| real-adaptation 合同审计与计划生成 | 已实现，禁止加载模型或谱图 |
-| real-adaptation 训练器 | 尚未实现 |
-| 真实适配与 final real test | 均锁定、未执行 |
-| V10 Train-only 诊断 | P0 `PASS`、Pilot v1 `HOLD`、Pilot v2 `PARTIAL`；已冻结归档 |
+| `src/xrd_robustness/models/ml4pxrd_resnet1d.py` | 当前 ResNet-18-GN backbone |
+| `src/xrd_robustness/training/objectives.py` | Dynamic ERM、JS 及归档目标函数 |
+| `src/xrd_robustness/simulator.py` | PXRD forward perturbation simulator |
+| `src/xrd_robustness/online_views.py` | 确定性配对在线视图 |
+| `scripts/train_v7.py` | 当前共享训练入口；文件名旧但仍被 V9-T 使用，不能按版本名删除 |
+| `scripts/run_v9_resnet_js_simulated_test.py` | frozen Test runner；当前 source hash 与历史执行绑定不同，不得借修复重跑 Test |
+| `src/xrd_robustness/evaluation/rruff301_replay.py` | RRUFF-301 retrospective audit/replay contract |
 
-## 核心论文问题
+PAMPT、Residual、V10 和 opXRD 相关文件保留失败机制、NO_GO 或未来重启条件，是科学记录而非当前论文主比较。
 
-在相同母结构、动态配对视图、backbone、最大优化预算、early-stopping 规则和模拟评测面板下：
+## 权威证据
 
-> JS Consistency 或 Residual Class Decorrelation 能否在 Dynamic/Paired ERM 之上，提高未知扰动泛化，并在 0/1/2/3-shot 真实域适配中保持相对优势？
+| 文件 | 内容 |
+|---|---|
+| `reports/v9_resnet_js_ten_run_summary.json` | 五组 paired Validation replication |
+| `reports/v9_resnet_js_simulated_test_summary.json` | frozen simulated Test 主汇总 |
+| `reports/v9_resnet_js_simulated_test_audit.json` | Test checkpoint/panel/summary 绑定 |
+| `reports/v9_resnet_js_simulated_test_class_metric_correction.json` | named class-F1 纠错 sidecar |
+| `reports/v9_formal_split_identity_overlap_audit.json` | exact-parent 与 exact-formula 重叠边界 |
+| `reports/rruff301_existing_artifact_lineage_audit.json` | RRUFF-301 各 artifact 的实际核验层级 |
+| `reports/rruff301_retrospective_replay_episode_plan.json` | 新 retrospective plan；不是历史 episode plan，也未获执行授权 |
 
-真实数据提高三种方法的绝对准确率是允许且预期的。公平性来自：
+冻结 raw outputs、data、checkpoint 和生成谱图位于 Git 忽略区域，不得为“仓库清理”而修改、移动或提交。
 
-- 同一个 RRUFF support episode；
-- 同一个 adaptation validation；
-- 同一个 CE 适配目标；
-- 同一优化与 early-stopping 规则；
-- final real test 完全隔离。
-
-## RRUFF 真实域协议
-
-### RRUFF-371 扩展资产（2026-08-03）
-
-本地已冻结 `rruff-real-pxrd-371-v2`：七晶系各 53 条，共 371 个唯一 RRUFF
-样本编号。其中旧 RRUFF-70 的规范谱图按字节哈希原样保留，extension 为
-301 条、每晶系 43 条。上一版 `rruff-real-pxrd-350-v1` 继续独立保留；审计
-确认 v1 的 350 个 ID 及 canonical spectrum、RAW、DIF 哈希全部被 v2 原样
-继承，新增 21 条正好每晶系 3 条。
-
-数据位于 Git 忽略的 `data/real_xrd/rruff371/`，构建器为可配置的
-`scripts/build_rruff350.py`。可提交审计为
-`reports/rruff371_build_audit.json` 与
-`reports/rruff371_expansion_audit.json`。构建和审计均未加载模型、未读取
-checkpoint 或预测结果，也未执行 real-XRD inference。
-
-当前科学方向是：RRUFF-70 只承担真实域接口开发和 few-shot adaptation；
-301 条 extension 承担外部评测。旧 21/14/35 合同仍保留为历史 v1 且禁止
-执行，替代的 v2 角色和 episode manifest 尚待冻结。
-
-301 条中有 34 条与 RRUFF-70 共享矿物名称，共涉及 23 个名称。因此 primary
-endpoint 的准确定位是 measurement-domain transfer，而不是 unseen-mineral
-generalization；若要主张后者，必须提前冻结 mineral-name group-disjoint 的
-sensitivity cohort。
-
-来源语料：`rruff-real-pxrd-70-v1.0-final`，七晶系各 10 条。
-
-历史 v1 在模型访问前曾按固定 SHA-256 规则冻结为：
-
-| 角色 | 每晶系 | 总数 |
-|---|---:|---:|
-| adaptation train | 3 | 21 |
-| adaptation validation | 2 | 14 |
-| final real test | 5 | 35 |
-
-这份 21/14/35 划分不再是当前拟执行设计。当前建议把完整 RRUFF-70 平衡
-改为 35 support / 35 adaptation validation（均为每晶系 5 条），并使用
-0/1/2/3/5-shot 的 episode 内嵌套学习曲线。该建议必须在任何真实谱模型
-访问前版本化为 v2 manifest 和合同；在此之前不能启动真实域训练。
-
-主适配实验固定为：冻结 encoder、只更新 classifier head、cross-entropy only。全模型 CE 微调作为预注册次要分析。
-
-完整合同：
-
-- `docs/V9_REAL_FEWSHOT_ADAPTATION_PROTOCOL.md`
-- `configs/real_adaptation.v9.method_transfer.json`
-
-本地数据 manifest 和谱图属于 Git 忽略数据，不得提交。
-
-## GTIIT 数据边界
-
-GTIIT 不进入 RRUFF 主适配训练、验证或最终 Macro-F1。当前只保留为本地仪器 supplementary case study，且必须先完成样品标签、批次、隐私和 provenance 审计。
-
-## 文档入口
-
-- `docs/V9_METHOD_TRANSFER_ENGINEERING.md`：模拟算法迁移、lambda、五组实验、公平性和执行门禁；
-- `docs/V9_REAL_FEWSHOT_ADAPTATION_PROTOCOL.md`：RRUFF-70 的 21/14/35 划分、0/1/2/3-shot 与适配统计；
-- `docs/DATA_AND_SIMULATION_CONTRACT.md`：模拟与真实数据统一边界；
-- `docs/V9_SIMULATOR_SUPERVISED_RESIDUAL_ENGINEERING.md`：V10 工程备忘；
-- `docs/V10_MODULE_ARCHIVE_AND_FUTURE_DIRECTIONS.md`：V10 Train-only
-  负结果、架构级结论与重启条件；
-- `CODEX_HANDOFF.md`：模拟训练与台式机接管；
-- `CODEX_HANDOFF_REAL_ADAPTATION_ADDENDUM.md`：真实域新协议交接。
-
-机器可读配置、源代码和匹配哈希报告优先于解释性文档。真实适配训练器仍不存在，因此真实数据训练和 final-test 推理仍不能运行。
-
-本地新增 opXRD/SIMPOD 文献、数据和第三方源码的 Git-safe 元数据索引位于
-`../00_project_context/LITERATURE_LOCAL_RESOURCE_INDEX.md`。PDF、数据集、
-ZIP 和外部源码树不进入 Git，也不构成当前 V9 的训练或评测输入。
-
-## 模拟数据流程
-
-```text
-Materials Project structures
-  -> formal_14060 parent-structure split
-  -> ideal reflection cache
-  -> paired online physical perturbations
-  -> PAMPT-B3 + ERM / JS / Residual
-  -> Simulation Validation tuning
-  -> formal checkpoints
-  -> simulated Test
-```
-
-## 真实域流程
-
-```text
-Frozen core-method checkpoints
-  -> RRUFF adaptation train / validation
-  -> 0/1/2/3-shot CE adaptation
-  -> freeze adapted checkpoints
-  -> one immutable evaluation on 35-sample final real test
-```
-
-## 当前安全命令
+## 安装与测试
 
 ```powershell
-# 只读模拟预检
-E:\AI4science\.venvs\xrd_tools\Scripts\python.exe -s scripts\run_v9_method_transfer.py preflight
-
-# 仅生成 7-run 计划，不训练
-E:\AI4science\.venvs\xrd_tools\Scripts\python.exe -s scripts\run_v9_method_transfer.py tune-plan
-
-# 当前已授权的 100-epoch 上限、每 10 epoch Validation、patience 2 的七条串行调参队列
-E:\AI4science\.venvs\xrd_tools\Scripts\python.exe -s scripts\run_v9_method_transfer.py tune-run --confirm-development-tuning --max-parallel-runs 1
-
-# 检查 Test 锁
-E:\AI4science\.venvs\xrd_tools\Scripts\python.exe -s scripts\run_v9_method_transfer.py final-preflight
-
-# 真实适配合同审计；不加载模型或谱图
-E:\AI4science\.venvs\xrd_tools\Scripts\python.exe -s scripts\audit_v9_real_adaptation_contract.py
-
-# 本地 manifest 已复制后执行严格哈希与成员审计
-E:\AI4science\.venvs\xrd_tools\Scripts\python.exe -s scripts\audit_v9_real_adaptation_contract.py --require-local-data
-
-# 仅生成 primary head-only 适配计划，不训练
-E:\AI4science\.venvs\xrd_tools\Scripts\python.exe -s scripts\run_v9_real_adaptation.py plan
-
-# 同时生成预注册 secondary full-network 计划，不训练
-E:\AI4science\.venvs\xrd_tools\Scripts\python.exe -s scripts\run_v9_real_adaptation.py plan --include-secondary
-
-# 单元测试
-$env:PYTHONPATH='E:\AI4science\xrd_robustness\src'
-E:\AI4science\.venvs\xrd_tools\Scripts\python.exe -s -m unittest discover -s tests -p 'test_*.py' -v
+cd E:\AI4science\xrd_robustness
+E:\AI4science\.venvs\xrd_test\Scripts\python.exe -m pip install -e ".[test]"
+E:\AI4science\.venvs\xrd_test\Scripts\python.exe -m pytest -q
 ```
 
-`run_v9_real_adaptation.py run` 当前必须返回 `refused_execution_disabled`，并保证 `model_loaded=false`、`spectra_loaded=false`。
+## 只读核验
 
-下一项工程任务是复制本地冻结 manifest、在目标仓库运行严格 preflight，并实现 classifier-head adaptation trainer、adaptation-validation checkpoint 选择与结果哈希绑定；完成这些工作仍不自动授权真实适配训练。
+```powershell
+# frozen Test class metric correction；不改 raw JSON
+E:\AI4science\.venvs\xrd_test\Scripts\python.exe -s scripts\audit_v9_simulated_test_class_metrics.py --check-only
+
+# exact-parent isolation 与 formula overlap 范围
+E:\AI4science\.venvs\xrd_test\Scripts\python.exe -s scripts\audit_formal_split_identity_overlap.py --check-only
+
+# 已有 RRUFF-301 artifact lineage；缺少注册证据时非零退出
+E:\AI4science\.venvs\xrd_test\Scripts\python.exe -s scripts\run_rruff301_retrospective_replay.py audit-existing --verify-checkpoints --check-only
+
+# 只生成/核验新的 retrospective plan，不加载模型或谱图
+E:\AI4science\.venvs\xrd_test\Scripts\python.exe -s scripts\run_rruff301_retrospective_replay.py plan-replay --check-only
+```
+
+`run_rruff301_retrospective_replay.py run-replay` 必须在模型或谱图加载前返回 `refused_execution_not_authorized`；提供 `--authorization` 路径也不能开启它。
+
+## 贡献与数据规则
+
+- 不提交 `data/`、`outputs/`、checkpoint、optimizer state、虚拟环境、文献 PDF、第三方仓库或凭据；
+- 不使用 `git add .` 或 `git add -A`；
+- 代码变更必须运行相关定向测试，交接前运行完整 pytest；
+- 新实验需要单独科学理由、明确授权和新的空输出根目录；不能通过修改历史 artifact 或重命名旧结果来制造 confirmatory lineage。

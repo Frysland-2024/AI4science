@@ -86,7 +86,12 @@ def main() -> int:
     parser.add_argument("--simulation-config", default=str(PROJECT_ROOT / "configs" / "simulation.v7.candidate.json"))
     parser.add_argument("--batch-size", type=int, default=64)
     parser.add_argument("--device", choices=["cuda", "cpu", "auto"], default="cuda")
-    parser.add_argument("--output", default=str(PROJECT_ROOT / "reports" / "v7_batch_evaluation_140.json"))
+    parser.add_argument(
+        "--output",
+        default=str(
+            PROJECT_ROOT / "outputs" / "diagnostics" / "v7_batch_evaluation_140.json"
+        ),
+    )
     args = parser.parse_args()
     if args.batch_size <= 1:
         raise SystemExit("--batch-size must be greater than 1")
