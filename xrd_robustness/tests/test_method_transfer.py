@@ -6,6 +6,8 @@ import tempfile
 import unittest
 from unittest.mock import patch
 
+import pytest
+
 
 from xrd_robustness.method_transfer import (
     audit_contract_assets,
@@ -93,6 +95,7 @@ class MethodTransferContractTests(unittest.TestCase):
             ]
         )
 
+    @pytest.mark.data_bound
     def test_current_assets_and_locked_splits_pass_preflight(self):
         audit = audit_contract_assets(self.contract, PROJECT_ROOT)
         self.assertEqual(audit["status"], "passed")
@@ -147,6 +150,7 @@ class MethodTransferContractTests(unittest.TestCase):
         self.assertFalse(narrative["structured_perturbation_in_scope"])
         self.assertFalse(narrative["simulator_label_supervision_in_scope"])
 
+    @pytest.mark.data_bound
     def test_tuning_plan_is_seven_full_budget_validation_only_runs(self):
         plan = build_tuning_plan(self.contract, PROJECT_ROOT)
         self.assertEqual(
@@ -268,10 +272,12 @@ class MethodTransferContractTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "unexpected development tuning grids"):
             validate_contract(contract)
 
+    @pytest.mark.data_bound
     def test_formal_plan_fails_closed_before_tuning_freeze(self):
         with self.assertRaisesRegex(ValueError, "tuning selection has not been frozen"):
             build_run_plan(self.contract, PROJECT_ROOT)
 
+    @pytest.mark.data_bound
     def test_formal_plan_contains_clean_offline_and_three_core_methods(self):
         with patch(
             "xrd_robustness.method_transfer._frozen_hyperparameters",
@@ -472,6 +478,7 @@ class MethodTransferTuningTests(SyntheticResultMixin, unittest.TestCase):
     def setUp(self):
         self.contract = load_contract(CONTRACT_PATH)
 
+    @pytest.mark.data_bound
     def test_tuning_selects_best_guardrail_eligible_registered_values(self):
         plan = build_tuning_plan(self.contract, PROJECT_ROOT)
         with tempfile.TemporaryDirectory() as directory:
@@ -507,6 +514,7 @@ class MethodTransferTuningTests(SyntheticResultMixin, unittest.TestCase):
             self.assertFalse(selection["simulated_test_used"])
             self.assertFalse(selection["real_test_used"])
 
+    @pytest.mark.data_bound
     def test_tuning_fails_closed_on_sampler_hash_mismatch(self):
         plan = build_tuning_plan(self.contract, PROJECT_ROOT)
         with tempfile.TemporaryDirectory() as directory:

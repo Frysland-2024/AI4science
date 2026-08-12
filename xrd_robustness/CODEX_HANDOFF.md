@@ -332,3 +332,47 @@ reviewed source, configuration, audit, documentation, and cleanup changes to
 `origin/main`. Local `outputs/` artifacts and unreviewed personal application drafts
 remain excluded. After synchronization, continue manuscript construction within the
 frozen evidence and claim boundaries above.
+
+## 16. Sealed sample–instrument inverse module (2026-08-13)
+
+A new future-only design is registered at
+`../00_project_context/future_modules/PXRD_IDENTIFIABILITY_AWARE_SAMPLE_INSTRUMENT_INVERSION.md`.
+It does not alter the active implementation or evidence.
+
+The first target is not the proposed six-variable joint vector. Under one known
+nominal prototype, the module begins with isotropic lattice-scale change plus a
+global 2-theta zero offset. It requires a differentiable expected-signal renderer,
+Jacobian/Fisher and collision audits, and a multi-start classical-fit baseline
+before neural training. Later anisotropic lattice, effective-width, and background
+stages require separate gates. An operator-mismatch panel is mandatory before any
+robustness claim.
+
+Keep these boundaries explicit:
+
+- this module is a scientific design, not completed evidence;
+- training, inference, data generation, existing frozen V9 simulated-Test access,
+  and real-XRD access remain unauthorized;
+- V9 remains the completed seven-class robust-classification project;
+- the existing measurement-nuisance inversion module remains separately sealed;
+- archived V10 is not reopened or renamed;
+- CT/MRI and optical scatterometry are methodological bridges only, not implemented
+  capabilities.
+
+The prospective four-week profile uses a two-parameter core, a gated
+three-parameter anisotropic-lattice stretch, and `log_effective_width` only as a
+fourth stretch target. It compares exactly two learned objectives on the same
+new regression wrapper (`lambda=0` versus a positive-sign forward discrepancy)
+at 100% and one frozen low-label budget. Week 1 is the renderer/identifiability
+gate; Week 2 is the supervised baseline; Week 3 is Validation-only lambda
+selection; Week 4 is the new module's locked synthetic ID/OOD/operator-mismatch
+evaluation and a short technical report. This schedule is not execution
+authorization.
+
+The user approved the focused repair for failed GitHub Actions run `31618025186`.
+Exactly eleven tests requiring ignored local `formal_14060` assets are marked
+`data_bound`; clean-checkout CI excludes that marker, while local default pytest
+still runs every test. Root `.gitattributes` preserves the existing Windows CRLF
+raw-byte hashes for the two frozen bound reports. Local portable verification is
+`272 passed, 11 deselected, 39 subtests passed`; the complete data-bound local suite
+is `283 passed, 39 subtests passed`. Publication requires the pushed revision to
+pass the remote clean-checkout workflow.

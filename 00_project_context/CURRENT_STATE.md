@@ -273,6 +273,7 @@ The following remain valuable future research/deployment axes but are **not manu
 - Tan Lab perovskite functional-ceramic phase-state adaptation;
 - Residual-v2 / conditional measurement-decoder redesign;
 - physics-guided lattice-geometry losses;
+- known-template, identifiability-aware PXRD sample–instrument inversion;
 - backbone–augmentation compatibility in one-dimensional scientific signals;
 - Raman or other scientific characterization modalities;
 - broader lab-specific calibration and domain adaptation.
@@ -406,3 +407,69 @@ frozen evidence and claim boundaries above.
 deleted-basename references passed; Test-metric, split-scope, and RRUFF lineage
 audits passed at their declared levels; desktop first-boot `-PlanOnly` listed only
 engineering checks with `formal_training_commands=0`.
+
+## 16. Sealed low-dimensional inverse-project registration (2026-08-13)
+
+### Scientific design decision
+
+The proposed six-target vector `(a, c, zero_shift, FWHM, b0, b1)` is not accepted
+as the first implementation. Compact output dimension does not establish joint
+identifiability, and the current simulator does not provide a differentiable
+`a,c -> peaks` path or registered `b0,b1` targets.
+
+A separate sibling module is now registered at
+`00_project_context/future_modules/PXRD_IDENTIFIABILITY_AWARE_SAMPLE_INSTRUMENT_INVERSION.md`.
+Its minimum target, under one known nominal prototype, is isotropic lattice-scale
+change plus global 2-theta zero offset. Jacobian/Fisher sensitivity, global
+collision search, and multi-start physics fitting must pass before any neural
+training. Anisotropic lattice change, effective width, and background may be
+added only through later gated stages.
+
+This is a future sample–instrument inverse problem, distinct from the existing
+sealed measurement-nuisance calibration module. It is not called V10 because V10
+already denotes an archived residual mechanism in this repository.
+
+### Completed work and experiment status
+
+Only the scientific contract and module index were added. No implementation,
+data generation, training, inference, checkpoint access, existing frozen V9
+simulated-Test access, or real-XRD access occurred. The completed V9-T task remains
+seven-class robust classification and has not been reinterpreted as physical
+inversion.
+
+### Current blocker and next action
+
+The inverse module remains `SEALED_FUTURE_MODULE`. Activation requires a separate
+dated authorization that freezes the nominal prototype, parameter ranges, Gate 0
+tolerances, the new module's isolated train/validation/locked-evaluation data
+scope, mismatch generator, label budgets, baselines, seeds, success criteria,
+ownership, and compute budget. Until then
+there is no authorized execution command; the active project next action remains
+manuscript construction within the frozen evidence boundary.
+
+The registered one-month profile now fixes a two-parameter core
+`(epsilon_iso, global_zero_shift)`, a three-parameter anisotropic-lattice stretch,
+and `log_effective_width` only as a fourth gated stretch target. It compares one
+ResNet under exactly two objectives—supervised regression and the same model plus
+a positive-sign forward discrepancy—at 100% and one prospectively frozen low-label
+budget. Week 1 contains the renderer and identifiability gate; Weeks 2–4 cover the
+baseline, the Validation-only lambda comparison, locked synthetic ID/OOD/operator-
+mismatch evaluation, and a 2–4 page report. Learned uncertainty, JS, new backbone
+research, diffusion, multiple prototypes, real XRD, and V9 evidence are outside
+this profile.
+
+This schedule is a prospective design, not execution authorization or a guarantee
+of a positive result. If only the spectral discrepancy improves, that supports a
+forward-fit conclusion, not more accurate parameter recovery. If identifiability
+fails, downscoping or an honest negative report is required.
+
+The user approved the focused clean-checkout portability repair after failed
+GitHub Actions run `31618025186`. Exactly eleven tests that require the
+policy-excluded local `formal_14060` assets are now marked `data_bound`; CI runs the
+portable complement while the default local command still runs the full suite.
+Two reports with frozen Windows raw-byte hashes have explicit CRLF checkout rules,
+so their existing hashes retain the same meaning across operating systems. Local
+verification passed: portable suite `272 passed, 11 deselected, 39 subtests
+passed`; complete local suite `283 passed, 39 subtests passed`. Remote clean-
+checkout verification of the pushed revision is required before publication is
+considered complete.

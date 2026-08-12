@@ -31,4 +31,4 @@ jobs:
       - name: Import installed package
         run: python -c "import xrd_robustness; print(xrd_robustness.__file__)"
       - name: Run tests
-        run: python -m pytest -q
+        run: python -m pytest -q -m "not data_bound"

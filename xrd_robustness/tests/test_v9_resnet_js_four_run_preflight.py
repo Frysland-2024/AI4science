@@ -6,6 +6,8 @@ from pathlib import Path
 import tempfile
 import unittest
 
+import pytest
+
 
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "scripts" / "audit_v9_resnet_js_four_run_preflight.py"
@@ -15,6 +17,7 @@ assert SPEC.loader is not None
 SPEC.loader.exec_module(MODULE)
 
 
+@pytest.mark.data_bound
 class FourRunPreflightTest(unittest.TestCase):
     def test_locked_contract_refuses_completed_output_root(self) -> None:
         contract = ROOT / "configs" / "v9_resnet_js_four_run.preregistered.json"

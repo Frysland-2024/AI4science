@@ -975,3 +975,50 @@ episode plan。计划是新的复现计划，不冒充历史计划；`run-replay
 authorization path 也必须在加载模型或谱图之前拒绝。若论文必须提出 confirmatory
 真实域结论，唯一合规路径是未来另行审查并授权一次 prospective execution；不能
 通过补文档或重命名旧产物来恢复不存在的历史 provenance。
+
+## 2026-08-13：把 XRD 反演收缩为已知模板条件下的低维样品—仪器联合问题
+
+新的设想希望把当前“测量扰动感知的稳健分类”延伸到 forward-model-constrained
+parameter inversion，并以此连接半导体光学量测及更长期的 CT/MRI 反演研究。方向
+本身与已有的未来研究身份一致，但原始首版同时反演 `a`、`c`、zero shift、FWHM
+和两个背景系数，混合了样品结构、仪器与信号处理参数。参数维数只有六并不意味
+前向映射单射：晶格变化和零偏都会移动峰，峰宽会混合多种未建模机制，背景系数
+又依赖强度归一化和基函数。当前模拟器也只在 `pymatgen` 生成冻结 peak table 后
+施加测量扰动，并没有可微的 `a,c -> peak positions` 链路。
+
+因此决定保留 2026-08-01 的 measurement-nuisance inversion 模块，并另建 sibling
+module，而不是覆盖旧设计或把 V9-T 反向包装成 inverse solver。新的最小目标为：
+
+\[
+z=(\varepsilon_{\mathrm{iso}},\delta),
+\]
+
+其中已知 nominal prototype、固定分数坐标和反射强度；
+`epsilon_iso` 表示样品晶格的各向同性尺度变化，`delta` 表示仪器全局 2-theta
+零偏。前者的峰移随角度近似按 `-2 tan(theta)` 变化，后者为常量偏移，所以多条
+跨宽角域的独立反射提供了原则上的区分信息，但这一点必须由实际 Jacobian/Fisher
+谱、参数碰撞搜索和多起点经典物理拟合证明，不能由神经网络拟合分数代替。
+
+版本阶梯冻结为：先做 `epsilon_iso + delta`；Gate 通过后才考虑
+`epsilon_a + epsilon_c + delta`；再后才加入仅代表 renderer 的 effective width；
+背景最后进入固定、尺度可解释的 basis。任何一级不可辨识都回退到更低维目标，
+不得通过增加网络容量掩盖。一个月的正式学习比较固定为同一 ResNet 的两个
+objective：监督回归，以及监督回归加正号的 measurement discrepancy；100% 和一个
+预注册低标签比例只是两种 label-budget strata，不扩展成新的模型族。Bragg-law
+least squares 与同前向模型的 multi-start nonlinear fit 只承担 Gate 0 和物理参照，
+并加入不同峰形、角度相关展宽或不同背景族的 operator-mismatch panel，避免只在
+同一 renderer 上制造 inverse-crime 式成功。
+
+四周顺序被固定为：第一周完成单 prototype renderer、数值梯度验证和可辨识性
+Gate；第二周只完成 supervised baseline；第三周在完全相同模型上加入
+forward-consistency，并只用 Validation 选择小 lambda 网格；第四周冻结选择后评估
+新模块自己的 clean/noise/parameter-shift/operator-mismatch panels，并形成 2–4 页
+技术报告。三条结果路径都允许保留：参数误差改善是正向 inversion 结果；只有谱
+残差改善只能称 forward fit 更稳；不可辨识或 naive consistency 无效则形成负结果。
+这份排期仍是 prospective design，不等于数据生成、训练或评估授权。
+
+本次只完成 sealed scientific contract，没有授权实现、数据生成、训练、推理、
+simulated Test 或 real XRD 访问。新项目也不使用“V10”名称，因为该名称已属于
+仓库中冻结归档的 measurement-supervised residual 机制。它与 CT/MRI 和 optical
+scatterometry 共享的是“把已知采集算子显式用于逆推断”的方法论，不意味着物理
+模型、损失函数、可辨识性或难度相同。

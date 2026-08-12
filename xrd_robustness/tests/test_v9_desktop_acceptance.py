@@ -5,6 +5,7 @@ import json
 from pathlib import Path
 import unittest
 
+import pytest
 import torch
 
 
@@ -47,6 +48,7 @@ class DesktopAccelerationComparisonTests(unittest.TestCase):
         self.assertFalse(compare_cases(reference, changed, thresholds)["passed"])
 
 
+@pytest.mark.data_bound
 class DesktopReadinessTests(unittest.TestCase):
     def setUp(self) -> None:
         self.contract = load_contract(CONTRACT_PATH)
