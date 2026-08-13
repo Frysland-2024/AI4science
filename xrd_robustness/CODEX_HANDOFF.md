@@ -376,3 +376,25 @@ raw-byte hashes for the two frozen bound reports. Local portable verification is
 `272 passed, 11 deselected, 39 subtests passed`; the complete data-bound local suite
 is `283 passed, 39 subtests passed`. Publication requires the pushed revision to
 pass the remote clean-checkout workflow.
+
+## 17. Local predecessor-literature archive (2026-08-13)
+
+The seven works used to contextualize real-domain validation now have a unified
+local acquisition record at:
+
+```text
+E:\AI4science\01_literature\source_acquisitions\2026-08-13_real_domain_predecessors\
+```
+
+The Git-ignored bundle records the available articles, author source snapshots,
+supplementary files, official URLs, license boundaries, and SHA-256 checksums.
+Newly recovered public assets include the Vecsei arXiv source, Salgado SI,
+ML4pXRDs KITopen article, CrystalMELA article/full text plus its cited ExRT
+upstream source, and CPICANN SI. Existing Salgado/XRDs, ML4pXRDs, CPICANN, and
+SimXRD source trees remain the canonical local code copies.
+
+Do not describe the archive as a new experiment or a second domain. CrystalMELA
+real spectra remain private; Toyota industrial spectra remain approval-controlled;
+the ML4pXRDs SI endpoint is currently unresolved; and no access control, licensed
+ICSD input, bulk generated dataset, checkpoint, or private data was acquired.
+The active handoff remains manuscript construction from the frozen artifacts.

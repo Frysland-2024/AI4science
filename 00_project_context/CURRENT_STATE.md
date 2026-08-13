@@ -473,3 +473,25 @@ verification passed: portable suite `272 passed, 11 deselected, 39 subtests
 passed`; complete local suite `283 passed, 39 subtests passed`. Remote clean-
 checkout verification of the pushed revision is required before publication is
 considered complete.
+
+## 17. Real-domain predecessor asset archive (2026-08-13)
+
+A local, Git-ignored acquisition bundle now records the seven predecessor works
+used in the real-domain validation comparison. Publicly retrievable gaps were
+filled where possible: the Vecsei arXiv source, Salgado supplementary PDF,
+ML4pXRDs KITopen article, CrystalMELA article/full text and cited ExRT upstream
+source, and CPICANN supplementary PDF. Existing local articles and source
+snapshots were reused instead of duplicated. Every acquired binary has a recorded
+source, license boundary, SHA-256 checksum, and archive or PDF inspection result.
+
+Negative findings are preserved rather than silently treated as download
+failures. CrystalMELA's 110 experimental patterns are private and its platform
+source and weights were not found publicly. Toyota's 1,298 industrial patterns
+remain approval-controlled; its article download was blocked by the publisher
+challenge in this environment, and no public code or independent supplementary
+archive was found. No access control was bypassed, no external data request was
+sent, and no restricted or bulk dataset was added to the repository.
+
+This is literature and provenance completion, not new scientific evidence. It
+does not change the evidence freeze, the RRUFF-301 retrospective status, the
+single-identifiable-real-domain limitation, or the manuscript-first next action.
