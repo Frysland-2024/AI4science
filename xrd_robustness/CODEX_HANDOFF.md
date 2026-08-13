@@ -398,3 +398,43 @@ real spectra remain private; Toyota industrial spectra remain approval-controlle
 the ML4pXRDs SI endpoint is currently unresolved; and no access control, licensed
 ICSD input, bulk generated dataset, checkpoint, or private data was acquired.
 The active handoff remains manuscript construction from the frozen artifacts.
+
+## 18. Group-meeting deck handoff (2026-08-14)
+
+The current evidence and claim boundary have been converted into a 15-slide,
+editable Chinese presentation at:
+
+```text
+E:\AI4science\outputs\presentations\AI4science_XRD_group_meeting_20260814.pptx
+```
+
+The file is a local delivery artifact under ignored `outputs/`; do not add it to
+Git. It follows the visual language of the local 55-page `组会1.pdf` reference,
+but it does not copy that PDF as a raster template. All charts and diagrams remain
+editable PowerPoint objects, and every slide contains a `[Sources]` block in its
+speaker notes.
+
+The deck encodes these authoritative roles and must not be relabelled during
+later edits:
+
+- Pipeline-35: engineering zero-shot/pipeline diagnostic, outside RRUFF-371;
+- legacy RRUFF-70: exploratory few-shot pilot, accuracy metric;
+- RRUFF-301: retrospective few-shot validation, Macro-F1 metric;
+- RRUFF-371: `legacy RRUFF-70 + extension RRUFF-301` asset container, not an
+  additional validation result;
+- all three historical stages remain within one RRUFF measurement ecosystem.
+
+Verification completed: 15/15 artifact-tool slides were visually inspected;
+the PPTX archive contains 15 populated editable slide XML parts and 15 populated
+speaker-note XML parts with sources; and `slides_test.py` passed with no overflow.
+The old `outputs/fig1_validation_results.png`, `fig2_test_confirmation.png`,
+`fig3_two_phase_arch.png`, and `fig4_summary_table.png` were not reused because
+they contain stale per-seed values, stale Test aggregates, or an obsolete project
+stage.
+
+No model execution or evidence mutation occurred. Existing frozen summaries,
+RRUFF artifacts, and one existing RRUFF spectrum were read only for presentation
+construction. The scientific blocker and default next action are unchanged:
+historical RRUFF-301 execution provenance remains incomplete; the real-domain
+evidence still has one identifiable source ecosystem; and work should continue on
+manuscript figures and prose before any new training or additional RRUFF sampling.

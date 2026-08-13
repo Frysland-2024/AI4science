@@ -495,3 +495,48 @@ sent, and no restricted or bulk dataset was added to the repository.
 This is literature and provenance completion, not new scientific evidence. It
 does not change the evidence freeze, the RRUFF-301 retrospective status, the
 single-identifiable-real-domain limitation, or the manuscript-first next action.
+
+## 18. Group-meeting presentation asset (2026-08-14)
+
+A 15-slide, editable Chinese group-meeting deck was completed at the local,
+Git-ignored delivery path:
+
+```text
+E:\AI4science\outputs\presentations\AI4science_XRD_group_meeting_20260814.pptx
+```
+
+The visual system was reconstructed from the 55-page local reference
+`组会1.pdf`: 16:9 layout, white/light-grey background, navy headers and footer,
+orange emphasis, pale-blue cards, and restrained result-chart layouts. The deck
+was rebuilt from the current frozen JSON/report artifacts rather than copying the
+legacy `outputs/fig1`, `fig2`, `fig3`, or `fig4` images, whose per-seed values,
+Test values, or project-stage labels are stale.
+
+The scientific narrative now makes the real-domain hierarchy explicit:
+
+- Pipeline-35 is an engineering zero-shot/pipeline diagnostic and is outside
+  RRUFF-371;
+- legacy RRUFF-70 is an exploratory few-shot pilot and reports accuracy;
+- RRUFF-301 is the strongest retrospective validation and reports Macro-F1;
+- RRUFF-371 is the asset container `legacy RRUFF-70 + extension RRUFF-301`, not
+  an additional experiment;
+- the three stages are sample-ID-disjoint cohorts in one RRUFF ecosystem, not
+  three independent acquisition domains.
+
+Presentation verification passed at three levels: all 15 slides were rendered
+and visually reviewed; the exported PPTX contains 15 non-empty editable slide
+XML parts and 15 speaker-note parts with per-slide `[Sources]` blocks; and the
+presentation overflow checker reported `Test passed. No overflow detected.`
+
+No training, inference, new data collection, checkpoint modification, simulated-
+Test rerun, or evidence-state change occurred. Existing summaries, recorded
+RRUFF results, and one existing RRUFF spectrum were read only to construct the
+deck. The PPTX remains excluded from Git by repository policy.
+
+**Current blocker:** unchanged. Historical RRUFF-301 execution provenance cannot
+be recovered, and the real-domain evidence still represents one identifiable
+RRUFF ecosystem rather than a second independent laboratory/instrument domain.
+
+**Next action:** review and rehearse the group-meeting deck, then continue the
+four frozen manuscript figures and Methods/Results/Discussion/Limitations without
+starting new training by default.
