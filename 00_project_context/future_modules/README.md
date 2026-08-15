@@ -16,7 +16,8 @@ A module in this directory must not automatically:
 | Module | Status | Relationship to active V9 |
 |---|---|---|
 | [PXRD Measurement Parameter Inversion and Calibration](PXRD_MEASUREMENT_PARAMETER_INVERSION.md) | `SEALED_FUTURE_MODULE` | Complementary future project: explicitly infer and calibrate measurement nuisance parameters, while V9 learns measurement-robust classification through JS Consistency |
-| [Identifiability-Aware Joint Sample–Instrument Inversion from PXRD](PXRD_IDENTIFIABILITY_AWARE_SAMPLE_INSTRUMENT_INVERSION.md) | `SEALED_FUTURE_MODULE` | Separate known-template inverse project: begin with isotropic lattice-scale change plus global zero offset, require identifiability and operator-mismatch gates, and leave V9/V10 unchanged |
+| [Identifiability-Aware Joint Sample–Instrument Inversion from PXRD](PXRD_IDENTIFIABILITY_AWARE_SAMPLE_INSTRUMENT_INVERSION.md) | `SEALED_FUTURE_MODULE` | Historical 2026-08-13 inverse-project design: joint sample/instrument target with identifiability gates; preserved to record the reasoning path rather than overwritten |
+| [Robust Physics-Guided Lattice-Parameter Inversion from PXRD](PXRD_ROBUST_LATTICE_PARAMETER_INVERSION.md) | `SEALED_FUTURE_MODULE` | Preferred 2026-08-15 one-month inversion scope: known-template `(a,c)` recovery, measurement perturbations as nuisance stress tests, and forward crystallographic relations as additional supervision |
 | [Scientific Signal Tokenization and Backbone–Augmentation Compatibility](SCIENTIFIC_SIGNAL_TOKENIZATION_AND_BACKBONE_COMPATIBILITY.md) | `SEALED_FUTURE_MODULE` | Explains why the earlier peak-aware Transformer/PAMPT underperformed the frozen ResNet backbone and studies whether scientific-signal tokenization, hybrid CNN-attention representations, and perturbation-compatible inductive bias can improve it without reopening V9 |
 
 ## Activation rule
