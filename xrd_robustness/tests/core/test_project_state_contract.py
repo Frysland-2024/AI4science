@@ -26,8 +26,8 @@ def test_public_release_keeps_three_positive_result_reports() -> None:
 
 
 def test_public_experiment_declares_exactly_five_paired_runs() -> None:
-    contract = _load_json(PROJECT_ROOT / "configs/experiment.v9.public.json")
-    assert contract["schema_version"] == "v9-public-experiment-v1"
+    contract = _load_json(PROJECT_ROOT / "configs/experiment.public.json")
+    assert contract["schema_version"] == "public-experiment-v1"
     assert contract["model"] == {"architecture": "ResNet-18-GN"}
     assert len(contract["runs"]) == 5
     assert len(contract["training_seeds"]) == 5
@@ -70,7 +70,7 @@ def test_public_document_links_resolve() -> None:
         PROJECT_ROOT / "reports/RESULTS.md": {
             "validation_results.json",
             "simulated_test_results.json",
-            "../configs/experiment.v9.public.json",
+            "../configs/experiment.public.json",
         },
     }
     for document, expected in expected_links.items():

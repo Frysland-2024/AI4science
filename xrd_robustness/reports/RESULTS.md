@@ -38,4 +38,4 @@ pairs. The primary single-factor OOD improvement had sample SD
 
 Exact aggregate values are available in `validation_results.json` and
 `simulated_test_results.json`. The experiment definition is
-`../configs/experiment.v9.public.json`.
+`../configs/experiment.public.json`.

@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "v9_prediction_rows.schema.json",
-  "title": "V9 per-spectrum prediction row",
+  "$id": "prediction_rows.schema.json",
+  "title": "Per-spectrum prediction row",
   "type": "object",
   "additionalProperties": true,
   "required": [

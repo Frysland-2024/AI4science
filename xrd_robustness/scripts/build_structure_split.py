@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build the V9-T parent-structure-level stratified 70/15/15 split."""
+"""Build the parent-structure-level stratified 70/15/15 split."""
 
 from __future__ import annotations
 
@@ -18,7 +18,7 @@ _SPLIT_MODULE_PATH = (
     PROJECT_ROOT / "src" / "xrd_robustness" / "structure_split.py"
 )
 _SPLIT_SPEC = importlib.util.spec_from_file_location(
-    "v9_structure_split",
+    "structure_split",
     _SPLIT_MODULE_PATH,
 )
 if _SPLIT_SPEC is None or _SPLIT_SPEC.loader is None:
@@ -93,18 +93,18 @@ def main() -> int:
         "--validation-output",
         default=str(
             PROJECT_ROOT
-            / "data/formal_14060/manifests/v9_method_transfer_validation.csv"
+            / "data/formal_14060/manifests/method_transfer_validation.csv"
         ),
     )
     parser.add_argument(
         "--data-config-output",
         default=str(
-            PROJECT_ROOT / "configs/data.v9.method_transfer.structure_split.json"
+            PROJECT_ROOT / "configs/data.method_transfer.structure_split.json"
         ),
     )
     parser.add_argument(
         "--summary-output",
-        default=str(PROJECT_ROOT / "outputs/v9_structure_split_summary.json"),
+        default=str(PROJECT_ROOT / "outputs/structure_split_summary.json"),
     )
     parser.add_argument("--seed", type=int, default=DEFAULT_SPLIT_SEED)
     args = parser.parse_args()
@@ -126,7 +126,7 @@ def main() -> int:
     split_path = Path(args.split_output).resolve()
     split_path.parent.mkdir(parents=True, exist_ok=True)
     split_payload = {
-        "schema_version": "v9t-parent-structure-split-v1",
+        "schema_version": "parent-structure-split-v1",
         "status": "frozen",
         "split_unit": "parent_structure",
         "stratification": "crystal_system",
@@ -170,7 +170,7 @@ def main() -> int:
         / "data/formal_14060/manifests/peak_cache_manifest.v7.reflection.csv"
     )
     data_config = {
-        "schema_version": "v9t-parent-structure-data-split-v1",
+        "schema_version": "parent-structure-data-split-v1",
         "status": "frozen",
         "dataset_root": "data/formal_14060",
         "dataset_size": 14_060,
@@ -240,7 +240,7 @@ def main() -> int:
     )
     material_intersections = _intersection_counts(split_rows, "material_id")
     summary = {
-        "schema_version": "v9t-parent-structure-split-summary-v1",
+        "schema_version": "parent-structure-split-summary-v1",
         "status": "passed",
         "split_seed": int(args.seed),
         "split_algorithm": SPLIT_ALGORITHM,

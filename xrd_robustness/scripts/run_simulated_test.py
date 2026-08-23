@@ -35,10 +35,10 @@ from xrd_robustness.view_manifest import (  # noqa: E402
 )
 
 
-EXPERIMENT_PATH = ROOT / "configs/experiment.v9.public.json"
+EXPERIMENT_PATH = ROOT / "configs/experiment.public.json"
 DATA_ROOT = ROOT / "data/formal_14060"
-OUTPUT_ROOT = ROOT / "outputs/v9_public_simulated_test"
-CHECKPOINT_ROOT = ROOT / "outputs/v9_resnet_js_simulated_test_checkpoints/checkpoints"
+OUTPUT_ROOT = ROOT / "outputs/public_simulated_test"
+CHECKPOINT_ROOT = ROOT / "outputs/simulated_test_checkpoints/checkpoints"
 RENDERER_SOURCE_PATHS = (
     ROOT / "src/xrd_robustness/measurement_models.py",
     ROOT / "src/xrd_robustness/online_views.py",
@@ -129,7 +129,7 @@ def load_public_contract(
     experiment_path: Path = EXPERIMENT_PATH,
 ) -> tuple[dict[str, Any], Path, dict[str, Any]]:
     contract = read_json(experiment_path)
-    if contract.get("schema_version") != "v9-public-experiment-v1":
+    if contract.get("schema_version") != "public-experiment-v1":
         raise ValueError("unsupported public experiment schema")
     if contract.get("model", {}).get("architecture") != "ResNet-18-GN":
         raise ValueError("public simulated Test supports only ResNet-18-GN")
@@ -171,7 +171,7 @@ def load_data_contract(
         raise ValueError("public experiment does not declare its data config")
     data_path = _resolve_public_path(relative_path)
     data = read_json(data_path)
-    if data.get("schema_version") != "v9t-parent-structure-data-split-v1":
+    if data.get("schema_version") != "parent-structure-data-split-v1":
         raise ValueError("unsupported public data schema")
     dataset_root = data.get("dataset_root")
     if not isinstance(dataset_root, str) or _resolve_public_path(dataset_root) != DATA_ROOT:
@@ -274,7 +274,7 @@ def preflight(
             }
         )
     gate = {
-        "schema_version": "v9-public-simulated-test-preflight-v1",
+        "schema_version": "public-simulated-test-preflight-v1",
         "status": "pass",
         "created_at": datetime.now(timezone.utc).isoformat(),
         "experiment_path": str(experiment_path.resolve()),
@@ -388,7 +388,7 @@ def build_panel_cache(
         existing = {}
     test_ids = sorted(mid for mid, row in records.items() if row["split"] == "test")
     index: dict[str, Any] = {
-        "schema_version": "v9-public-panel-cache-v1",
+        "schema_version": "public-panel-cache-v1",
         "bindings": bindings,
         "material_ids": test_ids,
         "labels": [CRYSTAL_SYSTEMS.index(records[mid]["crystal_system"]) for mid in test_ids],
@@ -506,7 +506,7 @@ def initialize_or_resume_run(
             raise RuntimeError("resume device differs from the in-progress run")
         return state
     state = {
-        "schema_version": "v9-public-simulated-test-state-v1",
+        "schema_version": "public-simulated-test-state-v1",
         "status": "in_progress",
         "started_at": datetime.now(timezone.utc).isoformat(),
         "batch_size": int(batch_size),
@@ -584,7 +584,7 @@ def _aggregate_summary(
     rng = np.random.default_rng(20260801)
     bootstrap = rng.choice(primary, size=(20_000, len(primary)), replace=True).mean(axis=1)
     return {
-        "schema_version": "v9-public-simulated-test-output-v1",
+        "schema_version": "public-simulated-test-output-v1",
         "status": "completed",
         "per_run": per_run,
         "paired_deltas": paired,
@@ -652,7 +652,7 @@ def execute(
     )
     raw_path = output_root / "raw_results.json"
     raw: dict[str, Any] = {
-        "schema_version": "v9-public-simulated-test-raw-v1",
+        "schema_version": "public-simulated-test-raw-v1",
         "runs": {},
     }
     for run_id in state["completed_runs"]:

@@ -7,7 +7,7 @@ import numpy as np
 import pytest
 
 
-SCRIPT = Path(__file__).resolve().parents[2] / "scripts/run_v9_resnet_js_simulated_test.py"
+SCRIPT = Path(__file__).resolve().parents[2] / "scripts/run_simulated_test.py"
 SPEC = importlib.util.spec_from_file_location("public_simulated_test_runner", SCRIPT)
 assert SPEC is not None and SPEC.loader is not None
 runner = importlib.util.module_from_spec(SPEC)
@@ -40,10 +40,10 @@ def test_public_contract_resolves_ten_resnet_runs_and_profiles() -> None:
         "dynamic_js",
     }
     assert runner.flatten_profiles(contract)
-    assert simulation_path.name == "simulation.v9.method_transfer.frozen.json"
+    assert simulation_path.name == "simulation.method_transfer.frozen.json"
     assert set(runner.flatten_profiles(contract)).issubset(simulation["profiles"])
-    assert data_path.name == "data.v9.method_transfer.structure_split.json"
-    assert data["schema_version"] == "v9t-parent-structure-data-split-v1"
+    assert data_path.name == "data.method_transfer.structure_split.json"
+    assert data["schema_version"] == "parent-structure-data-split-v1"
 
 
 def test_runtime_bindings_cover_checkpoints_and_view_manifest() -> None:
@@ -102,7 +102,7 @@ def test_named_crystal_system_f1_uses_full_confusion_matrix() -> None:
 def test_runner_uses_public_contract_and_configurable_runtime_output(
     tmp_path: Path,
 ) -> None:
-    assert runner.EXPERIMENT_PATH.name == "experiment.v9.public.json"
+    assert runner.EXPERIMENT_PATH.name == "experiment.public.json"
     assert runner.EXPERIMENT_PATH.is_file()
     args = runner.build_parser().parse_args(
         ["preflight", "--output-root", str(tmp_path)]

@@ -1,5 +1,5 @@
 {
-  "schema_version": "v9-public-experiment-v1",
+  "schema_version": "public-experiment-v1",
   "status": "completed_and_frozen",
   "model": {
     "architecture": "ResNet-18-GN"
@@ -86,8 +86,8 @@
     ]
   },
   "config_paths": {
-    "data": "configs/data.v9.method_transfer.structure_split.json",
-    "simulation": "configs/simulation.v9.method_transfer.frozen.json",
-    "prediction_rows_schema": "configs/v9_prediction_rows.schema.json"
+    "data": "configs/data.method_transfer.structure_split.json",
+    "simulation": "configs/simulation.method_transfer.frozen.json",
+    "prediction_rows_schema": "configs/prediction_rows.schema.json"
   }
 }
