@@ -19,8 +19,8 @@
 
 | 文件 | 用途 |
 |---|---|
-| [`00_project_context/CURRENT_STATE.md`](00_project_context/CURRENT_STATE.md) | 当前完成项、实验状态、工作重点与下一步 |
-| [`00_project_context/APPLICATION_RESEARCH_NARRATIVE.md`](00_project_context/APPLICATION_RESEARCH_NARRATIVE.md) | 项目申请与交流叙事 |
+| [`00_project_context/CURRENT_STATE.md`](00_project_context/CURRENT_STATE.md) | 项目现状、进度和下一步 |
+| [`00_project_context/APPLICATION_RESEARCH_NARRATIVE.md`](00_project_context/APPLICATION_RESEARCH_NARRATIVE.md) | 申请和面试用的项目介绍 |
 | [`xrd_robustness/README.md`](xrd_robustness/README.md) | 安装、代码结构与使用方式 |
 | [`xrd_robustness/MANUSCRIPT.md`](xrd_robustness/MANUSCRIPT.md) | 论文正文框架 |
 | [`xrd_robustness/reports/RESULTS.md`](xrd_robustness/reports/RESULTS.md) | 结果汇总 |

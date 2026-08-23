@@ -24,7 +24,7 @@
 | `src/xrd_robustness/models/ml4pxrd_resnet1d.py` | ResNet-18-GN 骨干网络 |
 | `src/xrd_robustness/training/objectives.py` | Dynamic ERM 与 JS 一致性目标 |
 | `src/xrd_robustness/simulator.py` | PXRD 物理扰动模拟器 |
-| `src/xrd_robustness/online_views.py` | 同一母体结构的配对在线视图 |
+| `src/xrd_robustness/online_views.py` | 同一母体结构的两份配对谱图 |
 | `scripts/train.py` | 训练脚本（Dynamic ERM 与 JS 一致性） |
 
 ## 安装与测试
