@@ -1,542 +1,107 @@
 # AI4science Current State
 
-**Canonical status date:** 2026-08-11
-**Repository:** `Frysland-2024/AI4science`  
-**Active engineering root:** `xrd_robustness/`
+**Status date:** 2026-08-23
 
-> This file records only the current authoritative state. Historical reasoning remains in `PROJECT_JOURNEY.md`, dated reports, Git history, and the RRUFF-301 audit trail.
+**Authority:** current project state for `Frysland-2024/AI4science`
 
-## 1. Current phase
+**Phase:** evidence freeze → manuscript and figure construction
 
-The current V9-T / JS-consistency study has completed the evidence-building phase required for a first manuscript draft.
+## 1. Current scientific design
 
-**Current project mode:**
+当前论文问题是：在线 PXRD 模拟器能够为同一 parent structure 生成不同物理扰动视图时，measurement-equivalence consistency 是否能提高七晶系分类器的合成 OOD 鲁棒性。
 
-`experiment-building → evidence freeze → manuscript building`
+冻结合同如下：
 
-The default next action is **not additional training**. The default next action is manuscript, figure, and application-narrative preparation from frozen evidence.
+- task：7-class crystal-system classification；
+- backbone：ResNet-18-GN；
+- baseline：Dynamic ERM；
+- selected method：Dynamic JS Consistency，`lambda_js=60`；
+- preprocessing：identity；optimizer：AdamW；schedule：constant LR；
+- split：Train 9,842 / Validation 2,109 / Test 2,109；
+- split claim：exact-parent-disjoint only。
 
-Canonical evidence-freeze document:
+模型不输出晶格常数、相分数、应变、织构、峰宽或其他物理参数。
 
-`00_project_context/EVIDENCE_FREEZE_V1_20260808.md`
+## 2. Completed and frozen evidence
 
-## 2. Frozen paper-level research question
-
-The active paper asks:
-
-> Can parent-structure provenance retained by an online PXRD simulator be used as measurement-equivalence supervision, so that physically different observations of the same crystal produce more stable predictions and improve both simulated OOD robustness and low-label adaptation to experimental PXRD relative to matched Dynamic ERM?
-
-The conceptual advance is **not** a new JS algorithm. It is the use of simulator-retained same-parent relationships as structured supervision under a controlled matched-data design.
-
-## 3. Frozen method contract
-
-- task: seven-crystal-system PXRD classification;
-- parent structures: 14,060 total;
-- split: Train 9,842 / Validation 2,109 / Test 2,109;
-- backbone: ResNet-18-GN;
-- preprocessing: identity;
-- optimizer: AdamW;
-- learning-rate schedule: constant;
-- baseline: Dynamic ERM with two online physical views;
-- selected method: JS Consistency on the same two views;
-- frozen weight: `lambda_js = 60`.
-
-Residual-v1 is archived after its preregistered stability Gate failure. V10 measurement-supervised residual learning is archived as a partial/negative mechanism study. PAMPT is a foundation/backbone diagnosis, not the active model. These modules are not part of the current paper’s primary comparison.
-
-## 4. Frozen simulated Validation evidence
-
-Five matched training seeds, two methods per seed, ten runs total.
-
-Authoritative records:
-
-- `xrd_robustness/reports/v9_resnet_js_ten_run_summary.json`
-- `xrd_robustness/reports/v9_resnet_js_ten_run_results_20260801.md`
-
-| Metric | Dynamic ERM | JS λ=60 | Paired mean Δ |
+| Evidence | Dynamic ERM | Dynamic JS | Paired result |
 |---|---:|---:|---:|
-| Mean single-factor OOD Macro-F1 | 0.658495 | 0.705064 | **+0.046569** |
-| In-range Macro-F1 | 0.705112 | 0.733103 | **+0.027991** |
-| Level-0 Macro-F1 | 0.706891 | 0.734648 | **+0.027757** |
-| Worst-class F1 | 0.574014 | 0.593611 | +0.019597 |
+| Validation mean single-factor OOD Macro-F1 | 0.658495 | 0.705064 | Δ `+0.046569`; 5/5 positive |
+| Frozen simulated Test mean single-factor OOD Macro-F1 | 0.65074 | 0.70534 | Δ `+0.054600`; 5/5 positive |
+| RRUFF-301 few-shot Macro-F1, K=1/2/5 | — | — | Δ `+0.0433/+0.0460/+0.0545` |
 
-Primary paired OOD effect:
+Validation ten-run 与 frozen simulated Test 均已完成并关闭。Test 只支持 aggregate synthetic-OOD robustness improvement；它不证明每个晶系或每个压力条件都改善。
 
-- mean Δ = `+0.046569`;
-- sample SD = `0.009711`;
-- paired-bootstrap 95% interval = `[0.038145, 0.052834]`;
-- positive in all five matched training-seed pairs.
+RRUFF-301 是当前最强的真实域补充证据，但只能称为 **retrospective validation**。历史 runner、episode support IDs、独立执行授权、完整日志以及代码/运行时绑定不全，因此不能升级为 confirmatory evidence。该 provenance 缺口是论文 claim limitation，**不是当前 blocker，也不构成重跑理由**。
 
-The preregistered in-range guardrail passed.
+旧 `per_crystal_system_f1` diagnostic 的实现有误；正确 named class F1 已由 full-panel confusion matrix 复核。主 Macro-F1、worst-class F1 和冻结 summary 不受影响。
 
-## 5. Frozen simulated Test evidence
+权威证据入口：
 
-The one-shot simulated Test has completed and is frozen.
+- [`../xrd_robustness/reports/EVIDENCE_INDEX.md`](../xrd_robustness/reports/EVIDENCE_INDEX.md)
+- [`../xrd_robustness/reports/v9_resnet_js_ten_run_summary.json`](../xrd_robustness/reports/v9_resnet_js_ten_run_summary.json)
+- [`../xrd_robustness/reports/v9_resnet_js_simulated_test_summary.json`](../xrd_robustness/reports/v9_resnet_js_simulated_test_summary.json)
+- [`../xrd_robustness/reports/v9_resnet_js_simulated_test_audit.json`](../xrd_robustness/reports/v9_resnet_js_simulated_test_audit.json)
+- [`../xrd_robustness/reports/v9_resnet_js_simulated_test_class_metric_correction.json`](../xrd_robustness/reports/v9_resnet_js_simulated_test_class_metric_correction.json)
+- [`../xrd_robustness/reports/v9_formal_split_identity_overlap_audit.json`](../xrd_robustness/reports/v9_formal_split_identity_overlap_audit.json)
+- [`../xrd_robustness/reports/rruff301_existing_artifact_lineage_audit.json`](../xrd_robustness/reports/rruff301_existing_artifact_lineage_audit.json)
 
-Authoritative records:
+## 3. Current engineering state
 
-- `xrd_robustness/reports/v9_resnet_js_simulated_test_summary.json`
-- `xrd_robustness/reports/v9_resnet_js_simulated_test_results_20260803.md`
-- `xrd_robustness/reports/v9_resnet_js_simulated_test_audit.json`
+Active reusable implementation:
 
-Primary result:
+- [`../xrd_robustness/src/xrd_robustness/models/ml4pxrd_resnet1d.py`](../xrd_robustness/src/xrd_robustness/models/ml4pxrd_resnet1d.py)
+- [`../xrd_robustness/src/xrd_robustness/training/objectives.py`](../xrd_robustness/src/xrd_robustness/training/objectives.py)
+- [`../xrd_robustness/src/xrd_robustness/simulator.py`](../xrd_robustness/src/xrd_robustness/simulator.py)
+- [`../xrd_robustness/src/xrd_robustness/online_views.py`](../xrd_robustness/src/xrd_robustness/online_views.py)
+- [`../xrd_robustness/scripts/train_v7.py`](../xrd_robustness/scripts/train_v7.py) — 文件名沿用旧版本，但仍是 V9-T 共享训练入口
+- [`../xrd_robustness/src/xrd_robustness/evaluation/rruff301_replay.py`](../xrd_robustness/src/xrd_robustness/evaluation/rruff301_replay.py)
 
-- five-pair mean single-factor OOD Macro-F1 Δ = **`+0.054600`**;
-- sample SD = `0.007271`;
-- paired-bootstrap 95% interval = **`[+0.048944, +0.060255]`**;
-- all five paired OOD deltas are positive;
-- all five in-range deltas are positive.
+2026-08-23 仓库整理将一次性 runner、重复配置、重复报告和低价值脚本测试合并或删除。当前布局为：`scripts/` 10 个文件；`configs/` 顶层 10 个、`provenance/` 3 个；`reports/` 顶层 10 个、hash-bound `provenance/` 8 个、Git-safe ten-run archive 3 个；`tests/` 顶层 1 个，并按 `core 6 / simulation 9 / training 9 / evidence 5` 组织。每个作者维护目录均不超过 10 个直接文件。
 
-Interpretation boundary: this confirms an **aggregate simulated-domain robustness improvement**. It does not establish uniform improvement for every class and perturbation. Monoclinic and selected shift/texture conditions remain important secondary limitations.
+历史科学结论写入 [`PROJECT_JOURNEY.md`](PROJECT_JOURNEY.md) 和证据索引，原始文件仍可从 Git baseline `f36be82b2a0b5fd3c58ec87a58fa6e3ba839f217` 恢复。保留的 provenance 子目录不是旧报告堆积：其中的文件仍被冻结方法合同逐项路径/哈希校验。
 
-No simulated-Test rerun, Test-guided retuning, checkpoint substitution, seed exclusion, or method reopening is permitted for the current paper.
+本地忽略的数据集、checkpoint、生成谱图和 raw outputs 是复核资产，不属于本轮删除范围，也不得提交。
 
-## 6. Real-domain evidence hierarchy
+## 4. Hard execution lock
 
-### 6.1 RRUFF-70 — exploratory only
+在没有新的科学问题、书面授权和全新空输出根目录前：
 
-RRUFF-70 produced the first real-domain few-shot signal that JS-pretrained representations might adapt more efficiently than ERM-pretrained representations. Because the cohort was small and had already informed hypothesis formation, it is now explicitly classified as **exploratory/pilot evidence**, not final confirmatory evidence.
+- 不启动新训练；
+- 不重跑 frozen simulated Test；
+- 不根据 Test 调参或改变方法选择；
+- 不替换冻结 checkpoint；
+- 不把历史 RRUFF-301 重新命名为 confirmatory run；
+- 不执行 sealed future module。
 
-Its role is historical hypothesis generation and pipeline development.
+## 5. Known limitations and current blocker
 
-### 6.2 RRUFF-301 v2 — strongest real-domain retrospective validation
+已知限制：
 
-Canonical commit:
+- exact-parent-disjoint 不等于 formula、chemical-family、prototype 或 symmetry-equivalence disjoint；
+- simulated Test 是合成域 aggregate 证据，存在 class/condition heterogeneity；
+- RRUFF-301 历史 provenance 不完整，只允许 retrospective claim；
+- 当前结论只覆盖七晶系分类，不可外推为参数反演能力。
 
-`24d8c8511bdea9df8b52cdf779b04420bebffafc`
+当前 blocker 是**论文与图表尚未完成并接受 claim-boundary 校核**。RRUFF provenance 只是需要在稿件中透明披露的限制，不是工程或实验 blocker。
 
-Authoritative records:
+## 6. Sealed future direction
 
-- `xrd_robustness/reports/rruff301_confirmatory_full_report_20260807.md`
-- `xrd_robustness/reports/rruff301_representation_analysis_20260807.md`
-- `xrd_robustness/reports/rruff301_v1_audit_trail_20260807.md`
-- `xrd_robustness/reports/rruff301_existing_artifact_lineage_audit.json`
+[`future_modules/PXRD_ROBUST_LATTICE_PARAMETER_INVERSION.md`](future_modules/PXRD_ROBUST_LATTICE_PARAMETER_INVERSION.md) 登记了 known-template tetragonal `(a,c)` robust lattice-parameter inversion：以 nuisance robustness 和 physics-guided forward consistency 为核心，并设置 identifiability gate 与 conventional-fit baseline。
 
-The first three filenames are historical. The lineage audit supersedes their
-"confirmatory" wording: the numerical artifacts can be checked at declared levels,
-but pre-execution authorization, the original RRUFF-301 runner, the original episode
-plan/support IDs, the execution log, and the bound code/runtime state are unavailable.
-The results are therefore retrospective evidence, not confirmatory evidence.
+该模块状态为 **SEALED_FUTURE_MODULE**。它不是 V9-T 的追加目标，尚未获执行授权，也不能与当前七晶系分类 claim 混写。
 
-Protocol:
+## 7. Next actions
 
-- 301 experimental RRUFF mineral PXRD spectra;
-- 43 spectra per crystal system;
-- adaptation pool: 10/class = 70 total;
-- locked test set: 33/class = 231 total;
-- K = 1, 2, 5 support examples per class;
-- 5 pretraining seeds × 5 episode seeds;
-- frozen convolutional backbone;
-- trainable projection `7168→256` plus 7-class head;
-- AdamW, `lr=1e-4`;
-- primary metric: paired ΔMacro-F1 (JS-pretrained − ERM-pretrained).
+1. 依据冻结 Validation/Test/RRUFF-301 证据完成论文正文与图表。
+2. 在方法与限制部分明确 exact-parent split、class heterogeneity 和 retrospective provenance 边界。
+3. 仅在出现新的、可预注册的科学问题时评审新实验；否则保持冻结。
 
-Recorded v2 results (retrospective validation):
-
-| K | ERM Macro-F1 | JS Macro-F1 | Paired mean Δ | Positive/25 |
-|---:|---:|---:|---:|---:|
-| 1 | 0.2847 ± 0.026 | 0.3280 ± 0.032 | **+0.0433** | 21 |
-| 2 | 0.3026 ± 0.040 | 0.3486 ± 0.033 | **+0.0460** | 23 |
-| 5 | 0.3555 ± 0.030 | 0.4099 ± 0.027 | **+0.0545** | 24 |
-
-Across K=1/2/5, **68 of 75 paired comparisons are positive**.
-
-A fixed-200-step sensitivity check at K=1 and K=5 preserves the same direction, reducing concern that the result is driven only by the support-loss early-stopping rule.
-
-The earlier RRUFF-70 monoclinic negative-transfer pattern does **not** replicate in RRUFF-301 v2; however, per-class effects remain nonuniform, so no universal class-wise improvement claim is allowed.
-
-### 6.3 RRUFF-301 v1 label bug
-
-The first intended confirmatory execution was invalidated after a class-label construction error was discovered: RRUFF CELL PARAMETERS metadata represented trigonal records under a hexagonal convention, causing an invalid trigonal/hexagonal split.
-
-The project did not repair or reinterpret v1 post hoc. Instead:
-
-1. v1 was invalidated for confirmatory use;
-2. the error and diagnosis were preserved in an audit trail;
-3. labels were rebuilt using DIF `space_group` evidence plus crystallographic mapping with `pymatgen.SpaceGroup`;
-4. the complete experiment was rerun as v2 on the corrected locked split, but the
-   available repository artifacts do not establish a valid confirmatory execution
-   lineage.
-
-This exploratory→intended-confirmatory→bug-discovery→full-rerun sequence is part of the project’s research-governance record. The final rerun remains retrospective because its original governance and execution provenance cannot now be reconstructed.
-
-## 7. Representation and calibration evidence
-
-Representation analysis from the RRUFF-301 v2 lineage includes:
-
-- fix/break patterns;
-- confidence dynamics;
-- confusion asymmetry;
-- per-class effects.
-
-Calibration analysis was added in commit:
-
-`a1966ba939f16b291dad2dd4d48e79bfedfc7b8f`
-
-Assets:
-
-- `outputs/calibration_metrics.json`;
-- `outputs/calibration_report.html`.
-
-Calibration includes ECE, NLL, Brier score, and confidence-distribution analysis. It is currently **supplementary evidence**, not a primary manuscript claim.
-
-## 8. Frozen manuscript figure plan
-
-### Figure 1 — Method / simulator provenance
-
-Show parent crystal → two online physical measurement views → matched ERM vs JS objectives. Central message: the simulator is both a data engine and a provider of measurement-equivalence supervision.
-
-### Figure 2 — Simulated Validation + Test paired effects
-
-Show the five matched training-seed paired effects on Validation and frozen Test, with the in-range guardrail summarized but not overplotted.
-
-### Figure 3 — RRUFF-301 v2 K=1/2/5 few-shot adaptation
-
-Show ERM vs JS Macro-F1 and paired Δ distributions/points across the 25 comparisons at each K. Mark `68/75 positive`.
-
-### Figure 4 — Effect heterogeneity / mechanism diagnostic
-
-Use per-class ΔF1 plus selected fix/break or confidence evidence. Main message: gains are broad but not uniform.
-
-### Supplementary
-
-- calibration;
-- complete profile tables;
-- full per-class tables;
-- fixed-step sensitivity;
-- zero-shot diagnostics;
-- v1 audit trail;
-- hyperparameter and implementation tables.
-
-## 9. Manuscript claim boundary
-
-### Allowed strong claim — simulated domain
-
-> Under matched online physical perturbation exposure, explicitly using parent-structure measurement-equivalence through JS consistency improves aggregate simulated OOD robustness relative to Dynamic ERM.
-
-### Allowed descriptive claim — RRUFF-301
-
-> In the recorded RRUFF-301 few-shot artifacts, JS-pretrained models have higher
-> mean Macro-F1 than their matched ERM-pretrained counterparts at K=1/2/5. The 150
-> few-shot metrics and fixed 231-spectrum test membership were recomputed from
-> 34,650 prediction rows, but the historical execution provenance is incomplete;
-> this is retrospective validation, not confirmatory evidence.
-
-### Allowed interpretation
-
-> The simulator provides structured supervision beyond class labels because it retains provenance linking multiple perturbed observations to the same latent crystal structure.
-
-### Forbidden / unsupported claim
-
-- JS is a novel consistency algorithm;
-- the method universally solves PXRD Sim2Real;
-- every crystal system and every perturbation improves;
-- RRUFF represents all experimental PXRD;
-- the method proves semantic/measurement disentanglement;
-- residual approaches are impossible for XRD;
-- any claim based on Test-guided retuning or post-hoc seed selection.
-
-## 10. Current scientific decision
-
-**The current paper is draft-ready, but its real-domain evidence is not confirmation-complete.**
-
-The evidence chain now contains:
-
-1. matched-data method comparison;
-2. preregistered multi-seed Validation replication;
-3. frozen simulated Test confirmation;
-4. separate RRUFF-301 retrospective experimental-domain validation;
-5. per-class/profile limitations;
-6. representation and calibration supplementary evidence;
-7. transparent v1 label-bug audit and corrected v2 rerun.
-
-The paper should now be drafted from the frozen evidence rather than expanded by default.
-
-## 11. Current next actions
-
-1. Generate the four main figures from existing artifacts.
-2. Write the literature-backed Introduction around physical augmentation, on-the-fly PXRD generation, simulator provenance, consistency learning, and Sim2Real/few-shot transfer.
-3. Write exact Methods from frozen configs, hashes, and audit reports.
-4. Write Results in the frozen order: Validation → simulated Test → RRUFF-301 → heterogeneity/diagnostics.
-5. Write Discussion and Limitations before polishing the abstract.
-6. Maintain the application-ready narrative in `00_project_context/APPLICATION_RESEARCH_NARRATIVE_V1_20260808.md`.
-
-### New-experiment rule
-
-No new training is the default.
-
-A new experiment may be proposed only if manuscript drafting or external review identifies a **specific reviewer-critical evidence gap** that cannot be answered using the frozen artifacts. Such an experiment must be named and justified prospectively and must not reopen `lambda_js`, method selection, or the frozen simulated Test. If a confirmatory real-domain claim is required, it needs a newly authorized prospective execution; the historical RRUFF-301 artifacts cannot be relabelled as confirmatory.
-
-## 12. Future work not required for the current paper
-
-The following remain valuable future research/deployment axes but are **not manuscript blockers**:
-
-- Tan Lab perovskite functional-ceramic phase-state adaptation;
-- Residual-v2 / conditional measurement-decoder redesign;
-- physics-guided lattice-geometry losses;
-- known-template, identifiability-aware PXRD sample–instrument inversion;
-- backbone–augmentation compatibility in one-dimensional scientific signals;
-- Raman or other scientific characterization modalities;
-- broader lab-specific calibration and domain adaptation.
-
-These must remain separate from the frozen evidence of the current paper.
-
-## 13. Repository workflow update (2026-08-10)
-
-- Completed engineering/documentation work: removed the repository-wide mandatory
-  `check-journal-indexing` startup requirement. The skill remains optional and
-  scoped to explicit SCIE, EI Compendex, or CSCD verification tasks.
-- Experiment status: unchanged; no data, model, configuration, or evidence artifact
-  was accessed or modified.
-- Current blocker: manuscript-building work remains the active project workstream.
-- Next action: proceed with the frozen manuscript and figure plan in Section 11.
-
-## 14. Code-and-artifact repair audit (2026-08-11; authoritative)
-
-This section supersedes earlier current-state wording where it conflicts with the
-source-code and artifact audit.
-
-### 14.1 Scientific task boundary
-
-The implemented task is robust seven-class PXRD crystal-system classification. The
-model emits seven logits and the completed losses/evaluations are classification
-losses and metrics. Perturbation parameters are sampled nuisance variables used to
-construct views; the current code does not estimate lattice constants, phase
-fractions, strain, texture, peak parameters, or another physical quantity. The
-project supports a scientific-ML / measurement-robustness capability claim, not a
-completed inverse-problem or physical-parameter-recovery claim.
-
-### 14.2 Completed engineering repairs
-
-- Future simulated-Test output now maps the full-panel `per_class_f1` vector to
-  canonical crystal-system names. The former implementation filtered to one true
-  class and then computed seven-class Macro-F1, creating a defective diagnostic.
-- Frozen Test JSON was not edited or rerun. The independent correction sidecar is
-  `xrd_robustness/reports/v9_resnet_js_simulated_test_class_metric_correction.json`.
-- A split-scope auditor now distinguishes exact-parent isolation from exact-formula
-  overlap in `xrd_robustness/reports/v9_formal_split_identity_overlap_audit.json`.
-- RRUFF-301 now has a fail-closed retrospective contract, artifact auditor, and
-  deterministic replay plan. `run-replay` cannot load a model or spectrum and
-  cannot be enabled merely by supplying an authorization path.
-- Packaging metadata, clean-install test dependencies, stale handoff tests, and a
-  GitHub Actions test workflow were repaired.
-
-### 14.3 Completed evidence checks
-
-- Simulated Test: 360/360 profile records contain a defective legacy named-class
-  field; the correct `per_class_f1` values exactly match their confusion matrices.
-  Ten frozen per-run hashes remain valid. `macro_f1`, `per_class_f1`,
-  `worst_class_f1`, paired deltas, and the primary summary are unaffected.
-- Formal split: 0 exact parent fingerprints cross train/validation/test. However,
-  47 exact formulas cross splits, involving 585/14,060 records; 12 formulas occur
-  in all three splits. The established claim is exact-parent-disjoint only. No
-  formula-, chemical-family-, prototype-, or symmetry-equivalence-disjoint claim is
-  supported.
-- RRUFF-301: all registered file hashes and ten checkpoint hashes pass. For the 150
-  few-shot runs, accuracy, Macro-F1, and per-class F1 were recomputed from 34,650
-  prediction rows, and every run uses the same 231 locked-test IDs. The 100
-  fixed-200 records have hash/schema/grid/step/range checks only. The ten zero-shot
-  records additionally pass Macro-F1-versus-per-class internal checks, but their
-  accuracy cannot be recomputed without prediction rows.
-
-### 14.4 Experiment status, unresolved risk, and next action
-
-No training, inference, checkpoint substitution, split rebuild, or simulated-Test
-access was performed during this repair. Frozen raw artifacts remain unchanged.
-
-The unrecoverable blocker is historical RRUFF-301 provenance: the original runner,
-episode support IDs, independent pre-execution authorization, execution log, and
-bound code/runtime state are absent. A newly generated retrospective plan cannot
-repair that history and remains `NOT_AUTHORIZED`. If confirmation is required, the
-next scientific action is a separately reviewed prospective authorization and a new
-empty output root—not relabelling the old results.
-
-Exact read-only verification commands:
+当前精确下一条命令：
 
 ```powershell
 cd E:\AI4science\xrd_robustness
-python -s scripts/audit_v9_simulated_test_class_metrics.py --check-only
-python -s scripts/audit_formal_split_identity_overlap.py --check-only
-python -s scripts/run_rruff301_retrospective_replay.py audit-existing --verify-checkpoints --check-only
-python -s -m pytest -q
+E:\AI4science\.venvs\xrd_test\Scripts\python.exe -m pytest -q
 ```
 
-## 15. Repository cleanup and authority consolidation (2026-08-11)
-
-This maintenance pass removed redundant repository snapshots and one-time delivery
-machinery without changing the scientific evidence:
-
-- removed the duplicated 2026-06-27 extracted context pack, static Git/directory
-  inventories, an obsolete sync memo, and superseded cleanup reports;
-- removed the legacy account-handoff bundle while retaining the current
-  `xrd_robustness/CODEX_HANDOFF.md`;
-- removed one-time desktop migration packaging and its 14,301-row payload inventory;
-  retained the frozen hardware profiles and all eight implementation paths required
-  by the active method-transfer contract, while simplifying first-boot/readiness
-  checks so they no longer consume the retired migration payload;
-- removed superseded tuning/runtime snapshots, generated pytest XML, empty failure
-  tables, and one byte-identical duplicate Gate-3 report pair;
-- replaced the legacy handoff/migration test with a current project-state contract
-  test and changed the historical Gate-3 launcher to write only the canonical
-  `gate3_pampt_vs_resnet` report pair;
-- rewrote the three repository entry READMEs to point to the 2026-08-11 authority
-  and added explicit supersession notices to the 2026-08-08 freeze, manuscript,
-  and application drafts;
-- moved only regenerable caches, logs, a temporary wheel, profiling output, and
-  confirmed duplicate/intermediate images out of the repository into
-  a local temporary cleanup directory outside the repository.
-
-Preserved on purpose: frozen simulated-Test evidence, RRUFF artifacts and audit
-trail, datasets, checkpoints, experimental outputs, user admission assets,
-literature, virtual environments, and the Residual/V10/PAMPT/opXRD negative or
-archived scientific record. The cleanup does not authorize training, inference,
-Test reruns, or evidence rewriting.
-
-**Experiment status:** unchanged from Section 14; no training or inference was
-performed and no frozen raw artifact was edited.
-
-**Current blocker:** historical RRUFF-301 provenance remains unrecoverable.
-
-**Publication scope (2026-08-13):** the user explicitly authorized publication of
-the reviewed local source, configuration, audit, and documentation changes. Local
-`outputs/` delivery artifacts remain excluded by repository policy.
-
-**Next action after synchronization:** continue manuscript construction within the
-frozen evidence and claim boundaries above.
-
-**Verification:** `283 passed, 39 subtests passed`; current Markdown links and
-deleted-basename references passed; Test-metric, split-scope, and RRUFF lineage
-audits passed at their declared levels; desktop first-boot `-PlanOnly` listed only
-engineering checks with `formal_training_commands=0`.
-
-## 16. Sealed low-dimensional inverse-project registration (2026-08-13)
-
-### Scientific design decision
-
-The proposed six-target vector `(a, c, zero_shift, FWHM, b0, b1)` is not accepted
-as the first implementation. Compact output dimension does not establish joint
-identifiability, and the current simulator does not provide a differentiable
-`a,c -> peaks` path or registered `b0,b1` targets.
-
-A separate sibling module is now registered at
-`00_project_context/future_modules/PXRD_IDENTIFIABILITY_AWARE_SAMPLE_INSTRUMENT_INVERSION.md`.
-Its minimum target, under one known nominal prototype, is isotropic lattice-scale
-change plus global 2-theta zero offset. Jacobian/Fisher sensitivity, global
-collision search, and multi-start physics fitting must pass before any neural
-training. Anisotropic lattice change, effective width, and background may be
-added only through later gated stages.
-
-This is a future sample–instrument inverse problem, distinct from the existing
-sealed measurement-nuisance calibration module. It is not called V10 because V10
-already denotes an archived residual mechanism in this repository.
-
-### Completed work and experiment status
-
-Only the scientific contract and module index were added. No implementation,
-data generation, training, inference, checkpoint access, existing frozen V9
-simulated-Test access, or real-XRD access occurred. The completed V9-T task remains
-seven-class robust classification and has not been reinterpreted as physical
-inversion.
-
-### Current blocker and next action
-
-The inverse module remains `SEALED_FUTURE_MODULE`. Activation requires a separate
-dated authorization that freezes the nominal prototype, parameter ranges, Gate 0
-tolerances, the new module's isolated train/validation/locked-evaluation data
-scope, mismatch generator, label budgets, baselines, seeds, success criteria,
-ownership, and compute budget. Until then
-there is no authorized execution command; the active project next action remains
-manuscript construction within the frozen evidence boundary.
-
-The registered one-month profile now fixes a two-parameter core
-`(epsilon_iso, global_zero_shift)`, a three-parameter anisotropic-lattice stretch,
-and `log_effective_width` only as a fourth gated stretch target. It compares one
-ResNet under exactly two objectives—supervised regression and the same model plus
-a positive-sign forward discrepancy—at 100% and one prospectively frozen low-label
-budget. Week 1 contains the renderer and identifiability gate; Weeks 2–4 cover the
-baseline, the Validation-only lambda comparison, locked synthetic ID/OOD/operator-
-mismatch evaluation, and a 2–4 page report. Learned uncertainty, JS, new backbone
-research, diffusion, multiple prototypes, real XRD, and V9 evidence are outside
-this profile.
-
-This schedule is a prospective design, not execution authorization or a guarantee
-of a positive result. If only the spectral discrepancy improves, that supports a
-forward-fit conclusion, not more accurate parameter recovery. If identifiability
-fails, downscoping or an honest negative report is required.
-
-The user approved the focused clean-checkout portability repair after failed
-GitHub Actions run `31618025186`. Exactly eleven tests that require the
-policy-excluded local `formal_14060` assets are now marked `data_bound`; CI runs the
-portable complement while the default local command still runs the full suite.
-Two reports with frozen Windows raw-byte hashes have explicit CRLF checkout rules,
-so their existing hashes retain the same meaning across operating systems. Local
-verification passed: portable suite `272 passed, 11 deselected, 39 subtests
-passed`; complete local suite `283 passed, 39 subtests passed`. Remote clean-
-checkout verification of the pushed revision is required before publication is
-considered complete.
-
-## 17. Real-domain predecessor asset archive (2026-08-13)
-
-A local, Git-ignored acquisition bundle now records the seven predecessor works
-used in the real-domain validation comparison. Publicly retrievable gaps were
-filled where possible: the Vecsei arXiv source, Salgado supplementary PDF,
-ML4pXRDs KITopen article, CrystalMELA article/full text and cited ExRT upstream
-source, and CPICANN supplementary PDF. Existing local articles and source
-snapshots were reused instead of duplicated. Every acquired binary has a recorded
-source, license boundary, SHA-256 checksum, and archive or PDF inspection result.
-
-Negative findings are preserved rather than silently treated as download
-failures. CrystalMELA's 110 experimental patterns are private and its platform
-source and weights were not found publicly. Toyota's 1,298 industrial patterns
-remain approval-controlled; its article download was blocked by the publisher
-challenge in this environment, and no public code or independent supplementary
-archive was found. No access control was bypassed, no external data request was
-sent, and no restricted or bulk dataset was added to the repository.
-
-This is literature and provenance completion, not new scientific evidence. It
-does not change the evidence freeze, the RRUFF-301 retrospective status, the
-single-identifiable-real-domain limitation, or the manuscript-first next action.
-
-## 18. Group-meeting presentation asset (2026-08-14)
-
-A 15-slide, editable Chinese group-meeting deck was completed at the local,
-Git-ignored delivery path:
-
-```text
-E:\AI4science\outputs\presentations\AI4science_XRD_group_meeting_20260814.pptx
-```
-
-The visual system was reconstructed from the 55-page local reference
-`组会1.pdf`: 16:9 layout, white/light-grey background, navy headers and footer,
-orange emphasis, pale-blue cards, and restrained result-chart layouts. The deck
-was rebuilt from the current frozen JSON/report artifacts rather than copying the
-legacy `outputs/fig1`, `fig2`, `fig3`, or `fig4` images, whose per-seed values,
-Test values, or project-stage labels are stale.
-
-The scientific narrative now makes the real-domain hierarchy explicit:
-
-- Pipeline-35 is an engineering zero-shot/pipeline diagnostic and is outside
-  RRUFF-371;
-- legacy RRUFF-70 is an exploratory few-shot pilot and reports accuracy;
-- RRUFF-301 is the strongest retrospective validation and reports Macro-F1;
-- RRUFF-371 is the asset container `legacy RRUFF-70 + extension RRUFF-301`, not
-  an additional experiment;
-- the three stages are sample-ID-disjoint cohorts in one RRUFF ecosystem, not
-  three independent acquisition domains.
-
-Presentation verification passed at three levels: all 15 slides were rendered
-and visually reviewed; the exported PPTX contains 15 non-empty editable slide
-XML parts and 15 speaker-note parts with per-slide `[Sources]` blocks; and the
-presentation overflow checker reported `Test passed. No overflow detected.`
-
-No training, inference, new data collection, checkpoint modification, simulated-
-Test rerun, or evidence-state change occurred. Existing summaries, recorded
-RRUFF results, and one existing RRUFF spectrum were read only to construct the
-deck. The PPTX remains excluded from Git by repository policy.
-
-**Current blocker:** unchanged. Historical RRUFF-301 execution provenance cannot
-be recovered, and the real-domain evidence still represents one identifiable
-RRUFF ecosystem rather than a second independent laboratory/instrument domain.
-
-**Next action:** review and rehearse the group-meeting deck, then continue the
-four frozen manuscript figures and Methods/Results/Discussion/Limitations without
-starting new training by default.
+历史研究判断与方向变化必须追加到 [`PROJECT_JOURNEY.md`](PROJECT_JOURNEY.md)，不得通过重写本文件删除历史。

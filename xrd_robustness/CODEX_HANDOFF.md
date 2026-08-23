@@ -1,440 +1,107 @@
 # XRD Robustness V9-T — Current Handoff
 
-**Status date:** 2026-08-11
-**Repository:** `Frysland-2024/AI4science`  
-**Branch:** `main`
+**Status date:** 2026-08-23
 
-> Current mode is **evidence freeze / manuscript building**. This handoff is intentionally concise. Historical engineering details remain in Git history, dated reports, `00_project_context/PROJECT_JOURNEY.md`, and the RRUFF-301 audit trail.
+**Mode:** evidence frozen; manuscript/figure construction
 
-## 1. Current instruction to any new Codex/GPT session
+**Authority:** [`../00_project_context/CURRENT_STATE.md`](../00_project_context/CURRENT_STATE.md)
 
-Do **not** begin by proposing another training run.
+## Start here
 
-Read in this order:
+不要把本仓库当作待继续调参的实验分支。V9-T 的方法选择、五组 paired Validation replication 和 frozen simulated Test 已完成；默认工作是核验现有证据、维护 claim boundary、完成论文和图表。
 
-1. `AGENTS.md`
-2. `00_project_context/CURRENT_STATE.md`
-3. `00_project_context/EVIDENCE_FREEZE_V1_20260808.md`
-4. this file
-5. `xrd_robustness/MANUSCRIPT_DRAFT_V1_20260808.md`
-6. `00_project_context/APPLICATION_RESEARCH_NARRATIVE_V1_20260808.md`
-7. `00_project_context/PROJECT_JOURNEY.md`
+冻结方法：
 
-The current task is to transform frozen evidence into a manuscript and application-ready research narrative without silently reopening method selection.
+- 7-class crystal-system classification；
+- ResNet-18-GN；
+- Dynamic ERM vs Dynamic JS Consistency；
+- selected `lambda_js=60`；
+- identity preprocessing、AdamW、constant LR；
+- Train 9,842 / Validation 2,109 / Test 2,109；exact-parent-disjoint only。
 
-## 2. Frozen active method
+## Frozen results
 
-- task: seven-crystal-system PXRD classification;
-- split: parent-structure 70/15/15 = 9,842 / 2,109 / 2,109;
-- backbone: ResNet-18-GN;
-- preprocessing: identity;
-- optimizer: AdamW;
-- baseline: Dynamic ERM;
-- selected method: Dynamic JS Consistency;
-- selected weight: `lambda_js = 60`;
-- same two online physical views for ERM and JS;
-- JS differs only by the added prediction-consistency objective.
+| Evidence | ERM → JS | Result |
+|---|---:|---:|
+| Validation mean single-factor OOD Macro-F1 | 0.658495 → 0.705064 | Δ `+0.046569`; 5/5 positive |
+| Frozen simulated Test mean single-factor OOD Macro-F1 | 0.65074 → 0.70534 | Δ `+0.054600`; 5/5 positive |
+| RRUFF-301 K=1/2/5 few-shot | see lineage audit | Δ `+0.0433/+0.0460/+0.0545` |
 
-Residual-v1 is archived. V10 is archived as a partial/negative mechanism study. PAMPT is historical foundation/backbone evidence. None should be reintroduced into the current main comparison unless a new project version is explicitly opened.
+RRUFF-301 只能称为 retrospective validation。In manuscript terms, this is
+**retrospective evidence, not confirmatory evidence**. 缺少完整历史 execution
+provenance 是 **claim limitation**，不是当前 blocker，不授权补跑或重新包装历史结果。
 
-## 3. Simulated Validation evidence
+## Active code entrypoints
 
-Authoritative files:
+| Path | Role |
+|---|---|
+| `src/xrd_robustness/models/ml4pxrd_resnet1d.py` | ResNet-18-GN backbone |
+| `src/xrd_robustness/training/objectives.py` | Dynamic ERM/JS objectives |
+| `src/xrd_robustness/simulator.py` | PXRD perturbation simulator |
+| `src/xrd_robustness/online_views.py` | deterministic paired online views |
+| `scripts/train_v7.py` | shared V9-T training entrypoint; legacy filename, still active |
+| `scripts/run_v9_resnet_js_simulated_test.py` | frozen Test runner; audit reference only, do not rerun |
+| `src/xrd_robustness/evaluation/rruff301_replay.py` | retrospective audit/replay contract |
 
-- `reports/v9_resnet_js_ten_run_summary.json`
-- `reports/v9_resnet_js_ten_run_results_20260801.md`
+Repository cleanup deliberately keeps only active/reusable entrypoints. One-off runners and closed-branch implementations are summarized in the Journey/evidence index and recoverable from Git history.
 
-Five matched training-seed pairs:
+## Evidence map
 
-- OOD Macro-F1 paired mean Δ = **+0.046569**;
-- paired-bootstrap 95% interval = `[0.038145, 0.052834]`;
-- all five paired seeds positive;
-- in-range paired mean Δ = **+0.027991**;
-- in-range guardrail passed.
+Start with [`reports/EVIDENCE_INDEX.md`](reports/EVIDENCE_INDEX.md). Machine-readable authorities are:
 
-This stage closed method selection and froze `lambda_js=60`.
+- `reports/v9_resnet_js_ten_run_summary.json`;
+- `reports/v9_resnet_js_simulated_test_summary.json`;
+- `reports/v9_resnet_js_simulated_test_audit.json`;
+- `reports/v9_resnet_js_simulated_test_class_metric_correction.json`;
+- `reports/v9_formal_split_identity_overlap_audit.json`;
+- `reports/rruff301_existing_artifact_lineage_audit.json`.
 
-## 4. Frozen simulated Test evidence
+The old named class-F1 diagnostic was wrong; the correction sidecar is authoritative. Aggregate Macro-F1, worst-class F1 and frozen Test summary remain unchanged.
 
-Authoritative files:
+## Hard locks
 
-- `reports/v9_resnet_js_simulated_test_summary.json`
-- `reports/v9_resnet_js_simulated_test_results_20260803.md`
-- `reports/v9_resnet_js_simulated_test_audit.json`
+Without a new scientific question, explicit authorization and a new empty output root:
 
-Primary result:
+- do not train or tune;
+- do not rerun frozen Test;
+- do not replace checkpoints;
+- do not infer confirmatory status from retrospective RRUFF artifacts;
+- do not execute `run-replay`;
+- do not execute sealed future modules.
 
-- mean five-pair single-factor OOD Macro-F1 Δ = **+0.054600**;
-- sample SD = `0.007271`;
-- paired-bootstrap 95% interval = `[+0.048944, +0.060255]`;
-- all five paired OOD effects positive;
-- all five in-range effects positive.
+`run_rruff301_retrospective_replay.py run-replay` must remain fail-closed before model or spectrum loading.
 
-No repeated Test access or Test-guided method modification is allowed for the current manuscript.
+## Repository shape and data boundary
 
-Secondary limitation: improvement is aggregate, not uniform. Monoclinic remains a difficult class and selected shift/texture profiles retain local declines.
+After the 2026-08-23 cleanup, `scripts/`, `configs/` and `reports/` each contain at most 10 direct files. `configs/provenance/` has three hash-bound contracts and `reports/provenance/` has eight hash-bound audits; neither is an overflow archive. Tests retain high-value regression coverage and are grouped so every maintained test directory contains at most 10 direct files.
 
-## 5. Real-domain evidence — RRUFF-301 v2 is retrospective
+Do not commit or clean away ignored datasets, raw outputs, generated spectra, checkpoints, optimizer state, virtual environments, PDFs, third-party repositories or credentials. These local evidence assets are outside the tracked-source cleanup.
 
-RRUFF-70 is exploratory only.
-
-The strongest recorded experimental-domain signal is the RRUFF-301 v2 artifact set in commit:
-
-`24d8c8511bdea9df8b52cdf779b04420bebffafc`
-
-Authoritative files:
-
-- `reports/rruff301_confirmatory_full_report_20260807.md`
-- `reports/rruff301_representation_analysis_20260807.md`
-- `reports/rruff301_v1_audit_trail_20260807.md`
-- `reports/rruff301_existing_artifact_lineage_audit.json`
-
-The first three filenames are historical. Do not inherit their confirmatory label.
-The current audit verifies the 150 few-shot metrics from 34,650 prediction rows and
-the fixed 231-spectrum test membership; fixed-200 and zero-shot artifacts have only
-the narrower verification levels recorded in the audit. Missing authorization,
-runner, episode-support, execution-log, code-state, and runtime provenance cannot be
-reconstructed after the fact. Treat all RRUFF-301 results as retrospective evidence.
-
-Protocol:
-
-- 301 spectra, 43/class;
-- 70 adaptation-pool spectra, 10/class;
-- 231 locked-test spectra, 33/class;
-- K = 1/2/5;
-- five pretraining seeds × five episode seeds;
-- frozen convolutional backbone;
-- trainable projection + head;
-- paired JS-pretrained versus ERM-pretrained comparison.
-
-Results:
-
-| K | ERM Macro-F1 | JS Macro-F1 | Paired mean Δ | Positive/25 |
-|---:|---:|---:|---:|---:|
-| 1 | 0.2847 | 0.3280 | **+0.0433** | 21 |
-| 2 | 0.3026 | 0.3486 | **+0.0460** | 23 |
-| 5 | 0.3555 | 0.4099 | **+0.0545** | 24 |
-
-**68/75 paired comparisons are positive.**
-
-Fixed-200-step sensitivity at K=1 and K=5 preserves the direction.
-
-## 6. RRUFF-301 v1 bug handling
-
-The first intended confirmatory execution must never be cited as valid v2 evidence.
-
-Bug:
-
-- RRUFF CELL PARAMETERS convention caused trigonal samples to be absorbed into hexagonal during label construction;
-- v1 therefore had an invalid trigonal/hexagonal split.
-
-Governance response:
-
-1. invalidate v1 for confirmatory claims;
-2. preserve the audit trail;
-3. rebuild labels from DIF `space_group` plus `pymatgen.SpaceGroup` mapping;
-4. verify 70 adaptation + 231 test, 33/class, zero overlap;
-5. rerun the complete experiment as v2; its numerical artifacts remain useful, but
-   the available lineage is insufficient for a confirmatory claim.
-
-This is a research-integrity event, not a result to hide.
-
-## 7. Representation and calibration evidence
-
-RRUFF-301 representation report includes:
-
-- fix/break patterns;
-- confidence dynamics;
-- confusion asymmetry;
-- per-class effects.
-
-Calibration commit:
-
-`a1966ba939f16b291dad2dd4d48e79bfedfc7b8f`
-
-Assets:
-
-- `../outputs/calibration_metrics.json`
-- `../outputs/calibration_report.html`
-
-Calibration covers ECE, NLL, Brier, and confidence distributions. Default placement is Supplementary.
-
-## 8. Frozen paper figures
-
-### Fig. 1 — Method
-
-Parent structure → paired online physical views → matched Dynamic ERM vs Dynamic JS. Show simulator provenance as measurement-equivalence supervision.
-
-### Fig. 2 — Simulated evidence
-
-Paired five-seed Validation OOD effects + frozen-Test paired effects. Include in-range guardrail concisely.
-
-### Fig. 3 — Real-domain evidence
-
-RRUFF-301 v2 K=1/2/5 Macro-F1 ERM vs JS plus paired deltas / positive-pair counts.
-
-### Fig. 4 — Heterogeneity / diagnostic
-
-Per-class effects plus one coherent fix/break/confidence diagnostic. Message: gains are broad but not uniform.
-
-### Supplementary
-
-Calibration, full profiles, full class tables, fixed-step sensitivity, zero-shot diagnostics, v1 audit trail, implementation details.
-
-## 9. Claim boundary
-
-Allowed strong simulated-domain claim:
-
-> Parent-structure provenance from the online simulator can be used as measurement-equivalence supervision; under a matched two-view design, JS consistency improves aggregate simulated OOD robustness relative to Dynamic ERM.
-
-Allowed descriptive RRUFF claim:
-
-> The recorded RRUFF-301 artifacts show higher mean few-shot Macro-F1 for
-> JS-pretrained than matched ERM-pretrained models at K=1/2/5. This is retrospective
-> validation with incomplete historical provenance, not confirmatory evidence.
-
-Do not claim:
-
-- JS itself is algorithmically novel;
-- universal PXRD Sim2Real solution;
-- every class/profile improves;
-- RRUFF is all experimental PXRD;
-- semantic/measurement disentanglement is proven;
-- Residual methods are impossible for PXRD.
-
-## 10. Current manuscript files
-
-- evidence freeze: `../00_project_context/EVIDENCE_FREEZE_V1_20260808.md`
-- manuscript draft: `MANUSCRIPT_DRAFT_V1_20260808.md`
-- application narrative: `../00_project_context/APPLICATION_RESEARCH_NARRATIVE_V1_20260808.md`
-
-## 11. Current next actions
-
-1. Generate publication-quality versions of the four frozen main figures from existing artifacts.
-2. Write Introduction with literature support; do not rewrite the literature history as if JS or on-the-fly simulation were invented here.
-3. Extract exact Method parameters from frozen configs and audits.
-4. Write Results in order: Validation → simulated Test → RRUFF-301 v2 → heterogeneity.
-5. Put calibration and detailed diagnostics into Supplementary by default.
-6. Draft Discussion and Limitations before polishing the abstract.
-7. Keep the application narrative synchronized with `PROJECT_JOURNEY.md`.
-
-## 12. New experiment policy
-
-No new training by default.
-
-A new experiment may be opened only if manuscript drafting or external review identifies one concrete reviewer-critical question that the frozen evidence cannot answer. Such an experiment must be named prospectively and must not:
-
-- retune `lambda_js`;
-- exclude or replace seeds;
-- rerun the frozen simulated Test to improve a number;
-- modify the locked RRUFF-301 v2 evidence;
-- reopen Residual/PAMPT as if they were part of the current paper.
-
-Tan Lab phase-state adaptation, Residual-v2, physics-guided lattice losses, backbone–augmentation compatibility, and Raman remain future projects rather than current-paper blockers.
-
-## 13. Repository workflow update (2026-08-10)
-
-The repository-wide mandatory `check-journal-indexing` startup requirement was
-removed. The skill is now optional and should be used only for tasks that explicitly
-require SCIE, EI Compendex, or CSCD coverage verification. This change does not alter
-the frozen experiment contract, evidence, or execution authorization.
-
-## 14. Repair audit and current authority (2026-08-11)
-
-When earlier sections conflict with this section, use this section and the bound
-JSON audits.
-
-### Implemented task and claim boundary
-
-The current code implements robust seven-class PXRD crystal-system classification,
-not physical-parameter inversion. It demonstrates forward perturbation simulation,
-classification robustness, and few-shot adaptation workflows. Do not describe it as
-completed lattice/phase/strain/texture estimation, TCAD, PDE inversion, or a general
-inverse solver.
-
-### Repairs and authoritative audits
-
-- `reports/v9_resnet_js_simulated_test_class_metric_correction.json`: 360/360
-  legacy `per_crystal_system_f1` records are defective. Correct full-panel class F1
-  is already present as `per_class_f1`; primary and aggregate metrics are unchanged.
-  No frozen Test result was edited or rerun.
-- `reports/v9_formal_split_identity_overlap_audit.json`: exact parents are disjoint
-  across splits, but 47 exact formulas / 585 records cross splits and 12 formulas
-  cross all three. Never call the active split family-, formula-, prototype-, or
-  symmetry-equivalence-disjoint.
-- `reports/rruff301_existing_artifact_lineage_audit.json`: registered hashes and ten
-  checkpoint hashes pass; 150 few-shot metrics are recomputed from 34,650 prediction
-  rows with fixed 231-ID test membership. Fixed-200 and zero-shot verification is
-  explicitly narrower and recorded per artifact.
-- `reports/rruff301_retrospective_replay_episode_plan.json`: a new deterministic
-  15-episode / 280-support-assignment plan with a fixed 231-spectrum test set. It
-  has `historical_plan_claim=false` and is not authorized for execution.
-
-### Hard execution boundary
-
-`scripts/run_rruff301_retrospective_replay.py run-replay` must return
-`refused_execution_not_authorized` before model or spectrum access. Supplying any
-path via `--authorization` cannot enable this v1 repair runner. The historical
-RRUFF-301 outputs are retrospective evidence because the original runner, support
-IDs, authorization, execution log, and code/runtime bindings are unavailable.
-
-### Current commands
+## Verification
 
 ```powershell
 cd E:\AI4science\xrd_robustness
-python -s scripts/audit_v9_simulated_test_class_metrics.py --check-only
-python -s scripts/audit_formal_split_identity_overlap.py --check-only
-python -s scripts/run_rruff301_retrospective_replay.py audit-existing --verify-checkpoints --check-only
-python -s scripts/run_rruff301_retrospective_replay.py plan-replay --check-only
-python -s -m pytest -q
+
+# Full maintained suite
+E:\AI4science\.venvs\xrd_test\Scripts\python.exe -m pytest -q
+
+# Frozen Test named-class correction; read-only
+E:\AI4science\.venvs\xrd_test\Scripts\python.exe -s scripts\audit_v9_simulated_test_class_metrics.py --check-only
+
+# Exact-parent isolation and formula-overlap boundary; read-only
+E:\AI4science\.venvs\xrd_test\Scripts\python.exe -s scripts\audit_formal_split_identity_overlap.py --check-only
+
+# Existing RRUFF artifact lineage; read-only
+E:\AI4science\.venvs\xrd_test\Scripts\python.exe -s scripts\run_rruff301_retrospective_replay.py audit-existing --verify-checkpoints --check-only
 ```
 
-Current blocker: historical RRUFF-301 governance provenance is unrecoverable. A
-confirmatory real-domain claim requires a newly authorized prospective execution in
-a new empty output root. No training or inference was run during this repair.
+## Known limitations and next work
 
-## 15. Repository cleanup handoff (2026-08-11)
+- split claim is exact-parent only;
+- simulated improvement is aggregate, not universal across classes/conditions;
+- RRUFF evidence is retrospective because historical provenance is incomplete;
+- V9-T is classification, not physical-parameter inversion.
 
-The active repository surface is now intentionally smaller:
+The current blocker is unfinished manuscript/figure construction and claim-boundary review. The next command is the full pytest command above; after it passes, continue manuscript assembly from frozen evidence.
 
-- current entrypoints are `../README.md`, `README.md`,
-  `../00_project_context/CURRENT_STATE.md`, and this file;
-- the duplicated extracted context pack, old static inventories, and legacy
-  account-handoff generator/manifest/DOCX bundle were removed; their committed
-  versions remain recoverable from Git history;
-- one-time desktop migration packaging and its payload inventory were removed;
-  frozen hardware profiles, bootstrap, first-boot orchestration, and all eight
-  implementation paths required by the method-transfer contract were retained;
-- first-boot/readiness now performs the engineering acceptance checks directly and
-  no longer depends on the retired migration verification payload;
-- obsolete laptop/runtime snapshots, generated XML/empty failure tables, and the
-  duplicate `gate3_resnet_summary` report pair were removed;
-- `tests/test_project_state_contract.py` now checks the completed simulated-Test
-  summary/hash, closed post-hoc boundaries, live audit references, and absence of
-  retired handoff links;
-- the 2026-08-08 freeze, manuscript, and application documents remain as historical
-  records with a 2026-08-11 supersession notice rather than being silently deleted.
-
-Do not recreate the retired account-handoff or migration-packaging bundles unless a
-concrete new delivery requirement appears. Do not delete the active desktop-contract
-implementation, V10, Residual, PAMPT, opXRD, RRUFF, or
-other negative-result records merely because they are outside the current runtime
-path. No data, checkpoint, frozen result, training, inference, or authorization
-state changed during cleanup.
-
-Cleanup verification: `283 passed, 39 subtests passed`; all current Markdown links
-resolve; no active deleted-file references remain; the Test-metric, split-scope,
-and RRUFF lineage auditors pass at their declared levels; desktop first-boot
-`-PlanOnly` reports `formal_training_commands=0`.
-
-Publication decision (2026-08-13): the user authorized synchronization of the
-reviewed source, configuration, audit, documentation, and cleanup changes to
-`origin/main`. Local `outputs/` artifacts and unreviewed personal application drafts
-remain excluded. After synchronization, continue manuscript construction within the
-frozen evidence and claim boundaries above.
-
-## 16. Sealed sample–instrument inverse module (2026-08-13)
-
-A new future-only design is registered at
-`../00_project_context/future_modules/PXRD_IDENTIFIABILITY_AWARE_SAMPLE_INSTRUMENT_INVERSION.md`.
-It does not alter the active implementation or evidence.
-
-The first target is not the proposed six-variable joint vector. Under one known
-nominal prototype, the module begins with isotropic lattice-scale change plus a
-global 2-theta zero offset. It requires a differentiable expected-signal renderer,
-Jacobian/Fisher and collision audits, and a multi-start classical-fit baseline
-before neural training. Later anisotropic lattice, effective-width, and background
-stages require separate gates. An operator-mismatch panel is mandatory before any
-robustness claim.
-
-Keep these boundaries explicit:
-
-- this module is a scientific design, not completed evidence;
-- training, inference, data generation, existing frozen V9 simulated-Test access,
-  and real-XRD access remain unauthorized;
-- V9 remains the completed seven-class robust-classification project;
-- the existing measurement-nuisance inversion module remains separately sealed;
-- archived V10 is not reopened or renamed;
-- CT/MRI and optical scatterometry are methodological bridges only, not implemented
-  capabilities.
-
-The prospective four-week profile uses a two-parameter core, a gated
-three-parameter anisotropic-lattice stretch, and `log_effective_width` only as a
-fourth stretch target. It compares exactly two learned objectives on the same
-new regression wrapper (`lambda=0` versus a positive-sign forward discrepancy)
-at 100% and one frozen low-label budget. Week 1 is the renderer/identifiability
-gate; Week 2 is the supervised baseline; Week 3 is Validation-only lambda
-selection; Week 4 is the new module's locked synthetic ID/OOD/operator-mismatch
-evaluation and a short technical report. This schedule is not execution
-authorization.
-
-The user approved the focused repair for failed GitHub Actions run `31618025186`.
-Exactly eleven tests requiring ignored local `formal_14060` assets are marked
-`data_bound`; clean-checkout CI excludes that marker, while local default pytest
-still runs every test. Root `.gitattributes` preserves the existing Windows CRLF
-raw-byte hashes for the two frozen bound reports. Local portable verification is
-`272 passed, 11 deselected, 39 subtests passed`; the complete data-bound local suite
-is `283 passed, 39 subtests passed`. Publication requires the pushed revision to
-pass the remote clean-checkout workflow.
-
-## 17. Local predecessor-literature archive (2026-08-13)
-
-The seven works used to contextualize real-domain validation now have a unified
-local acquisition record at:
-
-```text
-E:\AI4science\01_literature\source_acquisitions\2026-08-13_real_domain_predecessors\
-```
-
-The Git-ignored bundle records the available articles, author source snapshots,
-supplementary files, official URLs, license boundaries, and SHA-256 checksums.
-Newly recovered public assets include the Vecsei arXiv source, Salgado SI,
-ML4pXRDs KITopen article, CrystalMELA article/full text plus its cited ExRT
-upstream source, and CPICANN SI. Existing Salgado/XRDs, ML4pXRDs, CPICANN, and
-SimXRD source trees remain the canonical local code copies.
-
-Do not describe the archive as a new experiment or a second domain. CrystalMELA
-real spectra remain private; Toyota industrial spectra remain approval-controlled;
-the ML4pXRDs SI endpoint is currently unresolved; and no access control, licensed
-ICSD input, bulk generated dataset, checkpoint, or private data was acquired.
-The active handoff remains manuscript construction from the frozen artifacts.
-
-## 18. Group-meeting deck handoff (2026-08-14)
-
-The current evidence and claim boundary have been converted into a 15-slide,
-editable Chinese presentation at:
-
-```text
-E:\AI4science\outputs\presentations\AI4science_XRD_group_meeting_20260814.pptx
-```
-
-The file is a local delivery artifact under ignored `outputs/`; do not add it to
-Git. It follows the visual language of the local 55-page `组会1.pdf` reference,
-but it does not copy that PDF as a raster template. All charts and diagrams remain
-editable PowerPoint objects, and every slide contains a `[Sources]` block in its
-speaker notes.
-
-The deck encodes these authoritative roles and must not be relabelled during
-later edits:
-
-- Pipeline-35: engineering zero-shot/pipeline diagnostic, outside RRUFF-371;
-- legacy RRUFF-70: exploratory few-shot pilot, accuracy metric;
-- RRUFF-301: retrospective few-shot validation, Macro-F1 metric;
-- RRUFF-371: `legacy RRUFF-70 + extension RRUFF-301` asset container, not an
-  additional validation result;
-- all three historical stages remain within one RRUFF measurement ecosystem.
-
-Verification completed: 15/15 artifact-tool slides were visually inspected;
-the PPTX archive contains 15 populated editable slide XML parts and 15 populated
-speaker-note XML parts with sources; and `slides_test.py` passed with no overflow.
-The old `outputs/fig1_validation_results.png`, `fig2_test_confirmation.png`,
-`fig3_two_phase_arch.png`, and `fig4_summary_table.png` were not reused because
-they contain stale per-seed values, stale Test aggregates, or an obsolete project
-stage.
-
-No model execution or evidence mutation occurred. Existing frozen summaries,
-RRUFF artifacts, and one existing RRUFF spectrum were read only for presentation
-construction. The scientific blocker and default next action are unchanged:
-historical RRUFF-301 execution provenance remains incomplete; the real-domain
-evidence still has one identifiable source ecosystem; and work should continue on
-manuscript figures and prose before any new training or additional RRUFF sampling.
+The known-template tetragonal `(a,c)` inversion design is registered at [`../00_project_context/future_modules/PXRD_ROBUST_LATTICE_PARAMETER_INVERSION.md`](../00_project_context/future_modules/PXRD_ROBUST_LATTICE_PARAMETER_INVERSION.md) as **SEALED_FUTURE_MODULE** and is not authorized for execution.

@@ -1,4 +1,0 @@
-method_id,seed,profile,independent_family_count,accuracy,balanced_accuracy,macro_f1,worst_group_f1,ece,paired_js,prediction_flip_rate,correct_and_consistent_rate
-dynamic_erm,[seed],[profile],[n],[value],[value],[value],[value],[value],[value],[value],[value]
-js_consistency_transfer,[seed],[profile],[n],[value],[value],[value],[value],[value],[value],[value],[value]
-residual_decorrelation_transfer,[seed],[profile],[n],[value],[value],[value],[value],[value],[value],[value],[value]

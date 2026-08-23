@@ -734,7 +734,27 @@ def audit_contract_assets(contract: Mapping[str, Any], project_root: str | Path)
         for path in measurement_implementation.values()
         if not _project_path(root, str(path)).is_file()
     ]
-    if missing_measurement_implementation:
+    implementation_retention = measurement_gate.get("implementation_retention", {})
+    recovery_commit = str(implementation_retention.get("recovery_commit", ""))
+    execution_policy = contract.get("execution_policy", {})
+    retired_implementations_are_valid = (
+        len(missing_measurement_implementation) == len(measurement_implementation)
+        and implementation_retention.get("status") == "retired_to_git_history"
+        and implementation_retention.get("execution_authorized") is False
+        and len(recovery_commit) == 40
+        and all(character in "0123456789abcdefABCDEF" for character in recovery_commit)
+        and all(
+            execution_policy.get(key) is False
+            for key in (
+                "tuning_plan_generation_enabled",
+                "development_tuning_execution_enabled",
+                "experiment_execution_enabled",
+                "simulated_test_enabled",
+                "real_test_enabled",
+            )
+        )
+    )
+    if missing_measurement_implementation and not retired_implementations_are_valid:
         raise ValueError(
             "missing target measurement implementations: "
             f"{missing_measurement_implementation}"
@@ -945,6 +965,9 @@ def audit_contract_assets(contract: Mapping[str, Any], project_root: str | Path)
         "development_validation_count": len(validation_manifest_ids),
         "experiment_execution_enabled": bool(
             contract["execution_policy"]["experiment_execution_enabled"]
+        ),
+        "retired_measurement_implementation_count": len(
+            missing_measurement_implementation
         ),
     }
 

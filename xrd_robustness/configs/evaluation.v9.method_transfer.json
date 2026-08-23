@@ -46,7 +46,7 @@
       ]
     },
     "split_audit": {
-      "path": "reports/v9_method_transfer_split_audit.json",
+      "path": "reports/provenance/v9_method_transfer_split_audit.json",
       "sha256": "140B63065261F8C121B4811CC0CD7CBB0436E6499BFCECE49C5AC2377633C7A6"
     }
   },
@@ -82,7 +82,7 @@
   "real_test": {
     "enabled": false,
     "locked": true,
-    "contract_path": "configs/real_test.v9.method_transfer.template.json",
+    "contract_path": "configs/provenance/real_test.v9.method_transfer.template.json",
     "contract_sha256": "AB75819E94A3CA333CCD3E082056A9553CF81F8677D0B9D5E788A00C6DFE4B62",
     "unlock_after_simulated_test": true,
     "selection_use_forbidden": true

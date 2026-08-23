@@ -22,7 +22,8 @@
     "original_preregistration": {
       "path": "configs/rruff301_confirmatory_fewshot.preregistered.json",
       "sha256": "BE7D320088ED8E5FA6C2EE8F37C2B19E49C122C91AC171A7DA61B78F6F8589D9",
-      "recorded_status": "PREREGISTERED_LOCKED_NOT_AUTHORIZED"
+      "recorded_status": "PREREGISTERED_LOCKED_NOT_AUTHORIZED",
+      "retained_in_git_commit": "f36be82b2a0b5fd3c58ec87a58fa6e3ba839f217"
     },
     "unrecoverable_from_available_artifacts": [
       "independent pre-execution authorization",

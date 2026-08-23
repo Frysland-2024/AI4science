@@ -104,7 +104,7 @@ def main() -> int:
     )
     parser.add_argument(
         "--audit-output",
-        default=str(PROJECT_ROOT / "reports/v9_method_transfer_split_audit.json"),
+        default=str(PROJECT_ROOT / "outputs/v9_method_transfer_split_audit.json"),
     )
     parser.add_argument("--seed", type=int, default=DEFAULT_SPLIT_SEED)
     args = parser.parse_args()

@@ -469,7 +469,10 @@ def _registered_hash_specs(contract: Mapping[str, Any]) -> list[tuple[str, Mappi
     dataset = contract["dataset"]
     lineage = contract["historical_lineage"]
     return [
-        ("original_preregistration", lineage["original_preregistration"], True),
+        # The superseded preregistration is retained in Git history rather than
+        # the lean working tree. Its recorded hash remains auditable, but its
+        # absence must not block the retrospective consistency audit.
+        ("original_preregistration", lineage["original_preregistration"], False),
         ("canonical_split", dataset["canonical_split"], True),
         ("split_manifest", dataset["split_manifest"], True),
         ("master_manifest", dataset["master_manifest"], True),

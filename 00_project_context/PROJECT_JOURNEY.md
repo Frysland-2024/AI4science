@@ -1022,3 +1022,34 @@ simulated Test 或 real XRD 访问。新项目也不使用“V10”名称，因�
 仓库中冻结归档的 measurement-supervised residual 机制。它与 CT/MRI 和 optical
 scatterometry 共享的是“把已知采集算子显式用于逆推断”的方法论，不意味着物理
 模型、损失函数、可辨识性或难度相同。
+
+## 2026-08-23：压缩工作树，保留结论与可恢复历史
+
+本次仓库整理是工程和证据治理决策，不改变已经冻结的科学结果。工作树中过时的
+单次脚本、重复报告、退役配置和与退役分支绑定的测试不再继续作为“活跃代码”
+保存；PAMPT、Residual、V10、opXRD、RRUFF-70 等分支的关键门控结论被合并到
+`xrd_robustness/reports/EVIDENCE_INDEX.md`，科学决策仍由本历程文件保留。整理前的
+完整跟踪文件可从 Git commit
+`f36be82b2a0b5fd3c58ec87a58fa6e3ba839f217` 精确读取，因此从当前工作树删除不等于
+抹除历史，也不允许重写或美化原有负结果。
+
+证据状态同时作如下校正：RRUFF-301 已有产物能够在声明的核验层级上通过内部一致
+性检查，150 个 few-shot 指标可由 34,650 条 prediction rows 重算，固定的 231-ID
+test membership 也可核验；但原始执行的 runner、support IDs、预执行授权、日志和
+完整 code/runtime binding 缺失。因此它继续只作为 retrospective validation，不能
+称为 prospective confirmatory evidence。补做正式 provenance 不是当前论文与证据
+整理的 blocker，而是已知限制和内部治理事项；只有未来出现必须提出 confirmatory
+真实域结论的新科学问题时，才另行审查一次 prospective execution，不能用补文档
+倒推不存在的历史治理链。
+
+未来研究方向也需要区分“历史阶梯”和“当前目标”。2026-08-13 的
+`(epsilon_iso, zero_shift)` 低维联合反演仍保留为辨识性收缩过程中的历史设计；
+2026-08-15 封存的已知模板四方晶系 `(a, c)` robust lattice-parameter inversion
+模块取代它，成为当前 future-module target。该取代只改变未来模块的科学设计优先
+级，不授权实现、数据生成、训练、推理、simulated Test 或 real-XRD 访问。
+
+整理后的边界明确为：科学设计由冻结 V9-T 与 sealed future modules 表述；工程实现
+只保留当前可维护入口和核心库；完成证据由机器可读摘要、哈希审计和合并证据索引
+承载；假设与未决风险包括 RRUFF 历史 provenance 不完整、真实铁电实验室 XRD 尚未
+建立外部有效性、JS 增益并非对所有类别和扰动都一致。仓库体积或文件数量的下降
+不构成新的科学证据。

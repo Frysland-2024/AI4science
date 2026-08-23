@@ -3,17 +3,22 @@
 venv/
 __pycache__/
 *.py[cod]
+.ipynb_checkpoints/
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/
 *.egg-info/
 .coverage
 htmlcov/
+build/
+dist/
 
 # Temporary files
 tmp/
 *.tmp
 *.log
+*.bak
+*.swp
 
 # Large local research assets
 01_literature/
@@ -21,6 +26,26 @@ tmp/
 03_tools_and_packages/
 04_external_lab_data/
 /outputs/
+/data/
+/xrd_robustness/data/
+**/outputs/
+**/checkpoints/
+**/runs/
+*.ckpt
+*.pt
+*.pth
+*.onnx
+*.safetensors
+*.npy
+*.npz
+*.tar
+*.tar.gz
+*.zip
+*.7z
+*.rar
+*.pdf
+*.docx
+*.pptx
 
 # Secrets
 .env
@@ -29,12 +54,15 @@ tmp/
 *.pem
 credentials.json
 secrets.json
+secret*.json
 
 # OS / IDE
 .vscode/
 .idea/
 .workbuddy/
 .qoder/
+.codex/
+.worktrees/
 Thumbs.db
 .DS_Store
 

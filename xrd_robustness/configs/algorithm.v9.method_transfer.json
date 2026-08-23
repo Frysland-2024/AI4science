@@ -75,8 +75,8 @@
     "legacy_filename_only": true
   },
   "hardware_profile": {
-    "path": "configs/hardware.v9.laptop.7945hx_4060.json",
-    "sha256": "A0FC0DA4F20D30F60F3498535B893EA747F8FE7535138A57304D10E26E3142A0"
+    "path": "configs/provenance/hardware.v9.laptop.7945hx_4060.json",
+    "sha256": "FCB4714067EEBBCE5D303929BE341E57C536D265948F330A8C9BF565039AC3B7"
   },
   "runtime": {
     "python_executable": "E:/AI4science/.venvs/xrd_tools/Scripts/python.exe",
@@ -94,9 +94,9 @@
     "data_config_sha256": "C57A2C9C400518576B1D7776762B0C8BEBF72BDA4775E6173C3FD091D3A6855C",
     "split_manifest": "data/formal_14060/manifests/split_manifest.json",
     "split_manifest_sha256": "B9D3B72E42EA0FD549DAE34425FF61D2D650D5DD7FE6F337D747CB952CF43293",
-    "split_audit": "reports/v9_method_transfer_split_audit.json",
+    "split_audit": "reports/provenance/v9_method_transfer_split_audit.json",
     "split_audit_sha256": "140B63065261F8C121B4811CC0CD7CBB0436E6499BFCECE49C5AC2377633C7A6",
-    "split_change_invalidation": "reports/v9_split_change_invalidation.json",
+    "split_change_invalidation": "reports/provenance/v9_split_change_invalidation.json",
     "split_change_invalidation_sha256": "B554E6E94BA9906FDF54C8026D2566106360C4790F6E8701F14E495F798E301A",
     "peak_cache_manifest": "data/formal_14060/manifests/peak_cache_manifest.v7.reflection.csv",
     "peak_cache_manifest_sha256": "6AE0CFD1B5B29671E2F532D7A094F2FC412CABD64E4CF77D42915937BACC8D18",
@@ -117,9 +117,9 @@
     "path": "configs/simulation.v9.method_transfer.frozen.json",
     "sha256": "AF6E2FA400525CCF48AAC18C9839CC8EFE13DD3E4C056DD45A74B4DD43262558",
     "scientific_range_status": "frozen",
-    "freeze_evidence": "reports/v9_method_transfer_perturbation_freeze.json",
+    "freeze_evidence": "reports/provenance/v9_method_transfer_perturbation_freeze.json",
     "freeze_evidence_sha256": "34793043BEA82BE9DB1C514491BC9DA04876A5F96285458DC19E84288175F810",
-    "parameter_table": "reports/v9_method_transfer_frozen_parameter_table.csv",
+    "parameter_table": "reports/provenance/v9_method_transfer_frozen_parameter_table.csv",
     "parameter_table_sha256": "A81656EA7EE4FD33F69F479061E739C1F181C4BFEE712F428A32296F842CA36B",
     "clean_profile": "level0",
     "train_profile": "train",
@@ -140,7 +140,7 @@
   },
   "evaluation": {
     "path": "configs/evaluation.v9.method_transfer.json",
-    "sha256": "4B07EEBCF7F8E70391D9BB2365C7AFE63F0F044CDA644FF7EAA7FAD9CB9799A5",
+    "sha256": "88813698988B2C4902A411C10E190B712B730216EBB968418AFAE0DEA3F36A3D",
     "development_evaluation_seed": 20260720,
     "validation_role": "hyperparameter_selection_early_stopping_checkpoint_selection_and_development_method_comparison"
   },
@@ -176,8 +176,8 @@
     "shared_encoder_and_classifier": true
   },
   "method_parameter_governance": {
-    "path": "configs/v9_method_parameter_governance.json",
-    "sha256": "609F5323AA89D2233D30BAD17C3FDB5068365505DD2180F599BFEFCEAD0F3ED7",
+    "path": "configs/provenance/v9_method_parameter_governance.json",
+    "sha256": "1B6D624A7B46D026F0360DD127278A11BE4987D27A88B479EEEFDCE4A5167AE0",
     "status": "candidate_range_frozen_for_validation",
     "registered_candidate_grids": {
       "lambda_js": [0.3, 3.0, 30.0],
@@ -201,13 +201,13 @@
         "method_id": "js_consistency_transfer",
         "parameter": "lambda_js",
         "values": [0.3, 3.0, 30.0],
-        "source": "configs/v9_method_parameter_governance.json; single human-approved pre-Validation decade-grid revision, directly measured on a rebuilt Train-only learned state and frozen after the candidate Gate passed"
+        "source": "configs/provenance/v9_method_parameter_governance.json; single human-approved pre-Validation decade-grid revision, directly measured on a rebuilt Train-only learned state and frozen after the candidate Gate passed"
       },
       {
         "method_id": "residual_decorrelation_transfer",
         "parameter": "lambda_res",
         "values": [0.2, 2.0, 20.0],
-        "source": "configs/v9_method_parameter_governance.json; single human-approved pre-Validation decade-grid revision, directly measured with a competent disjoint Train residual probe and frozen after the candidate Gate passed"
+        "source": "configs/provenance/v9_method_parameter_governance.json; single human-approved pre-Validation decade-grid revision, directly measured with a competent disjoint Train residual probe and frozen after the candidate Gate passed"
       }
     ],
     "selection": {
@@ -402,7 +402,7 @@
   },
   "final_evaluation": {
     "simulated_test_contract": "configs/evaluation.v9.method_transfer.json#simulated_test",
-    "real_test_contract": "configs/real_test.v9.method_transfer.template.json",
+    "real_test_contract": "configs/provenance/real_test.v9.method_transfer.template.json",
     "simulated_test_results_cannot_change_selected_method": true,
     "real_test_results_cannot_change_selected_method": true
   },

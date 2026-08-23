@@ -1,6 +1,0 @@
-mode: offline_erm
-offline_views_per_structure: 4
-optimizer: adamw
-epochs: 50
-learning_rate: 0.0001
-weight_decay: 0.0001
