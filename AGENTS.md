@@ -19,39 +19,31 @@ Frysland-2024/AI4science
 Apply the following rules:
 
 1. Read `Frysland-2024/AI4science` by default before answering any current
-   project question. Do not rely only on chat memory or archived local documents.
-2. Read `Frysland-2024/ferroai-audit` only when the user explicitly asks about
-   the old FerroAI project, or when the task is clearly limited to historical
-   FerroAI code, evidence, or audit records.
-3. If a task compares the old FerroAI project with the current XRD/AI4science
-   project, read both repositories. Treat `Frysland-2024/AI4science` as the
-   authority for current status and `Frysland-2024/ferroai-audit` only as the
-   authority for historical FerroAI evidence.
-4. Never allow information from `ferroai-audit` to override the current XRD,
-   V9-T, application-planning, or project-state records in `AI4science`.
-5. If the repository choice is ambiguous, remain on `Frysland-2024/AI4science`
-   unless the user clearly identifies the old FerroAI project.
+   project question. Do not rely only on chat memory or local documents.
+2. Treat the current tracked files in `Frysland-2024/AI4science` as the authority
+   for XRD, V9-T, application-planning, and project-state questions.
+3. If the repository choice is ambiguous, remain on
+   `Frysland-2024/AI4science` unless the user explicitly selects another project.
 
 Before working on the XRD project, read:
 
 1. `00_project_context/CURRENT_STATE.md`
-2. `00_project_context/PROJECT_JOURNEY.md`
-3. `xrd_robustness/CODEX_HANDOFF.md`
-4. `xrd_robustness/README.md`
+2. `xrd_robustness/CODEX_HANDOFF.md`
+3. `xrd_robustness/README.md`
 
 At the end of every meaningful task:
 
 1. Update `00_project_context/CURRENT_STATE.md` with completed work, current blocker, experiment status, and next actions.
-2. When a scientific decision or research direction changes, append the reasoning to `00_project_context/PROJECT_JOURNEY.md`.
-3. Never erase historical research decisions just because the current plan changes.
-4. Clearly distinguish:
+2. When a scientific decision or research direction changes, record the current
+   rationale in `00_project_context/CURRENT_STATE.md`.
+3. Clearly distinguish:
    - scientific design
    - engineering implementation
-   - completed evidence
+   - completed results
    - assumptions
    - unresolved risks
 
-5. Do not commit:
+4. Do not commit:
    - datasets
    - checkpoints
    - generated spectra
@@ -60,7 +52,7 @@ At the end of every meaningful task:
    - credentials
    - large third-party repositories
 
-6. Before handing work back, report:
+5. Before handing work back, report:
    - files changed
    - tests executed
    - tests passed or failed
@@ -80,15 +72,15 @@ documentation, complete the following workflow before handing work back:
      be `origin/main`;
    - if there are unrelated, unexplained, or user-owned changes, stop and report
      them instead of altering or staging them.
-2. Run the tests or audits relevant to the files changed. A documentation-only
+2. Run the tests or verification checks relevant to the files changed. A documentation-only
    change may use targeted formatting, link, policy, and secret scans instead of the
    full model test suite. Any failed required check blocks commit and push.
 3. If the current project state changed, update both:
    - `xrd_robustness/CODEX_HANDOFF.md`;
    - the corresponding current-state or decision record under
      `00_project_context/`.
-   Append scientific or research-direction reasoning to
-   `00_project_context/PROJECT_JOURNEY.md`; never rewrite historical decisions.
+   Record current scientific or research-direction reasoning in
+   `00_project_context/CURRENT_STATE.md`.
 4. Never stage or commit:
    - datasets, generated spectra, `data/`, or `outputs/` artifacts;
    - checkpoints, model weights, optimizer state, or caches;

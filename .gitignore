@@ -76,3 +76,6 @@ Thumbs.db
 
 # Additional local virtual environments
 .venvs/
+
+# Local-only historical record (kept on disk, not tracked in git)
+00_project_context/PROJECT_JOURNEY.md
