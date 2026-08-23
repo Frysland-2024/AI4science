@@ -1,0 +1,93 @@
+{
+  "schema_version": "v9-public-experiment-v1",
+  "status": "completed_and_frozen",
+  "model": {
+    "architecture": "ResNet-18-GN"
+  },
+  "methods": [
+    {
+      "id": "ordinary_dynamic_augmentation",
+      "name": "Dynamic ERM",
+      "lambda_js": 0.0
+    },
+    {
+      "id": "js_consistency_transfer",
+      "name": "JS Consistency",
+      "lambda_js": 60.0
+    }
+  ],
+  "training_seeds": [
+    20260711,
+    20260712,
+    20260713,
+    20260714,
+    20260715
+  ],
+  "evaluation_seeds": [
+    20260721,
+    20260722,
+    20260723
+  ],
+  "runs": [
+    {
+      "training_seed": 20260711,
+      "dynamic_erm_run_id": "seed_20260711_dynamic_erm",
+      "js_run_id": "seed_20260711_js_lambda_60"
+    },
+    {
+      "training_seed": 20260712,
+      "dynamic_erm_run_id": "seed_20260712_dynamic_erm",
+      "js_run_id": "seed_20260712_js_lambda_60"
+    },
+    {
+      "training_seed": 20260713,
+      "dynamic_erm_run_id": "seed_20260713_dynamic_erm",
+      "js_run_id": "seed_20260713_js_lambda_60"
+    },
+    {
+      "training_seed": 20260714,
+      "dynamic_erm_run_id": "seed_20260714_dynamic_erm",
+      "js_run_id": "seed_20260714_js_lambda_60"
+    },
+    {
+      "training_seed": 20260715,
+      "dynamic_erm_run_id": "seed_20260715_dynamic_erm",
+      "js_run_id": "seed_20260715_js_lambda_60"
+    }
+  ],
+  "split_counts": {
+    "train": 9842,
+    "validation": 2109,
+    "test": 2109,
+    "total": 14060
+  },
+  "evaluation_profiles": {
+    "level0": [
+      "level0"
+    ],
+    "in_range": [
+      "in_range"
+    ],
+    "single_factor_ood": [
+      "ood_shift_negative",
+      "ood_shift_positive",
+      "ood_broadening",
+      "ood_noise",
+      "ood_background",
+      "ood_texture"
+    ],
+    "combined_ood": [
+      "ood_combo_shift_broadening",
+      "ood_combo_background_noise",
+      "ood_combo_texture_shift"
+    ],
+    "stress": [
+      "ood_all"
+    ]
+  },
+  "config_paths": {
+    "data": "configs/data.v9.method_transfer.structure_split.json",
+    "simulation": "configs/simulation.v9.method_transfer.frozen.json",
+    "prediction_rows_schema": "configs/v9_prediction_rows.schema.json"
+  }
+}
