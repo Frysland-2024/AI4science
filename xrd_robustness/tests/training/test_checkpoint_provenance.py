@@ -33,11 +33,11 @@ class CheckpointProvenanceTests(unittest.TestCase):
                 view_manifest_hash="views",
                 seed=3,
                 provenance=provenance,
-                extra_state={"training_stream_audit": {"optimizer_steps": 2}},
+                extra_state={"training_state": {"optimizer_steps": 2}},
             )
             payload = load_checkpoint(path, model=model, optimizers=[optimizer])
             self.assertEqual(
-                payload["extra_state"]["training_stream_audit"]["optimizer_steps"],
+                payload["extra_state"]["training_state"]["optimizer_steps"],
                 2,
             )
             assert_checkpoint_provenance(

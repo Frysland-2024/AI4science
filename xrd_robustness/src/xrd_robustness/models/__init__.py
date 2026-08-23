@@ -1,17 +1,9 @@
-"""Project-owned V7 PXRD backbones."""
+"""Public ResNet-18-GN PXRD backbone."""
 
-from .derivative_channels import DerivativeChannels
-from .ml4pxrd_resnet1d import ML4PXRDResNet1D, ML4PXRDResNet1DConfig
-from .patch_transformer import BackboneOutput, PatchTransformerConfig, XRDPatchTransformer
-from .xrd_pampt import PAMPT, PAMPTConfig
+from .ml4pxrd_resnet1d import BackboneOutput, ML4PXRDResNet1D, ML4PXRDResNet1DConfig
 
 __all__ = [
     "BackboneOutput",
-    "DerivativeChannels",
     "ML4PXRDResNet1D",
     "ML4PXRDResNet1DConfig",
-    "PAMPT",
-    "PAMPTConfig",
-    "PatchTransformerConfig",
-    "XRDPatchTransformer",
 ]

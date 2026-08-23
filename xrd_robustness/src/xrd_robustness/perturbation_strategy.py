@@ -1,15 +1,9 @@
-"""V8 perturbation-strategy boundary without a frozen structured sampler.
-
-The current renderer and V7 parameter sampler remain the executable
-``independent_dynamic`` baseline.  ``structured_dynamic`` is deliberately a
-fail-closed placeholder until its literature-anchored joint distribution is
-approved.
-"""
+"""Independent online perturbation sampling for public ResNet experiments."""
 
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from dataclasses import asdict, dataclass, field
+from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from typing import Any, Callable, Mapping
 
@@ -32,10 +26,6 @@ INDEPENDENT_OPERATOR_NAMES = (
     "background",
     "noise",
 )
-
-
-class StructuredStrategyNotFrozenError(NotImplementedError):
-    """Raised whenever an unfrozen structured strategy is asked to generate data."""
 
 
 @dataclass(frozen=True)
@@ -90,7 +80,7 @@ class PerturbationDraw:
 
 @dataclass(frozen=True)
 class StrategyGeneration:
-    """One rendered view plus its complete in-memory V8 audit record."""
+    """One rendered view plus its complete in-memory render metadata."""
 
     xrd: Any
     parameters: PhysicsParameters
@@ -184,7 +174,7 @@ class PerturbationStrategy(ABC):
         parameters: PhysicsParameters,
         rng_seed: int,
     ) -> dict[str, Any]:
-        """Build the same V8 record for direct generation or manifest replay."""
+        """Build the same render record for direct generation or manifest replay."""
         context.validate()
         parameters.validate()
         return {
@@ -220,7 +210,7 @@ class PerturbationStrategy(ABC):
     @property
     @abstractmethod
     def generation_order(self) -> tuple[str, ...]:
-        """Return the applied operator order, or fail if it is not frozen."""
+        """Return the applied operator order, raising if it is not frozen."""
 
     @property
     @abstractmethod
@@ -234,10 +224,10 @@ class PerturbationStrategy(ABC):
 
 
 class IndependentDynamicStrategy(PerturbationStrategy):
-    """V8 baseline with factorized operator-level online sampling."""
+    """Factorized operator-level online sampling used by Dynamic ERM and JS."""
 
     strategy_name = "independent_dynamic"
-    status = "v8_independent_baseline_ready"
+    status = "public_independent_dynamic"
     formal_use_allowed = True
 
     def __init__(
@@ -245,7 +235,7 @@ class IndependentDynamicStrategy(PerturbationStrategy):
         sampler: PhysicsParameterSampler,
         *,
         config_hash: str = "unbound_config_hash",
-        code_version: str = "independent-dynamic-v8-1",
+        code_version: str = "independent-dynamic-v1",
     ):
         self.sampler = sampler
         self._config_hash = str(config_hash)
@@ -291,86 +281,17 @@ class IndependentDynamicStrategy(PerturbationStrategy):
         return self._code_version
 
 
-class StructuredDynamicStrategy(PerturbationStrategy):
-    """Fail-closed V8 placeholder; no joint distribution has been approved."""
-
-    strategy_name = "structured_dynamic"
-    status = "not_frozen"
-    formal_use_allowed = False
-
-    def __init__(self, *, config_hash: str = "not_frozen"):
-        self._config_hash = str(config_hash)
-
-    @staticmethod
-    def placeholder_state_contract() -> MeasurementState:
-        """Expose the agreed hierarchy without inventing its variables or priors."""
-        return MeasurementState(
-            sample_state={"definition": "TBD", "frozen": False},
-            instrument_state={"definition": "TBD", "frozen": False},
-            acquisition_state={"definition": "TBD", "frozen": False},
-            status="not_frozen",
-        )
-
-    def _raise_not_frozen(self) -> None:
-        raise StructuredStrategyNotFrozenError(
-            "StructuredDynamicStrategy is a V8 interface placeholder. "
-            "Freeze literature-anchored state variables, conditional relations, "
-            "parameter ranges, and generation order before generating data."
-        )
-
-    def sample_state(self, context: PerturbationContext) -> MeasurementState:
-        context.validate()
-        self._raise_not_frozen()
-
-    def sample_parameters(
-        self,
-        state: MeasurementState,
-        context: PerturbationContext,
-    ) -> PerturbationDraw:
-        self._raise_not_frozen()
-
-    def apply(
-        self,
-        clean_pattern: Any,
-        draw: PerturbationDraw,
-        *,
-        renderer: StrategyRenderer,
-    ) -> StrategyGeneration:
-        self._raise_not_frozen()
-
-    @property
-    def generation_order(self) -> tuple[str, ...]:
-        self._raise_not_frozen()
-
-    @property
-    def config_hash(self) -> str:
-        return self._config_hash
-
-    @property
-    def code_version(self) -> str:
-        return "structured-dynamic-not-frozen"
-
-
 def strategy_descriptor(strategy: PerturbationStrategy) -> dict[str, Any]:
-    """Return a serializable strategy status for resolved run configurations."""
-    descriptor = {
+    """Return the serializable active sampler contract."""
+
+    return {
         "strategy_name": strategy.strategy_name,
         "status": strategy.status,
         "formal_use_allowed": strategy.formal_use_allowed,
         "config_hash": strategy.config_hash,
         "code_version": strategy.code_version,
+        "generation_order": list(strategy.generation_order),
+        "sampling_model": "factorized_operator_level",
+        "shared_measurement_state": False,
+        "operator_names": list(INDEPENDENT_OPERATOR_NAMES),
     }
-    if isinstance(strategy, StructuredDynamicStrategy):
-        descriptor["measurement_state"] = asdict(strategy.placeholder_state_contract())
-        descriptor["generation_order"] = {"status": "TBD", "frozen": False}
-    else:
-        descriptor["generation_order"] = list(strategy.generation_order)
-    if isinstance(strategy, IndependentDynamicStrategy):
-        descriptor.update(
-            {
-                "sampling_model": "factorized_operator_level",
-                "shared_measurement_state": False,
-                "operator_names": list(INDEPENDENT_OPERATOR_NAMES),
-            }
-        )
-    return descriptor

@@ -103,8 +103,8 @@ def main() -> int:
         ),
     )
     parser.add_argument(
-        "--audit-output",
-        default=str(PROJECT_ROOT / "outputs/v9_method_transfer_split_audit.json"),
+        "--summary-output",
+        default=str(PROJECT_ROOT / "outputs/v9_structure_split_summary.json"),
     )
     parser.add_argument("--seed", type=int, default=DEFAULT_SPLIT_SEED)
     args = parser.parse_args()
@@ -239,8 +239,8 @@ def main() -> int:
         "parent_structure_id",
     )
     material_intersections = _intersection_counts(split_rows, "material_id")
-    audit = {
-        "schema_version": "v9t-parent-structure-split-audit-v1",
+    summary = {
+        "schema_version": "v9t-parent-structure-split-summary-v1",
         "status": "passed",
         "split_seed": int(args.seed),
         "split_algorithm": SPLIT_ALGORITHM,
@@ -276,7 +276,7 @@ def main() -> int:
         "material_id_intersections": material_intersections,
         "parent_structure_id_intersections": parent_intersections,
         "parent_assignment": assignment_report,
-        "view_inheritance_audit": {
+        "view_inheritance": {
             "status": "passed",
             "split_before_view_generation": True,
             "all_generated_views_inherit_parent_structure_split": True,
@@ -294,32 +294,32 @@ def main() -> int:
         },
         "unified_validation_manifest_only": True,
         "test_locked": True,
-        "external_real_test_separate": True,
     }
     zero_checks = [
-        audit["duplicate_material_id_count"],
+        summary["duplicate_material_id_count"],
         *material_intersections.values(),
         *parent_intersections.values(),
     ]
     if any(zero_checks):
         raise SystemExit(
-            f"split audit failed parent-structure isolation checks: {zero_checks}"
+            "split validation found parent-structure isolation conflicts: "
+            f"{zero_checks}"
         )
-    audit_path = Path(args.audit_output).resolve()
-    audit_path.parent.mkdir(parents=True, exist_ok=True)
-    audit_path.write_text(
-        json.dumps(audit, indent=2, sort_keys=True) + "\n",
+    summary_path = Path(args.summary_output).resolve()
+    summary_path.parent.mkdir(parents=True, exist_ok=True)
+    summary_path.write_text(
+        json.dumps(summary, indent=2, sort_keys=True) + "\n",
         encoding="utf-8",
     )
     print(
         json.dumps(
             {
                 "status": "passed",
-                "split_counts": audit["structure_counts"],
+                "split_counts": summary["structure_counts"],
                 "split_seed": int(args.seed),
-                "split_manifest_sha256": audit["split_manifest"]["sha256"],
-                "data_config_sha256": audit["data_config"]["sha256"],
-                "audit": _project_relative(audit_path),
+                "split_manifest_sha256": summary["split_manifest"]["sha256"],
+                "data_config_sha256": summary["data_config"]["sha256"],
+                "summary": _project_relative(summary_path),
             },
             sort_keys=True,
         )

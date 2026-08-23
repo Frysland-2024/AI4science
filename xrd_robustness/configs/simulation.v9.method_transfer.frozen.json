@@ -1,97 +1,10 @@
 {
-  "schema_version": "v7.1-candidate",
+  "schema_version": "v9-public-simulation-v1",
   "run_seed": 20260714,
-  "purpose": "Formal instrument-agnostic five-perturbation configuration frozen for the V9 cross-domain method-transfer controlled experiment after dev_3500 distribution and spectrum-quality audits; it is not local-instrument calibration and it is outside the simulator-label-supervision study",
+  "purpose": "Frozen five-perturbation PXRD simulation configuration for the public V9 ResNet-18-GN Dynamic ERM versus JS Consistency experiment",
   "status": "formal_frozen",
-  "apply_probability_semantics": "operator-level online coverage control for the XRDMatch-style Independent baseline, not experimental prevalence; each operator activity and value is proposed without a shared measurement state",
+  "apply_probability_semantics": "per-operator probability that an online PXRD perturbation is applied to a rendered view",
   "normalization": "preferred orientation modifies reflection integrated intensities before peak rendering; smooth non-negative background is added to the expected intensity, Poisson photon counts and optional count-space electronic readout noise are sampled before clipping, and the model input is then max-normalized",
-  "methodology_policy": {
-    "parameter_source_hierarchy": ["peer_reviewed_literature", "paper_used_open_source_code", "physics_constrained_distribution", "explicitly_approved_real_instrument_data"],
-    "instrument_agnostic": true,
-    "formal_training_requires_parameter_evidence": true,
-    "default_for_perturbation_supervision_pilot": false
-  },
-  "real_experiment_policy": {
-    "role": "optional_future_external_validation",
-    "parameter_definition_source": false,
-    "training_prerequisite": false
-  },
-  "parameter_evidence": {
-    "background_type": {
-      "literature_source": ["Schopmans et al. 2023", "Vecsei et al. 2019"],
-      "code_source": "src/xrd_robustness/measurement_models.py",
-      "physics_basis": "Background is a smooth additive expectation term; flat, polynomial, and Gaussian-process forms are instrument-agnostic representations."
-    },
-    "background_order": {
-      "literature_source": ["Lee et al. 2023", "SimXRD-4M 2025"],
-      "code_source": "src/xrd_robustness/measurement_models.py",
-      "physics_basis": "Polynomial order controls smooth angular variation and is a representation choice rather than an instrument identity."
-    },
-    "background_variation": {
-      "literature_source": "Schopmans et al. 2023",
-      "code_source": "src/xrd_robustness/measurement_models.py",
-      "physics_basis": "Non-negative coefficients perturb a smooth background shape; candidate magnitudes remain subject to dev_3500 review."
-    },
-    "background_anchor_count": {
-      "code_source": "src/xrd_robustness/measurement_models.py",
-      "physics_basis": "Numerical discretization of a smooth Gaussian-process background, not a physical instrument parameter."
-    },
-    "background_gp_length_scale": {
-      "literature_source": "Schopmans et al. 2023",
-      "code_source": "src/xrd_robustness/measurement_models.py",
-      "physics_basis": "Positive correlation length enforces a slowly varying background; source units are not treated as directly interchangeable."
-    },
-    "background_floor_fraction": {
-      "code_source": "src/xrd_robustness/measurement_models.py",
-      "physics_basis": "A bounded non-negative floor represents continuous background intensity before observation noise."
-    },
-    "noise_model": {
-      "literature_source": ["Schopmans et al. 2023", "Salgado et al. 2023"],
-      "code_source": "src/xrd_robustness/measurement_models.py",
-      "physics_basis": "Photon counts follow a Poisson process and electronic readout is approximated by additive Gaussian noise."
-    },
-    "noise_stage": {
-      "code_source": "src/xrd_robustness/measurement_models.py",
-      "physics_basis": "Observation noise is sampled on expected intensity before clipping and model-input normalization."
-    },
-    "poisson_count_scale": {
-      "code_source": "src/xrd_robustness/measurement_models.py",
-      "physics_basis": "The positive count scale is the exposure/intensity factor in C_i ~ Poisson(g I_i); candidate bounds require dev_3500 review."
-    },
-    "electronic_noise_std_ratio": {
-      "code_source": "src/xrd_robustness/measurement_models.py",
-      "physics_basis": "Non-negative Gaussian readout-noise scale relative to expected intensity; retained at zero for count-space V7 profiles."
-    },
-    "electronic_noise_std_counts": {
-      "code_source": "src/xrd_robustness/measurement_models.py",
-      "physics_basis": "Non-negative Gaussian readout-noise standard deviation in count space; candidate bounds require dev_3500 review."
-    },
-    "delta_2theta_deg": {
-      "literature_source": ["Szymanski et al. 2021", "SimXRD-4M 2025"],
-      "code_source": "src/xrd_robustness/simulator.py",
-      "physics_basis": "One global 2theta-axis offset, not lattice strain or a fitted local instrument function."
-    },
-    "fwhm_deg": {
-      "literature_source": ["Salgado et al. 2023", "Schopmans et al. 2023"],
-      "code_source": "src/xrd_robustness/simulator.py",
-      "physics_basis": "Area-conserving effective scalar Gaussian-width surrogate motivated by Scherrer/Caglioti broadening."
-    },
-    "background_to_peak_ratio": {
-      "literature_source": ["Schopmans et al. 2023", "CPICANN 2024", "SimXRD-4M 2025"],
-      "code_source": "src/xrd_robustness/measurement_models.py",
-      "physics_basis": "Non-negative smooth additive background on the documented reference-peak scale."
-    },
-    "noise_std_ratio": {
-      "literature_source": ["Schopmans et al. 2023", "Vecsei et al. 2019", "Salgado et al. 2023"],
-      "code_source": "src/xrd_robustness/measurement_models.py",
-      "physics_basis": "Additive Gaussian observation-noise option retained as one explicit V7 measurement model."
-    },
-    "preferred_orientation": {
-      "literature_source": ["Lee et al. 2023", "Szymanski et al. 2021", "SimXRD-4M 2025"],
-      "code_source": "src/xrd_robustness/preferred_orientation.py",
-      "physics_basis": "March-Dollase modifies reflection integrated intensities using one preferred reciprocal-space direction without moving peak positions."
-    }
-  },
   "quality_gates": {
     "top20_peak_recall_min": 0.8,
     "retained_integrated_intensity_min": 0.95,

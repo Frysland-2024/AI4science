@@ -2,7 +2,7 @@ import unittest
 
 import numpy as np
 
-from xrd_robustness.online_views import OnlineViewFactory, TrainingMode, training_objective
+from xrd_robustness.online_views import OnlineViewFactory, TrainingMode
 from xrd_robustness.physics import PhysicsParameterSampler
 
 
@@ -66,25 +66,11 @@ class OnlineViewTests(unittest.TestCase):
         )
         np.testing.assert_array_equal(first.xrd, second.xrd)
 
-    def test_dynamic_consistency_only_adds_consistency_loss(self):
-        logits_1 = np.asarray([[2.0, 0.0]])
-        logits_2 = np.asarray([[0.5, 1.0]])
-        erm = training_objective(
-            TrainingMode.DYNAMIC_ERM, logits_1, [0], logits_second=logits_2
+    def test_only_public_dynamic_modes_are_exposed(self):
+        self.assertEqual(
+            {mode.value for mode in TrainingMode},
+            {"dynamic_erm", "dynamic_js"},
         )
-        consistent = training_objective(
-            TrainingMode.DYNAMIC_CONSISTENCY,
-            logits_1,
-            [0],
-            logits_second=logits_2,
-            consistency_weight=0.4,
-        )
-        self.assertEqual(erm["classification"], consistent["classification"])
-        self.assertAlmostEqual(
-            consistent["total"],
-            erm["total"] + 0.4 * consistent["consistency"],
-        )
-        self.assertNotIn("consistency_only", {mode.value for mode in TrainingMode})
 
 
 if __name__ == "__main__":

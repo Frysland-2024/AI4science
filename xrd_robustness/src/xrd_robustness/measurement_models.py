@@ -117,7 +117,7 @@ def generate_background_profile(
     floor_fraction: float = 0.0,
     rng: np.random.Generator | None = None,
 ) -> tuple[np.ndarray, dict[str, Any]]:
-    """Generate a non-negative smooth background and its audit metadata.
+    """Generate a non-negative smooth background and its quality metadata.
 
     ``amplitude`` is relative to the clean reference peak height.  The shape
     is normalized to a maximum of one before that amplitude is applied.  The

@@ -9,6 +9,9 @@ description = "Physics-grounded robustness experiments for 1D powder XRD"
 requires-python = ">=3.10"
 dependencies = ["numpy>=1.24", "torch>=2.0"]
 
+[project.scripts]
+xrd-train = "xrd_robustness.training.runner:main"
+
 [project.optional-dependencies]
 science = ["mp-api", "pymatgen", "scipy>=1.10", "PyYAML>=6"]
 test = ["pytest>=8", "scipy>=1.10", "PyYAML>=6", "pymatgen"]

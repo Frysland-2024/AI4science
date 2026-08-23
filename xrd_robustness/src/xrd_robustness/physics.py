@@ -586,17 +586,8 @@ def validate_formal_simulation_config(
         if not isinstance(raw_strategy, Mapping):
             raise ValueError("perturbation_strategy must be a mapping")
         strategy_name = str(raw_strategy.get("name", ""))
-        if strategy_name not in {"independent_dynamic", "structured_dynamic"}:
+        if strategy_name != "independent_dynamic":
             raise ValueError(f"unsupported perturbation strategy: {strategy_name!r}")
-        if strategy_name == "structured_dynamic" and (
-            str(raw_strategy.get("status", "")) != "formal_frozen"
-            or raw_strategy.get("formal_use_allowed") is not True
-        ):
-            raise ValueError(
-                "structured_dynamic is not frozen for formal experiments; "
-                "approve its literature-anchored state model, conditional relations, "
-                "parameter ranges, and generation order first"
-            )
     raw_profiles = config.get("profiles")
     if not isinstance(raw_profiles, Mapping) or not raw_profiles:
         raise ValueError("formal simulation config must define named profiles")

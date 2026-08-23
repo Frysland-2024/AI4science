@@ -270,33 +270,6 @@ def hierarchical_paired_bootstrap(
     }
 
 
-def infer_paper_outcome(
-    *,
-    residual_minus_dynamic: Mapping[str, Any],
-    js_minus_dynamic: Mapping[str, Any],
-    residual_minus_js: Mapping[str, Any],
-) -> str:
-    """Map registered paired contrasts to the four pre-written result branches."""
-
-    def positive(result: Mapping[str, Any]) -> bool:
-        low, _ = result["hierarchical_bootstrap_95_ci"]
-        return float(result["mean_delta"]) > 0.0 and float(low) > 0.0
-
-    def negative(result: Mapping[str, Any]) -> bool:
-        _, high = result["hierarchical_bootstrap_95_ci"]
-        return float(result["mean_delta"]) < 0.0 and float(high) < 0.0
-
-    residual_effective = positive(residual_minus_dynamic)
-    js_effective = positive(js_minus_dynamic)
-    if residual_effective and positive(residual_minus_js):
-        return "A_residual_stably_beats_dynamic_and_js"
-    if js_effective and negative(residual_minus_js):
-        return "C_js_effective_residual_no_extra_gain"
-    if residual_effective and js_effective:
-        return "B_both_effective_no_clear_difference"
-    return "D_neither_effective_or_inconclusive"
-
-
 def interpret_single_contrast(
     contrast: Mapping[str, Any],
     *,
@@ -324,50 +297,36 @@ def interpret_single_contrast(
     return "inconclusive"
 
 
-def build_method_transfer_statistics_report(
+def build_paired_statistics_report(
     rows: Iterable[Mapping[str, Any]],
     *,
-    dynamic_method_id: str,
+    erm_method_id: str,
     js_method_id: str,
-    residual_method_id: str,
     profiles: Sequence[str],
     replicates: int = 10_000,
     random_seed: int = 20260722,
 ) -> dict[str, Any]:
-    """Build the frozen result schema and all pre-registered paired contrasts."""
+    """Build a generic paired Dynamic JS minus Dynamic ERM report."""
+
     normalized = validate_prediction_rows(rows)
-    kwargs = {
-        "rows": normalized,
-        "profiles": profiles,
-        "replicates": replicates,
-        "random_seed": random_seed,
-    }
-    js_dynamic = hierarchical_paired_bootstrap(
-        focus_method_id=js_method_id, comparator_method_id=dynamic_method_id, **kwargs
-    )
-    residual_dynamic = hierarchical_paired_bootstrap(
-        focus_method_id=residual_method_id, comparator_method_id=dynamic_method_id, **kwargs
-    )
-    residual_js = hierarchical_paired_bootstrap(
-        focus_method_id=residual_method_id, comparator_method_id=js_method_id, **kwargs
-    )
-    outcome = infer_paper_outcome(
-        residual_minus_dynamic=residual_dynamic,
-        js_minus_dynamic=js_dynamic,
-        residual_minus_js=residual_js,
+    js_minus_erm = hierarchical_paired_bootstrap(
+        normalized,
+        focus_method_id=js_method_id,
+        comparator_method_id=erm_method_id,
+        profiles=profiles,
+        replicates=replicates,
+        random_seed=random_seed,
     )
     return {
-        "schema_version": "v9.2-parent-structure-hierarchical-statistics",
+        "schema_version": "paired-js-vs-erm-parent-structure-statistics-v1",
         "analysis_scope": "prediction_rows_only",
         "selection_or_tuning_performed": False,
-        "simulated_test_used": False,
-        "real_test_used": False,
         "row_schema": list(PREDICTION_ROW_REQUIRED_FIELDS) + ["probabilities"],
         "summaries": summarize_prediction_rows(normalized),
         "paired_comparisons": {
-            "js_minus_dynamic": {**js_dynamic, "interpretation": interpret_single_contrast(js_dynamic)},
-            "residual_minus_dynamic": {**residual_dynamic, "interpretation": interpret_single_contrast(residual_dynamic)},
-            "residual_minus_js": {**residual_js, "interpretation": interpret_single_contrast(residual_js)},
+            "js_minus_erm": {
+                **js_minus_erm,
+                "interpretation": interpret_single_contrast(js_minus_erm),
+            }
         },
-        "paper_outcome": outcome,
     }

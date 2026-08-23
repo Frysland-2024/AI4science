@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build an atomic, versioned ideal-reflection cache with audit artifacts."""
+"""Build an atomic, versioned ideal-reflection cache and summary."""
 
 from __future__ import annotations
 
@@ -69,8 +69,14 @@ def main() -> int:
     parser.add_argument("--batch-size", type=int, default=100)
     parser.add_argument("--cache-name", default="peak_tables_v7_reflection")
     parser.add_argument("--manifest-name", default="peak_cache_manifest.v7.reflection.csv")
-    parser.add_argument("--failure-name", default="peak_cache_failures.v7.reflection.csv")
-    parser.add_argument("--audit-name", default="peak_cache_audit.v7.reflection.json")
+    parser.add_argument(
+        "--skipped-records-name",
+        default="peak_cache_skipped_records.v7.reflection.csv",
+    )
+    parser.add_argument(
+        "--summary-name",
+        default="peak_cache_summary.v7.reflection.json",
+    )
     parser.add_argument("--limit", type=int)
     parser.add_argument("--force-local", action="store_true")
     parser.add_argument(
@@ -85,20 +91,22 @@ def main() -> int:
         raise SystemExit("--limit must be positive")
     if Path(args.cache_name).name != args.cache_name:
         raise SystemExit("--cache-name must be one directory name")
-    for name in (args.manifest_name, args.failure_name, args.audit_name):
+    for name in (args.manifest_name, args.skipped_records_name, args.summary_name):
         if Path(name).name != name:
-            raise SystemExit("manifest, failure, and audit names must be plain file names")
+            raise SystemExit(
+                "manifest, skipped-records, and summary names must be plain file names"
+            )
 
     data_root = resolve_data_root(PROJECT_ROOT, args.data_root)
     records_path = data_root / "mp_processed" / "structure_records.jsonl"
     output_dir = data_root / "mp_processed" / args.cache_name
     staging_dir = output_dir.with_name(output_dir.name + ".tmp")
     manifest_path = data_root / "manifests" / args.manifest_name
-    failure_path = data_root / "manifests" / args.failure_name
-    audit_path = data_root / "manifests" / args.audit_name
+    skipped_records_path = data_root / "manifests" / args.skipped_records_name
+    summary_path = data_root / "manifests" / args.summary_name
     if not records_path.exists():
         raise SystemExit(f"structure records are missing: {records_path}")
-    protected_paths = [output_dir, manifest_path, failure_path, audit_path]
+    protected_paths = [output_dir, manifest_path, skipped_records_path, summary_path]
     if not args.resume_staging:
         protected_paths.append(staging_dir)
     occupied = [path for path in protected_paths if path.exists()]
@@ -167,7 +175,7 @@ def main() -> int:
         return compute_external(batch[:midpoint]) + compute_external(batch[midpoint:])
 
     manifest: list[dict[str, Any]] = []
-    failures: list[dict[str, str]] = []
+    skipped_records: list[dict[str, str]] = []
 
     def make_manifest_row(
         record: dict[str, Any], output: Path, table: PeakTable
@@ -239,22 +247,22 @@ def main() -> int:
                 for payload in rows:
                     material_id = str(payload["material_id"])
                     if payload.get("error"):
-                        failures.append(
+                        skipped_records.append(
                             {
                                 "material_id": material_id,
-                                "error_type": str(payload.get("error_type", "StructureCalculationError")),
-                                "error_message": str(payload["error"]),
+                                "reason_type": str(payload.get("error_type", "StructureCalculationError")),
+                                "reason": str(payload["error"]),
                             }
                         )
                         continue
                     try:
                         persist_peak(records_by_id[material_id], _table_from_payload(payload))
                     except Exception as error:
-                        failures.append(
+                        skipped_records.append(
                             {
                                 "material_id": material_id,
-                                "error_type": type(error).__name__,
-                                "error_message": str(error),
+                                "reason_type": type(error).__name__,
+                                "reason": str(error),
                             }
                         )
                 print(
@@ -263,7 +271,7 @@ def main() -> int:
                             "batch": batch_number,
                             "batches": len(batches),
                             "completed": len(manifest),
-                            "failed": len(failures),
+                            "skipped": len(skipped_records),
                         },
                         sort_keys=True,
                     ),
@@ -275,11 +283,11 @@ def main() -> int:
                 structure = Structure.from_dict(record["standardized_structure"])
                 persist_peak(record, ideal_peak_table(structure, grid))
             except Exception as error:
-                failures.append(
+                skipped_records.append(
                     {
                         "material_id": str(record["material_id"]),
-                        "error_type": type(error).__name__,
-                        "error_message": str(error),
+                        "reason_type": type(error).__name__,
+                        "reason": str(error),
                     }
                 )
             if index % args.batch_size == 0 or index == len(records):
@@ -287,7 +295,7 @@ def main() -> int:
                     json.dumps(
                         {
                             "completed": len(manifest),
-                            "failed": len(failures),
+                            "skipped": len(skipped_records),
                             "processed": index,
                             "total": len(records),
                         },
@@ -297,20 +305,20 @@ def main() -> int:
                 )
 
     manifest.sort(key=lambda row: row["material_id"])
-    failures.sort(key=lambda row: row["material_id"])
-    failure_fields = ["material_id", "error_type", "error_message"]
-    _write_csv(failure_path, failures, failure_fields)
+    skipped_records.sort(key=lambda row: row["material_id"])
+    skipped_fields = ["material_id", "reason_type", "reason"]
+    _write_csv(skipped_records_path, skipped_records, skipped_fields)
     elapsed = time.perf_counter() - started
     aggregate_payload = "\n".join(
         f"{row['material_id']}:{row['sha256']}" for row in manifest
     ).encode("utf-8")
     aggregate_cache_hash = hashlib.sha256(aggregate_payload).hexdigest()
-    audit = {
+    summary = {
         "schema_version": CACHE_SCHEMA_VERSION,
         "status": (
-            "passed"
-            if not failures and len(manifest) == expected_record_count
-            else "failed"
+            "completed"
+            if not skipped_records and len(manifest) == expected_record_count
+            else "incomplete"
         ),
         "data_root": project_relative_path(PROJECT_ROOT, data_root),
         "source_records": project_relative_path(PROJECT_ROOT, records_path),
@@ -319,7 +327,7 @@ def main() -> int:
         "cache_name": args.cache_name,
         "required_arrays": list(REQUIRED_ARRAYS),
         "completed_count": len(manifest),
-        "failed_count": len(failures),
+        "skipped_count": len(skipped_records),
         "aggregate_cache_sha256": aggregate_cache_hash,
         "total_cache_bytes": int(sum(int(row["bytes"]) for row in manifest)),
         "grid": {
@@ -335,30 +343,39 @@ def main() -> int:
         "resumed_staging_file_count": len(completed_ids),
     }
 
-    if failures or len(manifest) != expected_record_count:
-        audit_path.write_text(json.dumps(audit, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    if skipped_records or len(manifest) != expected_record_count:
+        summary_path.write_text(
+            json.dumps(summary, indent=2, sort_keys=True) + "\n",
+            encoding="utf-8",
+        )
         raise SystemExit(
-            f"V7 cache build failed: {len(manifest)}/{expected_record_count} complete; "
-            f"see {failure_path} and {audit_path}; staging cache retained at {staging_dir}"
+            f"V7 cache build incomplete: {len(manifest)}/{expected_record_count} complete; "
+            f"see {skipped_records_path} and {summary_path}; "
+            f"staging cache retained at {staging_dir}"
         )
 
     staging_dir.replace(output_dir)
     manifest_fields = list(manifest[0])
     _write_csv(manifest_path, manifest, manifest_fields)
-    audit["manifest"] = project_relative_path(PROJECT_ROOT, manifest_path)
-    audit["manifest_sha256"] = _sha256(manifest_path)
-    audit["failure_report"] = project_relative_path(PROJECT_ROOT, failure_path)
-    audit["failure_report_sha256"] = _sha256(failure_path)
-    audit_path.write_text(json.dumps(audit, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    summary["manifest"] = project_relative_path(PROJECT_ROOT, manifest_path)
+    summary["manifest_sha256"] = _sha256(manifest_path)
+    summary["skipped_records"] = project_relative_path(
+        PROJECT_ROOT, skipped_records_path
+    )
+    summary["skipped_records_sha256"] = _sha256(skipped_records_path)
+    summary_path.write_text(
+        json.dumps(summary, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
     print(
         json.dumps(
             {
-                "status": audit["status"],
+                "status": summary["status"],
                 "peak_tables": len(manifest),
                 "manifest": str(manifest_path),
-                "manifest_sha256": audit["manifest_sha256"],
+                "manifest_sha256": summary["manifest_sha256"],
                 "aggregate_cache_sha256": aggregate_cache_hash,
-                "audit": str(audit_path),
+                "summary": str(summary_path),
                 "elapsed_seconds": elapsed,
             },
             sort_keys=True,

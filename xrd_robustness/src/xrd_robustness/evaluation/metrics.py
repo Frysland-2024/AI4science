@@ -121,29 +121,6 @@ def robustness_auc(severity: Iterable[float], values: Iterable[float]) -> float:
     return float(integral / span) if span > 0 else float(y.mean())
 
 
-def residual_diagnostics(
-    residual: np.ndarray,
-    *,
-    probe_logits: np.ndarray | None = None,
-    labels: Iterable[int] | None = None,
-) -> dict[str, float]:
-    residual = np.asarray(residual, dtype=np.float64)
-    if residual.ndim != 2:
-        raise ValueError("residual must have shape [batch, embedding_dim]")
-    output = {
-        "residual_norm": float(np.linalg.norm(residual, axis=1).mean()),
-        **representation_diagnostics(residual, labels=labels, prefix="residual"),
-    }
-    if probe_logits is not None:
-        logits = np.asarray(probe_logits, dtype=np.float64)
-        shifted = logits - logits.max(axis=1, keepdims=True)
-        probabilities = np.exp(shifted)
-        probabilities /= probabilities.sum(axis=1, keepdims=True)
-        entropy = -np.sum(probabilities * np.log(np.clip(probabilities, 1e-12, 1.0)), axis=1)
-        output["residual_prediction_entropy"] = float(entropy.mean())
-    return output
-
-
 def representation_diagnostics(
     features: np.ndarray,
     *,

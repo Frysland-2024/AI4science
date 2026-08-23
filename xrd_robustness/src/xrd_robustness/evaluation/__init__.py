@@ -1,30 +1,29 @@
-"""V7 evaluation utilities."""
+"""Metrics and paired Dynamic JS versus Dynamic ERM statistics."""
 
 from .metrics import (
     classification_metrics,
     expected_calibration_error,
     paired_view_metrics,
-    residual_diagnostics,
+    representation_diagnostics,
     robustness_auc,
 )
-from .residual_probe import (
-    PostHocResidualProbe,
-    ProbeConfig,
-    frozen_model_residuals,
-    train_posthoc_residual_probe,
+from .statistics import (
+    build_paired_statistics_report,
+    hierarchical_paired_bootstrap,
+    interpret_single_contrast,
+    summarize_prediction_rows,
+    validate_prediction_rows,
 )
-from .real_xrd import RealXRDConfig, load_real_xrd
 
 __all__ = [
-    "PostHocResidualProbe",
-    "ProbeConfig",
-    "RealXRDConfig",
+    "build_paired_statistics_report",
     "classification_metrics",
     "expected_calibration_error",
-    "frozen_model_residuals",
+    "hierarchical_paired_bootstrap",
+    "interpret_single_contrast",
     "paired_view_metrics",
-    "residual_diagnostics",
-    "load_real_xrd",
+    "representation_diagnostics",
     "robustness_auc",
-    "train_posthoc_residual_probe",
+    "summarize_prediction_rows",
+    "validate_prediction_rows",
 ]

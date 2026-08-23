@@ -1,10 +1,6 @@
 {
   "dataset_root": "data/formal_14060",
   "dataset_size": 14060,
-  "external_real_test": {
-    "inside_14060": false,
-    "selection_use_forbidden": true
-  },
   "peak_cache": {
     "path": "data/formal_14060/manifests/peak_cache_manifest.v7.reflection.csv",
     "sha256": "6AE0CFD1B5B29671E2F532D7A094F2FC412CABD64E4CF77D42915937BACC8D18",
@@ -69,7 +65,7 @@
     "count": 2109,
     "iid_profile_role": "training-range perturbations on the same locked test structures",
     "ood_profile_role": "unseen stronger perturbations on the same locked test structures",
-    "selection_use_forbidden": true
+    "reserved_for_final_evaluation": true
   },
   "validation": {
     "count": 2109,

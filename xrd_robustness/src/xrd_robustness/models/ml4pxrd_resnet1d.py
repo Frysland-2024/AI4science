@@ -12,13 +12,20 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 import math
-from typing import Final
+from typing import Final, TypedDict
 
 import torch
 from torch import nn
 from torch.nn import functional as F
 
-from .patch_transformer import BackboneOutput
+
+class BackboneOutput(TypedDict):
+    """Small common output contract used by training and evaluation."""
+
+    logits: torch.Tensor
+    pooled_embedding: torch.Tensor
+    main_tokens: torch.Tensor
+    prior_tokens: None
 
 
 _RESNET_SPECS: Final[dict[str, tuple[tuple[int, int], ...]]] = {

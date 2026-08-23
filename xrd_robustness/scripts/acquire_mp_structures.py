@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Acquire and audit the formal structure-only Materials Project dataset."""
+"""Acquire the formal structure-only Materials Project dataset."""
 
 from __future__ import annotations
 
@@ -132,7 +132,7 @@ def _external_standardize(
                     return [
                         {
                             "material_id": batch[0]["material_id"],
-                            "error": f"isolated standardizer failure: {detail}",
+                            "error": f"isolated standardizer issue: {detail}",
                         }
                     ]
         midpoint = len(batch) // 2
@@ -165,7 +165,7 @@ def process_documents(
     retained: list[dict[str, Any]] = []
     duplicate_report: list[dict[str, Any]] = []
     mismatch_report: list[dict[str, Any]] = []
-    failures: list[dict[str, Any]] = []
+    skipped_records: list[dict[str, Any]] = []
     last_updated: list[str] = []
     standardized_rows = (
         _external_standardize(documents, standardizer_python=standardizer_python)
@@ -263,7 +263,7 @@ def process_documents(
             if updated is not None:
                 last_updated.append(str(updated))
         except Exception as exc:
-            failures.append(
+            skipped_records.append(
                 {
                     "material_id": material_id,
                     "error_type": type(exc).__name__,
@@ -293,7 +293,7 @@ def process_documents(
     reports = {
         "duplicates": duplicate_report,
         "mismatches": mismatch_report,
-        "failures": failures,
+        "skipped": skipped_records,
     }
     return retained, reports, last_updated
 
@@ -376,7 +376,7 @@ def main() -> int:
         raise SystemExit("use either --limit or --per-class-limit, not both")
     with MPRester(args.api_key) as mpr:
         database_version = mpr.db_version
-        reports = {"duplicates": [], "mismatches": [], "failures": []}
+        reports = {"duplicates": [], "mismatches": [], "skipped": []}
         records: list[dict[str, Any]] = []
         source_updates: list[str] = []
         if args.per_class_limit is None:
@@ -405,7 +405,7 @@ def main() -> int:
                     max(10, math.ceil(requested_per_class / len(spacegroup_numbers))),
                 )
                 class_candidates: list[dict[str, Any]] = []
-                class_reports = {"duplicates": [], "mismatches": [], "failures": []}
+                class_reports = {"duplicates": [], "mismatches": [], "skipped": []}
                 class_updates: list[str] = []
                 target_valid = args.per_class_limit + max(20, math.ceil(args.per_class_limit * 0.15))
                 candidate_specs = [("stable", dict(query))]
@@ -545,8 +545,8 @@ def main() -> int:
         ],
     )
     _write_csv(
-        manifests / "failed_structures.csv",
-        reports["failures"],
+        manifests / "skipped_structures.csv",
+        reports["skipped"],
         ["material_id", "error_type", "error", "action"],
     )
 
@@ -588,7 +588,7 @@ def main() -> int:
             "retained": len(records),
             "duplicates": len(reports["duplicates"]),
             "label_mismatches": len(reports["mismatches"]),
-            "failed": len(reports["failures"]),
+            "skipped": len(reports["skipped"]),
             "selection_tiers": {
                 tier: sum(row.get("selection_tier") == tier for row in records)
                 for tier in ("stable", "near_stable")

@@ -1,6 +1,5 @@
-"""Structure-anchored online XRD robustness utilities."""
+"""Structure-anchored Dynamic ERM/JS utilities for powder XRD."""
 
-from .online_views import OnlineViewFactory, TrainingMode, training_objective
 from .dynamic_pair_dataset import (
     DynamicPairBatch,
     DynamicPairDataset,
@@ -9,25 +8,29 @@ from .dynamic_pair_dataset import (
     collate_dynamic_pairs,
     stable_pair_seed,
 )
-from .physics import (
-    PhysicsParameterSampler,
-    PhysicsParams,
-    PhysicsParameters,
-    build_frozen_perturbation_manifest,
-    parameter_registry_rows,
-    stable_view_seed,
-    validate_formal_simulation_config,
-)
+from .online_views import OnlineViewFactory, TrainingMode
 from .perturbation_strategy import (
     IndependentDynamicStrategy,
     MeasurementState,
     PerturbationContext,
     PerturbationStrategy,
-    StructuredDynamicStrategy,
-    StructuredStrategyNotFrozenError,
     strategy_descriptor,
 )
-from .v8_independent import IndependentDynamicERM
+from .physics import (
+    PhysicsParameterSampler,
+    PhysicsParameters,
+    PhysicsParams,
+    build_frozen_perturbation_manifest,
+    parameter_registry_rows,
+    stable_view_seed,
+    validate_formal_simulation_config,
+)
+from .simulation_interfaces import IdealPeakCalculator, PeakTable, XRDRenderer
+from .simulator import (
+    GaussianProfileRenderer,
+    PerturbationProvenance,
+    PymatgenIdealPeakCalculator,
+)
 from .splitting import build_structure_split_manifest, validate_split_manifest
 from .structure_data import (
     PERSISTED_STRUCTURE_FIELDS,
@@ -45,15 +48,8 @@ from .view_manifest import (
     load_manifest,
     save_manifest,
 )
-from .simulation_interfaces import IdealPeakCalculator, PeakTable, XRDRenderer
-from .simulator import (
-    GaussianProfileRenderer,
-    PerturbationProvenance,
-    PymatgenIdealPeakCalculator,
-)
 
 __all__ = [
-    "OnlineViewFactory",
     "DynamicPairBatch",
     "DynamicPairDataset",
     "DynamicPairItem",
@@ -61,40 +57,37 @@ __all__ = [
     "FrozenEvaluationManifest",
     "GaussianProfileRenderer",
     "IdealPeakCalculator",
-    "PeakTable",
-    "PERSISTED_STRUCTURE_FIELDS",
-    "SUPPORTED_DATASET_SIZES",
-    "PhysicsParameterSampler",
-    "PhysicsParams",
-    "PhysicsParameters",
     "IndependentDynamicStrategy",
-    "IndependentDynamicERM",
     "MeasurementState",
+    "OnlineViewFactory",
+    "PERSISTED_STRUCTURE_FIELDS",
+    "PeakTable",
     "PerturbationContext",
-    "PerturbationStrategy",
     "PerturbationProvenance",
+    "PerturbationStrategy",
+    "PhysicsParameterSampler",
+    "PhysicsParameters",
+    "PhysicsParams",
     "PymatgenIdealPeakCalculator",
+    "SUPPORTED_DATASET_SIZES",
     "TrainingMode",
-    "StructuredDynamicStrategy",
-    "StructuredStrategyNotFrozenError",
+    "ViewManifestRow",
     "XRDRenderer",
     "assign_structure_splits",
     "build_frozen_perturbation_manifest",
-    "parameter_registry_rows",
     "build_offline_view_manifest",
+    "build_parameter_stream",
     "build_structure_split_manifest",
-    "stable_view_seed",
+    "collate_dynamic_pairs",
+    "load_manifest",
+    "parameter_registry_rows",
+    "save_manifest",
     "select_nested_structure_records",
+    "stable_pair_seed",
+    "stable_view_seed",
+    "strategy_descriptor",
     "validate_formal_simulation_config",
-    "training_objective",
     "validate_no_split_leakage",
     "validate_persisted_structure_record",
     "validate_split_manifest",
-    "ViewManifestRow",
-    "build_parameter_stream",
-    "collate_dynamic_pairs",
-    "load_manifest",
-    "save_manifest",
-    "stable_pair_seed",
-    "strategy_descriptor",
 ]
