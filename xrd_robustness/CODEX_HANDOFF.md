@@ -1,4 +1,4 @@
-# XRD Robustness V9-T — Current Handoff
+# XRD Robustness — Current Handoff
 
 **Status date:** 2026-08-23
 

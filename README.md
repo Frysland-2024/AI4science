@@ -2,9 +2,9 @@
 
 本仓库的当前研究主线位于 [`xrd_robustness/`](xrd_robustness/)：利用在线 PXRD 模拟器提供的同源结构配对视图，为七晶系分类学习 measurement-equivalence supervision。
 
-> 状态（2026-08-23）：V9-T 方法与模拟域结果已经冻结，当前工作是论文和图表制作。
+> 状态（2026-08-23）：本研究的方法与模拟域结果已经定型，当前工作是论文和图表制作。
 
-## V9-T 结果
+## 本研究结果
 
 冻结比较采用 ResNet-18-GN、Dynamic ERM 与 Dynamic JS Consistency，选定 `lambda_js=60`。
 

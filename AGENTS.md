@@ -21,7 +21,7 @@ Apply the following rules:
 1. Read `Frysland-2024/AI4science` by default before answering any current
    project question. Do not rely only on chat memory or local documents.
 2. Treat the current tracked files in `Frysland-2024/AI4science` as the authority
-   for XRD, V9-T, application-planning, and project-state questions.
+   for XRD, application-planning, and project-state questions.
 3. If the repository choice is ambiguous, remain on
    `Frysland-2024/AI4science` unless the user explicitly selects another project.
 

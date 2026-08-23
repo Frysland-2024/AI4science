@@ -8,7 +8,7 @@ My project studies robust machine learning for powder X-ray diffraction (PXRD). 
 
 I converted this relationship into measurement-equivalence supervision. For each parent structure, the training system generates two online views and applies Jensen-Shannon prediction consistency while preserving the same structures, perturbation distribution, backbone, optimization and data exposure as a Dynamic ERM baseline.
 
-The final V9-T comparison uses a ResNet-18-GN backbone for seven-crystal-system classification. Across five matched training-seed pairs, JS consistency improved simulated Validation mean single-factor OOD Macro-F1 by `+0.046569`. Evaluation of the already selected checkpoints on the frozen simulated Test produced a `+0.054600` mean paired improvement. All five paired effects were positive on both panels.
+The final comparison uses a ResNet-18-GN backbone for seven-crystal-system classification. Across five matched training-seed pairs, JS consistency improved simulated Validation mean single-factor OOD Macro-F1 by `+0.046569`. Evaluation of the already selected checkpoints on the frozen simulated Test produced a `+0.054600` mean paired improvement. All five paired effects were positive on both panels.
 
 This work strengthened my interest in robust and data-efficient learning for scientific measurements. It also taught me how to convert information already available in a scientific data-generation process into a focused machine-learning hypothesis, a matched comparison and a reproducible result.
 

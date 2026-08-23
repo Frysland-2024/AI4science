@@ -1,8 +1,8 @@
-# V9 Public Results
+# Study Results
 
 ## Experiment
 
-The public V9 experiment compares Dynamic ERM with JS Consistency
+The public experiment compares Dynamic ERM with JS Consistency
 (`lambda = 60`) using the same ResNet-18-GN architecture and five matched
 training seeds. The formal simulated PXRD dataset contains 14,060 parent
 structures split into 9,842 Train, 2,109 Validation, and 2,109 simulated Test

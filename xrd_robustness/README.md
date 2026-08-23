@@ -1,4 +1,4 @@
-# XRD Robustness V9-T
+# XRD Robustness
 
 本目录实现基于在线 PXRD 物理扰动的七晶系鲁棒分类。冻结比较为 matched Dynamic ERM 与 Dynamic JS Consistency；选定配置为 ResNet-18-GN、identity preprocessing、AdamW、constant learning rate、`lambda_js=60`。
 

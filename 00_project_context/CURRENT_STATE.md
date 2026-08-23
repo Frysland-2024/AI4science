@@ -2,11 +2,11 @@
 
 **Status date:** 2026-08-23
 
-**Phase:** frozen V9-T results → manuscript and figure construction
+**Phase:** frozen results → manuscript and figure construction
 
 ## 1. Current scientific design
 
-V9-T 研究在线 PXRD 模拟器提供的同源结构关系能否转化为额外监督，从而提升七晶系分类器在模拟测量变化下的鲁棒性。
+本研究问在线 PXRD 模拟器提供的同源结构关系能否转化为额外监督，从而提升七晶系分类器在模拟测量变化下的鲁棒性。
 
 冻结设计：
 
@@ -51,11 +51,11 @@ V9-T 研究在线 PXRD 模拟器提供的同源结构关系能否转化为额外
 - [`../xrd_robustness/src/xrd_robustness/online_views.py`](../xrd_robustness/src/xrd_robustness/online_views.py)
 - [`../xrd_robustness/scripts/train.py`](../xrd_robustness/scripts/train.py)
 
-冻结结果保持只读。公开发布范围仅包含当前 V9-T 实现、运行配置、正向结果与使用文档；`train.py` 提供可复用的方法参考实现，冻结分数以既有 checkpoint 的公开评估入口和结果文件为准。
+冻结结果保持只读。公开发布范围仅包含当前实现、运行配置、正向结果与使用文档；`train.py` 提供可复用的方法参考实现，冻结分数以既有 checkpoint 的公开评估入口和结果文件为准。
 
 ## 5. Experiment status
 
-V9-T 方法比较、Validation replication 和 simulated Test 均已完成。当前没有计划内训练任务；现有结果作为论文版本的固定输入。
+方法比较、Validation replication 和 simulated Test 均已完成。当前没有计划内训练任务；现有结果作为论文版本的固定输入。
 
 ## 6. Current blocker
 
