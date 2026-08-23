@@ -1,6 +1,6 @@
-# AI4science Current State
+# AI4science 当前状态
 
-**Status date:** 2026-08-23
+**状态日期：** 2026-08-23
 
 **阶段：** 结果已定型 → 论文与图表制作
 
@@ -64,7 +64,7 @@
 ## 7. 下一步
 
 1. 从 `reports/validation_results.json` 和 `reports/simulated_test_results.json` 生成论文图表。
-2. 完成 Methods、Results 和 Discussion 正文。
+2. 完成方法、结果和讨论章节。
 3. 运行完整测试，确认公开接口、数据约定与核心实现一致。
 
 下一条命令：

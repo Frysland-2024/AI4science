@@ -1,4 +1,4 @@
-# XRD Robustness — 当前交接
+# XRD 鲁棒性 — 当前交接
 
 **状态日期：** 2026-08-23
 
@@ -38,14 +38,14 @@
 | `src/xrd_robustness/training/objectives.py` | Dynamic ERM 与 JS 一致性目标 |
 | `src/xrd_robustness/simulator.py` | PXRD 扰动模拟器 |
 | `src/xrd_robustness/online_views.py` | 配对在线视图生成 |
-| `scripts/train.py` | ResNet Dynamic ERM/JS 训练脚本 |
+| `scripts/train.py` | 训练脚本（Dynamic ERM 与 JS 一致性） |
 
 ## 当前工作
 
 现有实验结果保持固定。当前在做：
 
 1. 从两份结果文件生成论文图表；
-2. 完成 Methods、Results 和 Discussion；
+2. 完成方法、结果和讨论章节；
 3. 保持公开文档中的方法与数值一致；
 4. 运行完整测试确认当前实现。
 

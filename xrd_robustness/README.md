@@ -1,4 +1,4 @@
-# XRD Robustness
+# XRD 鲁棒性
 
 本目录实现基于在线 PXRD 物理扰动的七晶系鲁棒分类。核心对比为 Dynamic ERM 与 Dynamic JS Consistency 两种方法；选定配置为 ResNet-18-GN、不做额外预处理、AdamW、恒定学习率、`lambda_js=60`。
 
@@ -25,7 +25,7 @@
 | `src/xrd_robustness/training/objectives.py` | Dynamic ERM 与 JS 一致性目标 |
 | `src/xrd_robustness/simulator.py` | PXRD 物理扰动模拟器 |
 | `src/xrd_robustness/online_views.py` | 同一母体结构的配对在线视图 |
-| `scripts/train.py` | ResNet Dynamic ERM/JS 训练脚本 |
+| `scripts/train.py` | 训练脚本（Dynamic ERM 与 JS 一致性） |
 
 ## 安装与测试
 
