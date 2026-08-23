@@ -28,8 +28,7 @@ Apply the following rules:
 Before working on the XRD project, read:
 
 1. `00_project_context/CURRENT_STATE.md`
-2. `xrd_robustness/CODEX_HANDOFF.md`
-3. `xrd_robustness/README.md`
+2. `xrd_robustness/README.md`
 
 At the end of every meaningful task:
 
@@ -75,10 +74,8 @@ documentation, complete the following workflow before handing work back:
 2. Run the tests or verification checks relevant to the files changed. A documentation-only
    change may use targeted formatting, link, policy, and secret scans instead of the
    full model test suite. Any failed required check blocks commit and push.
-3. If the current project state changed, update both:
-   - `xrd_robustness/CODEX_HANDOFF.md`;
-   - the corresponding current-state or decision record under
-     `00_project_context/`.
+3. If the current project state changed, update the corresponding
+   current-state or decision record under `00_project_context/`.
    Record current scientific or research-direction reasoning in
    `00_project_context/CURRENT_STATE.md`.
 4. Never stage or commit:

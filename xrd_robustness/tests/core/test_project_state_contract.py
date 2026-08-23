@@ -62,7 +62,6 @@ def test_public_document_links_resolve() -> None:
         },
         PROJECT_ROOT / "README.md": {
             "../00_project_context/CURRENT_STATE.md",
-            "CODEX_HANDOFF.md",
             "MANUSCRIPT.md",
             "reports/RESULTS.md",
             "reports/validation_results.json",

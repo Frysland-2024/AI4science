@@ -1,6 +1,6 @@
 # XRD 鲁棒性
 
-本目录实现基于在线 PXRD 物理扰动的七晶系鲁棒分类。核心对比为 Dynamic ERM 与 Dynamic JS Consistency 两种方法；选定配置为 ResNet-18-GN、不做额外预处理、AdamW、恒定学习率、`lambda_js=60`。
+这里做的是：用在线 PXRD 物理扰动做七晶系鲁棒分类。对比 Dynamic ERM 和 Dynamic JS Consistency 两种方法，配置是 ResNet-18-GN、不做额外预处理、AdamW、恒定学习率、`lambda_js=60`。
 
 ## 结果
 
@@ -9,7 +9,7 @@
 | 模拟验证集 · 单因素分布外 Macro-F1 | 0.658495 | 0.705064 | `+0.046569` |
 | 模拟测试集 · 单因素分布外 Macro-F1 | 0.65074 | 0.70534 | `+0.054600` |
 
-五组配对种子实验在两个数据集上均为正向提升。
+两个数据集上，五组配对实验都有提升。
 
 结果文件：
 
@@ -37,7 +37,6 @@ python -m pytest -q
 ## 文档
 
 - [`../00_project_context/CURRENT_STATE.md`](../00_project_context/CURRENT_STATE.md)
-- [`CODEX_HANDOFF.md`](CODEX_HANDOFF.md)
 - [`MANUSCRIPT.md`](MANUSCRIPT.md)
 
-数据集、模型权重、生成谱图、缓存和本地输出不进入 Git。
+数据集、模型权重、生成的谱图、缓存和本地输出都不会提交到 Git。
