@@ -1,6 +1,6 @@
 # Measurement-Equivalence Supervision for Robust PXRD Classification
 
-**Status:** manuscript scaffold from frozen simulated evidence
+**Status:** manuscript scaffold from the simulated results
 
 **Updated:** 2026-08-23
 
@@ -8,7 +8,7 @@
 
 ## Abstract
 
-Machine-learning analysis of powder X-ray diffraction (PXRD) commonly uses simulated training data, while measured patterns vary with peak shifts, broadening, preferred orientation, background and noise. We study an additional source of supervision created by online simulation: multiple perturbed patterns generated from one parent structure are related measurements of the same latent physical object. We add Jensen-Shannon prediction consistency between paired online views to a matched Dynamic ERM baseline while controlling the backbone, parent structures, perturbation distribution, optimization and data exposure. Across five matched training-seed pairs, consistency improves mean single-factor Validation-OOD Macro-F1 by `0.046569`, with all five effects positive. Evaluation of the already selected checkpoints on the frozen simulated Test yields a mean paired improvement of `0.054600`, also positive in all five pairs. These results show how simulator-retained relationships can provide structured supervision for robust scientific classification.
+Machine-learning analysis of powder X-ray diffraction (PXRD) commonly uses simulated training data, while measured patterns vary with peak shifts, broadening, preferred orientation, background and noise. We study an additional source of supervision created by online simulation: multiple perturbed patterns generated from one parent structure are related measurements of the same latent physical object. We add Jensen-Shannon prediction consistency between paired online views to a matched Dynamic ERM baseline while controlling the backbone, parent structures, perturbation distribution, optimization and data exposure. Across five matched seeds, consistency improves mean single-factor Validation-OOD Macro-F1 by `0.046569`, with all five effects positive. Evaluation of the already selected checkpoints on the simulated Test yields a mean paired improvement of `0.054600`, also positive in all five pairs. These results show how simulator-retained relationships can provide structured supervision for robust scientific classification.
 
 ## 1. Research question
 
@@ -58,7 +58,7 @@ The primary OOD effect is positive for all five matched pairs, with a paired-boo
 
 ## 4. Discussion
 
-The contribution is the use of simulator-retained parent identity as an equivalence relation for scientific measurements. The matched design isolates the value of this relationship while preserving structures, perturbations, optimization and data exposure. The Validation and Test panels consistently support the same aggregate improvement in simulated PXRD robustness.
+The contribution is the use of simulator-retained parent identity as an equivalence relation for scientific measurements. The matched design isolates the value of this relationship while preserving structures, perturbations, optimization and data exposure. The Validation and Test results consistently support the same aggregate improvement in simulated PXRD robustness.
 
 ## 5. Figure plan
 
@@ -69,11 +69,11 @@ The contribution is the use of simulator-retained parent identity as an equivale
 
 ## 6. Submission-facing claim
 
-Online PXRD simulation can supply measurement-equivalence supervision through shared parent identity. In a matched two-view design, JS consistency improves aggregate simulated OOD robustness relative to Dynamic ERM across five training seeds and a frozen simulated Test.
+Online PXRD simulation can supply measurement-equivalence supervision through shared parent identity. In a matched two-view design, JS consistency improves aggregate simulated OOD robustness relative to Dynamic ERM across five training seeds and a simulated Test.
 
 ## 7. Remaining writing work
 
 1. Complete the source-backed Introduction and Related Work.
-2. Convert frozen configurations into an exact Methods description.
-3. Generate publication figures from the two machine-readable result files.
+2. Convert the fixed configurations into an exact Methods description.
+3. Generate publication figures from the two result files.
 4. Complete the Results and Discussion prose.
