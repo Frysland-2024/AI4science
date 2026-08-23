@@ -26,14 +26,8 @@ from .view_manifest import ViewManifestRow
 
 
 class TrainingMode(str, Enum):
-    CLEAN_ERM = "clean_erm"
-    OFFLINE_ERM = "offline_erm"
-    FIXED_VIEW_ERM = "offline_erm"
     DYNAMIC_ERM = "dynamic_erm"
     DYNAMIC_JS = "dynamic_js"
-    DYNAMIC_CONSISTENCY = "dynamic_js"
-    DYNAMIC_RESIDUAL = "dynamic_residual"
-    PERTURBATION_SUPERVISED_RESIDUAL = "perturbation_supervised_residual"
 
 
 @dataclass(frozen=True)
@@ -412,65 +406,3 @@ class OnlineViewFactory:
             first=self.make_view_from_manifest(peaks, first),
             second=self.make_view_from_manifest(peaks, second),
         )
-
-
-def _softmax(logits: np.ndarray) -> np.ndarray:
-    values = np.asarray(logits, dtype=np.float64)
-    shifted = values - np.max(values, axis=-1, keepdims=True)
-    exp = np.exp(shifted)
-    return exp / np.sum(exp, axis=-1, keepdims=True)
-
-
-def cross_entropy_from_logits(logits: np.ndarray, target: np.ndarray | int) -> float:
-    probabilities = _softmax(logits)
-    targets = np.asarray(target, dtype=np.int64).reshape(-1)
-    probabilities = np.atleast_2d(probabilities)
-    if probabilities.shape[0] != len(targets):
-        raise ValueError("target count does not match batch size")
-    selected = probabilities[np.arange(len(targets)), targets]
-    return float(-np.mean(np.log(np.clip(selected, 1e-12, 1.0))))
-
-
-def jensen_shannon_from_logits(first: np.ndarray, second: np.ndarray) -> float:
-    p = np.atleast_2d(_softmax(first))
-    q = np.atleast_2d(_softmax(second))
-    if p.shape != q.shape:
-        raise ValueError("consistency logits must have identical shapes")
-    midpoint = 0.5 * (p + q)
-    kl_p = np.sum(p * (np.log(np.clip(p, 1e-12, 1.0)) - np.log(midpoint)), axis=-1)
-    kl_q = np.sum(q * (np.log(np.clip(q, 1e-12, 1.0)) - np.log(midpoint)), axis=-1)
-    return float(np.mean(0.5 * (kl_p + kl_q)))
-
-
-def training_objective(
-    mode: TrainingMode,
-    logits_first: np.ndarray,
-    target: np.ndarray | int,
-    *,
-    logits_second: np.ndarray | None = None,
-    consistency_weight: float = 0.0,
-) -> dict[str, float]:
-    """Compute matched objectives; no unsupported consistency-only branch exists."""
-    if mode in {
-        TrainingMode.DYNAMIC_RESIDUAL,
-        TrainingMode.PERTURBATION_SUPERVISED_RESIDUAL,
-    }:
-        raise ValueError(f"{mode.value} requires the differentiable torch training objective")
-    first_loss = cross_entropy_from_logits(logits_first, target)
-    if mode is TrainingMode.FIXED_VIEW_ERM:
-        return {"classification": first_loss, "consistency": 0.0, "total": first_loss}
-    if logits_second is None:
-        raise ValueError(f"{mode.value} requires two supervised views")
-    second_loss = cross_entropy_from_logits(logits_second, target)
-    classification = 0.5 * (first_loss + second_loss)
-    consistency = 0.0
-    if mode is TrainingMode.DYNAMIC_CONSISTENCY:
-        if consistency_weight < 0:
-            raise ValueError("consistency_weight must be non-negative")
-        consistency = jensen_shannon_from_logits(logits_first, logits_second)
-    total = classification + consistency_weight * consistency
-    return {
-        "classification": classification,
-        "consistency": consistency,
-        "total": total,
-    }
