@@ -34,9 +34,11 @@ python -m pip install -e ".[test]"
 python -m pytest -q
 ```
 
+`pytest` 用于检查实现、接口、配置和公开结果文件之间的一致性，不会重新训练模型或复现论文中的完整训练结果。
+
 ## 文档
 
-- [`../00_project_context/CURRENT_STATE.md`](../00_project_context/CURRENT_STATE.md)
+- [`../docs/CURRENT_STATE.md`](../docs/CURRENT_STATE.md)
 - [`MANUSCRIPT.md`](MANUSCRIPT.md)
 
 数据集、模型权重、生成的谱图、缓存和本地输出都不会提交到 Git。

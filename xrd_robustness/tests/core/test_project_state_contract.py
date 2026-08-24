@@ -54,14 +54,24 @@ def test_public_report_directory_matches_positive_allowlist() -> None:
 def test_public_document_links_resolve() -> None:
     expected_links = {
         REPOSITORY_ROOT / "README.md": {
-            "00_project_context/CURRENT_STATE.md",
+            "docs/CURRENT_STATE.md",
+            "docs/APPLICATION_RESEARCH_NARRATIVE.md",
+            "docs/PROJECT_HISTORY.md",
             "xrd_robustness/README.md",
+            "xrd_robustness/MANUSCRIPT.md",
             "xrd_robustness/reports/RESULTS.md",
             "xrd_robustness/reports/validation_results.json",
             "xrd_robustness/reports/simulated_test_results.json",
         },
+        REPOSITORY_ROOT / "docs/README.md": {
+            "CURRENT_STATE.md",
+            "APPLICATION_RESEARCH_NARRATIVE.md",
+            "PROJECT_HISTORY.md",
+            "../xrd_robustness/MANUSCRIPT.md",
+            "../xrd_robustness/reports/RESULTS.md",
+        },
         PROJECT_ROOT / "README.md": {
-            "../00_project_context/CURRENT_STATE.md",
+            "../docs/CURRENT_STATE.md",
             "MANUSCRIPT.md",
             "reports/RESULTS.md",
             "reports/validation_results.json",
