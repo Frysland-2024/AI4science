@@ -299,3 +299,73 @@ A natural concise description is:
 > I am interested in machine learning for the analysis and inference of experimental physical measurement data, for example extracting structures, defects, or physical parameters from diffraction, microscopy, spectroscopy, or other instrument-generated data.
 
 This wording intentionally does **not** imply a primary interest in lens design, optical paths, detectors, or imaging hardware. It also remains broad enough to include semiconductor metrology, microscopy, spectroscopy, XRD, computational imaging data, and other measurement-driven AI problems.
+
+---
+
+## Method vs Direction: Do Not Confuse the Two
+
+A key correction from family discussion is:
+
+> **"Image recognition, data judgment, analysis, and inference" describe how AI is used; they are methods or work interfaces, not by themselves a complete research direction.**
+
+This distinction should remain explicit in future planning.
+
+A useful three-level hierarchy is:
+
+| Level | Current interpretation |
+|---|---|
+| Work paradigm / methodological interface | AI-assisted processing, judgment, analysis, and inference on experimental data |
+| Machine-learning questions of interest | Sim2Real, robustness, low-data learning, physics-guided learning, uncertainty, inverse inference |
+| Concrete application directions | semiconductor inspection/metrology, XRD, SEM/TEM analysis, spectroscopy, scientific-instrument data analysis |
+
+Therefore, **measurement -> inference** should not be treated as a narrow field label or the only possible research direction. It is better understood as a recurring computational interface that can appear inside many concrete domains.
+
+The broad positioning can be written as:
+
+> **AI-assisted analysis of experimental measurement data.**
+
+Within this broad scope, the preferred research problems are those where AI operates on the right-hand side of the experimental chain:
+
+```text
+experimental data
+  -> judgment / analysis / parameter extraction / anomaly detection / structural inference
+```
+
+rather than primarily on instrument, detector, optical-path, or acquisition-system design.
+
+This also explains why the research scope should not be reduced to computer vision. Relevant examples include:
+
+- SEM defect image -> defect classification or geometry estimation
+- scatterometry curve -> CD / sidewall angle
+- ellipsometry spectrum -> thickness / optical constants
+- e-beam measurements -> defect characterization
+- electrical response curves -> process anomaly assessment
+- Raman spectrum -> stress / composition
+- XRD pattern -> lattice / phase / structural information
+
+All of these fit the broader methodological paradigm, even though the data modality and scientific domain differ.
+
+### How to use this distinction when screening advisors
+
+Do **not** filter advisors only by whether their data look like XRD, SEM, images, spectra, or curves.
+
+Instead ask:
+
+> **What experimental problem is this group solving, and what role does AI play in the experimental workflow?**
+
+Groups are particularly relevant when AI is used to extract scientifically meaningful structure, state, defect, or parameter information from experimental measurements.
+
+Within that broad set, the strongest personal fit is likely to involve:
+
+```text
+experimental measurement data
++ physical generation mechanism
++ machine-learning inference
++ simulation / forward models
++ real-world measurement discrepancy
++ sim-to-real / robustness / low-data adaptation
+```
+
+Thus the stable principle for future advisor search and application narratives is:
+
+> **The method is AI-assisted experimental-data analysis; the research direction is determined by the scientific problem and application domain in which that method is used.**
