@@ -243,3 +243,59 @@ with research involving:
 This means groups working on microscopy, semiconductor metrology, computational imaging, spectroscopy, diffraction, or related inverse problems can all be relevant, provided the intended entry point is **computational inference rather than measurement-system hardware design**.
 
 This distinction should be preserved in future application narratives and advisor searches.
+
+---
+
+## Application Scope Clarification: Experimental Measurement Data -> Useful Information
+
+The application scope should be kept broader than either **computer vision** or **strict mathematical inverse problems**.
+
+The intended research object is any experimentally generated measurement data — curves, spectra, diffraction patterns, microscopy images, detector outputs, or sensor responses — from which machine learning can extract scientifically useful information.
+
+A general pipeline is:
+
+```text
+sample
+  -> measurement / imaging technique
+  -> experimental data
+  -> computational analysis and inference
+  -> scientific or engineering conclusion
+```
+
+The intended position is primarily in the second computational box:
+
+> **computational analysis and inference from experimental measurement data**
+
+rather than in the design of the measurement or imaging hardware itself.
+
+Representative tasks include:
+
+```text
+XRD spectrum -> crystal system / phase fraction / lattice or structural parameters
+SEM image -> defect class / critical dimension / roughness / geometry
+Raman / XPS / EELS -> composition / state / material properties
+sensor response curve -> parameter / anomaly / physical state
+scatterometry -> geometric parameters
+```
+
+This framing matters because not every relevant task is a strict inverse problem. Classification, anomaly detection, quality assessment, trend analysis, parameter estimation, and defect recognition may not all fit the same mathematical inverse-problem definition, but they share the same practical structure:
+
+> **measurement data -> useful information**
+
+Therefore the broader application identity is:
+
+> **Machine learning for computational analysis and inference of experimental physical measurements.**
+
+Within that broad application domain, the more specific methodological interest remains:
+
+> **Machine learning and inference on physical measurement data, especially where physical models, simulated data, real measurement bias, sim-to-real transfer, robustness, low-data adaptation, and uncertainty matter.**
+
+This also prevents the research direction from being narrowed to image recognition. The relevant data modalities can be images, spectra, one-dimensional curves, diffraction patterns, multidimensional detector data, or other scientific measurements.
+
+### Practical wording for applications and conversations
+
+A natural concise description is:
+
+> I am interested in machine learning for the analysis and inference of experimental physical measurement data, for example extracting structures, defects, or physical parameters from diffraction, microscopy, spectroscopy, or other instrument-generated data.
+
+This wording intentionally does **not** imply a primary interest in lens design, optical paths, detectors, or imaging hardware. It also remains broad enough to include semiconductor metrology, microscopy, spectroscopy, XRD, computational imaging data, and other measurement-driven AI problems.
