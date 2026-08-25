@@ -114,6 +114,51 @@ Related to:
 
 ---
 
+## Semiconductor Device Inverse Problems / Property Estimation
+
+This branch targets groups that infer latent device or material parameters from measured electrical, optical, or structural responses. It is particularly relevant when searching for semiconductor-oriented work that is closer to parameter inference than to defect-image classification.
+
+Recommended Japanese search keywords:
+
+- 半導体物性 逆推定
+- 半導体デバイス 逆問題
+- デバイスパラメータ抽出
+- トランジスタ特性 物性推定
+- デバイスシミュレーション 機械学習
+- 半導体物性 機械学習
+
+Useful adjacent combinations:
+
+- 半導体デバイス パラメータ推定
+- デバイス特性 逆推定
+- 半導体計測 パラメータ抽出
+- TCAD 機械学習
+- TCAD 逆問題
+- トランジスタ モデルパラメータ抽出
+- I-V特性 機械学習
+- 電気特性 パラメータ推定
+
+Conceptually, this branch corresponds to:
+
+```text
+measured device response
+        -> computational inference
+        -> material / device / process parameters
+```
+
+Representative examples include:
+
+```text
+I-V / C-V characteristics -> mobility / threshold voltage / trap or interface parameters
+optical / electrical response -> material-property estimation
+measured transistor characteristics -> compact-model or physical parameters
+device simulation + experimental data -> inverse parameter identification
+```
+
+This branch should be treated as a concrete **semiconductor application direction** under the broader methodological interface of AI-assisted experimental-data analysis.
+
+---
+
 ## Search Tree
 
 ```text
@@ -122,6 +167,9 @@ Related to:
         +-- 顕微鏡計測インフォマティクス
         |
         +-- 半導体計測・検査
+        |       |
+        |       +-- 欠陥検査・画像解析
+        |       +-- デバイス逆問題・物性推定
         |
         +-- 放射光・X線計測
         |
@@ -137,6 +185,9 @@ Methods can be added as secondary keywords:
 - データ科学
 - 数理解析
 - インフォマティクス
+- 逆問題
+- 逆推定
+- パラメータ推定
 
 ---
 
@@ -161,4 +212,4 @@ experimental measurement
         -> structure / defect / parameter / state extraction
 ```
 
-This keeps the research identity broad enough to include semiconductor inspection, microscopy, spectroscopy, diffraction, and other measurement-driven AI problems.
+This keeps the research identity broad enough to include semiconductor inspection, semiconductor device parameter inference, microscopy, spectroscopy, diffraction, and other measurement-driven AI problems.
