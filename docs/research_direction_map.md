@@ -120,3 +120,126 @@ The project development story should emphasize:
 The key identity is not "using AI for materials" but:
 
 > Developing reliable AI methods for understanding and interpreting scientific measurements.
+
+---
+
+## Research Scope Clarification: Physical Measurement -> Inference
+
+A crucial distinction is that the intended research direction is **not primarily about designing imaging or measurement hardware**, but about what happens **after a physical measurement has been obtained**.
+
+The central problem is:
+
+> Given a physical measurement, how can we reliably infer the latent structure, state, parameters, or defects that generated it?
+
+For the current XRD project, the pipeline is:
+
+```text
+crystal
+  -> XRD measurement
+  -> diffraction pattern
+  -> structural inference
+```
+
+The main research focus is the final mapping:
+
+```text
+measurement -> inference
+```
+
+rather than X-ray source design, detector design, optical path engineering, or diffractometer hardware.
+
+A general physical measurement pipeline can be divided into four layers:
+
+```text
+measurement-system design
+  -> signal acquisition
+  -> reconstruction / preprocessing
+  -> inference
+```
+
+The current research identity is clearly concentrated toward the right side of this chain.
+
+Examples of the same research interface across different domains include:
+
+```text
+XRD pattern -> crystal system / structural state
+SEM image -> defect / CD / roughness
+Raman spectrum -> composition / physical state
+scatterometry signal -> 3D geometry parameters
+```
+
+Although these measurements come from diffraction, microscopy, spectroscopy, or optical metrology, the underlying machine-learning task is the same:
+
+> **Physical Measurement -> Latent Physical Information**
+
+This gives a more precise long-term research identity than the broad label of "imaging".
+
+### Relation to inverse problems
+
+Reconstruction itself is a form of generalized inference.
+
+For example:
+
+```text
+ptychographic diffraction measurements -> object image
+```
+
+This is an inverse inference problem where the unknown is a high-dimensional spatial field.
+
+The current XRD task:
+
+```text
+XRD pattern -> crystal system
+```
+
+infers a low-dimensional discrete variable.
+
+Semiconductor metrology may instead involve:
+
+```text
+SEM / scatterometry -> (CD, height, sidewall angle, roughness)
+```
+
+which corresponds to a small set of continuous physical parameters.
+
+Therefore, the possible future research space forms a continuum:
+
+```text
+classification
+  -> parameter estimation
+  -> property inversion
+  -> structural recovery
+  -> full image reconstruction
+```
+
+The current project lies toward the classification side, but its methodology can progressively move toward more difficult inverse problems.
+
+### Implication for graduate-advisor search
+
+When screening future advisors, the most important question is not simply:
+
+> Does this group work on XRD, SEM, or imaging?
+
+A more useful criterion is:
+
+> Does this group perform computational inference from real physical measurements?
+
+Particularly relevant interfaces are:
+
+```text
+measurement signal -> structure / parameter / state / defect
+```
+
+with research involving:
+
+- physical forward models
+- simulated data
+- noise and instrumental bias
+- sim-to-real transfer
+- robustness under measurement shift
+- uncertainty and calibration
+- low-data or few-shot adaptation
+
+This means groups working on microscopy, semiconductor metrology, computational imaging, spectroscopy, diffraction, or related inverse problems can all be relevant, provided the intended entry point is **computational inference rather than measurement-system hardware design**.
+
+This distinction should be preserved in future application narratives and advisor searches.
