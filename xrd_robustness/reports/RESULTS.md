@@ -36,6 +36,24 @@ pairs. The primary single-factor OOD improvement had sample SD
 `0.007271` and a paired-bootstrap 95% interval of
 `[0.048944, 0.060255]`.
 
+## Secondary calibration analysis
+
+A post-hoc readout of the already frozen simulated-Test predictions found
+systematically lower Expected Calibration Error (ECE) for JS Consistency than
+for matched Dynamic ERM evaluations. Across the 180 matched combinations of
+five training seeds, three evaluation seeds, and twelve profiles, the extracted
+mean paired difference was `DeltaECE = ECE(JS) - ECE(ERM) = -0.0855`, with
+all `180/180` paired comparisons favoring JS. The independent CNRS-318
+zero-shot evaluation shows the same direction (`0.6826` ERM vs `0.6124` JS),
+although both models remain strongly over-confident in that difficult real
+domain.
+
+This is treated as a **secondary reliability observation**, not a new primary
+method claim. ECE alone cannot distinguish genuine calibration improvement
+from general confidence shrinkage. The interpretation, limitations, and minimum
+follow-up with NLL, Brier score, mean confidence, and reliability diagrams are
+recorded in [`CALIBRATION_ANALYSIS.md`](CALIBRATION_ANALYSIS.md).
+
 Exact aggregate values are available in `validation_results.json` and
 `simulated_test_results.json`. The experiment definition is
 `../configs/experiment.public.json`.
