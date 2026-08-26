@@ -48,6 +48,9 @@ def test_public_report_directory_matches_positive_allowlist() -> None:
         "RESULTS.md",
         "simulated_test_results.json",
         "validation_results.json",
+        "CNRS_318_DATASET_AUDIT.md",
+        "CNRS_318_EVALUATION_PROTOCOL.md",
+        "opxrd_cnrs7cs_independent_parent_audit_20260827.md",
     }
 
 

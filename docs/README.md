@@ -11,10 +11,14 @@
 | [`NEXT_PROJECT_XRD_QUANTITATIVE_INVERSION.md`](NEXT_PROJECT_XRD_QUANTITATIVE_INVERSION.md) | 下一代项目的正式执行计划：已知相参考条件下的 PXRD 定量参数反演、同源结构一致性、前向物理验证和 refinement 初始化 |
 | [`XRD_QUANTITATIVE_INVERSION_RESOURCE_MANIFEST.md`](XRD_QUANTITATIVE_INVERSION_RESOURCE_MANIFEST.md) | 定量反演项目的论文、代码、数据和补充材料资源清单 |
 | [`PROJECT_HISTORY_NOTE_2026-08-27_XRD_QUANTITATIVE_INVERSION.md`](PROJECT_HISTORY_NOTE_2026-08-27_XRD_QUANTITATIVE_INVERSION.md) | 2026-08-27 思路节点：从分类中的晶格物理约束构想，收敛为独立的已知相定量反演项目 |
+| [`PROJECT_HISTORY_NOTE_2026-08-27_CNRS_RECLASSIFICATION.md`](PROJECT_HISTORY_NOTE_2026-08-27_CNRS_RECLASSIFICATION.md) | 2026-08-27 认知修正节点：CNRS-318 重新定级为正式第二实验域（balanced-equivalent=NO / naturally-imbalanced=YES），记录旧 Gate、问题重构、RRUFF few-shot 与 CNRS zero-shot 分工 |
 | [`PROJECT_HISTORY_NOTE_2026-08-24_INVERSE_PROBLEM_DIFFICULTY.md`](PROJECT_HISTORY_NOTE_2026-08-24_INVERSE_PROBLEM_DIFFICULTY.md) | 2026-08-24 方向认知节点：区分高维不完备重建与强先验、有限解空间的识别/参数反演，并记录其对未来 AI+科学量测方向选择的影响 |
 | [`PROJECT_HISTORY.md`](PROJECT_HISTORY.md) | 完整研究演化档案：保留失败、版本变化、思路转向与历史决策；用于追溯项目如何发展，不代表当前方法或论文主张 |
 | [`../xrd_robustness/MANUSCRIPT.md`](../xrd_robustness/MANUSCRIPT.md) | 当前 JS 分类项目的论文正文框架 |
 | [`../xrd_robustness/reports/RESULTS.md`](../xrd_robustness/reports/RESULTS.md) | 当前 JS 分类项目的模拟结果汇总 |
+| [`../xrd_robustness/reports/CNRS_318_DATASET_AUDIT.md`](../xrd_robustness/reports/CNRS_318_DATASET_AUDIT.md) | CNRS-318 数据集审计（git 可跟踪的权威摘要，含 v2 manifest SHA 与七类计数） |
+| [`../xrd_robustness/reports/CNRS_318_EVALUATION_PROTOCOL.md`](../xrd_robustness/reports/CNRS_318_EVALUATION_PROTOCOL.md) | CNRS-318 冻结评测协议（推理尚未运行） |
+| [`../xrd_robustness/manifests/cnrs_318_parent_manifest_v2.csv`](../xrd_robustness/manifests/cnrs_318_parent_manifest_v2.csv) | CNRS-318 轻量父样本 manifest（318 个独立父样本，不含原始谱） |
 
 ## 建议阅读顺序
 
@@ -26,5 +30,7 @@
 ## 当前结论与未来规划的边界
 
 对外的当前科学说法以 `CURRENT_STATE.md` 和结果文件为准。已经完成的项目是七晶系 PXRD 分类、在线物理扰动，以及 Dynamic ERM 和 Dynamic JS 的配对比较。
+
+实验真实域分两层：RRUFF-301（平衡、人工整理的实验真实域）与 CNRS-318（自然不平衡、跨数据库的独立实验真实域，已正式定级为第二真实域）。两个真实域的评测资产正在冻结，正式推理尚未运行，不属于已完成的模拟结果。
 
 定量反演文档属于**下一项目规划**：它已经完成问题定义和执行路线设计，但尚未启动训练，不能被写成当前已完成成果，也不会反向修改已经冻结的 JS 分类实验。

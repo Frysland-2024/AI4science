@@ -1,6 +1,6 @@
 # Measurement-Equivalence Supervision for Robust PXRD Classification
 
-**Status:** manuscript scaffold from the simulated results
+**Status:** manuscript scaffold from the simulated results; experimental-domain evaluation (RRUFF-301, CNRS-318) is planned but not yet run.
 
 **Updated:** 2026-08-23
 
@@ -36,6 +36,15 @@ Does measurement-equivalence supervision improve simulated OOD robustness beyond
 
 The simulator varies peak position, broadening, preferred orientation, background and noise. Each training step renders paired views from the same parent structure. The shared parent identity defines measurement equivalence and supplies the relationship used by the consistency objective.
 
+### 2.4 Experimental domains
+
+The frozen models are additionally evaluated on two independent experimental domains. The evaluation protocol is frozen, but inference has not yet been run, so no experimental-domain numbers are asserted in this scaffold.
+
+- **RRUFF-301** — a class-balanced, curated experimental mineral domain (balanced curated experimental domain).
+- **CNRS-318** — a naturally imbalanced, chemically diverse experimental domain derived from opXRD/COD after spectrum deduplication, structural-parent grouping, stable symmetry reconstruction and overlap exclusion (naturally imbalanced independent experimental domain; 318 independent structural parents with class counts `21 / 87 / 77 / 41 / 33 / 12 / 47`).
+
+The primary real-domain comparison is the paired Macro-F1 difference between JS and ERM on identical parents, `Δ = F1_JS − F1_ERM`, with bootstrap stratified by crystal system and paired by structural parent. Labels are structure-derived crystal-system labels. Hexagonal-specific conclusions remain underpowered.
+
 ## 3. Results
 
 ### 3.1 Simulated Validation
@@ -55,6 +64,10 @@ The primary OOD effect is positive for all five matched pairs, with a paired-boo
 - Sample SD across five pairs: `0.007271`.
 - Paired-bootstrap 95% interval: `[+0.048944, +0.060255]`.
 - Five of five OOD and in-range paired effects are positive.
+
+### 3.3 Experimental domains (pending)
+
+Evaluation on RRUFF-301 and CNRS-318 is pending. Results will be reported as a per-domain table (ERM, JS, paired delta, role) once the frozen protocol is executed and the manual label-quality review is complete. No experimental-domain numbers are asserted here.
 
 ## 4. Discussion
 
@@ -77,3 +90,4 @@ Online PXRD simulation can supply measurement-equivalence supervision through sh
 2. Convert the fixed configurations into an exact Methods description.
 3. Generate publication figures from the two result files.
 4. Complete the Results and Discussion prose.
+5. Execute the frozen experimental-domain evaluation (RRUFF-301, CNRS-318) and report the paired delta.

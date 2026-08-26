@@ -11,6 +11,13 @@
 > manifest (SHA-256 `FAF089375C10C18D0A4AB3568E85FA78EAA56DE45F507FAACD39672AD88BE424`)
 > as the authoritative result.  This file is retained only for its independent
 > methodology and endpoint-sensitivity notes.
+>
+> **Decision reversal (2026-08-27):** the HOLD/NO-GO recommendation below was later
+> reversed.  CNRS-318 is now registered as the formal second real domain
+> (naturally imbalanced independent experimental domain); see
+> `data/real_xrd/opxrd_cnrs7cs/SECOND_REAL_DOMAIN_DECISION.md`.  The retained,
+> still-valid point is that CNRS is *not* equivalent in statistical strength to
+> RRUFF-301 and must not be presented as such.
 
 Audit date: 2026-08-27 (Asia/Shanghai)
 

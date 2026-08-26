@@ -2,7 +2,7 @@
 
 **状态日期：** 2026-08-27
 
-**阶段：** 结果已确定，进入论文、图表与汇报成果封装阶段
+**阶段：** 模拟结果已确定，进入论文、图表与汇报成果封装阶段；实验真实域评测资产正在冻结（推理尚未运行）
 
 ## 1. 当前科学设计
 
@@ -54,9 +54,23 @@
 
 结果已经确定，不会再改。公开仓库里只留了当前实现、运行配置、结果和使用文档；`train.py` 是可复用的方法参考，分数看已有模型的评估结果文件。
 
+这里说的"结果已经确定"指**模拟部分**（验证集、模拟测试集）。实验真实域（RRUFF-301、CNRS-318）的评测资产正在冻结，正式推理尚未运行，不包含在已确定结果之内。
+
 ## 5. 实验进度
 
-方法对比、验证集和模拟测试集的评估都做完了。目前没有新的分类训练任务，这些结果就是当前论文和汇报使用的最终结果。
+方法对比、验证集和模拟测试集的评估都做完了，模拟部分的结果已经确定、不会再改。
+
+实验真实域分两层：
+
+- **RRUFF-301**：平衡、人工整理的实验真实域（balanced curated experimental domain）。
+- **CNRS-318**：自然不平衡、跨数据库的独立实验真实域（naturally imbalanced independent experimental domain），已正式定级为第二真实域，保留自然类别分布 `21 / 87 / 77 / 41 / 33 / 12 / 47`。
+
+两个真实域的评测资产正在冻结，**正式推理尚未运行**：
+
+- CNRS-318 的权威审计与父样本 manifest 已进入 git（见 [`xrd_robustness/reports/CNRS_318_DATASET_AUDIT.md`](../xrd_robustness/reports/CNRS_318_DATASET_AUDIT.md) 和 [`xrd_robustness/manifests/cnrs_318_parent_manifest_v2.csv`](../xrd_robustness/manifests/cnrs_318_parent_manifest_v2.csv)）；
+- 评测协议已锁定（[`xrd_robustness/reports/CNRS_318_EVALUATION_PROTOCOL.md`](../xrd_robustness/reports/CNRS_318_EVALUATION_PROTOCOL.md)）；
+- 35 条人工标签质量复核尚未完成；
+- 真实数据不参与模型、checkpoint、seed 或 `lambda_js` 选择。
 
 ## 6. 当前卡点
 
@@ -73,6 +87,7 @@
 2. 完成方法、结果和讨论章节。
 3. 跑一遍完整测试，确认接口、数据和实现都对得上。
 4. 将组会 PPT、技术报告和一页项目摘要整理为申请可复用成果。
+5. 完成 CNRS-318 的 35 条人工标签质量复核后，按冻结协议跑一次性真实域推理（RRUFF-301 与 CNRS-318）。
 
 下一条工程检查命令：
 

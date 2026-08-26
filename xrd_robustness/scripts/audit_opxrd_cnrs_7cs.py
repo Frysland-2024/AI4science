@@ -1187,21 +1187,36 @@ def write_csv(path: Path, rows: list[dict[str, Any]]) -> None:
 def manual_validation_sample(
     rows: list[dict[str, Any]], per_class: int
 ) -> list[dict[str, Any]]:
+    """Draw the model-blind manual label-quality review sample.
+
+    All hexagonal parents are reviewed (the smallest, most underpowered class).
+    The remaining six classes contribute ``per_class`` parents each, selected
+    deterministically by the SHA-256 digest of the representative scan id -- not
+    by file order and not by a human "looks clean" choice.
+    """
+    eligible = [
+        row
+        for row in rows
+        if row.get("mapped_cu_ka_10_80_broad_parent_independent_eligible") is True
+    ]
+    by_system: dict[str, list[dict[str, Any]]] = {}
+    for row in eligible:
+        system = str(row.get("recomputed_crystal_system", ""))
+        by_system.setdefault(system, []).append(row)
+
+    def deterministic_key(row: dict[str, Any]) -> str:
+        return hashlib.sha256(str(row.get("scan_id", "")).encode("utf-8")).hexdigest()
+
     sample: list[dict[str, Any]] = []
     for system in CRYSTAL_SYSTEMS:
-        candidates = sorted(
-            (
-                row
-                for row in rows
-                if row.get("mapped_cu_ka_10_80_broad_parent_independent_eligible") is True
-                and row.get("recomputed_crystal_system") == system
-            ),
-            key=lambda row: str(row.get("source_relpath", "")),
-        )
-        for row in candidates[:per_class]:
+        candidates = sorted(by_system.get(system, []), key=deterministic_key)
+        limit = len(candidates) if system == "hexagonal" else per_class
+        for row in candidates[:limit]:
             copy = dict(row)
             copy["manual_structure_label_valid"] = ""
             copy["manual_spectrum_quality_valid"] = ""
+            copy["single_phase_compatible"] = ""
+            copy["unexplained_extra_peaks"] = ""
             copy["manual_reviewer"] = ""
             copy["manual_review_notes"] = ""
             sample.append(copy)
