@@ -14,7 +14,8 @@ xrd-train = "xrd_robustness.training.runner:main"
 
 [project.optional-dependencies]
 science = ["mp-api", "pymatgen", "scipy>=1.10", "PyYAML>=6"]
-test = ["pytest>=8", "scipy>=1.10", "PyYAML>=6", "pymatgen"]
+figures = ["matplotlib>=3.8"]
+test = ["pytest>=8", "scipy>=1.10", "PyYAML>=6", "pymatgen", "matplotlib>=3.8"]
 
 [tool.setuptools.packages.find]
 where = ["src"]

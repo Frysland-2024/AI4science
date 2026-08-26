@@ -34,6 +34,11 @@ from xrd_robustness.structure_data import (
 )
 from xrd_robustness.mp_credentials import configured_api_key
 from xrd_robustness.data_layout import project_relative_path, resolve_data_root
+from xrd_robustness.external_runtime import (
+    external_script_issue,
+    resolve_python_command,
+    virtual_environment_python,
+)
 
 
 QUERY_FIELDS = [
@@ -87,6 +92,8 @@ def _external_standardize(
     documents: Iterable[Any],
     *,
     standardizer_python: Path,
+    symprec: float,
+    angle_tolerance: float,
 ) -> dict[str, dict[str, Any]]:
     """Use the compatible legacy environment for native symmetry operations."""
     payload = []
@@ -116,6 +123,10 @@ def _external_standardize(
                         str(input_path),
                         "--output",
                         str(output_path),
+                        "--symprec",
+                        str(symprec),
+                        "--angle-tolerance",
+                        str(angle_tolerance),
                     ],
                     cwd=PROJECT_ROOT,
                     check=True,
@@ -168,7 +179,12 @@ def process_documents(
     skipped_records: list[dict[str, Any]] = []
     last_updated: list[str] = []
     standardized_rows = (
-        _external_standardize(documents, standardizer_python=standardizer_python)
+        _external_standardize(
+            documents,
+            standardizer_python=standardizer_python,
+            symprec=symprec,
+            angle_tolerance=angle_tolerance,
+        )
         if standardizer_python is not None
         else None
     )
@@ -358,11 +374,26 @@ def main() -> int:
         raise SystemExit(f"refusing to overwrite existing acquisition: {records_path}")
 
     started = datetime.now(timezone.utc)
-    standardizer_python = Path(args.standardizer_python) if args.standardizer_python else None
-    if standardizer_python is None:
-        legacy_python = PROJECT_ROOT.parent / ".venvs" / "xrd_legacy" / "Scripts" / "python.exe"
-        if legacy_python.exists():
+    standardizer_helper = PROJECT_ROOT / "scripts" / "standardize_structure_batch.py"
+    standardizer_python = None
+    if args.standardizer_python is not None:
+        candidate = resolve_python_command(args.standardizer_python)
+        issue = external_script_issue(candidate, standardizer_helper, cwd=PROJECT_ROOT)
+        if issue is not None:
+            raise SystemExit(f"invalid --standardizer-python: {issue}")
+        standardizer_python = candidate
+    else:
+        legacy_python = virtual_environment_python(
+            PROJECT_ROOT.parent / ".venvs" / "xrd_legacy"
+        )
+        issue = external_script_issue(legacy_python, standardizer_helper, cwd=PROJECT_ROOT)
+        if issue is None:
             standardizer_python = legacy_python
+        elif legacy_python.exists():
+            print(
+                f"warning: ignoring unusable legacy standardizer; {issue}",
+                file=sys.stderr,
+            )
     query = {
         "deprecated": False,
         "is_stable": True,

@@ -23,6 +23,10 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
 from xrd_robustness.data_layout import project_relative_path, resolve_data_root
+from xrd_robustness.external_runtime import (
+    external_script_issue,
+    virtual_environment_python,
+)
 from xrd_robustness.peak_cache import load_peak_table
 from xrd_robustness.simulation_interfaces import PeakTable
 from xrd_robustness.simulator import SimulationGrid, ideal_peak_table
@@ -133,8 +137,25 @@ def main() -> int:
         staging_dir.mkdir(parents=True)
     started = time.perf_counter()
     grid = SimulationGrid()
-    external_python = PROJECT_ROOT.parent / ".venvs" / "xrd_legacy" / "Scripts" / "python.exe"
-    use_external = external_python.exists() and not args.force_local
+    external_python = virtual_environment_python(
+        PROJECT_ROOT.parent / ".venvs" / "xrd_legacy"
+    )
+    external_helper = PROJECT_ROOT / "scripts" / "precompute_peak_table_batch.py"
+    external_issue = None
+    if args.force_local:
+        use_external = False
+    else:
+        external_issue = external_script_issue(
+            external_python,
+            external_helper,
+            cwd=PROJECT_ROOT,
+        )
+        use_external = external_issue is None
+        if external_issue is not None and external_python.exists():
+            print(
+                f"warning: ignoring unusable legacy peak-table runtime; {external_issue}",
+                file=sys.stderr,
+            )
 
     def compute_external(batch: list[dict[str, Any]]) -> list[dict[str, Any]]:
         """Compute in the compatible pymatgen interpreter and isolate process crashes."""
@@ -150,7 +171,7 @@ def main() -> int:
                     [
                         str(external_python),
                         "-s",
-                        str(PROJECT_ROOT / "scripts" / "precompute_peak_table_batch.py"),
+                        str(external_helper),
                         "--input",
                         str(input_path),
                         "--output",
