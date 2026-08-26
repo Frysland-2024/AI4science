@@ -21,6 +21,51 @@ Those analyses are scientifically useful, but this created a mismatch between:
 
 This mismatch made valid real-domain results appear unnecessarily weak, especially for naturally limited and imbalanced experimental datasets.
 
+## Methodological reflection — separating scientific judgment from statistical audit
+
+A major lesson from this stage of the project is that we had temporarily conflated **internal credibility auditing** with **the criterion for whether the scientific result itself is allowed to count as successful**.
+
+The earlier logic was effectively:
+
+> high-intensity ML audit -> every real-domain result must individually clear a confirmatory threshold -> only then may the experiment be described as successful.
+
+That logic is too strong for this application setting. In a real PXRD domain with naturally scarce and imbalanced experimental samples, metrics such as Macro-F1 and class-stratified parent bootstrap can be intentionally conservative. For example, in CNRS the class counts are highly uneven and the hexagonal class has only 12 samples, yet Macro-F1 assigns every class the same 1/7 weight. A parent-level bootstrap therefore honestly exposes large uncertainty, but that uncertainty should not be converted into a binary verdict on whether the entire experiment "worked".
+
+The project therefore formally distinguishes two questions:
+
+### Scientific conclusion layer
+
+Ask whether the **full body of evidence is directionally coherent** across:
+
+- simulated OOD;
+- RRUFF few-shot adaptation;
+- CNRS external-domain validation;
+- calibration / confidence behavior;
+- independent training-seed consistency.
+
+If these pieces jointly support the same mechanism-level conclusion, then the scientific story is supported even if one auxiliary confidence interval in one limited real domain crosses zero.
+
+### Statistical audit layer
+
+Use:
+
+- confidence intervals;
+- parent-level bootstrap;
+- per-class uncertainty;
+- seed-wise variation;
+- ECE / NLL / Brier;
+- detailed stratified resampling;
+
+as tools for answering **how certain the conclusion is, where it is fragile, and which classes/domains remain underpowered**.
+
+They are not automatic vetoes on the first layer.
+
+This distinction is now part of the project history because it represents an important change in research judgment:
+
+> **Early in the project, we temporarily treated high-strength ML statistical auditing as a confirmatory gate that every materials-application result had to pass. We later separated credibility auditing from scientific-result judgment: strict statistics are preserved, but a single CI crossing zero no longer determines the narrative or reclassifies an otherwise coherent result as failure.**
+
+This correction does not reduce rigor. It changes the hierarchy of evidence so that rigor serves interpretation rather than replacing it.
+
 ## New two-layer reporting policy
 
 ### Layer 1 — main scientific / presentation results
