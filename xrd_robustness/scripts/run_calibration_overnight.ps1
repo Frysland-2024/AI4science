@@ -24,8 +24,10 @@ public static class SleepControl {
 }
 "@
 
-$ES_CONTINUOUS = [uint32]0x80000000
-$ES_SYSTEM_REQUIRED = [uint32]0x00000001
+# Use a decimal literal here because Windows PowerShell parses 0x80000000 as signed Int32
+# before the UInt32 cast, which raises InvalidCastIConvertible on some versions.
+$ES_CONTINUOUS = [uint32]2147483648
+$ES_SYSTEM_REQUIRED = [uint32]1
 [SleepControl]::SetThreadExecutionState($ES_CONTINUOUS -bor $ES_SYSTEM_REQUIRED) | Out-Null
 
 try {
