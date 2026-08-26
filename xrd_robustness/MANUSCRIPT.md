@@ -38,12 +38,12 @@ The simulator varies peak position, broadening, preferred orientation, backgroun
 
 ### 2.4 Experimental domains
 
-The frozen models are additionally evaluated on two independent experimental domains. The evaluation protocol is frozen, but inference has not yet been run, so no experimental-domain numbers are asserted in this scaffold.
+The frozen models are additionally evaluated on two independent experimental domains with distinct roles. Neither has been run yet in this scaffold.
 
-- **RRUFF-301** — a class-balanced, curated experimental mineral domain (balanced curated experimental domain).
-- **CNRS-318** — a naturally imbalanced, chemically diverse experimental domain derived from opXRD/COD after spectrum deduplication, structural-parent grouping, stable symmetry reconstruction and overlap exclusion (naturally imbalanced independent experimental domain; 318 independent structural parents with class counts `21 / 87 / 77 / 41 / 33 / 12 / 47`).
+- **RRUFF-301** — a class-balanced, curated experimental mineral domain (balanced curated experimental domain). Its role is **few-shot adaptation** (K=1/2/5), following the pre-registered protocol.
+- **CNRS-318** — a naturally imbalanced, chemically diverse experimental domain derived from opXRD/COD after spectrum deduplication, structural-parent grouping, stable symmetry reconstruction and overlap exclusion (naturally imbalanced independent experimental domain; 318 independent structural parents with class counts `21 / 87 / 77 / 41 / 33 / 12 / 47`). Its role is **zero-shot external evaluation** of the frozen models, without touching any CNRS label for adaptation.
 
-The primary real-domain comparison is the paired Macro-F1 difference between JS and ERM on identical parents, `Δ = F1_JS − F1_ERM`, with bootstrap stratified by crystal system and paired by structural parent. Labels are structure-derived crystal-system labels. Hexagonal-specific conclusions remain underpowered.
+The primary CNRS comparison is the paired Macro-F1 difference between JS and ERM on identical parents, `Δ = F1_JS − F1_ERM`, with a class-stratified paired-parent bootstrap that preserves the natural class composition. Labels are structure-derived crystal-system labels, reconstructed from the deposited atomic basis and stable across symmetry tolerances; they were not independently verified by manual spectrum-level phase analysis. Hexagonal-specific conclusions remain underpowered.
 
 ## 3. Results
 
@@ -67,7 +67,7 @@ The primary OOD effect is positive for all five matched pairs, with a paired-boo
 
 ### 3.3 Experimental domains (pending)
 
-Evaluation on RRUFF-301 and CNRS-318 is pending. Results will be reported as a per-domain table (ERM, JS, paired delta, role) once the frozen protocol is executed and the manual label-quality review is complete. No experimental-domain numbers are asserted here.
+Evaluation on the two experimental domains is pending. RRUFF-301 is reported as a few-shot (K=1/2/5) adaptation result, and CNRS-318 as a frozen-model zero-shot external evaluation. Results will be reported in separate per-domain tables (ERM, JS, paired delta, role) once the frozen protocol is executed. All 318 CNRS parents are used as frozen, with no post-hoc removal after seeing predictions. No experimental-domain numbers are asserted here.
 
 ## 4. Discussion
 

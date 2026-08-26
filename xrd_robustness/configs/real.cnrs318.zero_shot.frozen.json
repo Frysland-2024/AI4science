@@ -1,0 +1,78 @@
+{
+  "schema_version": "cnrs318-zero-shot-frozen-v1",
+  "status": "spec_frozen",
+  "dataset_id": "opxrd_v11_cnrs318",
+  "role": "formal_naturally_imbalanced_external_domain",
+  "primary_analysis": "zero_shot",
+  "model_selection_on_cnrs": false,
+  "class_order": [
+    "triclinic",
+    "monoclinic",
+    "orthorhombic",
+    "tetragonal",
+    "trigonal",
+    "hexagonal",
+    "cubic"
+  ],
+  "class_counts": {
+    "triclinic": 21,
+    "monoclinic": 87,
+    "orthorhombic": 77,
+    "tetragonal": 41,
+    "trigonal": 33,
+    "hexagonal": 12,
+    "cubic": 47
+  },
+  "total_parents": 318,
+  "target_wavelength_angstrom": 1.5406,
+  "two_theta_min": 10.0,
+  "two_theta_max": 80.0,
+  "step_deg": 0.02,
+  "input_length": 3501,
+  "interpolation": "linear",
+  "normalization": "max",
+  "methods": [
+    {
+      "id": "ordinary_dynamic_augmentation",
+      "name": "Dynamic ERM",
+      "lambda_js": 0.0
+    },
+    {
+      "id": "js_consistency_transfer",
+      "name": "JS Consistency",
+      "lambda_js": 60.0
+    }
+  ],
+  "training_seeds": [
+    20260711,
+    20260712,
+    20260713,
+    20260714,
+    20260715
+  ],
+  "checkpoint_root": "outputs/simulated_test_checkpoints/checkpoints",
+  "checkpoints": {
+    "seed_20260711_dynamic_erm": "E8BDE2871520AEDE1502E99B1BA5B761358C63B0A98EBAC36DB384B276F3D40B",
+    "seed_20260711_js_lambda_60": "3EE1BEB8831E46A8D7014352D5C1ADFAC49B7FE8959894811C1CB559B2CC6B49",
+    "seed_20260712_dynamic_erm": "F8A025902A72E75DFA7AED00796912A3EF49C6B1BFEB320EB4C32FDCB71668C9",
+    "seed_20260712_js_lambda_60": "AF06D30712879BDFE02D9C82E6C713BE6A66F1BD50937B2954EC66EE7A11171C",
+    "seed_20260713_dynamic_erm": "87B7C264B5818F45E388293FA03E9BCFBE165182B2B75FCE0304A6911339EF98",
+    "seed_20260713_js_lambda_60": "2FCF8698E07D47D15B78C6B61A0986DC3976F8960AAB26F633306F27E1E5638A",
+    "seed_20260714_dynamic_erm": "149C20E32D35565D305B3CCCF3CA981118ECC5BCBBA29B04F99FD7C0CEC4C4FB",
+    "seed_20260714_js_lambda_60": "C3AC158084FE6B2E1E2A28EB8B010C43532F7612E6C99F1B6C305F66A374BE18",
+    "seed_20260715_dynamic_erm": "A52A34AEE62B71365E45E39742DA55E76648C32099EB8D1D7F0DEB854F0A33AC",
+    "seed_20260715_js_lambda_60": "87F2516402635EA010AF00E987172560BB178F024937E2F57A57C9DB331DF0D6"
+  },
+  "manual_review": {
+    "planned": false,
+    "note": "Labels are derived from deposited crystal structures through stable symmetry reconstruction and were not independently verified by manual spectrum-level phase analysis."
+  },
+  "hashes": {
+    "opxrd_v11_archive_sha256": "38B62BCDDF976DEBB3E41D2597D3F14AC6C1F1C8A33565A84A98EF38BA3B6044",
+    "audit_manifest_sha256": "FAF089375C10C18D0A4AB3568E85FA78EAA56DE45F507FAACD39672AD88BE424",
+    "final_parent_manifest_sha256": "20CCF2E7034AA4B66D46311C2607137E01493F7FAB89A20DF987C2E116AA7588",
+    "experiment_config_sha256": "5FA4D5A562A28886313593BEF000EC83F6DC44741B06D2E8F0ED3E42DCB0EA82",
+    "data_config_sha256": "8A09605F73A3CE79F901BAC5F446137DEA5F671646AE3B28BB6FC7BA9A7274FE",
+    "git_commit": "pending"
+  }
+}

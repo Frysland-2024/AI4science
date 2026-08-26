@@ -270,6 +270,157 @@ def hierarchical_paired_bootstrap(
     }
 
 
+def class_stratified_paired_bootstrap(
+    rows: Iterable[Mapping[str, Any]],
+    *,
+    focus_method_id: str,
+    comparator_method_id: str,
+    num_classes: int,
+    replicates: int = 10_000,
+    random_seed: int = 20260827,
+) -> dict[str, Any]:
+    """Paired parent bootstrap stratified by crystal system.
+
+    Unlike :func:`hierarchical_paired_bootstrap` (which resamples parents uniformly
+    across all classes), this resamples parents independently within each class so the
+    natural class composition is preserved exactly at every replicate.  It is intended
+    for naturally imbalanced external domains such as CNRS-318, where a uniform
+    resampling would let large classes dominate the bootstrap.
+
+    Each row must provide ``seed`` (int), ``method_id`` (str), ``parent_structure_id``
+    (str), and either ``label``/``prediction`` or ``label_index``/``prediction_index``.
+    """
+    if replicates < 100:
+        raise ValueError("at least 100 bootstrap replicates are required")
+    if num_classes < 2:
+        raise ValueError("num_classes must be at least two")
+
+    normalized: list[dict[str, Any]] = []
+    for index, row in enumerate(rows):
+        item = dict(row)
+        label = item.get("label", item.get("label_index"))
+        prediction = item.get("prediction", item.get("prediction_index"))
+        if label is None or prediction is None:
+            raise ValueError(f"prediction row {index} is missing label/prediction")
+        item["label"] = int(label)
+        item["prediction"] = int(prediction)
+        item["seed"] = int(item["seed"])
+        item["method_id"] = str(item["method_id"])
+        item["parent_structure_id"] = str(item["parent_structure_id"])
+        if not item["parent_structure_id"]:
+            raise ValueError(f"prediction row {index} has an empty parent_structure_id")
+        normalized.append(item)
+
+    relevant = [
+        row
+        for row in normalized
+        if row["method_id"] in {focus_method_id, comparator_method_id}
+    ]
+    seeds = sorted({int(row["seed"]) for row in relevant})
+    if not seeds:
+        raise ValueError("no rows match the requested methods")
+
+    grouped: dict[tuple[int, str, str], list[dict[str, Any]]] = defaultdict(list)
+    for row in relevant:
+        grouped[(row["seed"], row["method_id"], row["parent_structure_id"])].append(row)
+
+    structure_confusions = {
+        key: _structure_confusion(group, num_classes)
+        for key, group in grouped.items()
+    }
+
+    seed_structures: dict[int, list[str]] = {}
+    seed_class_of: dict[int, dict[str, int]] = {}
+    for seed in seeds:
+        method_parents = {
+            method: {
+                key[2] for key in grouped if key[0] == seed and key[1] == method
+            }
+            for method in (focus_method_id, comparator_method_id)
+        }
+        common = sorted(set.intersection(*method_parents.values()))
+        if len(common) < 2:
+            raise ValueError(
+                f"seed {seed} has fewer than two paired parent structures"
+            )
+        seed_structures[seed] = common
+        class_of: dict[str, int] = {}
+        for parent in common:
+            rows_for_parent = [
+                row
+                for row in relevant
+                if row["seed"] == seed and row["parent_structure_id"] == parent
+            ]
+            class_of[parent] = int(rows_for_parent[0]["label"])
+        seed_class_of[seed] = class_of
+
+    def contrast_for(seed: int, sampled: Sequence[str]) -> float:
+        scores: dict[str, float] = {}
+        for method in (focus_method_id, comparator_method_id):
+            matrix = np.zeros((num_classes, num_classes), dtype=np.int64)
+            for parent in sampled:
+                matrix += structure_confusions[(seed, method, parent)]
+            scores[method] = _macro_f1_from_confusion(matrix)
+        return float(scores[focus_method_id] - scores[comparator_method_id])
+
+    observed_seed_deltas = {
+        str(seed): contrast_for(seed, seed_structures[seed]) for seed in seeds
+    }
+
+    rng = np.random.default_rng(random_seed)
+    bootstrap_deltas = np.zeros(replicates, dtype=np.float64)
+    for seed in seeds:
+        structures = seed_structures[seed]
+        class_of = seed_class_of[seed]
+        by_class: dict[int, list[str]] = defaultdict(list)
+        for parent in structures:
+            by_class[class_of[parent]].append(parent)
+        class_keys = sorted(by_class)
+        method_scores: dict[str, np.ndarray] = {}
+        for method in (focus_method_id, comparator_method_id):
+            sampled_confusions = np.zeros(
+                (replicates, num_classes, num_classes), dtype=np.float64
+            )
+            for cls in class_keys:
+                members = by_class[cls]
+                count = len(members)
+                matrices = np.stack(
+                    [structure_confusions[(seed, method, parent)] for parent in members]
+                )
+                counts = rng.multinomial(
+                    count, np.full(count, 1.0 / count), size=replicates
+                )
+                sampled_confusions += np.tensordot(counts, matrices, axes=(1, 0))
+            method_scores[method] = _macro_f1_from_confusion_batch(
+                sampled_confusions.astype(np.int64)
+            )
+        bootstrap_deltas += (
+            method_scores[focus_method_id] - method_scores[comparator_method_id]
+        ) / len(seeds)
+
+    low, high = np.quantile(bootstrap_deltas, [0.025, 0.975])
+    return {
+        "focus_method_id": focus_method_id,
+        "comparator_method_id": comparator_method_id,
+        "metric": "class_stratified_parent_macro_f1",
+        "seed_ids": seeds,
+        "independent_unit": "parent_structure",
+        "bootstrap_design": (
+            "class_stratified_paired_parent_within_seed_"
+            "then_mean_across_registered_seeds"
+        ),
+        "seed_resampling_forbidden": True,
+        "independent_parent_structure_count_by_seed": {
+            str(seed): len(seed_structures[seed]) for seed in seeds
+        },
+        "paired_seed_deltas": observed_seed_deltas,
+        "mean_delta": float(np.mean(list(observed_seed_deltas.values()))),
+        "class_stratified_bootstrap_95_ci": [float(low), float(high)],
+        "bootstrap_replicates": replicates,
+        "random_seed": random_seed,
+    }
+
+
 def interpret_single_contrast(
     contrast: Mapping[str, Any],
     *,

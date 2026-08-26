@@ -60,16 +60,16 @@
 
 方法对比、验证集和模拟测试集的评估都做完了，模拟部分的结果已经确定、不会再改。
 
-实验真实域分两层：
+实验真实域分两层，主任务不同：
 
-- **RRUFF-301**：平衡、人工整理的实验真实域（balanced curated experimental domain）。
-- **CNRS-318**：自然不平衡、跨数据库的独立实验真实域（naturally imbalanced independent experimental domain），已正式定级为第二真实域，保留自然类别分布 `21 / 87 / 77 / 41 / 33 / 12 / 47`。
+- **RRUFF-301**：平衡、人工整理的实验真实域（balanced curated experimental domain），主任务是 K=1/2/5 few-shot adaptation。
+- **CNRS-318**：自然不平衡、跨数据库的独立实验真实域（naturally imbalanced independent experimental domain），已正式定级为第二实验域，主分析是 frozen-model zero-shot external evaluation，保留自然类别分布 `21 / 87 / 77 / 41 / 33 / 12 / 47`。
 
 两个真实域的评测资产正在冻结，**正式推理尚未运行**：
 
 - CNRS-318 的权威审计与父样本 manifest 已进入 git（见 [`xrd_robustness/reports/CNRS_318_DATASET_AUDIT.md`](../xrd_robustness/reports/CNRS_318_DATASET_AUDIT.md) 和 [`xrd_robustness/manifests/cnrs_318_parent_manifest_v2.csv`](../xrd_robustness/manifests/cnrs_318_parent_manifest_v2.csv)）；
 - 评测协议已锁定（[`xrd_robustness/reports/CNRS_318_EVALUATION_PROTOCOL.md`](../xrd_robustness/reports/CNRS_318_EVALUATION_PROTOCOL.md)）；
-- 35 条人工标签质量复核尚未完成；
+- 人工标签质量复核**不计划执行**：标签由 deposited structure 稳定重建、未做人工物相核验，这一限制将如实注明；
 - 真实数据不参与模型、checkpoint、seed 或 `lambda_js` 选择。
 
 ## 6. 当前卡点
@@ -87,7 +87,7 @@
 2. 完成方法、结果和讨论章节。
 3. 跑一遍完整测试，确认接口、数据和实现都对得上。
 4. 将组会 PPT、技术报告和一页项目摘要整理为申请可复用成果。
-5. 完成 CNRS-318 的 35 条人工标签质量复核后，按冻结协议跑一次性真实域推理（RRUFF-301 与 CNRS-318）。
+5. 按冻结协议跑一次性真实域推理（RRUFF-301 与 CNRS-318，318 条全用、不做事后删样本）。
 
 下一条工程检查命令：
 

@@ -44,7 +44,8 @@ The seven-class labels are **structure-derived crystal-system labels**: they are
 reconstructed from the COD deposited atomic basis (not from the pattern file,
 which carries zero deposited space-group labels), and are accepted only when the
 crystal system is identical across all audited `symprec` values. They are not
-"pseudo-labels" produced by a model.
+"pseudo-labels" produced by a model. They were **not** independently verified by
+manual spectrum-level phase analysis.
 
 ## Role relative to RRUFF-301
 
@@ -64,9 +65,14 @@ hexagonal-specific conclusions remain **underpowered**. This is information
 about the data, not a defect: wide bootstrap intervals are reported as-is, and
 no downsampling to 84 or upsampling/duplication of hexagonal is performed.
 
+Labels are **derived from the deposited crystal structures through stable symmetry
+reconstruction and were not independently verified by manual spectrum-level phase
+analysis**. A small amount of metadata, extra-phase, or spectrum-structure mismatch
+is therefore possible and must be acknowledged in the Discussion; it does not prevent
+CNRS-318 from being a formal second experimental domain.
+
 ## Related records
 
 - Evaluation protocol: [`CNRS_318_EVALUATION_PROTOCOL.md`](CNRS_318_EVALUATION_PROTOCOL.md)
 - Parent manifest: [`../manifests/cnrs_318_parent_manifest_v2.csv`](../manifests/cnrs_318_parent_manifest_v2.csv)
 - Project history node: [`../../docs/PROJECT_HISTORY_NOTE_2026-08-27_CNRS_RECLASSIFICATION.md`](../../docs/PROJECT_HISTORY_NOTE_2026-08-27_CNRS_RECLASSIFICATION.md)
-- Manual-review template (local, git-ignored): `data/real_xrd/opxrd_cnrs7cs/manual_validation_sample.csv`

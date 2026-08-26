@@ -17,7 +17,9 @@
 | [`../xrd_robustness/MANUSCRIPT.md`](../xrd_robustness/MANUSCRIPT.md) | 当前 JS 分类项目的论文正文框架 |
 | [`../xrd_robustness/reports/RESULTS.md`](../xrd_robustness/reports/RESULTS.md) | 当前 JS 分类项目的模拟结果汇总 |
 | [`../xrd_robustness/reports/CNRS_318_DATASET_AUDIT.md`](../xrd_robustness/reports/CNRS_318_DATASET_AUDIT.md) | CNRS-318 数据集审计（git 可跟踪的权威摘要，含 v2 manifest SHA 与七类计数） |
-| [`../xrd_robustness/reports/CNRS_318_EVALUATION_PROTOCOL.md`](../xrd_robustness/reports/CNRS_318_EVALUATION_PROTOCOL.md) | CNRS-318 冻结评测协议（推理尚未运行） |
+| [`../xrd_robustness/reports/CNRS_318_EVALUATION_PROTOCOL.md`](../xrd_robustness/reports/CNRS_318_EVALUATION_PROTOCOL.md) | CNRS-318 冻结评测协议（zero-shot 主分析，推理尚未运行） |
+| [`../xrd_robustness/configs/real.cnrs318.zero_shot.frozen.json`](../xrd_robustness/configs/real.cnrs318.zero_shot.frozen.json) | CNRS-318 冻结评测配置（zero-shot，含类序/类计数与 10 个 checkpoint 哈希） |
+| [`../xrd_robustness/manifests/cnrs318_eval_manifest.csv`](../xrd_robustness/manifests/cnrs318_eval_manifest.csv) | CNRS-318 冻结评测清单（318 父样本；标签由结构派生、未人工物相核验） |
 | [`../xrd_robustness/manifests/cnrs_318_parent_manifest_v2.csv`](../xrd_robustness/manifests/cnrs_318_parent_manifest_v2.csv) | CNRS-318 轻量父样本 manifest（318 个独立父样本，不含原始谱） |
 
 ## 建议阅读顺序
@@ -31,6 +33,6 @@
 
 对外的当前科学说法以 `CURRENT_STATE.md` 和结果文件为准。已经完成的项目是七晶系 PXRD 分类、在线物理扰动，以及 Dynamic ERM 和 Dynamic JS 的配对比较。
 
-实验真实域分两层：RRUFF-301（平衡、人工整理的实验真实域）与 CNRS-318（自然不平衡、跨数据库的独立实验真实域，已正式定级为第二真实域）。两个真实域的评测资产正在冻结，正式推理尚未运行，不属于已完成的模拟结果。
+实验真实域分两层，主任务不同：RRUFF-301（平衡、人工整理的实验真实域，主任务 K=1/2/5 few-shot adaptation）与 CNRS-318（自然不平衡、跨数据库的独立实验真实域，已正式定级为第二实验域，主分析 frozen-model zero-shot external evaluation）。两个真实域的评测资产正在冻结，正式推理尚未运行，不属于已完成的模拟结果。
 
 定量反演文档属于**下一项目规划**：它已经完成问题定义和执行路线设计，但尚未启动训练，不能被写成当前已完成成果，也不会反向修改已经冻结的 JS 分类实验。
