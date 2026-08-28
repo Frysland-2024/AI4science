@@ -4,6 +4,8 @@
 
 > **本轮证据结案先看：** [`../docs/PXRD_EVIDENCE_CLOSURE.md`](../docs/PXRD_EVIDENCE_CLOSURE.md)。五类扰动物理/文献依据与 RRUFF-301 composition audit 已正式结案；当前最重要的工作是把 **shared parent identity → measurement equivalence → relationship supervision** 的方法贡献讲清楚，而不是再补实验或加算法。
 
+> **五个方法细节问题也已结案：** [`../docs/PXRD_METHOD_DETAIL_EVIDENCE_CLOSURE.md`](../docs/PXRD_METHOD_DETAIL_EVIDENCE_CLOSURE.md)。其中明确核实了：ERM/JS 是真正同条件对照；formal_14060 先按 parent structure 划分再生成 views；五类扰动只改变观测谱，不会把 structure A 变成 structure B；`lambda_js=60` 来自 Train-only 候选尺度检查后仅用 Validation 选择，而不是看 Test/真实域结果后调出来的。
+
 > **方法贡献的核心一句话：** conventional online simulation mainly treats the simulator as a data generator; this work additionally exploits simulator-retained parent identity so that the simulator becomes **data generator + relationship supervisor**.
 
 ## 结果
@@ -42,11 +44,24 @@ RRUFF-301 adaptation pool（70）与 locked test（231）：
 
 完整报告：[`reports/RRUFF301_COMPOSITION_AUDIT.md`](reports/RRUFF301_COMPOSITION_AUDIT.md)。这项检查已经结案，不据此修改 frozen split 或重跑模型。
 
+### 五个方法细节问题
+
+仓库与 Git 历史已经完成考古并统一结案：
+
+1. Related Work / 新颖性边界；
+2. Dynamic ERM 与 Dynamic JS 是否在真正相同的训练条件下比较；
+3. formal_14060 数据集如何构建以及如何避免 parent leakage；
+4. 五类扰动是否只改变观测谱，而没有把 structure A 变成 structure B；
+5. `lambda_js=60` 的候选范围与 Validation-only 选择路径。
+
+统一入口：[`../docs/PXRD_METHOD_DETAIL_EVIDENCE_CLOSURE.md`](../docs/PXRD_METHOD_DETAIL_EVIDENCE_CLOSURE.md)。这些问题后续直接用于 Methods、Related Work、PPT 与答辩，不再作为新的实验任务重新开启。
+
 ## 结果与证据索引
 
 | 文件 | 作用 |
 |---|---|
 | [`../docs/PXRD_EVIDENCE_CLOSURE.md`](../docs/PXRD_EVIDENCE_CLOSURE.md) | **本轮两个证据问题的结案结果 + 当前方法新颖性 framing** |
+| [`../docs/PXRD_METHOD_DETAIL_EVIDENCE_CLOSURE.md`](../docs/PXRD_METHOD_DETAIL_EVIDENCE_CLOSURE.md) | **五个方法细节问题的本地仓库/Git 历史考古与结案** |
 | [`../docs/PXRD_PERTURBATION_EVIDENCE.md`](../docs/PXRD_PERTURBATION_EVIDENCE.md) | 五类扰动的物理/文献依据、最终范围与历史详细证据入口 |
 | [`reports/RRUFF301_COMPOSITION_AUDIT.md`](reports/RRUFF301_COMPOSITION_AUDIT.md) | RRUFF-301 adaptation/test 只读组成与近重复谱检查 |
 | [`reports/RRUFF301_COMPOSITION_AUDIT.json`](reports/RRUFF301_COMPOSITION_AUDIT.json) | 上述 composition audit 的机器可读结果 |
@@ -105,6 +120,7 @@ python scripts/build_cnrs318_audit_artifact.py
 
 - [`../docs/CURRENT_STATE.md`](../docs/CURRENT_STATE.md)
 - [`../docs/PXRD_EVIDENCE_CLOSURE.md`](../docs/PXRD_EVIDENCE_CLOSURE.md)
+- [`../docs/PXRD_METHOD_DETAIL_EVIDENCE_CLOSURE.md`](../docs/PXRD_METHOD_DETAIL_EVIDENCE_CLOSURE.md)
 - [`../docs/PXRD_PERTURBATION_EVIDENCE.md`](../docs/PXRD_PERTURBATION_EVIDENCE.md)
 - [`MANUSCRIPT.md`](MANUSCRIPT.md)
 
