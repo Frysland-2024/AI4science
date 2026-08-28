@@ -2,6 +2,8 @@
 
 这里做的是：用在线 PXRD 物理扰动做七晶系鲁棒分类。对比 Dynamic ERM 和 Dynamic JS Consistency 两种方法，配置是 ResNet-18-GN、不做额外预处理、AdamW、恒定学习率、`lambda_js=60`。
 
+> **先看五类扰动依据：** [`../docs/PXRD_PERTURBATION_EVIDENCE.md`](../docs/PXRD_PERTURBATION_EVIDENCE.md)。峰位偏移、展宽、择优取向、背景和噪声的文献/物理证据早期已经系统核过；该文件把历史证据、最终 frozen range 与解释边界重新集中到当前主线，避免把这件事误判为新的科研 TODO。
+
 ## 结果
 
 | 数据集 | Dynamic ERM | Dynamic JS | 配对提升 |
@@ -21,6 +23,7 @@
 
 | 文件 | 作用 |
 |---|---|
+| [`../docs/PXRD_PERTURBATION_EVIDENCE.md`](../docs/PXRD_PERTURBATION_EVIDENCE.md) | **五类扰动的物理/文献依据、最终范围与历史详细证据入口** |
 | [`reports/RESULTS.md`](reports/RESULTS.md) | 跨域 headline performance、reliability 与严格 audit 摘要 |
 | [`reports/validation_results.json`](reports/validation_results.json) | 冻结模拟验证集汇总 |
 | [`reports/simulated_test_results.json`](reports/simulated_test_results.json) | 冻结模拟 Test 汇总及 SHA 绑定的 Accuracy 扩展 |
@@ -68,6 +71,7 @@ python scripts/build_cnrs318_audit_artifact.py
 ## 文档
 
 - [`../docs/CURRENT_STATE.md`](../docs/CURRENT_STATE.md)
+- [`../docs/PXRD_PERTURBATION_EVIDENCE.md`](../docs/PXRD_PERTURBATION_EVIDENCE.md)
 - [`MANUSCRIPT.md`](MANUSCRIPT.md)
 
 数据集、模型权重、生成的谱图、缓存和本地输出都不会提交到 Git。
