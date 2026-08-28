@@ -66,6 +66,32 @@ This distinction is now part of the project history because it represents an imp
 
 This correction does not reduce rigor. It changes the hierarchy of evidence so that rigor serves interpretation rather than replacing it.
 
+## Community-metric survey — what PXRD / crystallographic ML actually reports
+
+A follow-up literature survey of representative PXRD / XRD machine-learning work from 2019–2026 was used to ground the reporting reset in actual community practice rather than project preference. Representative examples considered include Oviedo et al. (npj Computational Materials, 2019), Suzuki et al. (Scientific Reports, 2020), CrystalMELA (Journal of Applied Crystallography, 2023), Lee et al. (Advanced Intelligent Systems, 2023), Schopmans et al. (Digital Discovery, 2023), SimXRD-4M (2025), XQueryer (National Science Review, 2025), and recent real-PXRD structure-solving work.
+
+The recurring classification-reporting pattern in this community is:
+
+1. **Accuracy** — still the most traditional and widely comparable headline metric.
+2. **F1 / Macro-F1** — especially important for multiclass or imbalanced crystal-system / space-group classification.
+3. **Precision / Recall** — often reported as macro averages or per-class diagnostics.
+4. **Confusion matrix and per-class scores** — common for understanding crystal-system confusions.
+5. **Balanced Accuracy** — useful and established when the experimental domain is naturally imbalanced.
+6. **Top-k Accuracy / match rate** — common in many-class candidate retrieval, indexing, or structure-solving tasks.
+7. **Cross-validation standard deviation or repeated-run mean ± std** — a common way of reporting training variability and robustness.
+8. **Uncertainty / calibration metrics** — increasingly used in recent work, but still generally secondary to the above performance metrics rather than replacing them as the headline.
+
+The survey did **not** identify a community norm in which a paired/bootstrap 95% confidence interval must lie completely above zero before an XRD-ML result may be reported as positive. Strict bootstrap or significance analyses can strengthen a paper, but they are not the normal binary success criterion of the PXRD classification literature.
+
+### Metric redundancy notes
+
+For standard single-label multiclass classification:
+
+- micro-F1 is numerically equivalent to overall accuracy, so both do not need to occupy separate headline columns;
+- balanced accuracy is the mean per-class recall, so macro recall is highly redundant if balanced accuracy is already reported.
+
+This motivates concise main tables rather than maximizing the number of metrics.
+
 ## New two-layer reporting policy
 
 ### Layer 1 — main scientific / presentation results
@@ -79,6 +105,8 @@ Use conventional, directly interpretable performance evidence:
 - mean improvement in percentage points;
 - consistency across independent training seeds;
 - per-class performance where scientifically informative;
+- mean ± std or equivalent repeated-run summaries;
+- Top-k metrics only when the task is candidate retrieval / many-class ranking rather than ordinary seven-class classification;
 - ECE / NLL / Brier as secondary reliability metrics when relevant.
 
 The main question is whether the evidence as a whole supports the scientific claim, not whether every auxiliary statistical test independently clears a confirmatory threshold.
@@ -95,30 +123,47 @@ Keep, but demote to secondary evidence / appendix / internal audit:
 
 These analyses remain valuable for transparency and for answering methodological questions, but **a CI crossing zero is not by itself a reason to treat the whole real-domain experiment as a failure** when the broader performance evidence is coherent.
 
-## Consequences for current results
+## Domain-specific reporting rules adopted for this project
 
 ### Simulated OOD
 
 Main outward-facing result:
 
+- **Primary:** Macro-F1;
+- also report overall accuracy where useful;
+- report the matched-seed mean / standard deviation and direction consistency;
 - JS improves mean single-factor OOD Macro-F1 by about **+5.46 percentage points**;
 - all **5/5** matched training seeds improve.
 
 The paired/bootstrap audit remains supporting evidence rather than the headline.
 
-### RRUFF
+### RRUFF-301
 
-Main outward-facing role:
+RRUFF is a balanced curated experimental domain, so the main outward-facing role is:
 
 - emphasize **few-shot adaptation / label efficiency** under identical real-label budgets;
-- report the learning curve and JS-vs-ERM performance differences;
+- report Macro-F1 and Accuracy at each K;
+- report the learning curve and JS-vs-ERM percentage-point differences;
+- report repeated-seed mean ± std / direction consistency;
 - do not let an overly strict auxiliary CI criterion determine whether the real-domain result is considered useful.
 
-RRUFF zero-shot does not need an independent main-slide role if it distracts from the stronger few-shot story; K=0 may remain as a diagnostic point in a learning curve when useful.
+Balanced Accuracy is not needed as a headline in a deliberately balanced benchmark. RRUFF zero-shot does not need an independent main-slide role if it distracts from the stronger few-shot story; K=0 may remain as a diagnostic point in a learning curve when useful.
 
 ### CNRS-318
 
-Treat CNRS as a naturally imbalanced second real domain and report the conventional performance picture:
+Treat CNRS as a naturally imbalanced second real domain. Its natural class counts are:
+
+`21 / 87 / 77 / 41 / 33 / 12 / 47`
+
+The main table should therefore use the combination:
+
+- **Macro-F1** — equal-weight precision/recall performance across all seven crystal systems;
+- **Balanced Accuracy** — mean per-class recall, appropriate for the natural imbalance;
+- **Overall Accuracy** — performance under the actual natural sample distribution and the most conventional PXRD comparison metric;
+- **per-class F1 + support** when space permits;
+- **5-seed direction / mean ± std** as the main stability description.
+
+Current conventional performance picture:
 
 - 5/5 training seeds favor JS;
 - Macro-F1: about 0.191 -> 0.209;
@@ -130,7 +175,13 @@ The small class supports (notably hexagonal n=12) make Macro-F1 uncertainty intr
 
 Appropriate public wording is along the lines of:
 
-> The independent CNRS experimental domain shows a directionally consistent improvement across all five training seeds, with gains also observed in balanced accuracy, overall accuracy, and calibration; uncertainty remains larger because the real dataset is naturally imbalanced and contains low-support crystal systems.
+> The independent CNRS experimental domain shows a directionally consistent improvement across all five training seeds, with gains in Macro-F1, balanced accuracy, overall accuracy, and calibration; uncertainty remains larger because the real dataset is naturally imbalanced and contains low-support crystal systems.
+
+### Calibration / reliability metrics
+
+ECE, NLL, Brier score, predictive entropy and confidence analysis are scientifically valuable and increasingly relevant to reliable scientific ML. In this project they should be used as **secondary reliability evidence**. For example, an ECE improvement can support the statement that the performance gain is accompanied by better calibration.
+
+They should not replace Accuracy / Macro-F1 / Balanced Accuracy as the headline performance layer unless the scientific question itself is specifically calibration or uncertainty estimation.
 
 ## What is explicitly abandoned
 
@@ -152,3 +203,5 @@ The original audit outputs remain preserved. The change is about the **role and 
 ## Rationale for future project decisions
 
 For materials-ML / AI-for-characterization work, evaluation standards should be calibrated to the scientific question, the actual experimental-data regime, and the conventions of the target field. Internal rigor should improve credibility, not impose a stricter success definition than the community itself normally uses and thereby make valid results artificially difficult to communicate.
+
+For future PPTs, paper drafts, result summaries, and application narratives, Codex and other analysis agents should default to the domain-specific metric hierarchy above. If an older project document uses language equivalent to `CI > 0 or the result fails`, that should be treated as a historical governance rule, not as the current reporting standard.
