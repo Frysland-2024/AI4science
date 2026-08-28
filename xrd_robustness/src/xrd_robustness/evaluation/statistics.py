@@ -283,9 +283,10 @@ def class_stratified_paired_bootstrap(
 
     Unlike :func:`hierarchical_paired_bootstrap` (which resamples parents uniformly
     across all classes), this resamples parents independently within each class so the
-    natural class composition is preserved exactly at every replicate.  It is intended
-    for naturally imbalanced external domains such as CNRS-318, where a uniform
-    resampling would let large classes dominate the bootstrap.
+    natural class composition is preserved exactly at every replicate.  One parent draw
+    is shared by both methods and every fixed training seed.  It is intended for
+    naturally imbalanced external domains such as CNRS-318, where the same external
+    parents are evaluated by every registered model.
 
     Each row must provide ``seed`` (int), ``method_id`` (str), ``parent_structure_id``
     (str), and either ``label``/``prediction`` or ``label_index``/``prediction_index``.
@@ -330,7 +331,6 @@ def class_stratified_paired_bootstrap(
     }
 
     seed_structures: dict[int, list[str]] = {}
-    seed_class_of: dict[int, dict[str, int]] = {}
     for seed in seeds:
         method_parents = {
             method: {
@@ -338,21 +338,41 @@ def class_stratified_paired_bootstrap(
             }
             for method in (focus_method_id, comparator_method_id)
         }
-        common = sorted(set.intersection(*method_parents.values()))
+        parent_sets = list(method_parents.values())
+        if not parent_sets or any(parents != parent_sets[0] for parents in parent_sets[1:]):
+            raise ValueError(
+                f"seed {seed} does not have the same parent structures for both methods"
+            )
+        common = sorted(parent_sets[0])
         if len(common) < 2:
             raise ValueError(
                 f"seed {seed} has fewer than two paired parent structures"
             )
         seed_structures[seed] = common
-        class_of: dict[str, int] = {}
-        for parent in common:
-            rows_for_parent = [
-                row
-                for row in relevant
-                if row["seed"] == seed and row["parent_structure_id"] == parent
-            ]
-            class_of[parent] = int(rows_for_parent[0]["label"])
-        seed_class_of[seed] = class_of
+
+    reference_structures = seed_structures[seeds[0]]
+    if any(seed_structures[seed] != reference_structures for seed in seeds[1:]):
+        raise ValueError(
+            "registered seeds do not share the same paired parent structures"
+        )
+
+    class_of: dict[str, int] = {}
+    for parent in reference_structures:
+        labels = {
+            int(row["label"])
+            for row in relevant
+            if row["parent_structure_id"] == parent
+        }
+        if len(labels) != 1:
+            raise ValueError(
+                f"parent structure {parent!r} has inconsistent labels: {sorted(labels)}"
+            )
+        label = next(iter(labels))
+        if not 0 <= label < num_classes:
+            raise ValueError(
+                f"parent structure {parent!r} has label {label} outside [0, {num_classes})"
+            )
+        class_of[parent] = label
 
     def contrast_for(seed: int, sampled: Sequence[str]) -> float:
         scores: dict[str, float] = {}
@@ -368,14 +388,21 @@ def class_stratified_paired_bootstrap(
     }
 
     rng = np.random.default_rng(random_seed)
+    by_class: dict[int, list[str]] = defaultdict(list)
+    for parent in reference_structures:
+        by_class[class_of[parent]].append(parent)
+    class_keys = sorted(by_class)
+    class_draws: dict[int, np.ndarray] = {}
+    for cls in class_keys:
+        count = len(by_class[cls])
+        class_draws[cls] = rng.multinomial(
+            count,
+            np.full(count, 1.0 / count),
+            size=replicates,
+        )
+
     bootstrap_deltas = np.zeros(replicates, dtype=np.float64)
     for seed in seeds:
-        structures = seed_structures[seed]
-        class_of = seed_class_of[seed]
-        by_class: dict[int, list[str]] = defaultdict(list)
-        for parent in structures:
-            by_class[class_of[parent]].append(parent)
-        class_keys = sorted(by_class)
         method_scores: dict[str, np.ndarray] = {}
         for method in (focus_method_id, comparator_method_id):
             sampled_confusions = np.zeros(
@@ -383,14 +410,12 @@ def class_stratified_paired_bootstrap(
             )
             for cls in class_keys:
                 members = by_class[cls]
-                count = len(members)
                 matrices = np.stack(
                     [structure_confusions[(seed, method, parent)] for parent in members]
                 )
-                counts = rng.multinomial(
-                    count, np.full(count, 1.0 / count), size=replicates
+                sampled_confusions += np.tensordot(
+                    class_draws[cls], matrices, axes=(1, 0)
                 )
-                sampled_confusions += np.tensordot(counts, matrices, axes=(1, 0))
             method_scores[method] = _macro_f1_from_confusion_batch(
                 sampled_confusions.astype(np.int64)
             )
@@ -406,9 +431,10 @@ def class_stratified_paired_bootstrap(
         "seed_ids": seeds,
         "independent_unit": "parent_structure",
         "bootstrap_design": (
-            "class_stratified_paired_parent_within_seed_"
-            "then_mean_across_registered_seeds"
+            "class_stratified_paired_parent_shared_across_methods_"
+            "and_fixed_registered_seeds_then_mean"
         ),
+        "parent_resampling_shared_across_methods_and_seeds": True,
         "seed_resampling_forbidden": True,
         "independent_parent_structure_count_by_seed": {
             str(seed): len(seed_structures[seed]) for seed in seeds

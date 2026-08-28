@@ -30,6 +30,7 @@ CONFIG_PATH = ROOT / "configs/real.cnrs318.zero_shot.frozen.json"
 EXPERIMENT_PATH = ROOT / "configs/experiment.public.json"
 EVAL_MANIFEST = ROOT / "manifests/cnrs318_eval_manifest.csv"
 INPUTS_PATH = ROOT / "outputs/cnrs318_zero_shot/cnrs318_inputs.npz"
+PREPROCESSING_REPORT = ROOT / "outputs/cnrs318_zero_shot/cnrs318_preprocessing_report.json"
 OUTPUT_ROOT = ROOT / "outputs/cnrs318_zero_shot"
 CHECKPOINT_ROOT = ROOT / "outputs/simulated_test_checkpoints/checkpoints"
 
@@ -79,11 +80,37 @@ def _device(value: str) -> torch.device:
     return device
 
 
+def validate_preprocessing_handshake(
+    *,
+    preprocessing_report: Path,
+    eval_manifest: Path,
+    inputs_path: Path,
+) -> dict[str, Any]:
+    """Bind the manifest order used at inference to the frozen NPZ build."""
+    if not preprocessing_report.is_file():
+        raise RuntimeError(
+            "missing preprocessing report; run prepare_cnrs318_eval.py before inference"
+        )
+    report = json.loads(preprocessing_report.read_text(encoding="utf-8"))
+    expected = {
+        "eval_manifest_sha256": sha256(eval_manifest),
+        "inputs_sha256": sha256(inputs_path),
+    }
+    for field, observed in expected.items():
+        if report.get(field) != observed:
+            raise RuntimeError(
+                f"preprocessing handshake failed for {field}: "
+                f"{report.get(field)!r} != {observed!r}"
+            )
+    return report
+
+
 def execute(
     *,
     config_path: Path = CONFIG_PATH,
     eval_manifest: Path = EVAL_MANIFEST,
     inputs_path: Path = INPUTS_PATH,
+    preprocessing_report: Path = PREPROCESSING_REPORT,
     checkpoint_root: Path = CHECKPOINT_ROOT,
     output_root: Path = OUTPUT_ROOT,
     batch_size: int = 128,
@@ -93,6 +120,11 @@ def execute(
     class_order = list(config["class_order"])
     if not inputs_path.is_file():
         raise RuntimeError("run prepare_cnrs318_eval.py before zero-shot inference")
+    preprocessing = validate_preprocessing_handshake(
+        preprocessing_report=preprocessing_report,
+        eval_manifest=eval_manifest,
+        inputs_path=inputs_path,
+    )
     archive = np.load(inputs_path, allow_pickle=False)
     matrix = archive["spectra"]
     n_parents = int(config["total_parents"])
@@ -102,6 +134,15 @@ def execute(
     if len(manifest_rows) != n_parents:
         raise RuntimeError("eval manifest length does not match inputs")
     dataset_manifest_sha256 = sha256(eval_manifest)
+    inputs_sha256 = sha256(inputs_path)
+
+    expected_experiment_sha256 = config.get("hashes", {}).get("experiment_config_sha256")
+    observed_experiment_sha256 = sha256(EXPERIMENT_PATH)
+    if expected_experiment_sha256 != observed_experiment_sha256:
+        raise RuntimeError(
+            "experiment config changed: "
+            f"{observed_experiment_sha256} != {expected_experiment_sha256}"
+        )
 
     device = _device(device_name)
     output_root.mkdir(parents=True, exist_ok=True)
@@ -178,6 +219,15 @@ def execute(
         "class_order": class_order,
         "predictions_sha256": sha256(output_path),
         "dataset_manifest_sha256": dataset_manifest_sha256,
+        "inputs_sha256": inputs_sha256,
+        "preprocessing_report_sha256": sha256(preprocessing_report),
+        "config_sha256": sha256(config_path),
+        "experiment_config_sha256": observed_experiment_sha256,
+        "resolved_device": str(device),
+        "autocast": "float16" if device.type == "cuda" else "disabled",
+        "torch_version": torch.__version__,
+        "numpy_version": np.__version__,
+        "preprocessing_schema_version": preprocessing.get("schema_version"),
     }
     (output_root / "predictions_report.json").write_text(
         json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8"
@@ -196,6 +246,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--config", type=Path, default=CONFIG_PATH)
     parser.add_argument("--eval-manifest", type=Path, default=EVAL_MANIFEST)
     parser.add_argument("--inputs", type=Path, default=INPUTS_PATH)
+    parser.add_argument("--preprocessing-report", type=Path, default=PREPROCESSING_REPORT)
     parser.add_argument("--checkpoint-root", type=Path, default=CHECKPOINT_ROOT)
     parser.add_argument("--output-root", type=Path, default=OUTPUT_ROOT)
     parser.add_argument("--batch-size", type=int, default=128)
@@ -209,6 +260,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         config_path=args.config.resolve(),
         eval_manifest=args.eval_manifest.resolve(),
         inputs_path=args.inputs.resolve(),
+        preprocessing_report=args.preprocessing_report.resolve(),
         checkpoint_root=args.checkpoint_root.resolve(),
         output_root=args.output_root.resolve(),
         batch_size=args.batch_size,

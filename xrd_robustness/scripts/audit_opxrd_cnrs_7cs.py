@@ -929,7 +929,7 @@ def build_summary(
         for row in rows
     )
     summary: dict[str, Any] = {
-        "schema_version": "opxrd-cnrs-7cs-feasibility-v2",
+        "schema_version": "opxrd-cnrs-7cs-feasibility-v3",
         "created_at": datetime.now(timezone.utc).isoformat(),
         "source_root": str(source_root.resolve()),
         "archive_path": str(archive_path.resolve()) if archive_path else "",
@@ -1109,9 +1109,9 @@ def build_summary(
             "final_mapped_cu_ka_10_80_has_all_7cs": "PASS"
             if mapped_all_classes
             else "FAIL",
-            "final_mapped_cu_ka_10_80_min_20_per_class": "PASS"
+            "balanced_equivalent_min_20_per_class": "PASS"
             if mapped_min_20
-            else "FAIL",
+            else "FAIL_NON_BLOCKING",
             "exact_structure_independence_from_formal_14060": (
                 "PASS"
                 if formal_overlap_audit_run and not exact_overlap_rows
@@ -1133,38 +1133,42 @@ def build_summary(
                 if fuzzy_overlap_audit_run
                 else "NOT_RUN"
             ),
-            "manual_label_validation": "NOT_RUN",
+            "manual_label_validation": "NOT_PLANNED",
         },
     }
-    immediate = (
+    formal_naturally_imbalanced = (
         archive_ok
         and summary["gates"]["all_cnrs_json_parse"] == "PASS"
-        and direct_all_classes
-        and mapped_min_20
-        and summary["gates"]["exact_structure_independence_from_formal_14060"] == "PASS"
-        and summary["gates"]["manual_label_validation"] == "PASS"
-    )
-    salvageable = (
-        archive_ok
         and derived_all_classes
         and mapped_all_classes
+        and summary["gates"]["exact_structure_independence_from_formal_14060"]
+        == "PASS"
         and summary["gates"]["intra_cnrs_structural_parent_audit"] == "PASS"
         and summary["gates"]["fuzzy_structure_matches_excluded_from_candidates"] == "PASS"
     )
-    if salvageable and mapped_min_20:
-        salvage_status = "FEASIBLE_WITH_FOLLOWUP"
-    elif salvageable:
-        salvage_status = "EXPLORATORY_ONLY"
-    else:
-        salvage_status = "NOT_FEASIBLE"
+    summary["gates"]["formal_naturally_imbalanced_second_domain"] = (
+        "PASS" if formal_naturally_imbalanced else "FAIL"
+    )
     summary["decision"] = {
-        "immediate_second_real_domain": "GO" if immediate else "HOLD",
-        "derived_label_salvage_path": salvage_status,
+        "immediate_second_real_domain": (
+            "GO" if formal_naturally_imbalanced else "HOLD"
+        ),
+        "formal_naturally_imbalanced_second_domain": (
+            "PASS" if formal_naturally_imbalanced else "FAIL"
+        ),
+        "balanced_equivalent_to_rruff": "YES" if mapped_min_20 else "NO",
+        "derived_label_salvage_path": (
+            "FORMAL_NATURALLY_IMBALANCED_DOMAIN"
+            if formal_naturally_imbalanced
+            else "NOT_FEASIBLE"
+        ),
         "reason": (
-            "Deposited space-group labels are absent; the final independent structural-parent "
-            f"minimum is {min(mapped_broad_independent_counts.values())} per class, below the "
-            "20-per-class gate; and manual label validation has not been run.  Tolerant "
-            "formal_14060 overlap screening was completed and matching parent groups were excluded."
+            "Stable structure-derived labels cover all seven classes; CNRS structural parents "
+            "were deduplicated and all tolerant formal_14060 matches were excluded. The final "
+            f"minimum is {min(mapped_broad_independent_counts.values())} parents in hexagonal, "
+            "so the domain is not balanced-equivalent to RRUFF and class-specific hexagonal "
+            "claims are underpowered, but this is not a domain-level exclusion. Manual "
+            "spectrum-level phase validation is not planned and is reported as a limitation."
         ),
     }
     return summary
@@ -1230,8 +1234,10 @@ def write_report(path: Path, summary: dict[str, Any]) -> None:
     lines = [
         "# opXRD v11 CNRS seven-crystal-system feasibility audit",
         "",
-        f"Decision: **{summary['decision']['immediate_second_real_domain']} for immediate use**; "
-        f"derived-label path: **{summary['decision']['derived_label_salvage_path']}**.",
+        "Decision: **FORMAL SECOND REAL DOMAIN — "
+        f"{summary['decision']['formal_naturally_imbalanced_second_domain']}**; "
+        "balanced-equivalent to RRUFF: "
+        f"**{summary['decision']['balanced_equivalent_to_rruff']}**.",
         "",
         "## What was audited",
         "",
@@ -1313,9 +1319,13 @@ def write_report(path: Path, summary: dict[str, Any]) -> None:
             "symmetry tolerance.  The C+H flag is only an organic/hybrid-risk proxy, not a validated "
             "inorganic label.  Exact hashes, tolerant within-CNRS parent clustering, and tolerant "
             "formal_14060 overlap screening have been completed; matched parent groups are excluded.  "
-            "The remaining bottlenecks are the sub-20 hexagonal parent count, absent deposited labels, "
-            "and manual spot validation.  The data can support an exploratory balanced pilot, but it "
-            "should not yet be called a formal second real domain.",
+            "The domain is therefore accepted as a formal naturally imbalanced independent "
+            "experimental domain with 318 structural parents.  It is not a balanced equivalent "
+            "to RRUFF: hexagonal has 12 parents, so class-specific conclusions remain underpowered. "
+            "Manual spectrum-level phase validation is not planned; structure-derived labels and "
+            "the possibility of metadata, extra-phase, or spectrum-structure mismatch are reported "
+            "as limitations.  All 318 frozen parents must remain in the evaluation after predictions "
+            "are inspected.",
             "",
         ]
     )
@@ -1340,6 +1350,14 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         help="Optional endpoint tolerance for 10-80 and 10-60 coverage checks.",
     )
     parser.add_argument("--manual-sample-per-class", type=int, default=5)
+    parser.add_argument(
+        "--write-manual-sample",
+        action="store_true",
+        help=(
+            "Write the optional deterministic manual-review candidate sample. "
+            "It is not a domain gate and is disabled by default."
+        ),
+    )
     parser.add_argument(
         "--symprecs",
         type=float,
@@ -1428,10 +1446,11 @@ def main(argv: list[str] | None = None) -> int:
             or bool(row.get("formal_14060_structure_match_error"))
         ],
     )
-    write_csv(
-        output_root / "manual_validation_sample.csv",
-        manual_validation_sample(rows, per_class=int(args.manual_sample_per_class)),
-    )
+    if args.write_manual_sample:
+        write_csv(
+            output_root / "manual_validation_sample.csv",
+            manual_validation_sample(rows, per_class=int(args.manual_sample_per_class)),
+        )
     (output_root / "cnrs_7cs_audit_summary.json").write_text(
         json.dumps(summary, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
     )

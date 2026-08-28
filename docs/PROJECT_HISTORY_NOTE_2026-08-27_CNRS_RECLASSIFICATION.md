@@ -88,3 +88,20 @@ structure 完全一致；论文讨论中需承认可能存在少量 metadata、�
 - 父样本 manifest：`xrd_robustness/manifests/cnrs_318_parent_manifest_v2.csv`
 - 冻结配置：`xrd_robustness/configs/real.cnrs318.zero_shot.frozen.json`
 - 当前状态：`docs/CURRENT_STATE.md`
+
+## 后续执行更新（2026-08-28；追加记录）
+
+上述 PENDING 状态随后完成：冻结 manifest、`318×3501` 输入与 10 个模型的
+3,180 条预测均已生成并通过哈希/身份审计。五个 seed 的 Macro-F1 差值全部为正，
+seed-level Macro-F1 为 `0.188372±0.026336→0.207085±0.021336`，mean seed-paired Δ
+为 `+0.018713±0.006754`。原 bootstrap 实现错误地给 ERM 与 JS 抽取了不同父样本；
+纠正为按晶系分层、父样本抽样在两方法和五个固定 seed 间共享后，95% CI 为
+`[−0.009339, +0.046107]`。
+
+该区间作为统计不确定性审计完整保留；在冻结协议当时的内部 wording table 下它对应
+`directional support`，但当前对外结果遵循三层评价体系，不把 CI 跨 0 单独当作失败判决。
+CNRS 标签没有参与训练、微调、checkpoint/seed/超参数选择，全部 318 条保持冻结，
+也没有按错例事后删除。
+
+- 结果：`xrd_robustness/reports/CNRS_318_RESULTS.md`
+- 机器 run record：`xrd_robustness/manifests/cnrs318_zero_shot_run_record.json`

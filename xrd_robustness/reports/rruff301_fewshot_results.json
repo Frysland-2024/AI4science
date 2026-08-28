@@ -1,0 +1,71 @@
+{
+  "schema_version": "rruff301-public-fewshot-results-v1",
+  "status": "completed",
+  "scope": "retrospectively_verified_locked_test_fewshot",
+  "dataset": "RRUFF-301",
+  "role": "balanced_curated_experimental_domain_for_label_efficiency",
+  "methods": {
+    "dynamic_erm": {"source_method_name": "dynamic_erm"},
+    "js_consistency": {"source_method_name": "js_lambda_60", "lambda_js": 60}
+  },
+  "design": {
+    "labels_per_class": [1, 2, 5],
+    "training_seeds": 5,
+    "episode_seeds": 5,
+    "paired_comparisons_per_budget": 25,
+    "sd_definition": "sample standard deviation (ddof=1) across the 25 paired runs per K (5 training seeds x 5 episode seeds)"
+  },
+  "provenance": {
+    "source_local_results": "data/real_xrd/rruff371/results/rruff301_fewshot_runs.json",
+    "source_local_results_sha256": "78839694E53B8944643EA1A24F82F011F8E86A2C5100D7FD9F8EAD94F152DBC3",
+    "verification_date": "2026-08-28",
+    "claim_boundary": "The locked-test values are reproducible from the hashed local result file, but historical prospective confirmatory provenance is incomplete; do not describe this as a fully provenance-complete prospective confirmatory run.",
+    "historical_lineage_audit": {
+      "git_commit": "f36be82b2a0b5fd3c58ec87a58fa6e3ba839f217",
+      "path_at_commit": "xrd_robustness/reports/rruff301_existing_artifact_lineage_audit.json",
+      "confirmatory_claim_supported": false,
+      "evidence_role": "reproducibility_replay_not_confirmatory",
+      "metrics_recomputed_from_predictions": 150,
+      "prediction_count": 34650
+    }
+  },
+  "results_by_k": {
+    "1": {
+      "macro_f1": {
+        "dynamic_erm": {"mean": 0.284718979578149, "sample_sd": 0.026911641309628094},
+        "js_consistency": {"mean": 0.3280396420899909, "sample_sd": 0.03288035759560043},
+        "paired_delta": {"mean": 0.04332066251184188, "sample_sd": 0.04462349224126666, "positive_pairs": 21, "positive_training_seeds_after_episode_mean": 5}
+      },
+      "accuracy": {
+        "dynamic_erm": {"mean": 0.299047619047619, "sample_sd": 0.02591142046208099},
+        "js_consistency": {"mean": 0.33748917748917756, "sample_sd": 0.02987431219021059},
+        "paired_delta": {"mean": 0.038441558441558436, "sample_sd": 0.04130211958832693, "positive_pairs": 20, "positive_training_seeds_after_episode_mean": 4}
+      }
+    },
+    "2": {
+      "macro_f1": {
+        "dynamic_erm": {"mean": 0.3026150816434789, "sample_sd": 0.040691166930969795},
+        "js_consistency": {"mean": 0.3486411093591271, "sample_sd": 0.03348789217943395},
+        "paired_delta": {"mean": 0.04602602771564824, "sample_sd": 0.03526383185397387, "positive_pairs": 23, "positive_training_seeds_after_episode_mean": 5}
+      },
+      "accuracy": {
+        "dynamic_erm": {"mean": 0.31203463203463205, "sample_sd": 0.03827192399186207},
+        "js_consistency": {"mean": 0.36086580086580095, "sample_sd": 0.03428943090616944},
+        "paired_delta": {"mean": 0.048831168831168836, "sample_sd": 0.03407561671715052, "positive_pairs": 23, "positive_training_seeds_after_episode_mean": 5}
+      }
+    },
+    "5": {
+      "macro_f1": {
+        "dynamic_erm": {"mean": 0.35546430676138274, "sample_sd": 0.0301537468100514},
+        "js_consistency": {"mean": 0.40993113162853434, "sample_sd": 0.027061333778833508},
+        "paired_delta": {"mean": 0.05446682486715158, "sample_sd": 0.031174673590688592, "positive_pairs": 24, "positive_training_seeds_after_episode_mean": 5}
+      },
+      "accuracy": {
+        "dynamic_erm": {"mean": 0.3580952380952381, "sample_sd": 0.02730820661148496},
+        "js_consistency": {"mean": 0.4148917748917749, "sample_sd": 0.025232315145044034},
+        "paired_delta": {"mean": 0.0567965367965368, "sample_sd": 0.03089809465636274, "positive_pairs": 23, "positive_training_seeds_after_episode_mean": 5}
+      }
+    }
+  },
+  "macro_f1_positive_pairs_total": 68
+}

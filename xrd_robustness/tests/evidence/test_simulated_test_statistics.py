@@ -4,6 +4,7 @@ import unittest
 
 from xrd_robustness.evaluation.statistics import (
     build_paired_statistics_report,
+    class_stratified_paired_bootstrap,
     hierarchical_paired_bootstrap,
     interpret_single_contrast,
     validate_prediction_rows,
@@ -11,6 +12,68 @@ from xrd_robustness.evaluation.statistics import (
 
 
 class PairedStatisticsTests(unittest.TestCase):
+    def test_class_stratified_bootstrap_uses_one_shared_parent_draw(self) -> None:
+        rows = []
+        for seed in (11, 23):
+            for parent in range(20):
+                label = parent % 2
+                prediction = label if parent % 5 else 1 - label
+                for method in ("baseline", "focus"):
+                    rows.append(
+                        {
+                            "seed": seed,
+                            "method_id": method,
+                            "parent_structure_id": f"p{parent}",
+                            "label": label,
+                            "prediction": prediction,
+                        }
+                    )
+
+        result = class_stratified_paired_bootstrap(
+            rows,
+            focus_method_id="focus",
+            comparator_method_id="baseline",
+            num_classes=2,
+            replicates=300,
+            random_seed=7,
+        )
+
+        self.assertEqual(result["class_stratified_bootstrap_95_ci"], [0.0, 0.0])
+        self.assertTrue(result["parent_resampling_shared_across_methods_and_seeds"])
+
+    def test_class_stratified_bootstrap_shares_parent_draw_across_seeds(self) -> None:
+        rows = []
+        for seed in (11, 23):
+            for parent in range(20):
+                label = parent % 2
+                degraded = 1 - label if parent % 5 == 0 else label
+                predictions = (
+                    {"baseline": degraded, "focus": label}
+                    if seed == 11
+                    else {"baseline": label, "focus": degraded}
+                )
+                for method, prediction in predictions.items():
+                    rows.append(
+                        {
+                            "seed": seed,
+                            "method_id": method,
+                            "parent_structure_id": f"p{parent}",
+                            "label": label,
+                            "prediction": prediction,
+                        }
+                    )
+
+        result = class_stratified_paired_bootstrap(
+            rows,
+            focus_method_id="focus",
+            comparator_method_id="baseline",
+            num_classes=2,
+            replicates=300,
+            random_seed=7,
+        )
+
+        self.assertEqual(result["class_stratified_bootstrap_95_ci"], [0.0, 0.0])
+
     def test_parent_structure_bootstrap_detects_paired_improvement(self) -> None:
         rows = []
         for seed in (17, 29, 43):

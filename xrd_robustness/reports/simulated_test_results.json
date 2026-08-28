@@ -1,7 +1,18 @@
 {
-  "schema_version": "v9-public-simulated-test-results-v1",
+  "schema_version": "v9-public-simulated-test-results-v2",
   "status": "completed",
   "scope": "five_seed_paired_simulated_test",
+  "reporting_extension": {
+    "added": "2026-08-28",
+    "purpose": "add community-standard single-factor OOD accuracy without changing frozen raw outputs",
+    "source_raw_results": "outputs/simulated_test_v1/raw_results.json",
+    "source_raw_results_sha256": "18F42848476519E4BCDCC0E07799FA974D694316C3A97638490B05266E1686D3",
+    "tracked_cross_check": "outputs/calibration_analysis/simulated_paired.csv",
+    "tracked_cross_check_sha256": "37B28B0897F8F2804A264966A89F9E010AAC72B6629B2545A67F4A062DDAC681",
+    "tracked_cross_check_hash_definition": "SHA-256 after normalizing CRLF and CR line endings to LF, matching the tracked Git blob across platforms",
+    "aggregation": "within each training seed, mean over six frozen single-factor profiles and three evaluation seeds; then summarize five matched training seeds",
+    "sd_definition": "sample standard deviation (ddof=1)"
+  },
   "model": "ResNet-18-GN",
   "paired_seed_count": 5,
   "paired_runs": [
@@ -11,12 +22,14 @@
         "level0_macro_f1": 0.6969800325643246,
         "in_range_macro_f1": 0.700020170267336,
         "mean_single_factor_ood_macro_f1": 0.6390289738183859,
+        "mean_single_factor_ood_accuracy": 0.6395869553764291,
         "worst_class_f1": 0.5052510617561263
       },
       "js_consistency": {
         "level0_macro_f1": 0.7236251275752741,
         "in_range_macro_f1": 0.7208032653950155,
         "mean_single_factor_ood_macro_f1": 0.693876991053726,
+        "mean_single_factor_ood_accuracy": 0.6939571150097467,
         "worst_class_f1": 0.561919978420441
       }
     },
@@ -26,12 +39,14 @@
         "level0_macro_f1": 0.7057091243072119,
         "in_range_macro_f1": 0.6979007443447411,
         "mean_single_factor_ood_macro_f1": 0.6553344693123498,
+        "mean_single_factor_ood_accuracy": 0.6545756282598387,
         "worst_class_f1": 0.5214515021703517
       },
       "js_consistency": {
         "level0_macro_f1": 0.7440255013690787,
         "in_range_macro_f1": 0.7406998622807889,
         "mean_single_factor_ood_macro_f1": 0.7167350510714009,
+        "mean_single_factor_ood_accuracy": 0.7155049786628733,
         "worst_class_f1": 0.5751263351849648
       }
     },
@@ -41,12 +56,14 @@
         "level0_macro_f1": 0.7032066892868208,
         "in_range_macro_f1": 0.6987246661764707,
         "mean_single_factor_ood_macro_f1": 0.6576775722233105,
+        "mean_single_factor_ood_accuracy": 0.6582898688161847,
         "worst_class_f1": 0.527902711841729
       },
       "js_consistency": {
         "level0_macro_f1": 0.7461428532235187,
         "in_range_macro_f1": 0.7453190231451431,
         "mean_single_factor_ood_macro_f1": 0.7075365341900337,
+        "mean_single_factor_ood_accuracy": 0.7076550234444973,
         "worst_class_f1": 0.5710991482534565
       }
     },
@@ -56,12 +73,14 @@
         "level0_macro_f1": 0.6940534212766636,
         "in_range_macro_f1": 0.6909071471207997,
         "mean_single_factor_ood_macro_f1": 0.6516668147748125,
+        "mean_single_factor_ood_accuracy": 0.645856382698488,
         "worst_class_f1": 0.5114424376436928
       },
       "js_consistency": {
         "level0_macro_f1": 0.727892090434164,
         "in_range_macro_f1": 0.7258392297543113,
         "mean_single_factor_ood_macro_f1": 0.6967439318934591,
+        "mean_single_factor_ood_accuracy": 0.6993572519888309,
         "worst_class_f1": 0.5169736146178031
       }
     },
@@ -71,12 +90,14 @@
         "level0_macro_f1": 0.6864484135876925,
         "in_range_macro_f1": 0.6887803430908924,
         "mean_single_factor_ood_macro_f1": 0.6499750544803157,
+        "mean_single_factor_ood_accuracy": 0.6556029713924452,
         "worst_class_f1": 0.48927073617267763
       },
       "js_consistency": {
         "level0_macro_f1": 0.744110633156908,
         "in_range_macro_f1": 0.7416091773874349,
         "mean_single_factor_ood_macro_f1": 0.7117878924947072,
+        "mean_single_factor_ood_accuracy": 0.7097097097097098,
         "worst_class_f1": 0.5676732826083216
       }
     }
@@ -94,6 +115,10 @@
       "mean_single_factor_ood_macro_f1": {
         "mean": 0.650736576921835,
         "sample_sd": 0.007208176945833817
+      },
+      "mean_single_factor_ood_accuracy": {
+        "mean": 0.6507823613086772,
+        "sample_sd": 0.007803720330291812
       },
       "worst_class_f1": {
         "mean": 0.5110636899169155,
@@ -113,6 +138,10 @@
       "mean_single_factor_ood_macro_f1": {
         "mean": 0.7053360801406654,
         "sample_sd": 0.00976652641883598
+      },
+      "mean_single_factor_ood_accuracy": {
+        "mean": 0.7052368157631316,
+        "sample_sd": 0.008559944468937371
       },
       "worst_class_f1": {
         "mean": 0.5585584718169974,
@@ -138,6 +167,11 @@
         0.04894403508121596,
         0.060254971356445065
       ],
+      "positive_pairs": 5
+    },
+    "mean_single_factor_ood_accuracy": {
+      "mean": 0.054454454454454446,
+      "sample_sd": 0.004149174226862904,
       "positive_pairs": 5
     },
     "worst_class_f1": {

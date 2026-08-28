@@ -1,0 +1,134 @@
+{
+  "schema_version": "cnrs318-zero-shot-run-record-v1",
+  "status": "completed",
+  "executed_at_utc": "2026-08-26T18:08:40Z",
+  "recorded_at": "2026-08-28",
+  "dataset_id": "opxrd_v11_cnrs318",
+  "domain_role": "naturally_imbalanced_independent_experimental_domain",
+  "analysis_role": "zero_shot_external_evaluation",
+  "cnrs_labels_used_for_adaptation_or_selection": false,
+  "n_parents": 318,
+  "n_checkpoints": 10,
+  "n_prediction_rows": 3180,
+  "class_order": [
+    "triclinic",
+    "monoclinic",
+    "orthorhombic",
+    "tetragonal",
+    "trigonal",
+    "hexagonal",
+    "cubic"
+  ],
+  "class_counts": {
+    "triclinic": 21,
+    "monoclinic": 87,
+    "orthorhombic": 77,
+    "tetragonal": 41,
+    "trigonal": 33,
+    "hexagonal": 12,
+    "cubic": 47
+  },
+  "frozen_identity": {
+    "config": {
+      "path": "configs/real.cnrs318.zero_shot.frozen.json",
+      "sha256": "06442F2BCAFAB533BCDB5CDA815F7D0C9A94A14C074471FA8E37B748D0C4E217"
+    },
+    "eval_manifest": {
+      "path": "manifests/cnrs318_eval_manifest.csv",
+      "sha256": "373DDD5FDC9FE5BB879D242C58CDB4969D50FA69AB009383AA6C96416A6A2A98"
+    },
+    "lightweight_parent_manifest": {
+      "path": "manifests/cnrs_318_parent_manifest_v2.csv",
+      "sha256": "8E2B4A61C459D440BEFDB18A793E1B413BDD9D253637B99F66AE61C448BD465D"
+    },
+    "full_local_parent_candidates": {
+      "path": "data/real_xrd/opxrd_cnrs7cs/cnrs_7cs_final_parent_candidates.csv",
+      "sha256": "20CCF2E7034AA4B66D46311C2607137E01493F7FAB89A20DF987C2E116AA7588"
+    }
+  },
+  "local_run_artifacts": {
+    "inputs": {
+      "path": "outputs/cnrs318_zero_shot/cnrs318_inputs.npz",
+      "sha256": "980965E95E8A4CFC9020CB1C64976E0B4E95735A7DEFD990407863161C45D7C6",
+      "shape": [318, 3501],
+      "dtype": "float32"
+    },
+    "predictions": {
+      "path": "outputs/cnrs318_zero_shot/predictions.ndjson",
+      "sha256": "DE9AE0A3A7C60D84AD8F4DD1083A00811A5A387BD68F3DE49DAF60B81B09A160",
+      "rows": 3180
+    },
+    "audit_summary": {
+      "path": "outputs/cnrs318_zero_shot/audit/summary.json",
+      "tracked": false
+    }
+  },
+  "integrity_audit": {
+    "status": "PASS",
+    "raw_spectra_rebuilt": 318,
+    "raw_to_frozen_input_maximum_absolute_error": 0.0,
+    "unique_prediction_identities": 3180,
+    "manifest_preprocessing_order_match": true,
+    "prediction_manifest_metadata_match": true,
+    "probability_argmax_and_confidence_match": true,
+    "checkpoint_hashes_verified_against_frozen_config": 10
+  },
+  "primary_result": {
+    "metric": "mean_seed_paired_macro_f1_delta_js_minus_erm",
+    "value": 0.018713073457056785,
+    "positive_seed_pairs": 5,
+    "total_seed_pairs": 5,
+    "per_seed": [
+      {"seed": 20260711, "erm": 0.20672340362415262, "js": 0.22124424888283936, "delta": 0.014520845258686743},
+      {"seed": 20260712, "erm": 0.1469314460190874, "js": 0.1755637530229103, "delta": 0.02863230700382291},
+      {"seed": 20260713, "erm": 0.18417607177334316, "js": 0.19711925267400357, "delta": 0.012943180900660406},
+      {"seed": 20260714, "erm": 0.21486615744219506, "js": 0.22952607812014655, "delta": 0.014659920677951493},
+      {"seed": 20260715, "erm": 0.18916044565915469, "js": 0.21196955910331705, "delta": 0.022809113444162366}
+    ],
+    "bootstrap": {
+      "design": "class_stratified_paired_parent_shared_across_methods_and_fixed_registered_seeds_then_mean",
+      "replicates": 10000,
+      "random_seed": 20260827,
+      "ci_95": [-0.009339083508940738, 0.04610714546350477]
+    },
+    "interpretation": "directional_support_not_stable_replication"
+  },
+  "descriptive_pooled_metrics": {
+    "dynamic_erm": {
+      "macro_f1": 0.1911761931899363,
+      "balanced_accuracy": 0.21822494931017583,
+      "accuracy": 0.2,
+      "ece": 0.6825702260312794,
+      "nll": 8.3199878403929,
+      "brier": 1.433840876340878
+    },
+    "js_consistency": {
+      "macro_f1": 0.20911911879717107,
+      "balanced_accuracy": 0.23877675131199716,
+      "accuracy": 0.21006289308176102,
+      "ece": 0.6124200799180277,
+      "nll": 6.118565560591459,
+      "brier": 1.3156058374319188
+    }
+  },
+  "limitations": [
+    "Structure-derived labels were not independently verified by manual spectrum-level phase analysis.",
+    "CNRS-318 is naturally imbalanced and hexagonal has only 12 parents.",
+    "Overall accuracy remains below the majority-class baseline.",
+    "Two frozen inputs retain negative intensities because clipping was not part of the frozen preprocessing.",
+    "The original prediction report did not embed the input NPZ hash, resolved device, or Git commit.",
+    "The current input and prediction hashes were bound post hoc by the integrity audit; they are not original runtime provenance."
+  ],
+  "audit_code": {
+    "analysis_entry_point": "scripts/analyze_cnrs318_results.py",
+    "analysis_entry_point_sha256": "35FE33B47593972E63B0B6388C0B10C7D477EF089CC955611156095F3D7D0C78",
+    "statistics_module": "src/xrd_robustness/evaluation/statistics.py",
+    "statistics_module_sha256": "E1D884682197F3F7FEA1D47EAE4BC613D7D102E8CD3160710C782D48F9A332B4",
+    "report_artifact_entry_point": "scripts/build_cnrs318_audit_artifact.py",
+    "report_artifact_entry_point_sha256": "F1DAFEE09F06279699FACE31D557195D48945E4BB8F3AD8BD94CA2A530025F11",
+    "future_inference_entry_point": "scripts/run_cnrs318_zero_shot.py",
+    "future_inference_entry_point_sha256": "9CE33A2DE1E86E3AD96135F25E62C26D0E752F92886111FDBF862002F0D66D62",
+    "audit_git_head": "27fd4b69ecd813593df5940293ed7e664fa4b3af",
+    "audit_worktree_was_dirty": true
+  }
+}

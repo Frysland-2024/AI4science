@@ -44,6 +44,13 @@ def test_window_coverage_is_strict_unless_tolerance_is_explicit() -> None:
     assert AUDIT.covers_window(10.0006, 79.999, 10.0, 80.0, tolerance=0.01)
 
 
+def test_manual_review_sample_is_opt_in() -> None:
+    args = AUDIT.parse_args(
+        ["--source-root", "source", "--output-root", "output"]
+    )
+    assert args.write_manual_sample is False
+
+
 def test_spectrum_representative_is_selected_within_eligibility_stratum() -> None:
     rows = [
         {
