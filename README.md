@@ -4,6 +4,8 @@
 
 > 状态（2026-08-28）：模拟结果、RRUFF-301 few-shot 与 CNRS-318 zero-shot 已完成；当前在做论文、图表与成果封装。
 
+> **五类扰动的物理/文献依据已经做过，不是新的 TODO。** 当前主线的显式证据索引见 [`docs/PXRD_PERTURBATION_EVIDENCE.md`](docs/PXRD_PERTURBATION_EVIDENCE.md)：其中集中列出峰位偏移、展宽、择优取向、背景、噪声的最终冻结范围、代表性文献锚点和历史详细证据表入口。后续写 Methods、PPT 或答辩时应先读该文件，不要重新把“扰动真实性调查”当成未完成任务。
+
 ## 一眼看懂这个项目
 
 ```text
@@ -39,6 +41,7 @@ Dynamic JS：共同标签 + 预测一致性
 | 文件 | 用途 |
 |---|---|
 | [`docs/CURRENT_STATE.md`](docs/CURRENT_STATE.md) | 项目现状、进度和下一步 |
+| [`docs/PXRD_PERTURBATION_EVIDENCE.md`](docs/PXRD_PERTURBATION_EVIDENCE.md) | **五类扰动的物理/文献依据、最终冻结范围与历史详细证据入口** |
 | [`docs/PXRD_RESULT_REPORTING_STANDARD.md`](docs/PXRD_RESULT_REPORTING_STANDARD.md) | 当前三层评价体系与各域默认汇报模板 |
 | [`docs/GRADUATE_RESEARCH_DIRECTION.md`](docs/GRADUATE_RESEARCH_DIRECTION.md) | 申请叙事、研究方向框架、方向地图与日本导师检索关键词 |
 | [`docs/NEXT_PROJECT_XRD_QUANTITATIVE_INVERSION.md`](docs/NEXT_PROJECT_XRD_QUANTITATIVE_INVERSION.md) | 下一代定量反演计划及论文、代码、数据资源附录 |
@@ -53,7 +56,7 @@ Dynamic JS：共同标签 + 预测一致性
 | [`xrd_robustness/reports/simulated_test_results.json`](xrd_robustness/reports/simulated_test_results.json) | 测试集结果（JSON） |
 | [`xrd_robustness/reports/rruff301_fewshot_results.json`](xrd_robustness/reports/rruff301_fewshot_results.json) | RRUFF-301 few-shot 机器可读汇总 |
 
-建议先读 `CURRENT_STATE.md` 和 `RESULTS.md`；只有追溯旧判断、失败实验或方法转变时才查 `PROJECT_HISTORY.md`。当前科学说法以当前状态、评价规范和结果文件为准，历史档案不覆盖当前结论。
+建议先读 `CURRENT_STATE.md`、`PXRD_PERTURBATION_EVIDENCE.md` 和 `RESULTS.md`；只有追溯旧判断、失败实验或方法转变时才查 `PROJECT_HISTORY.md`。当前科学说法以当前状态、评价规范、扰动证据索引和结果文件为准，历史档案不覆盖当前结论。
 
 ## 快速验证
 
