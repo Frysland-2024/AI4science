@@ -2,9 +2,11 @@
 
 这个仓库主要做 XRD 鲁棒性研究，代码在 [`xrd_robustness/`](xrd_robustness/)。核心想法是：在线 PXRD 模拟器知道哪些谱图来自同一个母体结构，把这个关系变成一种监督信号，让七晶系分类器在测量条件变化时更稳。
 
-> 状态（2026-08-28）：模拟结果、RRUFF-301 few-shot 与 CNRS-318 zero-shot 已完成；当前在做论文、图表与成果封装。
+> 状态（2026-08-29）：模拟结果、RRUFF-301 few-shot 与 CNRS-318 zero-shot 已完成；当前在做论文、图表与成果封装。
 
-> **五类扰动的物理/文献依据已经做过，不是新的 TODO。** 当前主线的显式证据索引见 [`docs/PXRD_PERTURBATION_EVIDENCE.md`](docs/PXRD_PERTURBATION_EVIDENCE.md)：其中集中列出峰位偏移、展宽、择优取向、背景、噪声的最终冻结范围、代表性文献锚点和历史详细证据表入口。后续写 Methods、PPT 或答辩时应先读该文件，不要重新把“扰动真实性调查”当成未完成任务。
+> **本轮两个证据问题已经结案。** 五类扰动的物理/文献依据已经完成系统核验；RRUFF-301 composition audit 也确认 adaptation/test 之间无 RRUFF ID 或相同谱图重合，16,170 个跨 split 谱图对中无 Pearson ≥ 0.95。结案结果与当前方法新颖性 framing 统一见 [`docs/PXRD_EVIDENCE_CLOSURE.md`](docs/PXRD_EVIDENCE_CLOSURE.md)。
+
+> **当前最重要的写作任务不是补实验或加算法，而是把方法贡献讲清楚：**传统 online simulator 主要是 `data generator`；本项目进一步利用 simulator-retained parent identity，把同一晶体的不同测量 realization 定义为 measurement-equivalent views，从而让 simulator 同时成为 **data generator + relationship supervisor**。
 
 ## 一眼看懂这个项目
 
@@ -13,8 +15,12 @@
       ↓ 在线物理扰动
 两份不同测量条件下的 PXRD 谱图
       ↓
+shared parent identity
+      ↓
+measurement equivalence
+      ↓
 Dynamic ERM：只使用共同晶系标签
-Dynamic JS：共同标签 + 预测一致性
+Dynamic JS：共同标签 + measurement-equivalence consistency
       ↓
 更稳定的分布外泛化
 ```
@@ -41,7 +47,8 @@ Dynamic JS：共同标签 + 预测一致性
 | 文件 | 用途 |
 |---|---|
 | [`docs/CURRENT_STATE.md`](docs/CURRENT_STATE.md) | 项目现状、进度和下一步 |
-| [`docs/PXRD_PERTURBATION_EVIDENCE.md`](docs/PXRD_PERTURBATION_EVIDENCE.md) | **五类扰动的物理/文献依据、最终冻结范围与历史详细证据入口** |
+| [`docs/PXRD_EVIDENCE_CLOSURE.md`](docs/PXRD_EVIDENCE_CLOSURE.md) | **本轮两个证据问题的结案结果 + measurement-equivalence / relationship-supervision 新颖性 framing** |
+| [`docs/PXRD_PERTURBATION_EVIDENCE.md`](docs/PXRD_PERTURBATION_EVIDENCE.md) | 五类扰动的物理/文献依据、最终冻结范围与历史详细证据入口 |
 | [`docs/PXRD_RESULT_REPORTING_STANDARD.md`](docs/PXRD_RESULT_REPORTING_STANDARD.md) | 当前三层评价体系与各域默认汇报模板 |
 | [`docs/GRADUATE_RESEARCH_DIRECTION.md`](docs/GRADUATE_RESEARCH_DIRECTION.md) | 申请叙事、研究方向框架、方向地图与日本导师检索关键词 |
 | [`docs/NEXT_PROJECT_XRD_QUANTITATIVE_INVERSION.md`](docs/NEXT_PROJECT_XRD_QUANTITATIVE_INVERSION.md) | 下一代定量反演计划及论文、代码、数据资源附录 |
@@ -49,6 +56,7 @@ Dynamic JS：共同标签 + 预测一致性
 | [`docs/PROJECT_HISTORY_NOTE_2026-08-27_CNRS_RECLASSIFICATION.md`](docs/PROJECT_HISTORY_NOTE_2026-08-27_CNRS_RECLASSIFICATION.md) | 冻结 CNRS 协议所链接的独立历史节点 |
 | [`xrd_robustness/README.md`](xrd_robustness/README.md) | 安装、代码结构与结果/证据索引 |
 | [`xrd_robustness/MANUSCRIPT.md`](xrd_robustness/MANUSCRIPT.md) | 论文正文框架 |
+| [`xrd_robustness/reports/RRUFF301_COMPOSITION_AUDIT.md`](xrd_robustness/reports/RRUFF301_COMPOSITION_AUDIT.md) | RRUFF-301 adaptation/test 的只读组成与近重复谱检查 |
 | [`xrd_robustness/reports/RESULTS.md`](xrd_robustness/reports/RESULTS.md) | 结果汇总 |
 | [`xrd_robustness/reports/CNRS_318_RESULTS.md`](xrd_robustness/reports/CNRS_318_RESULTS.md) | CNRS-318 zero-shot 结果、完整性审计与修正后的 paired bootstrap |
 | [`xrd_robustness/reports/CALIBRATION_ANALYSIS.md`](xrd_robustness/reports/CALIBRATION_ANALYSIS.md) | 模拟 Test 与 CNRS 概率可靠性分析 |
@@ -56,7 +64,7 @@ Dynamic JS：共同标签 + 预测一致性
 | [`xrd_robustness/reports/simulated_test_results.json`](xrd_robustness/reports/simulated_test_results.json) | 测试集结果（JSON） |
 | [`xrd_robustness/reports/rruff301_fewshot_results.json`](xrd_robustness/reports/rruff301_fewshot_results.json) | RRUFF-301 few-shot 机器可读汇总 |
 
-建议先读 `CURRENT_STATE.md`、`PXRD_PERTURBATION_EVIDENCE.md` 和 `RESULTS.md`；只有追溯旧判断、失败实验或方法转变时才查 `PROJECT_HISTORY.md`。当前科学说法以当前状态、评价规范、扰动证据索引和结果文件为准，历史档案不覆盖当前结论。
+建议先读 `CURRENT_STATE.md`、`PXRD_EVIDENCE_CLOSURE.md` 和 `RESULTS.md`；需要扰动参数依据时再看 `PXRD_PERTURBATION_EVIDENCE.md`，只有追溯旧判断、失败实验或方法转变时才查 `PROJECT_HISTORY.md`。当前科学说法以当前状态、结案文档、评价规范和结果文件为准，历史档案不覆盖当前结论。
 
 ## 快速验证
 
