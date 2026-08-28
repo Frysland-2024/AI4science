@@ -8,9 +8,9 @@
 | 问题 | 状态 | 最终结论 |
 |---|---|---|
 | 1. Related Work / 新颖性边界 | **CLOSED** | 本地证据足以支持“online simulation、consistency 本身都有前例；本项目贡献是利用 simulator-retained parent identity 做 measurement-equivalence / relationship supervision”的当前说法；**不做 world-first 声明** |
-| 2. Dynamic ERM 与 Dynamic JS 是否是公平、同条件的对照 | **CLOSED** | 两者共享母体结构、双视图生成器、扰动分布、骨干网络、训练流程和配对 seed；classification loss 相同，JS 唯一新增的是 same-parent 两个预测之间的 JS consistency |
+| 2. Dynamic ERM 与 Dynamic JS 是否是在真正相同的训练条件下比较 | **CLOSED** | 两者共享母体结构、在线双视图生成器、扰动分布、骨干网络、优化设置、训练预算和配对 seed；classification loss 完全相同，JS 唯一新增的是同一母体两份预测之间的 consistency term |
 | 3. formal_14060 数据集如何构建、如何避免 parent leakage | **CLOSED** | 14,060 个 Materials Project 结构来自已审计结构层的确定性合并；当前最终划分以 `structure_fingerprint` 为 parent identity，按晶系分层做 70/15/15，得到 9,842 / 2,109 / 2,109，并在生成任何扰动谱之前完成 parent-level split |
-| 4. 为什么 same-parent 的两张不同谱可以作为 measurement-equivalent pair | **CLOSED** | measurement equivalence 不是“谱图相同”，而是“同一母体结构在不同测量/样品状态下的不同观测，在七晶系分类任务中仍共享同一任务标签”；当前 pair generator 正是同一 structure/material_id、不同 view state |
+| 4. 五类扰动是否只改变观测谱，而没有把 structure A 变成 structure B | **CLOSED** | 是。代码先由固定 parent structure 计算 ideal peak table，后续扰动只作用于峰位坐标、峰宽、相对峰强、背景和噪声；不重写母体原子结构、晶格或 crystal-system label。因此 structure A 经扰动后仍是 structure A 的另一种测量 realization |
 | 5. `lambda_js=60` 是怎么选出来的 | **CLOSED** | 先用 Train-only 梯度尺度把候选固定为 `[3,30,60]`，再仅用 Validation 按预先定义的 OOD + in-range 规则选择 60；选择时没有使用 simulated Test、RRUFF 或 CNRS，之后不再 retune |
 
 > 五项都已经有本地证据，可以结案。当前剩下的是把这些已结案事实写进 Methods、Related Work、PPT 和申请叙事，而不是再补实验。
@@ -66,15 +66,17 @@ KBSS 思想吸收笔记则明确记录：KBSS 提供的是“同一对象不同�
 
 ---
 
-## 2. Dynamic ERM 与 Dynamic JS 的对照是否真正公平：CLOSED
+## 2. Dynamic ERM 与 Dynamic JS 是否是在真正相同的条件下比较：CLOSED
 
 ### 2.1 问题要怎样讲清楚
 
-当我们说“JS 的提升来自 relationship supervision”时，前提是 **Dynamic ERM 和 Dynamic JS 必须真正在同一组训练条件下比较**。
+当我们说“JS 的提升来自 relationship supervision”时，首先要排除一种很普通的混淆：**会不会其实是 JS 那组看了更多数据、用了更强的扰动、换了模型或训练预算，所以分数才更高？**
 
-需要核实的不是它们是不是用了同一个模型名字，而是：
+因此这个问题真正要核实的是：
 
-> **两种方法是否使用同一批母体结构、同一套在线双视图生成方式、同一扰动分布、同样的骨干网络、优化器、训练预算和配对随机种子？如果 JS 额外看了更多数据、用了更强增强，或者换了训练条件，那么性能差异就不能归因于 same-parent relationship supervision。只有在其他条件保持一致、唯一新增项是“这两张谱来自同一母体，因此预测应保持一致”时，这个对照才真正回答我们的方法问题。**
+> **Dynamic ERM 和 Dynamic JS 是否使用同一批母体结构、同一套在线双视图生成方式、同一扰动分布、同样的骨干网络、优化器、训练预算和配对随机种子；并且在这些条件都相同的情况下，JS 唯一多出来的东西是否只是“这两张谱来自同一母体，因此两份预测应保持一致”的关系约束。**
+
+如果这一点成立，那么两组实验的性能差异才可以主要解释为：**显式利用 same-parent relationship 是否有价值。**
 
 ### 2.2 当前代码给出的直接答案
 
@@ -116,7 +118,7 @@ V9 历史的 four-run 方案则更早就把 scientific question 写成：在 fro
 
 因此当前可以合理地把 ERM vs JS 的核心差异解释为：
 
-> **是否显式利用 simulator 已知的 same-parent measurement relationship。**
+> **两组看到的是同样的数据与同样的测量扰动；JS 额外利用了 simulator 已知的 same-parent relationship。**
 
 这不是因为 JS 看了更多谱，也不是因为 JS 使用了更强的 augmentation。
 
@@ -203,76 +205,119 @@ V9 历史的 four-run 方案则更早就把 scientific question 写成：在 fro
 
 ---
 
-## 4. 为什么 same-parent 的两张不同谱可以作为 measurement-equivalent pair：CLOSED
+## 4. 五类扰动是否只改变观测谱，而没有把 structure A 变成 structure B：CLOSED
 
 ### 4.1 问题要怎样讲清楚
 
-同一晶体在不同测量条件、样品状态和随机噪声下得到的 PXRD 谱，当然可以长得很不一样。于是最自然的问题是：
+这是 measurement-equivalence 能不能成立的物理前提。
 
-> **既然两张谱并不相同，为什么还可以要求模型对它们给出一致的晶系判断？**
+我们真正要确认的是：
 
-这里需要说明的不是“这两张谱在物理上完全一样”，而是：
+> **从一个固定的母体晶体结构 A 出发，施加峰位偏移、峰展宽、择优取向、背景和噪声以后，得到的是否仍然只是“structure A 在另一种测量/样品条件下的 PXRD 观测”；还是说模拟器实际上修改了晶格或原子坐标，把 structure A 变成了另一个 structure B。**
 
-> **它们是否仍然是同一个母体晶体结构的不同测量实现，并且这些变化是否不改变当前任务要预测的七晶系标签。**
+只有前一种情况成立，同一 parent 的两张谱才天然共享同一个七晶系标签。
 
-如果答案是肯定的，那么所谓 measurement equivalence 就是**任务层面的等价关系**：信号可以不同、测量状态可以不同，但它们对应同一个 latent physical object，而且任务标签保持不变。
+也就是说，我们要验证的是：
 
-### 4.2 代码里这个关系是怎样生成的
+```text
+structure A
+    ↓ diffraction
+ideal PXRD of A
+    ↓ measurement/sample perturbation
+perturbed PXRD of A
+```
 
-当前 `online_views.py` 对一个 parent structure `s` 生成 pair 时：
+而不是：
 
-- 两个 view 使用同一个 `structure`；
+```text
+structure A
+    ↓ structural modification
+structure B
+    ↓ diffraction
+PXRD of B
+```
+
+### 4.2 当前 simulator 的实际执行顺序
+
+当前 `simulator.py` 先调用 `ideal_peak_table(structure, grid)`，由**传入的固定 structure** 计算理想 Bragg peak table，包括 peak positions、intensities、hkl、multiplicity 与 reciprocal-vector metadata。
+
+随后 `simulate_from_peak_table(...)` 接收的是已经生成好的 peak table / peak arrays，并在观测层进行扰动：
+
+- **peak shift**：对全部 `2θ` positions 加一个统一 `delta_2theta_deg`；代码明确把它解释为 instrument zero offset；
+- **broadening**：使用 `fwhm_deg` 把同一组 peak positions / intensities 渲染成不同峰宽；
+- **preferred orientation**：在 reflection table 上改变相对反射强度；
+- **background**：向已经生成的 diffraction signal 叠加平滑背景；
+- **noise**：向 signal 加入 Gaussian / Poisson-count / electronic readout noise。
+
+在这些步骤里，没有把新的 atomic coordinates、lattice parameters 或新的 `structure` 对象写回 simulator，也没有重新计算一个不同结构的 crystal-system label。
+
+因此代码层面实际是：
+
+```text
+s = fixed parent structure
+P(s) = ideal peak table of s
+x1 = T_m1(P(s))
+x2 = T_m2(P(s))
+```
+
+而不是：
+
+```text
+s1 = A
+s2 = structural_transform(A) = B
+x1 = diffraction(A)
+x2 = diffraction(B)
+```
+
+### 4.3 pair generator 也保持同一个 parent
+
+当前 `online_views.py` 对一个 parent 生成 pair 时：
+
+- 两个 view 使用同一个 `structure` 或同一个 cached `PeakTable`；
 - 使用同一个 `material_id`；
-- 使用同一个 parent 的 ideal peak table；
-- view 1 与 view 2 使用不同 `view_id`，从而得到不同的 sampled measurement state。
+- 只是 `view_id=1/2` 和对应 sampled measurement state 不同。
 
-可以写成：
+所以可以写成：
 
 ```text
 x1 = g(s, m1)
 x2 = g(s, m2)
 ```
 
-其中 `s` 没变，变化的是 measurement/sample state `m`。
+其中 `s` 始终是同一个 parent，变化的是 measurement/sample state `m`。
 
-### 4.3 为什么五类扰动与七晶系标签兼容
+### 4.4 这和“谱图完全一样”不是一回事
 
-当前五类扰动分别模拟：
+结论不是：
 
-- 全谱峰位 offset：零点、样品高度或标定型角度偏移；
-- 峰展宽：有限晶粒、微应变、仪器展宽等造成的有效峰宽变化；
-- 择优取向：样品取向/织构造成相对峰强变化；
-- 背景：样品、环境和仪器相关的平滑背景；
-- Poisson-Gaussian noise：计数与电子读出噪声。
+```text
+x1 == x2
+```
 
-这些 operator 在当前 simulator 中作用于**同一 parent 的观测生成过程**，不会把 parent structure 本身换成另一个晶体，也不会重写其 crystal-system label。
-
-因此，对七晶系分类这个任务，合理关系是：
+而是：
 
 ```text
 parent(x1) = parent(x2) = s
 crystal_system(x1) = crystal_system(x2) = h(s)
 ```
 
-而不是：
+因此，**structure A 仍然是 structure A，但它的观测谱可以因为测量和样品状态而显著变化。**
 
-```text
-x1 == x2
-```
+这就是当前项目里 measurement equivalence 的准确含义：
 
-### 4.4 为什么用 prediction-level consistency，而不是强迫内部特征完全相同
+> **structure-preserving / label-preserving measurement variation**，而不是 signal identity。
 
-这个定义还解释了为什么当前采用的是 output-level JS，而不是要求所有 feature 完全一致。
+### 4.5 为什么用 prediction-level consistency，而不是强迫内部特征完全相同
 
 峰移、展宽、texture、background 等确实会带来真实的测量差异；内部 representation 可以保留这些差异。当前任务真正需要稳定的是**关于晶系类别的判断**。
 
 所以更准确的约束是：
 
-> 两张谱可以不同，但对同一 parent 的 task-level belief 不应因为 measurement state 改变而任意漂移。
+> 两张谱可以不同，但既然它们仍然来自同一个 structure A，模型对 crystal-system 的 task-level belief 不应因为 measurement state 改变而任意漂移。
 
 这与项目后来放弃强残差解耦、保留 prediction-level JS 的方法收缩也是一致的。
 
-### 4.5 claim 边界
+### 4.6 claim 边界
 
 可以说：
 
@@ -284,9 +329,9 @@ x1 == x2
 - 所有 measurement perturbations 都对所有下游任务保持不变；
 - 模型内部 feature 必须完全 invariant。
 
-### 4.6 状态
+### 4.7 状态
 
-**CLOSED.** same-parent → measurement-equivalence 的任务定义、物理边界和代码实现都有本地证据，不需要新增实验来“证明两张谱相同”。
+**CLOSED.** 当前代码已经直接证明五类 perturbation 在实现上是对固定 parent diffraction representation 的观测层变换，而不是把 structure A 变成 structure B；不需要新增实验来验证这一点。
 
 ---
 
@@ -356,7 +401,7 @@ x1 == x2
 1. **Related Work / contribution boundary：CLOSED。**
 2. **ERM vs JS 公平对照：CLOSED。**
 3. **formal_14060 数据集构建与 parent split：CLOSED。**
-4. **measurement equivalence 的任务定义与物理合理性：CLOSED。**
+4. **五类扰动的 structure-preserving / label-preserving 实现：CLOSED。**
 5. **λ=60 的选择路径：CLOSED。**
 
 这不意味着新颖性 framing 的写作已经完成。**证据问题已经关闭，表达工作仍然是当前最高优先级。**
