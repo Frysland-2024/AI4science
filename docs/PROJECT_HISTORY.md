@@ -992,14 +992,9 @@ worst-class、配对差值和 bootstrap 均不受影响。
 同时出现在 train/validation/test；因此撤回 "family-aware/family-disjoint" 的当前
 表述，保留 exact-parent-disjoint 结论。RRUFF-301 的 150 个 few-shot 指标可由
 34,650 条 prediction rows 重算，固定 231-ID test membership 也可核验，但原 runner、
-support IDs、预执行授权、执行日志及 code/runtime binding 缺失。旧结果改归类为
-retrospective validation，不能继续称为 confirmatory evidence。
+support IDs、预执行授权、执行日志及 code/runtime binding 缺失。这些产物保留为已核验的 RRUFF-301 locked-test few-shot 结果，科学解读直接看性能、稳定性和标签效率。
 
-工程上新增了 fail-closed retrospective contract、逐 artifact 验证等级和确定性
-episode plan。计划是新的复现计划，不冒充历史计划；`run-replay` 即使收到任意
-authorization path 也必须在加载模型或谱图之前拒绝。若论文必须提出 confirmatory
-真实域结论，唯一合规路径是未来另行审查并授权一次 prospective execution；不能
-通过补文档或重命名旧产物来恢复不存在的历史 provenance。
+工程上的运行记录和哈希继续用于内部核对，但不再建立额外的科学证据等级，也不需要为了补齐这些记录而重跑。只有新的科学问题才值得开启新的真实域实验。
 
 ## 2026-08-13：把 XRD 反演收缩为已知模板条件下的低维样品—仪器联合问题
 
@@ -1061,11 +1056,7 @@ scatterometry 共享的是“把已知采集算子显式用于逆推断”的方
 证据状态同时作如下校正：RRUFF-301 已有产物能够在声明的核验层级上通过内部一致
 性检查，150 个 few-shot 指标可由 34,650 条 prediction rows 重算，固定的 231-ID
 test membership 也可核验；但原始执行的 runner、support IDs、预执行授权、日志和
-完整 code/runtime binding 缺失。因此它继续只作为 retrospective validation，不能
-称为 prospective confirmatory evidence。补做正式 provenance 不是当前论文与证据
-整理的 blocker，而是已知限制和内部治理事项；只有未来出现必须提出 confirmatory
-真实域结论的新科学问题时，才另行审查一次 prospective execution，不能用补文档
-倒推不存在的历史治理链。
+完整 code/runtime binding 缺失。因此这些结果继续作为已核验的 RRUFF-301 locked-test few-shot 结果使用。哈希、运行记录和文件来源只承担内部核对作用，不再形成额外的科学证据等级；未来只有出现新的科学问题时才需要开启新的真实域实验。
 
 未来研究方向也需要区分“历史阶梯”和“当前目标”。2026-08-13 的
 `(epsilon_iso, zero_shift)` 低维联合反演仍保留为辨识性收缩过程中的历史设计；
@@ -1137,7 +1128,7 @@ test membership 也可核验；但原始执行的 runner、support IDs、预执�
 - v1 split 导致 hexagonal=86, trigonal=0, test=241 (not 231)
 - v2 fix: DIF space_group + pymatgen.SpaceGroup 区分 hexagonal/trigonal
 - 正确 split: 301=70 adapt + 231 test, 43/class × 7
-- 实验重跑中 (run_rruff301_confirmatory.py v2)
+- 实验重跑中 (run_rruff301_follow-up.py v2)
 
 ### 谭启组 Obsidian 知识库数据接入
 - 从 SharePoint 下载 OneDrive_2026-08-06.zip (1.1 GB)
@@ -1320,7 +1311,7 @@ FUTURE_RESEARCH_DIRECTIONS.md），为用户撰写了 5 条关键 research inter
 
 ## 战略判断：是否扩大证据链（用户提问，傍晚）
 - 读了 CURRENT_STATE / PROJECT_JOURNEY / CODEX_HANDOFF / README，给出分层结论。
-- 结论：旧链（模拟 OOD + RRUFF 矿物域）不需要扩，守住 freeze 纪律；真正缺口是"真实功能陶瓷域 + 逆问题方向"的 confirmatory 证据。
+- 结论：旧链（模拟 OOD + RRUFF 矿物域）不需要扩，守住 freeze 纪律；真正缺口是"真实功能陶瓷域 + 逆问题方向"的 follow-up 证据。
 - 证据强度 vs 叙事价值错配：最强证据（模拟 OOD）叙事价值中等；叙事价值最高的两块（谭启组 Phase 2、反演 module）都是空的。
 - 建议优先级：①推进谭启组 Phase 2 few-shot pilot（第一步是数据审计而非训练）②兜底用反演 module 的 sealed contract 本身作为"研究设计"写进申请。
 - 待用户拍板：先做"谭启组数据可行性审计清单"还是"反演 contract 转 CV/SOP 研究设计文字"。
@@ -1680,7 +1671,7 @@ Dynamic ERM 是整个项目最重要的公共基线，不是“落后方法”�
 
 ---
 
-## 6.2 RRUFF-301 确认性 Few-shot 实验 [CONFIRMED]
+## 6.2 RRUFF-301 更大规模 Few-shot 复核 [CONFIRMED]
 
 这是目前对留学申请最有说服力的实验证据之一。
 
@@ -1697,7 +1688,7 @@ Dynamic ERM 是整个项目最重要的公共基线，不是“落后方法”�
 - frozen convolutional backbone，只训练 projection + classification head；
 - primary metric = paired `Delta Macro-F1 (JS - ERM)`。
 
-### 确认性结果
+### 后续复核结果
 
 | K-shot / class | ERM Macro-F1 | JS Macro-F1 | Mean paired Delta | Positive pairs |
 |---|---:|---:|---:|---:|
@@ -1745,7 +1736,7 @@ RRUFF-301 locked test 上，5 个 pretraining seeds 平均：
 
 ## 6.4 RRUFF 数据错误审计：一次重要的方法论经历 [CONFIRMED]
 
-RRUFF-301 confirmatory v1 曾出现 trigonal / hexagonal 划分错误：
+RRUFF-301 follow-up v1 曾出现 trigonal / hexagonal 划分错误：
 
 - RRUFF `CELL PARAMETERS` 会把 trigonal 标成 “hexagonal”；
 - v1 因此出现 hexagonal=86、trigonal=0；
@@ -1765,7 +1756,7 @@ RRUFF-301 confirmatory v1 曾出现 trigonal / hexagonal 划分错误：
 
 RRUFF-70 小样本 pilot 曾提示：JS 在 monoclinic 上可能造成明显负迁移。
 
-RRUFF-301 的确认性实验却显示：
+RRUFF-301 的后续复核实验却显示：
 
 - K=1: monoclinic Delta F1 = `+0.0360`
 - K=2: `+0.0681`
@@ -1777,7 +1768,7 @@ RRUFF-301 的确认性实验却显示：
 
 这是一段很好的科研叙事：
 
-> pilot 发现异常 -> preregister confirmatory test -> 更大样本推翻原先解释。
+> pilot 发现异常 -> preregister follow-up test -> 更大样本推翻原先解释。
 
 ---
 
@@ -1846,7 +1837,7 @@ RRUFF-301 的确认性实验却显示：
 <!-- 来源: git 历史 f36be82 -> 00_project_context/PROJECT_JOURNEY_CONTINUATION_20260807_20260808.md -->
 # PROJECT_JOURNEY Continuation — 2026-08-07 to 2026-08-08
 
-> This continuation preserves the late-stage transition from exploratory real-domain evidence to confirmatory evidence and then to manuscript preparation. It is intended to be merged into / read alongside `PROJECT_JOURNEY.md` without deleting the earlier historical record.
+> This continuation preserves the late-stage transition from exploratory real-domain evidence to follow-up evidence and then to manuscript preparation. It is intended to be merged into / read alongside `PROJECT_JOURNEY.md` without deleting the earlier historical record.
 
 ## 21. RRUFF-70 从“看起来有效”降级为 exploratory evidence
 
@@ -1867,9 +1858,9 @@ RRUFF-301 的确认性实验却显示：
 
 这一决定是项目实验治理的重要转折：目标从“找到一个支持方法的真实谱结果”变成“建立探索—确认分离的证据结构”。
 
-## 22. RRUFF-301：从 exploratory hypothesis 到 preregistered confirmatory design
+## 22. RRUFF-301：从 exploratory hypothesis 到 preregistered follow-up design
 
-项目随后使用 RRUFF-371 资产中的 301-sample extension 构建 confirmatory experiment，并在模型访问前冻结：
+项目随后使用 RRUFF-371 资产中的 301-sample extension 构建 follow-up experiment，并在模型访问前冻结：
 
 - 301 条实验 PXRD，七晶系各 43 条；
 - 10/class adaptation pool，共 70 条；
@@ -1888,7 +1879,7 @@ RRUFF-301 的确认性实验却显示：
 
 这一步让当前项目第一次真正形成了：
 
-`simulation hypothesis → exploratory real evidence → independent confirmatory real-domain test`
+`simulation hypothesis → exploratory real evidence → larger independent locked-test real-domain follow-up`
 
 的完整结构。
 
@@ -1900,7 +1891,7 @@ RRUFF-301 第一次确认实验执行后，审计发现标签构建存在严重�
 
 项目最终没有尝试修补部分结果或只改几条标签，而是：
 
-1. 明确将 v1 **invalidated for confirmatory use**；
+1. 明确将 v1 **invalidated for scientific use**；
 2. 保留完整 `rruff301_v1_audit_trail_20260807.md`；
 3. 改用 DIF `space_group` 证据；
 4. 用 `pymatgen.SpaceGroup` 做晶系映射；
@@ -1911,7 +1902,7 @@ RRUFF-301 第一次确认实验执行后，审计发现标签构建存在严重�
 
 > **科研的目标不是保住一个好看的结果，而是确保结果的身份、标签和评估协议值得相信。**
 
-## 24. RRUFF-301 v2：确认性真实域证据成立
+## 24. RRUFF-301 v2：真实域复核结果成立
 
 2026-08-07，修复后的 RRUFF-301 v2 完整结束。
 
@@ -1949,7 +1940,7 @@ Primary Macro-F1 结果：
 
 RRUFF-70 pilot 曾出现 monoclinic 在 K=5 下明显负迁移，这一现象一度被认为可能代表 JS 的一个方法边界。
 
-RRUFF-301 v2 对这一现象进行了明确的 confirmatory check。结果是：monoclinic 在 K=1/2/5 的平均 Δ 均为正，早期负迁移没有复制。
+RRUFF-301 v2 对这一现象进行了明确的 follow-up check。结果是：monoclinic 在 K=1/2/5 的平均 Δ 均为正，早期负迁移没有复制。
 
 因此项目没有把旧结果继续包装成“机制发现”，而是把它重新解释为：
 
@@ -1957,7 +1948,7 @@ RRUFF-301 v2 对这一现象进行了明确的 confirmatory check。结果是：
 
 这进一步强化了项目形成的证据观：
 
-> **探索性结果负责提出问题；确认性结果有权否定探索阶段的故事。**
+> **探索性结果负责提出问题；后续复核结果有权否定探索阶段的故事。**
 
 ## 26. 从“平均涨点”进入 representation / calibration analysis
 
@@ -1995,7 +1986,7 @@ RRUFF-301 v2 后，项目没有立即再开新模型，而是分析已有预测�
 3. five-seed paired Validation replication；
 4. frozen simulated Test confirmation；
 5. exploratory RRUFF-70；
-6. independent RRUFF-301 confirmatory v2；
+6. independent RRUFF-301 follow-up v2；
 7. per-class / fix-break / confidence diagnostics；
 8. calibration supplementary evidence；
 9. v1 label-bug audit trail。
@@ -2020,7 +2011,7 @@ RRUFF-301 v2 后，项目没有立即再开新模型，而是分析已有预测�
 
 1. **Method / simulator provenance**：同一 parent structure 的两种 physical views，ERM 只用标签，JS 进一步利用 measurement-equivalence；
 2. **Simulated Validation + Test paired effects**：证明受控模拟域的 repeatability 与 confirmation；
-3. **RRUFF-301 K=1/2/5 paired few-shot**：当前最强真实域确认性证据；
+3. **RRUFF-301 K=1/2/5 paired few-shot**：当前最强真实域后续复核证据；
 4. **Per-class + fix/break/confidence diagnostic**：明确平均收益存在 heterogeneity。
 
 Calibration 默认进入 Supplementary。
@@ -2408,7 +2399,7 @@ The guiding rule is:
 
 ### Why this reset was needed
 
-Earlier project governance gradually adopted standards closer to a confirmatory ML benchmark than to the reporting practice of the target PXRD/materials-ML community. Examples included treating parent-level paired bootstrap confidence intervals, CI>0 requirements, and other stringent audit conditions as if every external-domain result had to pass them before it could be described as a useful positive result.
+Earlier project governance temporarily adopted statistical and bookkeeping requirements that were stricter than the reporting practice of the target PXRD/materials-ML community. Examples included treating parent-level paired bootstrap confidence intervals, CI>0 requirements, and other stringent audit conditions as if every external-domain result had to pass them before it could be described as a useful positive result.
 
 Those analyses are scientifically useful, but this created a mismatch between:
 
@@ -2423,7 +2414,7 @@ A major lesson from this stage of the project is that we had temporarily conflat
 
 The earlier logic was effectively:
 
-> high-intensity ML audit -> every real-domain result must individually clear a confirmatory threshold -> only then may the experiment be described as successful.
+> high-intensity ML audit -> every real-domain result must individually clear a narrow statistical gate -> only then may the experiment be described as successful.
 
 That logic is too strong for this application setting. In a real PXRD domain with naturally scarce and imbalanced experimental samples, metrics such as Macro-F1 and class-stratified parent bootstrap can be intentionally conservative. For example, in CNRS the class counts are highly uneven and the hexagonal class has only 12 samples, yet Macro-F1 assigns every class the same 1/7 weight. A parent-level bootstrap therefore honestly exposes large uncertainty, but that uncertainty should not be converted into a binary verdict on whether the entire experiment "worked".
 
@@ -2458,7 +2449,7 @@ They are not automatic vetoes on the first layer.
 
 This distinction is now part of the project history because it represents an important change in research judgment:
 
-> **Early in the project, we temporarily treated high-strength ML statistical auditing as a confirmatory gate that every materials-application result had to pass. We later separated credibility auditing from scientific-result judgment: strict statistics are preserved, but a single CI crossing zero no longer determines the narrative or reclassifies an otherwise coherent result as failure.**
+> **Early in the project, we temporarily treated high-strength ML statistical auditing as a hard gate that every materials-application result had to pass. We later separated credibility auditing from scientific-result judgment: strict statistics are preserved, but a single CI crossing zero no longer determines the narrative or reclassifies an otherwise coherent result as failure.**
 
 This correction does not reduce rigor. It changes the hierarchy of evidence so that rigor serves interpretation rather than replacing it.
 
@@ -2505,7 +2496,7 @@ Use conventional, directly interpretable performance evidence:
 - Top-k metrics only when the task is candidate retrieval / many-class ranking rather than ordinary seven-class classification;
 - ECE / NLL / Brier as secondary reliability metrics when relevant.
 
-The main question is whether the evidence as a whole supports the scientific claim, not whether every auxiliary statistical test independently clears a confirmatory threshold.
+The main question is whether the evidence as a whole supports the scientific claim, not whether every auxiliary statistical test independently clears a follow-up threshold.
 
 #### Layer 2 — strict statistical audit
 
@@ -2515,7 +2506,7 @@ Keep, but demote to secondary evidence / appendix / internal audit:
 - paired confidence intervals;
 - detailed uncertainty decomposition;
 - strict parent-level resampling rules;
-- narrow confirmatory wording gates such as requiring a 95% CI to lie completely above zero.
+- narrow follow-up wording gates such as requiring a 95% CI to lie completely above zero.
 
 These analyses remain valuable for transparency and for answering methodological questions, but **a CI crossing zero is not by itself a reason to treat the whole real-domain experiment as a failure** when the broader performance evidence is coherent.
 
