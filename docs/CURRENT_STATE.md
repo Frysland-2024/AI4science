@@ -27,8 +27,8 @@
 - 固定了模型、数据、扰动、优化器和训练量；
 - 把公开的结果和论文的说法统一了；
 - 精简了公开文件，只留下训练、评估和核对结果需要的部分；
-- 明确当前结果不再通过新增 loss、重新调参或重开训练改变。
-- 完成 RRUFF-301 的 K=1/2/5 locked-test few-shot 评测并回溯核验结果；历史 prospective provenance 不完整，因此不将其表述为 provenance-complete confirmatory execution；
+- 明确当前结果不再通过新增 loss、重新调参或重开训练改变；
+- 完成 RRUFF-301 的 K=1/2/5 locked-test few-shot 评测并回溯核验结果；当前直接按 Macro-F1、Accuracy、mean ± SD、paired consistency 与 learning curve 报告；
 - 完成 CNRS-318 的 10-checkpoint zero-shot 外部域评测、原始输入复建和结果完整性审计；
 - 完成模拟 Test 与 CNRS 的概率可靠性审计；
 - 完成跨平台换行规范化哈希校验与全量回归测试（`117 passed`）。
@@ -56,7 +56,7 @@
 | CNRS-318 · zero-shot Accuracy | 0.20000 | 0.21006 | `+0.01006` |
 | CNRS-318 · zero-shot ECE ↓ | 0.68257 | 0.61242 | `−0.07015`（更低为好） |
 
-表中 `±` 均为对应重复运行的 sample standard deviation；完整 mean±SD、paired consistency 与 provenance 边界见 [`../xrd_robustness/reports/RESULTS.md`](../xrd_robustness/reports/RESULTS.md)。
+表中 `±` 均为对应重复运行的 sample standard deviation；完整 mean±SD、paired consistency 与结果说明见 [`../xrd_robustness/reports/RESULTS.md`](../xrd_robustness/reports/RESULTS.md)。
 
 结果文件：
 
@@ -79,7 +79,7 @@
 
 结果已经确定，不会再改。公开仓库里只留当前实现、运行配置、结果和使用文档；安装项目后通过 `xrd-train` 调用可复用训练入口，分数看已有模型的评估结果文件。
 
-这里说的"结果已经确定"包括模拟部分和两个角色不同的实验域。CNRS 的结果是
+这里说的“结果已经确定”包括模拟部分和两个角色不同的实验域。CNRS 的结果是
 **zero-shot 外部域压力测试**，不是使用 CNRS 标签做域适配；冻结配置保持原样，执行完成状态由
 结果报告和 run record 另行记录。
 
@@ -97,8 +97,8 @@
 - CNRS-318 的权威审计与父样本 manifest 已进入 git（见 [`xrd_robustness/reports/CNRS_318_DATASET_AUDIT.md`](../xrd_robustness/reports/CNRS_318_DATASET_AUDIT.md) 和 [`xrd_robustness/manifests/cnrs_318_parent_manifest_v2.csv`](../xrd_robustness/manifests/cnrs_318_parent_manifest_v2.csv)）；
 - 评测已按冻结协议执行完毕；pre-run 协议文件保持原样，完成状态与纠错记录见结果报告和 run record（[`xrd_robustness/reports/CNRS_318_EVALUATION_PROTOCOL.md`](../xrd_robustness/reports/CNRS_318_EVALUATION_PROTOCOL.md)）；
 - 人工标签质量复核**不计划执行**：标签由 deposited structure 稳定重建、未做人工物相核验，这一限制将如实注明；
-- 真实数据不参与模型、checkpoint、seed 或 `lambda_js` 选择。
-- CNRS-318 的五个 seed 均 favor JS，平均配对 ΔMacro-F1 为 `+0.018713`；pooled Macro-F1、balanced accuracy、accuracy、ECE、NLL 与 Brier 共同改善。修正后的 class-stratified paired-parent 95% CI 为 `[−0.009339, +0.046107]`，说明自然类别不平衡和低支持类别带来较大的统计不确定性；该区间作为严格审计如实保留，但不单独否决上述多 seed、多指标一致的科学结果。
+- 真实数据不参与模型、checkpoint、seed 或 `lambda_js` 选择；
+- CNRS-318 的五个 seed 均 favor JS，平均配对 ΔMacro-F1 为 `+0.018713`；pooled Macro-F1、balanced accuracy、accuracy、ECE、NLL 与 Brier 共同改善。修正后的 class-stratified paired-parent 95% CI 为 `[−0.009339, +0.046107]`，说明自然类别不平衡和低支持类别带来较大的统计不确定性；该区间作为严格审计如实保留，但不单独否决上述多 seed、多指标一致的科学结果；
 - CNRS 的绝对 sim-to-real 表现仍弱、校准仍差；overall accuracy `0.200→0.210` 低于多数类基线 `0.274`，不能包装成已解决的真实域分类。
 
 ## 6. 当前卡点
