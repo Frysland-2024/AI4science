@@ -183,6 +183,45 @@ ECE, NLL, Brier score, predictive entropy and confidence analysis are scientific
 
 They should not replace Accuracy / Macro-F1 / Balanced Accuracy as the headline performance layer unless the scientific question itself is specifically calibration or uncertainty estimation.
 
+## Retrospective correction — how the earlier Residual branch should be interpreted
+
+The reporting-standard reset also requires a retrospective correction to how the project history describes the earlier Residual / residual-decorrelation branch.
+
+During the first P0 stage, some Residual performance comparisons had small positive point estimates but paired/bootstrap confidence intervals that crossed zero. At the time, the project sometimes treated that fact too strongly, using language close to "benefit not demonstrated" or implicitly allowing `CI crosses zero` to contribute to a failure-style verdict.
+
+Under the current reporting standard, **CI crossing zero by itself is not a valid reason to say that Residual was scientifically disproved or that the experiment failed**. Those early performance results should instead be read as:
+
+> the tested Residual implementation did not show a clear, stable performance advantage; the point estimates were small and seed-sensitive, with substantial uncertainty.
+
+However, the later decision to seal Residual was **not based only on confidence intervals**. Several independent negative or inconclusive signals accumulated:
+
+1. **Optimization / performance trajectory:** early short-trajectory updates could hurt classification before later recovering, and the performance advantage never became as clean or persistent as the JS branch.
+2. **Mechanism mismatch:** the intended crystal-semantic decorrelation was not stably demonstrated; independent probes could still decode crystal information from the residual, and some later milestones moved in the wrong direction.
+3. **V10 follow-up:** explicit simulator-supervised measurement information became decodable, but crystal leakage increased at the same time. This suggested that the auxiliary branch increased total residual information rather than cleanly separating measurement variation from crystal semantics.
+4. **ResNet scale Gate:** after the backbone was changed, the old Residual lambda grid `[0.2, 2, 20]` produced only negligible / negligible / weak influence and did not span the preregistered weak / material / dominant range.
+5. **ResNet residual stability Gate:** across three Train-only seeds, the preregistered probe signal counts at epochs 3 / 5 / 10 were `2/3`, `1/3`, and `2/3`; the rule required at least `2/3` at both epochs 5 and 10, so the status was `stable_signal_not_demonstrated`.
+
+Therefore the historically correct conclusion is **not**:
+
+> Residual was disproved because its confidence interval crossed zero.
+
+The correct conclusion is:
+
+> **Residual was not selected for the mainline because stable performance benefit and stable decorrelation behavior were not demonstrated under the tested implementation, and subsequent Train-only mechanism/scale/stability Gates did not justify committing formal Validation resources. The underlying Residual hypothesis itself was not scientifically disproved.**
+
+Chinese shorthand for future application / project-history writing:
+
+> **Residual 并未被科学上证伪；当时实现由于性能收益不稳定、机制去相关未稳定成立，并在后续稳定性与作用尺度 Gate 中没有获得继续进入正式实验的资格，因此被封存。**
+
+### Development Gate versus scientific-result reporting
+
+This episode also clarifies a second distinction that must be preserved:
+
+- **Outward scientific-result reporting:** a bootstrap CI crossing zero is an uncertainty annotation, not an automatic veto on a coherent result.
+- **Internal development Go/No-Go Gate:** a preregistered Train-only mechanism criterion may legitimately decide whether a risky branch earns more compute / Validation access, provided it is described as a resource-allocation / development rule rather than a claim that the scientific hypothesis has been disproved.
+
+Thus, the Residual stability Gate remains historically valid as a development decision, while any old wording equivalent to `CI crosses zero -> Residual failed` should be treated as an over-strong interpretation and corrected in future summaries.
+
 ## What is explicitly abandoned
 
 The project will no longer use the following logic for outward-facing scientific judgment:
