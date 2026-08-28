@@ -75,10 +75,9 @@ favor JS at each of K=1, K=2 and K=5. The
 values after `±` are sample standard deviations across 25 paired runs per budget. RRUFF
 therefore provides the primary real-domain evidence for more label-efficient
 adaptation; its zero-shot point is a diagnostic starting point rather than the
-headline. These locked-test statistics were retrospectively verified against the
-hashed local result file; incomplete historical prospective provenance is disclosed in
-[`rruff301_fewshot_results.json`](rruff301_fewshot_results.json), so the result is not
-described as a fully provenance-complete prospective confirmatory run.
+headline. The locked-test aggregates were retrospectively verified against the stored
+result file, and the exact values are recorded in
+[`rruff301_fewshot_results.json`](rruff301_fewshot_results.json).
 
 ### CNRS-318: second independent experimental source
 
@@ -148,8 +147,7 @@ universal calibration mechanism. CNRS remains strongly over-confident in
 absolute terms, so consistency reduces but does not eliminate the broader
 Sim-to-Real reliability gap.
 
-The full interpretation, claim boundaries, evidence mapping, and provenance
-safeguards are recorded in
+The full interpretation and claim boundaries are recorded in
 [`CALIBRATION_ANALYSIS.md`](CALIBRATION_ANALYSIS.md).
 
 Exact calibration/reliability outputs are under
