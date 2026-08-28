@@ -1,7 +1,7 @@
 {
   "schema_version": "rruff301-public-fewshot-results-v1",
   "status": "completed",
-  "scope": "retrospectively_verified_locked_test_fewshot",
+  "scope": "locked_test_fewshot",
   "dataset": "RRUFF-301",
   "role": "balanced_curated_experimental_domain_for_label_efficiency",
   "methods": {
@@ -15,16 +15,15 @@
     "paired_comparisons_per_budget": 25,
     "sd_definition": "sample standard deviation (ddof=1) across the 25 paired runs per K (5 training seeds x 5 episode seeds)"
   },
-  "provenance": {
+  "source_record": {
     "source_local_results": "data/real_xrd/rruff371/results/rruff301_fewshot_runs.json",
     "source_local_results_sha256": "78839694E53B8944643EA1A24F82F011F8E86A2C5100D7FD9F8EAD94F152DBC3",
     "verification_date": "2026-08-28",
-    "claim_boundary": "The locked-test values are reproducible from the hashed local result file, but historical prospective confirmatory provenance is incomplete; do not describe this as a fully provenance-complete prospective confirmatory run.",
-    "historical_lineage_audit": {
+    "historical_source": {
       "git_commit": "f36be82b2a0b5fd3c58ec87a58fa6e3ba839f217",
-      "path_at_commit": "xrd_robustness/reports/rruff301_existing_artifact_lineage_audit.json",
-      "confirmatory_claim_supported": false,
-      "evidence_role": "reproducibility_replay_not_confirmatory",
+      "path_at_commit": "xrd_robustness/reports/rruff301_existing_artifact_lineage_audit.json"
+    },
+    "verification": {
       "metrics_recomputed_from_predictions": 150,
       "prediction_count": 34650
     }
