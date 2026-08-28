@@ -20,8 +20,7 @@ scientific interpretation.
 | [`simulated_test_results.json`](simulated_test_results.json) | Frozen simulated-Test aggregates plus a SHA-bound community-reporting Accuracy extension |
 | [`rruff301_fewshot_results.json`](rruff301_fewshot_results.json) | Retrospectively verified K=1/2/5 RRUFF Macro-F1 and Accuracy aggregates, with provenance boundary |
 | [`CNRS_318_RESULTS.md`](CNRS_318_RESULTS.md) | Completed CNRS-318 performance details plus Layer-C integrity and paired-bootstrap audit |
-| [`CALIBRATION_ANALYSIS.md`](CALIBRATION_ANALYSIS.md) | Calibration/proper-scoring-rule analysis on simulated Test and CNRS |
-| [`CALIBRATION_EVIDENCE_PACKAGE.md`](CALIBRATION_EVIDENCE_PACKAGE.md) | Claim-to-artifact evidence map for the reliability result |
+| [`CALIBRATION_ANALYSIS.md`](CALIBRATION_ANALYSIS.md) | Consolidated calibration/proper-scoring-rule analysis, artifact map and provenance safeguards for simulated Test and CNRS |
 
 ## Frozen CNRS design and data identity
 

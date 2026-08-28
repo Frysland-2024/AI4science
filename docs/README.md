@@ -8,6 +8,7 @@
 | [`PXRD_RESULT_REPORTING_STANDARD.md`](PXRD_RESULT_REPORTING_STANDARD.md) | 当前有效的三层评价体系：performance 主结果、reliability 增强证据、strict statistical audit |
 | [`master_route_framework.md`](master_route_framework.md) | 研究生方向与职业筛选的三棵技术树：测量到推断、AI辅助物理建模、EE/IC设计 |
 | [`research_direction_map.md`](research_direction_map.md) | AI＋表征、科学量测和半导体检测等方向地图 |
+| [`japan_advisor_search_keywords.md`](japan_advisor_search_keywords.md) | 日本导师检索的方向关键词与检索组合 |
 | [`APPLICATION_RESEARCH_NARRATIVE.md`](APPLICATION_RESEARCH_NARRATIVE.md) | 申请材料、面试和项目介绍的统一说法 |
 | [`NEXT_PROJECT_XRD_QUANTITATIVE_INVERSION.md`](NEXT_PROJECT_XRD_QUANTITATIVE_INVERSION.md) | 下一代项目的正式执行计划：已知相参考条件下的 PXRD 定量参数反演、同源结构一致性、前向物理验证和 refinement 初始化 |
 | [`XRD_QUANTITATIVE_INVERSION_RESOURCE_MANIFEST.md`](XRD_QUANTITATIVE_INVERSION_RESOURCE_MANIFEST.md) | 定量反演项目的论文、代码、数据和补充材料资源清单 |
@@ -15,6 +16,7 @@
 | [`PROJECT_HISTORY_NOTE_2026-08-27_CNRS_RECLASSIFICATION.md`](PROJECT_HISTORY_NOTE_2026-08-27_CNRS_RECLASSIFICATION.md) | 2026-08-27 认知修正节点：CNRS-318 重新定级为正式第二实验域（balanced-equivalent=NO / naturally-imbalanced=YES），记录旧 Gate、问题重构、RRUFF few-shot 与 CNRS zero-shot 分工 |
 | [`PROJECT_HISTORY_NOTE_2026-08-27_REPORTING_STANDARD_RESET.md`](PROJECT_HISTORY_NOTE_2026-08-27_REPORTING_STANDARD_RESET.md) | 评价层级从 confirmatory Gate 纠正为 community-standard reporting + strict audit 的历史原因 |
 | [`PROJECT_HISTORY_NOTE_2026-08-27_REAL_DOMAIN_HEADLINE_METRICS.md`](PROJECT_HISTORY_NOTE_2026-08-27_REAL_DOMAIN_HEADLINE_METRICS.md) | RRUFF few-shot 与 CNRS zero-shot 的 headline 指标和域分工决策记录 |
+| [`PROJECT_HISTORY_NOTE_2026-08-27_CALIBRATION_RELIABILITY_UPGRADE.md`](PROJECT_HISTORY_NOTE_2026-08-27_CALIBRATION_RELIABILITY_UPGRADE.md) | 2026-08-27 概率可靠性分析从 ECE 观察扩展到 NLL、Brier 与跨域一致性的历史节点 |
 | [`PROJECT_HISTORY_NOTE_2026-08-24_INVERSE_PROBLEM_DIFFICULTY.md`](PROJECT_HISTORY_NOTE_2026-08-24_INVERSE_PROBLEM_DIFFICULTY.md) | 2026-08-24 方向认知节点：区分高维不完备重建与强先验、有限解空间的识别/参数反演，并记录其对未来 AI+科学量测方向选择的影响 |
 | [`PROJECT_HISTORY.md`](PROJECT_HISTORY.md) | 完整研究演化档案：保留失败、版本变化、思路转向与历史决策；用于追溯项目如何发展，不代表当前方法或论文主张 |
 | [`../xrd_robustness/MANUSCRIPT.md`](../xrd_robustness/MANUSCRIPT.md) | 当前 JS 分类项目的论文正文框架 |

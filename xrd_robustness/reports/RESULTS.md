@@ -148,9 +148,9 @@ universal calibration mechanism. CNRS remains strongly over-confident in
 absolute terms, so consistency reduces but does not eliminate the broader
 Sim-to-Real reliability gap.
 
-The full interpretation, claim boundaries, and evidence mapping are recorded
-in [`CALIBRATION_ANALYSIS.md`](CALIBRATION_ANALYSIS.md) and
-[`CALIBRATION_EVIDENCE_PACKAGE.md`](CALIBRATION_EVIDENCE_PACKAGE.md).
+The full interpretation, claim boundaries, evidence mapping, and provenance
+safeguards are recorded in
+[`CALIBRATION_ANALYSIS.md`](CALIBRATION_ANALYSIS.md).
 
 Exact calibration/reliability outputs are under
 `../outputs/calibration_analysis/`, with `summary.json` as the canonical

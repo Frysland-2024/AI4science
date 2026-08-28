@@ -59,7 +59,6 @@ def test_public_report_directory_matches_positive_allowlist() -> None:
         "CNRS_318_EVALUATION_PROTOCOL.md",
         "CNRS_318_RESULTS.md",
         "CALIBRATION_ANALYSIS.md",
-        "CALIBRATION_EVIDENCE_PACKAGE.md",
         "opxrd_cnrs7cs_independent_parent_audit_20260827.md",
         "README.md",
     }
