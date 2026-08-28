@@ -25,7 +25,7 @@
 - per-class precision / recall / F1、support 和 confusion matrix；
 - 仅在候选检索或大类别任务需要时使用 Top-k Accuracy。
 
-主问题是多个相互独立的 performance 证据是否一致，而不是每个 dataset × K × metric 是否分别通过 95% confirmatory threshold。
+主问题是多个相互独立的 performance 证据是否一致，而不是让单个统计区间独自决定整项研究的成败。
 
 ### Simulated OOD
 
@@ -72,14 +72,15 @@ CNRS 可表述为：performance improvement is accompanied by improved calibrati
 - 95% confidence interval；
 - seed-wise paired analysis；
 - per-class uncertainty；
-- uncertainty decomposition；
-- provenance、hash 与冻结数据审计。
+- uncertainty decomposition。
 
 这些分析回答：效应有多确定、不确定性来自哪里、哪些类别样本不足、哪些结果最稳定。
 
 `CI crosses zero` 的正确含义是：在特定 resampling model 下，效应估计仍有较大不确定性。它不自动等于 `experiment failed`、`result invalid`、`no replication` 或 `cannot be positively reported`。
 
 CNRS 修正后的 class-stratified paired-parent 95% CI `[−0.009339, +0.046107]` 必须如实保留在详细结果、appendix 或 limitation 中；它不能覆盖 5/5 seed、多个 performance metric 与 reliability metric 的共同方向。
+
+工程上的哈希、manifest、run record 和文件追踪可以继续保留，用于复现和核对，但不属于科研贡献，也不构成判断结果是否成立的额外门槛。
 
 ## 5. 避免数学冗余
 
@@ -114,7 +115,7 @@ CNRS 推荐写法：
 
 ## 8. 文档优先级
 
-当前输出首先遵循本规范、[`CURRENT_STATE.md`](CURRENT_STATE.md) 与 [`../xrd_robustness/reports/RESULTS.md`](../xrd_robustness/reports/RESULTS.md)。冻结协议、run record、详细审计报告和日期化历史节点继续保存原貌，用于证明研究过程与不确定性；其中旧的 `CI > 0` wording gate 或 `directional support / stable replication` 分类只代表历史内部审计阶段，不得未经判断复制到当前 PPT、论文 headline、README、申请材料或项目总结。
+当前输出首先遵循本规范、[`CURRENT_STATE.md`](CURRENT_STATE.md) 与 [`../xrd_robustness/reports/RESULTS.md`](../xrd_robustness/reports/RESULTS.md)。冻结协议、run record、详细审计报告和日期化历史节点继续保存原貌，用于核对研究过程与不确定性；其中旧的单一 CI 门槛或内部结果分类只代表历史内部审计阶段，不得未经判断复制到当前 PPT、论文 headline、README、申请材料或项目总结。
 
 日期化的 reporting-reset 历史说明曾采用“两层”粗分：当时的主结果层对应本规范的 Layer A performance + Layer B reliability，当时的严格审计层对应本规范的 Layer C。两者在证据优先级上没有实质冲突；2026-08-28 起以本文件的三层命名为当前权威表述。
 
