@@ -1,0 +1,51 @@
+name: One-time evidence language cleanup
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/one_time_language_cleanup.yml
+
+permissions:
+  contents: write
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Rewrite evidence-tier wording
+        run: python .github/one_time_language_cleanup.py
+      - name: Verify current text
+        shell: bash
+        run: |
+          if grep -RniE 'provenance-complete|confirmatory|确认性' . \
+            --include='*.md' --include='*.json' --include='*.txt' \
+            --exclude-dir=.git --exclude-dir=.github; then
+            echo 'Obsolete evidence-tier wording remains.'
+            exit 1
+          fi
+      - name: Run tests
+        working-directory: xrd_robustness
+        run: |
+          python -m pip install -e '.[test]'
+          python -m pytest -q
+      - name: Commit cleanup and remove temporary files
+        shell: bash
+        run: |
+          rm -f .github/one_time_language_cleanup.py
+          rm -f .github/workflows/one_time_language_cleanup.yml
+          git config user.name 'Frysland-2024'
+          git config user.email '160820048+Frysland-2024@users.noreply.github.com'
+          git add -A
+          if git diff --cached --quiet; then
+            echo 'No cleanup changes needed.'
+            exit 0
+          fi
+          git commit -m 'docs: remove obsolete confirmatory evidence-tier language'
+          git push origin HEAD:main
