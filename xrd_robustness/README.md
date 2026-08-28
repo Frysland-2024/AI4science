@@ -24,7 +24,7 @@
 | [`reports/RESULTS.md`](reports/RESULTS.md) | 跨域 headline performance、reliability 与严格 audit 摘要 |
 | [`reports/validation_results.json`](reports/validation_results.json) | 冻结模拟验证集汇总 |
 | [`reports/simulated_test_results.json`](reports/simulated_test_results.json) | 冻结模拟 Test 汇总及 SHA 绑定的 Accuracy 扩展 |
-| [`reports/rruff301_fewshot_results.json`](reports/rruff301_fewshot_results.json) | RRUFF-301 K=1/2/5 汇总及 provenance 边界 |
+| [`reports/rruff301_fewshot_results.json`](reports/rruff301_fewshot_results.json) | RRUFF-301 K=1/2/5 汇总与结果说明 |
 | [`reports/CNRS_318_RESULTS.md`](reports/CNRS_318_RESULTS.md) | CNRS-318 完成结果、完整性审计与 paired bootstrap |
 | [`reports/CALIBRATION_ANALYSIS.md`](reports/CALIBRATION_ANALYSIS.md) | 模拟 Test 与 CNRS 的概率可靠性分析 |
 | [`reports/CNRS_318_DATASET_AUDIT.md`](reports/CNRS_318_DATASET_AUDIT.md) | CNRS 数据构建与角色审计 |
