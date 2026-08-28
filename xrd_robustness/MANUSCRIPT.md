@@ -136,3 +136,28 @@ Online PXRD simulation can supply measurement-equivalence supervision through sh
 3. Generate publication figures from the two result files.
 4. Complete the Results and Discussion prose.
 5. Integrate the completed RRUFF-301 and CNRS-318 figures, run record and limitations into the submission package.
+
+## 8. Figure generation and provenance
+
+From `xrd_robustness`, regenerate the four tracked manuscript figures with:
+
+```bash
+python scripts/generate_paper_figures.py
+```
+
+The tracked default is editable SVG. PNG and PDF remain available explicitly through
+`--formats png` and `--formats pdf`. The generator reads experimental values only from
+`reports/validation_results.json` and `reports/simulated_test_results.json`; before
+writing output, it checks the stored paired runs against every published mean, sample
+standard deviation, paired delta and available positive-pair count.
+
+Figure 1 is a method schematic. Its deterministic spectrum sketches illustrate legal
+paired measurement variation and are not experimental traces. Figures 2 and 3 draw the
+five stored seed pairs. Figure 4 summarizes the four frozen simulated-Test metrics and
+does not compare Validation and Test worst-class fields because their historical
+aggregation definitions differ.
+
+1. `figure_1_method_overview.svg`: paired PXRD views and Dynamic ERM / JS objectives.
+2. `figure_2_validation_paired_ood.svg`: five paired Validation OOD effects.
+3. `figure_3_simulated_test_paired_ood.svg`: five paired frozen-Test OOD effects and CI.
+4. `figure_4_metric_overview.svg`: clean, in-range and OOD metric overview.

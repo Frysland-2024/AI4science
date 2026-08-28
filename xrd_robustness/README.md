@@ -17,14 +17,22 @@
 
 当前默认采用[三层评价体系](../docs/PXRD_RESULT_REPORTING_STANDARD.md)：community-standard performance 是主科学交流层，reliability 是增强证据层，strict statistical audit 是不确定性与可信度审计层。
 
-结果文件：
+## 结果与证据索引
 
-- [`reports/RESULTS.md`](reports/RESULTS.md)
-- [`reports/validation_results.json`](reports/validation_results.json)
-- [`reports/simulated_test_results.json`](reports/simulated_test_results.json)
-- [`reports/rruff301_fewshot_results.json`](reports/rruff301_fewshot_results.json)
-- [`reports/CNRS_318_RESULTS.md`](reports/CNRS_318_RESULTS.md)
-- [`reports/README.md`](reports/README.md)
+| 文件 | 作用 |
+|---|---|
+| [`reports/RESULTS.md`](reports/RESULTS.md) | 跨域 headline performance、reliability 与严格 audit 摘要 |
+| [`reports/validation_results.json`](reports/validation_results.json) | 冻结模拟验证集汇总 |
+| [`reports/simulated_test_results.json`](reports/simulated_test_results.json) | 冻结模拟 Test 汇总及 SHA 绑定的 Accuracy 扩展 |
+| [`reports/rruff301_fewshot_results.json`](reports/rruff301_fewshot_results.json) | RRUFF-301 K=1/2/5 汇总及 provenance 边界 |
+| [`reports/CNRS_318_RESULTS.md`](reports/CNRS_318_RESULTS.md) | CNRS-318 完成结果、完整性审计与 paired bootstrap |
+| [`reports/CALIBRATION_ANALYSIS.md`](reports/CALIBRATION_ANALYSIS.md) | 模拟 Test 与 CNRS 的概率可靠性分析 |
+| [`reports/CNRS_318_DATASET_AUDIT.md`](reports/CNRS_318_DATASET_AUDIT.md) | CNRS 数据构建与角色审计 |
+| [`reports/CNRS_318_EVALUATION_PROTOCOL.md`](reports/CNRS_318_EVALUATION_PROTOCOL.md) | 原样保留的 pre-run 冻结协议 |
+| [`configs/real.cnrs318.zero_shot.frozen.json`](configs/real.cnrs318.zero_shot.frozen.json) | 冻结配置 |
+| [`manifests/cnrs318_zero_shot_run_record.json`](manifests/cnrs318_zero_shot_run_record.json) | 完成执行、哈希与修正结果绑定 |
+
+[`reports/opxrd_cnrs7cs_independent_parent_audit_20260827.md`](reports/opxrd_cnrs7cs_independent_parent_audit_20260827.md) 是保留的历史审计快照；其 317-parent 结论已被重复代表选择修正后的 318-parent 结果取代，不能当作当前结论。
 
 ## 代码结构
 
@@ -34,7 +42,7 @@
 | `src/xrd_robustness/training/objectives.py` | Dynamic ERM 与 JS 一致性目标 |
 | `src/xrd_robustness/simulator.py` | PXRD 物理扰动模拟器 |
 | `src/xrd_robustness/online_views.py` | 同一母体结构的两份配对谱图 |
-| `scripts/train.py` | 训练脚本（Dynamic ERM 与 JS 一致性） |
+| `src/xrd_robustness/training/runner.py` / `xrd-train` | Dynamic ERM 与 JS 一致性训练入口 |
 | `scripts/build_cnrs318_manifests.py` | 只读核验或显式重建 CNRS-318 冻结 manifests |
 | `scripts/analyze_cnrs318_results.py` | 复核 CNRS 输入、预测、checkpoint、指标与 paired bootstrap |
 | `scripts/build_cnrs318_audit_artifact.py` | 从审计 CSV/JSON 构建含四张核心图的便携技术报告 |
@@ -47,6 +55,15 @@ python -m pytest -q
 ```
 
 `pytest` 用于检查实现、接口、配置和公开结果文件之间的一致性，不会重新训练模型或复现论文中的完整训练结果。
+
+本地重建 CNRS 审计包时，在本目录运行：
+
+```powershell
+python scripts/analyze_cnrs318_results.py
+python scripts/build_cnrs318_audit_artifact.py
+```
+
+生成的 `outputs/cnrs318_zero_shot/audit/` 被 Git 忽略；其中包含 machine-readable summary、修正 bootstrap、逐 seed/逐类 CSV 和便携报告。原始 3,180 行预测与 `318 × 3501` 输入仍受 run record 的 SHA-256 绑定，不得移动或删除。
 
 ## 文档
 

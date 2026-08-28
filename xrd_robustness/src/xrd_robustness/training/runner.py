@@ -20,7 +20,7 @@ from ..peak_cache import load_peak_table
 from ..physics import PhysicsParameterSampler
 from ..simulation_interfaces import PeakTable
 from ..structure_data import CRYSTAL_SYSTEMS
-from .trainer_factory import TrainingStepConfig, run_training_step
+from .objectives import TrainingStepConfig, run_training_step
 
 
 @dataclass(frozen=True)

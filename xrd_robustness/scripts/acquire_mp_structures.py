@@ -10,6 +10,7 @@ import hashlib
 import importlib.metadata
 import json
 import math
+import os
 from pathlib import Path
 import subprocess
 import sys
@@ -32,7 +33,6 @@ from xrd_robustness.structure_data import (
     validate_no_split_leakage,
     validate_persisted_structure_record,
 )
-from xrd_robustness.mp_credentials import configured_api_key
 from xrd_robustness.data_layout import project_relative_path, resolve_data_root
 from xrd_robustness.external_runtime import (
     external_script_issue,
@@ -71,6 +71,27 @@ CRYSTAL_SYSTEM_SPACEGROUPS = {
     "Hexagonal": list(range(168, 195)),
     "Cubic": list(range(195, 231)),
 }
+
+
+def configured_api_key() -> str | None:
+    """Read a process key, then the Windows user-level environment."""
+    key = os.environ.get("MP_API_KEY") or os.environ.get("PMG_MAPI_KEY")
+    if key or os.name != "nt":
+        return key
+    try:
+        import winreg
+
+        with winreg.OpenKey(winreg.HKEY_CURRENT_USER, "Environment") as handle:
+            for name in ("MP_API_KEY", "PMG_MAPI_KEY"):
+                try:
+                    value, _ = winreg.QueryValueEx(handle, name)
+                except FileNotFoundError:
+                    continue
+                if value:
+                    return str(value)
+    except OSError:
+        return None
+    return None
 
 
 def _write_csv(path: Path, rows: Iterable[dict[str, Any]], fields: list[str]) -> None:

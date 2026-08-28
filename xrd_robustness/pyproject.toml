@@ -22,6 +22,7 @@ where = ["src"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+pythonpath = ["src"]
 markers = [
   "data_bound: requires the ignored local formal_14060 dataset and manifests",
 ]

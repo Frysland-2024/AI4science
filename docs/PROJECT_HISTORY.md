@@ -2103,3 +2103,733 @@ Under that priority system, the existing RRUFF-301 result is already useful beca
 
 A new real-domain experiment should only be run if it answers a genuinely new scientific question, tests robustness in a materially different setting, or otherwise strengthens the scientific conclusion itself—not merely to repair formal provenance bookkeeping.
 
+
+# 第六部分：2026-08-24 至 2026-08-27 日期化决策节点（合并归档）
+
+以下内容原先分散在五份日期化 note 中，现全文归并到总历史档案，以减少文件数量。冻结 CNRS 协议所链接的 `PROJECT_HISTORY_NOTE_2026-08-27_CNRS_RECLASSIFICATION.md` 仍独立保留。
+
+<a id="history-2026-08-24-inverse-problem"></a>
+
+## 归并自 `PROJECT_HISTORY_NOTE_2026-08-24_INVERSE_PROBLEM_DIFFICULTY.md`
+
+## 2026-08-24 方向认知节点：从“强逆问题”到“受约束识别与反演”
+
+> **性质：** 项目长期历史记录 / 申请叙事素材，不是当前 XRD 主线的实验合同。
+> **记录日期：** 2026-08-24
+
+### 背景
+
+在讨论计算全息、ptychography、医疗检测、工业检测和科学量测方向时，形成了一个新的问题难度判断：真正需要区分的并不是“光学难、医疗简单”或“某个应用领域更高级”，而是不同任务的**未知量维度、测量完备性和答案空间约束**。
+
+### 核心认识
+
+一类问题是：
+
+> **从严重不完备的测量中恢复一个高维、连续、未知对象。**
+
+例如计算全息、相位恢复和 ptychography 等任务，探测器往往只直接记录强度，而未知对象可能是完整的复数波场、二维/三维结构或连续物理场。此时输出不是几个标签或参数，而是大量连续自由度；同时测量本身还丢失了部分信息，因此本质上属于强逆问题。
+
+另一类问题是：
+
+> **在已知系统、已知结构范围或有限异常空间内，判断观测属于什么，或者估计少量参数。**
+
+典型形式包括：
+
+- 正常 / 异常 / 若干缺陷类型分类；
+- 已知器件或样品结构中的尺寸、位置、应变、缺陷大小等参数估计；
+- 已知解剖结构、CAD 结构或材料候选空间下的检测和量测；
+- 在有限物理模型族中的受约束反演。
+
+这类任务的重要优势是：**答案空间受到强先验约束。** 算法不需要在“世界上所有可能对象”中恢复唯一原物体，而是在一个已知系统、已知结构和有限异常空间内判断最可能发生了什么。
+
+因此，今后判断科研方向难度时，应优先分析：
+
+1. 测量是否严重不完备；
+2. 输出是高维连续对象，还是有限类别 / 少量参数；
+3. 是否存在可靠的结构、几何、材料或设备先验；
+4. 候选解空间是否可以被物理模型显著压缩；
+5. 任务是否允许将开放式重建改写为受约束检测、参数估计或有限模型选择。
+
+### 对未来方向选择的影响
+
+这一认识使未来方向选择进一步收敛：相比一开始就挑战“从不完备测量恢复任意未知对象”的最强形式逆问题，可以优先关注**强先验、有限解空间的科学测量反演、检测和参数估计**。
+
+这类问题仍然保留应用物理与科学量测的核心味道，但更适合在本科到硕士阶段形成可靠的方法研究和完整实验闭环。例如：
+
+- 材料表征中的结构参数反演、缺陷识别与仪器域适配；
+- 半导体光学 / 计量中的已知器件结构参数估计；
+- 工业检测中的有限缺陷空间识别；
+- 医学成像中利用解剖或物理先验的受约束重建与检测。
+
+### 与当前 XRD 项目的连接
+
+这并不意味着当前 XRD 晶系分类本身等同于计算成像逆问题，而是提供了一个更广的研究选择原则。
+
+当前 XRD 项目已经体现了这种“受约束科学测量问题”的特点：
+
+- 输入由明确的物理测量过程产生；
+- 输出空间有限；
+- 晶体结构、衍射规律和测量扰动提供强先验；
+- 模拟器能够显式控制样品与测量因素；
+- 研究重点可以从单纯追求分类分数扩展到 Sim2Real、少样本适配、参数反演和物理约束学习。
+
+因此，这一节点可作为后续申请叙事中的方向演变材料：
+
+> 从最初笼统地被“计算成像 / AI 反演”吸引，逐渐意识到逆问题之间存在巨大的难度结构差异；之后开始有意识地寻找那些既保留物理测量与反演内核、又具有强先验和可控答案空间的问题。这使研究兴趣从泛化的“AI + 物理”进一步收敛为面向科学量测的受约束反演、鲁棒学习与参数估计。
+
+---
+
+<a id="history-2026-08-27-calibration"></a>
+
+## 归并自 `PROJECT_HISTORY_NOTE_2026-08-27_CALIBRATION_RELIABILITY_UPGRADE.md`
+
+## Project history note — from ECE anomaly to probabilistic reliability evidence
+
+**Date:** 2026-08-27
+
+### Why this note exists
+
+This note records an important change in the XRD project's scientific interpretation. The calibration/reliability result was not part of the original model-selection plan. It emerged only after the main robustness experiments and the CNRS zero-shot evaluation had already been completed and frozen.
+
+This development is worth preserving because it shows how the research question evolved by re-reading existing evidence rather than by repeatedly changing the model until a desired result appeared.
+
+### Starting point: CNRS exposed a confidence problem
+
+The CNRS-318 zero-shot experiment produced only a modest classification improvement for JS, but it also revealed that both ERM and JS were extremely over-confident on the experimental domain.
+
+At that point, the immediate temptation could have been to add CNRS-specific adaptation or few-shot tuning in order to make the real-domain classification result larger.
+
+Instead, the project paused on a different observation: the frozen simulated-Test evaluation had already computed ECE, and the local result showed an unusually consistent pattern in which JS had lower ECE than ERM across every matched evaluation condition.
+
+This changed the question from:
+
+> “How can the CNRS classification number be made larger?”
+
+into:
+
+> “Does same-parent consistency change the reliability of the predictive probability distribution itself?”
+
+### First interpretation: promising but insufficient
+
+The first ECE readout was striking:
+
+- 180 matched simulated evaluation conditions;
+- mean paired ΔECE around `−0.0855`;
+- JS lower ECE in `180/180` conditions;
+- CNRS pooled ECE also lower for JS.
+
+However, ECE alone could not support a strong conclusion. A model can obtain lower ECE simply by becoming less confident without becoming a better probabilistic predictor.
+
+The project therefore deliberately did **not** immediately claim that JS was a calibration method or an implicit calibration regularizer.
+
+The minimum follow-up was defined before interpreting the result more strongly:
+
+- compute NLL;
+- compute multiclass Brier score;
+- inspect mean confidence and entropy;
+- generate reliability diagrams;
+- verify that classification performance was not sacrificed.
+
+No retraining was required or allowed for this audit.
+
+### Follow-up audit
+
+A dedicated resumable audit runner was added. For simulated Test it reused the frozen checkpoints and frozen evaluation panel/cache and performed forward inference only to recover per-sample probability vectors. For CNRS it reused the already stored zero-shot predictions.
+
+The completed audit showed:
+
+#### Simulated Test
+
+- ECE improved in `180/180` matched conditions;
+- multiclass Brier improved in `180/180`;
+- NLL improved in `176/180`;
+- Macro-F1 improved in `176/180`;
+- accuracy improved in `179/180`;
+- average confidence decreased while predictive entropy increased.
+
+Mean changes were:
+
+- Macro-F1: `+0.0528`;
+- accuracy: `+0.0538`;
+- ECE: `−0.0855`;
+- NLL: `−1.0357`;
+- Brier: `−0.1300`.
+
+#### CNRS-318
+
+Across all five matched training seeds:
+
+- Macro-F1 improved in `5/5`;
+- ECE improved in `5/5`;
+- NLL improved in `5/5`;
+- Brier improved in `5/5`.
+
+CNRS remained badly miscalibrated in absolute terms, so the result did not erase the Sim-to-Real problem. It instead showed that the same relative probability-quality improvement survives in a much harder external experimental domain.
+
+### Change in scientific conclusion
+
+Before the proper-score audit, the strongest defensible wording was:
+
+> Measurement-view consistency is associated with lower calibration error.
+
+After the audit, the result-level conclusion was upgraded to:
+
+> **Consistency regularization improves both robustness and probabilistic reliability under the evaluated PXRD measurement shifts.**
+
+The mechanism remains intentionally weaker:
+
+> Same-parent consistency may smooth the model's probability response along legal measurement-variation directions and reduce view-specific over-confidence.
+
+This is treated as a plausible explanation, not a proven causal mechanism.
+
+### Why this matters for the project story
+
+This episode marks another shift in the project's identity.
+
+The project began from the relatively conventional question of whether physically structured simulation and a transferred consistency objective could improve crystal-system classification accuracy. The reliability analysis pushed the work toward a broader scientific-measurement question:
+
+> **When a model is exposed to physically plausible measurement variation, does it only remain accurate, or does it also know when its predictions should be trusted?**
+
+That question is closer to the long-term direction of reliable AI for physical measurement and inverse problems than a pure benchmark-accuracy story.
+
+It also provides a useful example of research judgment for future application materials:
+
+1. a real-domain experiment exposed an unexpected weakness (severe over-confidence);
+2. an existing frozen output suggested a secondary phenomenon;
+3. the first attractive explanation was treated skeptically;
+4. alternative explanations such as generic confidence shrinkage were explicitly tested;
+5. proper scoring rules supported a stronger result while preserving the method's limitations;
+6. the project question became more mature without retraining or post-hoc model selection.
+
+### What should not be rewritten in hindsight
+
+The history should preserve that calibration was **not** an original design target and was **not** used to choose `lambda_js` or checkpoints.
+
+It should also preserve that the project initially considered the ECE observation insufficient and explicitly required NLL/Brier follow-up before strengthening the claim.
+
+That uncertainty and subsequent verification are part of the actual project-development path, not details to be erased from the final story.
+
+---
+
+<a id="history-2026-08-27-real-domain"></a>
+
+## 归并自 `PROJECT_HISTORY_NOTE_2026-08-27_REAL_DOMAIN_HEADLINE_METRICS.md`
+
+## Project History Note — Real-domain headline metrics and reporting roles
+
+Date: 2026-08-27
+
+### Decision
+
+For external communication, group-meeting slides, application narratives, and the main manuscript story, the two real-domain evaluations should be summarized using the performance-reporting conventions common in PXRD / materials-ML rather than by promoting every internal statistical audit quantity to a headline gate.
+
+Strict statistics remain available as second-layer credibility evidence and appendix material. They are not deleted, but they should not automatically veto or dominate the main scientific narrative.
+
+### RRUFF: role = few-shot adaptation efficiency
+
+RRUFF should be presented primarily as the balanced real-domain few-shot adaptation benchmark.
+
+Headline quantities:
+
+- 1-shot/class: Macro-F1 gain of approximately +4.33 percentage points (JS over Dynamic ERM).
+- 2-shot/class: Macro-F1 gain of approximately +4.60 percentage points.
+- 5-shot/class: Macro-F1 gain of approximately +5.45 percentage points.
+- Across the 75 paired few-shot comparisons (3 label budgets × 25 matched comparisons), 68 are positive for JS.
+
+Interpretation:
+
+> Under the same small real-label budget and the same adaptation procedure, JS-pretrained models consistently adapt better to experimental RRUFF spectra than Dynamic-ERM-pretrained models.
+
+RRUFF zero-shot should not be a headline result or a standalone main-text / main-slide figure. It may remain as a secondary diagnostic or appendix result.
+
+### CNRS: role = independent real-source transfer trend
+
+CNRS should be presented as the second independent experimental source, emphasizing cross-seed and cross-metric consistency rather than treating one confidence interval as the sole success criterion.
+
+Headline quantities:
+
+- 5/5 independent training seeds: JS > Dynamic ERM in Macro-F1.
+- Macro-F1: 0.1912 -> 0.2091, improvement about +1.79 percentage points.
+- Balanced Accuracy: 0.2182 -> 0.2388, improvement about +2.06 percentage points.
+- Overall Accuracy: 0.2000 -> 0.2101, improvement about +1.01 percentage points.
+- ECE: 0.6826 -> 0.6124, a lower calibration error for JS.
+
+Interpretation:
+
+> On a second, naturally imbalanced experimental source, JS preserves a positive advantage across all five training seeds, with Macro-F1, balanced accuracy, overall accuracy, and ECE all moving in the favorable direction.
+
+Because CNRS is naturally imbalanced (class counts 21 / 87 / 77 / 41 / 33 / 12 / 47), support limitations of the smallest classes should be acknowledged when needed. However, the main presentation should focus on the fact that several standard classification metrics and all five seeds agree in direction.
+
+### Main-story division of labor
+
+The two real domains should not be forced to tell the same story:
+
+- RRUFF = label-efficient real-domain adaptation.
+- CNRS = independent-source zero-shot transfer trend / robustness check.
+
+Together they support a cleaner real-domain narrative:
+
+> JS consistency improves simulated OOD robustness, makes subsequent RRUFF adaptation more label-efficient, and preserves a positive trend on an independent CNRS experimental source.
+
+### What moves out of the headline story
+
+The following are retained for audit, appendices, rebuttal/defense, or detailed reporting rather than headline communication:
+
+- RRUFF zero-shot as a standalone result;
+- CNRS parent-bootstrap confidence interval as a primary success/failure gate;
+- worst-class F1 as a headline metric;
+- full per-class CNRS tables in the main slide deck;
+- internal labels such as "stable replication" vs "directional support" as the main public framing;
+- detailed bootstrap mechanics and parent-level statistical protocol.
+
+These quantities remain valuable as evidence of rigor; they simply no longer define whether the main result is considered communicable.
+
+### General reporting principle
+
+> Main results should be communicated using the standard performance language of the PXRD / materials-ML community (F1, accuracy, balanced accuracy, label-efficiency curves, repeated-run consistency). Stricter paired/bootstrap audits are retained as a second evidence layer that strengthens credibility rather than as a mechanism for invalidating otherwise coherent, domain-appropriate results.
+
+---
+
+<a id="history-2026-08-27-reporting-reset"></a>
+
+## 归并自 `PROJECT_HISTORY_NOTE_2026-08-27_REPORTING_STANDARD_RESET.md`
+
+## Project history note — XRD reporting-standard reset
+
+**Date:** 2026-08-27
+
+### Decision
+
+For the PXRD robustness project, the main outward-facing results will be reported using the performance-reporting conventions that are normal in PXRD / materials-ML literature. Strict statistical auditing remains available as a second layer of evidence, but it is no longer treated as a pass/fail gate that can override an otherwise coherent scientific result.
+
+The guiding rule is:
+
+> **主结果应按照 PXRD/材料 ML 社区常用的 performance-reporting 范式来讲；严格统计审计作为增强可信度的第二层证据，而不是把结果重新判刑。**
+
+### Why this reset was needed
+
+Earlier project governance gradually adopted standards closer to a confirmatory ML benchmark than to the reporting practice of the target PXRD/materials-ML community. Examples included treating parent-level paired bootstrap confidence intervals, CI>0 requirements, and other stringent audit conditions as if every external-domain result had to pass them before it could be described as a useful positive result.
+
+Those analyses are scientifically useful, but this created a mismatch between:
+
+1. what the field normally reports and understands (accuracy, Macro-F1/F1, precision/recall, mean performance, learning curves, repeated-run consistency, per-class results), and
+2. what the project had started requiring internally as a hard success criterion.
+
+This mismatch made valid real-domain results appear unnecessarily weak, especially for naturally limited and imbalanced experimental datasets.
+
+### Methodological reflection — separating scientific judgment from statistical audit
+
+A major lesson from this stage of the project is that we had temporarily conflated **internal credibility auditing** with **the criterion for whether the scientific result itself is allowed to count as successful**.
+
+The earlier logic was effectively:
+
+> high-intensity ML audit -> every real-domain result must individually clear a confirmatory threshold -> only then may the experiment be described as successful.
+
+That logic is too strong for this application setting. In a real PXRD domain with naturally scarce and imbalanced experimental samples, metrics such as Macro-F1 and class-stratified parent bootstrap can be intentionally conservative. For example, in CNRS the class counts are highly uneven and the hexagonal class has only 12 samples, yet Macro-F1 assigns every class the same 1/7 weight. A parent-level bootstrap therefore honestly exposes large uncertainty, but that uncertainty should not be converted into a binary verdict on whether the entire experiment "worked".
+
+The project therefore formally distinguishes two questions:
+
+#### Scientific conclusion layer
+
+Ask whether the **full body of evidence is directionally coherent** across:
+
+- simulated OOD;
+- RRUFF few-shot adaptation;
+- CNRS external-domain validation;
+- calibration / confidence behavior;
+- independent training-seed consistency.
+
+If these pieces jointly support the same mechanism-level conclusion, then the scientific story is supported even if one auxiliary confidence interval in one limited real domain crosses zero.
+
+#### Statistical audit layer
+
+Use:
+
+- confidence intervals;
+- parent-level bootstrap;
+- per-class uncertainty;
+- seed-wise variation;
+- ECE / NLL / Brier;
+- detailed stratified resampling;
+
+as tools for answering **how certain the conclusion is, where it is fragile, and which classes/domains remain underpowered**.
+
+They are not automatic vetoes on the first layer.
+
+This distinction is now part of the project history because it represents an important change in research judgment:
+
+> **Early in the project, we temporarily treated high-strength ML statistical auditing as a confirmatory gate that every materials-application result had to pass. We later separated credibility auditing from scientific-result judgment: strict statistics are preserved, but a single CI crossing zero no longer determines the narrative or reclassifies an otherwise coherent result as failure.**
+
+This correction does not reduce rigor. It changes the hierarchy of evidence so that rigor serves interpretation rather than replacing it.
+
+### Community-metric survey — what PXRD / crystallographic ML actually reports
+
+A follow-up literature survey of representative PXRD / XRD machine-learning work from 2019–2026 was used to ground the reporting reset in actual community practice rather than project preference. Representative examples considered include Oviedo et al. (npj Computational Materials, 2019), Suzuki et al. (Scientific Reports, 2020), CrystalMELA (Journal of Applied Crystallography, 2023), Lee et al. (Advanced Intelligent Systems, 2023), Schopmans et al. (Digital Discovery, 2023), SimXRD-4M (2025), XQueryer (National Science Review, 2025), and recent real-PXRD structure-solving work.
+
+The recurring classification-reporting pattern in this community is:
+
+1. **Accuracy** — still the most traditional and widely comparable headline metric.
+2. **F1 / Macro-F1** — especially important for multiclass or imbalanced crystal-system / space-group classification.
+3. **Precision / Recall** — often reported as macro averages or per-class diagnostics.
+4. **Confusion matrix and per-class scores** — common for understanding crystal-system confusions.
+5. **Balanced Accuracy** — useful and established when the experimental domain is naturally imbalanced.
+6. **Top-k Accuracy / match rate** — common in many-class candidate retrieval, indexing, or structure-solving tasks.
+7. **Cross-validation standard deviation or repeated-run mean ± std** — a common way of reporting training variability and robustness.
+8. **Uncertainty / calibration metrics** — increasingly used in recent work, but still generally secondary to the above performance metrics rather than replacing them as the headline.
+
+The survey did **not** identify a community norm in which a paired/bootstrap 95% confidence interval must lie completely above zero before an XRD-ML result may be reported as positive. Strict bootstrap or significance analyses can strengthen a paper, but they are not the normal binary success criterion of the PXRD classification literature.
+
+#### Metric redundancy notes
+
+For standard single-label multiclass classification:
+
+- micro-F1 is numerically equivalent to overall accuracy, so both do not need to occupy separate headline columns;
+- balanced accuracy is the mean per-class recall, so macro recall is highly redundant if balanced accuracy is already reported.
+
+This motivates concise main tables rather than maximizing the number of metrics.
+
+### New two-layer reporting policy
+
+#### Layer 1 — main scientific / presentation results
+
+Use conventional, directly interpretable performance evidence:
+
+- Macro-F1 / F1 where appropriate;
+- balanced accuracy for naturally imbalanced domains;
+- overall accuracy when useful for comparison with prior PXRD literature;
+- few-shot learning curves and label-budget comparisons;
+- mean improvement in percentage points;
+- consistency across independent training seeds;
+- per-class performance where scientifically informative;
+- mean ± std or equivalent repeated-run summaries;
+- Top-k metrics only when the task is candidate retrieval / many-class ranking rather than ordinary seven-class classification;
+- ECE / NLL / Brier as secondary reliability metrics when relevant.
+
+The main question is whether the evidence as a whole supports the scientific claim, not whether every auxiliary statistical test independently clears a confirmatory threshold.
+
+#### Layer 2 — strict statistical audit
+
+Keep, but demote to secondary evidence / appendix / internal audit:
+
+- class-stratified parent bootstrap;
+- paired confidence intervals;
+- detailed uncertainty decomposition;
+- strict parent-level resampling rules;
+- narrow confirmatory wording gates such as requiring a 95% CI to lie completely above zero.
+
+These analyses remain valuable for transparency and for answering methodological questions, but **a CI crossing zero is not by itself a reason to treat the whole real-domain experiment as a failure** when the broader performance evidence is coherent.
+
+### Domain-specific reporting rules adopted for this project
+
+#### Simulated OOD
+
+Main outward-facing result:
+
+- **Primary:** Macro-F1;
+- also report overall accuracy where useful;
+- report the matched-seed mean / standard deviation and direction consistency;
+- JS improves mean single-factor OOD Macro-F1 by about **+5.46 percentage points**;
+- all **5/5** matched training seeds improve.
+
+The paired/bootstrap audit remains supporting evidence rather than the headline.
+
+#### RRUFF-301
+
+RRUFF is a balanced curated experimental domain, so the main outward-facing role is:
+
+- emphasize **few-shot adaptation / label efficiency** under identical real-label budgets;
+- report Macro-F1 and Accuracy at each K;
+- report the learning curve and JS-vs-ERM percentage-point differences;
+- report repeated-seed mean ± std / direction consistency;
+- do not let an overly strict auxiliary CI criterion determine whether the real-domain result is considered useful.
+
+Balanced Accuracy is not needed as a headline in a deliberately balanced benchmark. RRUFF zero-shot does not need an independent main-slide role if it distracts from the stronger few-shot story; K=0 may remain as a diagnostic point in a learning curve when useful.
+
+#### CNRS-318
+
+Treat CNRS as a naturally imbalanced second real domain. Its natural class counts are:
+
+`21 / 87 / 77 / 41 / 33 / 12 / 47`
+
+The main table should therefore use the combination:
+
+- **Macro-F1** — equal-weight precision/recall performance across all seven crystal systems;
+- **Balanced Accuracy** — mean per-class recall, appropriate for the natural imbalance;
+- **Overall Accuracy** — performance under the actual natural sample distribution and the most conventional PXRD comparison metric;
+- **per-class F1 + support** when space permits;
+- **5-seed direction / mean ± std** as the main stability description.
+
+Current conventional performance picture:
+
+- 5/5 training seeds favor JS;
+- Macro-F1: about 0.191 -> 0.209;
+- balanced accuracy: about 0.218 -> 0.239;
+- overall accuracy: about 0.200 -> 0.210;
+- ECE: about 0.683 -> 0.612.
+
+The small class supports (notably hexagonal n=12) make Macro-F1 uncertainty intrinsically wide because every crystal system receives equal weight. This limitation should be acknowledged, but the parent-bootstrap CI crossing zero is **not** the headline and should not be used to reclassify the experiment as a failed result.
+
+Appropriate public wording is along the lines of:
+
+> The independent CNRS experimental domain shows a directionally consistent improvement across all five training seeds, with gains in Macro-F1, balanced accuracy, overall accuracy, and calibration; uncertainty remains larger because the real dataset is naturally imbalanced and contains low-support crystal systems.
+
+#### Calibration / reliability metrics
+
+ECE, NLL, Brier score, predictive entropy and confidence analysis are scientifically valuable and increasingly relevant to reliable scientific ML. In this project they should be used as **secondary reliability evidence**. For example, an ECE improvement can support the statement that the performance gain is accompanied by better calibration.
+
+They should not replace Accuracy / Macro-F1 / Balanced Accuracy as the headline performance layer unless the scientific question itself is specifically calibration or uncertainty estimation.
+
+### Retrospective correction — how the earlier Residual branch should be interpreted
+
+The reporting-standard reset also requires a retrospective correction to how the project history describes the earlier Residual / residual-decorrelation branch.
+
+During the first P0 stage, some Residual performance comparisons had small positive point estimates but paired/bootstrap confidence intervals that crossed zero. At the time, the project sometimes treated that fact too strongly, using language close to "benefit not demonstrated" or implicitly allowing `CI crosses zero` to contribute to a failure-style verdict.
+
+Under the current reporting standard, **CI crossing zero by itself is not a valid reason to say that Residual was scientifically disproved or that the experiment failed**. Those early performance results should instead be read as:
+
+> the tested Residual implementation did not show a clear, stable performance advantage; the point estimates were small and seed-sensitive, with substantial uncertainty.
+
+However, the later decision to seal Residual was **not based only on confidence intervals**. Several independent negative or inconclusive signals accumulated:
+
+1. **Optimization / performance trajectory:** early short-trajectory updates could hurt classification before later recovering, and the performance advantage never became as clean or persistent as the JS branch.
+2. **Mechanism mismatch:** the intended crystal-semantic decorrelation was not stably demonstrated; independent probes could still decode crystal information from the residual, and some later milestones moved in the wrong direction.
+3. **V10 follow-up:** explicit simulator-supervised measurement information became decodable, but crystal leakage increased at the same time. This suggested that the auxiliary branch increased total residual information rather than cleanly separating measurement variation from crystal semantics.
+4. **ResNet scale Gate:** after the backbone was changed, the old Residual lambda grid `[0.2, 2, 20]` produced only negligible / negligible / weak influence and did not span the preregistered weak / material / dominant range.
+5. **ResNet residual stability Gate:** across three Train-only seeds, the preregistered probe signal counts at epochs 3 / 5 / 10 were `2/3`, `1/3`, and `2/3`; the rule required at least `2/3` at both epochs 5 and 10, so the status was `stable_signal_not_demonstrated`.
+
+Therefore the historically correct conclusion is **not**:
+
+> Residual was disproved because its confidence interval crossed zero.
+
+The correct conclusion is:
+
+> **Residual was not selected for the mainline because stable performance benefit and stable decorrelation behavior were not demonstrated under the tested implementation, and subsequent Train-only mechanism/scale/stability Gates did not justify committing formal Validation resources. The underlying Residual hypothesis itself was not scientifically disproved.**
+
+Chinese shorthand for future application / project-history writing:
+
+> **Residual 并未被科学上证伪；当时实现由于性能收益不稳定、机制去相关未稳定成立，并在后续稳定性与作用尺度 Gate 中没有获得继续进入正式实验的资格，因此被封存。**
+
+#### Development Gate versus scientific-result reporting
+
+This episode also clarifies a second distinction that must be preserved:
+
+- **Outward scientific-result reporting:** a bootstrap CI crossing zero is an uncertainty annotation, not an automatic veto on a coherent result.
+- **Internal development Go/No-Go Gate:** a preregistered Train-only mechanism criterion may legitimately decide whether a risky branch earns more compute / Validation access, provided it is described as a resource-allocation / development rule rather than a claim that the scientific hypothesis has been disproved.
+
+Thus, the Residual stability Gate remains historically valid as a development decision, while any old wording equivalent to `CI crosses zero -> Residual failed` should be treated as an over-strong interpretation and corrected in future summaries.
+
+### What is explicitly abandoned
+
+The project will no longer use the following logic for outward-facing scientific judgment:
+
+> "If a strict paired/bootstrap 95% CI crosses zero, the result is effectively unsuccessful or should not be presented positively."
+
+Likewise, not every internal audit statistic needs to appear in the main group-meeting PPT or application narrative.
+
+### What is NOT abandoned
+
+This is **not** permission to hide contradictory evidence, change metrics after seeing results to manufacture significance, delete frozen results, or alter evaluation data post hoc.
+
+The original audit outputs remain preserved. The change is about the **role and hierarchy of evidence**:
+
+- community-standard performance reporting = primary communication layer;
+- strict statistical audit = secondary credibility layer.
+
+### Rationale for future project decisions
+
+For materials-ML / AI-for-characterization work, evaluation standards should be calibrated to the scientific question, the actual experimental-data regime, and the conventions of the target field. Internal rigor should improve credibility, not impose a stricter success definition than the community itself normally uses and thereby make valid results artificially difficult to communicate.
+
+For future PPTs, paper drafts, result summaries, and application narratives, Codex and other analysis agents should default to the domain-specific metric hierarchy above. If an older project document uses language equivalent to `CI > 0 or the result fails`, that should be treated as a historical governance rule, not as the current reporting standard.
+
+---
+
+<a id="history-2026-08-27-quantitative-inversion"></a>
+
+## 归并自 `PROJECT_HISTORY_NOTE_2026-08-27_XRD_QUANTITATIVE_INVERSION.md`
+
+## 项目发展节点：从晶系分类中的物理约束构想，到独立的 PXRD 定量反演项目
+
+**日期：** 2026-08-27
+**状态：** 已记录为下一代项目规划，不改变当前 JS 分类项目的冻结结果
+
+### 1. 这次变化是什么
+
+当前七晶系项目已经完成 Dynamic ERM 与 Dynamic JS 的五组配对 Validation / simulated Test，科学结果不再改动。下一步研究不再继续给分类器叠加新的 loss，而是把此前关于晶格物理监督的构想，整理为一个独立的定量反演项目。
+
+新的主问题是：
+
+```text
+观测 PXRD + 名义结构 / 参考谱
+    -> 定量结构参数 + 测量参数
+    -> 前向物理验证与传统局部精修
+```
+
+这标志着项目从：
+
+```text
+XRD -> 离散晶系标签
+```
+
+推进到：
+
+```text
+XRD -> 可解释的连续物理参数
+```
+
+### 2. 早期构想
+
+此前曾提出：
+
+- 在 `CE + JS` 中加入基于 Bragg 定律的“硬限制”；
+- 教模型识别各晶系的特征峰位置；
+- 或增加晶格参数 / reciprocal metric 的辅助预测头。
+
+这些想法的共同出发点是：
+
+> JS 只利用同一母结构的观测等价关系，能否进一步利用模拟器和晶体学提供的参数与前向物理关系？
+
+这个出发点被保留，但具体物理表述需要修正。
+
+### 3. 关键修正
+
+七晶系并没有固定的绝对峰位置。峰位由：
+
+- 晶格参数；
+- Miller index；
+- 波长；
+- 候选结构及其反射条件；
+
+共同决定。
+
+因此，不能把：
+
+```text
+某个晶系 -> 某几个固定 2theta 峰
+```
+
+作为通用规则写入分类损失。
+
+真正属于晶体学的约束是：
+
+> 一整组峰位是否能够由某个晶格 metric、候选结构和物理前向模型统一解释。
+
+这使项目从一个可能过强、容易误用的“固定峰硬约束”，转向了更自然的：
+
+```text
+已知候选相下的参数反演 + 前向一致性
+```
+
+### 4. 为什么从分类辅助头转成独立反演项目
+
+继续在当前分类器上加入 lattice auxiliary，会混合两个问题：
+
+1. 晶系分类是否更鲁棒；
+2. 连续晶格与测量参数是否可辨识。
+
+而当前 JS 主线已经得到稳定模拟 OOD 结果，继续扩张会破坏项目收口。
+
+独立项目能够更干净地回答：
+
+- 模型能否恢复晶格尺度和四方畸变；
+- 模型能否区分结构变化与仪器零点偏移；
+- 同一结构的不同测量视图是否给出一致的结构参数；
+- 预测参数重新生成的谱是否与观测相容；
+- 机器学习预测能否改善传统 refinement 初始化。
+
+### 5. 当前正式 V0
+
+第一版冻结为：
+
+- 单相；
+- 已知候选结构 / 名义 CIF；
+- 四方晶系；
+- 固定元素、占位和分数坐标；
+- 输入为观测谱、参考谱和差谱；
+- 输出为晶胞尺度、四方畸变、零点偏移和峰宽；
+- 背景和噪声先作为 nuisance；
+- 使用同源双视图，其中结构参数相同、测量参数不同；
+- 分阶段加入监督回归、结构一致性和前向谱一致性；
+- 最后比较名义初始化与 ML 初始化后的同一局部精修流程。
+
+正式计划见：
+
+- [`NEXT_PROJECT_XRD_QUANTITATIVE_INVERSION.md`](NEXT_PROJECT_XRD_QUANTITATIVE_INVERSION.md)
+
+资源清单见：
+
+- [`NEXT_PROJECT_XRD_QUANTITATIVE_INVERSION.md`](NEXT_PROJECT_XRD_QUANTITATIVE_INVERSION.md#resource-manifest)
+
+### 6. 与当前项目的连续性
+
+当前项目的核心认识是：
+
+> 模拟器不只是数据生成器，还保留同一母结构不同观测之间的关系；这种关系可以转化为监督。
+
+下一项目把这一认识推进一步：
+
+> 模拟器还知道生成谱图所使用的结构参数、测量参数和前向映射，因此可以提供参数监督与物理一致性监督。
+
+项目发展的连续链条是：
+
+```text
+物理扰动数据生成
+    -> 同源关系监督（JS）
+    -> 连续参数监督
+    -> 前向物理一致性
+    -> refinement 初始化与模型校准
+```
+
+因此，这不是突然离开 XRD 分类另起炉灶，而是把“模拟器能提供什么监督”从关系层扩展到参数和前向模型层。
+
+### 7. 对长期研究方向的意义
+
+这次转向使项目从纯 `A-METRO` 的测量分类，进一步接近：
+
+```text
+测量 -> 参数反演 -> 前向模型校准
+```
+
+它能够迁移到：
+
+- 半导体光学量测与结构参数提取；
+- 器件 I-V / C-V 参数反演；
+- CT、MRI、超声等医学测量反演；
+- 工业无损检测中的几何与材料状态估计；
+- 其他“已知前向模型 + 受噪测量 + 隐参数恢复”的问题。
+
+对申请叙事而言，这一节点应表述为：
+
+> 在完成基于同源关系监督的鲁棒分类后，我没有继续堆叠分类算法，而是重新审视模拟器还能提供哪些科学信息，并将下一阶段收敛为参考条件下的定量参数反演：让模型不仅给出类别判断，还输出能够被前向物理模型验证、并可用于传统精修初始化的连续参数。
+
+### 8. 执行边界
+
+- 当前 JS 分类项目先完成图表、汇报与技术报告封装；
+- 定量反演在完成四方数据数量与可辨识性 Gate 前不创建大规模代码；
+- 不把“已形成规划”写成“项目已经完成”；
+- 不在没有独立实验验证时宣称真实域自动精修；
+- 多晶系、多相、完整 Rietveld 和实验 few-shot 均属于后续扩展，而非 V0。
+
+### 9. 保留、修正与推迟
+
+#### 保留
+
+- 模拟器标签监督；
+- 同一母结构的多视图关系；
+- 晶格物理应进入学习过程的直觉；
+- Chitturi、DONUT、RAPID、PQ-Net、AIdex 与 invariant representation 资源线索。
+
+#### 修正
+
+- “七晶系固定特征峰位置”改为“候选结构 / 晶格 metric 与整组峰位的相容性”；
+- “硬限制”改为分阶段、可审计的 physics-informed consistency；
+- “分类辅助模块”改为独立定量反演任务。
+
+#### 推迟
+
+- 七晶系统一 invariant representation；
+- 多相与相含量；
+- 晶粒尺寸和微应变的同时估计；
+- 原子坐标与占位精修；
+- 实验域 few-shot；
+- GSAS-II / FullProf 完整自动化接口。
+

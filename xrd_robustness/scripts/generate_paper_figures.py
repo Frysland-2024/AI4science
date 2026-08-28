@@ -1106,8 +1106,8 @@ def _parse_args() -> argparse.Namespace:
         "--formats",
         nargs="+",
         choices=("svg", "png", "pdf"),
-        default=("svg", "png"),
-        help="One or more output formats (default: svg png)",
+        default=("svg",),
+        help="One or more output formats (default: svg)",
     )
     return parser.parse_args()
 

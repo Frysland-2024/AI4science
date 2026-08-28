@@ -60,7 +60,6 @@ def test_public_report_directory_matches_positive_allowlist() -> None:
         "CNRS_318_RESULTS.md",
         "CALIBRATION_ANALYSIS.md",
         "opxrd_cnrs7cs_independent_parent_audit_20260827.md",
-        "README.md",
     }
 
 
@@ -83,8 +82,8 @@ def test_completed_cnrs_result_is_not_described_as_pending() -> None:
         assert path.is_file()
         assert audit_code[hash_field] == _source_sha256(path)
     for path in (
+        REPOSITORY_ROOT / "README.md",
         REPOSITORY_ROOT / "docs/CURRENT_STATE.md",
-        REPOSITORY_ROOT / "docs/README.md",
         PROJECT_ROOT / "MANUSCRIPT.md",
     ):
         text = path.read_text(encoding="utf-8")
@@ -155,20 +154,13 @@ def test_public_document_links_resolve() -> None:
     expected_links = {
         REPOSITORY_ROOT / "README.md": {
             "docs/CURRENT_STATE.md",
-            "docs/APPLICATION_RESEARCH_NARRATIVE.md",
+            "docs/GRADUATE_RESEARCH_DIRECTION.md",
             "docs/PROJECT_HISTORY.md",
             "xrd_robustness/README.md",
             "xrd_robustness/MANUSCRIPT.md",
             "xrd_robustness/reports/RESULTS.md",
             "xrd_robustness/reports/validation_results.json",
             "xrd_robustness/reports/simulated_test_results.json",
-        },
-        REPOSITORY_ROOT / "docs/README.md": {
-            "CURRENT_STATE.md",
-            "APPLICATION_RESEARCH_NARRATIVE.md",
-            "PROJECT_HISTORY.md",
-            "../xrd_robustness/MANUSCRIPT.md",
-            "../xrd_robustness/reports/RESULTS.md",
         },
         PROJECT_ROOT / "README.md": {
             "../docs/CURRENT_STATE.md",

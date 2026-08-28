@@ -31,11 +31,11 @@
 - 完成 RRUFF-301 的 K=1/2/5 locked-test few-shot 评测并回溯核验结果；历史 prospective provenance 不完整，因此不将其表述为 provenance-complete confirmatory execution；
 - 完成 CNRS-318 的 10-checkpoint zero-shot 外部域评测、原始输入复建和结果完整性审计；
 - 完成模拟 Test 与 CNRS 的概率可靠性审计；
-- 完成跨平台换行规范化哈希校验与全量回归测试（`122 passed`）。
+- 完成跨平台换行规范化哈希校验与全量回归测试（`117 passed`）。
 
 ## 3. 结果与当前评价口径
 
-主科学判断采用 PXRD / Materials ML 社区常用的 performance-reporting 范式，并按三层证据组织：Macro-F1、balanced accuracy、accuracy、mean ± std、多 seed 一致性、few-shot learning curve、label efficiency 和 per-class F1 是主 performance layer；ECE/NLL/Brier 等是 reliability 增强证据；paired/class-stratified parent bootstrap、95% CI 与不确定性分解是 strict statistical audit。单个 CI 跨 0 不再自动把整体一致的结果判成失败。当前权威规范见 [`PXRD_RESULT_REPORTING_STANDARD.md`](PXRD_RESULT_REPORTING_STANDARD.md)，方法论转变的历史缘由见 [`PROJECT_HISTORY_NOTE_2026-08-27_REPORTING_STANDARD_RESET.md`](PROJECT_HISTORY_NOTE_2026-08-27_REPORTING_STANDARD_RESET.md)。
+主科学判断采用 PXRD / Materials ML 社区常用的 performance-reporting 范式，并按三层证据组织：Macro-F1、balanced accuracy、accuracy、mean ± std、多 seed 一致性、few-shot learning curve、label efficiency 和 per-class F1 是主 performance layer；ECE/NLL/Brier 等是 reliability 增强证据；paired/class-stratified parent bootstrap、95% CI 与不确定性分解是 strict statistical audit。单个 CI 跨 0 不再自动把整体一致的结果判成失败。当前权威规范见 [`PXRD_RESULT_REPORTING_STANDARD.md`](PXRD_RESULT_REPORTING_STANDARD.md)，方法论转变的历史缘由已归并进 [`PROJECT_HISTORY.md`](PROJECT_HISTORY.md)。
 
 这项修正只改变证据层级，不改变实验或原始结果：不得删除不利统计结果、隐藏跨零 CI、看结果后换指标、修改 frozen test 数据、重选 checkpoint/seed、反复重跑到满意，或改写历史 raw outputs。
 
@@ -75,9 +75,9 @@
 - [`../xrd_robustness/src/xrd_robustness/training/objectives.py`](../xrd_robustness/src/xrd_robustness/training/objectives.py)
 - [`../xrd_robustness/src/xrd_robustness/simulator.py`](../xrd_robustness/src/xrd_robustness/simulator.py)
 - [`../xrd_robustness/src/xrd_robustness/online_views.py`](../xrd_robustness/src/xrd_robustness/online_views.py)
-- [`../xrd_robustness/scripts/train.py`](../xrd_robustness/scripts/train.py)
+- [`../xrd_robustness/src/xrd_robustness/training/runner.py`](../xrd_robustness/src/xrd_robustness/training/runner.py)
 
-结果已经确定，不会再改。公开仓库里只留了当前实现、运行配置、结果和使用文档；`train.py` 是可复用的方法参考，分数看已有模型的评估结果文件。
+结果已经确定，不会再改。公开仓库里只留当前实现、运行配置、结果和使用文档；安装项目后通过 `xrd-train` 调用可复用训练入口，分数看已有模型的评估结果文件。
 
 这里说的"结果已经确定"包括模拟部分和两个角色不同的实验域。CNRS 的结果是
 **zero-shot 外部域压力测试**，不是使用 CNRS 标签做域适配；冻结配置保持原样，执行完成状态由
@@ -143,7 +143,6 @@ python -m pytest -q
 相关文档：
 
 - [`NEXT_PROJECT_XRD_QUANTITATIVE_INVERSION.md`](NEXT_PROJECT_XRD_QUANTITATIVE_INVERSION.md)
-- [`XRD_QUANTITATIVE_INVERSION_RESOURCE_MANIFEST.md`](XRD_QUANTITATIVE_INVERSION_RESOURCE_MANIFEST.md)
-- [`PROJECT_HISTORY_NOTE_2026-08-27_XRD_QUANTITATIVE_INVERSION.md`](PROJECT_HISTORY_NOTE_2026-08-27_XRD_QUANTITATIVE_INVERSION.md)
+- [`PROJECT_HISTORY.md`](PROJECT_HISTORY.md)
 
 该项目目前仅完成问题定义、边界收缩和执行规划。必须先完成四方结构数量审计与可辨识性 Gate，才创建 `xrd_inversion/` 代码目录并启动训练。

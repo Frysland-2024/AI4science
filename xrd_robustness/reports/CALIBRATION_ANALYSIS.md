@@ -21,13 +21,14 @@ map is the single claim-to-artifact index for the reliability result:
 | Claim or check | Canonical artifact |
 |---|---|
 | Overall status, aggregate metrics and paired sign counts | `summary.json` |
-| Compact script-generated result table and reading rule | `REPORT.md` |
-| Every simulated method-level evaluation | `simulated_metrics.csv` |
-| All 180 matched simulated ERM-JS comparisons | `simulated_paired.csv` |
-| CNRS per-seed method metrics | `cnrs_metrics.csv` |
-| Five matched CNRS seed comparisons | `cnrs_paired.csv` |
+| All 180 matched simulated comparisons, including both method values | `simulated_paired.csv` |
+| Five matched CNRS seed comparisons, including both method values | `cnrs_paired.csv` |
 | Pooled descriptive reliability plots | `simulated_single_factor_ood_reliability.png` and `cnrs318_reliability.png` |
 | Metric computation and frozen forward-inference audit | `scripts/analyze_calibration.py` |
+
+The paired CSVs are the canonical row-level tables. Separate method-level expansions
+and a generated Markdown recap are intentionally not tracked because they are
+deterministically reconstructible from the paired tables and `summary.json`.
 
 The audit obeyed the following provenance safeguards:
 

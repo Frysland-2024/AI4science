@@ -40,16 +40,20 @@ Dynamic JS：共同标签 + 预测一致性
 |---|---|
 | [`docs/CURRENT_STATE.md`](docs/CURRENT_STATE.md) | 项目现状、进度和下一步 |
 | [`docs/PXRD_RESULT_REPORTING_STANDARD.md`](docs/PXRD_RESULT_REPORTING_STANDARD.md) | 当前三层评价体系与各域默认汇报模板 |
-| [`docs/PROJECT_HISTORY_NOTE_2026-08-27_REPORTING_STANDARD_RESET.md`](docs/PROJECT_HISTORY_NOTE_2026-08-27_REPORTING_STANDARD_RESET.md) | 评价体系修正的历史缘由 |
-| [`docs/APPLICATION_RESEARCH_NARRATIVE.md`](docs/APPLICATION_RESEARCH_NARRATIVE.md) | 申请和面试用的项目介绍 |
-| [`docs/PROJECT_HISTORY.md`](docs/PROJECT_HISTORY.md) | 完整研究演化档案；记录失败、版本变化和历史决策，不代表当前方法主张 |
-| [`xrd_robustness/README.md`](xrd_robustness/README.md) | 安装、代码结构与使用方式 |
+| [`docs/GRADUATE_RESEARCH_DIRECTION.md`](docs/GRADUATE_RESEARCH_DIRECTION.md) | 申请叙事、研究方向框架、方向地图与日本导师检索关键词 |
+| [`docs/NEXT_PROJECT_XRD_QUANTITATIVE_INVERSION.md`](docs/NEXT_PROJECT_XRD_QUANTITATIVE_INVERSION.md) | 下一代定量反演计划及论文、代码、数据资源附录 |
+| [`docs/PROJECT_HISTORY.md`](docs/PROJECT_HISTORY.md) | 完整研究演化档案；含日期化决策节点、失败、版本变化和评价体系修正 |
+| [`docs/PROJECT_HISTORY_NOTE_2026-08-27_CNRS_RECLASSIFICATION.md`](docs/PROJECT_HISTORY_NOTE_2026-08-27_CNRS_RECLASSIFICATION.md) | 冻结 CNRS 协议所链接的独立历史节点 |
+| [`xrd_robustness/README.md`](xrd_robustness/README.md) | 安装、代码结构与结果/证据索引 |
 | [`xrd_robustness/MANUSCRIPT.md`](xrd_robustness/MANUSCRIPT.md) | 论文正文框架 |
 | [`xrd_robustness/reports/RESULTS.md`](xrd_robustness/reports/RESULTS.md) | 结果汇总 |
 | [`xrd_robustness/reports/CNRS_318_RESULTS.md`](xrd_robustness/reports/CNRS_318_RESULTS.md) | CNRS-318 zero-shot 结果、完整性审计与修正后的 paired bootstrap |
-| [`xrd_robustness/reports/README.md`](xrd_robustness/reports/README.md) | 报告与证据索引 |
+| [`xrd_robustness/reports/CALIBRATION_ANALYSIS.md`](xrd_robustness/reports/CALIBRATION_ANALYSIS.md) | 模拟 Test 与 CNRS 概率可靠性分析 |
 | [`xrd_robustness/reports/validation_results.json`](xrd_robustness/reports/validation_results.json) | 验证集结果（JSON） |
 | [`xrd_robustness/reports/simulated_test_results.json`](xrd_robustness/reports/simulated_test_results.json) | 测试集结果（JSON） |
+| [`xrd_robustness/reports/rruff301_fewshot_results.json`](xrd_robustness/reports/rruff301_fewshot_results.json) | RRUFF-301 few-shot 机器可读汇总 |
+
+建议先读 `CURRENT_STATE.md` 和 `RESULTS.md`；只有追溯旧判断、失败实验或方法转变时才查 `PROJECT_HISTORY.md`。当前科学说法以当前状态、评价规范和结果文件为准，历史档案不覆盖当前结论。
 
 ## 快速验证
 

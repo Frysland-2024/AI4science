@@ -565,8 +565,6 @@ def _run_cnrs(
     return metrics_rows, paired, summary
 
 
-def _fmt(value: float, digits: int = 4) -> str:
-    return f"{value:+.{digits}f}" if value >= 0 else f"{value:.{digits}f}"
 
 
 def _calibration_interpretation(summary: dict[str, Any]) -> str:
@@ -592,90 +590,6 @@ def _calibration_interpretation(summary: dict[str, Any]) -> str:
     if float(ece.get("mean_delta_js_minus_erm", 0.0)) < 0:
         return "ece_only_or_mixed_proper_scores"
     return "not_supported"
-
-
-def _write_report(
-    path: Path,
-    *,
-    simulated_summary: dict[str, Any] | None,
-    cnrs_summary: dict[str, Any] | None,
-) -> None:
-    lines = [
-        "# Calibration audit — frozen Dynamic ERM vs JS",
-        "",
-        "This is a **post-hoc secondary analysis**. No model was trained, tuned, or selected by this script.",
-        "",
-    ]
-    if simulated_summary is not None:
-        pair_summary = simulated_summary["paired"]
-        means = simulated_summary["method_means_across_conditions"]
-        status = _calibration_interpretation(simulated_summary)
-        lines += [
-            "## Simulated Test",
-            "",
-            f"Matched evaluation conditions: **{pair_summary['n_pairs']}**.",
-            f"Calibration interpretation: **{status}**.",
-            "",
-            "| Metric | Dynamic ERM | JS Consistency | Mean paired Δ (JS−ERM) | Better-direction pairs |",
-            "|---|---:|---:|---:|---:|",
-        ]
-        for metric in METRIC_NAMES:
-            delta = pair_summary["metrics"][metric]
-            better = (
-                delta["positive_pairs"]
-                if metric in {"macro_f1", "accuracy", "mean_entropy"}
-                else delta["negative_pairs"]
-            )
-            lines.append(
-                f"| {metric} | {means['dynamic_erm'][metric]:.6f} | "
-                f"{means['dynamic_js'][metric]:.6f} | "
-                f"{_fmt(delta['mean_delta_js_minus_erm'], 6)} | "
-                f"{better}/{pair_summary['n_pairs']} |"
-            )
-        reproduction = simulated_summary["frozen_ece_reproduction"]
-        lines += [
-            "",
-            "The ECE values are recomputed from saved/re-generated per-sample probabilities. "
-            f"Where frozen raw ECE was available, {reproduction['comparisons']} conditions were cross-checked; "
-            f"maximum absolute discrepancy = {reproduction['max_absolute_error']:.8g}.",
-            "",
-            "Reliability figure: `simulated_single_factor_ood_reliability.png`.",
-            "",
-        ]
-
-    if cnrs_summary is not None:
-        pooled = cnrs_summary["pooled_metrics"]
-        delta = cnrs_summary["pooled_delta_js_minus_erm"]
-        seed_pairs = cnrs_summary["per_seed_paired"]
-        lines += [
-            "## CNRS-318 zero-shot",
-            "",
-            f"Per-seed matched pairs: **{seed_pairs['n_pairs']}**. CNRS labels were not used to fit or tune anything in this audit.",
-            "",
-            "| Metric | Dynamic ERM pooled | JS pooled | Δ (JS−ERM) |",
-            "|---|---:|---:|---:|",
-        ]
-        for metric in METRIC_NAMES:
-            lines.append(
-                f"| {metric} | {pooled['dynamic_erm'][metric]:.6f} | "
-                f"{pooled['dynamic_js'][metric]:.6f} | {_fmt(delta[metric], 6)} |"
-            )
-        lines += [
-            "",
-            "Reliability figure: `cnrs318_reliability.png`.",
-            "",
-        ]
-
-    lines += [
-        "## Reading rule",
-        "",
-        "The calibration claim should be strengthened only if ECE, NLL, and Brier improve together while classification performance is not sacrificed. "
-        "Lower ECE alone can reflect confidence shrinkage and is not sufficient to establish a general calibration mechanism.",
-        "",
-        "The repeated simulated conditions and CNRS seed predictions are paired/repeated evaluations, not statistically independent experiments.",
-        "",
-    ]
-    path.write_text("\n".join(lines), encoding="utf-8")
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -718,24 +632,22 @@ def main(argv: Sequence[str] | None = None) -> int:
     cnrs_summary: dict[str, Any] | None = None
 
     if not args.skip_simulated:
-        simulated_metrics, simulated_pairs, simulated_summary = _run_simulated(
+        _simulated_metrics, simulated_pairs, simulated_summary = _run_simulated(
             output_root=output_root,
             simulated_output=args.simulated_output.resolve(),
             checkpoint_root=args.checkpoint_root.resolve(),
             batch_size=int(args.batch_size),
             device=device,
         )
-        _write_csv(output_root / "simulated_metrics.csv", simulated_metrics)
         _write_csv(output_root / "simulated_paired.csv", simulated_pairs)
         final["simulated"] = simulated_summary
         _write_json(output_root / "summary.json", final)
 
     if not args.skip_cnrs:
-        cnrs_metrics, cnrs_pairs, cnrs_summary = _run_cnrs(
+        _cnrs_metrics, cnrs_pairs, cnrs_summary = _run_cnrs(
             output_root=output_root,
             predictions_path=args.cnrs_predictions.resolve(),
         )
-        _write_csv(output_root / "cnrs_metrics.csv", cnrs_metrics)
         _write_csv(output_root / "cnrs_paired.csv", cnrs_pairs)
         final["cnrs"] = cnrs_summary
         _write_json(output_root / "summary.json", final)
@@ -747,13 +659,8 @@ def main(argv: Sequence[str] | None = None) -> int:
         else "skipped"
     )
     _write_json(output_root / "summary.json", final)
-    _write_report(
-        output_root / "REPORT.md",
-        simulated_summary=simulated_summary,
-        cnrs_summary=cnrs_summary,
-    )
     print("Calibration audit completed.")
-    print(f"Open: {output_root / 'REPORT.md'}")
+    print(f"Summary: {output_root / 'summary.json'}")
     return 0
 
 
