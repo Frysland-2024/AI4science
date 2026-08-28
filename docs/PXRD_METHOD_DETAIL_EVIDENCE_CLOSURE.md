@@ -7,8 +7,8 @@
 
 | 问题 | 状态 | 最终结论 |
 |---|---|---|
-| 1. Related Work / 新颖性边界 | **CLOSED** | 本地证据足以支持“online simulation、consistency 本身都有前例；本项目贡献是利用 simulator-retained parent identity 做 measurement-equivalence / relationship supervision”的当前说法；**不做 world-first 声明** |
-| 2. Dynamic ERM 与 Dynamic JS 是否是在真正相同的训练条件下比较 | **CLOSED** | 两者共享母体结构、在线双视图生成器、扰动分布、骨干网络、优化设置、训练预算和配对 seed；classification loss 完全相同，JS 唯一新增的是同一母体两份预测之间的 consistency term |
+| 1. Related Work / 新颖性边界 | **CLOSED** | online simulation 和 consistency 本身都有前例；当前贡献是利用 simulator-retained parent identity，把同一母体结构的不同观测关系显式变成 measurement-equivalence / relationship supervision；**不做 world-first 声明** |
+| 2. ERM 与 JS 到底是不是看了相同的数据 | **CLOSED** | **ERM 也看两张扰动谱，JS 也看两张扰动谱。两者数据量一样、扰动一样、backbone 一样、optimizer 一样、训练预算一样、seed 配对一样。唯一差别是 JS 额外利用“这两张谱来自同一个 parent”这一关系，让两个 prediction 保持一致。** |
 | 3. formal_14060 数据集如何构建、如何避免 parent leakage | **CLOSED** | 14,060 个 Materials Project 结构来自已审计结构层的确定性合并；当前最终划分以 `structure_fingerprint` 为 parent identity，按晶系分层做 70/15/15，得到 9,842 / 2,109 / 2,109，并在生成任何扰动谱之前完成 parent-level split |
 | 4. 五类扰动是否只改变观测谱，而没有把 structure A 变成 structure B | **CLOSED** | 是。代码先由固定 parent structure 计算 ideal peak table，后续扰动只作用于峰位坐标、峰宽、相对峰强、背景和噪声；不重写母体原子结构、晶格或 crystal-system label。因此 structure A 经扰动后仍是 structure A 的另一种测量 realization |
 | 5. `lambda_js=60` 是怎么选出来的 | **CLOSED** | 先用 Train-only 梯度尺度把候选固定为 `[3,30,60]`，再仅用 Validation 按预先定义的 OOD + in-range 规则选择 60；选择时没有使用 simulated Test、RRUFF 或 CNRS，之后不再 retune |
@@ -36,7 +36,7 @@
 - 历史文件：`xrd_robustness/reports/literature_parameter_raw.csv`
 - 历史 commit：`f36be82b2a0b5fd3c58ec87a58fa6e3ba839f217`
 
-KBSS 思想吸收笔记则明确记录：KBSS 提供的是“同一对象不同视图保持稳定”的高层 consistency 思想；当前 XRD 项目不移植其代码、任务、伪标签阈值或具体训练流程，而是把这个原则重新落到有物理依据的 PXRD measurement views 上：
+KBSS 思想吸收笔记明确记录：KBSS 提供的是“同一对象不同视图保持稳定”的高层 consistency 思想；当前 XRD 项目不移植其代码、任务、伪标签阈值或具体训练流程，而是把这个原则重新落到有物理依据的 PXRD measurement views 上：
 
 - 历史文件：`00_project_context/KBSS_PROJECT_RELEVANCE.md`
 - 历史 commit：`f36be82b2a0b5fd3c58ec87a58fa6e3ba839f217`
@@ -58,73 +58,144 @@ KBSS 思想吸收笔记则明确记录：KBSS 提供的是“同一对象不同�
 - “我们第一次用模拟器生成扰动 PXRD”；
 - “这是世界上第一个使用 parent identity 的工作”。
 
-本地仓库足以**关闭当前 contribution boundary**，但它不是一份穷尽全领域的系统综述，因此不支持 world-first 口号。当前 manuscript 本来就不需要这种口号。
+本地仓库足以关闭当前 contribution boundary，但它不是一份穷尽全领域的系统综述，因此不支持 world-first 口号。
 
 ### 1.4 状态
 
-**CLOSED.** Related Work 后续只需把已有前例与当前 contribution boundary 写清楚。
+**CLOSED.** 后续只需把已有前例与当前 contribution boundary 写清楚。
 
 ---
 
-## 2. Dynamic ERM 与 Dynamic JS 是否是在真正相同的条件下比较：CLOSED
+## 2. ERM 与 JS 到底是不是看了相同的数据：CLOSED
 
-### 2.1 问题要怎样讲清楚
+### 2.1 这个问题应该直接怎么讲
 
-当我们说“JS 的提升来自 relationship supervision”时，首先要排除一种很普通的混淆：**会不会其实是 JS 那组看了更多数据、用了更强的扰动、换了模型或训练预算，所以分数才更高？**
+这个问题不需要绕成“matched design”这样的术语。最直接的问法就是：
 
-因此这个问题真正要核实的是：
+> **JS 比 ERM 表现更好，会不会只是因为 JS 那组看了更多谱、用了更强的扰动、换了 backbone、换了 optimizer，或者用了不同的 seed？**
 
-> **Dynamic ERM 和 Dynamic JS 是否使用同一批母体结构、同一套在线双视图生成方式、同一扰动分布、同样的骨干网络、优化器、训练预算和配对随机种子；并且在这些条件都相同的情况下，JS 唯一多出来的东西是否只是“这两张谱来自同一母体，因此两份预测应保持一致”的关系约束。**
+当前答案非常明确：**不是。**
 
-如果这一点成立，那么两组实验的性能差异才可以主要解释为：**显式利用 same-parent relationship 是否有价值。**
+最核心的事实应该直接写成：
 
-### 2.2 当前代码给出的直接答案
+> **ERM 也看两张扰动谱。**  
+> **JS 也看两张扰动谱。**  
+> **两者数据量一样、扰动一样、backbone 一样、optimizer 一样、训练预算一样、seed 配对一样。**  
+> **唯一差别就是：JS 额外利用了“这两张谱来自同一个 parent”这一关系，让两个 prediction 保持一致。**
 
-当前 `online_views.py` 中，`make_pair` / `make_pair_from_peaks` 从**同一个 structure / material_id**生成 view 1 和 view 2；训练 runner 无论 ERM 还是 JS，都先通过同一个 `render_pair_batch` 得到 `x1, x2, target`，然后才进入训练 objective。
+这四句话就是当前 ERM–JS 对照最重要的解释。
 
-当前 `training/objectives.py` 更直接：
+### 2.2 两种方法实际上吃进去的东西
+
+对同一个 parent structure `s`，online simulator 生成两张独立扰动谱：
+
+```text
+x1 = g(s, m1)
+x2 = g(s, m2)
+```
+
+其中 `m1` 和 `m2` 是两个独立采样的 measurement states。
+
+**Dynamic ERM 并不是只看一张谱。** 它同样同时看 `x1` 和 `x2`：
+
+```text
+x1 -> model -> CE(p1, y)
+x2 -> model -> CE(p2, y)
+
+L_ERM = 0.5 * [CE(p1,y) + CE(p2,y)]
+```
+
+**Dynamic JS 也看完全同样的两张谱：**
+
+```text
+x1 -> model -> CE(p1, y)
+x2 -> model -> CE(p2, y)
+
+L_JS = 0.5 * [CE(p1,y) + CE(p2,y)]
+       + lambda_js * JS(p1,p2)
+```
+
+因此，JS 并没有比 ERM 多得到一张谱，也没有额外得到一批更“困难”的增强样本。
+
+### 2.3 逐项核对：什么一样，什么不一样
+
+| 项目 | Dynamic ERM | Dynamic JS | 是否相同 |
+|---|---|---|---|
+| parent structures | 同一批 | 同一批 | **相同** |
+| 每个 parent 的在线 view 数 | 2 张 | 2 张 | **相同** |
+| view 1 / view 2 生成器 | 同一个 `OnlineViewFactory` | 同一个 `OnlineViewFactory` | **相同** |
+| perturbation distribution | 同一 frozen simulator config | 同一 frozen simulator config | **相同** |
+| 五类扰动 | 相同 | 相同 | **相同** |
+| data exposure | 两张 view 都参与 CE | 两张 view 都参与 CE | **相同** |
+| backbone | ResNet-18-GN | ResNet-18-GN | **相同** |
+| preprocessing | identity | identity | **相同** |
+| optimizer | AdamW | AdamW | **相同** |
+| learning-rate schedule | constant | constant | **相同** |
+| training budget | matched | matched | **相同** |
+| training seeds | paired | paired | **相同/配对** |
+| crystal-system CE supervision | `CE(x1,y)+CE(x2,y)` | `CE(x1,y)+CE(x2,y)` | **相同** |
+| same-parent relationship supervision | 不显式使用 | `JS(p1,p2)` | **唯一新增项** |
+
+### 2.4 当前代码直接支持这个判断
+
+当前 `online_views.py` 中，`make_pair` / `make_pair_from_peaks` 从同一个 `structure` / `material_id` 生成 view 1 和 view 2。
+
+训练 runner 无论选择 `dynamic_erm` 还是 `dynamic_js`，都先通过同一个 `render_pair_batch` 得到：
+
+```text
+x1, x2, target
+```
+
+然后才进入不同 objective。
+
+当前 `training/objectives.py` 中，两者的 classification 部分是逐字同构的：
+
+```text
+classification = 0.5 * [CE(logits1,target) + CE(logits2,target)]
+```
 
 Dynamic ERM：
 
 ```text
-classification = 0.5 * [CE(x1,y) + CE(x2,y)]
 total = classification
 ```
 
 Dynamic JS：
 
 ```text
-classification = 0.5 * [CE(x1,y) + CE(x2,y)]
-consistency = JS(p1,p2)
+consistency = JS(logits1, logits2)
 total = classification + lambda_js * consistency
 ```
 
-因此两种方法的 classification 部分完全相同；JS 唯一多出来的是同一 pair 上的 prediction-consistency term。
+所以从实现层看，**JS 的新增信息不是更多数据，而是“x1 和 x2 属于同一个 parent”这一已知关系。**
 
-### 2.3 配置与历史记录也支持同条件比较
+### 2.5 配置和历史协议也支持相同条件比较
 
 当前 `configs/experiment.public.json` 固定：
 
 - 相同 ResNet-18-GN；
 - 相同五个 training seeds；
 - 每个 seed 都有一组 ERM / JS 配对 run；
-- 同一 data config 与 simulation config。
+- 同一 data config；
+- 同一 simulation config。
 
-V9 历史的 four-run 方案则更早就把 scientific question 写成：在 frozen ResNet backbone 与 **identical dynamic exposure** 下比较 Dynamic ERM 和 JS，并固定相同 preprocessing、AdamW、learning rate、weight decay、batch size 与训练预算。
+V9 历史 four-run 方案也把问题明确写成：在 frozen ResNet backbone 和 **identical dynamic exposure** 下比较 Dynamic ERM 与 JS，并固定相同 preprocessing、AdamW、learning rate、weight decay、batch size 和训练预算。
 
-历史 manuscript skeleton 也明确要求 matched-budget protocol 报告 identical mother structures、accepted parameter pairs、pair schedule、forward-view exposure、backbone 和 optimizer-step count。
+因此，这不是后来为了 framing 才补上的解释，而是原始实验设计本身就在控制这些变量。
 
-### 2.4 最终判断
+### 2.6 最终判断
 
-因此当前可以合理地把 ERM vs JS 的核心差异解释为：
+当前最准确、最容易复述的结论就是：
 
-> **两组看到的是同样的数据与同样的测量扰动；JS 额外利用了 simulator 已知的 same-parent relationship。**
+> **ERM 也看两张扰动谱，JS 也看两张扰动谱。两者数据量、扰动分布、backbone、optimizer、训练预算和随机种子条件都相同。唯一差别是：JS 额外知道“这两张谱来自同一个 parent”，并用 JS consistency 要求两个 prediction 对晶系类别保持一致。**
 
-这不是因为 JS 看了更多谱，也不是因为 JS 使用了更强的 augmentation。
+所以当前观察到的 ERM–JS 性能差异，才能被解释为：
 
-### 2.5 状态
+> **显式使用 simulator-retained same-parent relationship 是否有价值。**
 
-**CLOSED.** 后续只需要在论文/PPT 做一张 matched-design 表，不需要重跑实验。
+### 2.7 状态
+
+**CLOSED.** 后续论文/PPT 直接用上面的四句话和 matched-design 表，不需要重跑实验。
 
 ---
 
@@ -146,9 +217,9 @@ V9 历史的 four-run 方案则更早就把 scientific question 写成：在 fro
 
 并记录了 `max_energy_above_hull = 0.1` 的来源筛选条件。
 
-### 3.2 当前真正生效的 split 不是旧的历史 split
+### 3.2 当前真正生效的 split
 
-早期 `build_formal_14060.py` 曾带有旧的 `9800 / 2130 / 2130` 划分。这个数字已经被后来的 parent-structure split **取代**，不能再用于当前论文。
+早期 `build_formal_14060.py` 曾带有旧的 `9800 / 2130 / 2130` 划分。这个数字已经被后来的 parent-structure split 取代，不能再用于当前论文。
 
 当前权威配置是：
 
@@ -161,7 +232,7 @@ V9 历史的 four-run 方案则更早就把 scientific question 写成：在 fro
 - split unit：`parent_structure`；
 - parent identity：`structure_fingerprint`。
 
-### 3.3 为什么不会出现“同一个 parent 的不同谱跨 split”
+### 3.3 为什么不会出现同一个 parent 的不同谱跨 split
 
 当前 `build_structure_split.py` 的顺序是：
 
@@ -170,11 +241,12 @@ V9 历史的 four-run 方案则更早就把 scientific question 写成：在 fro
         ↓
 先按 structure_fingerprint 分 Train / Validation / Test
         ↓
-每个 parent 的所有 clean / in-range / OOD / online views
-继承 parent 所属 split
+再从各自 parent 生成 clean / in-range / OOD / online views
+        ↓
+所有 view 继承 parent 所属 split
 ```
 
-脚本还显式检查：
+脚本显式检查：
 
 - duplicate material ID = 0；
 - Train / Validation / Test 的 material ID intersections = 0；
@@ -182,7 +254,7 @@ V9 历史的 four-run 方案则更早就把 scientific question 写成：在 fro
 - `split_before_view_generation = True`；
 - `all_generated_views_inherit_parent_structure_split = True`。
 
-因此当前的防泄漏单位不是“谱图文件”，而是更上游的**母体结构**。
+因此当前防泄漏的单位不是谱图文件，而是更上游的**母体结构**。
 
 ### 3.4 claim 边界
 
@@ -190,14 +262,7 @@ V9 历史的 four-run 方案则更早就把 scientific question 写成：在 fro
 
 > **exact-parent-disjoint / parent-structure-disjoint**
 
-不要称为：
-
-- formula-disjoint；
-- prototype-disjoint；
-- chemistry-disjoint；
-- structure-family-disjoint。
-
-当前 assignment 明确没有使用 family fields。
+不要称为 formula-disjoint、prototype-disjoint、chemistry-disjoint 或 structure-family-disjoint。当前 assignment 明确没有使用 family fields。
 
 ### 3.5 状态
 
@@ -211,13 +276,13 @@ V9 历史的 four-run 方案则更早就把 scientific question 写成：在 fro
 
 这是 measurement-equivalence 能不能成立的物理前提。
 
-我们真正要确认的是：
+真正要确认的是：
 
-> **从一个固定的母体晶体结构 A 出发，施加峰位偏移、峰展宽、择优取向、背景和噪声以后，得到的是否仍然只是“structure A 在另一种测量/样品条件下的 PXRD 观测”；还是说模拟器实际上修改了晶格或原子坐标，把 structure A 变成了另一个 structure B。**
+> **从固定的母体晶体结构 A 出发，施加峰位偏移、峰展宽、择优取向、背景和噪声以后，得到的是否仍然只是“structure A 在另一种测量/样品条件下的 PXRD 观测”；还是说模拟器实际上修改了晶格或原子坐标，把 structure A 变成了另一个 structure B。**
 
 只有前一种情况成立，同一 parent 的两张谱才天然共享同一个七晶系标签。
 
-也就是说，我们要验证的是：
+我们要验证的是：
 
 ```text
 structure A
@@ -241,7 +306,7 @@ PXRD of B
 
 当前 `simulator.py` 先调用 `ideal_peak_table(structure, grid)`，由**传入的固定 structure** 计算理想 Bragg peak table，包括 peak positions、intensities、hkl、multiplicity 与 reciprocal-vector metadata。
 
-随后 `simulate_from_peak_table(...)` 接收的是已经生成好的 peak table / peak arrays，并在观测层进行扰动：
+随后 `simulate_from_peak_table(...)` 接收已经生成好的 peak table / peak arrays，并只在观测层进行扰动：
 
 - **peak shift**：对全部 `2θ` positions 加一个统一 `delta_2theta_deg`；代码明确把它解释为 instrument zero offset；
 - **broadening**：使用 `fwhm_deg` 把同一组 peak positions / intensities 渲染成不同峰宽；
@@ -249,7 +314,7 @@ PXRD of B
 - **background**：向已经生成的 diffraction signal 叠加平滑背景；
 - **noise**：向 signal 加入 Gaussian / Poisson-count / electronic readout noise。
 
-在这些步骤里，没有把新的 atomic coordinates、lattice parameters 或新的 `structure` 对象写回 simulator，也没有重新计算一个不同结构的 crystal-system label。
+这些步骤不会把新的 atomic coordinates、lattice parameters 或新的 `structure` 对象写回 simulator，也不会重新计算一个不同结构的 crystal-system label。
 
 因此代码层面实际是：
 
@@ -277,7 +342,7 @@ x2 = diffraction(B)
 - 使用同一个 `material_id`；
 - 只是 `view_id=1/2` 和对应 sampled measurement state 不同。
 
-所以可以写成：
+所以：
 
 ```text
 x1 = g(s, m1)
@@ -286,7 +351,7 @@ x2 = g(s, m2)
 
 其中 `s` 始终是同一个 parent，变化的是 measurement/sample state `m`。
 
-### 4.4 这和“谱图完全一样”不是一回事
+### 4.4 measurement equivalence 的准确含义
 
 结论不是：
 
@@ -307,15 +372,15 @@ crystal_system(x1) = crystal_system(x2) = h(s)
 
 > **structure-preserving / label-preserving measurement variation**，而不是 signal identity。
 
-### 4.5 为什么用 prediction-level consistency，而不是强迫内部特征完全相同
+### 4.5 为什么用 prediction-level consistency
 
 峰移、展宽、texture、background 等确实会带来真实的测量差异；内部 representation 可以保留这些差异。当前任务真正需要稳定的是**关于晶系类别的判断**。
 
-所以更准确的约束是：
+所以约束的是：
 
-> 两张谱可以不同，但既然它们仍然来自同一个 structure A，模型对 crystal-system 的 task-level belief 不应因为 measurement state 改变而任意漂移。
+> 两张谱可以不同，但既然它们仍来自同一个 structure A，模型对 crystal-system 的 task-level belief 不应因为 measurement state 改变而任意漂移。
 
-这与项目后来放弃强残差解耦、保留 prediction-level JS 的方法收缩也是一致的。
+这也解释了为什么当前使用 output-level JS，而不是要求所有 feature 完全相同。
 
 ### 4.6 claim 边界
 
@@ -323,7 +388,7 @@ crystal_system(x1) = crystal_system(x2) = h(s)
 
 > measurement-equivalent views of the same latent crystal for the seven-crystal-system classification task
 
-不要把它扩张成：
+不要扩张成：
 
 - 两个 PXRD 信号在所有物理意义上等价；
 - 所有 measurement perturbations 都对所有下游任务保持不变；
@@ -331,13 +396,13 @@ crystal_system(x1) = crystal_system(x2) = h(s)
 
 ### 4.7 状态
 
-**CLOSED.** 当前代码已经直接证明五类 perturbation 在实现上是对固定 parent diffraction representation 的观测层变换，而不是把 structure A 变成 structure B；不需要新增实验来验证这一点。
+**CLOSED.** 当前代码已经直接证明五类 perturbation 在实现上是对固定 parent diffraction representation 的观测层变换，而不是把 structure A 变成 structure B；不需要新增实验。
 
 ---
 
 ## 5. `lambda_js = 60` 的选择历史：CLOSED
 
-### 5.1 第一阶段：只确定合理候选尺度，不看 Validation/Test/真实域
+### 5.1 第一阶段：只确定合理候选尺度
 
 历史 `v9_resnet_js_only_scale_gate` 在 Train-only 条件下检查了 `[3,30,60]` 三个 JS 权重的梯度尺度：
 
@@ -362,7 +427,7 @@ crystal_system(x1) = crystal_system(x2) = h(s)
 
 1. JS 的 in-range Macro-F1 不能比 Dynamic ERM 低超过 0.01；
 2. 在合格候选中，选择 mean single-factor OOD Macro-F1 最高者；
-3. 如再平手，才看 in-range，再看较小 λ。
+3. 如平手，再看 in-range，最后看较小 λ。
 
 实际 Validation 结果：
 
@@ -375,16 +440,14 @@ crystal_system(x1) = crystal_system(x2) = h(s)
 
 三个 JS candidate 都通过 in-range guardrail，λ=60 的 Validation OOD 指标最高，因此被选定。
 
-当时的 summary 明确记录：
+当时 summary 明确记录：
 
 - simulated Test used = false；
 - real XRD used = false。
 
-随后五个 training seeds 的 ERM vs λ=60 Validation replication 仍然保持 5/5 主 OOD effect 为正，并且记录 `lambda_retuned = false`。之后才进入 simulated Test 和真实域评估。
+随后五个 training seeds 的 ERM vs λ=60 Validation replication 仍然保持 5/5 主 OOD effect 为正，并记录 `lambda_retuned = false`。之后才进入 simulated Test 和真实域评估。
 
 ### 5.3 最终判断
-
-因此最简单、最准确的解释是：
 
 > `lambda_js=60` 不是看到 Test、RRUFF 或 CNRS 结果以后挑出来的；它先由 Train-only 梯度尺度限定候选范围，再由 simulated Validation 上预先定义的 OOD / in-range 规则选出，随后固定用于最终多 seed、Test 和真实域实验。
 
@@ -398,12 +461,10 @@ crystal_system(x1) = crystal_system(x2) = h(s)
 
 截至 2026-08-29，这五个“方法细节是否有证据”的问题均已结案：
 
-1. **Related Work / contribution boundary：CLOSED。**
-2. **ERM vs JS 公平对照：CLOSED。**
-3. **formal_14060 数据集构建与 parent split：CLOSED。**
-4. **五类扰动的 structure-preserving / label-preserving 实现：CLOSED。**
-5. **λ=60 的选择路径：CLOSED。**
+1. **Related Work / 新颖性边界：CLOSED。**
+2. **ERM 与 JS 的数据暴露和训练条件是否一致：CLOSED。ERM 与 JS 都看同样的两张扰动谱，唯一新增项是 same-parent consistency。**
+3. **formal_14060 构建与 parent-level split：CLOSED。**
+4. **五类扰动是否保持 structure A 不变：CLOSED。当前实现是 structure-preserving / label-preserving measurement transformation。**
+5. **`lambda_js=60` 选择路径：CLOSED。**
 
-这不意味着新颖性 framing 的写作已经完成。**证据问题已经关闭，表达工作仍然是当前最高优先级。**
-
-后续不应再把这五项重新包装成“需要补实验的科研缺口”；只需从本文件和对应当前/历史源文件抽取内容，用于 Methods、Related Work、核心方法图、组会 PPT 和申请材料。
+这些结论以后直接作为论文 Methods、Related Work、PPT、答辩和申请叙事的事实依据。除非项目 scientific claim 或当前实现发生实质变化，否则不要把它们重新列为“需要补实验”的开放问题。
