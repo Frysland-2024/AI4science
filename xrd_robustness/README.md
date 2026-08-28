@@ -19,6 +19,24 @@
 
 当前默认采用[三层评价体系](../docs/PXRD_RESULT_REPORTING_STANDARD.md)：community-standard performance 是主科学交流层，reliability 是增强证据层，strict statistical audit 是不确定性与可信度审计层。
 
+## RRUFF-301 组成只读检查
+
+为了把 few-shot 数据组成讲得更清楚，仓库提供 [`scripts/audit_rruff301_composition.py`](scripts/audit_rruff301_composition.py)。它只读取本地已经存在的 `rruff371_master_manifest.csv`、`rruff301_adaptation_test_split.csv` 和规范化谱图，检查：
+
+- adaptation pool 与 locked test 的 RRUFF ID / spectrum SHA 是否重合；
+- `mineral_name`、`ideal_chemistry`、`measured_chemistry`、`space_group` 的精确规范化字符串重合；
+- 70×231 个跨 split 谱图对的 Pearson 相似度，以及 `0.95 / 0.98 / 0.995` 三个描述性阈值。
+
+这项检查**不是新的实验 Gate**，不会改变 split、删除样本、读取模型预测或重跑结果。相同 mineral / chemistry 的存在也不自动构成数据泄漏，因为当前 RRUFF-301 的用途是同一实验域内的 few-shot adaptation，而不是 unseen-mineral benchmark。
+
+在本地 `xrd_robustness/` 目录运行：
+
+```powershell
+python scripts/audit_rruff301_composition.py
+```
+
+默认输出 `reports/RRUFF301_COMPOSITION_AUDIT.md` 和 `.json`。如果只想先看 metadata、不读取谱图，可加 `--skip-spectra`。
+
 ## 结果与证据索引
 
 | 文件 | 作用 |
@@ -46,6 +64,7 @@
 | `src/xrd_robustness/simulator.py` | PXRD 物理扰动模拟器 |
 | `src/xrd_robustness/online_views.py` | 同一母体结构的两份配对谱图 |
 | `src/xrd_robustness/training/runner.py` / `xrd-train` | Dynamic ERM 与 JS 一致性训练入口 |
+| `scripts/audit_rruff301_composition.py` | 只读检查 RRUFF-301 adaptation/test 的 metadata 与谱图相似度组成 |
 | `scripts/build_cnrs318_manifests.py` | 只读核验或显式重建 CNRS-318 冻结 manifests |
 | `scripts/analyze_cnrs318_results.py` | 复核 CNRS 输入、预测、checkpoint、指标与 paired bootstrap |
 | `scripts/build_cnrs318_audit_artifact.py` | 从审计 CSV/JSON 构建含四张核心图的便携技术报告 |
