@@ -1,8 +1,8 @@
 # AI4science 当前状态
 
-**状态日期：** 2026-08-28
+**状态日期：** 2026-08-29
 
-**阶段：** 模拟结果、RRUFF-301 few-shot 与 CNRS-318 zero-shot 均已完成；当前在做论文图表与成果封装
+**阶段：** 模拟结果、RRUFF-301 few-shot 与 CNRS-318 zero-shot 均已完成；当前在做论文图表、方法 framing 与成果封装
 
 ## 1. 当前科学设计
 
@@ -20,6 +20,12 @@
 - 划分：训练 9,842 / 验证 2,109 / 测试 2,109；
 - 划分方式：按母体结构严格分开，训练/验证/测试不共享同一母体。
 
+当前方法贡献的统一表述是：
+
+> **shared parent identity → measurement equivalence → relationship supervision**
+
+传统 online PXRD simulator 主要承担 `data generator` 的角色；本项目进一步利用 simulator-retained parent identity，使其同时成为 **data generator + relationship supervisor**。JS consistency 是这一 measurement-equivalence supervision 的具体实现，而不是项目声称发明的新算法。
+
 ## 2. 已经做完的事
 
 - 在验证集上跑完了五组配对实验；
@@ -31,7 +37,21 @@
 - 完成 RRUFF-301 的 K=1/2/5 locked-test few-shot 评测并回溯核验结果；当前直接按 Macro-F1、Accuracy、mean ± SD、paired consistency 与 learning curve 报告；
 - 完成 CNRS-318 的 10-checkpoint zero-shot 外部域评测、原始输入复建和结果完整性审计；
 - 完成模拟 Test 与 CNRS 的概率可靠性审计；
-- 完成跨平台换行规范化哈希校验与全量回归测试（`117 passed`）。
+- 完成跨平台换行规范化哈希校验与全量回归测试（`117 passed`）；
+- 完成五类扰动物理/文献依据的当前主线汇总，确认该问题不是新的科研 TODO；
+- 完成 RRUFF-301 adaptation/test 的只读 composition audit：301 个 RRUFF ID 全部唯一，ID overlap = 0，spectrum-SHA overlap = 0，16,170 个跨 split 谱图对中 maximum Pearson = `0.947785`，没有 Pearson ≥ 0.95 的近重复谱。
+
+### 2.1 本轮三个问题的最终状态
+
+权威结案文档：[`PXRD_EVIDENCE_CLOSURE.md`](PXRD_EVIDENCE_CLOSURE.md)。
+
+| 问题 | 状态 | 当前处理 |
+|---|---|---|
+| 五类扰动的物理/文献依据 | **CLOSED** | 已有系统 evidence；后续只在 Methods / PPT / 答辩中调用，不重新调查 |
+| RRUFF-301 composition / near-duplicate 检查 | **CLOSED** | 无相同 RRUFF ID、无相同谱、无 Pearson ≥ 0.95 的跨 split 近重复谱；不修改 frozen split |
+| 新颖性 framing | **ACTIVE WRITING** | 当前最高优先级；打磨 `simulator = data generator + relationship supervisor`，不是补实验或加算法 |
+
+除非未来 scientific claim 明显改变，否则前两个问题不再重新开启。
 
 ## 3. 结果与当前评价口径
 
@@ -58,8 +78,11 @@
 
 表中 `±` 均为对应重复运行的 sample standard deviation；完整 mean±SD、paired consistency 与结果说明见 [`../xrd_robustness/reports/RESULTS.md`](../xrd_robustness/reports/RESULTS.md)。
 
-结果文件：
+结果与证据文件：
 
+- [`PXRD_EVIDENCE_CLOSURE.md`](PXRD_EVIDENCE_CLOSURE.md)
+- [`PXRD_PERTURBATION_EVIDENCE.md`](PXRD_PERTURBATION_EVIDENCE.md)
+- [`../xrd_robustness/reports/RRUFF301_COMPOSITION_AUDIT.md`](../xrd_robustness/reports/RRUFF301_COMPOSITION_AUDIT.md)
 - [`../xrd_robustness/reports/RESULTS.md`](../xrd_robustness/reports/RESULTS.md)
 - [`../xrd_robustness/reports/validation_results.json`](../xrd_robustness/reports/validation_results.json)
 - [`../xrd_robustness/reports/simulated_test_results.json`](../xrd_robustness/reports/simulated_test_results.json)
@@ -76,6 +99,7 @@
 - [`../xrd_robustness/src/xrd_robustness/simulator.py`](../xrd_robustness/src/xrd_robustness/simulator.py)
 - [`../xrd_robustness/src/xrd_robustness/online_views.py`](../xrd_robustness/src/xrd_robustness/online_views.py)
 - [`../xrd_robustness/src/xrd_robustness/training/runner.py`](../xrd_robustness/src/xrd_robustness/training/runner.py)
+- [`../xrd_robustness/scripts/audit_rruff301_composition.py`](../xrd_robustness/scripts/audit_rruff301_composition.py)
 
 结果已经确定，不会再改。公开仓库里只留当前实现、运行配置、结果和使用文档；安装项目后通过 `xrd-train` 调用可复用训练入口，分数看已有模型的评估结果文件。
 
@@ -89,7 +113,7 @@
 
 两个实验真实域互补，主任务不同：
 
-- **RRUFF-301**：平衡、人工整理的实验真实域（balanced curated experimental domain），主任务是 K=1/2/5 few-shot adaptation。
+- **RRUFF-301**：平衡、人工整理的实验真实域（balanced curated experimental domain），主任务是 K=1/2/5 few-shot adaptation。composition audit 已完成并结案：adaptation/test 无相同 RRUFF ID、无相同 spectrum SHA、无 Pearson ≥ 0.95 的跨 split 近重复谱；共享 mineral identity 被保留，因为该 benchmark 不是 unseen-mineral task。
 - **CNRS-318**：自然不平衡、跨数据库的独立实验真实域（naturally imbalanced independent experimental domain），已正式定级为第二实验域，主分析是 frozen-model zero-shot external evaluation，保留自然类别分布 `21 / 87 / 77 / 41 / 33 / 12 / 47`。
 
 两个真实域均已有结果，但不合并成一个分数：
@@ -103,19 +127,25 @@
 
 ## 6. 当前卡点
 
-现在主要是把已有数字转化为清楚、可复述的成果：
+现在主要是把已有数字和方法思想转化为清楚、可复述的成果：
 
+- **最高优先级：**把 `shared parent identity → measurement equivalence → relationship supervision` 做成论文/PPT 的统一方法叙事；
+- 制作核心方法图，明确对照 `simulator = data generator` 与 `simulator = data generator + relationship supervisor`；
 - 生成五种扰动图、同源双视图方法图和配对结果图；
 - 完成仿照“组会1”视觉语言的阶段汇报；
 - 完成方法、结果和讨论正文；
 - 确保公开结果、图表和讲稿中的数字完全一致。
 
+这里的 framing 工作**不是新实验，也不是算法扩张**。不要重新把项目包装成“JS consistency 用于 XRD”；应把 JS 放在 measurement-equivalence relationship supervision 的下游实现位置。
+
 ## 7. 当前项目下一步
 
-1. 从 `reports/validation_results.json`、`reports/simulated_test_results.json` 和真实域结果文件生成论文与 PPT 图表。
-2. 完成方法、结果和讨论章节。
-3. 将组会 PPT、技术报告和一页项目摘要整理为申请可复用成果。
-4. 把 RRUFF-301 few-shot 与 CNRS-318 zero-shot 分表写入正文，并补齐结果图；不重开模型选择或事后删改 CNRS 样本。
+1. 首先打磨并固定方法新颖性 framing：`simulator from data generator to relationship supervisor`。
+2. 把该 framing 做成 PPT / manuscript 的核心方法图，视觉重点放在 `shared parent identity → measurement equivalence → supervision`，而不是把 JS 画成最大创新模块。
+3. 从 `reports/validation_results.json`、`reports/simulated_test_results.json` 和真实域结果文件生成论文与 PPT 图表。
+4. 完成 Introduction、Methods、Results 和 Discussion，使标题、摘要、方法图和申请叙事使用同一套 measurement-equivalence 语言。
+5. 将组会 PPT、技术报告和一页项目摘要整理为申请可复用成果。
+6. 把 RRUFF-301 few-shot 与 CNRS-318 zero-shot 分表写入正文并补齐结果图；不重开模型选择、不修改 frozen split、不事后删改真实域样本。
 
 复现当前工程检查的命令：
 
