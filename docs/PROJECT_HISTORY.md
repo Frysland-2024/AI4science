@@ -1128,7 +1128,7 @@ test membership 也可核验；但原始执行的 runner、support IDs、预执�
 - v1 split 导致 hexagonal=86, trigonal=0, test=241 (not 231)
 - v2 fix: DIF space_group + pymatgen.SpaceGroup 区分 hexagonal/trigonal
 - 正确 split: 301=70 adapt + 231 test, 43/class × 7
-- 实验重跑中 (run_rruff301_follow-up.py v2)
+- 实验重跑中 (historical RRUFF-301 v2 runner)
 
 ### 谭启组 Obsidian 知识库数据接入
 - 从 SharePoint 下载 OneDrive_2026-08-06.zip (1.1 GB)
@@ -1582,7 +1582,7 @@ Dynamic ERM 是整个项目最重要的公共基线，不是“落后方法”�
 
 ---
 
-## 4.2 JS Consistency：当前唯一主方法 [CONFIRMED]
+## 4.2 JS Consistency：当前唯一主方法 [RESULT]
 
 对于同一母结构动态生成的两个物理视图：
 
@@ -1656,7 +1656,7 @@ Dynamic ERM 是整个项目最重要的公共基线，不是“落后方法”�
 
 # 6. 当前最重要的结果
 
-## 6.1 JS 参数选择阶段 [CONFIRMED]
+## 6.1 JS 参数选择阶段 [RESULT]
 
 在受控 Validation 比较中：
 
@@ -1671,7 +1671,7 @@ Dynamic ERM 是整个项目最重要的公共基线，不是“落后方法”�
 
 ---
 
-## 6.2 RRUFF-301 更大规模 Few-shot 复核 [CONFIRMED]
+## 6.2 RRUFF-301 更大规模 Few-shot 复核 [RESULT]
 
 这是目前对留学申请最有说服力的实验证据之一。
 
@@ -1716,7 +1716,7 @@ Dynamic ERM 是整个项目最重要的公共基线，不是“落后方法”�
 
 ---
 
-## 6.3 Zero-shot 真实域结果：有趋势，但不是最强结论 [CONFIRMED / SECONDARY]
+## 6.3 Zero-shot 真实域结果：有趋势，但不是最强结论 [RESULT / SECONDARY]
 
 RRUFF-301 locked test 上，5 个 pretraining seeds 平均：
 
@@ -1734,7 +1734,7 @@ RRUFF-301 locked test 上，5 个 pretraining seeds 平均：
 
 ---
 
-## 6.4 RRUFF 数据错误审计：一次重要的方法论经历 [CONFIRMED]
+## 6.4 RRUFF 数据错误审计：一次重要的方法论经历 [RESULT]
 
 RRUFF-301 follow-up v1 曾出现 trigonal / hexagonal 划分错误：
 
@@ -1752,7 +1752,7 @@ RRUFF-301 follow-up v1 曾出现 trigonal / hexagonal 划分错误：
 
 ---
 
-## 6.5 Monoclinic 负迁移：从“发现”到“推翻” [CONFIRMED]
+## 6.5 Monoclinic 负迁移：从“发现”到“推翻” [RESULT]
 
 RRUFF-70 小样本 pilot 曾提示：JS 在 monoclinic 上可能造成明显负迁移。
 
@@ -1772,7 +1772,7 @@ RRUFF-301 的后续复核实验却显示：
 
 ---
 
-## 6.6 Calibration analysis [CONFIRMED, 但不是主贡献]
+## 6.6 Calibration analysis [RESULT, 但不是主贡献]
 
 2026-08-07 已新增 calibration analysis（ECE / NLL / Brier / confidence distributions）。
 
