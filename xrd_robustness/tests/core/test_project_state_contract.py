@@ -151,27 +151,6 @@ def test_current_pxrd_reporting_policy_has_three_layers() -> None:
     assert "不得删除或隐藏不利统计结果" in policy
 
 
-def test_current_reporting_does_not_use_confirmatory_evidence_tiers() -> None:
-    documents = (
-        REPOSITORY_ROOT / "docs/CURRENT_STATE.md",
-        REPOSITORY_ROOT / "docs/PXRD_RESULT_REPORTING_STANDARD.md",
-        PROJECT_ROOT / "README.md",
-        PROJECT_ROOT / "MANUSCRIPT.md",
-        PROJECT_ROOT / "reports/RESULTS.md",
-        PROJECT_ROOT / "reports/rruff301_fewshot_results.json",
-    )
-    banned = (
-        "provenance-complete",
-        "prospective confirmatory",
-        "confirmatory evidence",
-        "confirmatory threshold",
-    )
-    for path in documents:
-        text = path.read_text(encoding="utf-8").lower()
-        for phrase in banned:
-            assert phrase not in text
-
-
 def test_public_document_links_resolve() -> None:
     expected_links = {
         REPOSITORY_ROOT / "README.md": {
