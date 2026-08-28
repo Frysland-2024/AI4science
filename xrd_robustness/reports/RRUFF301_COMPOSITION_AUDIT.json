@@ -1,0 +1,1313 @@
+{
+  "schema_version": "rruff301-composition-audit-v1",
+  "purpose": "read_only_descriptive_composition_audit_not_a_gate",
+  "source_files": {
+    "master_manifest": "E:\\AI4science\\xrd_robustness\\data\\real_xrd\\rruff371\\manifests\\rruff371_master_manifest.csv",
+    "split": "E:\\AI4science\\xrd_robustness\\data\\real_xrd\\rruff371\\splits\\rruff301_adaptation_test_split.csv"
+  },
+  "counts": {
+    "adaptation_pool": 70,
+    "locked_test": 231,
+    "unique_rruff_ids": 301
+  },
+  "id_overlap_count": 0,
+  "id_overlap": [],
+  "spectrum_sha_overlap_count": 0,
+  "spectrum_sha_overlap": [],
+  "metadata_overlap": {
+    "mineral_name": {
+      "field": "mineral_name",
+      "overlapping_unique_values": 23,
+      "adaptation_samples_in_overlap": 26,
+      "locked_test_samples_in_overlap": 36,
+      "cross_split_pair_count": 40,
+      "details": [
+        {
+          "normalized_value": "bastnasite-(ce)",
+          "display_value": "Bastnasite-(Ce)",
+          "adaptation_ids": [
+            "R050409",
+            "R060359"
+          ],
+          "locked_test_ids": [
+            "R060550",
+            "R060737"
+          ],
+          "cross_split_pairs": 4
+        },
+        {
+          "normalized_value": "axinite-(fe)",
+          "display_value": "Axinite-(Fe)",
+          "adaptation_ids": [
+            "R050061"
+          ],
+          "locked_test_ids": [
+            "R050026",
+            "R060558"
+          ],
+          "cross_split_pairs": 2
+        },
+        {
+          "normalized_value": "calcite",
+          "display_value": "Calcite",
+          "adaptation_ids": [
+            "R040070"
+          ],
+          "locked_test_ids": [
+            "R050009",
+            "R050127"
+          ],
+          "cross_split_pairs": 2
+        },
+        {
+          "normalized_value": "chalcanthite",
+          "display_value": "Chalcanthite",
+          "adaptation_ids": [
+            "R060102"
+          ],
+          "locked_test_ids": [
+            "R050293",
+            "R050354"
+          ],
+          "cross_split_pairs": 2
+        },
+        {
+          "normalized_value": "chalcopyrite",
+          "display_value": "Chalcopyrite",
+          "adaptation_ids": [
+            "R050208"
+          ],
+          "locked_test_ids": [
+            "R050222",
+            "R050559"
+          ],
+          "cross_split_pairs": 2
+        },
+        {
+          "normalized_value": "dolomite",
+          "display_value": "Dolomite",
+          "adaptation_ids": [
+            "R050357"
+          ],
+          "locked_test_ids": [
+            "R040030",
+            "R050370"
+          ],
+          "cross_split_pairs": 2
+        },
+        {
+          "normalized_value": "fluorite",
+          "display_value": "Fluorite",
+          "adaptation_ids": [
+            "R050045"
+          ],
+          "locked_test_ids": [
+            "R040099",
+            "R050046"
+          ],
+          "cross_split_pairs": 2
+        },
+        {
+          "normalized_value": "marialite",
+          "display_value": "Marialite",
+          "adaptation_ids": [
+            "R040113"
+          ],
+          "locked_test_ids": [
+            "R060458",
+            "R060526"
+          ],
+          "cross_split_pairs": 2
+        },
+        {
+          "normalized_value": "microcline",
+          "display_value": "Microcline",
+          "adaptation_ids": [
+            "R050193"
+          ],
+          "locked_test_ids": [
+            "R050054",
+            "R050150"
+          ],
+          "cross_split_pairs": 2
+        },
+        {
+          "normalized_value": "natrolite",
+          "display_value": "Natrolite",
+          "adaptation_ids": [
+            "R040102"
+          ],
+          "locked_test_ids": [
+            "R040112",
+            "R060561"
+          ],
+          "cross_split_pairs": 2
+        },
+        {
+          "normalized_value": "rutile",
+          "display_value": "Rutile",
+          "adaptation_ids": [
+            "R060745"
+          ],
+          "locked_test_ids": [
+            "R050031",
+            "R050417"
+          ],
+          "cross_split_pairs": 2
+        },
+        {
+          "normalized_value": "sphalerite",
+          "display_value": "Sphalerite",
+          "adaptation_ids": [
+            "R060005",
+            "R060636"
+          ],
+          "locked_test_ids": [
+            "R050005"
+          ],
+          "cross_split_pairs": 2
+        },
+        {
+          "normalized_value": "strontianite",
+          "display_value": "Strontianite",
+          "adaptation_ids": [
+            "R050564"
+          ],
+          "locked_test_ids": [
+            "R040037",
+            "R050476"
+          ],
+          "cross_split_pairs": 2
+        },
+        {
+          "normalized_value": "wulfenite",
+          "display_value": "Wulfenite",
+          "adaptation_ids": [
+            "R050024",
+            "R050501"
+          ],
+          "locked_test_ids": [
+            "R050149"
+          ],
+          "cross_split_pairs": 2
+        },
+        {
+          "normalized_value": "zircon",
+          "display_value": "Zircon",
+          "adaptation_ids": [
+            "R050488"
+          ],
+          "locked_test_ids": [
+            "R050034",
+            "R050203"
+          ],
+          "cross_split_pairs": 2
+        },
+        {
+          "normalized_value": "corundum",
+          "display_value": "Corundum",
+          "adaptation_ids": [
+            "R060020"
+          ],
+          "locked_test_ids": [
+            "R040096"
+          ],
+          "cross_split_pairs": 1
+        },
+        {
+          "normalized_value": "dioptase",
+          "display_value": "Dioptase",
+          "adaptation_ids": [
+            "R050010"
+          ],
+          "locked_test_ids": [
+            "R040028"
+          ],
+          "cross_split_pairs": 1
+        },
+        {
+          "normalized_value": "grossular",
+          "display_value": "Grossular",
+          "adaptation_ids": [
+            "R060453"
+          ],
+          "locked_test_ids": [
+            "R060452"
+          ],
+          "cross_split_pairs": 1
+        },
+        {
+          "normalized_value": "kurnakovite",
+          "display_value": "Kurnakovite",
+          "adaptation_ids": [
+            "R050105"
+          ],
+          "locked_test_ids": [
+            "R050393"
+          ],
+          "cross_split_pairs": 1
+        },
+        {
+          "normalized_value": "leucite",
+          "display_value": "Leucite",
+          "adaptation_ids": [
+            "R060300"
+          ],
+          "locked_test_ids": [
+            "R040107"
+          ],
+          "cross_split_pairs": 1
+        },
+        {
+          "normalized_value": "mimetite",
+          "display_value": "Mimetite",
+          "adaptation_ids": [
+            "R040123"
+          ],
+          "locked_test_ids": [
+            "R050007"
+          ],
+          "cross_split_pairs": 1
+        },
+        {
+          "normalized_value": "scheelite",
+          "display_value": "Scheelite",
+          "adaptation_ids": [
+            "R060417"
+          ],
+          "locked_test_ids": [
+            "R040172"
+          ],
+          "cross_split_pairs": 1
+        },
+        {
+          "normalized_value": "topaz",
+          "display_value": "Topaz",
+          "adaptation_ids": [
+            "R050200"
+          ],
+          "locked_test_ids": [
+            "R050405"
+          ],
+          "cross_split_pairs": 1
+        }
+      ]
+    },
+    "ideal_chemistry": {
+      "field": "ideal_chemistry",
+      "overlapping_unique_values": 23,
+      "adaptation_samples_in_overlap": 27,
+      "locked_test_samples_in_overlap": 38,
+      "cross_split_pair_count": 44,
+      "details": [
+        {
+          "normalized_value": "ca(co_3_)",
+          "display_value": "Ca(CO_3_)",
+          "adaptation_ids": [
+            "R040070",
+            "R060195"
+          ],
+          "locked_test_ids": [
+            "R050009",
+            "R050127"
+          ],
+          "cross_split_pairs": 4
+        },
+        {
+          "normalized_value": "ce(co_3_)f",
+          "display_value": "Ce(CO_3_)F",
+          "adaptation_ids": [
+            "R050409",
+            "R060359"
+          ],
+          "locked_test_ids": [
+            "R060550",
+            "R060737"
+          ],
+          "cross_split_pairs": 4
+        },
+        {
+          "normalized_value": "k(alsi_3_o_8_)",
+          "display_value": "K(AlSi_3_O_8_)",
+          "adaptation_ids": [
+            "R050193"
+          ],
+          "locked_test_ids": [
+            "R050054",
+            "R050150",
+            "R050367"
+          ],
+          "cross_split_pairs": 3
+        },
+        {
+          "normalized_value": "tio_2_",
+          "display_value": "TiO_2_",
+          "adaptation_ids": [
+            "R060745"
+          ],
+          "locked_test_ids": [
+            "R050031",
+            "R050417",
+            "R050591"
+          ],
+          "cross_split_pairs": 3
+        },
+        {
+          "normalized_value": "ca_4_fe^2+^_2_al_4_[b_2_si_8_o_30_](oh)_2_",
+          "display_value": "Ca_4_Fe^2+^_2_Al_4_[B_2_Si_8_O_30_](OH)_2_",
+          "adaptation_ids": [
+            "R050061"
+          ],
+          "locked_test_ids": [
+            "R050026",
+            "R060558"
+          ],
+          "cross_split_pairs": 2
+        },
+        {
+          "normalized_value": "caf_2_",
+          "display_value": "CaF_2_",
+          "adaptation_ids": [
+            "R050045"
+          ],
+          "locked_test_ids": [
+            "R040099",
+            "R050046"
+          ],
+          "cross_split_pairs": 2
+        },
+        {
+          "normalized_value": "camg(co_3_)_2_",
+          "display_value": "CaMg(CO_3_)_2_",
+          "adaptation_ids": [
+            "R050357"
+          ],
+          "locked_test_ids": [
+            "R040030",
+            "R050370"
+          ],
+          "cross_split_pairs": 2
+        },
+        {
+          "normalized_value": "cu(so_4_)·5h_2_o",
+          "display_value": "Cu(SO_4_)·5H_2_O",
+          "adaptation_ids": [
+            "R060102"
+          ],
+          "locked_test_ids": [
+            "R050293",
+            "R050354"
+          ],
+          "cross_split_pairs": 2
+        },
+        {
+          "normalized_value": "cufes_2_",
+          "display_value": "CuFeS_2_",
+          "adaptation_ids": [
+            "R050208"
+          ],
+          "locked_test_ids": [
+            "R050222",
+            "R050559"
+          ],
+          "cross_split_pairs": 2
+        },
+        {
+          "normalized_value": "na_2_(si_3_al_2_)o_10_·2h_2_o",
+          "display_value": "Na_2_(Si_3_Al_2_)O_10_·2H_2_O",
+          "adaptation_ids": [
+            "R040102"
+          ],
+          "locked_test_ids": [
+            "R040112",
+            "R060561"
+          ],
+          "cross_split_pairs": 2
+        },
+        {
+          "normalized_value": "na_4_al_3_si_9_o_24_cl",
+          "display_value": "Na_4_Al_3_Si_9_O_24_Cl",
+          "adaptation_ids": [
+            "R040113"
+          ],
+          "locked_test_ids": [
+            "R060458",
+            "R060526"
+          ],
+          "cross_split_pairs": 2
+        },
+        {
+          "normalized_value": "pbmoo_4_",
+          "display_value": "PbMoO_4_",
+          "adaptation_ids": [
+            "R050024",
+            "R050501"
+          ],
+          "locked_test_ids": [
+            "R050149"
+          ],
+          "cross_split_pairs": 2
+        },
+        {
+          "normalized_value": "sr(co_3_)",
+          "display_value": "Sr(CO_3_)",
+          "adaptation_ids": [
+            "R050564"
+          ],
+          "locked_test_ids": [
+            "R040037",
+            "R050476"
+          ],
+          "cross_split_pairs": 2
+        },
+        {
+          "normalized_value": "zns",
+          "display_value": "ZnS",
+          "adaptation_ids": [
+            "R060005",
+            "R060636"
+          ],
+          "locked_test_ids": [
+            "R050005"
+          ],
+          "cross_split_pairs": 2
+        },
+        {
+          "normalized_value": "zr(sio_4_)",
+          "display_value": "Zr(SiO_4_)",
+          "adaptation_ids": [
+            "R050488"
+          ],
+          "locked_test_ids": [
+            "R050034",
+            "R050203"
+          ],
+          "cross_split_pairs": 2
+        },
+        {
+          "normalized_value": "al_2_o_3_",
+          "display_value": "Al_2_O_3_",
+          "adaptation_ids": [
+            "R060020"
+          ],
+          "locked_test_ids": [
+            "R040096"
+          ],
+          "cross_split_pairs": 1
+        },
+        {
+          "normalized_value": "al_2_sio_4_f_2_",
+          "display_value": "Al_2_SiO_4_F_2_",
+          "adaptation_ids": [
+            "R050200"
+          ],
+          "locked_test_ids": [
+            "R050405"
+          ],
+          "cross_split_pairs": 1
+        },
+        {
+          "normalized_value": "ca(wo_4_)",
+          "display_value": "Ca(WO_4_)",
+          "adaptation_ids": [
+            "R060417"
+          ],
+          "locked_test_ids": [
+            "R040172"
+          ],
+          "cross_split_pairs": 1
+        },
+        {
+          "normalized_value": "ca_3_al_2_(sio_4_)_3_",
+          "display_value": "Ca_3_Al_2_(SiO_4_)_3_",
+          "adaptation_ids": [
+            "R060453"
+          ],
+          "locked_test_ids": [
+            "R060452"
+          ],
+          "cross_split_pairs": 1
+        },
+        {
+          "normalized_value": "cusio_3_·h_2_o",
+          "display_value": "CuSiO_3_·H_2_O",
+          "adaptation_ids": [
+            "R050010"
+          ],
+          "locked_test_ids": [
+            "R040028"
+          ],
+          "cross_split_pairs": 1
+        },
+        {
+          "normalized_value": "k(alsi_2_o_6_)",
+          "display_value": "K(AlSi_2_O_6_)",
+          "adaptation_ids": [
+            "R060300"
+          ],
+          "locked_test_ids": [
+            "R040107"
+          ],
+          "cross_split_pairs": 1
+        },
+        {
+          "normalized_value": "mgb_3_o_3_(oh)_5_·5h_2_o",
+          "display_value": "MgB_3_O_3_(OH)_5_·5H_2_O",
+          "adaptation_ids": [
+            "R050105"
+          ],
+          "locked_test_ids": [
+            "R050393"
+          ],
+          "cross_split_pairs": 1
+        },
+        {
+          "normalized_value": "pb_5_(aso_4_)_3_cl",
+          "display_value": "Pb_5_(AsO_4_)_3_Cl",
+          "adaptation_ids": [
+            "R040123"
+          ],
+          "locked_test_ids": [
+            "R050007"
+          ],
+          "cross_split_pairs": 1
+        }
+      ]
+    },
+    "measured_chemistry": {
+      "field": "measured_chemistry",
+      "overlapping_unique_values": 4,
+      "adaptation_samples_in_overlap": 4,
+      "locked_test_samples_in_overlap": 4,
+      "cross_split_pair_count": 4,
+      "details": [
+        {
+          "normalized_value": "(zr_0.99_hf_0.01_)si_1.00_o_4_",
+          "display_value": "(Zr_0.99_Hf_0.01_)Si_1.00_O_4_",
+          "adaptation_ids": [
+            "R050488"
+          ],
+          "locked_test_ids": [
+            "R050203"
+          ],
+          "cross_split_pairs": 1
+        },
+        {
+          "normalized_value": "ca_1.000_f_2.000_",
+          "display_value": "Ca_1.000_ F_2.000_",
+          "adaptation_ids": [
+            "R050045"
+          ],
+          "locked_test_ids": [
+            "R050046"
+          ],
+          "cross_split_pairs": 1
+        },
+        {
+          "normalized_value": "ca_1.00_co_3_",
+          "display_value": "Ca_1.00_CO_3_",
+          "adaptation_ids": [
+            "R060195"
+          ],
+          "locked_test_ids": [
+            "R050127"
+          ],
+          "cross_split_pairs": 1
+        },
+        {
+          "normalized_value": "cu_1.00_fe_1.00_s_2.00_",
+          "display_value": "Cu_1.00_Fe_1.00_S_2.00_",
+          "adaptation_ids": [
+            "R050208"
+          ],
+          "locked_test_ids": [
+            "R050222"
+          ],
+          "cross_split_pairs": 1
+        }
+      ]
+    },
+    "space_group": {
+      "field": "space_group",
+      "overlapping_unique_values": 27,
+      "adaptation_samples_in_overlap": 57,
+      "locked_test_samples_in_overlap": 139,
+      "cross_split_pair_count": 419,
+      "details": [
+        {
+          "normalized_value": "p-1",
+          "display_value": "P-1",
+          "adaptation_ids": [
+            "R040119",
+            "R050061",
+            "R050105",
+            "R050555",
+            "R060102",
+            "R060645",
+            "R061082"
+          ],
+          "locked_test_ids": [
+            "R040179",
+            "R050026",
+            "R050062",
+            "R050261",
+            "R050293",
+            "R050299",
+            "R050354",
+            "R050393",
+            "R050463",
+            "R050468",
+            "R050491",
+            "R050539",
+            "R050576",
+            "R050577",
+            "R050621",
+            "R050657",
+            "R060101",
+            "R060558",
+            "R060598",
+            "R070209",
+            "R070562",
+            "R090030"
+          ],
+          "cross_split_pairs": 154
+        },
+        {
+          "normalized_value": "p6_3/m",
+          "display_value": "P6_3/m",
+          "adaptation_ids": [
+            "R040123",
+            "R050291",
+            "R050675"
+          ],
+          "locked_test_ids": [
+            "R040098",
+            "R050007",
+            "R050015",
+            "R050027",
+            "R050122",
+            "R050171",
+            "R050274",
+            "R050376",
+            "R050533",
+            "R060070",
+            "R060180",
+            "R060533"
+          ],
+          "cross_split_pairs": 36
+        },
+        {
+          "normalized_value": "r-3c",
+          "display_value": "R-3c",
+          "adaptation_ids": [
+            "R040070",
+            "R050658",
+            "R060020"
+          ],
+          "locked_test_ids": [
+            "R040035",
+            "R040051",
+            "R040096",
+            "R040114",
+            "R050009",
+            "R050127",
+            "R050443",
+            "R050676",
+            "R050677",
+            "R060366",
+            "R060583"
+          ],
+          "cross_split_pairs": 33
+        },
+        {
+          "normalized_value": "p2_1/c",
+          "display_value": "P2_1/c",
+          "adaptation_ids": [
+            "R050033",
+            "R050136",
+            "R050284"
+          ],
+          "locked_test_ids": [
+            "R050240",
+            "R050269",
+            "R050398",
+            "R050420",
+            "R050526",
+            "R050638",
+            "R060016",
+            "R060078",
+            "R100218"
+          ],
+          "cross_split_pairs": 27
+        },
+        {
+          "normalized_value": "fm3m",
+          "display_value": "Fm3m",
+          "adaptation_ids": [
+            "R040142",
+            "R050045",
+            "R070325"
+          ],
+          "locked_test_ids": [
+            "R040099",
+            "R050046",
+            "R050166",
+            "R060849",
+            "R060916",
+            "R070292",
+            "R070747"
+          ],
+          "cross_split_pairs": 21
+        },
+        {
+          "normalized_value": "c-1",
+          "display_value": "C-1",
+          "adaptation_ids": [
+            "R040006",
+            "R050193"
+          ],
+          "locked_test_ids": [
+            "R040060",
+            "R040062",
+            "R040068",
+            "R040129",
+            "R050054",
+            "R050150",
+            "R060082",
+            "R060193",
+            "R060275",
+            "R070268"
+          ],
+          "cross_split_pairs": 20
+        },
+        {
+          "normalized_value": "r-3",
+          "display_value": "R-3",
+          "adaptation_ids": [
+            "R050010",
+            "R050137",
+            "R050357",
+            "R050484"
+          ],
+          "locked_test_ids": [
+            "R040028",
+            "R040030",
+            "R050181",
+            "R050370",
+            "R050652"
+          ],
+          "cross_split_pairs": 20
+        },
+        {
+          "normalized_value": "pbnm",
+          "display_value": "Pbnm",
+          "adaptation_ids": [
+            "R040004",
+            "R050052",
+            "R050200"
+          ],
+          "locked_test_ids": [
+            "R040052",
+            "R040073",
+            "R050008",
+            "R050405",
+            "R050456"
+          ],
+          "cross_split_pairs": 15
+        },
+        {
+          "normalized_value": "pmcn",
+          "display_value": "Pmcn",
+          "adaptation_ids": [
+            "R050564",
+            "R060195"
+          ],
+          "locked_test_ids": [
+            "R040037",
+            "R040069",
+            "R050148",
+            "R050174",
+            "R050298",
+            "R050476"
+          ],
+          "cross_split_pairs": 12
+        },
+        {
+          "normalized_value": "r-3m",
+          "display_value": "R-3m",
+          "adaptation_ids": [
+            "R050654",
+            "R060683",
+            "R070375"
+          ],
+          "locked_test_ids": [
+            "R050458",
+            "R060400",
+            "R060406",
+            "R060520"
+          ],
+          "cross_split_pairs": 12
+        },
+        {
+          "normalized_value": "c2/c",
+          "display_value": "C2/c",
+          "adaptation_ids": [
+            "R050499",
+            "R060039"
+          ],
+          "locked_test_ids": [
+            "R050668",
+            "R060276",
+            "R060578",
+            "R070322"
+          ],
+          "cross_split_pairs": 8
+        },
+        {
+          "normalized_value": "ia-3d",
+          "display_value": "Ia-3d",
+          "adaptation_ids": [
+            "R060300",
+            "R060453"
+          ],
+          "locked_test_ids": [
+            "R040159",
+            "R050344",
+            "R060452",
+            "R061041"
+          ],
+          "cross_split_pairs": 8
+        },
+        {
+          "normalized_value": "p6_3mc",
+          "display_value": "P6_3mc",
+          "adaptation_ids": [
+            "R050503",
+            "R060928"
+          ],
+          "locked_test_ids": [
+            "R050419",
+            "R060027",
+            "R060121",
+            "R060906"
+          ],
+          "cross_split_pairs": 8
+        },
+        {
+          "normalized_value": "i4/m",
+          "display_value": "I4/m",
+          "adaptation_ids": [
+            "R040113",
+            "R050242"
+          ],
+          "locked_test_ids": [
+            "R040169",
+            "R060458",
+            "R060526"
+          ],
+          "cross_split_pairs": 6
+        },
+        {
+          "normalized_value": "p-62c",
+          "display_value": "P-62c",
+          "adaptation_ids": [
+            "R050409",
+            "R060283",
+            "R060359"
+          ],
+          "locked_test_ids": [
+            "R060550",
+            "R060737"
+          ],
+          "cross_split_pairs": 6
+        },
+        {
+          "normalized_value": "p2_1/n",
+          "display_value": "P2_1/n",
+          "adaptation_ids": [
+            "R070589"
+          ],
+          "locked_test_ids": [
+            "R040181",
+            "R050044",
+            "R050287",
+            "R050532",
+            "R060299",
+            "R070249"
+          ],
+          "cross_split_pairs": 6
+        },
+        {
+          "normalized_value": "p6/mcc",
+          "display_value": "P6/mcc",
+          "adaptation_ids": [
+            "R070623"
+          ],
+          "locked_test_ids": [
+            "R050065",
+            "R050121",
+            "R050305",
+            "R050347",
+            "R050648"
+          ],
+          "cross_split_pairs": 5
+        },
+        {
+          "normalized_value": "f-43m",
+          "display_value": "F-43m",
+          "adaptation_ids": [
+            "R060005",
+            "R060636"
+          ],
+          "locked_test_ids": [
+            "R050005",
+            "R050550"
+          ],
+          "cross_split_pairs": 4
+        },
+        {
+          "normalized_value": "p2_1/a",
+          "display_value": "P2_1/a",
+          "adaptation_ids": [
+            "R050520"
+          ],
+          "locked_test_ids": [
+            "R050114",
+            "R050124",
+            "R050341",
+            "R070195"
+          ],
+          "cross_split_pairs": 4
+        },
+        {
+          "normalized_value": "p4_2/mnm",
+          "display_value": "P4_2/mnm",
+          "adaptation_ids": [
+            "R060745"
+          ],
+          "locked_test_ids": [
+            "R040017",
+            "R050031",
+            "R050417",
+            "R060563"
+          ],
+          "cross_split_pairs": 4
+        },
+        {
+          "normalized_value": "fdd2",
+          "display_value": "Fdd2",
+          "adaptation_ids": [
+            "R040102"
+          ],
+          "locked_test_ids": [
+            "R040112",
+            "R060561"
+          ],
+          "cross_split_pairs": 2
+        },
+        {
+          "normalized_value": "i-42d",
+          "display_value": "I-42d",
+          "adaptation_ids": [
+            "R050208"
+          ],
+          "locked_test_ids": [
+            "R050222",
+            "R050559"
+          ],
+          "cross_split_pairs": 2
+        },
+        {
+          "normalized_value": "p6_3",
+          "display_value": "P6_3",
+          "adaptation_ids": [
+            "R060296"
+          ],
+          "locked_test_ids": [
+            "R040025",
+            "R060957"
+          ],
+          "cross_split_pairs": 2
+        },
+        {
+          "normalized_value": "cc",
+          "display_value": "Cc",
+          "adaptation_ids": [
+            "R050083"
+          ],
+          "locked_test_ids": [
+            "R050416"
+          ],
+          "cross_split_pairs": 1
+        },
+        {
+          "normalized_value": "p2_12_12_1",
+          "display_value": "P2_12_12_1",
+          "adaptation_ids": [
+            "R050397"
+          ],
+          "locked_test_ids": [
+            "R050509"
+          ],
+          "cross_split_pairs": 1
+        },
+        {
+          "normalized_value": "pa3",
+          "display_value": "Pa3",
+          "adaptation_ids": [
+            "R040134"
+          ],
+          "locked_test_ids": [
+            "R050276"
+          ],
+          "cross_split_pairs": 1
+        },
+        {
+          "normalized_value": "pbca",
+          "display_value": "Pbca",
+          "adaptation_ids": [
+            "R060042"
+          ],
+          "locked_test_ids": [
+            "R050591"
+          ],
+          "cross_split_pairs": 1
+        }
+      ]
+    }
+  },
+  "interpretation": {
+    "not_a_gate": true,
+    "no_split_changes": true,
+    "no_model_outputs_used": true,
+    "mineral_or_formula_overlap_does_not_invalidate_fewshot_claim": true
+  },
+  "spectral_overlap": {
+    "grid_points": 3501,
+    "cross_split_pair_count": 16170,
+    "maximum_pearson": 0.9477846668612151,
+    "maximum_same_class_pearson": 0.9477846668612151,
+    "thresholds": {
+      "ge_0.95": {
+        "all_cross_split_pairs": 0,
+        "same_class_pairs": 0,
+        "adaptation_samples_with_any_match": 0,
+        "locked_test_samples_with_any_match": 0
+      },
+      "ge_0.98": {
+        "all_cross_split_pairs": 0,
+        "same_class_pairs": 0,
+        "adaptation_samples_with_any_match": 0,
+        "locked_test_samples_with_any_match": 0
+      },
+      "ge_0.995": {
+        "all_cross_split_pairs": 0,
+        "same_class_pairs": 0,
+        "adaptation_samples_with_any_match": 0,
+        "locked_test_samples_with_any_match": 0
+      }
+    },
+    "top_pairs": [
+      {
+        "pearson": 0.9477846668612151,
+        "same_crystal_system": true,
+        "adaptation_id": "R050564",
+        "adaptation_mineral": "Strontianite",
+        "adaptation_ideal_chemistry": "Sr(CO_3_)",
+        "locked_test_id": "R050476",
+        "locked_test_mineral": "Strontianite",
+        "locked_test_ideal_chemistry": "Sr(CO_3_)"
+      },
+      {
+        "pearson": 0.9472252161850819,
+        "same_crystal_system": true,
+        "adaptation_id": "R060102",
+        "adaptation_mineral": "Chalcanthite",
+        "adaptation_ideal_chemistry": "Cu(SO_4_)·5H_2_O",
+        "locked_test_id": "R050354",
+        "locked_test_mineral": "Chalcanthite",
+        "locked_test_ideal_chemistry": "Cu(SO_4_)·5H_2_O"
+      },
+      {
+        "pearson": 0.9379914964478987,
+        "same_crystal_system": true,
+        "adaptation_id": "R050045",
+        "adaptation_mineral": "Fluorite",
+        "adaptation_ideal_chemistry": "CaF_2_",
+        "locked_test_id": "R040099",
+        "locked_test_mineral": "Fluorite",
+        "locked_test_ideal_chemistry": "CaF_2_"
+      },
+      {
+        "pearson": 0.9344612020534242,
+        "same_crystal_system": true,
+        "adaptation_id": "R050045",
+        "adaptation_mineral": "Fluorite",
+        "adaptation_ideal_chemistry": "CaF_2_",
+        "locked_test_id": "R050046",
+        "locked_test_mineral": "Fluorite",
+        "locked_test_ideal_chemistry": "CaF_2_"
+      },
+      {
+        "pearson": 0.9310476163514898,
+        "same_crystal_system": true,
+        "adaptation_id": "R040102",
+        "adaptation_mineral": "Natrolite",
+        "adaptation_ideal_chemistry": "Na_2_(Si_3_Al_2_)O_10_·2H_2_O",
+        "locked_test_id": "R060561",
+        "locked_test_mineral": "Natrolite",
+        "locked_test_ideal_chemistry": "Na_2_(Si_3_Al_2_)O_10_·2H_2_O"
+      },
+      {
+        "pearson": 0.931016928966206,
+        "same_crystal_system": true,
+        "adaptation_id": "R060636",
+        "adaptation_mineral": "Sphalerite",
+        "adaptation_ideal_chemistry": "ZnS",
+        "locked_test_id": "R050005",
+        "locked_test_mineral": "Sphalerite",
+        "locked_test_ideal_chemistry": "ZnS"
+      },
+      {
+        "pearson": 0.9299744368049063,
+        "same_crystal_system": false,
+        "adaptation_id": "R060300",
+        "adaptation_mineral": "Leucite",
+        "adaptation_ideal_chemistry": "K(AlSi_2_O_6_)",
+        "locked_test_id": "R040107",
+        "locked_test_mineral": "Leucite",
+        "locked_test_ideal_chemistry": "K(AlSi_2_O_6_)"
+      },
+      {
+        "pearson": 0.9287198968269693,
+        "same_crystal_system": true,
+        "adaptation_id": "R040102",
+        "adaptation_mineral": "Natrolite",
+        "adaptation_ideal_chemistry": "Na_2_(Si_3_Al_2_)O_10_·2H_2_O",
+        "locked_test_id": "R040112",
+        "locked_test_mineral": "Natrolite",
+        "locked_test_ideal_chemistry": "Na_2_(Si_3_Al_2_)O_10_·2H_2_O"
+      },
+      {
+        "pearson": 0.9272143839434924,
+        "same_crystal_system": true,
+        "adaptation_id": "R050357",
+        "adaptation_mineral": "Dolomite",
+        "adaptation_ideal_chemistry": "CaMg(CO_3_)_2_",
+        "locked_test_id": "R050370",
+        "locked_test_mineral": "Dolomite",
+        "locked_test_ideal_chemistry": "CaMg(CO_3_)_2_"
+      },
+      {
+        "pearson": 0.9208415409092345,
+        "same_crystal_system": true,
+        "adaptation_id": "R040070",
+        "adaptation_mineral": "Calcite",
+        "adaptation_ideal_chemistry": "Ca(CO_3_)",
+        "locked_test_id": "R050009",
+        "locked_test_mineral": "Calcite",
+        "locked_test_ideal_chemistry": "Ca(CO_3_)"
+      },
+      {
+        "pearson": 0.9188091485461851,
+        "same_crystal_system": true,
+        "adaptation_id": "R050501",
+        "adaptation_mineral": "Wulfenite",
+        "adaptation_ideal_chemistry": "PbMoO_4_",
+        "locked_test_id": "R050149",
+        "locked_test_mineral": "Wulfenite",
+        "locked_test_ideal_chemistry": "PbMoO_4_"
+      },
+      {
+        "pearson": 0.9100363742186311,
+        "same_crystal_system": true,
+        "adaptation_id": "R050208",
+        "adaptation_mineral": "Chalcopyrite",
+        "adaptation_ideal_chemistry": "CuFeS_2_",
+        "locked_test_id": "R050559",
+        "locked_test_mineral": "Chalcopyrite",
+        "locked_test_ideal_chemistry": "CuFeS_2_"
+      },
+      {
+        "pearson": 0.9083679356453606,
+        "same_crystal_system": true,
+        "adaptation_id": "R050010",
+        "adaptation_mineral": "Dioptase",
+        "adaptation_ideal_chemistry": "CuSiO_3_·H_2_O",
+        "locked_test_id": "R040028",
+        "locked_test_mineral": "Dioptase",
+        "locked_test_ideal_chemistry": "CuSiO_3_·H_2_O"
+      },
+      {
+        "pearson": 0.9040893606326378,
+        "same_crystal_system": true,
+        "adaptation_id": "R060417",
+        "adaptation_mineral": "Scheelite",
+        "adaptation_ideal_chemistry": "Ca(WO_4_)",
+        "locked_test_id": "R040172",
+        "locked_test_mineral": "Scheelite",
+        "locked_test_ideal_chemistry": "Ca(WO_4_)"
+      },
+      {
+        "pearson": 0.9037032051387563,
+        "same_crystal_system": true,
+        "adaptation_id": "R040113",
+        "adaptation_mineral": "Marialite",
+        "adaptation_ideal_chemistry": "Na_4_Al_3_Si_9_O_24_Cl",
+        "locked_test_id": "R060458",
+        "locked_test_mineral": "Marialite",
+        "locked_test_ideal_chemistry": "Na_4_Al_3_Si_9_O_24_Cl"
+      },
+      {
+        "pearson": 0.8845884021290673,
+        "same_crystal_system": true,
+        "adaptation_id": "R050024",
+        "adaptation_mineral": "Wulfenite",
+        "adaptation_ideal_chemistry": "PbMoO_4_",
+        "locked_test_id": "R050149",
+        "locked_test_mineral": "Wulfenite",
+        "locked_test_ideal_chemistry": "PbMoO_4_"
+      },
+      {
+        "pearson": 0.8776166383485311,
+        "same_crystal_system": true,
+        "adaptation_id": "R050564",
+        "adaptation_mineral": "Strontianite",
+        "adaptation_ideal_chemistry": "Sr(CO_3_)",
+        "locked_test_id": "R040037",
+        "locked_test_mineral": "Strontianite",
+        "locked_test_ideal_chemistry": "Sr(CO_3_)"
+      },
+      {
+        "pearson": 0.8752712428688908,
+        "same_crystal_system": true,
+        "adaptation_id": "R060020",
+        "adaptation_mineral": "Corundum",
+        "adaptation_ideal_chemistry": "Al_2_O_3_",
+        "locked_test_id": "R040096",
+        "locked_test_mineral": "Corundum",
+        "locked_test_ideal_chemistry": "Al_2_O_3_"
+      },
+      {
+        "pearson": 0.8724094645660152,
+        "same_crystal_system": true,
+        "adaptation_id": "R050409",
+        "adaptation_mineral": "Bastnasite-(Ce)",
+        "adaptation_ideal_chemistry": "Ce(CO_3_)F",
+        "locked_test_id": "R060550",
+        "locked_test_mineral": "Bastnasite-(Ce)",
+        "locked_test_ideal_chemistry": "Ce(CO_3_)F"
+      },
+      {
+        "pearson": 0.8640837667903334,
+        "same_crystal_system": true,
+        "adaptation_id": "R050409",
+        "adaptation_mineral": "Bastnasite-(Ce)",
+        "adaptation_ideal_chemistry": "Ce(CO_3_)F",
+        "locked_test_id": "R060737",
+        "locked_test_mineral": "Bastnasite-(Ce)",
+        "locked_test_ideal_chemistry": "Ce(CO_3_)F"
+      }
+    ]
+  }
+}
