@@ -1,5 +1,6 @@
 name: One-time evidence status cleanup
 
+# One-time corrected rerun; this workflow deletes itself after success.
 on:
   push:
     branches: [main]
