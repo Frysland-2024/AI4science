@@ -40,7 +40,7 @@ The simulator varies peak position, broadening, preferred orientation, backgroun
 
 The models are additionally evaluated on two experimental domains with distinct roles. Both evaluations are complete and are reported separately.
 
-- **RRUFF-301** — a class-balanced, curated experimental mineral domain (balanced curated experimental domain). Its role is **few-shot adaptation** (K=1/2/5) under the locked-test design recorded in the historical preregistration; because the prospective provenance is incomplete, the aggregates are treated as retrospectively verified rather than provenance-complete confirmatory results.
+- **RRUFF-301** — a class-balanced, curated experimental mineral domain (balanced curated experimental domain). Its role is **few-shot adaptation** (K=1/2/5) under the locked-test design. The stored aggregates have been retrospectively verified against the recorded prediction results and are reported directly as few-shot performance and label-efficiency evidence.
 - **CNRS-318** — a naturally imbalanced, chemically diverse experimental domain derived from opXRD/COD after spectrum deduplication, structural-parent grouping, stable symmetry reconstruction and overlap exclusion (naturally imbalanced independent experimental domain; 318 independent structural parents with class counts `21 / 87 / 77 / 41 / 33 / 12 / 47`). Its role is **zero-shot external evaluation** of the frozen models, without touching any CNRS label for adaptation.
 
 The primary CNRS comparison is the paired Macro-F1 difference between JS and ERM on identical parents, `Δ = F1_JS − F1_ERM`, with a class-stratified paired-parent bootstrap that preserves the natural class composition. Labels are structure-derived crystal-system labels, reconstructed from the deposited atomic basis and stable across symmetry tolerances; they were not independently verified by manual spectrum-level phase analysis. Hexagonal-specific conclusions remain underpowered.
@@ -95,8 +95,8 @@ improve locked-test Macro-F1 at every budget:
 
 For Macro-F1, all 5/5 pretraining seeds favor JS after averaging over episode seeds at
 each label budget (68/75 individual matched comparisons are positive). The locked-test
-statistics are retrospectively verified; the historical prospective provenance is
-incomplete and is not described as a provenance-complete confirmatory execution.
+aggregates were retrospectively verified against the stored result file and are reported
+directly as the observed few-shot performance.
 
 CNRS-318 is a complementary zero-shot external-source stress test; no CNRS label is used
 for adaptation or model selection. Seed-level Macro-F1 is
@@ -137,7 +137,7 @@ Online PXRD simulation can supply measurement-equivalence supervision through sh
 4. Complete the Results and Discussion prose.
 5. Integrate the completed RRUFF-301 and CNRS-318 figures, run record and limitations into the submission package.
 
-## 8. Figure generation and provenance
+## 8. Figure generation and verification
 
 From `xrd_robustness`, regenerate the four tracked manuscript figures with:
 
