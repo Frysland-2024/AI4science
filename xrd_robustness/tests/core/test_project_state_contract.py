@@ -123,13 +123,14 @@ def test_community_reporting_extensions_are_machine_readable() -> None:
 
     rruff = _load_json(PROJECT_ROOT / "reports/rruff301_fewshot_results.json")
     assert rruff["status"] == "completed"
-    assert rruff["scope"] == "retrospectively_verified_locked_test_fewshot"
+    assert rruff["scope"] == "locked_test_fewshot"
     assert rruff["methods"]["js_consistency"] == {
         "source_method_name": "js_lambda_60",
         "lambda_js": 60,
     }
     assert rruff["macro_f1_positive_pairs_total"] == 68
-    assert len(str(rruff["provenance"]["source_local_results_sha256"])) == 64
+    assert len(str(rruff["source_record"]["source_local_results_sha256"])) == 64
+    assert rruff["source_record"]["verification"]["metrics_recomputed_from_predictions"] == 150
     assert rruff["results_by_k"]["5"]["macro_f1"]["paired_delta"][
         "positive_pairs"
     ] == 24
@@ -148,6 +149,27 @@ def test_current_pxrd_reporting_policy_has_three_layers() -> None:
     assert "CI crosses zero" in policy
     assert "experiment failed" in policy
     assert "不得删除或隐藏不利统计结果" in policy
+
+
+def test_current_reporting_does_not_use_confirmatory_evidence_tiers() -> None:
+    documents = (
+        REPOSITORY_ROOT / "docs/CURRENT_STATE.md",
+        REPOSITORY_ROOT / "docs/PXRD_RESULT_REPORTING_STANDARD.md",
+        PROJECT_ROOT / "README.md",
+        PROJECT_ROOT / "MANUSCRIPT.md",
+        PROJECT_ROOT / "reports/RESULTS.md",
+        PROJECT_ROOT / "reports/rruff301_fewshot_results.json",
+    )
+    banned = (
+        "provenance-complete",
+        "prospective confirmatory",
+        "confirmatory evidence",
+        "confirmatory threshold",
+    )
+    for path in documents:
+        text = path.read_text(encoding="utf-8").lower()
+        for phrase in banned:
+            assert phrase not in text
 
 
 def test_public_document_links_resolve() -> None:
