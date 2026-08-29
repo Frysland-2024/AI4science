@@ -39,7 +39,7 @@ A and B remain the main **AI + physical systems** research world.
 | Label | Current direction | Core task | Representative examples | Priority |
 |---|---|---|---|---|
 | **A1** | Semiconductor Metrology / Scientific Instrument Analysis | real semiconductor/scientific measurement -> hidden structure / parameter / defect inference | ellipsometry/OHE -> thickness, mobility, carrier concentration; SEM/X-ray -> CD, roughness, defects; diffraction/spectroscopy -> structural parameters | **Main line** |
-| **B1** | Semiconductor Device Modeling | device measurements + device/material physics -> parameter / model / performance inference | I-V/C-V -> device parameters; transport/device modelling; TCAD + inverse modelling; compact-model extraction; surrogate / calibration | **Main line** |
+| **B1** | Semiconductor Device Modeling | device measurements + device/material physics -> parameter / model / performance inference | I-V/C-V -> device parameters; transport/device modelling; TCAD + inverse modelling; compact-model extraction; surrogate / calibration; **B1-CM device/compact modeling** | **Main line** |
 | **A2** | Quantitative Biomedical Sensing & Physiological Inference | optical/spectral/wearable/multimodal physiological measurement -> latent physiological parameter or state | PPG/NIR/Raman/spectroscopy/wearables -> glucose, SpO2, blood flow, blood pressure, hydration, tissue composition, metabolic state | **Important secondary line** |
 | **A3** | Industrial Measurement / NDT / Condition Monitoring | industrial sensing signal -> defect / damage / state inference | ultrasound, acoustic emission, photoacoustic, industrial CT, guided waves, thermal/vibration/EM sensing -> crack, damage, material state | Secondary line |
 | **B2** | Battery Modeling / State & Degradation Inference | electrochemical time series + models -> state / parameter / degradation inference | V/I/T/EIS -> SOC, SOH, RUL, degradation parameters; electrochemical surrogate / digital twin | **Opportunistic secondary line; further downgraded** |
@@ -237,6 +237,111 @@ measured I-V / C-V
 
 This kind of project is especially attractive because it directly connects **measurement inference** with **semiconductor device physics**.
 
+#### B1-CM — Device / Compact Modeling
+
+`B1-CM` is a **subtype of B1**, not a new parallel route. It marks projects that carry device-physics modeling far enough to connect naturally to circuit simulation and EDA.
+
+The preferred chain is:
+
+```text
+experimental I-V / switching data
+    -> physical or phenomenological device model
+    -> parameter extraction + optimization
+    -> compact model
+    -> Verilog-A / SPICE
+    -> Cadence or equivalent circuit simulation
+    -> circuit / array / in-memory-computing validation
+```
+
+This is particularly attractive as a transition from a materials background toward semiconductor devices and EE because the transferable technical stack is broader than any one emerging-device platform.
+
+Suitable application objects include:
+
+- memristors
+- RRAM
+- FeFET
+- TFT
+- MOSFET
+- emerging memories and other nonlinear semiconductor devices
+
+The preferred professional / academic identity is therefore **not** "a memristor researcher". A stronger framing is:
+
+> **Semiconductor Device Modeling / Compact Modeling, using memristors or emerging-memory devices as concrete application systems.**
+
+The main value is the transferable toolchain:
+
+```text
+materials / device physics
+    -> measured electrical characteristics
+    -> numerical fitting / optimization
+    -> parameter extraction
+    -> compact modeling
+    -> circuit-level simulation / design enablement
+```
+
+This can later transfer across:
+
+```text
+memristor / RRAM / FeFET / TFT / MOSFET / emerging devices
+    -> parameter extraction
+    -> compact modeling
+    -> PDK / design enablement
+    -> device-circuit co-simulation
+```
+
+##### High-fit signals when screening groups
+
+Prefer groups and projects that explicitly contain several of the following:
+
+- parameter extraction
+- compact model / compact modeling
+- Verilog-A
+- SPICE
+- Cadence
+- variability
+- statistical modeling
+- device-circuit co-design / co-simulation
+- array-level simulation
+- in-memory-computing simulation
+- model calibration against real device data
+
+A particularly strong master's-project pattern is:
+
+```text
+real device measurements
+    -> parameter inversion / extraction
+    -> compact model
+    -> Verilog-A implementation
+    -> circuit or array validation
+```
+
+##### Downgrade rule
+
+Do **not** automatically rate all "memristor modeling" work highly.
+
+Lower-priority versions are those dominated by:
+
+```text
+device fabrication
+    -> I-V measurement
+    -> fit one simple formula
+    -> a few MATLAB curves
+```
+
+with little or no reusable compact-model, parameter-extraction, variability, Verilog-A/SPICE, or circuit-simulation component.
+
+The value of `B1-CM` is precisely that it creates a bridge from **Materials -> Device Physics -> Numerical Modeling -> Compact Modeling -> EE/EDA**, while allowing the student's work to remain substantially computational rather than fabrication-heavy.
+
+##### Relationship to C
+
+A `B1-CM` project should normally be scored primarily as **B1**, with a possible **C-interface bonus** if it genuinely reaches SPICE/Verilog-A/Cadence/device-circuit co-simulation.
+
+It should not be reclassified as pure C merely because circuit simulation appears at the end of the chain. The scientific center remains the **device model and parameter extraction from physical device behavior**.
+
+A useful application sentence is:
+
+> **I am interested in semiconductor device and compact modeling, especially extracting physically meaningful models from measured device characteristics and connecting them to circuit-level simulation.**
+
 ### B2 — Battery Modeling
 
 B2 remains conceptually valid but is now explicitly **opportunistic and lower priority**.
@@ -305,7 +410,7 @@ Use the following mapping when reading historical notes:
 | `A-METRO` | **A1** | same core meaning; now explicitly a main line |
 | `A-BME` | **A2** | **major redefinition**: from broad biomedical imaging/inference to quantitative biomedical sensing & physiological inference |
 | `A-IND` | **A3** | same core meaning |
-| `B-DEVICE` | **B1** | same core meaning; now explicitly a main line |
+| `B-DEVICE` | **B1** | same core meaning; now explicitly a main line; `B1-CM` marks the device/compact-modeling subtype |
 | `B-BATTERY` | **B2** | same core meaning but priority reduced |
 | `C-IC` | **C** | moved from parallel technical tree to non-core option |
 
@@ -342,7 +447,7 @@ This makes the project a strong bridge into:
 - **A1**: semiconductor / scientific-instrument measurement inference
 - **A2**: physiological sensing under calibration/domain shift
 - **A3**: industrial measurement robustness
-- **B1**: simulator / forward-model / parameter-inference problems
+- **B1**: simulator / forward-model / parameter-inference problems, including later movement toward `B1-CM`
 
 The project is therefore an **entry point into quantitative measurement inference**, not a permanent commitment to XRD or materials classification.
 
@@ -390,6 +495,14 @@ C   ★★☆☆☆
 ```
 
 This is preferable to one vague total "Scientific ML fit" score.
+
+For B1 candidates, optionally add a subtype note:
+
+```text
+B1-CM  strong / medium / weak
+```
+
+when compact modeling, Verilog-A/SPICE, variability, or circuit-level validation are relevant.
 
 ### A2-specific screening question
 
@@ -463,6 +576,7 @@ Main world:
 Main routes:
     A1 Semiconductor / scientific measurement -> physical inference
     B1 Semiconductor device physics / modelling -> parameter and model inference
+        \-- B1-CM Device / Compact Modeling -> Verilog-A / SPICE / circuit-level interface
 
 Important secondary route:
     A2 Quantitative biomedical sensing -> physiological inference
@@ -482,5 +596,7 @@ Across A1, A2 and A3, the common methodological identity is:
 Across A1 and B1, the strongest semiconductor-facing identity is:
 
 > **real measurement + physical model / simulator + quantitative parameter inference**
+
+Within B1, `B1-CM` provides a particularly natural bridge from a materials/device-physics background toward EE/EDA without requiring an abrupt jump into pure IC design.
 
 This framework should be used for future advisor searches, graduate-program comparisons, application planning and career-exit evaluation.
