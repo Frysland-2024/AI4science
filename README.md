@@ -50,12 +50,14 @@ Dynamic JS：共同标签 + measurement-equivalence consistency
 |---|---|
 | [`docs/CURRENT_STATE.md`](docs/CURRENT_STATE.md) | 项目现状、进度和下一步 |
 | [`docs/PXRD_EVIDENCE_CLOSURE.md`](docs/PXRD_EVIDENCE_CLOSURE.md) | **本轮两个证据问题的结案结果 + measurement-equivalence / relationship-supervision 新颖性 framing** |
+| [`docs/PXRD_NOVELTY_LITERATURE_LINEAGE.md`](docs/PXRD_NOVELTY_LITERATURE_LINEAGE.md) | **随机物理扰动 / on-the-fly generation 的文献谱系，以及“从 data generation 到 provenance-aware relational supervision”的正式 novelty framing** |
 | [`docs/PXRD_METHOD_DETAIL_EVIDENCE_CLOSURE.md`](docs/PXRD_METHOD_DETAIL_EVIDENCE_CLOSURE.md) | **五个方法细节问题的仓库考古结案：Related Work、公平对照、formal_14060、structure-preserving 扰动、λ=60 选择历史** |
 | [`docs/PXRD_PERTURBATION_EVIDENCE.md`](docs/PXRD_PERTURBATION_EVIDENCE.md) | 五类扰动的物理/文献依据、最终冻结范围与历史详细证据入口 |
 | [`docs/PXRD_RESULT_REPORTING_STANDARD.md`](docs/PXRD_RESULT_REPORTING_STANDARD.md) | 当前三层评价体系与各域默认汇报模板 |
 | [`docs/GRADUATE_RESEARCH_DIRECTION.md`](docs/GRADUATE_RESEARCH_DIRECTION.md) | 申请叙事、研究方向框架、方向地图与日本导师检索关键词 |
 | [`docs/NEXT_PROJECT_XRD_QUANTITATIVE_INVERSION.md`](docs/NEXT_PROJECT_XRD_QUANTITATIVE_INVERSION.md) | 下一代定量反演计划及论文、代码、数据资源附录 |
 | [`docs/PROJECT_HISTORY.md`](docs/PROJECT_HISTORY.md) | 完整研究演化档案；含日期化决策节点、失败、版本变化和评价体系修正 |
+| [`docs/PROJECT_HISTORY_NOTE_2026-09-01_AUGMENTATION_TO_PROVENANCE_SUPERVISION.md`](docs/PROJECT_HISTORY_NOTE_2026-09-01_AUGMENTATION_TO_PROVENANCE_SUPERVISION.md) | **2026-09-01 项目发展节点：从随机物理扰动/在线生成的成熟范式，收敛到 parent-provenance relationship supervision 的正式方法定位** |
 | [`docs/PROJECT_HISTORY_NOTE_2026-08-27_CNRS_RECLASSIFICATION.md`](docs/PROJECT_HISTORY_NOTE_2026-08-27_CNRS_RECLASSIFICATION.md) | 冻结 CNRS 协议所链接的独立历史节点 |
 | [`xrd_robustness/README.md`](xrd_robustness/README.md) | 安装、代码结构与结果/证据索引 |
 | [`xrd_robustness/MANUSCRIPT.md`](xrd_robustness/MANUSCRIPT.md) | 论文正文框架 |
@@ -67,7 +69,7 @@ Dynamic JS：共同标签 + measurement-equivalence consistency
 | [`xrd_robustness/reports/simulated_test_results.json`](xrd_robustness/reports/simulated_test_results.json) | 测试集结果（JSON） |
 | [`xrd_robustness/reports/rruff301_fewshot_results.json`](xrd_robustness/reports/rruff301_fewshot_results.json) | RRUFF-301 few-shot 机器可读汇总 |
 
-建议先读 `CURRENT_STATE.md`、`PXRD_EVIDENCE_CLOSURE.md`、`PXRD_METHOD_DETAIL_EVIDENCE_CLOSURE.md` 和 `RESULTS.md`；需要扰动参数依据时再看 `PXRD_PERTURBATION_EVIDENCE.md`，只有追溯旧判断、失败实验或方法转变时才查 `PROJECT_HISTORY.md`。当前科学说法以当前状态、结案文档、评价规范和结果文件为准，历史档案不覆盖当前结论。
+建议先读 `CURRENT_STATE.md`、`PXRD_EVIDENCE_CLOSURE.md`、`PXRD_METHOD_DETAIL_EVIDENCE_CLOSURE.md` 和 `RESULTS.md`；需要扰动参数依据时再看 `PXRD_PERTURBATION_EVIDENCE.md`，需要文献谱系和 novelty framing 时看 `PXRD_NOVELTY_LITERATURE_LINEAGE.md`，只有追溯旧判断、失败实验或方法转变时才查 `PROJECT_HISTORY.md` 与对应的日期化 history note。当前科学说法以当前状态、结案文档、评价规范和结果文件为准，历史档案不覆盖当前结论。
 
 ## 快速验证
 
