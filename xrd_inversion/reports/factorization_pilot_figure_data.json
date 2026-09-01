@@ -1,0 +1,428 @@
+{
+  "leakage": {
+    "baseline": {
+      "measurement_to_structure": [
+        0.1359772474947591,
+        0.13474243198272087,
+        0.13016896086017873
+      ],
+      "structure_to_measurement": [
+        0.11845925559812884,
+        0.11434641565991284,
+        0.10929512102296254
+      ]
+    },
+    "factorized": {
+      "measurement_to_structure": [
+        0.12524992661799833,
+        0.11940269252493027,
+        0.11810051733405211
+      ],
+      "structure_to_measurement": [
+        0.11414592454683663,
+        0.10689144089258126,
+        0.10668483386439151
+      ]
+    }
+  },
+  "own_factor_response": {
+    "baseline": {
+      "measurement": [
+        {
+          "component_rmse": 0.107040016629073,
+          "mean_l2_error": 0.12055880069487915,
+          "pearson_correlation": 0.987958165953895,
+          "pearson_correlation_by_coordinate": {
+            "q_delta": 0.9826795799362147,
+            "q_w": 0.9939902026970618
+          },
+          "predicted_mean_l2_response": 0.8260568434752222,
+          "signed_bias_by_coordinate": {
+            "q_delta": -0.003607770367910588,
+            "q_w": 0.0008008058864656582
+          },
+          "through_origin_slope": 0.941750343803766,
+          "through_origin_slope_by_coordinate": {
+            "q_delta": 0.9136012729695928,
+            "q_w": 0.9721816326285199
+          },
+          "true_mean_l2_response": 0.8719798505267449
+        },
+        {
+          "component_rmse": 0.0963412863571919,
+          "mean_l2_error": 0.11171481709134759,
+          "pearson_correlation": 0.9899180994800015,
+          "pearson_correlation_by_coordinate": {
+            "q_delta": 0.9860911713770172,
+            "q_w": 0.9940223882649596
+          },
+          "predicted_mean_l2_response": 0.8421831741390604,
+          "signed_bias_by_coordinate": {
+            "q_delta": 0.0009545367862634647,
+            "q_w": -0.0029983347424054427
+          },
+          "through_origin_slope": 0.9625269497831342,
+          "through_origin_slope_by_coordinate": {
+            "q_delta": 0.9492301375154264,
+            "q_w": 0.9769018162556683
+          },
+          "true_mean_l2_response": 0.8719798505267449
+        },
+        {
+          "component_rmse": 0.103294216546983,
+          "mean_l2_error": 0.11400222322170198,
+          "pearson_correlation": 0.9883479426571777,
+          "pearson_correlation_by_coordinate": {
+            "q_delta": 0.9834479672073899,
+            "q_w": 0.9943171729004106
+          },
+          "predicted_mean_l2_response": 0.8441880452303008,
+          "signed_bias_by_coordinate": {
+            "q_delta": -0.007808265737015417,
+            "q_w": -0.002397547435284234
+          },
+          "through_origin_slope": 0.9630741753858043,
+          "through_origin_slope_by_coordinate": {
+            "q_delta": 0.9283465714877428,
+            "q_w": 1.0006173593381
+          },
+          "true_mean_l2_response": 0.8719798505267449
+        }
+      ],
+      "structure": [
+        {
+          "component_rmse": 0.17824653937308338,
+          "mean_l2_error": 0.19309561275500114,
+          "pearson_correlation": 0.9645647876160071,
+          "pearson_correlation_by_coordinate": {
+            "q_u": 0.9905943271268162,
+            "q_v": 0.9365478020384534
+          },
+          "predicted_mean_l2_response": 0.7738015664434422,
+          "signed_bias_by_coordinate": {
+            "q_u": 0.014176828497238739,
+            "q_v": 0.007115497487422249
+          },
+          "through_origin_slope": 0.8763026787884254,
+          "through_origin_slope_by_coordinate": {
+            "q_u": 0.9431731821048093,
+            "q_v": 0.8050083521653413
+          },
+          "true_mean_l2_response": 0.8481658747926109
+        },
+        {
+          "component_rmse": 0.17353604954915422,
+          "mean_l2_error": 0.18574122978411434,
+          "pearson_correlation": 0.9652227062743216,
+          "pearson_correlation_by_coordinate": {
+            "q_u": 0.9917237875841536,
+            "q_v": 0.9372686343003414
+          },
+          "predicted_mean_l2_response": 0.7935620229435565,
+          "signed_bias_by_coordinate": {
+            "q_u": 0.011860260108233116,
+            "q_v": -0.017601557531787264
+          },
+          "through_origin_slope": 0.9020201330776972,
+          "through_origin_slope_by_coordinate": {
+            "q_u": 0.9730437504031805,
+            "q_v": 0.8262979428677821
+          },
+          "true_mean_l2_response": 0.8481658747926109
+        },
+        {
+          "component_rmse": 0.17115880027561436,
+          "mean_l2_error": 0.1801388867413602,
+          "pearson_correlation": 0.9660376025287316,
+          "pearson_correlation_by_coordinate": {
+            "q_u": 0.992632429439041,
+            "q_v": 0.9377550016093196
+          },
+          "predicted_mean_l2_response": 0.800138471599055,
+          "signed_bias_by_coordinate": {
+            "q_u": 0.0070530044064982126,
+            "q_v": 0.0011775667135968198
+          },
+          "through_origin_slope": 0.9097763290027844,
+          "through_origin_slope_by_coordinate": {
+            "q_u": 0.9860470720125505,
+            "q_v": 0.8284598891040678
+          },
+          "true_mean_l2_response": 0.8481658747926109
+        }
+      ]
+    },
+    "factorized": {
+      "measurement": [
+        {
+          "component_rmse": 0.10683371117029583,
+          "mean_l2_error": 0.11852896266085687,
+          "pearson_correlation": 0.9879455380805197,
+          "pearson_correlation_by_coordinate": {
+            "q_delta": 0.9815369569818142,
+            "q_w": 0.9953420409053976
+          },
+          "predicted_mean_l2_response": 0.827798114777333,
+          "signed_bias_by_coordinate": {
+            "q_delta": -0.00864233832122717,
+            "q_w": -0.0031466114657992352
+          },
+          "through_origin_slope": 0.9446627785812596,
+          "through_origin_slope_by_coordinate": {
+            "q_delta": 0.911344284426006,
+            "q_w": 0.9806826076128276
+          },
+          "true_mean_l2_response": 0.8719798505267449
+        },
+        {
+          "component_rmse": 0.10106765307656206,
+          "mean_l2_error": 0.1124985804674046,
+          "pearson_correlation": 0.989392378037035,
+          "pearson_correlation_by_coordinate": {
+            "q_delta": 0.9838225369510136,
+            "q_w": 0.9958856485418812
+          },
+          "predicted_mean_l2_response": 0.82807265781496,
+          "signed_bias_by_coordinate": {
+            "q_delta": 0.0012701096473043544,
+            "q_w": -0.0028066244906217834
+          },
+          "through_origin_slope": 0.9429868968591851,
+          "through_origin_slope_by_coordinate": {
+            "q_delta": 0.9105821555593185,
+            "q_w": 0.9780188894814962
+          },
+          "true_mean_l2_response": 0.8719798505267449
+        },
+        {
+          "component_rmse": 0.10809472920456532,
+          "mean_l2_error": 0.11893720744122921,
+          "pearson_correlation": 0.9881774132326185,
+          "pearson_correlation_by_coordinate": {
+            "q_delta": 0.9820975804786752,
+            "q_w": 0.9951603634503479
+          },
+          "predicted_mean_l2_response": 0.8199596784544892,
+          "signed_bias_by_coordinate": {
+            "q_delta": -0.005811431954828903,
+            "q_w": -0.005546760088568175
+          },
+          "through_origin_slope": 0.9315913020794794,
+          "through_origin_slope_by_coordinate": {
+            "q_delta": 0.9000559332820488,
+            "q_w": 0.9656834368331676
+          },
+          "true_mean_l2_response": 0.8719798505267449
+        }
+      ],
+      "structure": [
+        {
+          "component_rmse": 0.17785774418619676,
+          "mean_l2_error": 0.19134836684910364,
+          "pearson_correlation": 0.9635865869140019,
+          "pearson_correlation_by_coordinate": {
+            "q_u": 0.9910181589840058,
+            "q_v": 0.9351888850407194
+          },
+          "predicted_mean_l2_response": 0.7888666534121913,
+          "signed_bias_by_coordinate": {
+            "q_u": 0.015895302752778798,
+            "q_v": -0.012891323451793437
+          },
+          "through_origin_slope": 0.8940935748615786,
+          "through_origin_slope_by_coordinate": {
+            "q_u": 0.974680984152408,
+            "q_v": 0.8081748992908964
+          },
+          "true_mean_l2_response": 0.8481658747926109
+        },
+        {
+          "component_rmse": 0.17311984043161632,
+          "mean_l2_error": 0.1828423820673592,
+          "pearson_correlation": 0.9658938407326981,
+          "pearson_correlation_by_coordinate": {
+            "q_u": 0.9921227649101865,
+            "q_v": 0.9392216741147037
+          },
+          "predicted_mean_l2_response": 0.7828351173027623,
+          "signed_bias_by_coordinate": {
+            "q_u": 0.01808419494427667,
+            "q_v": -0.020123565101055944
+          },
+          "through_origin_slope": 0.8907189431179646,
+          "through_origin_slope_by_coordinate": {
+            "q_u": 0.967698984070432,
+            "q_v": 0.8086462816164179
+          },
+          "true_mean_l2_response": 0.8481658747926109
+        },
+        {
+          "component_rmse": 0.17015550120819925,
+          "mean_l2_error": 0.18225161171545096,
+          "pearson_correlation": 0.9675318794966097,
+          "pearson_correlation_by_coordinate": {
+            "q_u": 0.9917982952231531,
+            "q_v": 0.9421089963115673
+          },
+          "predicted_mean_l2_response": 0.7782975063945781,
+          "signed_bias_by_coordinate": {
+            "q_u": 0.011220898272381555,
+            "q_v": -0.00967843679397295
+          },
+          "through_origin_slope": 0.8856283308684303,
+          "through_origin_slope_by_coordinate": {
+            "q_u": 0.9552168925603528,
+            "q_v": 0.8114361325082445
+          },
+          "true_mean_l2_response": 0.8481658747926109
+        }
+      ]
+    }
+  },
+  "physical_parameter_mae": {
+    "baseline": {
+      "a_angstrom": [
+        0.0052536603592827375,
+        0.004918512259477085,
+        0.004978163123189614
+      ],
+      "c_angstrom": [
+        0.01585672541462797,
+        0.014426534269116153,
+        0.014776854926295522
+      ],
+      "delta_2theta_deg": [
+        0.01678905342779627,
+        0.014889109442249622,
+        0.01687247418748465
+      ],
+      "fwhm_deg": [
+        0.0037637385224895017,
+        0.002605125905076528,
+        0.002445541913134953
+      ]
+    },
+    "factorized": {
+      "a_angstrom": [
+        0.005428669089664324,
+        0.005209481560518492,
+        0.005335047299833328
+      ],
+      "c_angstrom": [
+        0.014751277252995132,
+        0.013207966808895959,
+        0.013485592014640745
+      ],
+      "delta_2theta_deg": [
+        0.017134437116367803,
+        0.015884485847703505,
+        0.0173381093664253
+      ],
+      "fwhm_deg": [
+        0.002364581666074935,
+        0.00219082850896379,
+        0.002713386882565948
+      ]
+    }
+  },
+  "provenance": {
+    "canonical_label_dtype": "float64",
+    "config_sha256": "0672be6170da5b835b8c3fd378575384273bdd84cb1645163f4e2467f9ec121d",
+    "corner_order": [
+      "x11",
+      "x12",
+      "x21",
+      "x22"
+    ],
+    "dataset_source_sha256": {
+      "authoritative_split": "b9d3b72e42ea0fd549dae34425ff61d2d650d5dd7fe6f337d747cb952cf43293",
+      "peak_cache_manifest": "6ae0cfd1b5b29671e2f532d7a094f2fc412cabd64e4cf77d42915937bacc8d18",
+      "records": "05d5d33f200194612a8cdbe29d9443fc7bad9c245f66d185364b66a75915cc6c"
+    },
+    "interface_sha256": "27a3bd4b99d98dd5e4481d9d52a8fc4a1699ff63887b14a06ccf3f663a21489a",
+    "interface_version": "factorization-interface-v1",
+    "manifest_hash_kind": "canonical_json_payload_excluding_self_hash_field",
+    "manifest_sha256": "fad96ebc45eff6716a9b0faa403a609007cb7a8d0299a00a7527dff676cceba8",
+    "measurement_parameter_order": [
+      "q_delta",
+      "q_w"
+    ],
+    "profile_transform": "log1p_100_normalized",
+    "profile_view": "gpu_forward_compatibility_false",
+    "reference_q": [
+      0.0,
+      0.0,
+      0.0,
+      -1.0
+    ],
+    "scope": "Train-only; internal held-out intervention blocks only",
+    "source_sha256": {
+      "xrd_inversion/src/xrd_inversion/factorial_dataset.py": "94a7a7400fe24c5acfd3e0ecd4124bd9ac183837e5f2ebbe3ff88a6ac6e77022",
+      "xrd_inversion/src/xrd_inversion/factorization_losses.py": "28b46710f3f20a67679fa31b52e24bf1ae643101470b19edb87ed2af6f114716",
+      "xrd_inversion/src/xrd_inversion/factorization_metrics.py": "a90a6d314ae1abdf0fa81a95cb4aba01104a3dcec157cfcb3f5f12034bb4e6fb",
+      "xrd_inversion/src/xrd_inversion/factorization_pilot.py": "d0f73d0ffed829fd46226cc02c58ddc1341c8abf03ad6c854448be308c572e38",
+      "xrd_inversion/src/xrd_inversion/factorization_training.py": "29d53620101f28bb28d1c4ff0b4946a6032aea1b845e1703e2ca2ab962581f3d",
+      "xrd_inversion/src/xrd_inversion/gpu_forward.py": "4e247bd2b6202e62960729fbd9ee1e13c7ac5e157a2b1b116f1f920745d65c91",
+      "xrd_inversion/src/xrd_inversion/models.py": "1fbf00f9c0a9fcd92646cf7123f1a76a03092794f9ff967581186e1af0a70efc",
+      "xrd_inversion/src/xrd_inversion/parameterization.py": "c798c10aaf633ec471cc5228528a920bb8a342fcd6c39d0c78698e86674a8e87",
+      "xrd_inversion/src/xrd_inversion/week1_pilot.py": "e8ca8a918c764d06c4c2d618474786b110ee8b3a572c10104d696b045c905400"
+    },
+    "structure_parameter_order": [
+      "q_u",
+      "q_v"
+    ],
+    "training_dtype": "float32"
+  },
+  "response_matrix_mean": {
+    "baseline": {
+      "normalized": [
+        [
+          0.9304398787029494,
+          0.13444728303279627
+        ],
+        [
+          0.1532484342367507,
+          0.9604304737572692
+        ]
+      ],
+      "raw_mean_l2": [
+        [
+          0.7891673536620178,
+          0.1140335974270014
+        ],
+        [
+          0.13362954677921957,
+          0.8374760209481945
+        ]
+      ]
+    },
+    "factorized": {
+      "normalized": [
+        [
+          0.9235611991125916,
+          0.1287964257321491
+        ],
+        [
+          0.13867030538142563,
+          0.946440237715426
+        ]
+      ],
+      "raw_mean_l2": [
+        [
+          0.7833330923698439,
+          0.1092407331012698
+        ],
+        [
+          0.12091771215899356,
+          0.8252768170155941
+        ]
+      ]
+    }
+  },
+  "schema_version": "xrd-inversion-factorization-figure-data-v1",
+  "seeds": [
+    "20260901",
+    "20260902",
+    "20260903"
+  ]
+}
