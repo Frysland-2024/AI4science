@@ -1,0 +1,101 @@
+{
+  "schema_version": "xrd-inversion-week1-pilot-v2",
+  "status": "smoke_pilot_not_formal_gate",
+  "seed": 20260831,
+  "source_contract": {
+    "data_root": "xrd_robustness/data/formal_14060",
+    "records": "xrd_robustness/data/formal_14060/mp_processed/structure_records.jsonl",
+    "structure_manifest": "xrd_robustness/data/formal_14060/manifests/structure_manifest.csv",
+    "authoritative_split": "xrd_robustness/data/formal_14060/manifests/split_manifest.json",
+    "split_contract": "xrd_robustness/configs/data.method_transfer.structure_split.json",
+    "peak_cache_manifest": "xrd_robustness/data/formal_14060/manifests/peak_cache_manifest.v7.reflection.csv",
+    "peak_cache_dir": "xrd_robustness/data/formal_14060/mp_processed/peak_tables_v7_reflection",
+    "measurement_config": "xrd_robustness/configs/simulation.method_transfer.frozen.json"
+  },
+  "grid": {
+    "two_theta_min": 10.0,
+    "two_theta_max": 80.0,
+    "peak_calculation_padding_deg": 2.5,
+    "step": 0.02,
+    "wavelength_name": "CuKa",
+    "wavelength_angstrom": 1.54184
+  },
+  "sampling": {
+    "representative_parent_count": 4,
+    "classical_recovery_parent_count": 2,
+    "trials_per_parent": 1,
+    "split": "train",
+    "selection": "deterministic_robust_feature_maximin_v1"
+  },
+  "formal_gate_minimums": {
+    "representative_parent_count": 24,
+    "classical_recovery_parent_count": 24,
+    "trials_per_parent": 4
+  },
+  "canonical_cell": {
+    "relative_a_b_tolerance": 1e-6,
+    "angle_tolerance_deg": 1e-6,
+    "symprec": 0.01,
+    "angle_tolerance_for_restandardization_deg": 5.0
+  },
+  "parameterization": {
+    "q_bounds": [-1.0, 1.0],
+    "du_half_range": 0.01,
+    "dv_half_range": 0.01,
+    "delta_half_range_deg": 0.2,
+    "fwhm_transform": "log",
+    "fwhm_min_deg": 0.08,
+    "fwhm_max_deg": 0.2,
+    "nominal_q": [0.0, 0.0, 0.0, -1.0],
+    "nominal_fwhm_deg": 0.08,
+    "truth_q_range": [-0.8, 0.8]
+  },
+  "p0": {
+    "metric_d_atol_angstrom": 1e-12,
+    "metric_d_rtol": 1e-10,
+    "bragg_two_theta_atol_deg": 1.1e-5,
+    "fresh_cache_position_atol_deg": 1e-12,
+    "fresh_cache_intensity_rtol": 1e-10,
+    "lattice_fraction_step": 0.005,
+    "zero_shift_probe_deg": 0.073,
+    "center_error_max_deg": 0.002,
+    "center_shift_dispersion_max_deg": 0.001,
+    "fwhm_probe_deg": [0.08, 0.2],
+    "fwhm_error_max_deg": 0.01,
+    "area_relative_error_max": 0.01
+  },
+  "p1": {
+    "transform": "log1p_100_normalized",
+    "finite_difference_h_q": 0.01,
+    "finite_difference_convergence_relative_max": 0.1,
+    "column_norm_min": 0.01,
+    "rank_rcond": 0.001,
+    "condition_number_max": 1000.0,
+    "max_abs_cosine": 0.995,
+    "eligible_parent_fraction_min": 0.8,
+    "anchors": [
+      {"name": "nominal_level0", "q": [0.0, 0.0, 0.0, -1.0]},
+      {"name": "geometric_center", "q": [0.0, 0.0, 0.0, 0.0]},
+      {"name": "mixed_positive", "q": [0.6, -0.6, 0.6, 0.6]},
+      {"name": "mixed_negative", "q": [-0.6, 0.6, -0.6, -0.6]}
+    ]
+  },
+  "p2": {
+    "max_nfev": 80,
+    "finite_difference_h_q": 0.01,
+    "clean": {
+      "case_success_nae_max": 0.05,
+      "case_success_fraction_min": 0.9,
+      "parameter_median_nae_max": 0.01,
+      "parameter_p90_nae_max": 0.025,
+      "profile_rmse_max": 0.01
+    },
+    "nuisance": {
+      "case_success_nae_max": 0.1,
+      "case_success_fraction_min": 0.7,
+      "parameter_median_nae_max": 0.05,
+      "profile_rmse_max": 0.1,
+      "texture_enabled": false
+    }
+  }
+}
