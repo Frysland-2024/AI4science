@@ -15,12 +15,14 @@ The current implementation covers:
 - a full-parameter unmodelled-nuisance diagnostic that does not enter the clean Gate;
 - a structural near-duplicate audit and an independent renderer holdout frozen unopened.
 
-It deliberately does not start neural-network training. The repaired smoke
-passes P0, CUDA parity, P1, and clean P2-R, while P2-L retains the intended
-basin-sensitivity failure. Five non-conventional stored cells are explicitly
-quarantined for V0. The structural audit found no same-composition candidate
-pairs in its proxy scope, but did find broad anonymous-prototype overlap across
-the current split; that overlap must be handled as a pre-ML split-policy issue.
+It deliberately does not start neural-network training. The exact formal run
+passes P0, CUDA parity, P1, and all 288/288 clean P2-R cases across the three
+staircases. P2-L passes only 181/288 clean cases, preserving the intended
+nominal-basin diagnostic rather than turning it into a numerical Gate failure.
+Five non-conventional stored cells are explicitly quarantined for V0. The
+structural audit found no same-composition candidate pairs in its proxy scope,
+but did find broad anonymous-prototype overlap across the current split; that
+overlap must be handled as a pre-ML split-policy issue.
 
 Run from the repository root with the existing science environment:
 
