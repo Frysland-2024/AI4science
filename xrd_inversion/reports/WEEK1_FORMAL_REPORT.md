@@ -49,4 +49,4 @@ The high-recall composition/space-group/nsites proxy flags 154 cross-split group
 
 The exact 24-parent x 4-trial numerical scope passed P0, CUDA parity, P1, and every P2-R staircase. Formal ML remains unauthorized because the current split has broad anonymous-prototype overlap; a prototype-aware or explicitly accepted split policy must be frozen first. The independent renderer remains correctly frozen and unopened.
 
-Full per-parent parity, Jacobian, candidate-ranking, and recovery records are retained in the JSON artifact; the exact selected parent identities are retained in the configured CSV manifest.
+Full per-parent parity, Jacobian, and recovery records are retained in the JSON artifact, together with candidate-score summaries, the selected Sobol top-4, and all five local refinements per case; the exact selected parent identities are retained in the configured CSV manifest.
