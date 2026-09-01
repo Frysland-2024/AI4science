@@ -46,6 +46,24 @@ RRUFF-301：形成更完整的 K=1/2/5 few-shot benchmark
 
 这比单独说“负责 RRUFF-301”更符合真实项目历史，也更完整。
 
+### 2.1 已确认属于协作者的智力设计与研究决策
+
+项目负责人在 2026-09-01 进一步明确：下面这些并不是“共同、待核实”或“只能从产物反推”的内容，而是**协作者本人实际提出 / 主导完成的 RRUFF 线研究设计决策**：
+
+- 从 broad zero-shot real-domain evaluation 转向 few-shot adaptation / label-efficiency 的问题重构；
+- 将 RRUFF-70 明确降级为 exploratory study，而不是继续把小样本结果包装成最终真实域结论；
+- 设计 RRUFF-301 作为 preregistered confirmatory benchmark；
+- 确定 K=1 / 2 / 5 的真实标签预算与对应 few-shot 评测结构；
+- 采用 paired comparison 作为 ERM-pretrained 与 JS-pretrained representation 的主要比较方式；
+- 设计并执行 5 pretrained seeds × 5 episode seeds 的 matched few-shot protocol；
+- 将 RRUFF-301 的 primary performance 重点放在 Macro-F1、paired delta 与 label-efficiency learning curve，而不是只看单次 accuracy；
+- 在发现 trigonal / hexagonal 标签问题后，作废 v1 并完成修正后的 v2 confirmatory rerun；
+- 将 RRUFF-70 中出现的 monoclinic negative-transfer 现象带入 RRUFF-301 作为需复核的假设，并根据 confirmatory result 判定该现象未复现、属于小样本不稳定现象。
+
+因此，这些内容在未来的贡献声明、申请叙事与项目回顾中，应当归入协作者的 **Conceptualization / Methodology / Investigation / Formal analysis** 范围，而不是仅仅归入“工程执行”。
+
+同时需要维持边界：这些 RRUFF 真实域设计贡献并不自动等同于主方法 `parent provenance -> measurement equivalence -> relationship supervision` 的原创归属；主方法与 RRUFF downstream adaptation 是两条相连但不同的问题线。
+
 ## 3. 与主负责人 80% 主线的边界
 
 主负责人仍负责：
@@ -62,11 +80,15 @@ RRUFF-301：形成更完整的 K=1/2/5 few-shot benchmark
 协作者真实域模块负责：
 
 - RRUFF zero-shot 早期探索；
-- RRUFF-70 阶段的真实域实验；
+- 从 broad zero-shot 向 few-shot / label-efficiency 的研究问题转向；
+- RRUFF-70 阶段的真实域实验与 exploratory 定位；
+- RRUFF-301 preregistration 与 confirmatory design；
 - RRUFF-301 adaptation / locked-test few-shot evaluation；
 - K=1/2/5 label-budget experiments；
+- paired-comparison protocol 与 5×5 matched execution；
 - ERM-pretrained vs JS-pretrained downstream adaptation comparison；
-- RRUFF-specific result aggregation / learning-curve / label-efficiency interpretation。
+- RRUFF-specific result aggregation / learning-curve / label-efficiency interpretation；
+- v1 label issue audit、v2 rerun 与 per-class / negative-transfer follow-up analysis。
 
 这使 80/20 切分不是事后“制造一个 20%”，而是对已有真实工作边界的正式识别。
 
@@ -98,4 +120,4 @@ RRUFF-301：形成更完整的 K=1/2/5 few-shot benchmark
 
 ## 6. 最终一句话
 
-> **RRUFF 真实域线从 zero-shot、RRUFF-70 到 RRUFF-301，本来就是协作者实际执行并逐步发展出来的工作；其中部分历史提交也是协作者本人在共享工作站上完成上传，只是由于该工作站沿用了 `Frysland-2024` 的 Git / GitHub 身份配置，commit 元数据无法区分实际操作者。项目现在做的不是“把 20% 切给他”，而是把这条已经存在的真实贡献线正式识别、命名并与主方法线分开记录。**
+> **RRUFF 真实域线从 zero-shot、RRUFF-70 到 RRUFF-301，本来就是协作者实际提出问题、设计协议、借助 DeepSeek 执行实验、分析结果并逐步发展出来的工作；其中部分历史提交也是协作者本人在共享工作站上完成上传，只是由于该工作站沿用了 `Frysland-2024` 的 Git / GitHub 身份配置，commit 元数据无法区分实际操作者。项目现在做的不是“把 20% 切给他”，而是把这条已经存在的真实贡献线正式识别、命名并与主方法线分开记录。**
