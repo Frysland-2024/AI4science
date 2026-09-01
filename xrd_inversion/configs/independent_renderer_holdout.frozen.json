@@ -1,0 +1,79 @@
+{
+  "schema_version": "xrd-independent-renderer-holdout-v1",
+  "status": "frozen_unopened",
+  "freeze_date": "2026-09-01",
+  "purpose": "Week-4 renderer-shift evaluation only; never a Week-1 tuning signal",
+  "renderer": {
+    "contract": "numpy_signed_hkl_tetragonal_v1",
+    "module": "xrd_inversion.independent_renderer",
+    "source": "xrd_inversion/src/xrd_inversion/independent_renderer.py",
+    "source_sha256": "7cc1a2385b198f5a530fd7653a9d2ed5a26a72fa3f70b2e8705bed6dc3be575e",
+    "implementation": "numpy_direct_signed_hkl_plus_pymatgen_atomic_scattering_coefficients",
+    "forbidden_imports": [
+      "xrd_robustness.simulator",
+      "xrd_inversion.gpu_forward",
+      "xrd_inversion.week1_pilot"
+    ],
+    "xrd_calculator_used": false,
+    "peak_cache_used": false,
+    "debye_waller_b_squared": 0.0,
+    "scaled_intensity_fraction_min": 0.00001,
+    "gaussian_truncate_sigma": 5.0
+  },
+  "source_contract": {
+    "authoritative_split": "xrd_robustness/data/formal_14060/manifests/split_manifest.json",
+    "authoritative_split_sha256": "b9d3b72e42ea0fd549dae34425ff61d2d650d5dd7fe6f337d747cb952cf43293",
+    "candidate_manifest": "xrd_inversion/manifests/independent_renderer_holdout.frozen.json",
+    "split": "validation",
+    "crystal_system": "tetragonal"
+  },
+  "selection": {
+    "seed": 20260901,
+    "algorithm": "sha256_rank_parent_structure_id_v1",
+    "ranking_token": "{seed}:independent-renderer-holdout-v1:{parent_structure_id}",
+    "available_validation_tetragonal_parent_count_at_freeze": 301,
+    "candidate_parent_count": 24,
+    "candidate_semantics": "metadata-only frozen candidate identities"
+  },
+  "trial_contract": {
+    "trials_per_parent": 4,
+    "truth_q_distribution": "independent_uniform",
+    "truth_q_range": [-0.8, 0.8],
+    "trial_seed_algorithm": "sha256_first_uint32_big_endian_v1",
+    "trial_seed_token": "{seed}:trial-seed:{parent_structure_id}",
+    "trial_expansion": "SeedSequence(parent_trial_seed).spawn(4)",
+    "trial_q_values_materialized": false
+  },
+  "grid": {
+    "two_theta_min": 10.0,
+    "two_theta_max": 80.0,
+    "step": 0.02,
+    "wavelength_name": "CuKa",
+    "wavelength_angstrom": 1.54184,
+    "peak_calculation_padding_deg": 2.5
+  },
+  "parameterization": {
+    "q_bounds": [-1.0, 1.0],
+    "du_half_range": 0.01,
+    "dv_half_range": 0.01,
+    "delta_half_range_deg": 0.2,
+    "fwhm_transform": "log",
+    "fwhm_min_deg": 0.08,
+    "fwhm_max_deg": 0.2,
+    "nominal_q": [0.0, 0.0, 0.0, -1.0]
+  },
+  "seal": {
+    "profiles_rendered": false,
+    "profiles_persisted": false,
+    "metrics_computed": false,
+    "outcomes_opened": false,
+    "week1_allowed_operations": [
+      "source inspection",
+      "analytic tests",
+      "synthetic-structure tests",
+      "candidate identity verification from split metadata"
+    ],
+    "opening_requires": "Week-4 explicit status transition after parameter, model, loss, and method freeze",
+    "tuning_use_prohibited": true
+  }
+}

@@ -1,0 +1,119 @@
+{
+  "artifacts": {
+    "pair_csv": "xrd_inversion/manifests/week1_structural_near_duplicate_pairs.csv",
+    "pair_csv_sha256": "e609c7efb2e577b2f81ce97c7c31f29be61219dc4276e4f21fc48efbe32347ec",
+    "report_markdown": "xrd_inversion/reports/WEEK1_STRUCTURAL_NEAR_DUPLICATE_AUDIT.md",
+    "results_json": "xrd_inversion/reports/week1_structural_near_duplicate_audit.json"
+  },
+  "audit_status": "COMPLETE_ANONYMOUS_PROTOTYPE_OVERLAP_DETECTED",
+  "data_mutation": "none_read_only_audit",
+  "environment": {
+    "platform": "Windows-10-10.0.26200-SP0",
+    "pymatgen_version": "2026.5.4",
+    "python": "3.11.9"
+  },
+  "generated_at_utc": "2026-09-01T05:49:47.591051+00:00",
+  "matcher_contract": {
+    "anonymous_default_sensitivity": {
+      "allow_subset": false,
+      "angle_tol": 5.0,
+      "attempt_supercell": false,
+      "ltol": 0.2,
+      "primitive_cell": true,
+      "scale": true,
+      "stol": 0.3
+    },
+    "anonymous_high_recall": {
+      "allow_subset": false,
+      "angle_tol": 10.0,
+      "attempt_supercell": false,
+      "ltol": 0.3,
+      "primitive_cell": true,
+      "scale": true,
+      "stol": 0.5
+    },
+    "cached_reduction": "primitive_then_niggli_once_per_parent",
+    "same_species_default": {
+      "allow_subset": false,
+      "angle_tol": 5.0,
+      "attempt_supercell": false,
+      "comparator": "ElementComparator",
+      "ltol": 0.2,
+      "primitive_cell": true,
+      "scale": true,
+      "stol": 0.3
+    }
+  },
+  "provenance": {
+    "authoritative_split": "xrd_robustness/data/formal_14060/manifests/split_manifest.json",
+    "authoritative_split_sha256": "b9d3b72e42ea0fd549dae34425ff61d2d650d5dd7fe6f337d747cb952cf43293",
+    "config": "xrd_inversion/configs/week1_near_duplicate_audit.json",
+    "config_sha256": "5ba23a552a4ec6b3f3dee739a586343748c5ea764692f38a02a895b297280359",
+    "records": "xrd_robustness/data/formal_14060/mp_processed/structure_records.jsonl",
+    "records_sha256": "05d5d33f200194612a8cdbe29d9443fc7bad9c245f66d185364b66a75915cc6c"
+  },
+  "purpose": "read_only_cross_split_structural_near_duplicate_audit",
+  "reduction_errors": {},
+  "runtime": {
+    "pair_matching_seconds": 66.32810710003832,
+    "pairs_per_second": 217.75082437098004,
+    "structure_reduction_seconds": 4.008631499949843,
+    "wall_seconds": 74.12858689995483
+  },
+  "schema_version": "xrd-inversion-week1-near-duplicate-audit-v1",
+  "scope": {
+    "crystal_system": "tetragonal",
+    "data_mutation": "forbidden",
+    "pair_scope": "all_cross_split_pairs_within_cross_split_proxy_groups",
+    "proxy_definition": "anonymized_formula + recomputed_space_group + nsites"
+  },
+  "split_manifest": {
+    "algorithm": "sha256_seeded_crystal_system_stratified_random_v1",
+    "records_count": 14060,
+    "seed": 20260726
+  },
+  "summary": {
+    "anonymous_default_tolerance": {
+      "pair_count": 11629,
+      "pair_counts_by_split_edge": {
+        "train-test": 4734,
+        "train-validation": 5708,
+        "validation-test": 1187
+      },
+      "parent_count": 1463,
+      "proxy_group_count": 150
+    },
+    "anonymous_high_recall": {
+      "pair_count": 13031,
+      "pair_counts_by_split_edge": {
+        "train-test": 5345,
+        "train-validation": 6345,
+        "validation-test": 1341
+      },
+      "parent_count": 1480,
+      "proxy_group_count": 150
+    },
+    "candidate_cross_split_pair_count": 14443,
+    "candidate_pair_counts_by_split_edge": {
+      "train-test": 5998,
+      "train-validation": 6952,
+      "validation-test": 1493
+    },
+    "candidate_parent_count": 1538,
+    "candidate_proxy_group_count": 154,
+    "classification_counts": {
+      "anonymous_prototype_default_tolerance": 11629,
+      "anonymous_prototype_high_recall_only": 1402,
+      "screened_nonmatch": 1412
+    },
+    "pair_error_count": 0,
+    "same_reduced_composition_candidate_pair_count": 0,
+    "same_species_default_tolerance": {
+      "pair_count": 0,
+      "pair_counts_by_split_edge": {},
+      "parent_count": 0,
+      "proxy_group_count": 0
+    },
+    "tetragonal_parent_count": 2009
+  }
+}

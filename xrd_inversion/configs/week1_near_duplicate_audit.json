@@ -1,0 +1,50 @@
+{
+  "schema_version": "xrd-inversion-week1-near-duplicate-audit-v1",
+  "purpose": "read_only_cross_split_structural_near_duplicate_audit",
+  "source_contract": {
+    "records": "xrd_robustness/data/formal_14060/mp_processed/structure_records.jsonl",
+    "authoritative_split": "xrd_robustness/data/formal_14060/manifests/split_manifest.json"
+  },
+  "scope": {
+    "crystal_system": "tetragonal",
+    "proxy_definition": "anonymized_formula + recomputed_space_group + nsites",
+    "pair_scope": "all_cross_split_pairs_within_cross_split_proxy_groups",
+    "data_mutation": "forbidden"
+  },
+  "structure_matcher": {
+    "anonymous_high_recall": {
+      "ltol": 0.3,
+      "stol": 0.5,
+      "angle_tol": 10.0,
+      "primitive_cell": true,
+      "scale": true,
+      "attempt_supercell": false,
+      "allow_subset": false
+    },
+    "anonymous_default_sensitivity": {
+      "ltol": 0.2,
+      "stol": 0.3,
+      "angle_tol": 5.0,
+      "primitive_cell": true,
+      "scale": true,
+      "attempt_supercell": false,
+      "allow_subset": false
+    },
+    "same_species_default": {
+      "ltol": 0.2,
+      "stol": 0.3,
+      "angle_tol": 5.0,
+      "primitive_cell": true,
+      "scale": true,
+      "attempt_supercell": false,
+      "allow_subset": false,
+      "comparator": "ElementComparator"
+    },
+    "cached_reduction": "primitive_then_niggli_once_per_parent"
+  },
+  "outputs": {
+    "pair_csv": "xrd_inversion/manifests/week1_structural_near_duplicate_pairs.csv",
+    "results_json": "xrd_inversion/reports/week1_structural_near_duplicate_audit.json",
+    "report_markdown": "xrd_inversion/reports/WEEK1_STRUCTURAL_NEAR_DUPLICATE_AUDIT.md"
+  }
+}

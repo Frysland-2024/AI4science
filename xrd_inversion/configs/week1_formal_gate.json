@@ -1,0 +1,149 @@
+{
+  "schema_version": "xrd-inversion-week1-gate-v3",
+  "run_kind": "formal_gate",
+  "status": "formal_week1_numerical_gate",
+  "seed": 20260831,
+  "source_contract": {
+    "data_root": "xrd_robustness/data/formal_14060",
+    "records": "xrd_robustness/data/formal_14060/mp_processed/structure_records.jsonl",
+    "structure_manifest": "xrd_robustness/data/formal_14060/manifests/structure_manifest.csv",
+    "authoritative_split": "xrd_robustness/data/formal_14060/manifests/split_manifest.json",
+    "split_contract": "xrd_robustness/configs/data.method_transfer.structure_split.json",
+    "peak_cache_manifest": "xrd_robustness/data/formal_14060/manifests/peak_cache_manifest.v7.reflection.csv",
+    "peak_cache_dir": "xrd_robustness/data/formal_14060/mp_processed/peak_tables_v7_reflection",
+    "measurement_config": "xrd_robustness/configs/simulation.method_transfer.frozen.json"
+  },
+  "outputs": {
+    "selected_manifest": "xrd_inversion/manifests/week1_formal_selected_parents.csv",
+    "results": "xrd_inversion/reports/week1_formal_results.json",
+    "markdown": "xrd_inversion/reports/WEEK1_FORMAL_REPORT.md",
+    "checkpoint_dir": "xrd_inversion/checkpoints/week1_formal"
+  },
+  "runtime": {
+    "device": "cuda",
+    "dtype": "float64",
+    "require_cuda": true,
+    "allow_tf32": false,
+    "allow_autocast": false,
+    "parent_checkpointing": true
+  },
+  "gpu_forward": {
+    "contract": "tetragonal_torch_dense_v1",
+    "parity": {
+      "profile_max_abs_max": 2e-6,
+      "profile_rmse_max": 2e-7,
+      "q_probes": [
+        [0.0, 0.0, 0.0, -1.0],
+        [0.0, 0.0, 0.0, 0.0],
+        [0.6, -0.6, 0.6, 0.6],
+        [-0.6, 0.6, -0.6, -0.6]
+      ]
+    }
+  },
+  "grid": {
+    "two_theta_min": 10.0,
+    "two_theta_max": 80.0,
+    "peak_calculation_padding_deg": 2.5,
+    "step": 0.02,
+    "wavelength_name": "CuKa",
+    "wavelength_angstrom": 1.54184
+  },
+  "sampling": {
+    "representative_parent_count": 24,
+    "classical_recovery_parent_count": 24,
+    "trials_per_parent": 4,
+    "split": "train",
+    "selection": "deterministic_robust_feature_maximin_v1"
+  },
+  "formal_gate_minimums": {
+    "representative_parent_count": 24,
+    "classical_recovery_parent_count": 24,
+    "trials_per_parent": 4
+  },
+  "canonical_cell": {
+    "relative_a_b_tolerance": 1e-6,
+    "angle_tolerance_deg": 1e-6,
+    "symprec": 0.01,
+    "angle_tolerance_for_restandardization_deg": 5.0
+  },
+  "parameterization": {
+    "q_bounds": [-1.0, 1.0],
+    "du_half_range": 0.01,
+    "dv_half_range": 0.01,
+    "delta_half_range_deg": 0.2,
+    "fwhm_transform": "log",
+    "fwhm_min_deg": 0.08,
+    "fwhm_max_deg": 0.2,
+    "nominal_q": [0.0, 0.0, 0.0, -1.0],
+    "nominal_fwhm_deg": 0.08,
+    "truth_q_range": [-0.8, 0.8]
+  },
+  "p0": {
+    "metric_d_atol_angstrom": 1e-12,
+    "metric_d_rtol": 1e-10,
+    "bragg_two_theta_atol_deg": 1.1e-5,
+    "fresh_cache_position_atol_deg": 1e-12,
+    "fresh_cache_intensity_rtol": 1e-10,
+    "lattice_fraction_step": 0.005,
+    "zero_shift_probe_deg": 0.073,
+    "center_error_max_deg": 0.002,
+    "center_shift_dispersion_max_deg": 0.001,
+    "fwhm_probe_deg": [0.08, 0.2],
+    "fwhm_error_max_deg": 0.01,
+    "area_relative_error_max": 0.01
+  },
+  "p1": {
+    "transform": "log1p_100_normalized",
+    "jacobian_backend": "torch.func.jacfwd",
+    "finite_difference_h_q_values": [0.005, 0.01, 0.02, 0.04],
+    "finite_difference_autograd_relative_max": 0.1,
+    "finite_difference_convergence_relative_max": 0.1,
+    "finite_difference_required_adjacent_pair_count": 1,
+    "column_norm_min": 0.01,
+    "rank_rcond": 0.001,
+    "condition_number_max": 1000.0,
+    "max_abs_cosine": 0.995,
+    "eligible_parent_fraction_min": 0.8,
+    "anchors": [
+      {"name": "nominal_level0", "q": [0.0, 0.0, 0.0, -1.0]},
+      {"name": "geometric_center", "q": [0.0, 0.0, 0.0, 0.0]},
+      {"name": "mixed_positive", "q": [0.6, -0.6, 0.6, 0.6]},
+      {"name": "mixed_negative", "q": [-0.6, 0.6, -0.6, -0.6]}
+    ]
+  },
+  "p2": {
+    "local_optimizer": {
+      "algorithm": "scipy_least_squares_trf",
+      "jacobian": "cuda_autograd",
+      "max_nfev": 80,
+      "ftol": 1e-8,
+      "xtol": 1e-8,
+      "gtol": 1e-8
+    },
+    "recoverability": {
+      "candidate_design": "frozen_scrambled_sobol_4d_nested_prefix_v1",
+      "sobol_seed": 20260901,
+      "bank_seed_source": "fixed_config_sobol_seed_shared_4d_prefix",
+      "candidate_q_range": [-0.8, 0.8],
+      "stage_candidate_counts": {"S1": 256, "S2": 512, "S3": 1024},
+      "top_k": 4,
+      "top_k_semantics": "sobol_only_excluding_always_reused_nominal",
+      "score_batch_size": 16
+    },
+    "boundary_diagnostic_tolerance_q": 1e-6,
+    "clean": {
+      "case_success_nae_max": 0.05,
+      "case_success_fraction_min": 0.9,
+      "parameter_median_nae_max": 0.01,
+      "parameter_p90_nae_max": 0.025,
+      "profile_rmse_max": 0.01
+    },
+    "nuisance": {
+      "case_success_nae_max": 0.1,
+      "case_success_fraction_min": 0.7,
+      "parameter_median_nae_max": 0.05,
+      "profile_rmse_max": 0.1,
+      "texture_enabled": false
+    }
+  }
+}

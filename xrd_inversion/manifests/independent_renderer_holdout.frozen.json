@@ -1,0 +1,228 @@
+{
+  "schema_version": "xrd-independent-renderer-holdout-manifest-v1",
+  "status": "frozen_unopened",
+  "freeze_date": "2026-09-01",
+  "config": "xrd_inversion/configs/independent_renderer_holdout.frozen.json",
+  "selection_seed": 20260901,
+  "selection_algorithm": "sha256_rank_parent_structure_id_v1",
+  "selection_source": {
+    "path": "xrd_robustness/data/formal_14060/manifests/split_manifest.json",
+    "sha256": "b9d3b72e42ea0fd549dae34425ff61d2d650d5dd7fe6f337d747cb952cf43293",
+    "source_record_count": 14060,
+    "eligible_metadata_count": 301,
+    "eligibility": {
+      "split": "validation",
+      "crystal_system": "tetragonal"
+    }
+  },
+  "renderer_source": {
+    "path": "xrd_inversion/src/xrd_inversion/independent_renderer.py",
+    "sha256": "7cc1a2385b198f5a530fd7653a9d2ed5a26a72fa3f70b2e8705bed6dc3be575e",
+    "contract": "numpy_signed_hkl_tetragonal_v1"
+  },
+  "candidate_count": 24,
+  "candidates": [
+    {
+      "rank": 1,
+      "material_id": "mp-19815",
+      "parent_structure_id": "6cf43f1745f94f810ea2c8545b1a9a809072fa04f3f02d099c9e73c0a3e735b8",
+      "split": "validation",
+      "crystal_system": "tetragonal",
+      "parent_trial_seed": 3517233118
+    },
+    {
+      "rank": 2,
+      "material_id": "mp-21240",
+      "parent_structure_id": "e5f4a9f8e108379022ba9b4d08c866a2a9cd1d61906508c70c23f8c38869f16b",
+      "split": "validation",
+      "crystal_system": "tetragonal",
+      "parent_trial_seed": 3895316298
+    },
+    {
+      "rank": 3,
+      "material_id": "mp-27677",
+      "parent_structure_id": "fac07887a11170a79f07ea57c2ea2188b43b4b20c3e26243a0061c911ac2fb29",
+      "split": "validation",
+      "crystal_system": "tetragonal",
+      "parent_trial_seed": 1887772701
+    },
+    {
+      "rank": 4,
+      "material_id": "mp-1103397",
+      "parent_structure_id": "c023b9960f521c6592838d56b4c02147ba59de8a4ae0aed12f00b87d0f4664fa",
+      "split": "validation",
+      "crystal_system": "tetragonal",
+      "parent_trial_seed": 1444046366
+    },
+    {
+      "rank": 5,
+      "material_id": "mp-28768",
+      "parent_structure_id": "33ebb1ac0f314431ca37d2ff34aedf20883205c08beebc596e3f8e4570fe813b",
+      "split": "validation",
+      "crystal_system": "tetragonal",
+      "parent_trial_seed": 1146585786
+    },
+    {
+      "rank": 6,
+      "material_id": "mp-1192433",
+      "parent_structure_id": "0105837bdb0a23ad8c7b866be44a708b59cdf3e0dc9aa803eb42a5d347aa4018",
+      "split": "validation",
+      "crystal_system": "tetragonal",
+      "parent_trial_seed": 2230475728
+    },
+    {
+      "rank": 7,
+      "material_id": "mp-1104101",
+      "parent_structure_id": "c9b4a463704ac71a400e048cc42872c6f847550ab9f2c2a8f04ca3834c1c5af3",
+      "split": "validation",
+      "crystal_system": "tetragonal",
+      "parent_trial_seed": 1823447447
+    },
+    {
+      "rank": 8,
+      "material_id": "mp-1078369",
+      "parent_structure_id": "6f5aea80cbb38fded05c66da3c946550fe3198aecd5be4369f05b4b63385443a",
+      "split": "validation",
+      "crystal_system": "tetragonal",
+      "parent_trial_seed": 1117282523
+    },
+    {
+      "rank": 9,
+      "material_id": "mp-2071",
+      "parent_structure_id": "3db2d6bd7d3a1965177fe54aec6c655831bfb3f48bd4494778d57acd69a9c7d3",
+      "split": "validation",
+      "crystal_system": "tetragonal",
+      "parent_trial_seed": 794299015
+    },
+    {
+      "rank": 10,
+      "material_id": "mp-1198338",
+      "parent_structure_id": "037dbf3897161ba96567373bb19837bc2508a1615656cec9ddc7eb10215872fc",
+      "split": "validation",
+      "crystal_system": "tetragonal",
+      "parent_trial_seed": 620997632
+    },
+    {
+      "rank": 11,
+      "material_id": "mp-1220161",
+      "parent_structure_id": "16df2520db17618bb7633eb70f784618fce0ef661f2ad4ccdbf220c3681deeeb",
+      "split": "validation",
+      "crystal_system": "tetragonal",
+      "parent_trial_seed": 3741168934
+    },
+    {
+      "rank": 12,
+      "material_id": "mp-21468",
+      "parent_structure_id": "6f75e629dcc415f720b455d7c0d0a706af6b09ae7551983c5a1079ca2ef24f34",
+      "split": "validation",
+      "crystal_system": "tetragonal",
+      "parent_trial_seed": 270808868
+    },
+    {
+      "rank": 13,
+      "material_id": "mp-1206351",
+      "parent_structure_id": "6954f1b38c40d4a0b635e75eb5083a240557a78d394899831a903a25b0dbd463",
+      "split": "validation",
+      "crystal_system": "tetragonal",
+      "parent_trial_seed": 3307463392
+    },
+    {
+      "rank": 14,
+      "material_id": "mp-1173297",
+      "parent_structure_id": "2cfe180bd7c317006e456f5a401f816926157e001369d337d619ae163bc040fb",
+      "split": "validation",
+      "crystal_system": "tetragonal",
+      "parent_trial_seed": 677284268
+    },
+    {
+      "rank": 15,
+      "material_id": "mp-1210068",
+      "parent_structure_id": "f684149c8c45ecf68bc18e3f3e9306103fa8b63b6e0c5398b19e762d4f66694d",
+      "split": "validation",
+      "crystal_system": "tetragonal",
+      "parent_trial_seed": 2235673784
+    },
+    {
+      "rank": 16,
+      "material_id": "mp-1105793",
+      "parent_structure_id": "da94cf995851fa93aca0e343215dd396392b96ab67b2bf92eefc66197796734b",
+      "split": "validation",
+      "crystal_system": "tetragonal",
+      "parent_trial_seed": 629600248
+    },
+    {
+      "rank": 17,
+      "material_id": "mp-27782",
+      "parent_structure_id": "466fc1c7a32fd9416bd132dea298d70956dae1ad077649610a3861cd1c6e566e",
+      "split": "validation",
+      "crystal_system": "tetragonal",
+      "parent_trial_seed": 593346028
+    },
+    {
+      "rank": 18,
+      "material_id": "mp-1209930",
+      "parent_structure_id": "6a4f97fbdd1e0e2f3f3ba4093775e020ba6819d3f34f11da3da1e95e0d70806e",
+      "split": "validation",
+      "crystal_system": "tetragonal",
+      "parent_trial_seed": 2743395626
+    },
+    {
+      "rank": 19,
+      "material_id": "mp-1078074",
+      "parent_structure_id": "a11d1a2a42691130d14a87edcbc97bf5247061ee826bc853e60fde5682189475",
+      "split": "validation",
+      "crystal_system": "tetragonal",
+      "parent_trial_seed": 2674457359
+    },
+    {
+      "rank": 20,
+      "material_id": "mp-867780",
+      "parent_structure_id": "1df19305fd4dc3682e12f14bd91321cfb4e0d43ff25da76439a25e492e0c6b2e",
+      "split": "validation",
+      "crystal_system": "tetragonal",
+      "parent_trial_seed": 2758678505
+    },
+    {
+      "rank": 21,
+      "material_id": "mp-1201565",
+      "parent_structure_id": "58593857651efc90c918b9fe31d9b3c57bee982731a58e64ef9eceb77334b679",
+      "split": "validation",
+      "crystal_system": "tetragonal",
+      "parent_trial_seed": 318946682
+    },
+    {
+      "rank": 22,
+      "material_id": "mp-1029845",
+      "parent_structure_id": "ae53e9abacc89e0a93ee8957314bb7b85378095af94efe648764c7bfcdbb9343",
+      "split": "validation",
+      "crystal_system": "tetragonal",
+      "parent_trial_seed": 2182600008
+    },
+    {
+      "rank": 23,
+      "material_id": "mp-10534",
+      "parent_structure_id": "9e19dde788904bde207fb0424e32df958a54b9dc9477b46ddb84f90cbaac74d2",
+      "split": "validation",
+      "crystal_system": "tetragonal",
+      "parent_trial_seed": 2902321033
+    },
+    {
+      "rank": 24,
+      "material_id": "mp-1079135",
+      "parent_structure_id": "19a402d7df7a4e7c3b96005314f149a18cf0c6a4568406923f8a3c61baac64ee",
+      "split": "validation",
+      "crystal_system": "tetragonal",
+      "parent_trial_seed": 2406349193
+    }
+  ],
+  "seal": {
+    "candidate_structures_loaded": false,
+    "profiles_rendered": false,
+    "profiles_persisted": false,
+    "trial_q_values_materialized": false,
+    "metrics_computed": false,
+    "outcomes_opened": false,
+    "tuning_use_prohibited": true,
+    "opening_stage": "Week 4 after complete method freeze"
+  }
+}

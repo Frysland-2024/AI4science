@@ -4,10 +4,13 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "xrd-inversion"
-version = "0.1.0"
+version = "0.2.0"
 description = "Auditable PXRD quantitative-inversion pilots"
 requires-python = ">=3.10"
 dependencies = ["numpy>=1.24", "scipy>=1.10", "pymatgen"]
+
+[project.optional-dependencies]
+gpu = ["torch>=2.0"]
 
 [tool.setuptools.packages.find]
 where = ["src"]

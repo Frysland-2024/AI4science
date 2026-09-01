@@ -170,6 +170,13 @@ J=\left[
 
 不设置任意 magic threshold；结合 P2 的实际 recovery 决定 Go/No-Go。
 
+**Week-1 数值修订（2026-09-01）：** P1 的 Gate Jacobian 使用 CUDA float64
+autograd。有限差分只作数值审计，固定扫描
+`h_q = 0.005, 0.01, 0.02, 0.04`，原有 `0.1` 相对误差阈值不放宽。
+由于 sampled max-normalization 会在相邻 bin 间切换，有限差分在每个 anchor
+固定该 anchor 的局部 normalization branch；这不改变 anchor 处的 Jacobian，
+只避免把离散 argmax 切换误报成可辨识性失败。
+
 ### P2 — Classical Recovery Gate【新增关键 Gate】
 
 完全不使用 neural network。
@@ -180,23 +187,36 @@ J=\left[
 x=F(\theta_{true})
 \]
 
-从 nominal parameters `θ0` 出发，使用 local least-squares：
+使用同一套 bounded local least-squares：
 
 \[
 \hat\theta=\arg\min_\theta D(F(\theta),x)
 \]
 
-#### P2a — Clean recovery
+#### P2-R — Clean Recoverability Gate
 
 无随机 background / noise。
 
-要求：对绝大多数可辨识样本，local optimizer 能恢复受控真值。
+允许预注册的 deterministic multistart。正式方案使用一份冻结的 4D
+scrambled-Sobol 嵌套设计，GPU 分块计算初始 residual，选择固定数量的候选
+进入完全相同的 local least-squares；P2-L 的 nominal 解无条件复用并进入最终候选池。
+最终解只按 finite final cost 与固定 start ID 选择，严禁查看 truth/NAE 选解。
 
-#### P2b — Nuisance recovery
+要求：对绝大多数冻结样本，P2-R 能恢复受控真值。P2-R 才是项目数值
+recoverability Gate。
 
-加入 background / noise，记录恢复能力下降。
+#### P2-L — Nominal Local-capture Baseline
 
-若 clean 条件下传统 optimizer 都无法稳定恢复参数：
+保留原始 `θ0 = θ_nominal` 单起点 local least-squares，但它只衡量 basin / initialization
+sensitivity，不再作为四参数任务的 Go/No-Go Gate。后续 ML initializer 必须与它使用
+同一个 local refinement，才能形成公平比较。
+
+#### P2-N — Nuisance diagnostic
+
+加入未显式建模的 background / noise，记录完整四参数 nominal local capture 的下降。
+该结果不进入 clean recoverability Gate，也不能单独用于删除 FWHM 或收缩参数空间。
+
+若 clean 条件下 P2-R 都无法稳定恢复参数：
 
 > 不允许归因于神经网络；优先缩减参数维度或修改任务定义。
 
@@ -295,9 +315,18 @@ u\leftrightarrow\delta
 
 **Independent-renderer Test 在 Week 4 前不得用于调参数、改 loss、改 renderer。**
 
+该 renderer 必须在 Week 1 构造、记录源码哈希并冻结候选 parent/seeds；冻结时不得
+生成候选 profile、计算 metric 或打开 outcome。
+
 #### Week-1 Go
 
-至少核心参数组合在 clean / controlled setting 下具有明确可辨识性，且 classical local inversion 能恢复真值。
+至少核心参数组合在 clean / controlled setting 下具有明确可辨识性，且 P2-R
+deterministic multistart inversion 能恢复真值。P2-L 失败只说明 nominal capture basin
+脆弱，不能直接解释为任务不可恢复。
+
+正式数值 Gate 精确使用 24 个冻结 train parent × 每 parent 4 trials；P1 eligibility
+保留为分层标签，不得在观察 Gate 结果后筛掉或替补 P2 parent。prototype / near-duplicate
+审计与 independent-renderer seal 同时记录，但不得用 independent outcome 调 Week 1–3。
 
 否则缩减参数空间，不进入正式 ML。
 

@@ -9,17 +9,18 @@ from __future__ import annotations
 
 import argparse
 import csv
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
 import hashlib
 from importlib.metadata import PackageNotFoundError, version as package_version
 import json
 import math
+import os
 from pathlib import Path
 import platform
 import subprocess
 import sys
-from typing import Any, Iterable, Mapping, Sequence
+from typing import TYPE_CHECKING, Any, Iterable, Mapping, Sequence
 
 import numpy as np
 from pymatgen.core import Composition, Lattice, Structure
@@ -36,6 +37,9 @@ from xrd_robustness.simulator import (
     render_gaussian_peaks,
     simulate_from_peak_table,
 )
+
+if TYPE_CHECKING:
+    from .gpu_forward import CachedTetragonalGPUForward
 
 
 PARAMETER_NAMES = ("du", "dv", "delta", "fwhm")
@@ -83,7 +87,7 @@ def git_head(repository_root: Path) -> str | None:
 def git_status(repository_root: Path) -> str | None:
     try:
         return subprocess.check_output(
-            ["git", "status", "--short", "--untracked-files=all"],
+            ["git", "status", "--short", "--untracked-files=normal"],
             cwd=repository_root,
             text=True,
             stderr=subprocess.DEVNULL,
@@ -120,6 +124,22 @@ def resolve_source_paths(
                 raise ValueError(f"source path escapes repository: {path}")
             paths[name] = path
     return paths
+
+
+def resolve_output_path(
+    repository_root: Path,
+    config: Mapping[str, Any],
+    name: str,
+    fallback: str,
+) -> Path:
+    """Resolve a configured artifact path without permitting repository escape."""
+
+    configured = config.get("outputs", {})
+    value = configured.get(name, fallback) if isinstance(configured, Mapping) else fallback
+    path = (repository_root / str(value)).resolve()
+    if not path.is_relative_to(repository_root):
+        raise ValueError(f"output path escapes repository: {path}")
+    return path
 
 
 def load_authoritative_split(
@@ -936,16 +956,144 @@ def render_profile(
     )
 
 
-def jacobian_for_parent(
-    context: ParentContext,
+def build_gpu_forward_models(
+    contexts: Sequence[ParentContext], config: Mapping[str, Any]
+) -> dict[str, "CachedTetragonalGPUForward"]:
+    from .gpu_forward import CachedTetragonalGPUForward
+
+    runtime = config.get("runtime", {})
+    device = str(runtime.get("device", "cuda"))
+    dtype = str(runtime.get("dtype", "float64"))
+    if dtype != "float64":
+        raise ValueError("Week-1 numerical gates require runtime.dtype='float64'")
+    return {
+        context.material_id: CachedTetragonalGPUForward(
+            context.structure,
+            grid_config=config["grid"],
+            parameter_config=config["parameterization"],
+            device=device,
+        )
+        for context in contexts
+    }
+
+
+def run_gpu_forward_parity(
+    contexts: Sequence[ParentContext],
+    models: Mapping[str, "CachedTetragonalGPUForward"],
     *,
     config: Mapping[str, Any],
-    grid: SimulationGrid,
+) -> dict[str, Any]:
+    parity_config = config.get("gpu_forward", {}).get("parity", {})
+    maximum_allowed = float(parity_config.get("profile_max_abs_max", 5e-6))
+    rmse_allowed = float(parity_config.get("profile_rmse_max", 1e-7))
+    configured_probes = parity_config.get("q_probes")
+    if not isinstance(configured_probes, list) or not configured_probes:
+        configured_probes = [anchor["q"] for anchor in config["p1"]["anchors"]]
+    grid = SimulationGrid(
+        two_theta_min=float(config["grid"]["two_theta_min"]),
+        two_theta_max=float(config["grid"]["two_theta_max"]),
+        step=float(config["grid"]["step"]),
+        wavelength=str(config["grid"]["wavelength_name"]),
+    )
+    rows: list[dict[str, Any]] = []
+    maximum_error = 0.0
+    maximum_rmse = 0.0
+    for context in contexts:
+        model = models[context.material_id]
+        for probe_index, probe in enumerate(configured_probes):
+            q = np.asarray(probe, dtype=np.float64)
+            gpu = model.render_numpy(q)
+            cpu = render_profile(
+                context,
+                q,
+                config=config,
+                grid=grid,
+                rng_seed=stable_seed(config["seed"], "gpu-parity", context.material_id),
+            ).astype(np.float64)
+            difference = gpu - cpu
+            max_abs = float(np.max(np.abs(difference), initial=0.0))
+            rmse = float(np.sqrt(np.mean(difference * difference)))
+            maximum_error = max(maximum_error, max_abs)
+            maximum_rmse = max(maximum_rmse, rmse)
+            rows.append(
+                {
+                    "material_id": context.material_id,
+                    "probe_index": probe_index,
+                    "q": q.tolist(),
+                    "profile_max_abs": max_abs,
+                    "profile_rmse": rmse,
+                    "passed": max_abs <= maximum_allowed and rmse <= rmse_allowed,
+                }
+            )
+    passed = bool(rows) and all(bool(row["passed"]) for row in rows)
+    first_model = models[contexts[0].material_id] if contexts else None
+    return {
+        "status": "PASS" if passed else "INVALID",
+        "contract": (
+            first_model.provenance().contract if first_model is not None else None
+        ),
+        "profile_max_abs_max": maximum_error,
+        "profile_rmse_max": maximum_rmse,
+        "thresholds": {
+            "profile_max_abs_max": maximum_allowed,
+            "profile_rmse_max": rmse_allowed,
+        },
+        "probe_count": len(rows),
+        "models": {
+            material_id: asdict(model.provenance())
+            for material_id, model in models.items()
+        },
+        "probes": rows,
+    }
+
+
+def _second_order_finite_difference(
+    model: "CachedTetragonalGPUForward",
+    q0: np.ndarray,
+    parameter_index: int,
+    step: float,
+    *,
+    q_low: float,
+    q_high: float,
+    normalization_index: int | None = None,
+) -> tuple[np.ndarray, str]:
+    if step <= 0.0:
+        raise ValueError("finite-difference step must be positive")
+
+    def evaluate(offset: float) -> np.ndarray:
+        q = q0.copy()
+        q[parameter_index] += offset
+        return model.transformed_numpy(
+            q, normalization_index=normalization_index
+        )
+
+    tolerance = 1e-12
+    if q0[parameter_index] - step >= q_low - tolerance and q0[
+        parameter_index
+    ] + step <= q_high + tolerance:
+        return (evaluate(step) - evaluate(-step)) / (2.0 * step), "central_2point"
+    base = evaluate(0.0)
+    if q0[parameter_index] + 2.0 * step <= q_high + tolerance:
+        return (
+            -3.0 * base + 4.0 * evaluate(step) - evaluate(2.0 * step)
+        ) / (2.0 * step), "forward_3point"
+    if q0[parameter_index] - 2.0 * step >= q_low - tolerance:
+        return (
+            3.0 * base - 4.0 * evaluate(-step) + evaluate(-2.0 * step)
+        ) / (2.0 * step), "backward_3point"
+    raise ValueError("finite-difference stencil has insufficient room inside q bounds")
+
+
+def jacobian_for_parent(
+    model: "CachedTetragonalGPUForward",
+    *,
+    config: Mapping[str, Any],
     anchor_q: Sequence[float] | None = None,
-    check_convergence: bool = True,
 ) -> tuple[np.ndarray, list[dict[str, Any]]]:
-    h = float(config["p1"]["finite_difference_h_q"])
-    q_low, q_high = [float(value) for value in config["parameterization"]["q_bounds"]]
+    p1_config = config["p1"]
+    q_low, q_high = [
+        float(value) for value in config["parameterization"]["q_bounds"]
+    ]
     q0 = np.asarray(
         np.zeros(4, dtype=np.float64) if anchor_q is None else anchor_q,
         dtype=np.float64,
@@ -954,60 +1102,78 @@ def jacobian_for_parent(
         raise ValueError("P1 anchor must be a four-vector")
     if np.any(q0 < q_low) or np.any(q0 > q_high):
         raise ValueError("P1 anchor lies outside q_bounds")
-    columns: list[np.ndarray] = []
-    convergence: list[dict[str, float]] = []
-    seed = stable_seed(config["seed"], "p1", context.material_id, *q0.tolist())
+    h_values = [
+        float(value)
+        for value in p1_config.get(
+            "finite_difference_h_q_values", [0.005, 0.01, 0.02, 0.04]
+        )
+    ]
+    if h_values != sorted(set(h_values)) or len(h_values) < 2:
+        raise ValueError("P1 finite-difference h values must be unique and increasing")
+    normalization_index = model.smooth_normalization_index(q0)
+    autograd = model.transformed_jacobian_numpy(
+        q0, normalization_index=normalization_index
+    )
+    threshold = float(
+        p1_config.get(
+            "finite_difference_autograd_relative_max",
+            p1_config["finite_difference_convergence_relative_max"],
+        )
+    )
+    required_pairs = int(
+        p1_config.get("finite_difference_required_adjacent_pair_count", 1)
+    )
+    audits: list[dict[str, Any]] = []
     for parameter_index, name in enumerate(PARAMETER_NAMES):
-        derivatives: dict[str, np.ndarray] = {}
-        steps = (("half", h / 2.0), ("base", h), ("double", 2.0 * h)) if check_convergence else (("base", h),)
-        for label, step in steps:
-            plus = q0.copy()
-            minus = q0.copy()
-            plus[parameter_index] = min(q_high, plus[parameter_index] + step)
-            minus[parameter_index] = max(q_low, minus[parameter_index] - step)
-            denominator = plus[parameter_index] - minus[parameter_index]
-            if denominator <= 0.0:
-                raise ValueError("P1 finite-difference stencil collapsed at q bound")
-            forward = profile_transform(
-                render_profile(
-                    context, plus, config=config, grid=grid, rng_seed=seed
-                )
+        reference = autograd[:, parameter_index]
+        reference_norm = max(float(np.linalg.norm(reference)), 1e-12)
+        sweep: list[dict[str, Any]] = []
+        passing_steps: list[bool] = []
+        for step in h_values:
+            derivative, stencil = _second_order_finite_difference(
+                model,
+                q0,
+                parameter_index,
+                step,
+                q_low=q_low,
+                q_high=q_high,
+                normalization_index=normalization_index,
             )
-            backward = profile_transform(
-                render_profile(
-                    context, minus, config=config, grid=grid, rng_seed=seed
-                )
+            derivative_norm = float(np.linalg.norm(derivative))
+            relative = float(np.linalg.norm(derivative - reference)) / reference_norm
+            cosine = float(
+                np.dot(derivative, reference)
+                / max(derivative_norm * reference_norm, 1e-15)
             )
-            derivatives[label] = (forward - backward) / denominator
-        base = derivatives["base"]
-        norm_base = max(float(np.linalg.norm(base)), 1e-15)
-        if check_convergence:
-            half = derivatives["half"]
-            double = derivatives["double"]
-            norm_half = max(float(np.linalg.norm(half)), 1e-15)
-            error_half = float(np.linalg.norm(base - half)) / norm_half
-            error_double = float(np.linalg.norm(double - base)) / norm_base
-        else:
-            error_half = 0.0
-            error_double = 0.0
-        convergence.append(
+            passed = relative <= threshold
+            passing_steps.append(passed)
+            sweep.append(
+                {
+                    "h_q": step,
+                    "stencil": stencil,
+                    "finite_difference_column_norm": derivative_norm,
+                    "autograd_relative_error": relative,
+                    "autograd_cosine": cosine,
+                    "passed": passed,
+                }
+            )
+        passing_pairs = [
+            [h_values[index], h_values[index + 1]]
+            for index in range(len(h_values) - 1)
+            if passing_steps[index] and passing_steps[index + 1]
+        ]
+        audits.append(
             {
                 "parameter": name,
-                "column_norm": float(np.linalg.norm(base)),
-                "h_vs_half_relative": error_half,
-                "double_vs_h_relative": error_double,
-                "max_relative": max(error_half, error_double),
-                "stencil": (
-                    "forward"
-                    if q0[parameter_index] <= q_low
-                    else "backward"
-                    if q0[parameter_index] >= q_high
-                    else "central"
-                ),
+                "normalization_branch_index": normalization_index,
+                "autograd_column_norm": float(np.linalg.norm(reference)),
+                "sweep": sweep,
+                "passing_adjacent_pairs": passing_pairs,
+                "required_adjacent_pair_count": required_pairs,
+                "numerical_stability_passed": len(passing_pairs) >= required_pairs,
             }
         )
-        columns.append(base)
-    return np.column_stack(columns), convergence
+    return autograd, audits
 
 
 def matrix_identifiability(
@@ -1050,46 +1216,44 @@ def matrix_identifiability(
 
 def run_p1(
     contexts: Sequence[ParentContext],
+    models: Mapping[str, "CachedTetragonalGPUForward"],
+    forward_parity: Mapping[str, Any],
     *,
     config: Mapping[str, Any],
 ) -> dict[str, Any]:
     p1_config = config["p1"]
-    grid = SimulationGrid(
-        two_theta_min=float(config["grid"]["two_theta_min"]),
-        two_theta_max=float(config["grid"]["two_theta_max"]),
-        step=float(config["grid"]["step"]),
-        wavelength=str(config["grid"]["wavelength_name"]),
-    )
     parents: list[dict[str, Any]] = []
     eligible_ids: list[str] = []
+    numerical_failure_ids: set[str] = set()
+    identifiability_failure_ids: set[str] = set()
     configured_anchors = p1_config.get("anchors")
     if not isinstance(configured_anchors, list) or not configured_anchors:
         configured_anchors = [{"name": "center", "q": [0.0, 0.0, 0.0, 0.0]}]
     for context in contexts:
+        if context.material_id not in models:
+            raise ValueError(f"missing GPU forward for {context.material_id}")
+        model = models[context.material_id]
         anchor_rows: list[dict[str, Any]] = []
         for anchor in configured_anchors:
             anchor_name = str(anchor["name"])
             anchor_q = [float(value) for value in anchor["q"]]
-            check_convergence = True
-            jacobian, convergence = jacobian_for_parent(
-                context,
+            jacobian, numerical_audit = jacobian_for_parent(
+                model,
                 config=config,
-                grid=grid,
                 anchor_q=anchor_q,
-                check_convergence=check_convergence,
             )
             staircases: dict[str, Any] = {}
             for name, indices in STAIRCASES.items():
-                convergence_max = max(
-                    convergence[index]["max_relative"] for index in indices
-                )
                 metrics = matrix_identifiability(
                     jacobian,
                     indices,
                     rank_rcond=float(p1_config["rank_rcond"]),
                 )
-                metrics["finite_difference_convergence_max"] = convergence_max
-                metrics["eligible"] = bool(
+                numerical_passed = all(
+                    bool(numerical_audit[index]["numerical_stability_passed"])
+                    for index in indices
+                )
+                identifiability_passed = bool(
                     metrics["minimum_column_norm"]
                     >= float(p1_config["column_norm_min"])
                     and metrics["full_rank"]
@@ -1097,97 +1261,134 @@ def run_p1(
                     <= float(p1_config["condition_number_max"])
                     and metrics["max_abs_pairwise_cosine"]
                     <= float(p1_config["max_abs_cosine"])
-                    and convergence_max
-                    <= float(p1_config["finite_difference_convergence_relative_max"])
                 )
+                metrics["numerical_stability_passed"] = numerical_passed
+                metrics["identifiability_passed"] = identifiability_passed
+                metrics["eligible"] = numerical_passed and identifiability_passed
                 staircases[name] = metrics
             anchor_rows.append(
                 {
                     "name": anchor_name,
                     "q": anchor_q,
-                    "finite_difference_convergence_checked": check_convergence,
-                    "finite_difference_convergence": convergence,
+                    "jacobian_source": "torch.func.jacfwd",
+                    "finite_difference_role": "numerical audit only; not the gate Jacobian",
+                    "finite_difference_sweep": numerical_audit,
                     "staircases": staircases,
                 }
             )
-        parent_eligible = all(
-            anchor["staircases"]["S3"]["eligible"] for anchor in anchor_rows
+        parent_numerical = all(
+            staircase["numerical_stability_passed"]
+            for anchor in anchor_rows
+            for staircase in anchor["staircases"].values()
         )
+        parent_identifiable = all(
+            staircase["identifiability_passed"]
+            for anchor in anchor_rows
+            for staircase in anchor["staircases"].values()
+        )
+        parent_eligible = parent_numerical and parent_identifiable
         if parent_eligible:
             eligible_ids.append(context.material_id)
+        if not parent_numerical:
+            numerical_failure_ids.add(context.material_id)
+        if not parent_identifiable:
+            identifiability_failure_ids.add(context.material_id)
         parents.append(
             {
                 "material_id": context.material_id,
                 "formula": context.formula,
                 "space_group": context.space_group,
+                "numerical_stability_at_all_anchors": parent_numerical,
+                "identifiable_at_all_anchors": parent_identifiable,
                 "eligible_at_all_anchors": parent_eligible,
                 "anchors": anchor_rows,
             }
         )
     fraction = len(eligible_ids) / len(contexts) if contexts else 0.0
-    passed = fraction >= float(p1_config["eligible_parent_fraction_min"])
+    formal = str(config.get("run_kind", "smoke")) == "formal_gate"
+    minimum = int(config["formal_gate_minimums"]["representative_parent_count"])
+    sample_valid = not formal or len(contexts) == minimum
+    global_valid = (
+        str(forward_parity.get("status")) == "PASS"
+        and sample_valid
+        and len(models) == len(contexts)
+    )
+    passed = global_valid and fraction >= float(p1_config["eligible_parent_fraction_min"])
     return {
-        "status": "PASS" if passed else "FAIL",
+        "status": "PASS" if passed else "FAIL" if global_valid else "INVALID",
         "representative_parent_count": len(contexts),
         "eligible_parent_count": len(eligible_ids),
         "eligible_parent_fraction": fraction,
         "eligible_parent_ids": eligible_ids,
+        "numerical_stability_failure_count": len(numerical_failure_ids),
+        "numerical_stability_failure_ids": sorted(numerical_failure_ids),
+        "identifiability_failure_count": len(identifiability_failure_ids),
+        "identifiability_failure_ids": sorted(identifiability_failure_ids),
         "anchor_count": len(configured_anchors),
         "anchors": configured_anchors,
+        "jacobian_backend": "torch.func.jacfwd",
+        "matrix_metrics_source": "raw range-normalized autograd J_q",
+        "finite_difference_gate_rule": (
+            "for every active column, at least the configured number of adjacent "
+            "h pairs must both agree with autograd within the unchanged threshold"
+        ),
+        "forward_parity_status": forward_parity.get("status"),
+        "formal_sample_valid": sample_valid,
         "thresholds": dict(p1_config),
         "parents": parents,
     }
 
 
 def optimize_case(
-    context: ParentContext,
-    truth_q: np.ndarray,
+    model: "CachedTetragonalGPUForward",
+    start_q: np.ndarray,
     active_indices: Sequence[int],
     observed: np.ndarray,
     *,
     config: Mapping[str, Any],
-    grid: SimulationGrid,
-    render_seed: int,
-) -> tuple[np.ndarray, Any]:
+) -> tuple[np.ndarray, Any, dict[str, Any]]:
     baseline = np.asarray(
         config["parameterization"]["nominal_q"], dtype=np.float64
     )
     if baseline.shape != (4,):
         raise ValueError("nominal_q must be a four-vector")
-    x0 = baseline[list(active_indices)]
+    start = np.asarray(start_q, dtype=np.float64)
+    if start.shape != (4,):
+        raise ValueError("optimizer start_q must be a four-vector")
+    x0 = start[list(active_indices)]
     target = profile_transform(observed)
     q_low, q_high = [float(value) for value in config["parameterization"]["q_bounds"]]
-    jacobian_step = float(config["p2"]["finite_difference_h_q"])
+    cached_active: np.ndarray | None = None
+    cached_residual: np.ndarray | None = None
+    cached_jacobian: np.ndarray | None = None
+
+    def evaluate(active: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
+        nonlocal cached_active, cached_residual, cached_jacobian
+        active_array = np.asarray(active, dtype=np.float64)
+        if cached_active is not None and np.array_equal(active_array, cached_active):
+            assert cached_residual is not None and cached_jacobian is not None
+            return cached_residual, cached_jacobian
+        q = baseline.copy()
+        q[list(active_indices)] = active_array
+        predicted, full_jacobian = model.transformed_and_jacobian_numpy(q)
+        cached_active = active_array.copy()
+        cached_residual = predicted - target
+        cached_jacobian = full_jacobian[:, list(active_indices)]
+        return cached_residual, cached_jacobian
 
     def residual(active: np.ndarray) -> np.ndarray:
-        q = baseline.copy()
-        q[list(active_indices)] = active
-        predicted = render_profile(
-            context,
-            q,
-            config=config,
-            grid=grid,
-            rng_seed=render_seed,
-        )
-        return profile_transform(predicted) - target
+        return evaluate(active)[0]
 
-    def numerical_jacobian(active: np.ndarray) -> np.ndarray:
-        columns: list[np.ndarray] = []
-        for index in range(len(active_indices)):
-            plus = np.asarray(active, dtype=np.float64).copy()
-            minus = np.asarray(active, dtype=np.float64).copy()
-            plus[index] = min(q_high, plus[index] + jacobian_step)
-            minus[index] = max(q_low, minus[index] - jacobian_step)
-            denominator = plus[index] - minus[index]
-            if denominator <= 0.0:
-                raise ValueError("optimizer Jacobian step collapsed at parameter bound")
-            columns.append((residual(plus) - residual(minus)) / denominator)
-        return np.column_stack(columns)
+    def autograd_jacobian(active: np.ndarray) -> np.ndarray:
+        return evaluate(active)[1]
 
+    initial_residual = residual(x0)
+    initial_cost = 0.5 * float(np.dot(initial_residual, initial_residual))
+    optimizer_config = config["p2"].get("local_optimizer", config["p2"])
     result = least_squares(
         residual,
         x0,
-        jac=numerical_jacobian,
+        jac=autograd_jacobian,
         bounds=(
             np.full(len(active_indices), q_low),
             np.full(len(active_indices), q_high),
@@ -1195,14 +1396,246 @@ def optimize_case(
         method="trf",
         loss="linear",
         x_scale=1.0,
-        max_nfev=int(config["p2"]["max_nfev"]),
-        ftol=1e-8,
-        xtol=1e-8,
-        gtol=1e-8,
+        max_nfev=int(optimizer_config["max_nfev"]),
+        ftol=float(optimizer_config.get("ftol", 1e-8)),
+        xtol=float(optimizer_config.get("xtol", 1e-8)),
+        gtol=float(optimizer_config.get("gtol", 1e-8)),
     )
     recovered = baseline.copy()
     recovered[list(active_indices)] = result.x
-    return recovered, result
+    diagnostics = {
+        "start_q": start.tolist(),
+        "initial_cost": initial_cost,
+        "initial_profile_rmse": math.sqrt(
+            2.0 * initial_cost / max(int(observed.size), 1)
+        )
+    }
+    return recovered, result, diagnostics
+
+
+def deterministic_sobol_candidates(
+    active_indices: Sequence[int],
+    *,
+    config: Mapping[str, Any],
+) -> np.ndarray:
+    import torch
+
+    baseline = np.asarray(config["parameterization"]["nominal_q"], dtype=np.float64)
+    recovery = config["p2"]["recoverability"]
+    q_low, q_high = [
+        float(value)
+        for value in recovery.get(
+            "candidate_q_range", config["parameterization"]["q_bounds"]
+        )
+    ]
+    domain_low, domain_high = [
+        float(value) for value in config["parameterization"]["q_bounds"]
+    ]
+    if not (domain_low <= q_low < q_high <= domain_high):
+        raise ValueError("P2-R candidate_q_range must lie inside q_bounds")
+    stage = next(
+        (name for name, indices in STAIRCASES.items() if tuple(active_indices) == indices),
+        None,
+    )
+    if stage is None:
+        raise ValueError("P2-R active indices do not match a frozen staircase")
+    stage_counts = recovery.get("stage_candidate_counts")
+    candidate_count = int(
+        stage_counts[stage]
+        if isinstance(stage_counts, Mapping)
+        else recovery["sobol_candidate_count"]
+    )
+    if candidate_count < 1:
+        raise ValueError("P2-R sobol_candidate_count must be positive")
+    maximum_count = int(
+        max(int(value) for value in stage_counts.values())
+        if isinstance(stage_counts, Mapping)
+        else candidate_count
+    )
+    sobol_seed = int(recovery["sobol_seed"])
+    engine = torch.quasirandom.SobolEngine(
+        dimension=4,
+        scramble=True,
+        seed=sobol_seed,
+    )
+    frozen_design = (
+        engine.draw(maximum_count).to(dtype=torch.float64).cpu().numpy()
+    )
+    active = q_low + (q_high - q_low) * frozen_design[
+        :candidate_count, : len(active_indices)
+    ]
+    candidates = np.repeat(baseline[None, :], candidate_count, axis=0)
+    candidates[:, list(active_indices)] = active
+    return candidates
+
+
+def render_candidate_bank(
+    model: "CachedTetragonalGPUForward",
+    candidates: np.ndarray,
+    *,
+    batch_size: int,
+) -> np.ndarray:
+    import torch
+
+    if batch_size < 1:
+        raise ValueError("P2-R score_batch_size must be positive")
+    profile_chunks: list[np.ndarray] = []
+    with torch.no_grad(), torch.autocast(device_type="cuda", enabled=False):
+        for start in range(0, len(candidates), batch_size):
+            stop = min(start + batch_size, len(candidates))
+            q = torch.as_tensor(
+                candidates[start:stop], device=model.device, dtype=model.dtype
+            )
+            profile_chunks.append(model.transformed(q).cpu().numpy())
+    profiles = np.concatenate(profile_chunks, axis=0)
+    expected = (len(candidates), len(model.axis))
+    if profiles.shape != expected or not np.isfinite(profiles).all():
+        raise RuntimeError("P2-R candidate rendering produced invalid profiles")
+    return profiles
+
+
+def rank_multistart_candidates(
+    candidates: np.ndarray,
+    candidate_profiles: np.ndarray,
+    observed: np.ndarray,
+    *,
+    top_k: int,
+    score_batch_size: int,
+) -> tuple[np.ndarray, np.ndarray, list[dict[str, Any]], dict[str, float]]:
+    if top_k < 1 or top_k > len(candidates):
+        raise ValueError("P2-R top_k is outside the candidate set")
+    if candidate_profiles.shape[0] != len(candidates):
+        raise ValueError("candidate profile bank is misaligned")
+    target = profile_transform(observed)
+    cost_values = np.empty(len(candidates), dtype=np.float64)
+    for start in range(0, len(candidates), score_batch_size):
+        stop = min(start + score_batch_size, len(candidates))
+        residual = candidate_profiles[start:stop] - target[None, :]
+        cost_values[start:stop] = 0.5 * np.einsum(
+            "ij,ij->i", residual, residual, optimize=True
+        )
+    if cost_values.shape != (len(candidates),) or not np.isfinite(cost_values).all():
+        raise RuntimeError("P2-R candidate scoring produced invalid costs")
+    candidate_indices = np.arange(len(candidates), dtype=np.int64)
+    ranked = np.lexsort((candidate_indices, cost_values))
+    selected_indices = ranked[:top_k]
+    rows = [
+        {
+            "candidate_index": int(index),
+            "q": candidates[index].tolist(),
+            "cost": float(cost_values[index]),
+            "profile_rmse": math.sqrt(
+                2.0 * float(cost_values[index]) / max(int(observed.size), 1)
+            ),
+        }
+        for index in selected_indices.tolist()
+    ]
+    score_summary = {
+        "minimum": float(np.min(cost_values)),
+        "median": float(np.median(cost_values)),
+        "p90": float(np.percentile(cost_values, 90.0)),
+        "maximum": float(np.max(cost_values)),
+    }
+    return candidates[selected_indices], selected_indices, rows, score_summary
+
+
+def optimize_recoverability_case(
+    model: "CachedTetragonalGPUForward",
+    active_indices: Sequence[int],
+    observed: np.ndarray,
+    *,
+    config: Mapping[str, Any],
+    candidates: np.ndarray,
+    candidate_profiles: np.ndarray,
+    nominal_solution: tuple[np.ndarray, Any, Mapping[str, Any]] | None = None,
+) -> tuple[np.ndarray, Any, dict[str, Any]]:
+    recovery = config["p2"]["recoverability"]
+    if nominal_solution is None:
+        raise ValueError("P2-R requires the reused P2-L nominal solution")
+    starts, selected_indices, candidate_rows, score_summary = rank_multistart_candidates(
+        candidates,
+        candidate_profiles,
+        observed,
+        top_k=int(recovery["top_k"]),
+        score_batch_size=int(recovery.get("score_batch_size", 16)),
+    )
+    nominal_recovered, nominal_result, nominal_diagnostics = nominal_solution
+    local_rows: list[dict[str, Any]] = [
+        {
+            "start_rank": 0,
+            "candidate_kind": "nominal",
+            "candidate_index": None,
+            "reused_p2_l_nominal_solution": True,
+            **dict(nominal_diagnostics),
+            "final_q": nominal_recovered.tolist(),
+            "final_cost": float(nominal_result.cost),
+            "optimizer_success": bool(nominal_result.success),
+            "optimizer_status": int(nominal_result.status),
+            "nfev": int(nominal_result.nfev),
+            "njev": (
+                int(nominal_result.njev)
+                if nominal_result.njev is not None
+                else None
+            ),
+        }
+    ]
+    results: list[tuple[np.ndarray, Any, dict[str, Any]]] = [
+        (nominal_recovered, nominal_result, dict(nominal_diagnostics))
+    ]
+    for start_rank, (candidate_index, start) in enumerate(
+        zip(selected_indices.tolist(), starts, strict=True), start=1
+    ):
+        recovered, result, diagnostics = optimize_case(
+            model,
+            start,
+            active_indices,
+            observed,
+            config=config,
+        )
+        results.append((recovered, result, diagnostics))
+        local_rows.append(
+            {
+                "start_rank": start_rank,
+                "candidate_kind": "sobol",
+                "candidate_index": candidate_index,
+                "reused_p2_l_nominal_solution": False,
+                **diagnostics,
+                "final_q": recovered.tolist(),
+                "final_cost": float(result.cost),
+                "optimizer_success": bool(result.success),
+                "optimizer_status": int(result.status),
+                "nfev": int(result.nfev),
+                "njev": int(result.njev) if result.njev is not None else None,
+            }
+        )
+    best_index = min(
+        range(len(results)),
+        key=lambda index: (float(results[index][1].cost), index),
+    )
+    final_costs = [float(item[1].cost) for item in results]
+    if not all(math.isfinite(value) for value in final_costs):
+        raise RuntimeError("P2-R local refinement produced a non-finite cost")
+    recovered, result, diagnostics = results[best_index]
+    nominal_cost = float(nominal_result.cost)
+    if float(result.cost) > nominal_cost + 1e-12 * max(1.0, abs(nominal_cost)):
+        raise RuntimeError("P2-R selected result is worse than its reused P2-L baseline")
+    candidate_sha256 = hashlib.sha256(
+        np.ascontiguousarray(candidates, dtype=np.float64).tobytes()
+    ).hexdigest()
+    diagnostics = {
+        **diagnostics,
+        "candidate_design": str(recovery["candidate_design"]),
+        "sobol_candidate_count_excluding_nominal": len(candidates),
+        "top_k_sobol_excluding_nominal": len(starts),
+        "score_batch_size": int(recovery.get("score_batch_size", 16)),
+        "nominal_solution_always_reused": True,
+        "selected_best_local_rank": best_index,
+        "candidate_bank_sha256": candidate_sha256,
+        "selected_sobol_candidates": candidate_rows,
+        "candidate_score_summary": score_summary,
+        "local_refinements": local_rows,
+    }
+    return recovered, result, diagnostics
 
 
 def summarize_recovery_cases(
@@ -1279,16 +1712,113 @@ def summarize_recovery_by_staircase(
     return pooled
 
 
+def build_recovery_case(
+    *,
+    protocol: str,
+    domain: str,
+    context: ParentContext,
+    model: "CachedTetragonalGPUForward",
+    staircase: str,
+    trial: int,
+    seed: int,
+    active_indices: Sequence[int],
+    truth: np.ndarray,
+    recovered: np.ndarray,
+    observed: np.ndarray,
+    result: Any,
+    optimizer_diagnostics: Mapping[str, Any],
+    config: Mapping[str, Any],
+    nuisance_payload: Mapping[str, Any] | None,
+) -> dict[str, Any]:
+    q_low, q_high = [
+        float(value) for value in config["parameterization"]["q_bounds"]
+    ]
+    normalized_errors = {
+        PARAMETER_NAMES[index]: float(
+            abs(recovered[index] - truth[index]) / (q_high - q_low)
+        )
+        for index in active_indices
+    }
+    threshold = float(config["p2"][domain]["case_success_nae_max"])
+    profile_rmse = math.sqrt(2.0 * float(result.cost) / observed.size)
+    profile_rmse_max = float(config["p2"][domain]["profile_rmse_max"])
+    truth_physical = parameter_vector_to_physical(
+        truth, context.structure, config["parameterization"]
+    )
+    recovered_physical = parameter_vector_to_physical(
+        recovered, context.structure, config["parameterization"]
+    )
+    truth_residual = model.transformed_numpy(truth) - profile_transform(observed)
+    truth_cost = 0.5 * float(np.dot(truth_residual, truth_residual))
+    boundary_tolerance = float(
+        config["p2"].get("boundary_diagnostic_tolerance_q", 1e-6)
+    )
+    boundary_flags = {
+        PARAMETER_NAMES[index]: bool(
+            abs(recovered[index] - q_low) <= boundary_tolerance
+            or abs(recovered[index] - q_high) <= boundary_tolerance
+        )
+        for index in active_indices
+    }
+    return {
+        "protocol": protocol,
+        "domain": domain,
+        "material_id": context.material_id,
+        "formula": context.formula,
+        "staircase": staircase,
+        "trial": trial,
+        "seed": seed,
+        "active_parameters": [PARAMETER_NAMES[index] for index in active_indices],
+        "truth_q": truth.tolist(),
+        "recovered_q": recovered.tolist(),
+        "normalized_absolute_errors": normalized_errors,
+        "max_normalized_absolute_error": max(normalized_errors.values()),
+        "success": bool(
+            result.success
+            and max(normalized_errors.values()) <= threshold
+            and profile_rmse <= profile_rmse_max
+        ),
+        "optimizer_success": bool(result.success),
+        "optimizer_status": int(result.status),
+        "optimizer_message": str(result.message),
+        "nfev": int(result.nfev),
+        "njev": int(result.njev) if result.njev is not None else None,
+        "cost": float(result.cost),
+        "truth_cost": truth_cost,
+        "profile_rmse": profile_rmse,
+        "profile_rmse_max": profile_rmse_max,
+        "optimality": float(result.optimality),
+        "boundary_flags": boundary_flags,
+        "hit_any_q_bound": any(boundary_flags.values()),
+        "a_relative_error": abs(recovered_physical["a"] / truth_physical["a"] - 1.0),
+        "c_relative_error": abs(recovered_physical["c"] / truth_physical["c"] - 1.0),
+        "delta_absolute_error_deg": abs(
+            recovered_physical["delta_2theta_deg"]
+            - truth_physical["delta_2theta_deg"]
+        ),
+        "fwhm_relative_error": abs(
+            recovered_physical["fwhm_deg"] / truth_physical["fwhm_deg"] - 1.0
+        ),
+        "optimizer_diagnostics": dict(optimizer_diagnostics),
+        "nuisance": nuisance_payload,
+    }
+
+
 def run_p2(
     contexts: Sequence[ParentContext],
     p1_report: Mapping[str, Any],
+    models: Mapping[str, "CachedTetragonalGPUForward"],
     *,
     config: Mapping[str, Any],
     measurement_config: Mapping[str, Any],
+    checkpoint_dir: Path | None = None,
 ) -> dict[str, Any]:
     eligible = set(str(value) for value in p1_report["eligible_parent_ids"])
     requested = int(config["sampling"]["classical_recovery_parent_count"])
-    selected = [context for context in contexts if context.material_id in eligible][:requested]
+    # Freeze the P2 sample independently of the P1 outcome.  P1 eligibility is
+    # retained as an analysis label; filtering or backfilling here would change
+    # the formal 24-parent estimand after seeing a Gate result.
+    selected = list(contexts[:requested])
     grid = SimulationGrid(
         two_theta_min=float(config["grid"]["two_theta_min"]),
         two_theta_max=float(config["grid"]["two_theta_max"]),
@@ -1298,11 +1828,112 @@ def run_p2(
     truth_low, truth_high = [float(value) for value in config["parameterization"]["truth_q_range"]]
     q_low, q_high = [float(value) for value in config["parameterization"]["q_bounds"]]
     trials = int(config["sampling"]["trials_per_parent"])
-    clean_cases: list[dict[str, Any]] = []
-    nuisance_cases: list[dict[str, Any]] = []
+    del q_low, q_high  # bounds are consumed by helpers; retain one source of truth
+    recoverability_clean_cases: list[dict[str, Any]] = []
+    local_clean_cases: list[dict[str, Any]] = []
+    local_nuisance_cases: list[dict[str, Any]] = []
+    resumed_parent_ids: list[str] = []
+    checkpoint_contract = {
+        "schema_version": "xrd-inversion-p2-parent-checkpoint-v1",
+        "config_sha256": hashlib.sha256(
+            json.dumps(config, sort_keys=True, separators=(",", ":")).encode("utf-8")
+        ).hexdigest(),
+        "week1_module_sha256": sha256_file(Path(__file__).resolve()),
+        "selected_parent_ids": [context.material_id for context in selected],
+        "trials_per_parent": trials,
+    }
+    if checkpoint_dir is not None:
+        checkpoint_dir.mkdir(parents=True, exist_ok=True)
 
-    for context in selected:
+    formal = str(config.get("run_kind", "smoke")) == "formal_gate"
+    formal_minimum = int(
+        config["formal_gate_minimums"]["classical_recovery_parent_count"]
+    )
+    formal_trial_minimum = int(config["formal_gate_minimums"]["trials_per_parent"])
+    sample_valid = (
+        len(selected) == requested
+        and (
+            not formal
+            or (
+                requested == formal_minimum
+                and len(contexts) == formal_minimum
+                and trials == formal_trial_minimum
+            )
+        )
+    )
+    if str(p1_report.get("status")) != "PASS" or not sample_valid:
+        return {
+            "status": "INVALID",
+            "reason": (
+                "P2 requires a valid P1 PASS and the complete configured parent/trial sample"
+            ),
+            "requested_parent_count": requested,
+            "eligible_parent_count_available": len(eligible),
+            "executed_parent_count": 0,
+            "executed_parent_ids": [],
+            "trials_per_parent": trials,
+            "recoverability": {"status": "INVALID", "clean": {"status": "INVALID"}},
+            "local_capture": {
+                "status": "NOT_A_GATE",
+                "clean": {"status": "NOT_RUN"},
+                "nuisance": {"status": "NOT_RUN"},
+            },
+            "clean": {"status": "INVALID"},
+            "nuisance": {"status": "NOT_RUN"},
+            "recoverability_clean_cases": [],
+            "local_clean_cases": [],
+            "local_nuisance_cases": [],
+        }
+
+    for parent_index, context in enumerate(selected, start=1):
+        model = models[context.material_id]
+        checkpoint_path = (
+            checkpoint_dir / f"{parent_index:03d}_{context.material_id}.json"
+            if checkpoint_dir is not None
+            else None
+        )
+        if checkpoint_path is not None and checkpoint_path.exists():
+            checkpoint = load_json(checkpoint_path)
+            if checkpoint.get("contract") != checkpoint_contract:
+                raise ValueError(
+                    f"P2 checkpoint contract mismatch: {checkpoint_path}"
+                )
+            if checkpoint.get("material_id") != context.material_id:
+                raise ValueError(
+                    f"P2 checkpoint parent mismatch: {checkpoint_path}"
+                )
+            recoverability_clean_cases.extend(checkpoint["recoverability_clean_cases"])
+            local_clean_cases.extend(checkpoint["local_clean_cases"])
+            local_nuisance_cases.extend(checkpoint["local_nuisance_cases"])
+            resumed_parent_ids.append(context.material_id)
+            print(
+                f"week1: P2 resume parent {parent_index}/{len(selected)} "
+                f"from {checkpoint_path.name}",
+                flush=True,
+            )
+            continue
+        parent_recoverability_start = len(recoverability_clean_cases)
+        parent_local_start = len(local_clean_cases)
+        parent_nuisance_start = len(local_nuisance_cases)
+        candidate_banks: dict[str, np.ndarray] = {}
+        candidate_profile_banks: dict[str, np.ndarray] = {}
+        for staircase, active_indices in STAIRCASES.items():
+            candidates = deterministic_sobol_candidates(
+                active_indices, config=config
+            )
+            candidate_banks[staircase] = candidates
+            candidate_profile_banks[staircase] = render_candidate_bank(
+                model,
+                candidates,
+                batch_size=int(
+                    config["p2"]["recoverability"].get("score_batch_size", 16)
+                ),
+            )
         for trial in range(trials):
+            print(
+                f"week1: P2 parent {parent_index}/{len(selected)} trial {trial + 1}/{trials}",
+                flush=True,
+            )
             seed = stable_seed(config["seed"], "p2", context.material_id, trial)
             rng = np.random.default_rng(seed)
             nominal = np.asarray(
@@ -1313,136 +1944,230 @@ def run_p2(
             for staircase, active_indices in STAIRCASES.items():
                 truth = nominal.copy()
                 truth[list(active_indices)] = full_truth[list(active_indices)]
-                clean_observed = render_profile(
-                    context,
-                    truth,
-                    config=config,
-                    grid=grid,
-                    rng_seed=seed,
+                clean_observed = model.render_numpy(truth, compatibility=False)
+                local_clean_recovered, local_clean_result, local_clean_diagnostics = (
+                    optimize_case(
+                        model,
+                        nominal,
+                        active_indices,
+                        clean_observed,
+                        config=config,
+                    )
                 )
-                nuisance_observed = render_profile(
-                    context,
-                    truth,
-                    config=config,
-                    grid=grid,
-                    rng_seed=seed,
-                    nuisance=nuisance,
+                local_clean_cases.append(
+                    build_recovery_case(
+                        protocol="P2-L_nominal_local_capture",
+                        domain="clean",
+                        context=context,
+                        model=model,
+                        staircase=staircase,
+                        trial=trial,
+                        seed=seed,
+                        active_indices=active_indices,
+                        truth=truth,
+                        recovered=local_clean_recovered,
+                        observed=clean_observed,
+                        result=local_clean_result,
+                        optimizer_diagnostics=local_clean_diagnostics,
+                        config=config,
+                        nuisance_payload=None,
+                    )
                 )
-                for domain, observed, rows, nuisance_payload in (
-                    ("clean", clean_observed, clean_cases, None),
-                    ("nuisance", nuisance_observed, nuisance_cases, nuisance),
-                ):
-                    recovered, result = optimize_case(
+
+                recovered, result, diagnostics = optimize_recoverability_case(
+                    model,
+                    active_indices,
+                    clean_observed,
+                    config=config,
+                    candidates=candidate_banks[staircase],
+                    candidate_profiles=candidate_profile_banks[staircase],
+                    nominal_solution=(
+                        local_clean_recovered,
+                        local_clean_result,
+                        local_clean_diagnostics,
+                    ),
+                )
+                recoverability_clean_cases.append(
+                    build_recovery_case(
+                        protocol="P2-R_deterministic_multistart",
+                        domain="clean",
+                        context=context,
+                        model=model,
+                        staircase=staircase,
+                        trial=trial,
+                        seed=seed,
+                        active_indices=active_indices,
+                        truth=truth,
+                        recovered=recovered,
+                        observed=clean_observed,
+                        result=result,
+                        optimizer_diagnostics=diagnostics,
+                        config=config,
+                        nuisance_payload=None,
+                    )
+                )
+
+                if staircase == "S3":
+                    nuisance_observed = render_profile(
                         context,
                         truth,
-                        active_indices,
-                        observed,
                         config=config,
                         grid=grid,
-                        render_seed=seed,
+                        rng_seed=seed,
+                        nuisance=nuisance,
                     )
-                    normalized_errors = {
-                        PARAMETER_NAMES[index]: float(
-                            abs(recovered[index] - truth[index]) / (q_high - q_low)
+                    nuisance_recovered, nuisance_result, nuisance_diagnostics = (
+                        optimize_case(
+                            model,
+                            nominal,
+                            active_indices,
+                            nuisance_observed,
+                            config=config,
                         )
-                        for index in active_indices
-                    }
-                    threshold = float(config["p2"][domain]["case_success_nae_max"])
-                    profile_rmse = math.sqrt(2.0 * float(result.cost) / observed.size)
-                    profile_rmse_max = float(
-                        config["p2"][domain]["profile_rmse_max"]
                     )
-                    truth_physical = parameter_vector_to_physical(
-                        truth, context.structure, config["parameterization"]
+                    local_nuisance_cases.append(
+                        build_recovery_case(
+                            protocol="P2-L_nominal_local_capture",
+                            domain="nuisance",
+                            context=context,
+                            model=model,
+                            staircase=staircase,
+                            trial=trial,
+                            seed=seed,
+                            active_indices=active_indices,
+                            truth=truth,
+                            recovered=nuisance_recovered,
+                            observed=nuisance_observed,
+                            result=nuisance_result,
+                            optimizer_diagnostics=nuisance_diagnostics,
+                            config=config,
+                            nuisance_payload=nuisance,
+                        )
                     )
-                    recovered_physical = parameter_vector_to_physical(
-                        recovered, context.structure, config["parameterization"]
-                    )
-                    rows.append(
-                        {
-                            "domain": domain,
-                            "material_id": context.material_id,
-                            "formula": context.formula,
-                            "staircase": staircase,
-                            "trial": trial,
-                            "seed": seed,
-                            "active_parameters": [
-                                PARAMETER_NAMES[index] for index in active_indices
-                            ],
-                            "truth_q": truth.tolist(),
-                            "recovered_q": recovered.tolist(),
-                            "normalized_absolute_errors": normalized_errors,
-                            "max_normalized_absolute_error": max(normalized_errors.values()),
-                            "success": bool(
-                                result.success
-                                and max(normalized_errors.values()) <= threshold
-                                and profile_rmse <= profile_rmse_max
-                            ),
-                            "optimizer_success": bool(result.success),
-                            "optimizer_status": int(result.status),
-                            "optimizer_message": str(result.message),
-                            "nfev": int(result.nfev),
-                            "cost": float(result.cost),
-                            "profile_rmse": profile_rmse,
-                            "profile_rmse_max": profile_rmse_max,
-                            "optimality": float(result.optimality),
-                            "a_relative_error": abs(
-                                recovered_physical["a"] / truth_physical["a"] - 1.0
-                            ),
-                            "c_relative_error": abs(
-                                recovered_physical["c"] / truth_physical["c"] - 1.0
-                            ),
-                            "delta_absolute_error_deg": abs(
-                                recovered_physical["delta_2theta_deg"]
-                                - truth_physical["delta_2theta_deg"]
-                            ),
-                            "fwhm_relative_error": abs(
-                                recovered_physical["fwhm_deg"]
-                                / truth_physical["fwhm_deg"]
-                                - 1.0
-                            ),
-                            "nuisance": nuisance_payload,
-                        }
-                    )
+        if checkpoint_path is not None:
+            payload = {
+                "contract": checkpoint_contract,
+                "material_id": context.material_id,
+                "recoverability_clean_cases": recoverability_clean_cases[
+                    parent_recoverability_start:
+                ],
+                "local_clean_cases": local_clean_cases[parent_local_start:],
+                "local_nuisance_cases": local_nuisance_cases[parent_nuisance_start:],
+            }
+            temporary = checkpoint_path.with_suffix(".json.tmp")
+            with temporary.open("w", encoding="utf-8") as handle:
+                json.dump(payload, handle, ensure_ascii=False, indent=2, sort_keys=True)
+                handle.write("\n")
+            os.replace(temporary, checkpoint_path)
 
     clean_cfg = config["p2"]["clean"]
     nuisance_cfg = config["p2"]["nuisance"]
-    clean_summary = summarize_recovery_by_staircase(
-        clean_cases,
+    recoverability_clean_summary = summarize_recovery_by_staircase(
+        recoverability_clean_cases,
         case_threshold=float(clean_cfg["case_success_nae_max"]),
         success_fraction_min=float(clean_cfg["case_success_fraction_min"]),
         median_max=float(clean_cfg["parameter_median_nae_max"]),
         p90_max=float(clean_cfg["parameter_p90_nae_max"]),
     )
-    nuisance_summary = summarize_recovery_by_staircase(
-        nuisance_cases,
+    local_clean_summary = summarize_recovery_by_staircase(
+        local_clean_cases,
+        case_threshold=float(clean_cfg["case_success_nae_max"]),
+        success_fraction_min=float(clean_cfg["case_success_fraction_min"]),
+        median_max=float(clean_cfg["parameter_median_nae_max"]),
+        p90_max=float(clean_cfg["parameter_p90_nae_max"]),
+    )
+    local_nuisance_summary = summarize_recovery_cases(
+        local_nuisance_cases,
         case_threshold=float(nuisance_cfg["case_success_nae_max"]),
         success_fraction_min=float(nuisance_cfg["case_success_fraction_min"]),
         median_max=float(nuisance_cfg["parameter_median_nae_max"]),
         p90_max=None,
     )
+    local_nuisance_summary["gate_role"] = "diagnostic_only"
+    local_nuisance_summary["executed_staircase"] = "S3_full_four_parameter"
+    local_nuisance_summary["staircases"] = {
+        "S1": {"status": "NOT_RUN"},
+        "S2": {"status": "NOT_RUN"},
+        "S3": dict(local_nuisance_summary),
+    }
+    expected_clean_cases = requested * trials * len(STAIRCASES)
+    expected_nuisance_cases = requested * trials
+    execution_counts_valid = bool(
+        len(recoverability_clean_cases) == expected_clean_cases
+        and len(local_clean_cases) == expected_clean_cases
+        and len(local_nuisance_cases) == expected_nuisance_cases
+    )
+    if formal and not execution_counts_valid:
+        raise RuntimeError("formal P2 case counts disagree with the frozen 24x4 design")
     return {
-        "status": clean_summary["status"],
-        "s4_nuisance_status": nuisance_summary["status"],
+        "status": recoverability_clean_summary["status"],
+        "gate_definition": "P2-R clean deterministic multistart recoverability",
         "requested_parent_count": requested,
         "eligible_parent_count_available": len(eligible),
+        "executed_p1_eligible_parent_count": sum(
+            context.material_id in eligible for context in selected
+        ),
+        "executed_p1_ineligible_parent_ids": [
+            context.material_id
+            for context in selected
+            if context.material_id not in eligible
+        ],
         "executed_parent_count": len(selected),
         "executed_parent_ids": [context.material_id for context in selected],
         "trials_per_parent": trials,
-        "clean": clean_summary,
-        "nuisance": nuisance_summary,
+        "execution_counts": {
+            "expected_clean_cases_per_protocol": expected_clean_cases,
+            "recoverability_clean_cases": len(recoverability_clean_cases),
+            "local_clean_cases": len(local_clean_cases),
+            "expected_full_parameter_nuisance_cases": expected_nuisance_cases,
+            "local_nuisance_cases": len(local_nuisance_cases),
+            "valid": execution_counts_valid,
+        },
+        "checkpointing": {
+            "enabled": checkpoint_dir is not None,
+            "directory": checkpoint_dir.as_posix() if checkpoint_dir is not None else None,
+            "resumed_parent_count": len(resumed_parent_ids),
+            "resumed_parent_ids": resumed_parent_ids,
+            "contract": checkpoint_contract,
+        },
+        "recoverability": {
+            "status": recoverability_clean_summary["status"],
+            "clean": recoverability_clean_summary,
+            "candidate_design": dict(config["p2"]["recoverability"]),
+            "candidate_bank_scope": (
+                "one deterministic scrambled-Sobol bank per staircase, shared "
+                "across every parent and trial"
+            ),
+            "interpretation": (
+                "numerical recoverability gate; deterministic multistart is permitted"
+            ),
+        },
+        "local_capture": {
+            "status": "NOT_A_PROJECT_GATE",
+            "clean": local_clean_summary,
+            "nuisance": local_nuisance_summary,
+            "interpretation": (
+                "nominal single-start baseline measuring basin and initialization sensitivity"
+            ),
+        },
+        "clean": recoverability_clean_summary,
+        "nuisance": local_nuisance_summary,
         "nuisance_interpretation": (
-            "unmodelled-nuisance stress diagnostic; not a fair classical-baseline gate"
+            "P2-L full-four-parameter unmodelled-nuisance stress diagnostic; "
+            "not a fair project gate"
         ),
         "paired_design": (
             "each parent/trial reuses one full truth vector and one nuisance realization; "
             "S1-S3 progressively unmask parameters"
         ),
         "nuisance_amplitude_reference": (
-            "reused renderer references the padded peak-calculation set; diagnostic only"
+            "CPU oracle generates the nuisance observation once; CUDA clean forward is fitted"
         ),
-        "clean_cases": clean_cases,
-        "nuisance_cases": nuisance_cases,
+        "recoverability_clean_cases": recoverability_clean_cases,
+        "local_clean_cases": local_clean_cases,
+        "local_nuisance_cases": local_nuisance_cases,
+        "clean_cases": recoverability_clean_cases,
+        "nuisance_cases": local_nuisance_cases,
     }
 
 
@@ -1475,15 +2200,37 @@ def format_float(value: Any, digits: int = 6) -> str:
 
 
 def build_markdown_report(report: Mapping[str, Any]) -> str:
+    def recovery_result(summary: Mapping[str, Any]) -> str:
+        if "case_count" not in summary:
+            return str(summary.get("status", "UNKNOWN"))
+        return (
+            f"{summary['status']}; success={summary['case_success_count']}/"
+            f"{summary['case_count']} ({float(summary['case_success_fraction']):.1%})"
+        )
+
     audit = report["data_audit"]
     p0 = report["p0"]
+    gpu = report["gpu_forward"]
     p1 = report["p1"]
     p2 = report["p2"]
+    p2r = p2["recoverability"]["clean"]
+    p2l_clean = p2["local_capture"]["clean"]
+    p2l_nuisance = p2["local_capture"]["nuisance"]
+    administrative = report.get("administrative_audits", {})
+    near_duplicate = administrative.get("structural_near_duplicates", {})
+    independent = administrative.get("independent_renderer_holdout", {})
+    formal = report.get("run_kind") == "formal_gate"
     lines = [
-        "# Week-1 PXRD inversion pilot report",
+        "# Week-1 PXRD inversion numerical-gate report",
         "",
         f"- Overall decision: **{report['overall_decision']}**",
-        "- Scope: **smoke pilot only; not the formal Week-1 gate**.",
+        (
+            "- Scope: **formal 24-parent x 4-trial numerical gate**."
+            if formal
+            else "- Scope: **repaired smoke only; not the formal Week-1 gate**."
+        ),
+        "- P2-R is the recoverability gate; P2-L is a nominal-start basin diagnostic.",
+        "- P1/P2 physics ran on CUDA float64 with TF32 and autocast disabled.",
         f"- Repository HEAD anchor: `{report['provenance'].get('git_head')}` "
         f"(dirty={report['provenance']['working_tree_dirty']}; exact source hashes are in JSON).",
         f"- Config SHA-256: `{report['provenance']['config_sha256']}`",
@@ -1500,9 +2247,17 @@ def build_markdown_report(report: Mapping[str, Any]) -> str:
         f"Stored non-conventional tetragonal cells: {audit['stored_nonconventional_count']}; "
         f"restandardization failures: {audit['canonicalization_failure_count']}.",
         "",
-        "The current source has no prototype labels, so the Week-1 prototype audit is limited "
-        "to space-group and robust lattice/size/peak-count coverage. The prototype / "
-        "near-duplicate gate therefore remains pending.",
+        (
+            "The structural audit is complete: "
+            f"{near_duplicate.get('candidate_pair_count', 'n/a')} proxy candidate pairs, "
+            f"{near_duplicate.get('same_species_near_duplicate_pair_count', 'n/a')} "
+            "same-species matches in that proxy scope, and "
+            f"{near_duplicate.get('anonymous_prototype_pair_count', 'n/a')} "
+            "default-tolerance anonymous-prototype matches. Anonymous overlap is a "
+            "pre-ML split-policy annotation, not a P0-P2 numerical failure."
+            if near_duplicate.get("complete")
+            else "The structural near-duplicate audit is not complete."
+        ),
         f"The high-recall composition/space-group/nsites proxy flags "
         f"{audit['composition_spacegroup_nsites_proxy']['cross_split_group_count']} "
         "cross-split groups involving "
@@ -1516,15 +2271,19 @@ def build_markdown_report(report: Mapping[str, Any]) -> str:
         f"| P0 forward correctness | {p0['status']} | "
         f"{p0['cached_reflection_family_count']} cached reflection families; "
         f"max Bragg error={format_float(p0['max_cached_bragg_error_deg'])} deg |",
+        f"| CUDA/CPU forward parity | {gpu['status']} | "
+        f"max abs={format_float(gpu['profile_max_abs_max'])}; "
+        f"RMSE={format_float(gpu['profile_rmse_max'])} |",
         f"| P1 identifiability | {p1['status']} | "
         f"eligible={p1['eligible_parent_count']}/{p1['representative_parent_count']} "
-        f"({p1['eligible_parent_fraction']:.1%}) |",
-        f"| P2 clean classical recovery | {p2['clean']['status']} | "
-        f"success={p2['clean']['case_success_count']}/{p2['clean']['case_count']} "
-        f"({p2['clean']['case_success_fraction']:.1%}) |",
-        f"| S4 nuisance stress diagnostic | {p2['nuisance']['status']} | "
-        f"success={p2['nuisance']['case_success_count']}/{p2['nuisance']['case_count']} "
-        f"({p2['nuisance']['case_success_fraction']:.1%}) |",
+        f"({p1['eligible_parent_fraction']:.1%}); numerical failures="
+        f"{p1['numerical_stability_failure_count']} |",
+        f"| P2-R clean recoverability gate | {p2r['status']} | "
+        f"{recovery_result(p2r)} |",
+        f"| P2-L clean nominal capture | {p2l_clean['status']} (diagnostic) | "
+        f"{recovery_result(p2l_clean)} |",
+        f"| P2-L nuisance stress | {p2l_nuisance['status']} (diagnostic) | "
+        f"{recovery_result(p2l_nuisance)} |",
         "",
         "## P0 notes",
         "",
@@ -1536,40 +2295,52 @@ def build_markdown_report(report: Mapping[str, Any]) -> str:
         f"- Maximum dynamic-deformation Bragg error: {format_float(p0['max_dynamic_bragg_error_deg'])} deg.",
         f"- Zero-shift maximum error: {format_float(p0['zero_shift_error_deg']['max'])} deg.",
         f"- FWHM maximum error: {format_float(p0['fwhm_error_deg']['max'])} deg.",
+        f"- Independent renderer holdout: {independent.get('status', 'NOT_AVAILABLE')}; "
+        f"validly frozen unopened={independent.get('validly_frozen_unopened', False)}; "
+        f"outcomes opened={independent.get('outcomes_opened')}.",
         "",
     ]
     lines.extend(["## Per-staircase P2", ""])
-    for staircase in STAIRCASES:
-        clean = p2["clean"]["staircases"][staircase]
-        nuisance = p2["nuisance"]["staircases"][staircase]
-        lines.append(
-            f"- {staircase}: clean {clean['status']} "
-            f"({clean['case_success_count']}/{clean['case_count']}); nuisance stress "
-            f"{nuisance['status']} ({nuisance['case_success_count']}/{nuisance['case_count']})."
-        )
+    if all("staircases" in summary for summary in (p2r, p2l_clean, p2l_nuisance)):
+        for staircase in STAIRCASES:
+            recovery = p2r["staircases"][staircase]
+            local = p2l_clean["staircases"][staircase]
+            nuisance = p2l_nuisance["staircases"][staircase]
+            lines.append(
+                f"- {staircase}: P2-R {recovery_result(recovery)}; "
+                f"P2-L clean {recovery_result(local)}; "
+                f"P2-L nuisance {recovery_result(nuisance)}."
+            )
+    else:
+        lines.append(f"- P2 was not executed: {p2.get('reason', 'upstream Gate invalid')}.")
     lines.extend(["", "## Decision boundary", ""])
-    if report["overall_decision"] == "PILOT_COMPLETE_FORMAL_GATE_PENDING":
+    if report["overall_decision"] in {
+        "REPAIRED_SMOKE_PASS_FORMAL_GATE_PENDING",
+        "FORMAL_WEEK1_NUMERICAL_GATES_PASS_ADMIN_PENDING",
+        "FORMAL_WEEK1_GATE_PASS",
+    }:
         lines.extend(
             [
-                "P0, multi-anchor P1, and every clean P2 staircase passed at smoke scale. "
-                "This does not authorize formal ML: expand to the frozen formal sample size, "
-                "complete near-duplicate audit, resolve quarantined caches, and keep the "
-                "independent-renderer test pending until it is separately constructed and frozen.",
+                "The numerical forward, Jacobian, and recoverability checks passed for this "
+                "run's scope. This does not authorize formal ML: the full sample requirement, "
+                "near-duplicate audit, and frozen unopened independent-renderer boundary must "
+                "all be satisfied first.",
             ]
         )
     else:
         lines.extend(
             [
-                "At least one smoke-scale P0, P1, or clean P2 requirement failed. Do not start "
-                "formal ML training; inspect the failed staircase and repair or shrink the task.",
+                "At least one P0, CUDA parity, P1 numerical/identifiability, or P2-R "
+                "recoverability requirement failed. Do not start formal ML training; inspect "
+                "the typed failure before changing the scientific task.",
             ]
         )
     lines.extend(
         [
             "",
-            "Full per-parent Jacobian and recovery records are retained in "
-            "`week1_pilot_results.json`. Selected parent identities are frozen in "
-            "`../manifests/week1_selected_parents.csv`.",
+            "Full per-parent parity, Jacobian, candidate-ranking, and recovery records are "
+            "retained in the JSON artifact; the exact selected parent identities are retained "
+            "in the configured CSV manifest.",
             "",
         ]
     )
@@ -1580,6 +2351,45 @@ def run_week1_pilot(repository_root: Path, config_path: Path) -> dict[str, Any]:
     repository_root = repository_root.resolve()
     config_path = config_path.resolve()
     config = load_json(config_path)
+    inversion_root = repository_root / "xrd_inversion"
+    independent_config_path = (
+        inversion_root / "configs" / "independent_renderer_holdout.frozen.json"
+    )
+    independent_manifest_path = (
+        inversion_root / "manifests" / "independent_renderer_holdout.frozen.json"
+    )
+    independent_source_path = (
+        inversion_root / "src" / "xrd_inversion" / "independent_renderer.py"
+    )
+    independent_config = (
+        load_json(independent_config_path) if independent_config_path.exists() else {}
+    )
+    independent_manifest = (
+        load_json(independent_manifest_path) if independent_manifest_path.exists() else {}
+    )
+    independent_ready = bool(
+        independent_config.get("status") == "frozen_unopened"
+        and independent_manifest.get("status") == "frozen_unopened"
+        and independent_config.get("seal", {}).get("profiles_rendered") is False
+        and independent_config.get("seal", {}).get("metrics_computed") is False
+        and independent_config.get("seal", {}).get("outcomes_opened") is False
+        and independent_source_path.exists()
+        and independent_config.get("renderer", {}).get("source_sha256")
+        == sha256_file(independent_source_path)
+    )
+    near_duplicate_report_path = (
+        inversion_root / "reports" / "week1_structural_near_duplicate_audit.json"
+    )
+    near_duplicate_audit = (
+        load_json(near_duplicate_report_path)
+        if near_duplicate_report_path.exists()
+        else {}
+    )
+    near_duplicate_summary = near_duplicate_audit.get("summary", {})
+    near_duplicate_complete = bool(
+        str(near_duplicate_audit.get("audit_status", "")).startswith("COMPLETE")
+        and int(near_duplicate_summary.get("pair_error_count", 1)) == 0
+    )
     paths = resolve_source_paths(repository_root, config)
     for name, path in paths.items():
         if not path.exists():
@@ -1636,7 +2446,9 @@ def run_week1_pilot(repository_root: Path, config_path: Path) -> dict[str, Any]:
     )
     data_audit["peak_cache_validation"] = cache_validation
     data_audit["near_duplicate_audit_status"] = (
-        "pending_no_prototype_or_near_duplicate_labels_in_current_source"
+        near_duplicate_audit.get("audit_status")
+        if near_duplicate_complete
+        else "pending_structural_near_duplicate_audit"
     )
     selected = select_representative_parents(
         features,
@@ -1658,27 +2470,70 @@ def run_week1_pilot(repository_root: Path, config_path: Path) -> dict[str, Any]:
         "fresh cache semantic equality is checked on selected representatives, not all conventional parents",
         "zero-shift and FWHM primitives are checked below the full q-to-PhysicsParameters chain",
     ]
-    print("week1: P1 multi-anchor identifiability", flush=True)
-    p1_report = run_p1(contexts, config=config)
+    print("week1: compile CUDA forward caches", flush=True)
+    models = build_gpu_forward_models(contexts, config)
+    print("week1: strict CUDA/CPU forward parity", flush=True)
+    gpu_forward_report = run_gpu_forward_parity(contexts, models, config=config)
+    print("week1: P1 autograd Jacobian and fixed finite-difference audit", flush=True)
+    p1_report = run_p1(
+        contexts,
+        models,
+        gpu_forward_report,
+        config=config,
+    )
     measurement_config = load_json(paths["measurement_config"])
-    print("week1: P2 clean recovery and nuisance stress", flush=True)
+    print("week1: P2-R recoverability and P2-L local-capture baseline", flush=True)
+    checkpoint_dir = None
+    if bool(config.get("runtime", {}).get("parent_checkpointing", False)):
+        checkpoint_dir = resolve_output_path(
+            repository_root,
+            config,
+            "checkpoint_dir",
+            "xrd_inversion/checkpoints/week1_formal",
+        )
     p2_report = run_p2(
-        contexts, p1_report, config=config, measurement_config=measurement_config
+        contexts,
+        p1_report,
+        models,
+        config=config,
+        measurement_config=measurement_config,
+        checkpoint_dir=checkpoint_dir,
     )
     core_passed = (
         p0_report["status"] in {"PASS", "PASS_WITH_QUARANTINE"}
+        and gpu_forward_report["status"] == "PASS"
         and p1_report["status"] == "PASS"
-        and p2_report["clean"]["status"] == "PASS"
+        and p2_report["recoverability"]["clean"]["status"] == "PASS"
     )
-    inversion_root = repository_root / "xrd_inversion"
-    manifest_path = inversion_root / "manifests" / "week1_selected_parents.csv"
-    results_path = inversion_root / "reports" / "week1_pilot_results.json"
-    markdown_path = inversion_root / "reports" / "WEEK1_PILOT_REPORT.md"
+    manifest_path = resolve_output_path(
+        repository_root,
+        config,
+        "selected_manifest",
+        "xrd_inversion/manifests/week1_selected_parents.csv",
+    )
+    results_path = resolve_output_path(
+        repository_root,
+        config,
+        "results",
+        "xrd_inversion/reports/week1_pilot_results.json",
+    )
+    markdown_path = resolve_output_path(
+        repository_root,
+        config,
+        "markdown",
+        "xrd_inversion/reports/WEEK1_PILOT_REPORT.md",
+    )
     manifest_path.parent.mkdir(parents=True, exist_ok=True)
     results_path.parent.mkdir(parents=True, exist_ok=True)
+    markdown_path.parent.mkdir(parents=True, exist_ok=True)
     write_selected_manifest(manifest_path, selected)
     source_paths = {
         "week1_module": Path(__file__).resolve(),
+        "gpu_forward": Path(__file__).resolve().with_name("gpu_forward.py"),
+        "independent_renderer": independent_source_path,
+        "independent_renderer_config": independent_config_path,
+        "independent_renderer_manifest": independent_manifest_path,
+        "near_duplicate_audit": near_duplicate_report_path,
         "runner": inversion_root / "scripts" / "run_week1_pilot.py",
         "renderer": repository_root
         / "xrd_robustness"
@@ -1708,20 +2563,52 @@ def run_week1_pilot(repository_root: Path, config_path: Path) -> dict[str, Any]:
         "split_contract": paths["split_contract"],
     }
     current_git_status = git_status(repository_root)
+    run_kind = str(config.get("run_kind", "smoke"))
+    formal = run_kind == "formal_gate"
+    anonymous_overlap_count = int(
+        near_duplicate_summary.get("anonymous_default_tolerance", {}).get(
+            "pair_count", 0
+        )
+    )
+    same_species_near_duplicate_count = int(
+        near_duplicate_summary.get("same_species_default_tolerance", {}).get(
+            "pair_count", 0
+        )
+    )
+    formal_pending_reasons: list[str] = []
+    if not formal:
+        formal_pending_reasons.append("smoke sample is below the frozen formal minimum")
+    if not near_duplicate_complete:
+        formal_pending_reasons.append("structural near-duplicate audit is incomplete")
+    elif same_species_near_duplicate_count:
+        formal_pending_reasons.append(
+            "same-species cross-split structural near-duplicates require split repair"
+        )
+    if near_duplicate_complete and anonymous_overlap_count:
+        formal_pending_reasons.append(
+            "anonymous prototype overlap across splits requires a pre-ML split-policy decision"
+        )
+    if not independent_ready:
+        formal_pending_reasons.append(
+            "independent-renderer holdout is not validly frozen and unopened"
+        )
+    formal_ready = bool(formal and core_passed and not formal_pending_reasons)
+    overall_decision = (
+        "FORMAL_WEEK1_GATE_PASS"
+        if formal_ready
+        else "FORMAL_WEEK1_NUMERICAL_GATES_PASS_ADMIN_PENDING"
+        if formal and core_passed
+        else "REPAIRED_SMOKE_PASS_FORMAL_GATE_PENDING"
+        if core_passed
+        else "HOLD_REPAIR_BEFORE_FORMAL_GATE"
+    )
     report = {
-        "schema_version": "xrd-inversion-week1-results-v2",
-        "overall_decision": (
-            "PILOT_COMPLETE_FORMAL_GATE_PENDING"
-            if core_passed
-            else "HOLD_REPAIR_BEFORE_FORMAL_GATE"
-        ),
-        "formal_week1_gate_ready": False,
-        "formal_gate_pending_reasons": [
-            "smoke sample is below the frozen formal minimum",
-            "prototype and near-duplicate audit is not available in the current source",
-            "independent-renderer test has not yet been constructed or frozen",
-            "five non-conventional stored cells require matching regenerated caches or exclusion",
-        ],
+        "schema_version": "xrd-inversion-week1-results-v3",
+        "run_kind": run_kind,
+        "overall_decision": overall_decision,
+        "formal_week1_numerical_gate_passed": bool(formal and core_passed),
+        "formal_week1_gate_ready": formal_ready,
+        "formal_gate_pending_reasons": formal_pending_reasons,
         "provenance": {
             "generated_at_utc": datetime.now(timezone.utc).isoformat(),
             "git_head": git_head(repository_root),
@@ -1732,6 +2619,7 @@ def run_week1_pilot(repository_root: Path, config_path: Path) -> dict[str, Any]:
             "numpy": np.__version__,
             "scipy": scipy_version,
             "pymatgen": installed_version("pymatgen"),
+            "torch": installed_version("torch"),
             "config": config_path.relative_to(repository_root).as_posix(),
             "config_sha256": sha256_file(config_path),
             "records_sha256": actual_hashes["records"],
@@ -1766,8 +2654,47 @@ def run_week1_pilot(repository_root: Path, config_path: Path) -> dict[str, Any]:
             for row in selected
         ],
         "p0": p0_report,
+        "gpu_forward": gpu_forward_report,
         "p1": p1_report,
         "p2": p2_report,
+        "administrative_audits": {
+            "nonconventional_cells": {
+                "status": "RESOLVED_BY_EXPLICIT_V0_QUARANTINE",
+                "count": len(p0_report["quarantined_parent_ids"]),
+                "parent_ids": p0_report["quarantined_parent_ids"],
+            },
+            "structural_near_duplicates": {
+                "status": near_duplicate_audit.get("audit_status", "NOT_AVAILABLE"),
+                "complete": near_duplicate_complete,
+                "candidate_pair_count": near_duplicate_summary.get(
+                    "candidate_cross_split_pair_count"
+                ),
+                "same_species_near_duplicate_pair_count": (
+                    same_species_near_duplicate_count
+                ),
+                "anonymous_prototype_pair_count": anonymous_overlap_count,
+                "report_sha256": (
+                    sha256_file(near_duplicate_report_path)
+                    if near_duplicate_report_path.exists()
+                    else None
+                ),
+            },
+            "independent_renderer_holdout": {
+                "status": independent_config.get("status", "NOT_AVAILABLE"),
+                "validly_frozen_unopened": independent_ready,
+                "renderer_source_sha256": (
+                    sha256_file(independent_source_path)
+                    if independent_source_path.exists()
+                    else None
+                ),
+                "candidate_parent_count": independent_config.get(
+                    "selection", {}
+                ).get("candidate_parent_count"),
+                "outcomes_opened": independent_config.get("seal", {}).get(
+                    "outcomes_opened"
+                ),
+            },
+        },
         "execution_boundary": {
             "neural_network_training_run": False,
             "dataset_integrity_audit_splits_accessed": ["train", "validation", "test"],
@@ -1776,7 +2703,15 @@ def run_week1_pilot(repository_root: Path, config_path: Path) -> dict[str, Any]:
             "p1_splits_accessed": ["train"],
             "p2_splits_accessed": ["train"],
             "validation_or_test_used_for_selection_or_tuning": False,
-            "independent_renderer_test_status": "not_constructed_or_frozen",
+            "gpu_primary_for_p1_p2": True,
+            "cpu_roles": [
+                "authoritative P0 oracle",
+                "one-time P2 nuisance observation generation",
+                "SciPy trust-region optimizer control flow",
+            ],
+            "independent_renderer_test_status": independent_config.get(
+                "status", "not_available"
+            ),
             "independent_renderer_test_opened": False,
         },
     }
@@ -1794,7 +2729,12 @@ def main(argv: Sequence[str] | None = None) -> None:
     parser.add_argument(
         "--config",
         type=Path,
-        default=default_root / "xrd_inversion" / "configs" / "week1_pilot.json",
+        default=(
+            default_root
+            / "xrd_inversion"
+            / "configs"
+            / "week1_repaired_smoke.json"
+        ),
     )
     args = parser.parse_args(argv)
     report = run_week1_pilot(args.repository_root, args.config)
