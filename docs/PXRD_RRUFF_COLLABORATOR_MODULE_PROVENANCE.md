@@ -10,14 +10,17 @@ RRUFF 真实域相关工作的实际执行并不是在 2026-09-01 才“重新�
 
 实际项目历史是：
 
-> **RRUFF zero-shot、早期 RRUFF-70，以及后续 RRUFF-301 few-shot / label-efficiency 这一整条真实域实验线，本来就是由协作者借助 DeepSeek 完成实验执行、整理和分析；主仓库中的相关结果与记录主要由项目主负责人统一整合并 push 到 GitHub。**
+> **RRUFF zero-shot、早期 RRUFF-70，以及后续 RRUFF-301 few-shot / label-efficiency 这一整条真实域实验线，本来就是由协作者借助 DeepSeek 完成实验执行、整理和分析；其中相当一部分结果也是协作者本人在同一台共享工作电脑上完成 Git 提交 / 上传。**
+
+但该电脑当时使用的是项目主仓库 `Frysland-2024/AI4science` 的既有 Git / GitHub 身份配置，因此历史 commit 的 author / committer 元数据可能仍显示为 `Frysland-2024`。例如 RRUFF-301 confirmatory v2 的历史 commit `24d8c851...` 在 GitHub API 中记录的 author / committer 均为 `Frysland-2024`，这反映的是该工作站上的 Git 身份与仓库认证配置，不能据此推出实际坐在电脑前执行实验、整理文件和发起上传的人是谁。
 
 因此：
 
 - GitHub commit / push 身份不能直接等同于科研贡献归属；
-- 不应为了制造 GitHub 署名痕迹而重新跑一次已完成实验；
+- 同一工作站、同一 Git 配置下产生的提交，不能作为区分两位实际操作者的可靠证据；
+- 不应为了制造新的 GitHub 署名痕迹而重新跑一次已完成实验；
 - 不应重写既有 Git 历史来伪造原始提交者；
-- 后续 authorship / CRediT / 申请叙事应按实际完成的工作归属，而不是按谁执行了最终 `git push` 归属。
+- 后续 authorship / CRediT / 申请叙事应按实际完成的工作归属，而不是按 commit 上显示的账号归属。
 
 ## 2. 协作者真正拥有的是一条连续的真实域研究轨迹
 
@@ -84,15 +87,15 @@ RRUFF-301：形成更完整的 K=1/2/5 few-shot benchmark
 - `xrd_robustness/reports/RRUFF301_COMPOSITION_AUDIT.md`
 - 与 RRUFF-70 / RRUFF zero-shot 相关的历史记录与结果资产
 
-如果希望让协作者今后在 GitHub 上也留下可见、真实的维护痕迹，应让其以后亲自提交：
+如果希望让协作者今后在 GitHub 上也留下更容易辨认、且真实的个人维护痕迹，可以从现在开始让其使用自己的 Git identity / GitHub account 提交：
 
 - RRUFF-specific figure scripts；
 - RRUFF 模块说明 / reproduction notes；
 - downstream analysis / per-class analysis；
-- 论文 RRUFF subsection 的修改；
+- 论文 RRUFF subsection 的修改。
 
-而不是把旧结果重新上传一次。
+这些属于今后的真实维护记录，而不是对旧历史的补造。
 
 ## 6. 最终一句话
 
-> **RRUFF 真实域线从 zero-shot、RRUFF-70 到 RRUFF-301，本来就是协作者实际执行并逐步发展出来的工作；项目现在做的不是“把 20% 切给他”，而是把这条已经存在的真实贡献线正式识别、命名并与主方法线分开记录。**
+> **RRUFF 真实域线从 zero-shot、RRUFF-70 到 RRUFF-301，本来就是协作者实际执行并逐步发展出来的工作；其中部分历史提交也是协作者本人在共享工作站上完成上传，只是由于该工作站沿用了 `Frysland-2024` 的 Git / GitHub 身份配置，commit 元数据无法区分实际操作者。项目现在做的不是“把 20% 切给他”，而是把这条已经存在的真实贡献线正式识别、命名并与主方法线分开记录。**
