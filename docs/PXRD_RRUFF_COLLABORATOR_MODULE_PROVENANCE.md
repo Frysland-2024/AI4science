@@ -1,0 +1,98 @@
+# PXRD RRUFF 真实域模块：协作者实际贡献与执行溯源
+
+**日期：** 2026-09-01  
+**性质：** 对 `PXRD_ROBUSTNESS_TEAM_DIVISION_80_20.md` 的事实归属补充。  
+**状态：** 正式记录；不修改既有实验结果，不重写历史 Git commit。
+
+## 1. 核心事实修正
+
+RRUFF 真实域相关工作的实际执行并不是在 2026-09-01 才“重新切给协作者”。
+
+实际项目历史是：
+
+> **RRUFF zero-shot、早期 RRUFF-70，以及后续 RRUFF-301 few-shot / label-efficiency 这一整条真实域实验线，本来就是由协作者借助 DeepSeek 完成实验执行、整理和分析；主仓库中的相关结果与记录主要由项目主负责人统一整合并 push 到 GitHub。**
+
+因此：
+
+- GitHub commit / push 身份不能直接等同于科研贡献归属；
+- 不应为了制造 GitHub 署名痕迹而重新跑一次已完成实验；
+- 不应重写既有 Git 历史来伪造原始提交者；
+- 后续 authorship / CRediT / 申请叙事应按实际完成的工作归属，而不是按谁执行了最终 `git push` 归属。
+
+## 2. 协作者真正拥有的是一条连续的真实域研究轨迹
+
+协作者的模块不应仅被描述成“后来接手 RRUFF-301”。更准确的是：
+
+```text
+早期 RRUFF zero-shot
+        ↓
+暴露广域 sim-to-real 直接迁移的困难
+        ↓
+RRUFF-70：探索少量真实标签 / 真实域适配
+        ↓
+RRUFF-301：形成更完整的 K=1/2/5 few-shot benchmark
+        ↓
+比较 ERM-pretrained vs JS-pretrained representations
+        ↓
+形成 experimental label-efficiency / low-label transfer 结论
+```
+
+因此协作者的独立科学故事可以表述为：
+
+> **从广域 zero-shot 压力测试出发，逐步将真实域问题收敛为低标签实验适配，并系统评估模拟预训练表示在 RRUFF experimental domain 上的 label efficiency。**
+
+这比单独说“负责 RRUFF-301”更符合真实项目历史，也更完整。
+
+## 3. 与主负责人 80% 主线的边界
+
+主负责人仍负责：
+
+- simulator / physical perturbation system；
+- parent-level synthetic dataset governance；
+- Dynamic ERM / Dynamic JS 主方法；
+- `lambda_js=60` 选择与 matched simulated training；
+- 5-seed simulated OOD 主结果；
+- CNRS-318 zero-shot second-domain validation；
+- `parent provenance -> measurement equivalence -> relationship supervision` novelty framing；
+- manuscript 的核心方法学整合。
+
+协作者真实域模块负责：
+
+- RRUFF zero-shot 早期探索；
+- RRUFF-70 阶段的真实域实验；
+- RRUFF-301 adaptation / locked-test few-shot evaluation；
+- K=1/2/5 label-budget experiments；
+- ERM-pretrained vs JS-pretrained downstream adaptation comparison；
+- RRUFF-specific result aggregation / learning-curve / label-efficiency interpretation。
+
+这使 80/20 切分不是事后“制造一个 20%”，而是对已有真实工作边界的正式识别。
+
+## 4. 关于 DeepSeek 的记录原则
+
+“使用 DeepSeek 跑实验”本身不改变人的科研贡献归属。应区分：
+
+- AI 工具负责生成/修改代码、给出命令或辅助分析；
+- 人负责提出任务、决定协议、选择和检查输入、执行实验、判断输出、修复错误、解释结果并承担科学责任。
+
+正式贡献描述应写协作者实际完成的科研与工程工作，不把 DeepSeek 列为作者，也不把“谁敲下代码”机械等同于“谁提出或完成研究”。若未来需要更细的 CRediT 归属，应按 Conceptualization / Software / Investigation / Validation / Formal analysis / Visualization 等实际贡献逐项确认。
+
+## 5. GitHub 记录应怎么处理
+
+现有 RRUFF 结果文件继续保留原路径和原 Git 历史，不需要重新上传或重跑：
+
+- `xrd_robustness/reports/rruff301_fewshot_results.json`
+- `xrd_robustness/reports/RRUFF301_COMPOSITION_AUDIT.md`
+- 与 RRUFF-70 / RRUFF zero-shot 相关的历史记录与结果资产
+
+如果希望让协作者今后在 GitHub 上也留下可见、真实的维护痕迹，应让其以后亲自提交：
+
+- RRUFF-specific figure scripts；
+- RRUFF 模块说明 / reproduction notes；
+- downstream analysis / per-class analysis；
+- 论文 RRUFF subsection 的修改；
+
+而不是把旧结果重新上传一次。
+
+## 6. 最终一句话
+
+> **RRUFF 真实域线从 zero-shot、RRUFF-70 到 RRUFF-301，本来就是协作者实际执行并逐步发展出来的工作；项目现在做的不是“把 20% 切给他”，而是把这条已经存在的真实贡献线正式识别、命名并与主方法线分开记录。**
