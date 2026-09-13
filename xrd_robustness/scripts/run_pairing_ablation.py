@@ -1,41 +1,39 @@
 #!/usr/bin/env python3
 """Controlled same-parent vs same-class JS pairing ablation for PXRD.
 
-The scientific question is narrow:
+Scientific question
+-------------------
+Does JS benefit specifically from parent identity, or would any two different
+structures from the same crystal system work similarly?
 
-    Does JS benefit specifically from parent identity, or would any two
-    different structures from the same crystal system work similarly?
+Both arms see exactly the same parent structures, exactly the same two rendered
+views, the same CE supervision, optimizer, model initialization, and validation
+spectra.  The only difference is which second-view prediction is paired with
+the first-view prediction inside the JS term:
 
-To isolate that factor, both arms see exactly the same parent structures,
-exactly the same two rendered views, the same CE supervision, optimizer,
-model initialization, and validation spectra.  The only difference is which
-second-view prediction is paired with the first-view prediction inside the JS
-term:
+- ``same_parent_js``: view-1(parent A) <-> view-2(parent A)
+- ``same_class_js``:  view-1(parent A) <-> view-2(parent B), A != B,
+  where A and B have the same crystal-system label.
 
-- same_parent_js:  view-1(parent A) <-> view-2(parent A)
-- same_class_js:   view-1(parent A) <-> view-2(parent B), A != B,
-                   with A and B from the same crystal system
-
-Training batches are built from adjacent same-class parent pairs.  This keeps
-32 spectra/update (16 parents x 2 views) and lets same-class JS be formed by a
-pure permutation of already-rendered second views.  No extra spectra or model
-forwards are introduced in one arm.
+Training batches are built from adjacent same-class parent pairs.  Thus both
+arms still use 16 parents x 2 views = 32 spectra/update.  The same-class arm is
+implemented only by permuting already-rendered second-view logits inside JS;
+it gets no extra spectra or model forwards.
 
 This is a post-hoc mechanism ablation.  It does not replace the frozen main
-ERM-vs-JS result and it does not touch simulated Test.
+ERM-vs-JS result and it deliberately does not access simulated Test.
 """
 
 from __future__ import annotations
 
 import argparse
 from collections import defaultdict
-import copy
 import csv
 import json
 from pathlib import Path
 import random
 import sys
-from typing import Any, Iterable, Sequence
+from typing import Any, Sequence
 
 import numpy as np
 import torch
@@ -139,7 +137,8 @@ def load_local_records() -> tuple[list[PeakRecord], dict[str, Any]]:
     expected = data["split"]["counts"]
     if len(train) != int(expected["train"]) or len(validation) != int(expected["validation"]):
         raise RuntimeError(
-            f"local record counts differ from frozen split: train={len(train)}, validation={len(validation)}"
+            f"local record counts differ from frozen split: train={len(train)}, "
+            f"validation={len(validation)}"
         )
     metadata = {
         "data_config": str(DATA_CONFIG),
@@ -157,7 +156,10 @@ def load_local_records() -> tuple[list[PeakRecord], dict[str, Any]]:
 
 def load_peaks(records: Sequence[PeakRecord]) -> dict[str, Any]:
     print(f"Loading {len(records)} ideal peak tables...", flush=True)
-    return {record.material_id: load_peak_table(record.peak_table_path) for record in records}
+    return {
+        record.material_id: load_peak_table(record.peak_table_path)
+        for record in records
+    }
 
 
 def make_same_class_batches(
@@ -165,14 +167,16 @@ def make_same_class_batches(
     rng: np.random.Generator,
     batch_size: int,
 ) -> tuple[list[list[PeakRecord]], list[str]]:
-    """Return batches where adjacent records are different parents of one class.
+    """Make batches where adjacent records are different parents of one class.
 
-    A class with an odd count contributes one randomly rotated omission in this
-    epoch.  With formal_14060 this means at most one omitted parent per odd
-    class (<0.1% of the training set); the omitted identity changes each epoch.
+    A class with an odd number of parents contributes one randomly rotated
+    omission in that epoch.  In formal_14060 this is at most one parent per odd
+    class, i.e. <0.1% of the training set, and the omitted identity changes
+    with the epoch permutation.
     """
     if batch_size <= 0 or batch_size % 2:
         raise ValueError("batch_size must be a positive even number")
+
     grouped: dict[int, list[PeakRecord]] = defaultdict(list)
     for record in records:
         grouped[record.label].append(record)
@@ -198,12 +202,11 @@ def make_same_class_batches(
     for start in range(0, len(pairs), pairs_per_batch):
         chunk = pairs[start : start + pairs_per_batch]
         batch = [record for pair in chunk for record in pair]
-        # Adjacent parents are the same class and necessarily different IDs.
         for index in range(0, len(batch), 2):
             if batch[index].label != batch[index + 1].label:
                 raise RuntimeError("pair adjacency was lost")
             if batch[index].material_id == batch[index + 1].material_id:
-                raise RuntimeError("same-parent pair entered same-class arm")
+                raise RuntimeError("same parent entered a same-class pair")
         batches.append(batch)
     return batches, dropped
 
@@ -211,7 +214,12 @@ def make_same_class_batches(
 def logits(model: torch.nn.Module, x: torch.Tensor) -> torch.Tensor:
     output = model(x)
     if isinstance(output, dict):
-        return output["logits"]
+        value = output.get("logits")
+        if not isinstance(value, torch.Tensor):
+            raise RuntimeError("model output does not contain tensor logits")
+        return value
+    if not isinstance(output, torch.Tensor):
+        raise RuntimeError("model output is not a tensor")
     return output
 
 
@@ -223,25 +231,28 @@ def paired_loss(
     target: torch.Tensor,
     lambda_js: float,
 ) -> dict[str, torch.Tensor]:
+    """Keep CE/data fixed and change only the pairing used by JS."""
     first = logits(model, x1)
     second = logits(model, x2)
-    classification = 0.5 * (F.cross_entropy(first, target) + F.cross_entropy(second, target))
+    classification = 0.5 * (
+        F.cross_entropy(first, target) + F.cross_entropy(second, target)
+    )
 
     if arm == "same_parent_js":
         consistency = js_divergence(first, second)
     elif arm == "same_class_js":
         if len(target) % 2:
-            raise RuntimeError("same-class JS needs an even parent count per batch")
+            raise RuntimeError("same-class JS requires an even parent count")
         partner = torch.arange(len(target), device=target.device)
         partner[0::2] += 1
         partner[1::2] -= 1
         if not torch.equal(target, target[partner]):
-            raise RuntimeError("same-class JS partner has a different class label")
-        # Crucial control: x1/x2 and CE are unchanged; only the second-view
-        # logits are permuted inside JS.
+            raise RuntimeError("same-class JS partner has a different label")
+        # Only this permutation differs between the two arms.
         consistency = js_divergence(first, second[partner])
     else:
         raise ValueError(f"unknown arm: {arm}")
+
     return {
         "classification": classification,
         "consistency": consistency,
@@ -305,19 +316,27 @@ def train_arm(
         raise RuntimeError(f"refusing to overwrite non-empty output: {output_dir}")
     output_dir.mkdir(parents=True, exist_ok=True)
 
+    # Reset all random state before every arm.  With the same seed, both arms
+    # therefore receive the same model initialization, batch order and views.
     random.seed(seed)
     np.random.seed(seed)
     torch.manual_seed(seed)
     if torch.cuda.is_available():
         torch.cuda.manual_seed_all(seed)
 
-    train_sampler = PhysicsParameterSampler.from_mapping({**simulation, "run_seed": int(seed)})
-    eval_sampler = PhysicsParameterSampler.from_mapping({**simulation, "run_seed": int(evaluation_seed)})
+    train_sampler = PhysicsParameterSampler.from_mapping(
+        {**simulation, "run_seed": int(seed)}
+    )
+    eval_sampler = PhysicsParameterSampler.from_mapping(
+        {**simulation, "run_seed": int(evaluation_seed)}
+    )
     train_factory = OnlineViewFactory(train_sampler)
     eval_factory = OnlineViewFactory(eval_sampler)
 
     model = build_model(ML4PXRDResNet1DConfig(model_id="18")).to(device)
-    optimizer = torch.optim.AdamW(model.parameters(), lr=learning_rate, weight_decay=weight_decay)
+    optimizer = torch.optim.AdamW(
+        model.parameters(), lr=learning_rate, weight_decay=weight_decay
+    )
     rng = np.random.default_rng(seed)
     global_step = 0
     best_score = float("-inf")
@@ -332,6 +351,7 @@ def train_arm(
         model.train()
         sums = {"classification": 0.0, "consistency": 0.0, "total": 0.0}
         seen = 0
+
         for batch in batches:
             x1, x2, target = render_pair_batch(
                 batch,
@@ -344,10 +364,12 @@ def train_arm(
             x1 = x1.to(device)
             x2 = x2.to(device)
             target = target.to(device)
+
             optimizer.zero_grad(set_to_none=True)
             loss = paired_loss(arm, model, x1, x2, target, lambda_js)
             loss["total"].backward()
             optimizer.step()
+
             n = len(batch)
             for key in sums:
                 sums[key] += float(loss[key].detach()) * n
@@ -378,10 +400,14 @@ def train_arm(
                 f"in={metrics['in_range']['macro_f1']:.4f}, meanOOD={score:.4f}",
                 flush=True,
             )
+
             if score > best_score:
                 best_score = score
                 best_epoch = epoch
-                best_state = {k: v.detach().cpu().clone() for k, v in model.state_dict().items()}
+                best_state = {
+                    key: value.detach().cpu().clone()
+                    for key, value in model.state_dict().items()
+                }
             if score > patience_anchor + min_delta:
                 patience_anchor = score
                 stale_checks = 0
@@ -396,6 +422,7 @@ def train_arm(
 
     if best_state is None:
         raise RuntimeError("no validation checkpoint was selected")
+
     model.load_state_dict(best_state)
     final_validation = evaluate_profiles(
         model,
@@ -412,10 +439,15 @@ def train_arm(
             "arm": arm,
             "best_epoch": best_epoch,
             "lambda_js": lambda_js,
-            "pairing": "same-parent" if arm == "same_parent_js" else "same-class-different-parent",
+            "pairing": (
+                "same-parent"
+                if arm == "same_parent_js"
+                else "same-class-different-parent"
+            ),
         },
         output_dir / "best.pt",
     )
+
     result = {
         "arm": arm,
         "seed": seed,
@@ -441,33 +473,55 @@ def summarize(results: list[dict[str, Any]]) -> dict[str, Any]:
             continue
         parent = arms["same_parent_js"]["validation"]
         same_class = arms["same_class_js"]["validation"]
-        row: dict[str, Any] = {
-            "seed": seed,
-            "same_parent_mean_ood_macro_f1": parent["mean_single_ood_macro_f1"],
-            "same_class_mean_ood_macro_f1": same_class["mean_single_ood_macro_f1"],
-            "parent_minus_same_class_mean_ood_macro_f1": (
-                parent["mean_single_ood_macro_f1"] - same_class["mean_single_ood_macro_f1"]
-            ),
-            "same_parent_in_range_macro_f1": parent["in_range"]["macro_f1"],
-            "same_class_in_range_macro_f1": same_class["in_range"]["macro_f1"],
-            "profile_delta_macro_f1": {
-                profile: parent[profile]["macro_f1"] - same_class[profile]["macro_f1"]
-                for profile in SINGLE_OOD
-            },
-        }
-        comparisons.append(row)
+        comparisons.append(
+            {
+                "seed": seed,
+                "same_parent_mean_ood_macro_f1": parent[
+                    "mean_single_ood_macro_f1"
+                ],
+                "same_class_mean_ood_macro_f1": same_class[
+                    "mean_single_ood_macro_f1"
+                ],
+                "parent_minus_same_class_mean_ood_macro_f1": (
+                    parent["mean_single_ood_macro_f1"]
+                    - same_class["mean_single_ood_macro_f1"]
+                ),
+                "same_parent_in_range_macro_f1": parent["in_range"]["macro_f1"],
+                "same_class_in_range_macro_f1": same_class["in_range"]["macro_f1"],
+                "profile_delta_macro_f1": {
+                    profile: (
+                        parent[profile]["macro_f1"]
+                        - same_class[profile]["macro_f1"]
+                    )
+                    for profile in SINGLE_OOD
+                },
+            }
+        )
 
-    deltas = [row["parent_minus_same_class_mean_ood_macro_f1"] for row in comparisons]
+    deltas = [
+        row["parent_minus_same_class_mean_ood_macro_f1"]
+        for row in comparisons
+    ]
     return {
-        "scientific_question": "Is parent identity better than generic same-class consistency?",
+        "scientific_question": (
+            "Is parent identity better than generic same-class consistency?"
+        ),
         "interpretation_rule": (
-            "same_parent_js > same_class_js supports parent-specific relational information; "
-            "similar performance means parent specificity is not established by this ablation"
+            "same_parent_js > same_class_js supports parent-specific relational "
+            "information; similar performance means parent specificity is not "
+            "established by this ablation"
         ),
         "comparisons": comparisons,
-        "mean_parent_minus_same_class_macro_f1": float(np.mean(deltas)) if deltas else None,
-        "all_compared_seeds_parent_higher": bool(deltas and all(delta > 0 for delta in deltas)),
-        "note": "Validation-only post-hoc mechanism ablation; frozen simulated Test is not accessed.",
+        "mean_parent_minus_same_class_macro_f1": (
+            float(np.mean(deltas)) if deltas else None
+        ),
+        "all_compared_seeds_parent_higher": bool(
+            deltas and all(delta > 0 for delta in deltas)
+        ),
+        "note": (
+            "Validation-only post-hoc mechanism ablation; frozen simulated Test "
+            "is not accessed."
+        ),
     }
 
 
@@ -475,9 +529,21 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output-root", type=Path, default=DEFAULT_OUTPUT)
     parser.add_argument("--seeds", type=int, nargs="+", default=None)
-    parser.add_argument("--full-seeds", action="store_true", help="run all five original training seeds")
-    parser.add_argument("--quick", action="store_true", help="one-night pilot: 60 epochs, min 40, patience 2")
-    parser.add_argument("--dry-run", action="store_true", help="validate local data and pairing without training")
+    parser.add_argument(
+        "--full-seeds",
+        action="store_true",
+        help="run all five original training seeds",
+    )
+    parser.add_argument(
+        "--quick",
+        action="store_true",
+        help="one-night pilot: 60 epochs, min 40, patience 2",
+    )
+    parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="validate local data and pair construction without training",
+    )
     parser.add_argument("--epochs", type=int, default=None)
     parser.add_argument("--min-epochs", type=int, default=None)
     parser.add_argument("--patience", type=int, default=None)
@@ -495,26 +561,50 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
 
 def main(argv: Sequence[str] | None = None) -> int:
     args = parse_args(argv)
-    seeds = tuple(args.seeds or (FULL_SEEDS if args.full_seeds else (20260711,)))
-    epochs = int(args.epochs if args.epochs is not None else (60 if args.quick else 100))
-    min_epochs = int(args.min_epochs if args.min_epochs is not None else (40 if args.quick else 50))
-    patience = int(args.patience if args.patience is not None else (2 if args.quick else 3))
+    seeds = tuple(
+        args.seeds
+        or (FULL_SEEDS if args.full_seeds else (20260711,))
+    )
+    epochs = int(
+        args.epochs if args.epochs is not None else (60 if args.quick else 100)
+    )
+    min_epochs = int(
+        args.min_epochs
+        if args.min_epochs is not None
+        else (40 if args.quick else 50)
+    )
+    patience = int(
+        args.patience if args.patience is not None else (2 if args.quick else 3)
+    )
     if args.batch_size % 2:
         raise SystemExit("--batch-size must be even")
+    if epochs <= 0 or min_epochs <= 0 or min_epochs > epochs:
+        raise SystemExit("invalid epoch settings")
 
-    device = torch.device("cuda" if args.device == "auto" and torch.cuda.is_available() else args.device)
-    if args.device == "auto" and not torch.cuda.is_available():
-        device = torch.device("cpu")
+    if args.device == "auto":
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    else:
+        device = torch.device(args.device)
     if device.type == "cuda" and not torch.cuda.is_available():
         raise SystemExit("CUDA requested but unavailable")
+    if device.type == "cpu" and not args.dry_run:
+        print(
+            "warning: CUDA is unavailable; this ablation is intended for a GPU and may be slow on CPU",
+            file=sys.stderr,
+            flush=True,
+        )
 
     records, metadata = load_local_records()
     train_records = [record for record in records if record.split == "train"]
-    validation_records = [record for record in records if record.split == "validation"]
+    validation_records = [
+        record for record in records if record.split == "validation"
+    ]
     simulation = json.loads(SIMULATION_CONFIG.read_text(encoding="utf-8"))
 
     probe_rng = np.random.default_rng(seeds[0])
-    probe_batches, dropped = make_same_class_batches(train_records, probe_rng, args.batch_size)
+    probe_batches, dropped = make_same_class_batches(
+        train_records, probe_rng, args.batch_size
+    )
     first_batch = probe_batches[0]
     preflight = {
         **metadata,
@@ -528,17 +618,20 @@ def main(argv: Sequence[str] | None = None) -> int:
         "spectra_per_update": args.batch_size * 2,
         "pairing_check": [
             {
-                "a": first_batch[i].material_id,
-                "b": first_batch[i + 1].material_id,
-                "class": CRYSTAL_SYSTEMS[first_batch[i].label],
-                "different_parent": first_batch[i].material_id != first_batch[i + 1].material_id,
+                "a": first_batch[index].material_id,
+                "b": first_batch[index + 1].material_id,
+                "class": CRYSTAL_SYSTEMS[first_batch[index].label],
+                "different_parent": (
+                    first_batch[index].material_id
+                    != first_batch[index + 1].material_id
+                ),
             }
-            for i in range(0, min(len(first_batch), 8), 2)
+            for index in range(0, min(len(first_batch), 8), 2)
         ],
         "odd_class_parents_dropped_in_probe_epoch": dropped,
         "important_control": (
-            "both arms use identical parents, identical two rendered views and identical CE; "
-            "same_class_js only permutes second-view logits inside JS"
+            "both arms use identical parents, identical two rendered views and "
+            "identical CE; same_class_js only permutes second-view logits inside JS"
         ),
         "test_access": False,
     }
