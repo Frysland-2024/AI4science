@@ -3,25 +3,39 @@
 **状态：当前有效 / canonical**  
 **生效日期：2026-09-13**  
 **适用范围：** `Frysland-2024/AI4science` 中 PXRD 七晶系鲁棒分类主线，以及后续基于同一任务体系的结果汇报、导师汇报、论文 Results、PPT 和申请材料。  
-**目的：** 明确项目会输出很多数字，但**不是所有数字都是“科研结果”**，更不是所有数字都应参与项目好坏的评级。本标准按照 PXRD / XRD machine-learning 论文常见评价方式，区分：真正影响科学判断的结果、支持性结果、Methods 参数和过度 AI 工程化的审计信息。
+**目的：** 明确项目会输出很多数字，但**不是所有数字都是“科研结果”**，更不是所有数字都应参与项目好坏的评级。本标准按照 PXRD / XRD machine-learning 论文常见评价方式，区分：真正影响科学判断的结果、支持性结果、严格统计审计与工程复现信息。
 
 ---
 
 ## 0. 一句话原则
 
-> **评价 PXRD 机器学习工作，首先看模型在 XRD 任务上“分得准不准、跨扰动/实验域是否仍然分得准、哪些晶系分错了、真实谱上是否有实际收益”；而不是先看 loss、梯度、哈希、checkpoint、ECE、bootstrap 或训练工程细节。**
+> **评价 PXRD 机器学习工作，首先看模型在 XRD 任务上“分得准不准、跨扰动/实验域是否仍然分得准、哪些晶系分错了、真实谱上是否有实际收益”；而不是先看 loss、梯度、哈希、checkpoint、bootstrap 或训练工程细节。**
 
 本项目的结果排序遵循：
 
 ```text
-XRD classification performance
-    > per-class / perturbation / experimental-domain behavior
-    > probability reliability / mechanism evidence
-    > strict statistical audit
-    > training engineering / provenance
+Tier A: XRD classification performance
+    > Tier B: per-class / perturbation / real-domain / reliability / mechanism evidence
+    > Tier C: strict statistical audit
+    > Tier D: training engineering / reproducibility / provenance
 ```
 
-这不是降低严谨性。低层信息仍永久保留，只是**不能把工程审计当作项目主成绩**。
+### 强制汇报边界（2026-09-13 起）
+
+> **对外/对导师汇报只写 Tier A 与 Tier B。**  
+> **Tier C 与 Tier D 默认不进入 PPT、导师汇报主文、论文 Results 主文、申请材料或项目总结。**
+
+具体规则：
+
+- **Tier A + Tier B = 可汇报结果（reportable scientific results）**；
+- **Tier C = 内部统计审计（local audit only）**，保留在本地 JSON / CSV / audit report 中；
+- **Tier D = 工程与复现信息（local engineering/reproducibility only）**，保留在配置、JSON、日志、manifest、代码和 audit 中；
+- Tier C / D 只有在**明确回答审稿人、复现、方法核对或内部排障问题时**才从本地记录中调出，不主动占据科研结果页面；
+- Tier D 中少量**复现实验不可缺的 Methods 设置**（例如 2θ 范围、波长、扰动范围、backbone、optimizer）仍可写在 Methods/技术备忘录中，但**不能作为“结果”或项目评级指标出现**。
+
+因此，以后任何“结果汇总”“当前成绩”“导师汇报结果页”“论文 Results 表”默认只从 Tier A / Tier B 取数。
+
+这不是降低严谨性。Tier C / D 仍永久保留，只是**科研汇报与内部审计正式分离**。
 
 ---
 
@@ -172,11 +186,13 @@ RRUFF 主结果应直接报告 K=1/2/5 下 Macro-F1 / Accuracy，而不是只报
 
 ---
 
-## Tier B — 支持性科学结果：有价值，但不能替代主成绩
+## Tier B — 支持性科学结果：需要汇报，但不能替代主成绩
+
+> **Tier B 与 Tier A 一样属于“可汇报结果”。** 区别只是 Tier B 用于解释、增强和限定 Tier A，而不是单独定义项目成绩。
 
 ### B1. mean ± SD / 多 seed 稳定性
 
-**有效，但属于主结果的可信度增强。**
+**有效，属于主结果的可信度增强。**
 
 应与 Accuracy / Macro-F1 一起出现，例如：
 
@@ -227,7 +243,7 @@ RRUFF 主结果应直接报告 K=1/2/5 下 Macro-F1 / Accuracy，而不是只报
 
 ---
 
-## Tier C — 严格统计审计：保留，但不主导科研评级
+## Tier C — 严格统计审计：本地保存，不进入常规汇报
 
 包括：
 
@@ -238,24 +254,24 @@ RRUFF 主结果应直接报告 K=1/2/5 下 Macro-F1 / Accuracy，而不是只报
 - uncertainty decomposition；
 - p-value（如果未来使用）。
 
-这些结果回答“我们对效应估计有多确定”，不是回答“XRD 模型分得准不准”。
+这些信息回答“我们对效应估计有多确定”，不是回答“XRD 模型分得准不准”。
+
+### Tier C 存储与调用规则
+
+- 默认保存在本地/仓库的 JSON、CSV、audit report 或 analysis output 中；
+- **不进入常规导师汇报、PPT 主文、论文 Results 主表、申请材料或项目 headline**；
+- 只有在审稿、统计核查、内部审计或专门讨论不确定性时才调出；
+- 不允许 Tier C 单独覆盖 Tier A / B 的科学表现判断。
 
 因此：
 
 > `CI crosses zero` = 在该 resampling model 下不确定性较大。
 
-它**不自动等于**：
-
-- 实验失败；
-- 方法无效；
-- 不能报告正向结果；
-- 5/5 seed、Accuracy、Macro-F1、Balanced Accuracy 等全部作废。
-
-严格统计必须如实保留，但应放在详细 Results / limitation / appendix，不应该把整项 XRD 工作包装成统计显著性考试。
+它**不自动等于**实验失败、方法无效或主结果不能报告。
 
 ---
 
-## Tier D — Methods / Reproducibility：重要，但不是“结果”
+## Tier D — Methods / Reproducibility / Engineering：本地保存，不作为“结果”汇报
 
 以下信息必须记录，因为它们决定复现和实验解释，但**不参与项目性能评级**：
 
@@ -271,9 +287,16 @@ RRUFF 主结果应直接报告 K=1/2/5 下 Macro-F1 / Accuracy，而不是只报
 - training epochs；
 - early stopping；
 - preprocessing / normalization；
-- frozen checkpoint 选择规则。
+- frozen checkpoint 选择规则；
+- hashes / manifests / run records / exact seed IDs；
+- AMP / bfloat16 / fused optimizer / GPU 等执行环境。
 
-这些属于 **Methods 参数**，不是“模型表现结果”。
+### Tier D 存储与调用规则
+
+- 完整版本放在 config、JSON、日志、manifest、代码和内部技术备忘录；
+- **不进入“结果页”和项目成绩评价**；
+- 若需要写论文 Methods，只提取**复现不可缺的最小 Methods 参数**，不把工程细节搬进 Results；
+- 哈希、checkpoint SHA、GPU、梯度、精确 seed 编号等默认不进入对外材料。
 
 特殊例外：若论文明确研究“采集分辨率”“模型大小”“计算效率”，相应 step size / parameter count / runtime 才升级为科学结果。Oviedo 的 2θ coarsening 就属于这种情况，因为它直接研究 acquisition-speed vs accuracy trade-off；本项目固定 `0.02°` 时，它只是方法参数。
 
@@ -281,7 +304,7 @@ RRUFF 主结果应直接报告 K=1/2/5 下 Macro-F1 / Accuracy，而不是只报
 
 # 3. “过于 AI 工程”的输出：不应影响科研评级
 
-以下数字可以留在日志、audit、仓库，但默认**不进入导师汇报主结果表、Abstract 或论文 headline**：
+以下数字保留在日志、audit、JSON、配置和代码中，但默认**不进入导师汇报主结果表、Abstract、论文 Results 主文或申请材料**：
 
 | 输出 | 默认角色 | 为什么不是有效主结果 |
 |---|---|---|
@@ -293,14 +316,13 @@ RRUFF 主结果应直接报告 K=1/2/5 下 Macro-F1 / Accuracy，而不是只报
 | step count / samples seen | 工程复现 | 除非研究 sample efficiency，否则不评级 |
 | learning rate / weight decay | Methods | 训练设置，不是结果 |
 | fused AdamW / AMP / bfloat16 / float32 fallback | 工程 | 与 XRD 科学结论无直接关系 |
-| GPU 型号 / GPU 数量 /显存 | 工程 | 除非论文声称计算效率优势 |
+| GPU 型号 / GPU 数量 / 显存 | 工程 | 除非论文声称计算效率优势 |
 | checkpoint SHA / file SHA256 | provenance | 数据卫生，不是科学贡献 |
 | manifest hash / Git commit hash | provenance | 复现追踪，不是模型性能 |
 | exact seed IDs | reproducibility | 需要记录，但 seed 数字本身不是结果 |
 | raw parameter count | Methods | 除非明确比较模型简洁性/效率 |
 | train accuracy | learnability diagnostic | 可用于排障，但不能作为最终性能证明 |
-| calibration-only improvement | supporting | 不能替代真实分类性能 |
-| bootstrap CI 单独一项 | audit | 不能脱离绝对效果量、seed 和任务指标单独判刑 |
+| bootstrap CI | Tier C audit | 默认只留内部审计，不进入常规结果汇报 |
 
 这些内容的共同特点是：
 
@@ -310,7 +332,7 @@ RRUFF 主结果应直接报告 K=1/2/5 下 Macro-F1 / Accuracy，而不是只报
 
 # 4. 本项目最终“有效结果”优先级
 
-当以后问“当前项目结果到底好不好”，严格按下面顺序看。
+当以后问“当前项目结果到底好不好”，严格按下面顺序看，而且**只从 Tier A / Tier B 组织答案**。
 
 ## 第一优先级：模拟 Test 的 XRD 分类性能
 
@@ -320,7 +342,8 @@ RRUFF 主结果应直接报告 K=1/2/5 下 Macro-F1 / Accuracy，而不是只报
 2. mean single-factor OOD Accuracy；
 3. in-range Macro-F1 / Accuracy；
 4. profile-wise F1 / Accuracy；
-5. per-class F1 / confusion matrix。
+5. per-class F1 / confusion matrix；
+6. mean ± SD / matched-seed consistency（Tier B）。
 
 当前 headline：
 
@@ -335,7 +358,8 @@ RRUFF 主结果应直接报告 K=1/2/5 下 Macro-F1 / Accuracy，而不是只报
 - K=1/2/5 Macro-F1；
 - K=1/2/5 Accuracy；
 - learning curve / label efficiency；
-- per-class behavior（如果用于详细分析）。
+- mean ± SD / paired consistency；
+- per-class behavior（详细分析时）。
 
 这是项目当前最强的真实域应用证据。
 
@@ -347,9 +371,11 @@ RRUFF 主结果应直接报告 K=1/2/5 下 Macro-F1 / Accuracy，而不是只报
 - Balanced Accuracy；
 - Accuracy；
 - per-class F1 + support；
-- confusion / 典型错误。
+- confusion / 典型错误；
+- mean ± SD / 5-seed direction；
+- ECE/NLL/Brier 只作为 Tier B reliability 辅助。
 
-ECE/NLL/Brier 放在第二层说明 probability quality；bootstrap CI 放严格审计层。
+**bootstrap CI 不进入常规汇报表；它留在 Tier C 内部统计审计。**
 
 ## 第四优先级：机制和概率可靠性
 
@@ -360,11 +386,11 @@ ECE/NLL/Brier 放在第二层说明 probability quality；bootstrap CI 放严格
 - confidence / entropy；
 - mechanism-specific diagnostics。
 
-它们解释“为什么可能更稳健”，不能替代前三层。
+它们属于 Tier B，可在需要解释机制/可靠性时汇报，但不能替代前三类性能结果。
 
 ---
 
-# 5. 论文 / PPT 的结果表应该长什么样
+# 5. 论文 / PPT / 导师汇报的结果表应该长什么样
 
 ## 模拟 Test 主表
 
@@ -375,9 +401,7 @@ ECE/NLL/Brier 放在第二层说明 probability quality；bootstrap CI 放严格
 | Dynamic ERM |  |  |  |  |
 | JS consistency |  |  |  |  |
 
-旁边再给一张 profile-wise 图和 confusion matrix。
-
-`worst-class F1`、CI、ECE、NLL、Brier 不要全部挤进主表。
+旁边再给一张 profile-wise 图和 confusion matrix；必要时标 mean ± SD、5/5 direction。
 
 ## RRUFF 主表 / 主图
 
@@ -397,15 +421,23 @@ K=1/2/5：
 | ERM |  |  |  |
 | JS |  |  |  |
 
-另表给 per-class F1 + support。
+另表给 per-class F1 + support；可在支持性文字中补充 ECE/NLL/Brier。
 
-ECE/NLL/Brier 放“可靠性补充结果”。
+### 默认不出现
+
+- bootstrap CI；
+- p-value；
+- gradient scale；
+- loss curves（除非解释训练失败）；
+- checkpoint / hash / manifest；
+- exact seed IDs；
+- GPU / AMP / fused optimizer 等。
 
 ---
 
-# 6. 哪些当前常见输出以后不再写进“主结果”
+# 6. 哪些当前常见输出以后不再写进“常规汇报结果”
 
-从本标准生效起，下列内容除非特别回答对应研究问题，否则不得被包装成 headline scientific result：
+从本标准生效起，下列内容除非特别回答对应问题，否则不得进入导师汇报、论文 Results 主文、PPT 结果页或申请材料：
 
 - gradient-scale Gate；
 - λ=3/30/60 的梯度比；
@@ -415,22 +447,20 @@ ECE/NLL/Brier 放“可靠性补充结果”。
 - bfloat16 fallback；
 - hash / manifest / provenance 完整度；
 - checkpoint 选择 tie-break 的细节；
-- 单独的 ECE/NLL/Brier improvement；
-- 单独的 bootstrap CI；
-- 单独的 prediction entropy / confidence；
+- bootstrap CI / p-value；
 - 单独的 train accuracy。
 
-它们仍然可以存在于 Methods、appendix、audit 和内部记录中。
+其中 ECE/NLL/Brier、prediction entropy / confidence、paired-view consistency 属于 **Tier B**：只有在解释可靠性或机制时才汇报，不作为 headline。
 
 ---
 
 # 7. 有效结果的最低完整性要求
 
-一个数字只有满足以下条件，才可以进入“有效科学结果”主表：
+一个数字只有满足以下条件，才可以进入 Tier A / Tier B 的科学汇报：
 
 1. 对应明确的 XRD 任务条件（simulated ID/OOD、RRUFF few-shot、CNRS zero-shot）；
 2. 有明确 test / locked evaluation 数据，而不是 train-only；
-3. 使用社区可解释指标（Accuracy / Macro-F1 / Balanced Accuracy / per-class F1）；
+3. 使用社区可解释指标（Accuracy / Macro-F1 / Balanced Accuracy / per-class F1），或明确承担 Tier B 的机制/可靠性角色；
 4. 能说明样本单位和 support；
 5. 比较方法之间的数据暴露和任务条件可比；
 6. 对 repeated runs 报 mean ± SD 或至少说明 run 数；
@@ -449,44 +479,50 @@ ECE/NLL/Brier 放“可靠性补充结果”。
 
 如果这四件事成立，项目结果就成立。
 
-训练 loss、梯度比、CI、ECE、哈希、GPU、checkpoint 只是用来回答：
+Tier B 再回答：
 
-> **“我们对这个结论有多放心、实验是否可复现、机制是否合理？”**
+> **“这个结果是否稳定？是否伴随更合理的概率行为？机制证据是否与性能方向一致？”**
 
-它们不是这个项目“成绩是多少”的答案。
+Tier C / D 则只回答：
+
+> **“统计审计有多严格？实验能否被完整复现？工程执行是否可追踪？”**
+
+Tier C / D 不再被当作“项目成绩是多少”的答案。
 
 ---
 
 # 9. 与现有项目文档的关系
 
-- 本文件：**决定哪些输出算“有效结果”，哪些不参与主评级。**
-- `docs/PXRD_RESULT_REPORTING_STANDARD.md`：规定这些结果怎样分层汇报。
+- 本文件：**决定哪些输出算“有效结果”，哪些结果允许进入汇报。**
+- `docs/PXRD_RESULT_REPORTING_STANDARD.md`：规定 Tier A / B 怎样组织为对外汇报。
 - `xrd_robustness/reports/RESULTS.md`：当前冻结结果事实来源。
 - `docs/PXRD_PERTURBATION_EVIDENCE.md`：五类扰动的物理与文献依据。
-- `docs/XRD_技术细节备忘录_彻底重写版.md`：Methods / 物理复现技术备忘录。
+- `docs/XRD_技术细节备忘录_彻底重写版.md`：Methods / 物理复现技术备忘录；其中 Methods 参数用于复现，不等于评价结果。
 
-若未来内部 audit 文档与本文件在“什么是 headline scientific result”上冲突，以本文件与 `PXRD_RESULT_REPORTING_STANDARD.md` 为当前对外汇报标准；原始实验输出与不利结果不得因此删除或修改。
+若未来内部 audit 文档与本文件在“什么是可汇报 scientific result”上冲突，以本文件为准。原始实验输出、Tier C / D 证据与不利结果不得因此删除或修改，只是默认留在本地/仓库机器可读记录中。
 
 ---
 
 # 10. 最终原则
 
-> **XRD-ML 的有效结果不是“模型产生了多少数字”，而是这些数字是否回答 XRD 分类问题。**
+> **常规汇报只使用 Tier A + Tier B。Tier C + Tier D 只做内部审计和复现存档。**
 
-有效结果优先回答：
+有效汇报优先回答：
 
 - 分得准不准；
 - 实验谱能不能用；
 - 物理扰动下是否稳健；
 - 哪些晶系容易错；
-- 少量真实标签是否能改善部署。
+- 少量真实标签是否能改善部署；
+- 结果是否稳定、可靠性/机制是否同方向。
 
-过度 AI 工程化的信息主要回答：
+内部审计信息主要回答：
 
+- 统计不确定性如何；
 - 怎么训的；
 - 有没有收敛；
 - 怎么追踪文件；
 - 梯度是不是活着；
-- 统计审计有多严格。
+- 实验如何精确复现。
 
-两者都需要，但**只有前一类决定这个 PXRD 项目的科学评级。**
+两类信息都保留，但**只有 Tier A / Tier B 进入常规科研汇报。**
