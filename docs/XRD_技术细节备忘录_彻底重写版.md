@@ -117,7 +117,7 @@ March–Dollase：
 | Early stopping | used after a minimum training period |
 | Preprocessing after rendering | identity; max normalization already applied by simulator |
 
-这些参数的角色与 XRD-ML 论文中的 training setup 相同：**为了让别人知道模型怎么训练，而不是作为科学结果本身。** 不再报告 fused AdamW、AMP/bfloat16、batch 尾部补齐、stop epoch、step count 等运行工程细节。
+这些参数的角色与 XRD-ML 论文中的 training setup 相同：**为了让别人知道模型怎么训练，而不是作为科学结果本身。**
 
 ---
 
