@@ -151,16 +151,22 @@ JS 额外使用同母结构关系：
 
 五个 matched training seeds 的主 OOD Accuracy 与 Macro-F1 均为 JS 更高。
 
-按照 XRD 分类论文的读法，这里最重要的是：**在未参与选参的冻结模拟 Test 上，面对更强峰移、展宽、texture、背景和噪声扰动，JS 的 top-1 classification performance 稳定高于 matched Dynamic ERM。**
+## 6.1 各物理扰动下的分类性能
 
-后续若做 failure analysis，应优先从 frozen predictions 重建：
+下面把六个 single-factor OOD 条件拆开。每个数字先在同一 training seed 内平均 3 个固定 evaluation seeds，再对 5 个 training seeds 报 mean ± SD；因此六行的平均值与上面的 mean single-factor OOD 总结果严格一致。
 
-- 7×7 confusion matrix；
-- 各晶系 F1/recall；
-- 各物理 perturbation profile 的 Accuracy/F1；
-- 代表性错分谱。
+| 物理扰动 | ERM Macro-F1 | JS Macro-F1 | ΔF1 | ERM Accuracy | JS Accuracy | ΔAcc |
+|---|---:|---:|---:|---:|---:|---:|
+| Peak shift − | 0.6926 ± 0.0034 | 0.7290 ± 0.0142 | +3.64 pp | 0.6938 ± 0.0022 | 0.7294 ± 0.0135 | +3.56 pp |
+| Peak shift + | 0.6871 ± 0.0058 | 0.7307 ± 0.0083 | +4.36 pp | 0.6891 ± 0.0057 | 0.7313 ± 0.0071 | +4.22 pp |
+| Broadening | 0.5517 ± 0.0633 | 0.6357 ± 0.0268 | **+8.40 pp** | 0.5441 ± 0.0636 | 0.6330 ± 0.0255 | **+8.89 pp** |
+| Noise | 0.6712 ± 0.0044 | 0.7033 ± 0.0109 | +3.22 pp | 0.6714 ± 0.0037 | 0.7020 ± 0.0100 | +3.07 pp |
+| Background | 0.6827 ± 0.0038 | 0.7332 ± 0.0115 | +5.05 pp | 0.6825 ± 0.0052 | 0.7339 ± 0.0111 | +5.13 pp |
+| Preferred orientation / texture | 0.6191 ± 0.0211 | 0.7000 ± 0.0120 | **+8.09 pp** | 0.6238 ± 0.0179 | 0.7018 ± 0.0106 | **+7.80 pp** |
 
-这些都属于真正 XRD-ML 解释性结果，而不是增加更多 AI 指标。
+六种 single-factor OOD 中，五个 training seeds 的平均 Macro-F1 差值均为正。**Broadening 和 texture 是 ERM 绝对性能下降最明显、同时也是 JS 增益最大的两类扰动；background 次之，而 noise 和单纯全谱 shift 的增益较小但仍为正。**
+
+这让“+5.46 pp”不再只是一个平均 OOD 数字，而有了明确的 XRD 物理含义：当前方法的优势主要集中在**峰宽变化和相对峰强系统变化**这两类更强地改变峰形/峰强关系的测量条件上。这个现象支持“同母结构约束帮助模型减少对测量状态的依赖”这一解释，但不能单独证明具体机制。
 
 ---
 
@@ -177,6 +183,39 @@ RRUFF-301 是平衡、人工整理的实验矿物域：七晶系各 43 条；其
 | 5 | 0.3555 ± 0.0302 | 0.4099 ± 0.0271 | 0.3581 ± 0.0273 | 0.4149 ± 0.0252 |
 
 **解释：** 相同真实标签预算下，JS 预训练模型在 K=1/2/5 都获得更高实验谱分类性能；随着真实标签增加，两种方法都改善，而 JS 的优势持续存在。因此 RRUFF 最适合表述为 **label efficiency / few-shot adaptation**，而不是广义 unseen-mineral 泛化。
+
+## 7.1 晶系级行为：早期 monoclinic 负迁移未在 RRUFF-301 复制
+
+早期较小的 RRUFF-70 探索曾出现 monoclinic 负迁移，但 RRUFF-301 v2 的确认性结果为：
+
+| K | ERM monoclinic F1 | JS monoclinic F1 | ΔF1 |
+|---:|---:|---:|---:|
+| 1 | 0.2374 | 0.2735 | +3.60 pp |
+| 2 | 0.2335 | 0.3016 | +6.81 pp |
+| 5 | 0.2294 | 0.2985 | +6.91 pp |
+
+因此，monoclinic 的早期负迁移更适合解释为小样本探索阶段的不稳定类级信号，而不是稳定的方法边界。
+
+## 7.2 Fix / break：JS 改正了更多实验谱，但收益并非所有晶系一致
+
+对每个 K 的 25 组 paired adaptation 结果逐样本比较，可以统计“ERM 错、JS 对”的 fix 与“ERM 对、JS 错”的 break：
+
+| K | 被 JS 净改善的 test samples | 被 JS 净损伤的 test samples | JS-only correct episodes | ERM-only correct episodes | Fix/Break ratio |
+|---:|---:|---:|---:|---:|---:|
+| 1 | 112 | 78 | 934 | 712 | 1.31 |
+| 2 | 110 | 66 | 936 | 654 | 1.43 |
+| 5 | 103 | 70 | 902 | 574 | 1.57 |
+
+K=5 时，各晶系跨 25 组 paired runs 的**净正确次数变化**为：triclinic +68、monoclinic +74、orthorhombic +116、tetragonal +30、trigonal −14、hexagonal +81、cubic −27。也就是说，整体性能提升并不是“七个晶系全部等比例变好”：orthorhombic、hexagonal、monoclinic 等类受益明显，而 trigonal 和 cubic 在这一诊断下仍存在局部退化。
+
+## 7.3 代表性成功/失败样本
+
+现有预测分析已经能定位最值得画进论文的真实谱案例。以 K=5、25 组 paired runs 为例：
+
+- **明显被 JS 修正：** `R090034`（orthorhombic，24 次 JS-only correct / 0 break）、`R070562`（triclinic，22 / 0）、`R050008`（orthorhombic，19 / 0）、`R050027`（hexagonal，19 / 0）。
+- **明显被 JS 损伤：** `R050657`（triclinic，0 fix / 20 break）、`R040027`（cubic，0 / 18）、`R050609`（cubic，2 / 16）。
+
+这些 ID 已足以作为后续“代表性实验谱”图的优先候选。**但当前 Git 仓库没有追踪这些原始 RRUFF XRD trace，因此本报告只记录可复核的分类行为，不根据样本 ID 臆测具体峰缺失、背景、texture 或杂相原因。**若要做成熟论文式 spectrum-level failure analysis，应从本地 RRUFF 原始资产调出上述谱线，再逐条解释其峰形与混淆来源。
 
 ---
 
@@ -208,11 +247,55 @@ CNRS-318 含 318 个独立 structural parents，七晶系 support 为：
 | hexagonal | 12 | 0.1667 | 0.2500 | +0.0833 |
 | cubic | 47 | 0.2238 | 0.2383 | +0.0145 |
 
-**解释：** JS 在总体三项分类指标上改善，并提高 5/7 个晶系的 pooled F1；monoclinic 与 tetragonal 下降。hexagonal 只有 12 个 parent，因此不能把该类较大的 F1 涨幅当作强结论。更重要的是，绝对 Accuracy 仍约 0.21，说明第二真实来源上的 sim-to-real gap 仍然很大。
+**解释：** JS 在总体三项分类指标上改善，并提高 5/7 个晶系的 pooled F1；其中 orthorhombic 增益较明确。monoclinic 与 tetragonal 下降，尤其 tetragonal 从 0.2984 降至 0.2362；已有 confusion 分析显示，JS 下有更多 tetragonal 谱被路由到 trigonal。hexagonal 虽从 0.1667 升至 0.2500，但只有 12 个 parent，因此不能把该类较大的 F1 涨幅当作强结论。
+
+更重要的是，绝对 Accuracy 仍约 0.21，说明第二真实来源上的 sim-to-real gap 仍然很大。CNRS 的价值不是证明“真实域已经解决”，而是说明：在一个更困难、自然不平衡的独立实验来源上，整体分类指标仍保持同向改善，同时暴露出明确的晶系级失败模式。
 
 ---
 
-# 9. 正式报告只保留的支持性结果（Tier B）
+# 9. 跨域 Discussion：当前结果真正说明了什么
+
+把模拟 Test、RRUFF-301 和 CNRS-318 放在一起看，可以得到三个更接近成熟 XRD-ML 论文的结论：
+
+1. **改善具有明确的扰动物理结构。** 模拟域中 broadening 与 texture 是 ERM 最困难、也是 JS 增益最大的条件；单纯 peak shift 与 noise 的提升较小。这说明方法优势不是均匀撒在所有 profile 上，而主要出现在会明显改变峰宽或相对峰强关系的条件。
+2. **真实域收益具有标签效率和晶系异质性。** RRUFF 的 K-shot learning curve 持续 favor JS，而且 fix/break ratio 从 1.31 增至 1.57；但 trigonal/cubic 等类仍可出现局部退化。成熟的结论应同时展示平均提升和哪些晶系受益/受损。
+3. **独立来源上仍有明显 sim-to-real gap。** CNRS 的整体三项分类指标改善，但绝对 Accuracy 约 0.21，tetragonal 还出现明显下降。因此当前证据支持“更稳健”，不支持“真实域已经解决”。
+
+这三点把文章从“一个平均 OOD 分数更高”推进到：**在哪些 XRD 测量变化、哪些晶系和哪些真实谱上更好，以及哪里仍然失败。**
+
+## 9.1 目前仍缺的唯一关键归因对照
+
+仓库中**没有找到** `same-parent JS` 与 `same-class but different-parent JS` 的直接消融。因此当前可以严格支持的是：
+
+> matched Dynamic ERM < same-parent JS consistency。
+
+但还不能进一步声称：
+
+> same-parent identity 本身已经被证明优于任何一般性的 same-class consistency pairing。
+
+如果未来需要把“simulator-retained parent identity”作为论文最强的方法学归因，最值得新增的实验仍然是：
+
+`Dynamic ERM vs same-class random-pair JS vs same-parent JS`
+
+这属于一个新的方法消融，不应伪装成当前已有结果。
+
+---
+
+# 10. 成熟论文的最终图表结构
+
+基于当前已找到的冻结结果，最终论文/汇报不需要再增加更多 AI 指标，而应优先形成下面五类 XRD 图表：
+
+1. **Method / XRD forward figure**：同一 parent → 两个物理扰动 view → ERM vs JS；同时展示 shift、broadening、texture、background、noise 的谱形变化。
+2. **Profile-wise robustness figure**：六个 single-factor OOD 的 Accuracy / Macro-F1，突出 broadening 与 texture 的最大增益。
+3. **RRUFF few-shot learning curve**：K=1/2/5 的 Accuracy 与 Macro-F1；辅以 K=5 fix/break 或 per-class 行为。
+4. **Representative experimental spectra**：优先调出 `R090034` / `R070562` 等 JS-improved 谱与 `R050657` / `R040027` 等 JS-damaged 谱，展示真实峰形并解释为什么发生错分。
+5. **CNRS per-class/confusion figure**：七晶系 F1 change + support，并突出 tetragonal→trigonal 的失败模式。
+
+前 1–3 和第 5 类图所需数值证据已经存在；第 4 类图还需要读取 Git 未追踪的本地原始 RRUFF spectrum trace，不能由当前 tracked summary 凭空生成。
+
+---
+
+# 11. 正式报告只保留的支持性结果（Tier B）
 
 正式汇报允许保留的支持性信息仅包括：
 
@@ -227,13 +310,14 @@ CNRS-318 含 318 个独立 structural parents，七晶系 support 为：
 
 ---
 
-# 10. 报告边界
+# 12. 报告边界
 
 可以说：
 
 - 在冻结模拟 Test 上，JS 提高 OOD Accuracy 与 Macro-F1；
-- RRUFF-301 支持更好的 few-shot label efficiency；
-- CNRS-318 提供第二独立实验来源上的正向总体分类证据；
+- 六类单因素扰动的 seed-averaged Macro-F1 均为正向，其中 broadening / texture 增益最大；
+- RRUFF-301 支持更好的 few-shot label efficiency，并且现有 fix/break 分析显示 JS 总体修正的实验谱多于损伤的实验谱；
+- CNRS-318 提供第二独立实验来源上的正向总体分类证据，同时暴露 tetragonal 等类的退化；
 - same-parent provenance 被用作 measurement-equivalence supervision。
 
 不能说：
@@ -242,6 +326,7 @@ CNRS-318 含 318 个独立 structural parents，七晶系 support 为：
 - 当前扰动分布精确对应某一台真实仪器；
 - family/prototype leakage 已被完全排除；
 - 所有晶系都得到一致改善；
+- same-parent pairing 已被证明优于 same-class random pairing；
 - 广义 Sim-to-Real 已经解决。
 
 ---
