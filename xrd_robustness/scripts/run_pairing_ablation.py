@@ -1,27 +1,22 @@
 #!/usr/bin/env python3
 """Controlled same-parent vs same-class JS pairing ablation for PXRD.
 
-Scientific question
--------------------
-Does JS benefit specifically from parent identity, or would any two different
-structures from the same crystal system work similarly?
+The two arms see exactly the same parents, the same two rendered views, the
+same CE supervision, optimizer, model initialization and Validation spectra.
+Only the JS pairing changes:
 
-Both arms see exactly the same parent structures, exactly the same two rendered
-views, the same CE supervision, optimizer, model initialization, and validation
-spectra.  The only difference is which second-view prediction is paired with
-the first-view prediction inside the JS term:
+- same_parent_js: view1(A) <-> view2(A)
+- same_class_js:  view1(A) <-> view2(B), A != B, same crystal-system label
 
-- ``same_parent_js``: view-1(parent A) <-> view-2(parent A)
-- ``same_class_js``:  view-1(parent A) <-> view-2(parent B), A != B,
-  where A and B have the same crystal-system label.
+Training uses the restored deterministic multiprocessing online-rendering
+pipeline: 16 persistent workers by default, six batches prefetched ahead,
+per-worker lazy ideal-peak caching, cached structure-invariant reflection
+metadata, deterministic quality-gate retry, pinned host memory and non-blocking
+CUDA transfer.  The optimization changes execution speed, not the scientific
+view stream or the JS comparison.
 
-Training batches are built from adjacent same-class parent pairs.  Thus both
-arms still use 16 parents x 2 views = 32 spectra/update.  The same-class arm is
-implemented only by permuting already-rendered second-view logits inside JS;
-it gets no extra spectra or model forwards.
-
-This is a post-hoc mechanism ablation.  It does not replace the frozen main
-ERM-vs-JS result and it deliberately does not access simulated Test.
+This is a post-hoc Validation-only mechanism ablation.  It never accesses the
+frozen simulated Test split.
 """
 
 from __future__ import annotations
@@ -29,10 +24,12 @@ from __future__ import annotations
 import argparse
 from collections import defaultdict
 import csv
+import hashlib
 import json
 from pathlib import Path
 import random
 import sys
+import time
 from typing import Any, Sequence
 
 import numpy as np
@@ -53,12 +50,22 @@ from xrd_robustness.training.runner import (  # noqa: E402
     PeakRecord,
     build_model,
     evaluate,
-    render_pair_batch,
 )
+from xrd_robustness.training_prefetch import (  # noqa: E402
+    DynamicBatchPrefetcher,
+    PREFETCH_GENERATION,
+    PREFETCH_RESULT_ORDER,
+    PREFETCH_SHARDING_ALGORITHM,
+    PREFETCH_WORKER_PEAK_CACHE,
+    PREFETCH_WORKER_THREAD_POLICY,
+)
+from xrd_robustness.view_manifest import build_parameter_batch  # noqa: E402
 
 
 DATA_CONFIG = ROOT / "configs/data.method_transfer.structure_split.json"
 SIMULATION_CONFIG = ROOT / "configs/simulation.method_transfer.frozen.json"
+DATA_ROOT = ROOT / "data/formal_14060"
+PEAK_CACHE_NAME = "peak_tables_v7_reflection"
 DEFAULT_OUTPUT = ROOT / "outputs/pairing_ablation"
 SINGLE_OOD = (
     "ood_shift_negative",
@@ -75,7 +82,10 @@ FULL_SEEDS = (20260711, 20260712, 20260713, 20260714, 20260715)
 def write_json(path: Path, payload: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     tmp = path.with_suffix(path.suffix + ".tmp")
-    tmp.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    tmp.write_text(
+        json.dumps(payload, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
     tmp.replace(path)
 
 
@@ -87,7 +97,8 @@ def resolve_project_path(value: str) -> Path:
 
 
 def load_local_records() -> tuple[list[PeakRecord], dict[str, Any]]:
-    """Join the frozen split manifest to the local V7 ideal-peak cache."""
+    """Join the frozen Train/Validation split to the local V7 ideal-peak cache."""
+
     data = json.loads(DATA_CONFIG.read_text(encoding="utf-8"))
     split_path = resolve_project_path(str(data["split"]["path"]))
     peak_manifest_path = resolve_project_path(str(data["peak_cache"]["path"]))
@@ -132,14 +143,16 @@ def load_local_records() -> tuple[list[PeakRecord], dict[str, Any]]:
     if missing:
         raise RuntimeError(f"missing local peak tables, first IDs: {missing[:5]}")
 
-    train = [r for r in records if r.split == "train"]
-    validation = [r for r in records if r.split == "validation"]
+    train = [record for record in records if record.split == "train"]
+    validation = [record for record in records if record.split == "validation"]
     expected = data["split"]["counts"]
-    if len(train) != int(expected["train"]) or len(validation) != int(expected["validation"]):
+    if len(train) != int(expected["train"]):
+        raise RuntimeError(f"train count differs from frozen split: {len(train)}")
+    if len(validation) != int(expected["validation"]):
         raise RuntimeError(
-            f"local record counts differ from frozen split: train={len(train)}, "
-            f"validation={len(validation)}"
+            f"validation count differs from frozen split: {len(validation)}"
         )
+
     metadata = {
         "data_config": str(DATA_CONFIG),
         "split_manifest": str(split_path),
@@ -147,15 +160,19 @@ def load_local_records() -> tuple[list[PeakRecord], dict[str, Any]]:
         "train_count": len(train),
         "validation_count": len(validation),
         "train_per_class": {
-            CRYSTAL_SYSTEMS[label]: sum(r.label == label for r in train)
+            CRYSTAL_SYSTEMS[label]: sum(record.label == label for record in train)
             for label in range(len(CRYSTAL_SYSTEMS))
         },
     }
     return records, metadata
 
 
-def load_peaks(records: Sequence[PeakRecord]) -> dict[str, Any]:
-    print(f"Loading {len(records)} ideal peak tables...", flush=True)
+def load_validation_peaks(
+    records: Sequence[PeakRecord],
+) -> dict[str, Any]:
+    """Only Validation peaks live in the training process; workers own Train peaks."""
+
+    print(f"Loading {len(records)} Validation ideal peak tables...", flush=True)
     return {
         record.material_id: load_peak_table(record.peak_table_path)
         for record in records
@@ -167,16 +184,10 @@ def make_same_class_batches(
     rng: np.random.Generator,
     batch_size: int,
 ) -> tuple[list[list[PeakRecord]], list[str]]:
-    """Make batches where adjacent records are different parents of one class.
+    """Build batches where adjacent parents are different members of one class."""
 
-    A class with an odd number of parents contributes one randomly rotated
-    omission in that epoch.  In formal_14060 this is at most one parent per odd
-    class, i.e. <0.1% of the training set, and the omitted identity changes
-    with the epoch permutation.
-    """
     if batch_size <= 0 or batch_size % 2:
         raise ValueError("batch_size must be a positive even number")
-
     grouped: dict[int, list[PeakRecord]] = defaultdict(list)
     for record in records:
         grouped[record.label].append(record)
@@ -193,7 +204,7 @@ def make_same_class_batches(
             first = group[order[start]]
             second = group[order[start + 1]]
             if first.material_id == second.material_id or first.label != second.label:
-                raise RuntimeError("invalid same-class parent pair")
+                raise RuntimeError("invalid same-class different-parent pair")
             pairs.append((first, second))
 
     rng.shuffle(pairs)
@@ -204,15 +215,15 @@ def make_same_class_batches(
         batch = [record for pair in chunk for record in pair]
         for index in range(0, len(batch), 2):
             if batch[index].label != batch[index + 1].label:
-                raise RuntimeError("pair adjacency was lost")
+                raise RuntimeError("same-class pair adjacency was lost")
             if batch[index].material_id == batch[index + 1].material_id:
                 raise RuntimeError("same parent entered a same-class pair")
         batches.append(batch)
     return batches, dropped
 
 
-def logits(model: torch.nn.Module, x: torch.Tensor) -> torch.Tensor:
-    output = model(x)
+def logits(model: torch.nn.Module, values: torch.Tensor) -> torch.Tensor:
+    output = model(values)
     if isinstance(output, dict):
         value = output.get("logits")
         if not isinstance(value, torch.Tensor):
@@ -231,7 +242,6 @@ def paired_loss(
     target: torch.Tensor,
     lambda_js: float,
 ) -> dict[str, torch.Tensor]:
-    """Keep CE/data fixed and change only the pairing used by JS."""
     first = logits(model, x1)
     second = logits(model, x2)
     classification = 0.5 * (
@@ -247,8 +257,7 @@ def paired_loss(
         partner[0::2] += 1
         partner[1::2] -= 1
         if not torch.equal(target, target[partner]):
-            raise RuntimeError("same-class JS partner has a different label")
-        # Only this permutation differs between the two arms.
+            raise RuntimeError("same-class JS partner has a different class label")
         consistency = js_divergence(first, second[partner])
     else:
         raise ValueError(f"unknown arm: {arm}")
@@ -258,6 +267,32 @@ def paired_loss(
         "consistency": consistency,
         "total": classification + float(lambda_js) * consistency,
     }
+
+
+def numpy_to_device(
+    values: np.ndarray,
+    device: torch.device,
+    *,
+    pin_memory: bool,
+    non_blocking: bool,
+) -> torch.Tensor:
+    tensor = torch.from_numpy(np.asarray(values, dtype=np.float32))
+    if pin_memory and device.type == "cuda":
+        tensor = tensor.pin_memory()
+    return tensor.to(device, non_blocking=non_blocking)
+
+
+def labels_to_device(
+    batch: Sequence[PeakRecord],
+    device: torch.device,
+    *,
+    pin_memory: bool,
+    non_blocking: bool,
+) -> torch.Tensor:
+    tensor = torch.tensor([record.label for record in batch], dtype=torch.long)
+    if pin_memory and device.type == "cuda":
+        tensor = tensor.pin_memory()
+    return tensor.to(device, non_blocking=non_blocking)
 
 
 def evaluate_profiles(
@@ -282,10 +317,10 @@ def evaluate_profiles(
         for profile in profiles
     }
     output["mean_single_ood_macro_f1"] = float(
-        np.mean([float(output[p]["macro_f1"]) for p in SINGLE_OOD])
+        np.mean([float(output[profile]["macro_f1"]) for profile in SINGLE_OOD])
     )
     output["mean_single_ood_accuracy"] = float(
-        np.mean([float(output[p]["accuracy"]) for p in SINGLE_OOD])
+        np.mean([float(output[profile]["accuracy"]) for profile in SINGLE_OOD])
     )
     return output
 
@@ -296,7 +331,7 @@ def train_arm(
     seed: int,
     train_records: Sequence[PeakRecord],
     validation_records: Sequence[PeakRecord],
-    peaks: dict[str, Any],
+    validation_peaks: dict[str, Any],
     simulation: dict[str, Any],
     output_dir: Path,
     device: torch.device,
@@ -311,26 +346,28 @@ def train_arm(
     patience: int,
     min_delta: float,
     evaluation_seed: int,
+    prefetch_workers: int,
+    prefetch_batches: int,
+    prefetch_worker_native_threads: int,
+    pin_memory: bool,
+    non_blocking_h2d: bool,
+    quality_gate: bool,
 ) -> dict[str, Any]:
     if output_dir.exists() and any(output_dir.iterdir()):
         raise RuntimeError(f"refusing to overwrite non-empty output: {output_dir}")
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    # Reset all random state before every arm.  With the same seed, both arms
-    # therefore receive the same model initialization, batch order and views.
     random.seed(seed)
     np.random.seed(seed)
     torch.manual_seed(seed)
     if torch.cuda.is_available():
         torch.cuda.manual_seed_all(seed)
 
-    train_sampler = PhysicsParameterSampler.from_mapping(
-        {**simulation, "run_seed": int(seed)}
-    )
+    sampler_config = {**simulation, "run_seed": int(seed)}
+    train_sampler = PhysicsParameterSampler.from_mapping(sampler_config)
     eval_sampler = PhysicsParameterSampler.from_mapping(
         {**simulation, "run_seed": int(evaluation_seed)}
     )
-    train_factory = OnlineViewFactory(train_sampler)
     eval_factory = OnlineViewFactory(eval_sampler)
 
     model = build_model(ML4PXRDResNet1DConfig(model_id="18")).to(device)
@@ -345,80 +382,169 @@ def train_arm(
     patience_anchor = float("-inf")
     stale_checks = 0
     history: list[dict[str, Any]] = []
+    total_prefetch_wait = 0.0
+    training_started = time.perf_counter()
 
-    for epoch in range(1, epochs + 1):
-        batches, dropped = make_same_class_batches(train_records, rng, batch_size)
-        model.train()
-        sums = {"classification": 0.0, "consistency": 0.0, "total": 0.0}
-        seen = 0
+    simulation_hash = hashlib.sha256(SIMULATION_CONFIG.read_bytes()).hexdigest()
+    prefetcher = DynamicBatchPrefetcher(
+        worker_count=prefetch_workers,
+        worker_native_threads=prefetch_worker_native_threads,
+        prefetch_batches=prefetch_batches,
+        start_method="spawn",
+        data_root=DATA_ROOT,
+        peak_cache_name=PEAK_CACHE_NAME,
+        sampler_config=sampler_config,
+        quality_gate=quality_gate,
+        quality_gate_config=simulation.get("quality_gates", {}),
+        simulation_config_hash=simulation_hash,
+        profile="train",
+    )
 
-        for batch in batches:
-            x1, x2, target = render_pair_batch(
-                batch,
-                peaks,
-                train_factory,
-                epoch=epoch,
-                global_step=global_step,
-                profile="train",
+    try:
+        for epoch in range(1, epochs + 1):
+            epoch_started = time.perf_counter()
+            batches, dropped = make_same_class_batches(
+                train_records, rng, batch_size
             )
-            x1 = x1.to(device)
-            x2 = x2.to(device)
-            target = target.to(device)
+            model.train()
+            sums = {"classification": 0.0, "consistency": 0.0, "total": 0.0}
+            seen = 0
+            epoch_prefetch_wait = 0.0
+            epoch_base_key = global_step
 
-            optimizer.zero_grad(set_to_none=True)
-            loss = paired_loss(arm, model, x1, x2, target, lambda_js)
-            loss["total"].backward()
-            optimizer.step()
+            def submit(batch_index: int) -> None:
+                batch = batches[batch_index]
+                material_ids = [record.material_id for record in batch]
+                # Match the historical formal-training coordinate convention:
+                # epoch and step together identify a view; step resets each epoch.
+                rows = build_parameter_batch(
+                    material_ids,
+                    train_sampler,
+                    profile="train",
+                    epoch=epoch - 1,
+                    global_step=batch_index,
+                    split="train",
+                )
+                prefetcher.submit(
+                    epoch_base_key + batch_index,
+                    material_ids,
+                    rows,
+                )
 
-            n = len(batch)
-            for key in sums:
-                sums[key] += float(loss[key].detach()) * n
-            seen += n
-            global_step += 1
+            initial = min(prefetch_batches, len(batches))
+            for batch_index in range(initial):
+                submit(batch_index)
 
-        item: dict[str, Any] = {
-            "epoch": epoch,
-            "global_step": global_step,
-            "train": {key: value / seen for key, value in sums.items()},
-            "train_parent_count": seen,
-            "dropped_odd_class_parent_ids": dropped,
-        }
+            for batch_index, batch in enumerate(batches):
+                wait_started = time.perf_counter()
+                rendered = prefetcher.get(epoch_base_key + batch_index)
+                waited = time.perf_counter() - wait_started
+                epoch_prefetch_wait += waited
+                total_prefetch_wait += waited
 
-        if epoch % validation_every == 0 or epoch == epochs:
-            metrics = evaluate_profiles(
-                model,
-                validation_records,
-                peaks,
-                eval_factory,
-                device,
-                eval_batch_size,
-            )
-            score = float(metrics["mean_single_ood_macro_f1"])
-            item["validation"] = metrics
+                refill = batch_index + prefetch_batches
+                if refill < len(batches):
+                    submit(refill)
+
+                expected_ids = tuple(record.material_id for record in batch)
+                if rendered.material_ids != expected_ids:
+                    raise RuntimeError(
+                        f"prefetch batch identity mismatch: "
+                        f"{rendered.material_ids} != {expected_ids}"
+                    )
+
+                x1 = numpy_to_device(
+                    rendered.first,
+                    device,
+                    pin_memory=pin_memory,
+                    non_blocking=non_blocking_h2d,
+                )
+                x2 = numpy_to_device(
+                    rendered.second,
+                    device,
+                    pin_memory=pin_memory,
+                    non_blocking=non_blocking_h2d,
+                )
+                target = labels_to_device(
+                    batch,
+                    device,
+                    pin_memory=pin_memory,
+                    non_blocking=non_blocking_h2d,
+                )
+
+                optimizer.zero_grad(set_to_none=True)
+                loss = paired_loss(arm, model, x1, x2, target, lambda_js)
+                loss["total"].backward()
+                optimizer.step()
+
+                count = len(batch)
+                for key in sums:
+                    sums[key] += float(loss[key].detach()) * count
+                seen += count
+                global_step += 1
+
+            epoch_seconds = time.perf_counter() - epoch_started
+            item: dict[str, Any] = {
+                "epoch": epoch,
+                "global_step": global_step,
+                "train": {key: value / seen for key, value in sums.items()},
+                "train_parent_count": seen,
+                "dropped_odd_class_parent_ids": dropped,
+                "runtime": {
+                    "epoch_seconds": epoch_seconds,
+                    "prefetch_wait_seconds": epoch_prefetch_wait,
+                    "quality_checked_count_total": prefetcher.quality_gate_checked_count,
+                    "quality_rejected_count_total": prefetcher.quality_gate_rejected_count,
+                },
+            }
+
             print(
-                f"seed={seed} arm={arm} epoch={epoch}: "
-                f"in={metrics['in_range']['macro_f1']:.4f}, meanOOD={score:.4f}",
+                f"seed={seed} arm={arm} epoch={epoch}/{epochs} "
+                f"train={epoch_seconds:.1f}s prefetch_wait={epoch_prefetch_wait:.1f}s",
                 flush=True,
             )
 
-            if score > best_score:
-                best_score = score
-                best_epoch = epoch
-                best_state = {
-                    key: value.detach().cpu().clone()
-                    for key, value in model.state_dict().items()
-                }
-            if score > patience_anchor + min_delta:
-                patience_anchor = score
-                stale_checks = 0
-            else:
-                stale_checks += 1
+            if epoch % validation_every == 0 or epoch == epochs:
+                metrics = evaluate_profiles(
+                    model,
+                    validation_records,
+                    validation_peaks,
+                    eval_factory,
+                    device,
+                    eval_batch_size,
+                )
+                score = float(metrics["mean_single_ood_macro_f1"])
+                item["validation"] = metrics
+                print(
+                    f"  Validation: in={metrics['in_range']['macro_f1']:.4f}, "
+                    f"meanOOD={score:.4f}",
+                    flush=True,
+                )
 
-        history.append(item)
-        write_json(output_dir / "history.json", history)
+                if score > best_score:
+                    best_score = score
+                    best_epoch = epoch
+                    best_state = {
+                        key: value.detach().cpu().clone()
+                        for key, value in model.state_dict().items()
+                    }
+                if score > patience_anchor + min_delta:
+                    patience_anchor = score
+                    stale_checks = 0
+                else:
+                    stale_checks += 1
 
-        if epoch >= min_epochs and stale_checks >= patience:
-            break
+            history.append(item)
+            write_json(output_dir / "history.json", history)
+
+            if epoch >= min_epochs and stale_checks >= patience:
+                print(
+                    f"early stop: seed={seed} arm={arm} epoch={epoch}",
+                    flush=True,
+                )
+                break
+    finally:
+        prefetcher.close()
 
     if best_state is None:
         raise RuntimeError("no validation checkpoint was selected")
@@ -427,7 +553,7 @@ def train_arm(
     final_validation = evaluate_profiles(
         model,
         validation_records,
-        peaks,
+        validation_peaks,
         eval_factory,
         device,
         eval_batch_size,
@@ -456,6 +582,18 @@ def train_arm(
         "global_step": global_step,
         "lambda_js": lambda_js,
         "validation": final_validation,
+        "runtime": {
+            "training_seconds": time.perf_counter() - training_started,
+            "prefetch_wait_seconds": total_prefetch_wait,
+        },
+        "optimization": {
+            "prefetch_workers": prefetch_workers,
+            "prefetch_batches": prefetch_batches,
+            "worker_native_threads": prefetch_worker_native_threads,
+            "pin_memory": pin_memory,
+            "non_blocking_h2d": non_blocking_h2d,
+            "quality_gate": quality_gate,
+        },
     }
     write_json(output_dir / "result.json", result)
     return result
@@ -555,16 +693,31 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--weight-decay", type=float, default=1e-4)
     parser.add_argument("--lambda-js", type=float, default=60.0)
     parser.add_argument("--evaluation-seed", type=int, default=20260720)
+    parser.add_argument("--prefetch-workers", type=int, default=16)
+    parser.add_argument("--prefetch-batches", type=int, default=6)
+    parser.add_argument("--prefetch-worker-native-threads", type=int, default=1)
+    parser.add_argument(
+        "--pin-memory",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+    )
+    parser.add_argument(
+        "--non-blocking-h2d",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+    )
+    parser.add_argument(
+        "--quality-gate",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+    )
     parser.add_argument("--device", default="auto")
     return parser.parse_args(argv)
 
 
 def main(argv: Sequence[str] | None = None) -> int:
     args = parse_args(argv)
-    seeds = tuple(
-        args.seeds
-        or (FULL_SEEDS if args.full_seeds else (20260711,))
-    )
+    seeds = tuple(args.seeds or (FULL_SEEDS if args.full_seeds else (20260711,)))
     epochs = int(
         args.epochs if args.epochs is not None else (60 if args.quick else 100)
     )
@@ -576,8 +729,17 @@ def main(argv: Sequence[str] | None = None) -> int:
     patience = int(
         args.patience if args.patience is not None else (2 if args.quick else 3)
     )
-    if args.batch_size % 2:
-        raise SystemExit("--batch-size must be even")
+
+    if args.batch_size <= 0 or args.batch_size % 2:
+        raise SystemExit("--batch-size must be a positive even number")
+    if args.prefetch_workers <= 0:
+        raise SystemExit("--prefetch-workers must be positive")
+    if args.prefetch_workers > args.batch_size:
+        raise SystemExit("--prefetch-workers cannot exceed --batch-size")
+    if args.prefetch_batches <= 0 or args.prefetch_worker_native_threads <= 0:
+        raise SystemExit("prefetch settings must be positive")
+    if args.non_blocking_h2d and not args.pin_memory:
+        raise SystemExit("--non-blocking-h2d requires --pin-memory")
     if epochs <= 0 or min_epochs <= 0 or min_epochs > epochs:
         raise SystemExit("invalid epoch settings")
 
@@ -589,16 +751,14 @@ def main(argv: Sequence[str] | None = None) -> int:
         raise SystemExit("CUDA requested but unavailable")
     if device.type == "cpu" and not args.dry_run:
         print(
-            "warning: CUDA is unavailable; this ablation is intended for a GPU and may be slow on CPU",
+            "warning: CUDA is unavailable; this ablation is intended for GPU use",
             file=sys.stderr,
             flush=True,
         )
 
     records, metadata = load_local_records()
     train_records = [record for record in records if record.split == "train"]
-    validation_records = [
-        record for record in records if record.split == "validation"
-    ]
+    validation_records = [record for record in records if record.split == "validation"]
     simulation = json.loads(SIMULATION_CONFIG.read_text(encoding="utf-8"))
 
     probe_rng = np.random.default_rng(seeds[0])
@@ -633,15 +793,30 @@ def main(argv: Sequence[str] | None = None) -> int:
             "both arms use identical parents, identical two rendered views and "
             "identical CE; same_class_js only permutes second-view logits inside JS"
         ),
+        "optimization": {
+            "restored_historical_dynamic_prefetch": True,
+            "generation": PREFETCH_GENERATION,
+            "prefetch_workers": args.prefetch_workers,
+            "prefetch_batches": args.prefetch_batches,
+            "worker_native_threads": args.prefetch_worker_native_threads,
+            "worker_thread_policy": PREFETCH_WORKER_THREAD_POLICY,
+            "sharding": PREFETCH_SHARDING_ALGORITHM,
+            "result_order": PREFETCH_RESULT_ORDER,
+            "worker_peak_cache": PREFETCH_WORKER_PEAK_CACHE,
+            "pin_memory": args.pin_memory,
+            "non_blocking_h2d": args.non_blocking_h2d,
+            "quality_gate": args.quality_gate,
+        },
         "test_access": False,
     }
+
     output_root = args.output_root.resolve()
     write_json(output_root / "preflight.json", preflight)
     print(json.dumps(preflight, indent=2, sort_keys=True), flush=True)
     if args.dry_run:
         return 0
 
-    peaks = load_peaks(records)
+    validation_peaks = load_validation_peaks(validation_records)
     all_results: list[dict[str, Any]] = []
     for seed in seeds:
         for arm in ARMS:
@@ -650,7 +825,7 @@ def main(argv: Sequence[str] | None = None) -> int:
                 seed=int(seed),
                 train_records=train_records,
                 validation_records=validation_records,
-                peaks=peaks,
+                validation_peaks=validation_peaks,
                 simulation=simulation,
                 output_dir=output_root / f"seed_{seed}" / arm,
                 device=device,
@@ -665,6 +840,12 @@ def main(argv: Sequence[str] | None = None) -> int:
                 patience=patience,
                 min_delta=args.min_delta,
                 evaluation_seed=args.evaluation_seed,
+                prefetch_workers=args.prefetch_workers,
+                prefetch_batches=args.prefetch_batches,
+                prefetch_worker_native_threads=args.prefetch_worker_native_threads,
+                pin_memory=args.pin_memory,
+                non_blocking_h2d=args.non_blocking_h2d,
+                quality_gate=args.quality_gate,
             )
             all_results.append(result)
             write_json(output_root / "partial_results.json", all_results)
