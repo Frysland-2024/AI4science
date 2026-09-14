@@ -1,0 +1,25 @@
+{
+  "all_compared_seeds_parent_higher": true,
+  "comparisons": [
+    {
+      "parent_minus_same_class_mean_ood_macro_f1": 0.012692926207397481,
+      "profile_delta_macro_f1": {
+        "ood_background": 0.006984054020956476,
+        "ood_broadening": 0.05188044600373265,
+        "ood_noise": -0.007031113644186737,
+        "ood_shift_negative": -0.0038542265034061662,
+        "ood_shift_positive": -0.005183416012749853,
+        "ood_texture": 0.03336181338003874
+      },
+      "same_class_in_range_macro_f1": 0.733201702180282,
+      "same_class_mean_ood_macro_f1": 0.6979268594943581,
+      "same_parent_in_range_macro_f1": 0.7304296476134179,
+      "same_parent_mean_ood_macro_f1": 0.7106197857017555,
+      "seed": 20260711
+    }
+  ],
+  "interpretation_rule": "same_parent_js > same_class_js supports parent-specific relational information; similar performance means parent specificity is not established by this ablation",
+  "mean_parent_minus_same_class_macro_f1": 0.012692926207397481,
+  "note": "Validation-only post-hoc mechanism ablation; frozen simulated Test is not accessed.",
+  "scientific_question": "Is parent identity better than generic same-class consistency?"
+}
