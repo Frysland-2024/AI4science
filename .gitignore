@@ -1,1 +1,101 @@
-# placeholder
+﻿# Local Python environment
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+*.pyd
+*.so
+.ipynb_checkpoints/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+.coverage
+htmlcov/
+build/
+dist/
+cache/
+caches/
+wandb/
+tensorboard/
+lightning_logs/
+
+# Temporary files
+tmp/
+*.tmp
+*.temp
+*.log
+*.bak
+*.swp
+*.old
+sync_*
+.codex_tmp/
+
+# Large local research assets
+01_literature/
+02_code_repositories/
+03_tools_and_packages/
+04_external_lab_data/
+/outputs/
+/data/
+/xrd_robustness/data/
+**/outputs/
+**/checkpoints/
+**/runs/
+*.ckpt
+*.pt
+*.pth
+*.onnx
+*.safetensors
+*.npy
+*.npz
+*.h5
+*.hdf5
+*.pkl
+*.pickle
+*.joblib
+*.tar
+*.tar.gz
+*.tgz
+*.zip
+*.7z
+*.rar
+*.pdf
+*.docx
+*.pptx
+
+# Secrets
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+credentials.json
+secrets.json
+secret*.json
+
+# OS / IDE
+.vscode/
+.idea/
+.workbuddy/
+.qoder/
+.codex/
+.worktrees/
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# Generated PDF text extracts
+00_project_context/pdf_reading_extracts/
+
+# Local application drafts pending claim-boundary review
+/00_project_context/AI4Science_Project_Handoff_for_Admissions_AI_2026-08-07.docx
+/00_project_context/AI4Science_Project_Handoff_for_Admissions_AI_2026-08-07.md
+/00_project_context/RESEARCH_INTERESTS.md
+
+# Additional local virtual environments
+.venvs/
+
+# Local-only historical record (kept on disk, not tracked in git)
+00_project_context/PROJECT_JOURNEY.md
