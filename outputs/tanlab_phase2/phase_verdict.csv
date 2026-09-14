@@ -1,0 +1,5 @@
+﻿cluster,n,verdict,tetragonal_split,has_pyro,amorphous,n_peaks,members
+1,4,non-perovskite (amorphous/mixed oxide/pyrochlore),False,True,False,15,"1127Song2, NN7_powder, NN7_powder_0.01step, NNchina_powder"
+2,16,pure perovskite (pseudocubic/cubic),False,False,False,6,"100_001, 140_001, 60_001, H017A_2_, H021A_2_, La1, La4, La6"
+3,33,pure perovskite (pseudocubic/cubic),False,False,False,7,"S009C_1_bottom, S009C_1_top, S009C_2_top, S009C_3_top, S009C_NNchina_2_bottom, S009C_NNchina_2_top, S009C_Yixin'NN_2_top, S009C_chinaNN_2_top_depolarized"
+4,6,pure perovskite (pseudocubic/cubic),False,False,False,8,"S009C_3_bottom, S053-003_1_top, S053-004_1_top, S053-004_yixin'NN_2_top_depolarized, S053-005_1_top, S053-006_1_top"

@@ -1,0 +1,60 @@
+﻿short_name,rel_path,series,cluster_k4
+La1,plzt_2023\20221026_La1 4 6_Shiyi\La1_1250_6h(2.0).rasx,plzt_2023,2
+La1,plzt_2023\20221026_La1 4 6_Shiyi\La1_1250_6h(2.0).txt,plzt_2023,2
+La4,plzt_2023\20221026_La1 4 6_Shiyi\La4_1250_6h(2.0).rasx,plzt_2023,2
+La4,plzt_2023\20221026_La1 4 6_Shiyi\La4_1250_6h(2.0).txt,plzt_2023,2
+La6,plzt_2023\20221026_La1 4 6_Shiyi\La6_1250_6h(2.0).rasx,plzt_2023,2
+La6,plzt_2023\20221026_La1 4 6_Shiyi\La6_1250_6h(2.0).txt,plzt_2023,2
+100_001,plzt_2023\20230524_La5_varying temperature\100_001.txt,plzt_2023,2
+140_001,plzt_2023\20230524_La5_varying temperature\140_001.txt,plzt_2023,2
+60_001,plzt_2023\20230524_La5_varying temperature\60_001.txt,plzt_2023,2
+1127Song2,porous_pp_ald\XRD result of Porous PP with 600 cycles' Alumina by ALD(60degree+100ms)\1127Song2.txt,porous_pp_ald,1
+S053-003_1_bottom,yifan_piezoceramics\20230814\S053-003_1_bottom.rasx,yifan_piezoceramics,3
+S053-003_1_top,yifan_piezoceramics\20230814\S053-003_1_top.rasx,yifan_piezoceramics,4
+S053-003_2_bottom,yifan_piezoceramics\20230814\S053-003_2_bottom.rasx,yifan_piezoceramics,3
+S053-003_2_top,yifan_piezoceramics\20230814\S053-003_2_top.rasx,yifan_piezoceramics,3
+S053-003_3_bottom,yifan_piezoceramics\20230814\S053-003_3_bottom.rasx,yifan_piezoceramics,3
+S053-003_3_top,yifan_piezoceramics\20230814\S053-003_3_top.rasx,yifan_piezoceramics,3
+S053-004_1_bottom,yifan_piezoceramics\20230814\S053-004_1_bottom.rasx,yifan_piezoceramics,3
+S053-004_1_top,yifan_piezoceramics\20230814\S053-004_1_top.rasx,yifan_piezoceramics,4
+S053-004_2_bottom,yifan_piezoceramics\20230814\S053-004_2_bottom.rasx,yifan_piezoceramics,3
+S053-004_2_top,yifan_piezoceramics\20230814\S053-004_2_top.rasx,yifan_piezoceramics,3
+S053-004_3_bottom,yifan_piezoceramics\20230814\S053-004_3_bottom.rasx,yifan_piezoceramics,3
+S053-004_3_top,yifan_piezoceramics\20230814\S053-004_3_top.rasx,yifan_piezoceramics,3
+S053-004_0905_1_bottom,yifan_piezoceramics\20230905\S053-004_0905_1_bottom.rasx,yifan_piezoceramics,3
+S053-004_0905_1_top,yifan_piezoceramics\20230905\S053-004_0905_1_top.rasx,yifan_piezoceramics,3
+S053-004_0905_2_bottom,yifan_piezoceramics\20230905\S053-004_0905_2_bottom.rasx,yifan_piezoceramics,3
+S053-004_0905_2_top,yifan_piezoceramics\20230905\S053-004_0905_2_top.rasx,yifan_piezoceramics,3
+S053-004_0905_3_bottom,yifan_piezoceramics\20230905\S053-004_0905_3_bottom.rasx,yifan_piezoceramics,3
+S053-004_0905_3_top,yifan_piezoceramics\20230905\S053-004_0905_3_top.rasx,yifan_piezoceramics,3
+S009C_1_bottom,yifan_piezoceramics\20230911\S009C_1_bottom.rasx,yifan_piezoceramics,3
+S009C_1_top,yifan_piezoceramics\20230911\S009C_1_top.rasx,yifan_piezoceramics,3
+S009C_2_top,yifan_piezoceramics\20230911\S009C_2_top.rasx,yifan_piezoceramics,3
+S009C_3_bottom,yifan_piezoceramics\20230911\S009C_3_bottom.rasx,yifan_piezoceramics,4
+S009C_3_top,yifan_piezoceramics\20230911\S009C_3_top.rasx,yifan_piezoceramics,3
+S053-004_NNchina_2_top,yifan_piezoceramics\20231027\S053-004_NNchina_2_top.rasx,yifan_piezoceramics,2
+S053-004_Yixin'NN_2_top,yifan_piezoceramics\20231027\S053-004_Yixin'NN_2_top.rasx,yifan_piezoceramics,3
+S009C_NNchina_2_bottom,yifan_piezoceramics\20231027\20231030\S009C_NNchina_2_bottom.rasx,yifan_piezoceramics,3
+S009C_NNchina_2_top,yifan_piezoceramics\20231027\20231030\S009C_NNchina_2_top.rasx,yifan_piezoceramics,3
+S009C_Yixin'NN_2_top,yifan_piezoceramics\20231027\20231030\S009C_Yixin'NN_2_top.rasx,yifan_piezoceramics,3
+NN7_powder,yifan_piezoceramics\20231027\NN\NN7_powder.rasx,yifan_piezoceramics,1
+NN7_powder_0.01step,yifan_piezoceramics\20231027\NN\NN7_powder_0.01step.rasx,yifan_piezoceramics,1
+NNchina_powder,yifan_piezoceramics\20231027\NN\NNchina_powder.rasx,yifan_piezoceramics,1
+S009C_NNchina_2_top,yifan_piezoceramics\20231027\S009C\S009C_NNchina_2_top.rasx,yifan_piezoceramics,3
+S009C_Yixin'NN_2_top,yifan_piezoceramics\20231027\S009C\S009C_Yixin'NN_2_top.rasx,yifan_piezoceramics,3
+S053-002_2_top,yifan_piezoceramics\20231027\S053\S053-002_2_top.rasx,yifan_piezoceramics,3
+S053-004_NNchina_2_bottom,yifan_piezoceramics\20231027\S053\S053-004_NNchina_2_bottom.rasx,yifan_piezoceramics,3
+S053-004_Yixin'NN_2_bottom,yifan_piezoceramics\20231027\S053\S053-004_Yixin'NN_2_bottom.rasx,yifan_piezoceramics,3
+S009C_chinaNN_2_top_depolarized,yifan_piezoceramics\20231031\S009C\S009C_chinaNN_2_top_depolarized.rasx,yifan_piezoceramics,3
+S009C_yixin'NN_2_top_depolarized,yifan_piezoceramics\20231031\S009C\S009C_yixin'NN_2_top_depolarized.rasx,yifan_piezoceramics,3
+S053-002_2_top_depolarized,yifan_piezoceramics\20231031\S053\S053-002_2_top_depolarized.rasx,yifan_piezoceramics,3
+S053-004_chinaNN_2_bottom_depolarized,yifan_piezoceramics\20231031\S053\S053-004_chinaNN_2_bottom_depolarized.rasx,yifan_piezoceramics,3
+S053-004_yixin'NN_2_top_depolarized,yifan_piezoceramics\20231031\S053\S053-004_yixin'NN_2_top_depolarized.rasx,yifan_piezoceramics,4
+H017A_2_,yifan_piezoceramics\20231208\H017 and H021\H017A_2_.rasx,yifan_piezoceramics,2
+H021A_2_,yifan_piezoceramics\20231208\H017 and H021\H021A_2_.rasx,yifan_piezoceramics,2
+S053-005_1_top,yifan_piezoceramics\20231208\S053\S053-005_1_top.rasx,yifan_piezoceramics,4
+S053-005_2_,yifan_piezoceramics\20231208\S053\S053-005_2_.rasx,yifan_piezoceramics,2
+S053-006_1_top,yifan_piezoceramics\20231208\S053\S053-006_1_top.rasx,yifan_piezoceramics,4
+S053-006_2_,yifan_piezoceramics\20231208\S053\S053-006_2_.rasx,yifan_piezoceramics,2
+S053-004_chinaNN_2_top_depolarized,yifan_piezoceramics\20231213\S053-004_chinaNN_2_top_depolarized.rasx,yifan_piezoceramics,2
+S053-004_chinaNN_powder,yifan_piezoceramics\20231226\S053-004_chinaNN_powder.rasx,yifan_piezoceramics,2
