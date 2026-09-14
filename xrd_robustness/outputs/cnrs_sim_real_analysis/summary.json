@@ -1,0 +1,201 @@
+{
+  "hashes": {
+    "config_sha256": "06442F2BCAFAB533BCDB5CDA815F7D0C9A94A14C074471FA8E37B748D0C4E217",
+    "eval_manifest_sha256": "373DDD5FDC9FE5BB879D242C58CDB4969D50FA69AB009383AA6C96416A6A2A98",
+    "experiment_sha256": "5FA4D5A562A28886313593BEF000EC83F6DC44741B06D2E8F0ED3E42DCB0EA82",
+    "paired_metrics_sha256": "1CBA6DCCF237F25885F0497ED2878AA457EB5D142F73D5623CA60C92258E7CB7",
+    "preprocess_report_sha256": "35B97CEF53ECBE14267CDE7C18D2907AB0F3A0F4FF16AA0A668CFFCAD6ADF8F7",
+    "real_inputs_sha256": "980965E95E8A4CFC9020CB1C64976E0B4E95735A7DEFD990407863161C45D7C6",
+    "simulated_inputs_sha256": "B85C8B78632EC0A4EA661498502E6E9D905ABA336BBB48273800D05C5539370B",
+    "simulation_config_sha256": "1451F111430332CD426244436B5B9263100D1BE7CAA2E0B036BD03CD09814371"
+  },
+  "limitations": [
+    "CNRS simulated counterparts are linked through deposited structures, not manual spectrum-level phase verification.",
+    "The five matched training seeds are repeated model evaluations on one CNRS domain, not five independent datasets.",
+    "No training, tuning, adaptation, calibration fitting, or model selection occurs in this analysis."
+  ],
+  "metric_direction": {
+    "embedding_cosine_distance": "lower sim-to-real gap is better",
+    "prediction_flip_rate": "lower sim-to-real gap is better",
+    "prediction_js_divergence": "lower sim-to-real gap is better",
+    "true_margin_drop": "lower drop is better",
+    "true_probability_drop": "lower drop is better"
+  },
+  "n_frozen_runs": 10,
+  "n_parents": 318,
+  "pairing_term": "structure-linked simulated-experimental pairs",
+  "role": "post_hoc_frozen_representation_diagnostic",
+  "runtime": {
+    "autocast": "float16",
+    "device": "cuda",
+    "numpy_version": "2.4.6",
+    "torch_version": "2.13.0+cu126"
+  },
+  "schema_version": "cnrs318-sim-real-gap-v1",
+  "seed_method_summary": [
+    {
+      "mean_embedding_cosine_distance": 0.31880836234063337,
+      "mean_prediction_js_divergence": 0.23607506921542887,
+      "mean_true_margin_drop": 0.2793197476264066,
+      "mean_true_probability_drop": 0.13037944008719246,
+      "method_id": "js_consistency_transfer",
+      "method_name": "JS Consistency",
+      "prediction_flip_rate": 0.5062893081761006,
+      "real_accuracy": 0.22012578616352202,
+      "seed": 20260711,
+      "sim_accuracy": 0.36477987421383645
+    },
+    {
+      "mean_embedding_cosine_distance": 0.42269710891131607,
+      "mean_prediction_js_divergence": 0.3055259858192615,
+      "mean_true_margin_drop": 0.2773105914487779,
+      "mean_true_probability_drop": 0.14267620931631364,
+      "method_id": "ordinary_dynamic_augmentation",
+      "method_name": "Dynamic ERM",
+      "prediction_flip_rate": 0.5377358490566038,
+      "real_accuracy": 0.1949685534591195,
+      "seed": 20260711,
+      "sim_accuracy": 0.33962264150943394
+    },
+    {
+      "mean_embedding_cosine_distance": 0.3755409739022153,
+      "mean_prediction_js_divergence": 0.28243795000102373,
+      "mean_true_margin_drop": 0.37183660306270766,
+      "mean_true_probability_drop": 0.19364647951515965,
+      "method_id": "js_consistency_transfer",
+      "method_name": "JS Consistency",
+      "prediction_flip_rate": 0.559748427672956,
+      "real_accuracy": 0.18867924528301888,
+      "seed": 20260712,
+      "sim_accuracy": 0.4119496855345912
+    },
+    {
+      "mean_embedding_cosine_distance": 0.3550364267771903,
+      "mean_prediction_js_divergence": 0.2862991703948365,
+      "mean_true_margin_drop": 0.3062689572385272,
+      "mean_true_probability_drop": 0.15874245031824652,
+      "method_id": "ordinary_dynamic_augmentation",
+      "method_name": "Dynamic ERM",
+      "prediction_flip_rate": 0.5094339622641509,
+      "real_accuracy": 0.18238993710691823,
+      "seed": 20260712,
+      "sim_accuracy": 0.33647798742138363
+    },
+    {
+      "mean_embedding_cosine_distance": 0.36184850226787996,
+      "mean_prediction_js_divergence": 0.26920390771689817,
+      "mean_true_margin_drop": 0.2781522545799519,
+      "mean_true_probability_drop": 0.14784373577285861,
+      "method_id": "js_consistency_transfer",
+      "method_name": "JS Consistency",
+      "prediction_flip_rate": 0.5188679245283019,
+      "real_accuracy": 0.2138364779874214,
+      "seed": 20260713,
+      "sim_accuracy": 0.36163522012578614
+    },
+    {
+      "mean_embedding_cosine_distance": 0.4025164081559811,
+      "mean_prediction_js_divergence": 0.29518473492314357,
+      "mean_true_margin_drop": 0.24387293791620987,
+      "mean_true_probability_drop": 0.1272442732592049,
+      "method_id": "ordinary_dynamic_augmentation",
+      "method_name": "Dynamic ERM",
+      "prediction_flip_rate": 0.5031446540880503,
+      "real_accuracy": 0.21069182389937108,
+      "seed": 20260713,
+      "sim_accuracy": 0.34276729559748426
+    },
+    {
+      "mean_embedding_cosine_distance": 0.30464966824664264,
+      "mean_prediction_js_divergence": 0.20281609707140955,
+      "mean_true_margin_drop": 0.23102251782357316,
+      "mean_true_probability_drop": 0.12409464105869988,
+      "method_id": "js_consistency_transfer",
+      "method_name": "JS Consistency",
+      "prediction_flip_rate": 0.49056603773584906,
+      "real_accuracy": 0.2138364779874214,
+      "seed": 20260714,
+      "sim_accuracy": 0.34276729559748426
+    },
+    {
+      "mean_embedding_cosine_distance": 0.3971505638744801,
+      "mean_prediction_js_divergence": 0.3105762386874047,
+      "mean_true_margin_drop": 0.29978316516246434,
+      "mean_true_probability_drop": 0.16911187430597702,
+      "method_id": "ordinary_dynamic_augmentation",
+      "method_name": "Dynamic ERM",
+      "prediction_flip_rate": 0.5283018867924528,
+      "real_accuracy": 0.22327044025157233,
+      "seed": 20260714,
+      "sim_accuracy": 0.3836477987421384
+    },
+    {
+      "mean_embedding_cosine_distance": 0.3143207398302042,
+      "mean_prediction_js_divergence": 0.22594853882336371,
+      "mean_true_margin_drop": 0.2670089986714177,
+      "mean_true_probability_drop": 0.13359909106350545,
+      "method_id": "js_consistency_transfer",
+      "method_name": "JS Consistency",
+      "prediction_flip_rate": 0.449685534591195,
+      "real_accuracy": 0.2138364779874214,
+      "seed": 20260715,
+      "sim_accuracy": 0.3584905660377358
+    },
+    {
+      "mean_embedding_cosine_distance": 0.4824634607961845,
+      "mean_prediction_js_divergence": 0.33750436632370157,
+      "mean_true_margin_drop": 0.4033831537894483,
+      "mean_true_probability_drop": 0.19333599985770458,
+      "method_id": "ordinary_dynamic_augmentation",
+      "method_name": "Dynamic ERM",
+      "prediction_flip_rate": 0.5628930817610063,
+      "real_accuracy": 0.18867924528301888,
+      "seed": 20260715,
+      "sim_accuracy": 0.3867924528301887
+    }
+  ],
+  "seed_paired_deltas_js_minus_erm": [
+    {
+      "delta_embedding_cosine_distance_js_minus_erm": -0.1038887465706827,
+      "delta_prediction_flip_rate_js_minus_erm": -0.03144654088050314,
+      "delta_prediction_js_divergence_js_minus_erm": -0.06945091660383262,
+      "delta_true_margin_drop_js_minus_erm": 0.0020091561776287015,
+      "delta_true_probability_drop_js_minus_erm": -0.01229676922912118,
+      "seed": 20260711
+    },
+    {
+      "delta_embedding_cosine_distance_js_minus_erm": 0.02050454712502503,
+      "delta_prediction_flip_rate_js_minus_erm": 0.05031446540880502,
+      "delta_prediction_js_divergence_js_minus_erm": -0.0038612203938127587,
+      "delta_true_margin_drop_js_minus_erm": 0.06556764582418045,
+      "delta_true_probability_drop_js_minus_erm": 0.03490402919691313,
+      "seed": 20260712
+    },
+    {
+      "delta_embedding_cosine_distance_js_minus_erm": -0.04066790588810115,
+      "delta_prediction_flip_rate_js_minus_erm": 0.01572327044025157,
+      "delta_prediction_js_divergence_js_minus_erm": -0.025980827206245394,
+      "delta_true_margin_drop_js_minus_erm": 0.03427931666374204,
+      "delta_true_probability_drop_js_minus_erm": 0.020599462513653716,
+      "seed": 20260713
+    },
+    {
+      "delta_embedding_cosine_distance_js_minus_erm": -0.09250089562783748,
+      "delta_prediction_flip_rate_js_minus_erm": -0.037735849056603765,
+      "delta_prediction_js_divergence_js_minus_erm": -0.10776014161599515,
+      "delta_true_margin_drop_js_minus_erm": -0.06876064733889117,
+      "delta_true_probability_drop_js_minus_erm": -0.04501723324727713,
+      "seed": 20260714
+    },
+    {
+      "delta_embedding_cosine_distance_js_minus_erm": -0.16814272096598032,
+      "delta_prediction_flip_rate_js_minus_erm": -0.1132075471698113,
+      "delta_prediction_js_divergence_js_minus_erm": -0.11155582750033785,
+      "delta_true_margin_drop_js_minus_erm": -0.13637415511803058,
+      "delta_true_probability_drop_js_minus_erm": -0.05973690879419913,
+      "seed": 20260715
+    }
+  ],
+  "simulation_profile": "level0",
+  "status": "completed"
+}
