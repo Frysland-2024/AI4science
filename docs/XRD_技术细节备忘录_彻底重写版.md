@@ -1,135 +1,68 @@
-# 基于同母结构测量等价监督的鲁棒 PXRD 七晶系分类
+# 基于母结构同源关系监督的鲁棒 PXRD 七晶系分类
 
-**技术备忘录｜按成熟 Machine Learning XRD 论文范式重写**  
+**技术备忘录｜按成熟 XRD 机器学习论文的逻辑整理**  
 **更新日期：** 2026-09-14  
-**研究主线：** 七晶系 PXRD 分类、在线物理扰动、same-parent consistency、真实谱少样本适配
+**研究主线：** 七晶系 PXRD 分类、在线物理扰动、同母结构一致性监督、真实谱迁移与少样本适配
 
 ## 摘要
 
-基于模拟粉末 X 射线衍射（PXRD）训练的机器学习模型，在真实测量中会受到峰位偏移、峰展宽、择优取向、背景和计数噪声等测量变化影响。传统在线模拟主要把这些变化作为数据增强来源；本项目进一步利用模拟器保留的 **parent structure identity**，把同一晶体结构在不同测量状态下生成的两条 PXRD 谱定义为 measurement-equivalent views，并在常规晶系交叉熵监督之外加入 Jensen–Shannon（JS）预测一致性约束。
+基于模拟粉末 X 射线衍射（PXRD）训练的机器学习模型，在实验条件下会受到峰位偏移、峰展宽、择优取向、背景和计数噪声等多种测量因素影响。现有 PXRD 机器学习工作已经表明，物理合理的数据增强和在线模拟能够有效扩大训练数据覆盖范围。本项目沿用这一成熟范式，并进一步利用模拟器天然保留的母结构身份：对于同一个晶体结构，在不同测量状态下生成的两条谱，虽然峰形、背景、噪声和相对峰强可以发生明显变化，但它们仍然是同一个物理对象的不同观测。
 
-在完全匹配的 parent structures、在线扰动分布、ResNet backbone、优化器和数据暴露下，same-parent JS consistency 在冻结模拟 Test 上将 mean single-factor OOD Macro-F1 从 `0.6507` 提高到 `0.7053`，提升 **5.46 个百分点**；Accuracy 同期提升 **5.45 个百分点**，五个训练种子均保持正向改善。真实实验谱中，RRUFF-301 的 K=1/2/5 few-shot 适配分别获得 **+4.33 / +4.60 / +5.45 pp Macro-F1**，表明一致性预训练提高了真实标签利用效率；独立 CNRS-318 zero-shot 域中，五个训练种子的 Macro-F1 也保持同方向提升。进一步拆分物理扰动后，峰展宽和择优取向分别获得 **+8.40 pp** 与 **+8.09 pp Macro-F1**，是所有单因素 OOD 中增益最明显的两类。机制补充实验进一步显示，same-parent pairing 相对 same-class pairing 的额外收益主要保留在 broadening 和 texture 上。
+基于这一点，本项目在常规分类监督之外，引入同母结构双视图之间的 Jensen–Shannon（JS）预测一致性约束，使模拟器从单纯的数据生成器进一步成为同源关系监督的提供者。在完全匹配的母结构、在线扰动分布、ResNet 骨干网络、优化器和数据暴露条件下，JS 方法在冻结模拟测试集上的单因素分布外（OOD）Macro-F1 从 `0.6507` 提高到 `0.7053`，平均提升 **5.46 个百分点**；Accuracy 从 `0.6508` 提高到 `0.7052`，提升 **5.45 个百分点**，五个训练随机种子全部保持正向改善。
 
-因此，当前工作形成三个主要科学结论：**总体分类鲁棒性稳定提高；真实实验谱的标签效率提高；对与具体晶体衍射结构强耦合的测量扰动尤其具有优势。**
+逐扰动分析进一步显示，收益并不是均匀分布的。峰展宽和择优取向分别获得 **+8.40 pp** 和 **+8.09 pp** 的 Macro-F1 提升，是全部单因素 OOD 条件中增益最明显的两类；这两类扰动也恰好与具体晶体的峰位置、峰重叠关系和 `hkl` 反射强度最直接耦合。独立实验域中，CNRS-318 的五个零样本比较均保持正向，平均 seed-level Macro-F1 从 `0.1884` 提高到 `0.2071`；RRUFF-301 在 K=1/2/5 的少样本适配中，Macro-F1 分别提升 **+4.33 / +4.60 / +5.45 pp**。
 
----
-
-# 1. 研究背景与问题定义
-
-PXRD 机器学习长期面临一个核心问题：训练数据往往来自理想结构计算，而实验谱包含真实测量条件带来的系统变化。Oviedo 等、Lee 等以及后续多项 PXRD-ML 工作已经证明，物理合理的数据增强对于把模型从理想模拟谱推进到实验谱至关重要。峰位变化、峰展宽、择优取向、背景和噪声已经成为该领域最常见的几类模拟测量扰动。
-
-本项目进一步关注模拟过程中的另一类信息：**同一母结构可以在不同测量状态下生成多条不同的 PXRD 谱，而模拟器明确知道这些谱共享同一个 parent structure。**
-
-对母结构 `s` 和两个独立测量状态 `m1,m2`：
-
-```text
-x1 = g(s, m1)
-x2 = g(s, m2)
-```
-
-两条谱的峰形、背景、噪声和相对峰强可以明显不同，但它们仍然对应同一个潜在晶体结构。由此定义：
-
-```text
-same parent
-    ↓
-measurement-equivalent views
-    ↓
-prediction consistency supervision
-```
-
-因此，本项目把在线模拟器从“生成更多训练谱”的工具进一步扩展为“提供测量关系监督”的工具。
-
-研究问题可以写成：
-
-> **在相同数据、相同扰动和相同模型条件下，显式利用 same-parent measurement equivalence，是否能够提高 PXRD 晶系分类在模拟扰动和实验域中的鲁棒性？**
+由此，本项目形成三条主要结论：**第一，同母结构一致性监督能够稳定提高模拟域与真实域的分类鲁棒性；第二，它提高了真实实验谱的标签利用效率；第三，这种收益在峰展宽、择优取向等与具体晶体衍射结构强耦合的扰动下尤其明显。**
 
 ---
 
-# 2. 主要结果
+# 1. 科学问题与方法思路
 
-## 2.1 结论一：模拟域与真实域的总体分类性能稳定提高
+PXRD 机器学习面临的核心困难之一，是模拟训练分布与真实实验分布之间存在明显差异。理想计算谱通常只由晶体结构决定，而实验谱还会受到仪器零点、样品高度、有限晶粒、微应变、择优取向、背景散射和计数噪声等因素影响。近年来的代表性工作已经建立了较成熟的解决路线：在模拟谱中加入物理合理的扰动，并通过大规模或在线生成的方式不断扩大训练分布，使模型在训练阶段看到更多可能的测量状态。
 
-正式对照为 Dynamic ERM 与 same-parent Dynamic JS。两种方法使用相同的 parent structures、相同的两张在线扰动谱、相同 backbone、相同 optimizer 和相同训练预算。Dynamic JS 在分类损失之外加入 same-parent 预测一致性。
+本项目关注的是这个在线生成过程额外提供的一类信息。设晶体结构为 \(s\)，测量状态为 \(m\)，模拟器生成的谱可以表示为
 
-冻结 simulated Test 的五种训练种子结果如下：
+\[
+x=g(s,m).
+\]
 
-| 指标 | Dynamic ERM | Same-parent JS | 提升 |
+对同一个母结构 \(s\)，可以独立采样两个测量状态 \(m_1\) 和 \(m_2\)：
+
+\[
+x_1=g(s,m_1),\qquad x_2=g(s,m_2).
+\]
+
+两条谱在输入空间中可以相差很大，但它们对应的晶体结构没有改变。普通动态 ERM 会把它们视为两条拥有同一晶系标签的训练样本；本项目进一步利用“它们来自同一个母结构”这一更强的同源关系，要求模型对两条谱给出相容的预测分布。
+
+因此，研究问题可以概括为：
+
+> **在数据、扰动、模型和训练预算完全匹配的条件下，显式利用同一母结构在不同测量状态下的观测等价关系，能否进一步提高 PXRD 晶系分类对未见扰动和真实实验谱的鲁棒性？**
+
+这一思路的核心并不是改变 PXRD 的数据生成方式，而是在既有在线模拟框架上，把模拟器保留的“样本来源关系”转化为新的监督信号。
+
+---
+
+# 2. 结果
+
+## 2.1 模拟测试：总体鲁棒性稳定提升
+
+正式比较采用 Dynamic ERM 与同母结构 Dynamic JS。两种方法读取相同的 14,060 个母结构划分，训练时使用相同的双视图在线扰动、相同的一维 ResNet-18-GN、相同优化器和相同训练预算。两者唯一的学习目标差异，是 JS 方法额外约束同一母结构两条测量视图的预测分布保持一致。
+
+冻结模拟测试集的五个训练随机种子结果如下：
+
+| 指标 | Dynamic ERM | 同母结构 JS | 提升 |
 |---|---:|---:|---:|
-| In-range Macro-F1 | 0.6953 | 0.7349 | +3.96 pp |
-| Mean single-factor OOD Macro-F1 | 0.6507 ± 0.0072 | 0.7053 ± 0.0098 | **+5.46 pp** |
-| Mean single-factor OOD Accuracy | 0.6508 ± 0.0078 | 0.7052 ± 0.0086 | **+5.45 pp** |
+| 训练范围内 Macro-F1 | 0.6953 | 0.7349 | +3.96 pp |
+| 单因素 OOD 平均 Macro-F1 | 0.6507 ± 0.0072 | 0.7053 ± 0.0098 | **+5.46 pp** |
+| 单因素 OOD 平均 Accuracy | 0.6508 ± 0.0078 | 0.7052 ± 0.0086 | **+5.45 pp** |
 
-五个 matched training seeds 在主要 OOD Macro-F1 和 Accuracy 上均为正向改善。这个结果说明 same-parent consistency 带来的收益能够跨训练随机性稳定复现，并同时体现在 Macro-F1 与 top-1 Accuracy 上。
+五个训练种子在主要 OOD Macro-F1 和 Accuracy 上全部为正向改善。也就是说，这一收益能够跨训练随机性重复出现，同时体现在类别均衡的 Macro-F1 和整体 Accuracy 两个常用分类指标上。
 
-真实实验谱进一步给出两类互补证据。
+这构成项目的第一层证据：在控制数据暴露的前提下，显式利用同母结构关系，比仅仅让模型看到更多扰动谱具有额外价值。
 
-### RRUFF-301：真实域 few-shot 适配
+## 2.2 抗扰动分析：强结构耦合条件下收益最明显
 
-| Labels / class | Metric | Dynamic ERM | Same-parent JS | 提升 |
-|---:|---|---:|---:|---:|
-| 1 | Macro-F1 | 0.2847 ± 0.0269 | 0.3280 ± 0.0329 | **+4.33 pp** |
-| 1 | Accuracy | 0.2990 ± 0.0259 | 0.3375 ± 0.0299 | +3.84 pp |
-| 2 | Macro-F1 | 0.3026 ± 0.0407 | 0.3486 ± 0.0335 | **+4.60 pp** |
-| 2 | Accuracy | 0.3120 ± 0.0383 | 0.3609 ± 0.0343 | +4.88 pp |
-| 5 | Macro-F1 | 0.3555 ± 0.0302 | 0.4099 ± 0.0271 | **+5.45 pp** |
-| 5 | Accuracy | 0.3581 ± 0.0273 | 0.4149 ± 0.0252 | +5.68 pp |
-
-RRUFF-301 使用 `5 pretraining seeds × 5 episode seeds` 的 matched protocol。在每个 K 值上，把五个 episode seeds 先在对应 pretraining seed 内平均后，五个 pretraining seeds 均 favor JS；全部 75 个 Macro-F1 matched comparisons 中有 68 个 favor JS。
-
-### CNRS-318：独立实验来源 zero-shot 评测
-
-CNRS-318 保持模型冻结，直接进行实验域 zero-shot 评测。五个训练种子的 Macro-F1 为：
-
-```text
-0.1884 ± 0.0263  →  0.2071 ± 0.0213
-mean paired Δ = +1.87 pp
-```
-
-五个训练种子全部为正向变化。将五组重复预测 pooled 后：
-
-| Metric | Dynamic ERM | Same-parent JS | 改善 |
-|---|---:|---:|---:|
-| Macro-F1 | 0.1912 | 0.2091 | +1.79 pp |
-| Balanced Accuracy | 0.2182 | 0.2388 | +2.06 pp |
-| Accuracy | 0.2000 | 0.2101 | +1.01 pp |
-
-模拟 Test、RRUFF-301 和 CNRS-318 共同构成第一条结论：**same-parent consistency 在模拟扰动和实验谱上都带来稳定的分类性能提升。**
-
----
-
-## 2.2 结论二：真实实验谱适配具有更高标签效率
-
-RRUFF-301 的核心价值来自完整的 K-shot learning curve。两组模型拥有相同数量的真实标签，在 K=1、K=2 和 K=5 三个预算下，JS-pretrained representation 始终取得更高的 Macro-F1 和 Accuracy。
-
-从实际适配角度看，这意味着模拟阶段学到的 same-parent measurement consistency 能够形成更容易被少量真实标签校准的 representation：
-
-```text
-same synthetic pretraining scale
-        ↓
-more measurement-invariant representation
-        ↓
-fewer real labels are used more efficiently
-```
-
-随着真实标签预算从 K=1 增加到 K=5，Macro-F1 的优势从 `+4.33 pp` 增加到 `+5.45 pp`，说明该收益能够持续存在于少样本适配过程，而非只集中在某一个偶然 K 值。
-
-进一步的 prediction-level 分析也显示，JS-pretrained 模型在 RRUFF locked test 上修正的样本数持续高于被破坏的样本数：
-
-| K | ERM-only correct | JS-only correct | Fix | Break | Fix / Break |
-|---:|---:|---:|---:|---:|---:|
-| 1 | 112 | 78 | 934 | 712 | 1.31 |
-| 2 | 110 | 66 | 936 | 654 | 1.43 |
-| 5 | 103 | 70 | 902 | 574 | 1.57 |
-
-在 K=5 下，orthorhombic、hexagonal、monoclinic、triclinic 和 tetragonal 的净正确次数均增加，其中 orthorhombic `+116`、hexagonal `+81`、monoclinic `+74`。这说明真实域提升能够落实到具体样本和具体晶系行为，而不仅是总体平均值变化。
-
-第二条结论因此可以直接表述为：**same-parent consistency 预训练提高了真实 PXRD 的 label efficiency，使有限的实验标签产生更高的下游适配收益。**
-
----
-
-## 2.3 结论三：对强结构耦合扰动的鲁棒性提升尤其明显
-
-将 simulated Test 的六个 single-factor OOD 条件拆开后，JS consistency 的收益呈现出清晰的物理结构。
+为了理解平均提升来自哪里，将冻结模拟测试集拆分为六个单因素 OOD 条件。结果如下：
 
 | OOD 扰动 | ERM Macro-F1 | JS Macro-F1 | ΔMacro-F1 | ΔAccuracy |
 |---|---:|---:|---:|---:|
@@ -140,314 +73,270 @@ fewer real labels are used more efficiently
 | Background | 0.6827 ± 0.0038 | 0.7332 ± 0.0115 | +5.05 pp | +5.13 pp |
 | **Preferred orientation / texture** | 0.6191 ± 0.0211 | 0.7000 ± 0.0120 | **+8.09 pp** | **+7.80 pp** |
 
-其中 broadening 和 texture 是增益最大的两类扰动，同时也是最明显依赖具体晶体衍射结构的两类测量变化。
+其中，峰展宽和择优取向是 ERM 最困难、同时也是 JS 增益最大的两类扰动。这个现象具有明确的 XRD 物理含义。
 
-### Broadening 的结构耦合
+峰展宽的参数本身可以独立采样，但展宽作用在具体 Bragg 峰上。相同的 FWHM 对不同晶体会造成完全不同的后果：哪些峰开始重叠、哪些肩峰消失、局部峰群如何合并，都由原始母结构的峰位置和峰间距决定。因此，峰展宽并不是一个简单附加在谱图上的独立噪声，而是会与具体晶体的衍射结构发生明显耦合。
 
-统一 FWHM 参数本身可以独立采样，但展宽作用于每一个具体 Bragg peak。展宽之后：
+择优取向的结构依赖更加直接。本项目使用 March–Dollase 模型，根据具体晶体的倒易矢量和 `hkl` 晶面族，对相对反射强度进行系统重加权。也就是说，扰动发生在哪里、哪些峰被增强或削弱，本身就由母结构决定。
 
-- 哪些峰开始发生重叠；
-- 哪些肩峰消失；
-- 局部峰群如何合并；
-- 峰间距信息被压缩到什么程度；
+相比之下，全谱峰位偏移更接近统一的坐标轴变化；噪声主要改变观测统计；背景主要改变基线形状。它们同样会影响分类，但与具体母结构的耦合程度相对较弱。正式五 seed 结果因此显示出一个很清楚的规律：
 
-都由原始 parent structure 的峰位置和峰群布局决定。因此，broadening 对模型造成的困难具有明显的 parent-dependent 特征。
+> **一致性监督总体提高了扰动鲁棒性，而当测量扰动与具体晶体衍射结构耦合得更深时，这种提升尤其明显。**
 
-### Texture 的结构耦合
+一个补充性的配对机制实验与这一观察一致。在 Validation-only 的 same-parent 与 same-class 对照中，两种方法都保留 JS 一致性，只改变配对关系：前者使用同一母结构的两条谱，后者使用同一晶系但不同母结构的两条谱。100-epoch 扩展实验中，same-parent 的平均 OOD Macro-F1 为 `0.7106`，same-class 为 `0.6979`，总体差距为 **+1.27 pp**；逐扰动差异主要集中在 broadening **+5.19 pp** 和 texture **+3.34 pp**，而 shift、noise 和 background 的差异接近零。这个结果进一步表明，同母结构关系所提供的额外信息，主要体现在结构耦合更强的测量变化上。
 
-择优取向使用结构条件的 March–Dollase 模型，对具体 `hkl` reflection families 的相对强度进行系统重加权。它直接依赖 reciprocal vectors、晶面族和原始反射强度，因此具有更明确的 parent-specific 结构依赖。
+## 2.3 CNRS-318：独立实验来源的零样本迁移
 
-相比之下，全谱 peak shift 更接近统一坐标轴变换，noise 主要改变观测统计，background 主要改变基线形状。因此，same-parent relationship supervision 在 broadening 和 texture 上获得更大的收益具有明确的 XRD 物理解释：
+CNRS-318 用于评估模型在完全不接触该目标域标签的情况下，是否仍能把模拟阶段学到的优势迁移到另一个实验数据来源。数据包含 318 个独立结构父样本，类别自然分布为 `21 / 87 / 77 / 41 / 33 / 12 / 47`。
 
-> **当测量扰动与潜在晶体结构耦合得越深，同一个 parent 在不同测量状态下保持预测一致这一关系，就越具有信息量。**
+五个冻结训练种子的零样本 Macro-F1 为：
 
-### 机制补充：same-parent 与 same-class pairing
+\[
+0.1884\pm0.0263\;\rightarrow\;0.2071\pm0.0213,
+\]
 
-为了进一步观察 parent relation 的作用，项目进行了 Validation-only pairing ablation，将 same-parent JS 与“同晶系、不同 parent”的 same-class JS 进行比较。100-epoch extension 中：
+平均配对提升为 **+1.87 pp**，五个训练种子全部保持正向。将五组预测汇总后：
 
-```text
-same-parent mean OOD Macro-F1 = 0.7106
-same-class  mean OOD Macro-F1 = 0.6979
-Δ = +1.27 pp
-```
+| 指标 | Dynamic ERM | 同母结构 JS | 改善 |
+|---|---:|---:|---:|
+| Macro-F1 | 0.1912 | 0.2091 | +1.79 pp |
+| Balanced Accuracy | 0.2182 | 0.2388 | +2.06 pp |
+| Accuracy | 0.2000 | 0.2101 | +1.01 pp |
 
-更值得关注的是逐扰动差值：
+CNRS 是一个明显更困难的外部真实域，绝对分类性能较低，但 JS 相对 ERM 的优势仍然能够跨五个训练种子保留下来。这一结果说明，模拟域中形成的鲁棒性并非只存在于冻结模拟测试集，在独立实验来源上仍能观察到同方向的迁移收益。
 
-| 扰动 | same-parent − same-class Macro-F1 |
-|---|---:|
-| Background | +0.70 pp |
-| **Broadening** | **+5.19 pp** |
-| Noise | −0.70 pp |
-| Shift − | −0.39 pp |
-| Shift + | −0.52 pp |
-| **Texture** | **+3.34 pp** |
+## 2.4 RRUFF：从零样本优势到少样本标签效率
 
-这个补充实验与正式 ERM-vs-JS profile 结果形成一致的物理图景：**same-parent relation 的额外价值主要集中在 broadening 和 texture 这类强结构耦合扰动。**
+RRUFF 提供了另一类真实域证据。早期独立的 35 条真实谱零样本诊断中，Dynamic ERM 的平均 Accuracy 为 `0.1886`，JS 为 `0.2343`，提升约 **+4.57 pp**。这一结果首先说明，在完全不使用真实域标签时，同母结构一致性已经能够在 RRUFF 实验谱上保留相对优势。
 
----
+更重要的正式结果来自 RRUFF-301 少样本适配实验。RRUFF-301 采用七晶系平衡的真实实验谱，并在完全相同的真实标签预算下比较 ERM 预训练表示和 JS 预训练表示。K=1/2/5 的结果如下：
 
-# 3. Discussion
+| 每类真实标签数 | 指标 | Dynamic ERM | 同母结构 JS | 提升 |
+|---:|---|---:|---:|---:|
+| 1 | Macro-F1 | 0.2847 ± 0.0269 | 0.3280 ± 0.0329 | **+4.33 pp** |
+| 1 | Accuracy | 0.2990 ± 0.0259 | 0.3375 ± 0.0299 | +3.84 pp |
+| 2 | Macro-F1 | 0.3026 ± 0.0407 | 0.3486 ± 0.0335 | **+4.60 pp** |
+| 2 | Accuracy | 0.3120 ± 0.0383 | 0.3609 ± 0.0343 | +4.88 pp |
+| 5 | Macro-F1 | 0.3555 ± 0.0302 | 0.4099 ± 0.0271 | **+5.45 pp** |
+| 5 | Accuracy | 0.3581 ± 0.0273 | 0.4149 ± 0.0252 | +5.68 pp |
 
-## 3.1 从数据增强到关系监督
+RRUFF-301 使用 `5 个预训练 seed × 5 个 episode seed` 的成对实验设计。对每个 K 值，在预训练 seed 内平均五个 episode 后，五个预训练 seed 均为 JS 更高；全部 75 个 Macro-F1 成对比较中，有 68 个 favor JS。
 
-传统 PXRD synthetic-data pipeline 的主要作用是扩大训练数据覆盖：
+从学习曲线来看，JS 的价值不只是让一个固定 K 值的结果更高，而是使模型在相同真实标签预算下持续获得更好的适配性能。换句话说，同母结构一致性预训练形成的表示，更容易被少量真实实验标签校准。
 
-```text
-crystal structure
-    ↓
-simulator
-    ↓
-perturbed PXRD patterns
-    ↓
-classification training
-```
+样本级分析也给出了相同方向的证据。K=1/2/5 时，JS 修正的错误样本数持续高于被破坏的正确样本数，fix/break 比例依次为 `1.31 / 1.43 / 1.57`。在 K=5 下，orthorhombic、hexagonal、monoclinic 等晶系的净正确次数提升最明显。
 
-本项目在同一流程中继续利用 simulator-retained provenance：
+因此，RRUFF-301 支撑了项目的第二条主要结论：
 
-```text
-crystal structure s
-   ↙          ↘
-view x1      view x2
-   \          /
-    same parent
-        ↓
-measurement equivalence
-        ↓
-relationship supervision
-```
-
-因此，模型不仅看到“更多不同的谱”，还被明确告知“哪些变化属于同一个物理对象允许出现的测量变化”。这种关系信息对于科学测量问题尤其自然，因为许多表征数据都可以表示为：
-
-```text
-measurement = latent material state + acquisition-dependent nuisance
-```
-
-same-parent consistency 的作用，就是利用已知 latent identity 约束模型对 nuisance 的敏感性。
-
-## 3.2 为什么第三条结论具有 XRD 特异性
-
-本项目最重要的物理观察，是性能增益与 perturbation 的结构耦合程度存在对应关系。
-
-Broadening 改变峰宽并重新组织局部峰重叠；texture 改变具体晶面族的相对强度。这两种变化会重构模型用于识别晶系的峰形和峰强关系，因此同母结构的跨视图一致性提供了高价值监督。
-
-Peak shift、noise 和 background 仍会降低模型性能，也能够从一致性中受益；但它们对具体 parent structure 的依赖程度相对更弱。由此形成一个更一般的 AI-for-characterization 认识：
-
-> **关系监督的价值取决于测量 nuisance 与潜在材料结构之间的耦合程度。**
-
-这个认识使本项目从“用 JS 提高一个分类分数”进一步发展成“利用科学模拟器中的对象身份，学习结构条件下的测量不变性”。
-
-## 3.3 真实域意义
-
-RRUFF 与 CNRS 对应两种不同的实验使用场景：RRUFF-301 关注少量真实标签可用时的 adaptation efficiency；CNRS-318 关注没有目标域标签时的 frozen zero-shot transfer。两类实验结果都与模拟域的主趋势一致，因此 same-parent consistency 的收益能够从 controlled simulation 延伸到真实实验来源。
-
-当前最完整的证据链可以概括为：
-
-```text
-simulated OOD robustness
-        +
-experimental zero-shot improvement
-        +
-few-shot label efficiency
-        +
-structure-coupled perturbation advantage
-```
+> **同母结构一致性预训练提高了真实 PXRD 的标签利用效率，使有限的实验标签能够产生更高的下游适配收益。**
 
 ---
 
-# 4. Methods
+# 3. 讨论
 
-## 4.1 Task and structural dataset
+## 3.1 从在线数据生成到同源关系监督
 
-任务为七晶系 single-label classification：
+在线模拟的传统价值在于持续产生新的物理合理训练谱，从而扩大峰位、峰宽、织构、背景和噪声等测量变化的覆盖范围。本项目在这一基础上继续利用生成过程中的母结构来源信息：模拟器不仅知道每条谱的晶系标签，还知道哪些谱来自同一个具体晶体结构。
 
-```text
-triclinic
-monoclinic
-orthorhombic
-tetragonal
-trigonal
-hexagonal
-cubic
-```
+这种信息使训练监督从“每条谱属于哪个类别”扩展为“哪些谱是同一个物理对象在不同测量状态下的观测”。从机器学习角度看，前者是点标签监督，后者是关系监督。JS 一致性正则所做的事情，就是把这种关系写入优化目标，使模型不仅学会分别识别每条扰动谱，还学会在同一个母结构的测量变化轨道上保持稳定判断。
 
-结构数据来自 14,060 个 Materials Project parent structures。以 `structure_fingerprint` 定义 parent identity，并在任何在线扰动生成之前完成按晶系分层的 parent-level split：
+因此，本项目的方法可以概括为：
 
-| Split | Parent structures |
+\[
+\text{在线物理模拟}\quad+\quad\text{母结构同源关系}\quad\rightarrow\quad\text{测量等价监督}.
+\]
+
+## 3.2 为什么结构耦合扰动最值得关注
+
+本项目最有 XRD 特征的发现，不是某一个总体平均值，而是不同物理扰动下的收益具有清晰层次。峰展宽和择优取向直接改变峰重叠关系和 `hkl` 相对强度，它们对具体母结构的依赖最强；这两类扰动也恰好表现出最大的 JS 增益。
+
+这一结果提示，同源关系监督的价值与测量变化如何作用于材料结构密切相关。若扰动只是近似独立的坐标或基线变化，同一个 parent 的身份带来的额外信息较少；若扰动的实际表现由具体晶体峰型决定，那么“这两条谱来自同一个结构”就是更有信息量的监督信号。
+
+这个观察可以进一步抽象为一条更一般的科学机器学习观点：
+
+> **关系监督的价值取决于测量因素与潜在科学对象之间的耦合程度。**
+
+## 3.3 从模拟鲁棒性到真实实验可用性
+
+模拟 OOD、CNRS 零样本和 RRUFF 少样本分别回答了三个递进的问题。模拟测试说明方法在受控扰动下稳定有效；CNRS 说明这种优势能够迁移到独立实验来源；RRUFF 进一步说明，当少量真实标签可用时，JS 预训练表示可以更高效地完成实验域适配。
+
+因此，当前证据链可以概括为：
+
+\[
+\text{模拟域总体提升}
+\rightarrow
+\text{结构耦合扰动优势}
+\rightarrow
+\text{独立真实域零样本迁移}
+\rightarrow
+\text{真实域少样本标签效率提升}.
+\]
+
+这四个层次共同支撑了项目的三条主结论，而不是依赖单一测试集或单一评价指标。
+
+---
+
+# 4. 方法
+
+## 4.1 任务与数据划分
+
+任务为七晶系单标签分类，类别为 triclinic、monoclinic、orthorhombic、tetragonal、trigonal、hexagonal 和 cubic。
+
+结构数据来自 14,060 个 Materials Project 晶体结构。以 `structure_fingerprint` 定义母结构身份，并在生成任何扰动谱之前按晶系分层划分：
+
+| 数据集 | 母结构数量 |
 |---|---:|
 | Train | 9,842 |
 | Validation | 2,109 |
 | Test | 2,109 |
 
-该 split 保证同一母结构生成的不同 measurement views 始终位于同一数据划分中。
+同一母结构产生的所有测量视图始终属于同一个数据划分。
 
-## 4.2 PXRD representation
+## 4.2 PXRD 表示与理想反射
 
-理想衍射峰由：
+理想反射由
 
 ```python
 pymatgen.analysis.diffraction.xrd.XRDCalculator(wavelength="CuKa")
 ```
 
-计算。输入区间与采样为：
+计算。正式输入范围为 `2θ = 10°–80°`，步长 `0.02°`，每条谱共 3,501 个采样点。谱图进入网络前进行最大值归一化。
 
-- `2θ = 10°–80°`
-- step size = `0.02°`
-- 3501 points / pattern
-- final max normalization
+模拟器同时保留峰位、相对强度、`hkl`、multiplicity 和倒易矢量信息，以支持后续峰形与择优取向建模。
 
-模拟器同时保留 peak positions、relative intensities、`hkl`、multiplicity 和 reciprocal-vector information，用于后续 preferred-orientation 建模。
+## 4.3 峰形渲染
 
-## 4.3 Peak rendering
-
-离散理想反射通过 Gaussian profile 渲染：
+理想离散反射使用高斯峰形渲染：
 
 \[
-\sigma=\frac{\mathrm{FWHM}}{2\sqrt{2\ln2}}
+\sigma=\frac{\mathrm{FWHM}}{2\sqrt{2\ln2}},
 \]
 
 \[
 I(2\theta)=\sum_i\frac{A_i}{\sigma}
-\exp\left[-\frac12\left(\frac{2\theta-2\theta_i}{\sigma}\right)^2\right]
+\exp\left[-\frac12\left(\frac{2\theta-2\theta_i}{\sigma}\right)^2\right].
 \]
 
-峰强以 integrated peak strength 处理，除以 `σ` 使 FWHM 变化时峰面积保持稳定。
+其中峰强按积分强度处理，通过除以 `σ` 使峰宽改变时峰面积保持稳定。
 
-## 4.4 Physics-informed online perturbations
+## 4.4 在线物理扰动
 
-正式训练和 OOD 评测使用以下冻结扰动：
+正式训练与单因素 OOD 评测使用以下冻结设置：
 
-| 扰动 | Train / in-range | Single-factor OOD |
+| 扰动 | 训练 / in-range | 单因素 OOD |
 |---|---|---|
-| Global 2θ shift | `U(-0.2,0.2)°`, p=0.5 | `[-0.5,-0.2]°` / `[0.2,0.5]°` |
-| Peak broadening | FWHM `U(0.08,0.20)°` | FWHM `U(0.20,0.35)°` |
-| Preferred orientation | March–Dollase `r=0.8–1.0`, p=0.7 | `r=0.5–0.8` |
-| Background | 3rd-order polynomial, ratio `0–0.02` | GP background, ratio `0.02–0.05` |
-| Noise | Poisson–Gaussian, count scale `2500–40000`, electronic `0–2 counts` | count scale `100–2500`, electronic `0–5 counts` |
+| 全谱峰位偏移 | `U(-0.2, 0.2)°`, p=0.5 | `[-0.5,-0.2]°` / `[0.2,0.5]°` |
+| 峰展宽 | FWHM `U(0.08,0.20)°` | FWHM `U(0.20,0.35)°` |
+| 择优取向 | March–Dollase `r=0.8–1.0`, p=0.7 | `r=0.5–0.8` |
+| 背景 | 三阶多项式，ratio `0–0.02` | GP 背景，ratio `0.02–0.05` |
+| 计数 / 电子噪声 | count scale `2500–40000`，电子噪声 `0–2 counts` | count scale `100–2500`，电子噪声 `0–5 counts` |
 
-Preferred orientation 使用 March–Dollase：
+择优取向使用 March–Dollase 模型：
 
 \[
-P(\alpha;r)=\left[r^2\cos^2\alpha+\frac1r(1-\cos^2\alpha)\right]^{-3/2}
+P(\alpha;r)=\left[r^2\cos^2\alpha+\frac1r(1-\cos^2\alpha)\right]^{-3/2}.
 \]
 
-完整 forward chain 为：
+完整生成顺序为：
 
 ```text
-parent crystal structure
-→ ideal reflection table
-→ preferred orientation
-→ global 2θ shift
-→ Gaussian broadening
-→ smooth background
-→ Poisson / readout noise
+晶体结构
+→ 理想反射表
+→ 择优取向
+→ 全谱 2θ 偏移
+→ 高斯展宽
+→ 平滑背景
+→ Poisson / 电子读出噪声
 → clipping
-→ max normalization
+→ 最大值归一化
 ```
 
-## 4.5 Model architecture and training
+## 4.5 模型与训练
 
-模型采用一维 ResNet-18-GN，输入为 3501 点 PXRD，输出七晶系 softmax probability。
+骨干网络为一维 ResNet-18-GN，输入 3,501 点 PXRD，输出七晶系概率。
 
-| Training item | Setting |
+| 训练设置 | 数值 |
 |---|---|
 | Backbone | 1D ResNet-18-GN |
 | Optimizer | AdamW |
 | Learning rate | `1×10⁻⁴` |
 | Weight decay | `1×10⁻⁴` |
-| Batch | 16 parents × 2 online views = 32 patterns |
-| Maximum epochs | 100 |
-| Validation | every 10 epochs |
-| Checkpoint selection | Validation performance |
-| JS weight | `λ_JS = 60` |
+| Batch | 16 个母结构 × 2 个在线视图 = 32 条谱 |
+| 最大训练轮数 | 100 epochs |
+| Validation | 每 10 epochs |
+| JS 权重 | `λ_JS = 60` |
 
-`λ_JS=60` 由 Validation 选择并在正式 simulated Test 与真实域评测前冻结。
+`λ_JS=60` 由 Validation 选择，并在正式模拟测试和真实域评测前冻结。
 
-## 4.6 Same-parent consistency objective
+## 4.6 同母结构 JS 一致性目标
 
-每个 parent 生成两条独立 measurement views：
+对同一母结构生成两条独立测量视图：
 
 \[
-x_1=g(s,m_1),\qquad x_2=g(s,m_2)
+x_1=g(s,m_1),\qquad x_2=g(s,m_2).
 \]
 
-分类项为：
+两种方法共享相同的分类损失：
 
 \[
 \mathcal L_{cls}
 =\frac12\left[
 CE(f(x_1),y)+CE(f(x_2),y)
-\right]
+\right].
 \]
 
-令 `p1,p2` 为两条谱的预测概率，
+令两条谱的预测概率为 \(p_1,p_2\)，并定义
 
 \[
-m=\frac12(p_1+p_2)
+m=\frac12(p_1+p_2),
 \]
+
+则 Jensen–Shannon 散度为
 
 \[
 JS(p_1,p_2)
-=\frac12KL(p_1\|m)+\frac12KL(p_2\|m)
+=\frac12KL(p_1\|m)+\frac12KL(p_2\|m).
 \]
 
-最终 same-parent JS objective 为：
+最终目标为
 
 \[
 \mathcal L
-=\mathcal L_{cls}+60\,JS(p_1,p_2)
+=\mathcal L_{cls}+60\,JS(p_1,p_2).
 \]
 
-Dynamic ERM 使用相同的双视图分类项；因此两者的核心差异就是 same-parent prediction consistency。
+Dynamic ERM 使用完全相同的双视图分类项，因此正式对照只改变是否利用同母结构预测一致性。
 
-## 4.7 Experimental-domain evaluation
+## 4.7 真实域评测
 
-### RRUFF-301
+CNRS-318 作为独立来源的零样本真实域，模型保持冻结，主要报告 Macro-F1、Balanced Accuracy 与 Accuracy。
 
-RRUFF-301 用于 few-shot adaptation 和 label-efficiency evaluation。采用相同 frozen-backbone adaptation procedure，对 ERM-pretrained 与 JS-pretrained representation 使用相同真实标签预算：
-
-- K = 1 / 2 / 5 labels per class
-- 5 pretraining seeds
-- 5 episode seeds
-- paired locked-test comparison
-- primary reporting: Macro-F1、Accuracy、learning curve 与 per-class behavior
-
-### CNRS-318
-
-CNRS-318 用于 independent experimental zero-shot evaluation：
-
-- 318 independent structural parents
-- natural class distribution：`21 / 87 / 77 / 41 / 33 / 12 / 47`
-- frozen model inference
-- reporting：Macro-F1、Balanced Accuracy、Accuracy，以及 probability-quality supporting metrics
+RRUFF-301 作为少样本适配域，使用 K=1/2/5 labels per class，5 个预训练 seed 和 5 个 episode seed。ERM 预训练模型与 JS 预训练模型使用完全相同的真实 support、相同适配流程和相同测试集，主要报告 Macro-F1、Accuracy、学习曲线及逐类行为。
 
 ---
 
-# 5. 当前三大主要结论
+# 5. 三条主要结论
 
-## 结论一：总体分类性能稳定提升
+**结论一：总体分类鲁棒性稳定提升。** 同母结构 JS 一致性在冻结模拟测试集上稳定提高 Macro-F1 和 Accuracy，并在 CNRS 与 RRUFF 两个实验来源中继续保持同方向的相对优势。
 
-Same-parent JS consistency 在冻结模拟 Test 上稳定提升 Macro-F1 和 Accuracy，并在 RRUFF 与 CNRS 两个实验来源中继续表现出同方向的分类性能改善。
+**结论二：真实实验谱的标签利用效率更高。** RRUFF-301 的 K=1/2/5 学习曲线显示，在完全相同的真实标签预算下，JS 预训练表示始终取得更高的 Macro-F1 和 Accuracy。
 
-## 结论二：真实谱适配的标签效率更高
-
-RRUFF-301 的 K=1/2/5 learning curve 显示，在完全相同的真实标签预算下，JS-pretrained representation 始终取得更高 Macro-F1 和 Accuracy，说明真实标签能够被更有效地利用。
-
-## 结论三：强结构耦合扰动下的鲁棒性优势最明显
-
-Broadening 与 preferred orientation / texture 在正式 simulated Test 中获得最大的性能增益；same-parent vs same-class 的机制补充实验也把额外优势定位到这两类扰动。结果说明，当 measurement nuisance 与具体晶体衍射结构耦合更强时，parent-aware relationship supervision 的价值更高。
+**结论三：强结构耦合扰动下的优势最明显。** 峰展宽与择优取向在正式 simulated Test 中获得最大的性能增益；机制补充实验也显示，同母结构配对相对同晶系不同结构配对的额外优势主要集中在这两类扰动。
 
 ---
 
 # 6. 证据来源
 
-当前技术备忘录的数据与方法以以下仓库文件为准：
+本备忘录中的方法、数据与结果以仓库中的以下文件为准：
 
-- `xrd_robustness/reports/RESULTS.md`：正式 simulated Test、RRUFF-301、CNRS-318 结果
-- `xrd_robustness/reports/simulated_test_results.json`：五 seed simulated Test 原始汇总
-- `xrd_robustness/outputs/pairing_ablation_extend100/summary.json`：same-parent / same-class 机制补充结果
-- `xrd_robustness/configs/simulation.method_transfer.frozen.json`：正式冻结的 PXRD 扰动配置
-- `docs/PXRD_PERTURBATION_EVIDENCE.md`：五类扰动的物理与文献依据
-- `docs/PXRD_METHOD_DETAIL_EVIDENCE_CLOSURE.md`：数据构建、split、训练与 λ_JS 的方法证据
-- `docs/PROJECT_HISTORY_NOTE_2026-09-14_XRD_THREE_MAIN_CONCLUSIONS.md`：当前三大主要结论
+- `xrd_robustness/reports/RESULTS.md`
+- `xrd_robustness/reports/simulated_test_results.json`
+- `xrd_robustness/reports/rruff301_fewshot_results.json`
+- `xrd_robustness/reports/CNRS_318_RESULTS.md`
+- `xrd_robustness/outputs/pairing_ablation_extend100/summary.json`
+- `xrd_robustness/configs/simulation.method_transfer.frozen.json`
+- `docs/PXRD_PERTURBATION_EVIDENCE.md`
+- `docs/PXRD_METHOD_DETAIL_EVIDENCE_CLOSURE.md`
+- `docs/PROJECT_HISTORY_NOTE_2026-09-14_XRD_THREE_MAIN_CONCLUSIONS.md`
 
-代表性 XRD-ML 写作参考包括 Oviedo et al. (2019)、Lee et al. (2023) 及项目中已审读的 Schopmans 等工作：以实验/模拟条件和模型设置构成 Methods，以 Accuracy、F1、真实谱迁移、逐扰动与逐类行为构成 Results，并在 Discussion 中解释性能变化背后的 XRD 物理机制。
+写作组织参考项目中已审读的 Oviedo、Lee 与 Schopmans 等代表性 XRD 机器学习工作：方法部分交代数据、测量/模拟条件、扰动模型和训练设置；结果部分集中报告分类性能、真实谱迁移、逐扰动行为与少样本学习曲线；讨论部分解释这些结果与 XRD 物理机制之间的关系。
