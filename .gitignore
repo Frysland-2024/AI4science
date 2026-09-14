@@ -36,7 +36,6 @@ sync_*
 01_literature/
 02_code_repositories/
 03_tools_and_packages/
-04_external_lab_data/
 /outputs/
 /data/
 /xrd_robustness/data/
@@ -64,6 +63,10 @@ sync_*
 *.pdf
 *.docx
 *.pptx
+
+# Keep external lab data under version control, including binary research assets.
+!/04_external_lab_data/
+!/04_external_lab_data/**
 
 # Secrets
 .env
