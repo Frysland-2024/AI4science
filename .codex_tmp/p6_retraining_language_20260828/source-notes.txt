@@ -1,6 +1,0 @@
-User-approved terminology for the three experimental stages:
-- Simulated-spectrum stage: training.
-- RRUFF stage: retraining with a small number of real spectra.
-- CNRS stage: direct testing without retraining on real spectra.
-
-This round changes only the visible wording on slide 6. It does not create or edit a CNRS slide.

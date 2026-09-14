@@ -1,6 +1,0 @@
-Slide 3 only:
-- Reuse and extend the inherited “预测 A ≈ 预测 B” textbox.
-- Preserve the prediction as the primary visual and add one smaller centered line beneath it: 方法核心：把“谱可以变、结构不变”这一物理不变量写进模型训练。
-- Add no frame, icon, formula, loss term, JS label, or other ML terminology.
-No other object or slide is changed.
-

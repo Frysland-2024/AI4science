@@ -1,6 +1,0 @@
-Slide 6 only:
-- Rewrite the title and subtitle with the user-approved wording. The longer title uses 32 px instead of the inherited 34 px so it remains a single line without colliding with the page number.
-- Resize the existing chart into the left evidence area without changing its data, axis, labels, legend, colors, or type.
-- Reposition the three existing gain labels above the resized chart.
-- Reuse the existing summary-caption textbox as one flat right-side text region containing exactly two conclusion blocks.
-No other slide or object is changed.

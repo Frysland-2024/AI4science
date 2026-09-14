@@ -1,3 +1,0 @@
-No new external source is introduced.
-All existing speaker-note [Sources] blocks are preserved.
-Slide 4 chart data remain the same native series from the existing deck; only line colors change.

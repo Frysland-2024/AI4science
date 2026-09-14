@@ -1,3 +1,0 @@
-Slide 4 only:
-- Replace the final line "同一晶体 → 随机“换测量条件” → 不同训练谱" with "每次随机采样一组测量扰动 → 生成不同训练谱".
-- Preserve all other inherited content and geometry.

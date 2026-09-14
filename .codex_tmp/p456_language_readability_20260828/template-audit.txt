@@ -1,9 +1,0 @@
-Template source: current user-facing deck E:/AI4science/outputs/XRD_导师汇报.pptx
-Slide count: 6
-Slide size: 1280 x 720 px
-Visual system: white background, deep navy titles, thin navy divider, Microsoft YaHei, muted gray supporting text, blue as method/result accent, orange reserved for measurement-condition wording.
-This round keeps slides 1-3 immutable and edits only slides 4-6.
-Slide 4 is a data-scale plus disturbance-table frame; its two-column structure is preserved.
-Slide 5 is a paired clustered-column result frame; numerical evidence and summary hierarchy are preserved.
-Slide 6 is a full-width paired clustered-column result frame; only language is changed.
-No master, layout, theme, font, page size, or shared resource changes are authorized.

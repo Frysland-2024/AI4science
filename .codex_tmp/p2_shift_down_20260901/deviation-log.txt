@@ -1,2 +1,0 @@
-Slide 2 only: moved the four inherited baseline-spectrum elements downward by 18 px.
-No text, color, size, master, layout, theme, or other slide content was changed.

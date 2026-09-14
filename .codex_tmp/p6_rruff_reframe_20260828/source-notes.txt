@@ -1,9 +1,0 @@
-Source deck: E:/AI4science/outputs/XRD_导师汇报.pptx
-Verified local evidence:
-- E:/AI4science/xrd_robustness/reports/rruff301_fewshot_results.json
-- E:/AI4science/xrd_robustness/data/real_xrd/rruff371/contracts/dataset_contract.json
-- E:/AI4science/xrd_robustness/data/real_xrd/rruff371/splits/rruff301_manifest.json
-- E:/AI4science/xrd_robustness/data/real_xrd/rruff371/manifests/rruff371_master_manifest.csv
-RRUFF-301 contains 301 unique measured samples, each mapped to one normalized real PXRD spectrum, across seven crystal systems.
-K=1/2/5 means labels per crystal system, so each episode uses 7/14/35 labeled real spectra.
-Macro-F1 means across K=1/2/5 are 0.2847/0.3026/0.3555 for the baseline and 0.3280/0.3486/0.4099 for consistency pretraining.

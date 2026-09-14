@@ -1,4 +1,0 @@
-No new external claims or assets are introduced.
-Slide 6 retains its existing [Sources] speaker-notes block and frozen RRUFF-301 values.
-Requested copy changes only clarify that the seven classes are seven crystal systems and identify the method side of cross-budget comparisons.
-

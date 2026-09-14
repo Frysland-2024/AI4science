@@ -1,5 +1,0 @@
-Scope: slide 1 only. Slides 2-8 are immutable by explicit user workflow.
-Source pattern: white canvas, centered deep-navy title, thin divider, one native PXRD chart, a simple left-to-right task mapping, plain-text seven-class output, and a muted centered footer.
-Typography: Microsoft YaHei; deep navy #143A63; method blue #285F97; muted gray #657384.
-Insertion contract: reuse the title, divider, input label, native PXRD chart, crystal-system output labels/list, and footer. Delete the redundant subtitle, the classification-model box, and both old arrows. Add only one larger arrow between the PXRD chart and the crystal-system output.
-QA boundary: render and visually inspect slide 1 only; do not re-render, compare, or aesthetically review slides 2-8.

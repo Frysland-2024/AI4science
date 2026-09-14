@@ -1,1 +1,0 @@
-No structural or layout deviation is authorized. Slide 5 keeps the same chart type, data, axes, labels, legend, summary text, and placement. Only existing chart colors are adjusted for projection-safe contrast.

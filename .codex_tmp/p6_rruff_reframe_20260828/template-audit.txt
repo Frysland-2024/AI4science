@@ -1,8 +1,0 @@
-Source deck: E:/AI4science/outputs/XRD_导师汇报.pptx
-Targeted edit only: slide 6 RRUFF-301 result page.
-Slides 1–5 are immutable in this run.
-The source uses a 1280 x 720 white canvas, navy conclusion titles, a thin navy top rule, compact page markers, neutral-gray baselines, and saturated-blue method bars.
-Slide 6 contains an inherited title, page marker, divider, dataset-context line, three gain labels, one editable native clustered-column chart, and four inherited right-side summary textboxes.
-The edit keeps the source slide, master/layout hierarchy, page marker, divider, chart data, category order, series order, colors, and speaker-note provenance.
-The three incomplete right-side text fragments are deleted; the existing caption is reused as a first-group annotation; the native chart is replaced within the inherited evidence zone and expanded across the slide.
-Only slide 6 is rendered for visual review. Whole-deck checking is limited to opening and mechanical overflow validation.

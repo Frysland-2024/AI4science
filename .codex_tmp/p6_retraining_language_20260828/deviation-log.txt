@@ -1,5 +1,0 @@
-Slide 6 only:
-- Reword the inherited title from "少样本适配" to "真实谱验证 / 再训练" so the experimental stage is described in natural Chinese and is not confused with pretraining.
-- Reword the inherited subtitle to state the sequence explicitly: simulated-spectrum training first, then limited retraining with 1 / 2 / 5 real spectra per class.
-
-No other departures from the copied source deck are permitted.

@@ -1,6 +1,0 @@
-Slide 6 only:
-- Rewrite the dataset-context sentence from generic "每类" to explicit "每个晶系".
-- Rewrite chart category labels to "每个晶系 1/2/5 条（共 7/14/35 条）".
-- Rewrite conclusion 2 to add "本方法" to the heading and both comparisons.
-- Preserve chart data, geometry, colors, title, gain labels, notes, and every other slide element.
-

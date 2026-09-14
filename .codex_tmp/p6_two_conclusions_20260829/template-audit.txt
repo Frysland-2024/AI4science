@@ -1,5 +1,0 @@
-Source: current seven-slide advisor-report deck.
-Visual source and hierarchy: preserve the imported source deck exactly.
-This round modifies slide 6 only. Slides 1-5 and 7 are immutable and are not re-rendered or visually re-reviewed.
-Slide 6 reuses its existing title, subtitle, chart, three gain labels, and summary-caption textbox. No new decorative primitive is added.
-

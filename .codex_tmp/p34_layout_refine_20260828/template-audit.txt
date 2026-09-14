@@ -1,7 +1,0 @@
-Source deck: E:/AI4science/outputs/XRD_导师汇报.pptx
-Targeted edit only: slide 3 and slide 4.
-Slides 1, 2, and 5 are immutable in this run.
-The source uses a 1280 x 720 white canvas, navy takeaway titles, a thin navy top rule, and compact page markers.
-Slide 3 contains an editable native method chain with two native scatter charts, connectors, labels, a model bridge, and a large prediction conclusion.
-Slide 4 contains an editable left-side data block, a vertical divider, and five editable right-side text rows.
-The existing master, layouts, theme, title treatment, page markers, left data block, speaker-note citations, and chart data are preserved.

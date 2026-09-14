@@ -1,2 +1,0 @@
-No global template deviation. Slide 2 retains its inherited header, palette, evidence charts, and footer. One bounded native chart is added in the former text-node zone to visualize the intermediate baseline spectrum.
-

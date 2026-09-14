@@ -1,7 +1,0 @@
-Source: E:\AI4science\outputs\XRD_导师汇报.pptx
-Slides: 7, 1280 x 720.
-Visual system: white background, dark navy titles, muted gray secondary text, light-gray baseline bars, saturated blue method bars, Microsoft YaHei.
-Hierarchy: inherited master/layout preserved; slide-local edits only.
-This revision edits slide 6 only. Slides 1-5 and 7 are preserve-only.
-Slide 6 uses inherited subtitle, summary textbox, and native chart. No new shapes, overlays, icons, or layout changes are permitted.
-

@@ -1,7 +1,0 @@
-Slide 7 only:
-- Rewrite the title in natural language around switching to another real experimental spectrum source.
-- Rewrite the subtitle to state that CNRS data is not used to adjust the model.
-- Simplify the right summary to "5 / 5", "5 次重复全部提升", and the average gain.
-- Rewrite the bottom takeaway to distinguish CNRS direct testing from RRUFF real-spectrum retraining.
-- Preserve chart data, chart geometry, gain labels, colors, page number, notes, and all other slides.
-

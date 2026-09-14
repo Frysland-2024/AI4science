@@ -1,7 +1,0 @@
-Slide 6 only:
-- Rewrote the title to state RRUFF-301, the seven-label budget, and the +4.33 pp result.
-- Rewrote and darkened the dataset-context line so 301 real PXRD spectra and seven-class K=1/2/5 sampling are readable.
-- Deleted the floating right-side summary fragments.
-- Reused the inherited summary caption as “仅 7 条真实标注谱” above the first bar group.
-- Replaced the inherited native chart with a wider native chart using identical values, larger labels, darker text, and lighter gridlines.
-Slides 1–5: no edits and no new visual review.

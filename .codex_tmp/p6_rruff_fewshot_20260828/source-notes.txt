@@ -1,3 +1,0 @@
-Source is the approved local deck at E:/AI4science/outputs/XRD_导师汇报.pptx. P1-P5 remain visually immutable; only the existing P2-P5 page-number denominators are normalized mechanically to /06. P1 is the cover and intentionally has no page marker. P6 duplicates the approved P5 result layout.
-
-RRUFF wording and values are verified from the local dataset contract, split manifest, master manifest, and frozen rruff301_fewshot_results.json. The 301 count denotes unique measured RRUFF samples/spectra, not unique mineral species. K is labels per crystal-system class, so seven classes imply support-set sizes 7/14/35 per episode.

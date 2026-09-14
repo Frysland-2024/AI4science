@@ -1,6 +1,0 @@
-Scope: slide 1 only. Slides 2-8 are immutable by explicit user instruction.
-Source pattern: white canvas, centered deep-navy title, muted subtitle, thin light-gray divider, native PXRD chart, centered footer.
-Typography: Microsoft YaHei; deep navy #143A63; method blue #285F97; muted gray #657384.
-Insertion contract: reuse the existing title, subtitle, divider, left chart, text slots, and footer. Delete the second chart and outdated comparison labels. Add only two text arrows and one plain-text crystal-system list inside the former comparison region.
-QA boundary: render and visually inspect slide 1 only; do not re-render or aesthetically review slides 2-8.
-

@@ -1,5 +1,0 @@
-Scope: slide 3 only.
-Preserve: 16:9 canvas, blue-white scientific theme, Microsoft YaHei, navy title, thin divider, native PXRD chart style, page-number convention.
-Change: reframe slide 3 as the incremental method contribution following slide 2.
-Immutable: slides 1-2 and 4-8; no global master, theme, font, page-size, or shared-resource edits.
-

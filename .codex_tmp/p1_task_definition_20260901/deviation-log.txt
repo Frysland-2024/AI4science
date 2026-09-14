@@ -1,4 +1,0 @@
-Slide 1 is intentionally changed from a robustness hook to a task-definition page because the user explicitly changed its narrative role.
-The source slide's two-spectrum comparison is replaced with one existing representative PXRD chart and a simple classification flow.
-Slides 2-8 are preserved without edits.
-

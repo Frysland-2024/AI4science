@@ -1,4 +1,0 @@
-Slide 7 only:
-- Replace the small right-side line under the average result with: 在相同数据和训练设置下重复训练 5 次，结果都更好。
-- Replace the bottom takeaway with: 在另一套真实实验谱上直接测试，我的方法仍然表现出稳定增益。
-No other visible slide content, geometry, chart data, speaker notes, masters, layouts, theme, or formatting is intentionally changed.

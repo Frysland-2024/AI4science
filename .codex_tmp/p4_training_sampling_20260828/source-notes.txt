@@ -1,4 +1,0 @@
-User-provided wording for slide 4:
-每次随机采样一组测量扰动 → 生成不同训练谱
-
-No external sources were used in this wording-only edit.

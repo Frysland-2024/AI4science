@@ -1,1 +1,0 @@
-Current deck is the single user-facing file. Slides 1–4 are immutable. Slide 5 source data and all text are already approved; only contrast refinement is requested.

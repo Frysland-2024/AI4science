@@ -1,5 +1,0 @@
-Use source.pptx as the single source deck.
-Slide 5 must explicitly identify the result as a simulated-spectrum test and state the held-out test data and fixed out-of-training-range perturbation condition.
-Keep the chart values, result summary, and bottom repeat-training sentence unchanged.
-Preserve the previously approved slide 7 wording already present in source.pptx.
-

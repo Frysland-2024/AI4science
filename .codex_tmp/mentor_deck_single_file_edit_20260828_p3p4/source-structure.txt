@@ -1,3 +1,0 @@
-slides=4
-masters=1
-layouts=2

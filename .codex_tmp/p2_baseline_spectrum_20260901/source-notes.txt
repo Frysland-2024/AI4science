@@ -1,5 +1,0 @@
-Source deck: E:/AI4science/outputs/XRD_导师汇报.pptx
-External sources: none added in this edit.
-Visual assets: reuse the native slide-2 training-spectrum charts; derive the small baseline-computation chart from the existing native blue spectrum data already embedded on slide 2.
-Scientific wording: supplied directly by the user.
-

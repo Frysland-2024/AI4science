@@ -1,8 +1,0 @@
-Source deck: E:/AI4science/outputs/XRD_导师汇报.pptx
-Source inventory: 4 slides, all inspected and rendered individually.
-Slide hierarchy: the current deck's master, layouts, theme, page markers, notes, charts, and inherited visual system are preserved.
-Reuse contract: output slides 1-4 map one-to-one to source slides 1-4.
-Preserve-only slides: 1 and 2.
-Targeted edits: slide 3 has two label rewrites/repositions; slide 4 has one legend rewrite, one split-note rewrite, and five native-chart series recolors.
-Placeholder audit: no visible prompt text or unresolved authoring placeholders found in the source render/inspection.
-Inspection-script note: the bundled template inspector could not call unzip on this Windows host, so the same complete inventory was produced with artifact-tool directly.

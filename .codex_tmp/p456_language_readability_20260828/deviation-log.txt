@@ -1,5 +1,0 @@
-No deviations planned from the user-provided modification note.
-Slides 1-3 are immutable in this round.
-Slides 4-6 retain the existing visual system and all frozen experimental values.
-No whole-deck aesthetic regression review will be performed; only slides 4-6 will be rendered visually.
-A final whole-deck mechanical overflow/openability check is allowed because it does not redesign or re-review immutable slides.

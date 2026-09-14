@@ -1,9 +1,0 @@
-QA status: PASS
-Final output: E:\AI4science\outputs\XRD_导师阶段汇报_2026-08-28_重点版.pptx
-Slide count: 12
-Speaker notes with [Sources]: 12
-slides_test.py: Test passed. No overflow detected.
-Round-trip render: 12/12 slides inspected individually; no clipping, overlaps, or abnormal wrapping.
-SHA256: 7FA1035D9CA07E48A0408450845907189585CF6F54E84A02C7731146131831DC
-Gamma online version: https://gamma.app/docs/f22f6x6jhq747zd
-Gamma export check: 10 slides; kept in temporary QA workspace only.

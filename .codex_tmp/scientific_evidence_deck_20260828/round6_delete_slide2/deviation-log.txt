@@ -1,3 +1,0 @@
-Source slide 2 omitted because the user explicitly requested deletion.
-Source slide 3 page marker rewritten from 03 / 03 to 02 / 02 so the two-slide deck remains internally consistent.
-No other visual, textual, chart, note, master, layout, or theme changes are intended.

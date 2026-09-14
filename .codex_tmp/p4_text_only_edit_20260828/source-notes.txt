@@ -1,2 +1,0 @@
-No external web assets or web research were used.
-All visible data counts and perturbation categories are inherited from the existing local deck and its cited local project files.

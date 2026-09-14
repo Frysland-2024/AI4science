@@ -1,1 +1,0 @@
-The current five-slide deck is the sole design source. Slides 1–4 are immutable. Slide 5 keeps the approved title, chart data, geometry, colors, axes, summary block, and notes. Only existing chart microtype is enlarged for projection legibility.
