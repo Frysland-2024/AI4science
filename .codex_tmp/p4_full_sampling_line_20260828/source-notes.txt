@@ -1,0 +1,4 @@
+Exact user-approved wording for slide 4:
+同一晶体 → 每次随机采样一组测量扰动 → 生成不同训练谱
+
+No external sources were used.

@@ -1,0 +1,7 @@
+Source deck: E:/AI4science/outputs/XRD_导师汇报.pptx
+Source slides: 4, all retained without edits.
+New output slide: duplicate source slide 2 because it provides the established title, page marker, top rule, and a large full-width scientific-chart content area.
+Visual system: white canvas; dark navy title; muted gray-blue supporting copy; flat native chart; no cards, gradients, shadows, icons, or decorative artwork.
+Typography: inherit source title and page-number styles. Reuse three inherited labels for the right-side summary. The native chart uses the same navy and gray-blue palette.
+Insertion contract: delete only the duplicated slide's three spectrum charts, two row separators, and old takeaway. Add one native clustered-column chart inside x=72..932, y=136..614. Keep the inherited title rule and all masters/layouts.
+Inherited placeholders: no unresolved visible placeholder prompts in the source inspection.

@@ -1,0 +1,55 @@
+{
+  "benchmark_scope": {
+    "not_claimed": [
+      "unseen-structure benchmark",
+      "broad industrial PXRD coverage",
+      "quantitative phase-purity benchmark"
+    ],
+    "primary_claim": "simulation-to-experiment measurement-domain transfer on measured mineral powder XRD",
+    "structure_overlap_policy": "exact structure overlap is not an exclusion gate; no known strict RRUFF–MP match was detected"
+  },
+  "class_counts": {
+    "cubic": 10,
+    "hexagonal": 10,
+    "monoclinic": 10,
+    "orthorhombic": 10,
+    "tetragonal": 10,
+    "triclinic": 10,
+    "trigonal": 10
+  },
+  "dataset_id": "rruff-real-pxrd-70-v1.0-final",
+  "frozen_at": "2026-07-24",
+  "independence_rules": [
+    "unique RRUFF ID",
+    "unique mineral name",
+    "unique ideal formula plus space group",
+    "pairwise canonical spectrum Pearson r < 0.95"
+  ],
+  "input_hashes": {
+    "DIF.zip": "3B540DB61664CACDD22268FFBAC6AB586CA6BCE389B7399CC3E9BAAEB6607B03",
+    "XY_RAW.zip": "948A133482BB3C99DA80194CC2848933AEE668129BEB209150F7F850CD4B0587",
+    "source_prefreeze_manifest": "877E3F9DFB25A43D26F490945C95F70BA259291CEBF4F48BB4956C1868B6399A",
+    "source_prefreeze_package": "FFE8CE95594C45B678EC7DFFBDA1D90CE2C7CAD431C393ECB57B56257BFB2048",
+    "split_manifest.v9t.family_v1.csv": "4304D5FA5A35082AFD6653647875074D207E3ACDC35123FFF8FD6E42BE1C672B"
+  },
+  "manifest_sha256": "17236DA1654E43370034DB6F7391C5882583FFAF62147856B8A85D79BC1174C5",
+  "model_outputs_used_to_select_or_freeze": false,
+  "model_selection_use_forbidden": true,
+  "phase_evidence_policy": {
+    "claim": "nominal single-mineral label",
+    "not_claimed": "quantitative Rietveld phase fraction or 100 percent purity",
+    "required": [
+      "exact diffraction sample description Powder",
+      "XRD-confirmed identification",
+      "paired DIF space group",
+      "no explicit impurity warning in diffraction sample description",
+      "measured-vs-DIF consistency pass"
+    ]
+  },
+  "preprocessing_contract_sha256": "90DCBDC89F641A876DA2E8A927499A3E7225934AE38E820D70AD26640113C9CC",
+  "role": "final_external_measurement_domain_test_only",
+  "sample_count": 70,
+  "selection_id_list_sha256": "E497C65212EC36FFD6800B4806AF0B134B9CDBD9E270E073B1F3061409E7EE71",
+  "selection_unit": "unique_RRUFF_sample_id",
+  "status": "FROZEN_FINAL_DATASET"
+}

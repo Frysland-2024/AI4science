@@ -1,0 +1,14 @@
+{"kind":"slide","id":"sl/i107q5of","slide":5,"title":"五次独立训练全部提升，平均 Macro-F1 +5.46 个百分点","textShapes":10}
+{"kind":"textbox","id":"sh/v2twb6dw","slide":5,"name":"slide-2-title","text":"五次独立训练全部提升，平均 Macro-F1 +5.46 个百分点","textPreview":"五次独立训练全部提升，平均 Macro-F1 +5.46 个百分点","textChars":33,"textLines":1,"bbox":[58,30,1128,58]}
+{"kind":"textbox","id":"sh/dgbulwnm","slide":5,"text":"05 / 05","textPreview":"05 / 05","textChars":7,"textLines":1,"bbox":[1176,40,48,24]}
+{"kind":"shape","id":"sh/cf2tcr61","slide":5,"bbox":[58,102,1166,0]}
+{"kind":"textbox","id":"sh/z2tcnm5s","slide":5,"text":"5 / 5 ↑","textPreview":"5 / 5 ↑","textChars":7,"textLines":1,"bbox":[978,178,225,68]}
+{"kind":"textbox","id":"sh/yhkbe1o7","slide":5,"text":"全部独立训练均提升","textPreview":"全部独立训练均提升","textChars":9,"textLines":1,"bbox":[978,246,238,36]}
+{"kind":"textbox","id":"sh/l4bupwny","slide":5,"text":"平均 +5.46 pp","textPreview":"平均 +5.46 pp","textChars":11,"textLines":1,"bbox":[978,338,238,44]}
+{"kind":"textbox","id":"sh/58vehgvy","slide":5,"name":"p5-gain-1","text":"+5.48 pp","textPreview":"+5.48 pp","textChars":8,"textLines":1,"bbox":[158,108,108,24]}
+{"kind":"textbox","id":"sh/i54fmlc7","slide":5,"name":"p5-gain-2","text":"+6.14 pp","textPreview":"+6.14 pp","textChars":8,"textLines":1,"bbox":[317,108,108,24]}
+{"kind":"textbox","id":"sh/j6dwfqds","slide":5,"name":"p5-gain-3","text":"+4.99 pp","textPreview":"+4.99 pp","textChars":8,"textLines":1,"bbox":[476,108,108,24]}
+{"kind":"textbox","id":"sh/sb6xsvu9","slide":5,"name":"p5-gain-4","text":"+4.51 pp","textPreview":"+4.51 pp","textChars":8,"textLines":1,"bbox":[635,108,108,24]}
+{"kind":"textbox","id":"sh/tcfel0vu","slide":5,"name":"p5-gain-5","text":"+6.18 pp","textPreview":"+6.18 pp","textChars":8,"textLines":1,"bbox":[794,108,108,24]}
+{"kind":"chart","id":"ch/4b61kbil","slide":5,"name":"","chartType":"bar","bbox":[62,135,880,505]}
+{"kind":"notes","id":"nt/i107q5of","slide":5,"text":"本页只展示冻结模拟扰动 Test 的 Macro-F1。\n五次独立训练中，一致性训练均优于基线。\nSeed 1: 0.6390 → 0.6939 (+5.48 pp)\nSeed 2: 0.6553 → 0.7167 (+6.14 pp)\nSeed 3: 0.6577 → 0.7075 (+4.99 pp)\nSeed 4: 0.6517 → 0.6967 (+4.51 pp)\nSeed 5: 0.6500 → 0.7118 (+6.18 pp)\n平均: 0.6507 → 0.7053 (+5.46 pp)\n[Sources]\n- E:/AI4science/xrd_robustness/reports/simulated_test_results.json"}

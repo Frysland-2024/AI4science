@@ -1,0 +1,11 @@
+{
+  "template": "E:/AI4science/.codex_tmp/p5_contrast_refine_20260828/template-starter.pptx",
+  "output": "E:/AI4science/outputs/XRD_导师汇报.pptx",
+  "slideMapping": [
+    { "sourceSlide": 1, "outputSlide": 1, "action": "preserve", "review": false },
+    { "sourceSlide": 2, "outputSlide": 2, "action": "preserve", "review": false },
+    { "sourceSlide": 3, "outputSlide": 3, "action": "preserve", "review": false },
+    { "sourceSlide": 4, "outputSlide": 4, "action": "preserve", "review": false },
+    { "sourceSlide": 5, "outputSlide": 5, "action": "rewrite-existing-chart-colors-only", "review": true }
+  ]
+}

@@ -1,0 +1,3 @@
+Slide 4 only:
+- Replace "每次随机采样一组测量扰动 → 生成不同训练谱" with "同一晶体 → 每次随机采样一组测量扰动 → 生成不同训练谱".
+- Keep the line single-line while preserving all other inherited content.

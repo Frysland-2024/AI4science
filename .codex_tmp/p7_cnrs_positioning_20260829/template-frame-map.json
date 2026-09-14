@@ -1,0 +1,23 @@
+{
+  "outputSlides": [
+    {"outputSlide": 1, "sourceSlide": 1, "narrativeRole": "preserve-only source slide", "reuseMode": "duplicate-slide", "editTargets": []},
+    {"outputSlide": 2, "sourceSlide": 2, "narrativeRole": "preserve-only source slide", "reuseMode": "duplicate-slide", "editTargets": []},
+    {"outputSlide": 3, "sourceSlide": 3, "narrativeRole": "preserve-only source slide", "reuseMode": "duplicate-slide", "editTargets": []},
+    {"outputSlide": 4, "sourceSlide": 4, "narrativeRole": "preserve-only source slide", "reuseMode": "duplicate-slide", "editTargets": []},
+    {"outputSlide": 5, "sourceSlide": 5, "narrativeRole": "preserve-only source slide", "reuseMode": "duplicate-slide", "editTargets": []},
+    {"outputSlide": 6, "sourceSlide": 6, "narrativeRole": "preserve-only source slide", "reuseMode": "duplicate-slide", "editTargets": []},
+    {
+      "outputSlide": 7,
+      "sourceSlide": 7,
+      "narrativeRole": "CNRS direct-test positioning and result",
+      "reuseMode": "duplicate-slide",
+      "editTargets": [
+        {"sourceElementId": "sh/cbq1sv25", "action": "rewrite", "reason": "Replace ML-heavy title with a direct audience-facing statement."},
+        {"sourceElementId": "sh/kzmdova1", "action": "rewrite", "reason": "State that CNRS data does not adjust the model and is used for direct testing."},
+        {"sourceElementId": "sh/zedcfa9g", "action": "rewrite", "reason": "Remove repeated training-setting explanation and retain only the 5-of-5 result plus average gain."},
+        {"sourceElementId": "sh/jedkn654", "action": "rewrite", "reason": "Clarify why CNRS is distinct from the preceding RRUFF result."}
+      ]
+    }
+  ],
+  "omittedSourceSlides": []
+}

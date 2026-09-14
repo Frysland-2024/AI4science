@@ -1,0 +1,5 @@
+Slide 5 title font is reduced from 40 pt to 34 pt, matching the deck's existing long-title treatment on slides 6-7, so the requested conclusion title remains on one line.
+The existing small right-side explanatory textbox is repurposed as the requested test-data subtitle instead of adding a new decorative element.
+The chart and gain labels are moved downward and the chart height is reduced slightly to create a clear subtitle band while preserving all data and visual semantics.
+No other content or layout is changed.
+Mechanical correction: page-number totals on slides 2-6 are updated from /06 to /07 because the approved deck contains seven slides. No page-number position or style is changed.

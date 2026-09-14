@@ -1,0 +1,135 @@
+{"kind":"slide","id":"sl/y90nupkv","slide":1,"title":"研究任务：根据 XRD 谱判断晶系","textShapes":7}
+{"kind":"textbox","id":"sh/ul4vaxgb","slide":1,"name":"矩形 11","text":"研究任务：根据 XRD 谱判断晶系","textPreview":"研究任务：根据 XRD 谱判断晶系","textChars":17,"textLines":1,"bbox":[44,56,1192,66]}
+{"kind":"shape","id":"sh/k3yl0zql","slide":1,"name":"直接连接符 2","bbox":[178,158,924,0]}
+{"kind":"textbox","id":"sh/7qp4be9c","slide":1,"name":"矩形 3","text":"XRD 谱","textPreview":"XRD 谱","textChars":5,"textLines":1,"bbox":[72,204,520,42]}
+{"kind":"textbox","id":"sh/65g3298r","slide":1,"name":"矩形 4","text":"7 种晶系之一","textPreview":"7 种晶系之一","textChars":7,"textLines":1,"bbox":[824,345,376,36]}
+{"kind":"textbox","id":"sh/utg3698n","slide":1,"name":"矩形 8","text":"晶系判断","textPreview":"晶系判断","textChars":4,"textLines":1,"bbox":[824,260,376,78]}
+{"kind":"textbox","id":"sh/hofulsf2","slide":1,"name":"矩形 10","text":"阶段性研究汇报","textPreview":"阶段性研究汇报","textChars":7,"textLines":1,"bbox":[76,654,1128,24]}
+{"kind":"textbox","id":"sh/ipovexwn","slide":1,"name":"p1-crystal-system-list","text":"立方 · 四方 · 正交 · 六方\n三方 · 单斜 · 三斜","textPreview":"立方 · 四方 · 正交 · 六方 | 三方 · 单斜 · 三斜","textChars":30,"textLines":2,"bbox":[804,404,416,82]}
+{"kind":"textbox","id":"sh/sfqdkrep","slide":1,"name":"p1-direct-task-arrow","text":"→","textPreview":"→","textChars":1,"textLines":1,"bbox":[610,326,150,94]}
+{"kind":"chart","id":"ch/l8rap87e","slide":1,"name":"Chart","chartType":"scatter","bbox":[66,252,532,268]}
+{"kind":"slide","id":"sl/hwbqtkby","slide":2,"title":"前人工作：随机采样扰动参数，生成多样化训练谱","textShapes":18}
+{"kind":"textbox","id":"sh/nu58f2hs","slide":2,"name":"slide-2-title","text":"前人工作：随机采样扰动参数，生成多样化训练谱","textPreview":"前人工作：随机采样扰动参数，生成多样化训练谱","textChars":22,"textLines":1,"bbox":[58,26,1096,56]}
+{"kind":"textbox","id":"sh/9072xkry","slide":2,"name":"矩形 1","text":"02 / 08","textPreview":"02 / 08","textChars":7,"textLines":1,"bbox":[1176,40,48,24]}
+{"kind":"shape","id":"sh/ozy1ofad","slide":2,"name":"直接连接符 2","bbox":[58,140,1166,0]}
+{"kind":"textbox","id":"sh/b29kza94","slide":2,"name":"矩形 3","text":"晶体结构","textPreview":"晶体结构","textChars":4,"textLines":1,"bbox":[54,263,140,58]}
+{"kind":"textbox","id":"sh/a10jqpsj","slide":2,"name":"矩形 4","text":"根据晶体结构\n计算XRD谱","textPreview":"根据晶体结构 | 计算XRD谱","textChars":13,"textLines":2,"bbox":[226,208,216,48]}
+{"kind":"textbox","id":"sh/x4r21kru","slide":2,"name":"矩形 5","text":"随机采样\n扰动参数","textPreview":"随机采样 | 扰动参数","textChars":9,"textLines":2,"bbox":[484,239,222,104]}
+{"kind":"textbox","id":"sh/mtwrmxg7","slide":2,"name":"矩形 11","text":"但这些同源生成谱，通常仍被当作彼此独立的训练样本使用。","textPreview":"但这些同源生成谱，通常仍被当作彼此独立的训练样本使用。","textChars":27,"textLines":1,"bbox":[150,526,980,42]}
+{"kind":"textbox","id":"sh/bip8jmho","slide":2,"name":"p2-prior-work-subtitle","text":"已有工作通过随机采样峰移、展宽、背景/噪声、择优取向等扰动参数，生成更多样的训练谱。","textPreview":"已有工作通过随机采样峰移、展宽、背景/噪声、择优取向等扰动参数，生成更多样的训练谱。","textChars":42,"textLines":1,"bbox":[58,91,1146,34]}
+{"kind":"textbox","id":"sh/cnupgny5","slide":2,"name":"p2-arrow-1","text":"→","textPreview":"→","textChars":1,"textLines":1,"bbox":[192,256,34,68]}
+{"kind":"textbox","id":"sh/do3q9szq","slide":2,"name":"p2-arrow-2","text":"→","textPreview":"→","textChars":1,"textLines":1,"bbox":[442,256,38,68]}
+{"kind":"textbox","id":"sh/t8byxkn2","slide":2,"name":"p2-arrow-3","text":"→","textPreview":"→","textChars":1,"textLines":1,"bbox":[710,256,58,68]}
+{"kind":"textbox","id":"sh/s72xofmh","slide":2,"name":"p2-perturbation-examples","text":"峰移 · 展宽 · 背景/噪声 · 择优取向","textPreview":"峰移 · 展宽 · 背景/噪声 · 择优取向","textChars":22,"textLines":1,"bbox":[444,358,300,28]}
+{"kind":"textbox","id":"sh/76twva5c","slide":2,"name":"p2-output-heading","text":"生成多种训练谱","textPreview":"生成多种训练谱","textChars":7,"textLines":1,"bbox":[804,168,398,38]}
+{"kind":"textbox","id":"sh/65kfmpor","slide":2,"name":"p2-扰动谱 A","text":"训练谱 A","textPreview":"训练谱 A","textChars":5,"textLines":1,"bbox":[772,227,86,32]}
+{"kind":"textbox","id":"sh/hcvy14ne","slide":2,"name":"p2-扰动谱 B","text":"训练谱 B","textPreview":"训练谱 B","textChars":5,"textLines":1,"bbox":[772,322,86,32]}
+{"kind":"textbox","id":"sh/gbmxszmt","slide":2,"name":"p2-扰动谱 C","text":"训练谱 C","textPreview":"训练谱 C","textChars":5,"textLines":1,"bbox":[772,417,86,32]}
+{"kind":"textbox","id":"sh/fadgzu58","slide":2,"name":"p2-literature-line","text":"代表性工作：Oviedo et al. (2019); Szymanski et al. (2021); Lee et al. (2023); Schopmans et al. (2023)","textPreview":"代表性工作：Oviedo et al. (2019); Szymanski et al. (2021); Lee et al. (2023); Schopmans et al. (2023)","textChars":95,"textLines":1,"bbox":[58,610,1164,24]}
+{"kind":"textbox","id":"sh/nmpcj6ls","slide":2,"name":"p2-baseline-note","text":"未加入测量扰动","textPreview":"未加入测量扰动","textChars":7,"textLines":1,"bbox":[226,350.52,216,24]}
+{"kind":"textbox","id":"sh/r65knqtk","slide":2,"name":"文本框 7","text":"基准计算谱","textPreview":"基准计算谱","textChars":5,"textLines":1,"bbox":[261.27,316.67,145.45,33.93]}
+{"kind":"chart","id":"ch/gvul8jul","slide":2,"name":"Chart","chartType":"scatter","bbox":[866,212,348,82]}
+{"kind":"chart","id":"ch/hwn2hov6","slide":2,"name":"Chart","chartType":"scatter","bbox":[866,307,348,82]}
+{"kind":"chart","id":"ch/2xw3atcr","slide":2,"name":"Chart","chartType":"scatter","bbox":[866,402,348,86]}
+{"kind":"chart","id":"ch/3y5kjydw","slide":2,"name":"Chart","chartType":"scatter","bbox":[229,260,210,56]}
+{"kind":"slide","id":"sl/ofy9wn61","slide":3,"title":"我的改进：同一结构在不同扰动条件下，模型判断应保持一致","textShapes":22}
+{"kind":"textbox","id":"sh/03ix43e5","slide":3,"name":"slide-3-title","text":"我的改进：同一结构在不同扰动条件下，模型判断应保持一致","textPreview":"我的改进：同一结构在不同扰动条件下，模型判断应保持一致","textChars":27,"textLines":1,"bbox":[58,26,1104,58]}
+{"kind":"textbox","id":"sh/cza94vmx","slide":3,"name":"矩形 1","text":"03 / 08","textPreview":"03 / 08","textChars":7,"textLines":1,"bbox":[1176,40,48,24]}
+{"kind":"shape","id":"sh/d0jax03i","slide":3,"name":"直接连接符 2","bbox":[58,102,1166,0]}
+{"kind":"textbox","id":"sh/re9g7yxo","slide":3,"name":"p3-same-crystal","text":"同一晶体结构","textPreview":"同一晶体结构","textChars":6,"textLines":1,"bbox":[430,116,420,42]}
+{"kind":"textbox","id":"sh/sfix03y9","slide":3,"name":"p3-branch-left","text":"↙","textPreview":"↙","textChars":1,"textLines":1,"bbox":[412,148,88,38]}
+{"kind":"textbox","id":"sh/tgry9ofu","slide":3,"name":"p3-branch-right","text":"↘","textPreview":"↘","textChars":1,"textLines":1,"bbox":[780,148,88,38]}
+{"kind":"textbox","id":"sh/a9kfadwn","slide":3,"name":"p3-random-a","text":"随机采样扰动参数 A","textPreview":"随机采样扰动参数 A","textChars":10,"textLines":1,"bbox":[176,172,350,28]}
+{"kind":"textbox","id":"sh/batgjixs","slide":3,"name":"p3-random-b","text":"随机采样扰动参数 B","textPreview":"随机采样扰动参数 B","textChars":10,"textLines":1,"bbox":[754,172,350,28]}
+{"kind":"textbox","id":"sh/l4fi9cza","slide":3,"name":"p3-down-random-a","text":"↓","textPreview":"↓","textChars":1,"textLines":1,"bbox":[330,194,42,30]}
+{"kind":"textbox","id":"sh/k3m1g7yp","slide":3,"name":"p3-down-random-b","text":"↓","textPreview":"↓","textChars":1,"textLines":1,"bbox":[908,194,42,30]}
+{"kind":"textbox","id":"sh/z2d07mh4","slide":3,"name":"p3-spectrum-a-label","text":"训练谱 A","textPreview":"训练谱 A","textChars":5,"textLines":1,"bbox":[176,215,350,28]}
+{"kind":"textbox","id":"sh/y14jehgj","slide":3,"name":"p3-spectrum-b-label","text":"训练谱 B","textPreview":"训练谱 B","textChars":5,"textLines":1,"bbox":[754,215,350,28]}
+{"kind":"textbox","id":"sh/x0vi5czy","slide":3,"name":"p3-down-chart-a","text":"↓","textPreview":"↓","textChars":1,"textLines":1,"bbox":[330,326,42,30]}
+{"kind":"textbox","id":"sh/czmhc7id","slide":3,"name":"p3-down-chart-b","text":"↓","textPreview":"↓","textChars":1,"textLines":1,"bbox":[908,326,42,30]}
+{"kind":"shape","id":"sh/byd032h8","slide":3,"name":"p3-same-model-box","bbox":[354,358,572,38]}
+{"kind":"textbox","id":"sh/ax4zax0n","slide":3,"name":"p3-same-model-label","text":"同一个模型","textPreview":"同一个模型","textChars":5,"textLines":1,"bbox":[354,358,572,38]}
+{"kind":"textbox","id":"sh/hwzihwzi","slide":3,"name":"p3-down-model-a","text":"↓","textPreview":"↓","textChars":1,"textLines":1,"bbox":[330,396,42,30]}
+{"kind":"textbox","id":"sh/wv61obyx","slide":3,"name":"p3-down-model-b","text":"↓","textPreview":"↓","textChars":1,"textLines":1,"bbox":[908,396,42,30]}
+{"kind":"textbox","id":"sh/4nuhs7uh","slide":3,"name":"p3-judgment-a","text":"晶系判断 A","textPreview":"晶系判断 A","textChars":6,"textLines":1,"bbox":[176,424,350,34]}
+{"kind":"textbox","id":"sh/po3ilcvm","slide":3,"name":"p3-judgment-b","text":"晶系判断 B","textPreview":"晶系判断 B","textChars":6,"textLines":1,"bbox":[754,424,350,34]}
+{"kind":"textbox","id":"sh/21szqxcb","slide":3,"name":"p3-converge-left","text":"↘","textPreview":"↘","textChars":1,"textLines":1,"bbox":[430,452,70,34]}
+{"kind":"textbox","id":"sh/32l0j2dw","slide":3,"name":"p3-converge-right","text":"↙","textPreview":"↙","textChars":1,"textLines":1,"bbox":[780,452,70,34]}
+{"kind":"textbox","id":"sh/cruhwrud","slide":3,"name":"p3-main-takeaway","text":"两次判断保持一致","textPreview":"两次判断保持一致","textChars":8,"textLines":1,"bbox":[190,481,900,74]}
+{"kind":"textbox","id":"sh/ds3ipcvy","slide":3,"name":"p3-core-sentence","text":"方法核心：把“测量可变、结构不变”这一物理关系写进模型训练。","textPreview":"方法核心：把“测量可变、结构不变”这一物理关系写进模型训练。","textChars":30,"textLines":1,"bbox":[120,624,1040,34]}
+{"kind":"chart","id":"ch/a54z6pcb","slide":3,"name":"Chart","chartType":"scatter","bbox":[176,242,350,88]}
+{"kind":"chart","id":"ch/b6dgzutw","slide":3,"name":"Chart","chartType":"scatter","bbox":[754,242,350,88]}
+{"kind":"slide","id":"sl/jyx0ra1s","slide":4,"title":"数据与实验设置：14,060 个晶体结构，覆盖 5 类常见测量扰动","textShapes":7}
+{"kind":"textbox","id":"sh/jadsz2xk","slide":4,"name":"slide-2-title","text":"数据与实验设置：14,060 个晶体结构，覆盖 5 类常见测量扰动","textPreview":"数据与实验设置：14,060 个晶体结构，覆盖 5 类常见测量扰动","textChars":33,"textLines":1,"bbox":[58,30,1128,58]}
+{"kind":"textbox","id":"sh/1cj2d8b6","slide":4,"name":"矩形 1","text":"04 / 07","textPreview":"04 / 07","textChars":7,"textLines":1,"bbox":[1176,40,48,24]}
+{"kind":"shape","id":"sh/0ba143al","slide":4,"name":"直接连接符 2","bbox":[58,102,1166,0]}
+{"kind":"textbox","id":"sh/w72947yt","slide":4,"name":"矩形 13","text":"14,060","textPreview":"14,060","textChars":6,"textLines":1,"bbox":[68,154,390,82]}
+{"kind":"textbox","id":"sh/x8vaxsfe","slide":4,"name":"矩形 14","text":"来自 Materials Project 的晶体结构","textPreview":"来自 Materials Project 的晶体结构","textChars":26,"textLines":1,"bbox":[72,242,420,34]}
+{"kind":"textbox","id":"sh/a5kr2xg3","slide":4,"name":"矩形 15","text":"训练 / 验证 / 测试","textPreview":"训练 / 验证 / 测试","textChars":12,"textLines":1,"bbox":[72,337,375,28]}
+{"kind":"textbox","id":"sh/v6tsv2xo","slide":4,"name":"矩形 16","text":"9,842 / 2,109 / 2,109","textPreview":"9,842 / 2,109 / 2,109","textChars":21,"textLines":1,"bbox":[72,374,405,48]}
+{"kind":"textbox","id":"sh/g36tgryd","slide":4,"name":"矩形 17","text":"按晶体结构划分\n同一晶体的不同谱始终留在同一数据集\n\n训练时实时生成谱\n同一晶体 → 每次随机采样一组测量扰动 → 生成不同训练谱","textPreview":"按晶体结构划分 | 同一晶体的不同谱始终留在同一数据集 |  | 训练时实时生成谱 | 同一晶体 → 每次随机采样一组测量扰动 → 生成不同训练谱","textChars":65,"textLines":5,"bbox":[72,446,420,190]}
+{"kind":"shape","id":"sh/h4fa9wfy","slide":4,"name":"直接连接符 18","bbox":[500,134,0,502]}
+{"kind":"slide","id":"sl/i107q5of","slide":5,"title":"1. 模拟扰动结果：5 次重复训练全部提升","textShapes":11}
+{"kind":"textbox","id":"sh/v2twb6dw","slide":5,"name":"slide-2-title","text":"1. 模拟扰动结果：5 次重复训练全部提升","textPreview":"1. 模拟扰动结果：5 次重复训练全部提升","textChars":21,"textLines":1,"bbox":[58,28,1096,62]}
+{"kind":"textbox","id":"sh/dgbulwnm","slide":5,"name":"矩形 1","text":"05 / 07","textPreview":"05 / 07","textChars":7,"textLines":1,"bbox":[1176,40,48,24]}
+{"kind":"shape","id":"sh/cf2tcr61","slide":5,"name":"直接连接符 2","bbox":[58,102,1166,0]}
+{"kind":"textbox","id":"sh/z2tcnm5s","slide":5,"name":"矩形 3","text":"5 / 5 ↑","textPreview":"5 / 5 ↑","textChars":7,"textLines":1,"bbox":[978,178,225,68]}
+{"kind":"textbox","id":"sh/yhkbe1o7","slide":5,"name":"矩形 4","text":"测试数据：2,109 个未参与训练的 MP 晶体结构，在训练范围外的固定测量扰动下生成测试谱。","textPreview":"测试数据：2,109 个未参与训练的 MP 晶体结构，在训练范围外的固定测量扰动下生成测试谱。","textChars":47,"textLines":1,"bbox":[64,108,1158,30]}
+{"kind":"textbox","id":"sh/l4bupwny","slide":5,"name":"矩形 5","text":"平均 +5.46 pp","textPreview":"平均 +5.46 pp","textChars":11,"textLines":1,"bbox":[978,338,238,44]}
+{"kind":"textbox","id":"sh/58vehgvy","slide":5,"name":"p5-gain-1","text":"+5.48 pp","textPreview":"+5.48 pp","textChars":8,"textLines":1,"bbox":[158,143,108,24]}
+{"kind":"textbox","id":"sh/i54fmlc7","slide":5,"name":"p5-gain-2","text":"+6.14 pp","textPreview":"+6.14 pp","textChars":8,"textLines":1,"bbox":[317,143,108,24]}
+{"kind":"textbox","id":"sh/j6dwfqds","slide":5,"name":"p5-gain-3","text":"+4.99 pp","textPreview":"+4.99 pp","textChars":8,"textLines":1,"bbox":[476,143,108,24]}
+{"kind":"textbox","id":"sh/sb6xsvu9","slide":5,"name":"p5-gain-4","text":"+4.51 pp","textPreview":"+4.51 pp","textChars":8,"textLines":1,"bbox":[635,143,108,24]}
+{"kind":"textbox","id":"sh/tcfel0vu","slide":5,"name":"p5-gain-5","text":"+6.18 pp","textPreview":"+6.18 pp","textChars":8,"textLines":1,"bbox":[794,143,108,24]}
+{"kind":"textbox","id":"sh/gfi5grih","slide":5,"name":"p5-repeat-explanation","text":"在相同数据和训练设置下重复训练 5 次，结果都更好。","textPreview":"在相同数据和训练设置下重复训练 5 次，结果都更好。","textChars":26,"textLines":1,"bbox":[62,652,880,32]}
+{"kind":"chart","id":"ch/zud0z69g","slide":5,"name":"Chart","chartType":"bar","bbox":[62,170,880,470]}
+{"kind":"slide","id":"sl/x8f69ofe","slide":6,"title":"2. 真实谱结果｜RRUFF-301","textShapes":7}
+{"kind":"textbox","id":"sh/u1kbu1ov","slide":6,"name":"slide-2-title","text":"2. 真实谱结果｜RRUFF-301","textPreview":"2. 真实谱结果｜RRUFF-301","textChars":18,"textLines":1,"bbox":[58,28,1096,62]}
+{"kind":"textbox","id":"sh/yhg7epsj","slide":6,"name":"矩形 1","text":"06 / 07","textPreview":"06 / 07","textChars":7,"textLines":1,"bbox":[1176,40,48,24]}
+{"kind":"shape","id":"sh/zi98nu94","slide":6,"name":"直接连接符 2","bbox":[58,102,1166,0]}
+{"kind":"textbox","id":"sh/5svutgni","slide":6,"name":"p6-summary-caption","text":"① 三档真实标注预算均提升\n平均约 +4.8 pp\n\n② 本方法用更少真实谱，\n也能达到相近甚至更好性能\n\n本方法 14 条 ≈ 基线 35 条\n0.349 ≈ 0.356\n\n本方法 7 条 > 基线 14 条\n0.328 > 0.303","textPreview":"① 三档真实标注预算均提升 | 平均约 +4.8 pp |  | ② 本方法用更少真实谱， | 也能达到相近甚至更好性能 |  | 本方法 14 条 ≈ 基线 35 条 | 0.349 ≈ 0.356 |  | 本方法 7 条 > 基线 14 条 | 0.328 > 0.303","textChars":119,"textLines":11,"bbox":[852,176,350,464]}
+{"kind":"textbox","id":"sh/47mt0b6x","slide":6,"name":"p6-dataset-context","text":"RRUFF-301：301 条真实实验谱｜每个晶系各取 1 / 2 / 5 条真实谱进行少量再训练","textPreview":"RRUFF-301：301 条真实实验谱｜每个晶系各取 1 / 2 / 5 条真实谱进行少量再训练","textChars":49,"textLines":1,"bbox":[64,108,1158,32]}
+{"kind":"textbox","id":"sh/j6dcr65c","slide":6,"name":"p6-gain-1","text":"+4.33 pp","textPreview":"+4.33 pp","textChars":8,"textLines":1,"bbox":[150,168,160,25]}
+{"kind":"textbox","id":"sh/i54bylor","slide":6,"name":"p6-gain-2","text":"+4.60 pp","textPreview":"+4.60 pp","textChars":8,"textLines":1,"bbox":[381,168,160,25]}
+{"kind":"textbox","id":"sh/twfux0ne","slide":6,"name":"p6-gain-3","text":"+5.45 pp","textPreview":"+5.45 pp","textChars":8,"textLines":1,"bbox":[612,168,160,25]}
+{"kind":"chart","id":"ch/8va107ql","slide":6,"name":"p6-rruff-fewshot-bars","chartType":"bar","bbox":[58,196,760,456]}
+{"kind":"slide","id":"sl/gnmp4jqx","slide":7,"title":"3. 独立真实谱验证｜CNRS-318：5 次结果仍全部提升","textShapes":11}
+{"kind":"textbox","id":"sh/cbq1sv25","slide":7,"name":"slide-2-title","text":" 3. 独立真实谱验证｜CNRS-318：5 次结果仍全部提升","textPreview":"3. 独立真实谱验证｜CNRS-318：5 次结果仍全部提升","textChars":31,"textLines":1,"bbox":[58,28,1096,62]}
+{"kind":"textbox","id":"sh/cb2tkvap","slide":7,"name":"矩形 1","text":"07 / 07","textPreview":"07 / 07","textChars":7,"textLines":1,"bbox":[1176,40,48,24]}
+{"kind":"shape","id":"sh/dcbud0ra","slide":7,"name":"直接连接符 2","bbox":[58,102,1166,0]}
+{"kind":"textbox","id":"sh/ydkbm5sv","slide":7,"name":"矩形 3","text":"5 / 5 ↑","textPreview":"5 / 5 ↑","textChars":7,"textLines":1,"bbox":[978,198,225,68]}
+{"kind":"textbox","id":"sh/zedcfa9g","slide":7,"name":"矩形 4","text":"5 次重复全部提升\n\n平均 +1.87 pp","textPreview":"5 次重复全部提升 |  | 平均 +1.87 pp","textChars":22,"textLines":3,"bbox":[978,272,238,104]}
+{"kind":"textbox","id":"sh/kzmdova1","slide":7,"name":"矩形 5","text":"CNRS-318：另一套独立真实实验谱｜不使用 CNRS 数据调整模型，直接测试","textPreview":"CNRS-318：另一套独立真实实验谱｜不使用 CNRS 数据调整模型，直接测试","textChars":40,"textLines":1,"bbox":[64,108,1158,32]}
+{"kind":"textbox","id":"sh/25ojml43","slide":7,"name":"p5-gain-1","text":"+1.45 pp","textPreview":"+1.45 pp","textChars":8,"textLines":1,"bbox":[158,143,108,24]}
+{"kind":"textbox","id":"sh/p8fih03e","slide":7,"name":"p5-gain-2","text":"+2.87 pp","textPreview":"+2.87 pp","textChars":8,"textLines":1,"bbox":[317,143,108,24]}
+{"kind":"textbox","id":"sh/o761ov2t","slide":7,"name":"p5-gain-3","text":"+1.29 pp","textPreview":"+1.29 pp","textChars":8,"textLines":1,"bbox":[476,143,108,24]}
+{"kind":"textbox","id":"sh/f2d0b6lc","slide":7,"name":"p5-gain-4","text":"+1.46 pp","textPreview":"+1.46 pp","textChars":8,"textLines":1,"bbox":[635,143,108,24]}
+{"kind":"textbox","id":"sh/eh4jil4r","slide":7,"name":"p5-gain-5","text":"+2.28 pp","textPreview":"+2.28 pp","textChars":8,"textLines":1,"bbox":[794,143,108,24]}
+{"kind":"textbox","id":"sh/jedkn654","slide":7,"name":"p5-repeat-explanation","text":"不使用 CNRS 数据调整模型，直接测试仍有增益。","textPreview":"不使用 CNRS 数据调整模型，直接测试仍有增益。","textChars":25,"textLines":1,"bbox":[62,652,880,32]}
+{"kind":"chart","id":"ch/szmd4zyp","slide":7,"name":"p7-cnrs-direct-bars","chartType":"bar","bbox":[62,172,880,468]}
+{"kind":"slide","id":"sl/fu1gfa1s","slide":8,"title":"下一阶段：把同一种物理约束思想，从分类延伸到定量反演","textShapes":24}
+{"kind":"textbox","id":"sh/n6pwfmd8","slide":8,"name":"slide-2-title","text":"下一阶段：把同一种物理约束思想，从分类延伸到定量反演","textPreview":"下一阶段：把同一种物理约束思想，从分类延伸到定量反演","textChars":26,"textLines":1,"bbox":[58,24,1080,58]}
+{"kind":"textbox","id":"sh/18byd4zy","slide":8,"name":"矩形 1","text":"08 / 08","textPreview":"08 / 08","textChars":7,"textLines":1,"bbox":[1176,40,48,24]}
+{"kind":"shape","id":"sh/g72x4zyd","slide":8,"name":"直接连接符 2","bbox":[58,102,1166,0]}
+{"kind":"textbox","id":"sh/0jydkreh","slide":8,"name":"矩形 13","text":"当前：定性判断","textPreview":"当前：定性判断","textChars":7,"textLines":1,"bbox":[170.03,148,185.94,40]}
+{"kind":"textbox","id":"sh/1k7edwv2","slide":8,"name":"矩形 14","text":"同一结构的不同测量谱，模型判断应一致","textPreview":"同一结构的不同测量谱，模型判断应一致","textChars":18,"textLines":1,"bbox":[95.36,192,335.27,48]}
+{"kind":"textbox","id":"sh/ehgvihwr","slide":8,"name":"矩形 15","text":"同一晶体结构","textPreview":"同一晶体结构","textChars":6,"textLines":1,"bbox":[72,254,382,34]}
+{"kind":"textbox","id":"sh/zipwbmdc","slide":8,"name":"矩形 16","text":"两次判断保持一致","textPreview":"两次判断保持一致","textChars":8,"textLines":1,"bbox":[72,384,382,62]}
+{"kind":"textbox","id":"sh/kfixwbe1","slide":8,"name":"矩形 17","text":"统一思路：把已知的物理关系，转化为模型训练和结果判断时必须满足的约束。","textPreview":"统一思路：把已知的物理关系，转化为模型训练和结果判断时必须满足的约束。","textChars":35,"textLines":1,"bbox":[73,606,1136,42]}
+{"kind":"textbox","id":"sh/svydgb65","slide":8,"name":"p8-left-branch","text":"↙                         ↘","textPreview":"↙                         ↘","textChars":27,"textLines":1,"bbox":[72,286,382,30]}
+{"kind":"textbox","id":"sh/7u5w765k","slide":8,"name":"p8-spectrum-a","text":"谱 A","textPreview":"谱 A","textChars":3,"textLines":1,"bbox":[86,318,140,36]}
+{"kind":"textbox","id":"sh/6twve1oz","slide":8,"name":"p8-spectrum-b","text":"谱 B","textPreview":"谱 B","textChars":3,"textLines":1,"bbox":[300,318,140,36]}
+{"kind":"textbox","id":"sh/5sne5wne","slide":8,"name":"p8-spectrum-a-arrow","text":"↓","textPreview":"↓","textChars":1,"textLines":1,"bbox":[86,352,140,28]}
+{"kind":"textbox","id":"sh/kredcr6t","slide":8,"name":"p8-spectrum-b-arrow","text":"↓","textPreview":"↓","textChars":1,"textLines":1,"bbox":[300,352,140,28]}
+{"kind":"textbox","id":"sh/jq5w365o","slide":8,"name":"p8-left-physical-relation","text":"物理关系：测量条件可以变，晶体结构不变","textPreview":"物理关系：测量条件可以变，晶体结构不变","textChars":19,"textLines":1,"bbox":[72,462,382,54]}
+{"kind":"textbox","id":"sh/i5wva1o3","slide":8,"name":"p8-stage-transition","text":"定性判断\n→\n定量反演","textPreview":"定性判断 | → | 定量反演","textChars":11,"textLines":3,"bbox":[540,254,116,170]}
+{"kind":"textbox","id":"sh/x4ne1wni","slide":8,"name":"p8-next-heading","text":"下一步：定量反演","textPreview":"下一步：定量反演","textChars":8,"textLines":1,"bbox":[791.12,146,200.76,40]}
+{"kind":"textbox","id":"sh/w3ed8r6x","slide":8,"name":"p8-next-subtitle","text":"反演参数如果合理，应能重新生成并解释输入谱。","textPreview":"反演参数如果合理，应能重新生成并解释输入谱。","textChars":22,"textLines":1,"bbox":[704.97,189,409.21,48]}
+{"kind":"textbox","id":"sh/m9sb2x4v","slide":8,"name":"p8-input-xrd","text":"输入 XRD 谱","textPreview":"输入 XRD 谱","textChars":8,"textLines":1,"bbox":[575,252,633,38]}
+{"kind":"textbox","id":"sh/na1sb2lg","slide":8,"name":"p8-input-arrow","text":"↓","textPreview":"↓","textChars":1,"textLines":1,"bbox":[575,289,633,26]}
+{"kind":"textbox","id":"sh/8bat47ml","slide":8,"name":"p8-parameter-block","text":"反演物理参数\na、c、零点偏移、FWHM","textPreview":"反演物理参数 | a、c、零点偏移、FWHM","textChars":20,"textLines":2,"bbox":[575,316,633,70]}
+{"kind":"textbox","id":"sh/9w3uds36","slide":8,"name":"p8-parameter-arrow","text":"↓","textPreview":"↓","textChars":1,"textLines":1,"bbox":[575,385,633,26]}
+{"kind":"textbox","id":"sh/y5sbed4j","slide":8,"name":"p8-regenerate-xrd","text":"根据参数生成计算谱","textPreview":"根据参数生成计算谱","textChars":9,"textLines":1,"bbox":[575,412,633,40]}
+{"kind":"textbox","id":"sh/z61s7il4","slide":8,"name":"p8-regenerate-arrow","text":"↓","textPreview":"↓","textChars":1,"textLines":1,"bbox":[575,452,633,26]}
+{"kind":"textbox","id":"sh/07atgnmp","slide":8,"name":"p8-generation-relation","text":"生成谱  ≈  输入谱","textPreview":"生成谱  ≈  输入谱","textChars":11,"textLines":1,"bbox":[575,468,633,76]}
+{"kind":"textbox","id":"sh/l8ja9s3a","slide":8,"name":"p8-right-physical-relation","text":"物理关系：参数合理时，生成谱应与实验谱相符","textPreview":"物理关系：参数合理时，生成谱应与实验谱相符","textChars":21,"textLines":1,"bbox":[575,536,633,54]}

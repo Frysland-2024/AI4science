@@ -1,0 +1,14 @@
+Communication job: replace one audience-facing explanation on slide 5 with the user's exact plain-language statement while preserving every other slide and every other object.
+
+Source audit
+- The source deck has 7 slides on a 1280 x 720 canvas.
+- Slide 5 is the repeated-training simulation result slide.
+- The requested target is the inherited bottom explanation textbox with source element id sh/gfi5grih, positioned below the chart.
+- Slides 1-4 and 6-7 are preserve-only. All other slide-5 objects are preserve-only.
+- Existing Microsoft YaHei typography, font size, color, alignment, position, and insets of the target textbox must be retained.
+- No master, layout, theme, page marker, chart, or speaker-note edits are authorized.
+
+Insertion contract
+- Duplicate all source slides in order.
+- Rewrite only sh/gfi5grih on output slide 5.
+- Render and visually inspect only output slide 5.

@@ -1,0 +1,4 @@
+No template fallback was required.
+The new P4 duplicates the existing P2 frame and preserves the original title/page/rule geometry.
+Only the duplicated body was deleted and replaced with the user-approved experimental-configuration content.
+Native scatter charts were used for the five XRD strips so the evidence remains editable and source-backed.

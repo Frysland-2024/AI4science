@@ -1,0 +1,236 @@
+{
+  "slideCount": 8,
+  "slideId": "ofy9wn61",
+  "shapeCount": 19,
+  "chartCount": 2,
+  "imageCount": 0,
+  "tableCount": 0,
+  "placeholderSummary": [],
+  "elements": [
+    {
+      "aid": "sh/03ix43e5",
+      "kind": "shape",
+      "text": "核心假设：同一结构在不同测量条件下，模型判断应保持一致",
+      "bbox": [
+        58,
+        30,
+        1128,
+        58
+      ],
+      "lineCount": 1
+    },
+    {
+      "aid": "sh/cza94vmx",
+      "kind": "shape",
+      "text": "03 / 07",
+      "bbox": [
+        1176,
+        40,
+        48,
+        24
+      ],
+      "lineCount": 1
+    },
+    {
+      "aid": "sh/d0jax03i",
+      "kind": "shape",
+      "bbox": [
+        58,
+        102,
+        1166,
+        0
+      ]
+    },
+    {
+      "aid": "sh/298ryl4v",
+      "kind": "shape",
+      "bbox": [
+        640,
+        162,
+        0,
+        22
+      ]
+    },
+    {
+      "aid": "sh/3ah8rqlg",
+      "kind": "shape",
+      "bbox": [
+        330,
+        184,
+        620,
+        0
+      ]
+    },
+    {
+      "aid": "sh/obq90bml",
+      "kind": "shape",
+      "bbox": [
+        330,
+        184,
+        0,
+        12
+      ]
+    },
+    {
+      "aid": "sh/pcjqtg36",
+      "kind": "shape",
+      "bbox": [
+        950,
+        184,
+        0,
+        12
+      ]
+    },
+    {
+      "aid": "sh/m5cra54z",
+      "kind": "shape",
+      "bbox": [
+        320,
+        192,
+        20,
+        24
+      ]
+    },
+    {
+      "aid": "sh/n6ls3alk",
+      "kind": "shape",
+      "bbox": [
+        940,
+        192,
+        20,
+        24
+      ]
+    },
+    {
+      "aid": "sh/n2l4fq98",
+      "kind": "shape",
+      "bbox": [
+        320,
+        345,
+        20,
+        38
+      ]
+    },
+    {
+      "aid": "sh/m1c3mlsn",
+      "kind": "shape",
+      "bbox": [
+        940,
+        345,
+        20,
+        38
+      ]
+    },
+    {
+      "aid": "sh/943mhgre",
+      "kind": "shape",
+      "bbox": [
+        490,
+        427.48,
+        22,
+        42
+      ]
+    },
+    {
+      "aid": "sh/83ulovat",
+      "kind": "shape",
+      "bbox": [
+        769,
+        431,
+        22,
+        42
+      ],
+      "lineCount": 1
+    },
+    {
+      "aid": "sh/v6l4jq94",
+      "kind": "shape",
+      "text": "同一晶体结构",
+      "bbox": [
+        518,
+        128,
+        244,
+        34
+      ],
+      "lineCount": 1
+    },
+    {
+      "aid": "sh/a5c3ql8z",
+      "kind": "shape",
+      "text": "受测量扰动的计算谱 A ",
+      "bbox": [
+        82,
+        196,
+        220,
+        52
+      ],
+      "lineCount": 1
+    },
+    {
+      "aid": "sh/x8nml0ra",
+      "kind": "shape",
+      "text": "受测量扰动的计算谱 B",
+      "bbox": [
+        978,
+        196,
+        220,
+        52
+      ],
+      "lineCount": 1
+    },
+    {
+      "aid": "ch/18j69wbi",
+      "kind": "chart",
+      "bbox": [
+        160,
+        250,
+        340,
+        100
+      ]
+    },
+    {
+      "aid": "ch/q18nuxsv",
+      "kind": "chart",
+      "bbox": [
+        780,
+        250,
+        340,
+        100
+      ]
+    },
+    {
+      "aid": "sh/i9w3u58v",
+      "kind": "shape",
+      "bbox": [
+        260,
+        383,
+        760,
+        36
+      ]
+    },
+    {
+      "aid": "sh/e10f2twf",
+      "kind": "shape",
+      "text": "同一个模型",
+      "bbox": [
+        410,
+        388,
+        460,
+        26
+      ],
+      "lineCount": 1
+    },
+    {
+      "aid": "sh/f29gbyx0",
+      "kind": "shape",
+      "text": "两次判断保持一致\n\n方法核心：把“测量可变、结构不变”这一物理不变量写进模型训练。",
+      "bbox": [
+        116.79,
+        469.48,
+        1010.42,
+        190
+      ],
+      "lineCount": 3
+    }
+  ]
+}

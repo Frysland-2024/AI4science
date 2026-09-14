@@ -1,0 +1,182 @@
+{
+  "experiment_id": "rruff301_confirmatory_fewshot_v1",
+  "status": "PREREGISTERED_LOCKED_NOT_AUTHORIZED",
+  "preregistered_at": "2026-08-07T00:00:00+08:00",
+  "description": "Confirmatory real-domain few-shot adaptation on previously unseen RRUFF-301. RRUFF-70 is downgraded to exploratory pilot. All protocol choices frozen before any model access to RRUFF-301 data.",
+
+  "dataset": {
+    "source": "rruff-real-pxrd-371-v2",
+    "used_in_development": {
+      "set": "RRUFF-70",
+      "role": "exploratory_pilot__downgraded_from_final_test",
+      "samples": 70,
+      "per_class": 10
+    },
+    "confirmatory_set": {
+      "set": "RRUFF-301",
+      "role": "previously_unseen_confirmatory_set",
+      "samples": 301,
+      "per_class": 43
+    },
+    "split_design": {
+      "seed": 20260807,
+      "method": "stratified_random_per_class",
+      "adaptation_pool": {
+        "per_class": 10,
+        "total": 70,
+        "usage": "K shot support sampled from this pool only"
+      },
+      "locked_test": {
+        "per_class": 33,
+        "total": 231,
+        "usage": "fixed test set, identical across all K and all episodes"
+      }
+    }
+  },
+
+  "preregistered_checkpoints": {
+    "source": "v9_resnet_js_simulated_test_checkpoints/checkpoints/",
+    "count": 10,
+    "training_seeds": ["20260711","20260712","20260713","20260714","20260715"],
+    "methods": ["dynamic_erm","js_lambda_60"],
+    "selection": "Validation-selected best epoch, frozen before any real-domain access"
+  },
+
+  "preprocessing": {
+    "contract_sha256": "90DCBDC89F641A876DA2E8A927499A3E7225934AE38E820D70AD26640113C9CC",
+    "two_theta_min": 10.0,
+    "two_theta_max": 80.0,
+    "step": 0.02,
+    "points": 3501,
+    "interpolation": "linear",
+    "normalization": "max",
+    "out_of_range_fill": 0.0
+  },
+
+  "few_shot_protocol": {
+    "K_values": [1, 2, 5],
+    "episode_seeds": [42, 123, 456, 789, 1024],
+    "total_paired_comparisons": "3K × 5 episode_seeds × 5 train_seeds = 75",
+    "adaptation_layers": {
+      "description": "Frozen-backbone projection-and-classifier adaptation",
+      "trainable_modules": ["embedding (7168→256)", "head (256→7)"],
+      "trainable_params": 1837063,
+      "trainable_fraction": 0.1412,
+      "frozen_modules": "stem, stages.0-3 (all convolutional and normalization layers)"
+    },
+    "optimizer": {
+      "algorithm": "AdamW",
+      "learning_rate": 0.0001,
+      "schedule": "constant",
+      "rationale": "Same nominal learning rate as pretraining contract"
+    },
+    "training": {
+      "batch_size": "full_batch (all support samples per episode)",
+      "batches_per_epoch": 1,
+      "optimizer_steps_per_epoch": 1,
+      "max_epochs": 200,
+      "max_optimizer_steps": 200
+    },
+    "early_stopping": {
+      "criterion": "support_set_cross_entropy_loss",
+      "monitor": "min",
+      "min_delta": 0.0001,
+      "patience_epochs": 20,
+      "min_epochs": 20,
+      "restore_best": true,
+      "forbidden": "query accuracy must NOT be used for epoch selection"
+    },
+    "fixed_test_set": {
+      "description": "All K values and all episodes use the same 231-sample locked test set",
+      "benefit": "Test composition does not vary with K or episode seed"
+    },
+    "sensitivity_check": {
+      "description": "Fixed 200-step run for K=1 and K=5, no early stopping, to confirm delta direction is robust to stopping rule",
+      "execution": "Run after primary experiment, before reporting conclusions"
+    }
+  },
+
+  "evaluation": {
+    "primary_metric": {
+      "name": "Macro-F1",
+      "computation": "Per-class F1, then unweighted mean across 7 crystal systems",
+      "rationale": "JS benefit is class-dependent; accuracy masks per-class effects"
+    },
+    "secondary_metrics": ["Accuracy", "Per-class F1", "Per-class Precision", "Per-class Recall"],
+    "primary_endpoint": {
+      "name": "Delta_MacroF1",
+      "computation": "Macro-F1_JS - Macro-F1_ERM, paired per (train_seed, episode_seed)",
+      "aggregation": "75 paired deltas, stratified by K"
+    }
+  },
+
+  "analysis_plan": {
+    "per_K_table": {
+      "fields": ["ERM mean±SD", "JS mean±SD", "mean paired delta", "median delta", "positive pairs / total"]
+    },
+    "delta_matrix": {
+      "description": "5×5 matrix per K: rows=training_seed, columns=episode_seed"
+    },
+    "stratified_deltas": {
+      "by_pretraining_seed": "5 deltas per K (averaging over episode seeds)",
+      "by_episode_seed": "5 deltas per K (averaging over training seeds)"
+    },
+    "per_class_breakdown": {
+      "description": "Per-class F1 for JS and ERM at each K",
+      "special_attention": "monoclinic — confirm or refute the -0.09 negative transfer observed in RRUFF-70 pilot"
+    },
+    "confusion_matrices": "For each K, aggregated across all 25 JS runs",
+    "bootstrap": {
+      "method": "paired bootstrap on 75 deltas",
+      "caveat": "deltas are not fully independent (shared pretrained seeds and overlapping adaptation pool samples). Report as descriptive, not as formal significance test."
+    },
+    "zero_shot": {
+      "description": "Same 10 checkpoints, direct inference on 231-sample locked test, no training"
+    },
+    "sensitivity_analysis": {
+      "protocol": "Fixed 200 optimizer steps, no early stopping, K=1 and K=5 only",
+      "purpose": "Verify delta direction is not an artifact of early-stopping budget differences"
+    }
+  },
+
+  "conclusion_bounds": {
+    "allowed": [
+      "JS produces representations with consistently improved few-shot adaptability to experimental PXRD (if delta positive in majority of pairs)",
+      "The improvement is class-dependent (if per-class deltas show systematic variation)",
+      "Monoclinic negative transfer observed in RRUFF-70 pilot is [confirmed / not replicated] in RRUFF-301 (report whichever occurs)"
+    ],
+    "forbidden": [
+      "JS advantage increases monotonically with K (unless fixed-step check confirms)",
+      "JS eliminates the simulation-to-experiment gap",
+      "Any post-hoc selection of K, episode seeds, training seeds, checkpoints, or metrics",
+      "Any claim based on inspecting results before freezing protocol",
+      "Retuning lambda, optimizer, or architecture after seeing 301 results"
+    ],
+    "conditional": [
+      "If monoclinic negative transfer replicates: discuss as method boundary (JS consistency may trade off fine-grained structural discrimination)",
+      "If monoclinic negative transfer does not replicate: attribute RRUFF-70 result to small-sample composition of the 10 monoclinic samples"
+    ]
+  },
+
+  "file_manifest": {
+    "to_be_written_before_execution": [
+      "rruff301_adaptation_test_split.csv (adapted from RRUFF-371 extension manifest, excluding RRUFF-70 IDs)",
+      "rruff301_preregistration_contract.json (this file)",
+      "rruff301_episode_plan.csv (pre-generated support/query assignments for each K and episode seed)"
+    ],
+    "to_be_output_after_execution": [
+      "rruff301_results.json (150 run-level records)",
+      "rruff301_paired_comparisons.csv (75 paired deltas)",
+      "rruff301_zero_shot_results.json",
+      "rruff301_sensitivity_fixed200_results.json",
+      "rruff301_complete_report.md"
+    ]
+  },
+
+  "execution_rules": {
+    "single_run": "All K values, all episode seeds, zero-shot, and sensitivity check executed in ONE script before inspecting any result",
+    "no_incremental": "Do not run K=1, inspect, then run K=2. Do not run ERM, inspect, then run JS.",
+    "no_sample_exclusion": "No sample removed post-hoc based on prediction or loss",
+    "no_relabel": "No sample relabeled based on model output"
+  }
+}

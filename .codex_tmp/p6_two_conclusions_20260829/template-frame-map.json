@@ -1,0 +1,26 @@
+{
+  "outputSlides": [
+    {"outputSlide": 1, "sourceSlide": 1, "narrativeRole": "preserve-only source slide", "reuseMode": "duplicate-slide", "editTargets": []},
+    {"outputSlide": 2, "sourceSlide": 2, "narrativeRole": "preserve-only source slide", "reuseMode": "duplicate-slide", "editTargets": []},
+    {"outputSlide": 3, "sourceSlide": 3, "narrativeRole": "preserve-only source slide", "reuseMode": "duplicate-slide", "editTargets": []},
+    {"outputSlide": 4, "sourceSlide": 4, "narrativeRole": "preserve-only source slide", "reuseMode": "duplicate-slide", "editTargets": []},
+    {"outputSlide": 5, "sourceSlide": 5, "narrativeRole": "preserve-only source slide", "reuseMode": "duplicate-slide", "editTargets": []},
+    {
+      "outputSlide": 6,
+      "sourceSlide": 6,
+      "narrativeRole": "RRUFF-301 evidence for stable gains and reduced real-spectrum requirement",
+      "reuseMode": "duplicate-slide",
+      "editTargets": [
+        {"action": "rewrite-and-reposition", "sourceElementId": "sh/u1kbu1ov", "reason": "use the user-approved title"},
+        {"action": "rewrite", "sourceElementId": "sh/47mt0b6x", "reason": "use the user-approved experiment description"},
+        {"action": "rewrite-and-reposition", "sourceElementId": "sh/5svutgni", "reason": "reuse the inherited summary textbox for the two right-side conclusions"},
+        {"action": "rewrite-and-reposition", "sourceElementId": "sh/j6dcr65c", "reason": "align the first gain label with the resized chart"},
+        {"action": "rewrite-and-reposition", "sourceElementId": "sh/i54bylor", "reason": "align the second gain label with the resized chart"},
+        {"action": "rewrite-and-reposition", "sourceElementId": "sh/twfux0ne", "reason": "align the third gain label with the resized chart"},
+        {"action": "replace", "sourceElementId": "ch/8va107ql", "reason": "reuse the same chart and data in a narrower left evidence frame"}
+      ]
+    },
+    {"outputSlide": 7, "sourceSlide": 7, "narrativeRole": "preserve-only source slide", "reuseMode": "duplicate-slide", "editTargets": []}
+  ],
+  "omittedSourceSlides": []
+}

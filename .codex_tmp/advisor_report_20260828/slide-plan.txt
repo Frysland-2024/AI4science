@@ -1,0 +1,19 @@
+Communication job
+By the end, the advisor should understand that same-parent measurement-equivalence supervision produces a coherent robustness signal across simulated OOD, RRUFF few-shot, and CNRS zero-shot evidence, while agreeing that the next project should begin with a tightly scoped and identifiable quantitative-inversion V0.
+
+Narrative arc
+1. Cover: stage conclusion and evidence chain.
+2. Real problem: measurement appearance changes while crystal-system identity should not.
+3. Core hypothesis and matched JS consistency method.
+4. Experiment design: 14,060 structures, strict split, matched seeds, five perturbation classes.
+5. Simulated validation and frozen-test paired OOD results.
+6. Per-perturbation evidence across peak shift, broadening, texture, background, and noise.
+7. Probability reliability: classification improves together with ECE, NLL, and Brier.
+8. RRUFF-301 few-shot label efficiency.
+9. CNRS-318 frozen zero-shot external evaluation.
+10. Synthesis: supported conclusion and claim boundaries.
+11. Quantitative inversion V0 and four-week gated roadmap.
+12. Advisor decisions requested.
+
+Primary takeaway
+Consistency regularization turns simulator-retained parent identity into useful supervision: the strongest evidence is a +5.46 percentage-point frozen-test OOD Macro-F1 gain with 5/5 matched seeds positive; the same direction extends to RRUFF label efficiency and CNRS zero-shot transfer, but absolute CNRS performance and uncertainty show that broad Sim-to-Real is not solved.

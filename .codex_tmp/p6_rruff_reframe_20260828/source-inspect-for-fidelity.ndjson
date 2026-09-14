@@ -1,0 +1,93 @@
+{"kind":"layout","layoutId":"/ppt/slideMasters/slideMaster1.xml","name":"Master","type":"master"}
+{"kind":"layout","layoutId":"/ppt/slideLayouts/slideLayout1.xml","name":"Title Slide","type":"title"}
+{"kind":"slide","id":"sl/y90nupkv","slide":1,"title":"让 PXRD 晶系判断不再依赖“怎么测”","textShapes":7}
+{"kind":"textbox","id":"sh/ul4vaxgb","slide":1,"text":"让 PXRD 晶系判断不再依赖“怎么测”","textPreview":"让 PXRD 晶系判断不再依赖“怎么测”","textChars":20,"textLines":1,"bbox":[76,62,1128,74]}
+{"kind":"textbox","id":"sh/547294r6","slide":1,"text":"模拟谱训练出的模型，遇到真实实验条件变化后还能稳定判断晶系吗？","textPreview":"模拟谱训练出的模型，遇到真实实验条件变化后还能稳定判断晶系吗？","textChars":31,"textLines":1,"bbox":[116,158,1048,42]}
+{"kind":"shape","id":"sh/k3yl0zql","slide":1,"bbox":[178,222,924,0]}
+{"kind":"textbox","id":"sh/7qp4be9c","slide":1,"text":"较理想的谱","textPreview":"较理想的谱","textChars":5,"textLines":1,"bbox":[104,270,416,30]}
+{"kind":"textbox","id":"sh/65g3298r","slide":1,"text":"受测量扰动的谱","textPreview":"受测量扰动的谱","textChars":7,"textLines":1,"bbox":[760,270,416,30]}
+{"kind":"textbox","id":"sh/fu94fe98","slide":1,"text":"同一晶体","textPreview":"同一晶体","textChars":4,"textLines":1,"bbox":[548,326,184,32]}
+{"kind":"textbox","id":"sh/utg3698n","slide":1,"text":"晶系不变","textPreview":"晶系不变","textChars":4,"textLines":1,"bbox":[536,376,208,48]}
+{"kind":"shape","id":"sh/wn6dc7eh","slide":1,"bbox":[548,446,184,0]}
+{"kind":"textbox","id":"sh/hofulsf2","slide":1,"text":"阶段性研究汇报 · 2026.08.28","textPreview":"阶段性研究汇报 · 2026.08.28","textChars":20,"textLines":1,"bbox":[76,654,1128,24]}
+{"kind":"chart","id":"ch/3epsfe9g","slide":1,"name":"Chart","chartType":"scatter","bbox":[86,312,452,184]}
+{"kind":"chart","id":"ch/c3itcjqx","slide":1,"name":"Chart","chartType":"scatter","bbox":[742,312,452,184]}
+{"kind":"notes","id":"nt/y90nupkv","slide":1,"text":"左右曲线取自同一 mp-10448 母结构的基准谱与项目已缓存噪声扰动谱，仅作为开篇认知钩子。\n\n[Sources]\n- E:/AI4science/xrd_robustness/outputs/public_simulated_test/panel_cache/seed_20260721/level0.npy\n- E:/AI4science/xrd_robustness/outputs/public_simulated_test/panel_cache/seed_20260721/ood_noise.npy\n- E:/AI4science/xrd_robustness/outputs/public_simulated_test/panel_cache/index.json\n- E:\\AI4science\\xrd_robustness\\data\\formal_14060\\manifests\\v9_method_transfer_test_seed_20260721.csv"}
+{"kind":"slide","id":"sl/hwbqtkby","slide":2,"title":"同一晶体，仅改变测量条件，谱形就会明显变化","textShapes":6}
+{"kind":"textbox","id":"sh/nu58f2hs","slide":2,"name":"slide-2-title","text":"同一晶体，仅改变测量条件，谱形就会明显变化","textPreview":"同一晶体，仅改变测量条件，谱形就会明显变化","textChars":21,"textLines":1,"bbox":[58,30,1128,58]}
+{"kind":"textbox","id":"sh/9072xkry","slide":2,"text":"02 / 06","textPreview":"02 / 06","textChars":7,"textLines":1,"bbox":[1176,40,48,24]}
+{"kind":"shape","id":"sh/ozy1ofad","slide":2,"bbox":[58,102,1166,0]}
+{"kind":"textbox","id":"sh/b29kza94","slide":2,"text":"理想 / 基准谱","textPreview":"理想 / 基准谱","textChars":8,"textLines":1,"bbox":[64,162,154,32]}
+{"kind":"textbox","id":"sh/a10jqpsj","slide":2,"text":"峰移或展宽后的谱","textPreview":"峰移或展宽后的谱","textChars":8,"textLines":1,"bbox":[64,316,164,58]}
+{"kind":"textbox","id":"sh/x4r21kru","slide":2,"text":"加背景 / 噪声后的谱","textPreview":"加背景 / 噪声后的谱","textChars":11,"textLines":1,"bbox":[64,472,166,58]}
+{"kind":"shape","id":"sh/ove9o7yd","slide":2,"bbox":[230,264,982,0]}
+{"kind":"shape","id":"sh/9wnqhczy","slide":2,"bbox":[230,418,982,0]}
+{"kind":"textbox","id":"sh/mtwrmxg7","slide":2,"text":"变化来自测量条件，而非晶体结构本身。","textPreview":"变化来自测量条件，而非晶体结构本身。","textChars":18,"textLines":1,"bbox":[218,632,844,38]}
+{"kind":"chart","id":"ch/47uh8zqh","slide":2,"name":"Chart","chartType":"scatter","bbox":[230,126,982,128]}
+{"kind":"chart","id":"ch/p83y1472","slide":2,"name":"Chart","chartType":"scatter","bbox":[230,280,982,128]}
+{"kind":"chart","id":"ch/25cz6p8b","slide":2,"name":"Chart","chartType":"scatter","bbox":[230,434,982,154]}
+{"kind":"notes","id":"nt/hwbqtkby","slide":2,"text":"三条曲线均取 panel_cache 的 row 109，对应同一 mp-10448 母结构；峰移与噪声是项目中已缓存、可复现的测量扰动输出。\n\n[Sources]\n- E:/AI4science/xrd_robustness/outputs/public_simulated_test/panel_cache/seed_20260721/level0.npy\n- E:/AI4science/xrd_robustness/outputs/public_simulated_test/panel_cache/seed_20260721/ood_shift_positive.npy\n- E:/AI4science/xrd_robustness/outputs/public_simulated_test/panel_cache/seed_20260721/ood_noise.npy\n- E:/AI4science/xrd_robustness/outputs/public_simulated_test/panel_cache/index.json\n- E:\\AI4science\\xrd_robustness\\data\\formal_14060\\manifests\\v9_method_transfer_test_seed_20260721.csv"}
+{"kind":"slide","id":"sl/ofy9wn61","slide":3,"title":"同一结构即使测出来不同，模型判断也应一致","textShapes":7}
+{"kind":"textbox","id":"sh/03ix43e5","slide":3,"name":"slide-3-title","text":"同一结构即使测出来不同，模型判断也应一致","textPreview":"同一结构即使测出来不同，模型判断也应一致","textChars":20,"textLines":1,"bbox":[58,30,1128,58]}
+{"kind":"textbox","id":"sh/cza94vmx","slide":3,"text":"03 / 06","textPreview":"03 / 06","textChars":7,"textLines":1,"bbox":[1176,40,48,24]}
+{"kind":"shape","id":"sh/d0jax03i","slide":3,"bbox":[58,102,1166,0]}
+{"kind":"shape","id":"sh/298ryl4v","slide":3,"bbox":[640,162,0,22]}
+{"kind":"shape","id":"sh/3ah8rqlg","slide":3,"bbox":[330,184,620,0]}
+{"kind":"shape","id":"sh/obq90bml","slide":3,"bbox":[330,184,0,12]}
+{"kind":"shape","id":"sh/pcjqtg36","slide":3,"bbox":[950,184,0,12]}
+{"kind":"shape","id":"sh/m5cra54z","slide":3,"bbox":[320,192,20,24]}
+{"kind":"shape","id":"sh/n6ls3alk","slide":3,"bbox":[940,192,20,24]}
+{"kind":"shape","id":"sh/n2l4fq98","slide":3,"bbox":[320,345,20,38]}
+{"kind":"shape","id":"sh/m1c3mlsn","slide":3,"bbox":[940,345,20,38]}
+{"kind":"shape","id":"sh/943mhgre","slide":3,"bbox":[490,419,22,42]}
+{"kind":"shape","id":"sh/83ulovat","slide":3,"bbox":[768,419,22,42]}
+{"kind":"textbox","id":"sh/v6l4jq94","slide":3,"text":"同一晶体结构","textPreview":"同一晶体结构","textChars":6,"textLines":1,"bbox":[518,128,244,34]}
+{"kind":"textbox","id":"sh/a5c3ql8z","slide":3,"text":"受测量扰动的\n谱 A","textPreview":"受测量扰动的 | 谱 A","textChars":10,"textLines":2,"bbox":[82,196,220,52]}
+{"kind":"textbox","id":"sh/x8nml0ra","slide":3,"text":"受测量扰动的\n谱 B","textPreview":"受测量扰动的 | 谱 B","textChars":10,"textLines":2,"bbox":[978,196,220,52]}
+{"kind":"shape","id":"sh/i9w3u58v","slide":3,"bbox":[260,383,760,36]}
+{"kind":"textbox","id":"sh/e10f2twf","slide":3,"text":"同一个模型","textPreview":"同一个模型","textChars":5,"textLines":1,"bbox":[410,388,460,26]}
+{"kind":"textbox","id":"sh/f29gbyx0","slide":3,"text":"预测 A   ≈   预测 B","textPreview":"预测 A   ≈   预测 B","textChars":15,"textLines":1,"bbox":[190,456,900,134]}
+{"kind":"chart","id":"ch/18j69wbi","slide":3,"name":"Chart","chartType":"scatter","bbox":[160,250,340,100]}
+{"kind":"chart","id":"ch/q18nuxsv","slide":3,"name":"Chart","chartType":"scatter","bbox":[780,250,340,100]}
+{"kind":"notes","id":"nt/ofy9wn61","slide":3,"text":"[Sources]\n- E:\\AI4science\\xrd_robustness\\src\\xrd_robustness\\training\\objectives.py\n- E:\\AI4science\\xrd_robustness\\src\\xrd_robustness\\online_views.py\n- E:/AI4science/xrd_robustness/outputs/public_simulated_test/panel_cache/seed_20260721/in_range.npy\n- E:/AI4science/xrd_robustness/outputs/public_simulated_test/panel_cache/seed_20260722/in_range.npy\n- E:/AI4science/xrd_robustness/outputs/public_simulated_test/panel_cache/index.json\n- E:\\AI4science\\xrd_robustness\\data\\formal_14060\\manifests\\v9_method_transfer_test_seed_20260721.csv\n- E:\\AI4science\\xrd_robustness\\data\\formal_14060\\manifests\\v9_method_transfer_test_seed_20260722.csv"}
+{"kind":"slide","id":"sl/jyx0ra1s","slide":4,"title":"14,060 个晶体结构，覆盖 5 类常见测量扰动","textShapes":8}
+{"kind":"textbox","id":"sh/jadsz2xk","slide":4,"name":"slide-2-title","text":"14,060 个晶体结构，覆盖 5 类常见测量扰动","textPreview":"14,060 个晶体结构，覆盖 5 类常见测量扰动","textChars":25,"textLines":1,"bbox":[58,30,1128,58]}
+{"kind":"textbox","id":"sh/1cj2d8b6","slide":4,"text":"04 / 06","textPreview":"04 / 06","textChars":7,"textLines":1,"bbox":[1176,40,48,24]}
+{"kind":"shape","id":"sh/0ba143al","slide":4,"bbox":[58,102,1166,0]}
+{"kind":"textbox","id":"sh/w72947yt","slide":4,"text":"14,060","textPreview":"14,060","textChars":6,"textLines":1,"bbox":[68,154,390,82]}
+{"kind":"textbox","id":"sh/x8vaxsfe","slide":4,"text":"Materials Project 晶体结构","textPreview":"Materials Project 晶体结构","textChars":22,"textLines":1,"bbox":[72,242,390,34]}
+{"kind":"textbox","id":"sh/a5kr2xg3","slide":4,"text":"训练 / 验证 / 测试","textPreview":"训练 / 验证 / 测试","textChars":12,"textLines":1,"bbox":[72,337,375,28]}
+{"kind":"textbox","id":"sh/v6tsv2xo","slide":4,"text":"9,842 / 2,109 / 2,109","textPreview":"9,842 / 2,109 / 2,109","textChars":21,"textLines":1,"bbox":[72,374,405,48]}
+{"kind":"textbox","id":"sh/g36tgryd","slide":4,"text":"按晶体结构划分\n同一晶体的不同谱始终留在同一数据集\n\n训练时实时生成谱\n同一晶体 → 随机“换测量条件” → 不同训练谱","textPreview":"按晶体结构划分 | 同一晶体的不同谱始终留在同一数据集 |  | 训练时实时生成谱 | 同一晶体 → 随机“换测量条件” → 不同训练谱","textChars":60,"textLines":5,"bbox":[72,458,405,168]}
+{"kind":"shape","id":"sh/h4fa9wfy","slide":4,"bbox":[500,134,0,502]}
+{"kind":"textbox","id":"sh/oz29krqh","slide":4,"text":"5 类扰动及其对谱图的影响","textPreview":"5 类扰动及其对谱图的影响","textChars":13,"textLines":1,"bbox":[545,142,655,30]}
+{"kind":"table","id":"tb/8jqxsf29","slide":4,"name":"","rows":6,"cols":2,"preview":"扰动类型 | 对谱图的影响","bbox":[545,184,655,396]}
+{"kind":"notes","id":"nt/jyx0ra1s","slide":4,"text":"本页回答三个问题：使用多少独立晶体结构、模拟哪些测量扰动、训练谱如何生成。\n训练时，从同一晶体结构的理想峰表出发，在每个优化步在线采样两组测量条件并即时生成两条扰动谱；随机性由结构、训练轮次、训练步和视图编号共同控制，因此可复现。\n验证和测试时冻结每个样本的扰动参数与随机种子，确保不同模型在完全相同的固定谱上比较。\n\n[Sources]\n- E:/AI4science/xrd_robustness/configs/experiment.public.json\n- E:/AI4science/xrd_robustness/configs/data.method_transfer.structure_split.json\n- E:/AI4science/xrd_robustness/data/formal_14060/manifests/split_manifest.json\n- E:/AI4science/xrd_robustness/configs/simulation.method_transfer.frozen.json\n- E:/AI4science/xrd_robustness/src/xrd_robustness/training/runner.py\n- E:/AI4science/xrd_robustness/src/xrd_robustness/online_views.py\n- E:/AI4science/xrd_robustness/src/xrd_robustness/view_manifest.py\n- E:/AI4science/xrd_robustness/scripts/run_simulated_test.py"}
+{"kind":"slide","id":"sl/i107q5of","slide":5,"title":"五次独立训练全部提升，平均 Macro-F1 +5.46 个百分点","textShapes":10}
+{"kind":"textbox","id":"sh/v2twb6dw","slide":5,"name":"slide-2-title","text":"五次独立训练全部提升，平均 Macro-F1 +5.46 个百分点","textPreview":"五次独立训练全部提升，平均 Macro-F1 +5.46 个百分点","textChars":33,"textLines":1,"bbox":[58,30,1128,58]}
+{"kind":"textbox","id":"sh/dgbulwnm","slide":5,"text":"05 / 06","textPreview":"05 / 06","textChars":7,"textLines":1,"bbox":[1176,40,48,24]}
+{"kind":"shape","id":"sh/cf2tcr61","slide":5,"bbox":[58,102,1166,0]}
+{"kind":"textbox","id":"sh/z2tcnm5s","slide":5,"text":"5 / 5 ↑","textPreview":"5 / 5 ↑","textChars":7,"textLines":1,"bbox":[978,178,225,68]}
+{"kind":"textbox","id":"sh/yhkbe1o7","slide":5,"text":"全部独立训练均提升","textPreview":"全部独立训练均提升","textChars":9,"textLines":1,"bbox":[978,246,238,36]}
+{"kind":"textbox","id":"sh/l4bupwny","slide":5,"text":"平均 +5.46 pp","textPreview":"平均 +5.46 pp","textChars":11,"textLines":1,"bbox":[978,338,238,44]}
+{"kind":"textbox","id":"sh/58vehgvy","slide":5,"name":"p5-gain-1","text":"+5.48 pp","textPreview":"+5.48 pp","textChars":8,"textLines":1,"bbox":[158,108,108,24]}
+{"kind":"textbox","id":"sh/i54fmlc7","slide":5,"name":"p5-gain-2","text":"+6.14 pp","textPreview":"+6.14 pp","textChars":8,"textLines":1,"bbox":[317,108,108,24]}
+{"kind":"textbox","id":"sh/j6dwfqds","slide":5,"name":"p5-gain-3","text":"+4.99 pp","textPreview":"+4.99 pp","textChars":8,"textLines":1,"bbox":[476,108,108,24]}
+{"kind":"textbox","id":"sh/sb6xsvu9","slide":5,"name":"p5-gain-4","text":"+4.51 pp","textPreview":"+4.51 pp","textChars":8,"textLines":1,"bbox":[635,108,108,24]}
+{"kind":"textbox","id":"sh/tcfel0vu","slide":5,"name":"p5-gain-5","text":"+6.18 pp","textPreview":"+6.18 pp","textChars":8,"textLines":1,"bbox":[794,108,108,24]}
+{"kind":"chart","id":"ch/lwvi1grm","slide":5,"name":"Chart","chartType":"bar","bbox":[62,135,880,505]}
+{"kind":"notes","id":"nt/i107q5of","slide":5,"text":"本页只展示冻结模拟扰动 Test 的 Macro-F1。\n五次独立训练中，一致性训练均优于基线。\nSeed 1: 0.6390 → 0.6939 (+5.48 pp)\nSeed 2: 0.6553 → 0.7167 (+6.14 pp)\nSeed 3: 0.6577 → 0.7075 (+4.99 pp)\nSeed 4: 0.6517 → 0.6967 (+4.51 pp)\nSeed 5: 0.6500 → 0.7118 (+6.18 pp)\n平均: 0.6507 → 0.7053 (+5.46 pp)\n[Sources]\n- E:/AI4science/xrd_robustness/reports/simulated_test_results.json"}
+{"kind":"slide","id":"sl/x8f69ofe","slide":6,"title":"只需极少真实谱适配，三档标注预算下性能均提升","textShapes":10}
+{"kind":"textbox","id":"sh/u1kbu1ov","slide":6,"name":"slide-2-title","text":"只需极少真实谱适配，三档标注预算下性能均提升","textPreview":"只需极少真实谱适配，三档标注预算下性能均提升","textChars":22,"textLines":1,"bbox":[58,30,1128,58]}
+{"kind":"textbox","id":"sh/yhg7epsj","slide":6,"text":"06 / 06","textPreview":"06 / 06","textChars":7,"textLines":1,"bbox":[1176,40,48,24]}
+{"kind":"shape","id":"sh/zi98nu94","slide":6,"bbox":[58,102,1166,0]}
+{"kind":"textbox","id":"sh/87ipkzal","slide":6,"text":"仅 7 条","textPreview":"仅 7 条","textChars":5,"textLines":1,"bbox":[978,205,225,62]}
+{"kind":"textbox","id":"sh/98rqt4r6","slide":6,"text":"真实标注谱","textPreview":"真实标注谱","textChars":5,"textLines":1,"bbox":[978,264,238,38]}
+{"kind":"textbox","id":"sh/ml07i9sv","slide":6,"text":"+4.33 pp","textPreview":"+4.33 pp","textChars":8,"textLines":1,"bbox":[978,352,238,50]}
+{"kind":"textbox","id":"sh/5svutgni","slide":6,"name":"p6-summary-caption","text":"仍然提升","textPreview":"仍然提升","textChars":4,"textLines":1,"bbox":[978,401,238,32]}
+{"kind":"textbox","id":"sh/47mt0b6x","slide":6,"name":"p6-dataset-context","text":"RRUFF：301 条真实实验谱｜每个晶系仅使用 1 / 2 / 5 条标注进行少样本适配","textPreview":"RRUFF：301 条真实实验谱｜每个晶系仅使用 1 / 2 / 5 条标注进行少样本适配","textChars":45,"textLines":1,"bbox":[64,108,870,28]}
+{"kind":"textbox","id":"sh/j6dcr65c","slide":6,"name":"p6-gain-1","text":"+4.33 pp","textPreview":"+4.33 pp","textChars":8,"textLines":1,"bbox":[197,143,128,26]}
+{"kind":"textbox","id":"sh/i54bylor","slide":6,"name":"p6-gain-2","text":"+4.60 pp","textPreview":"+4.60 pp","textChars":8,"textLines":1,"bbox":[464,143,128,26]}
+{"kind":"textbox","id":"sh/twfux0ne","slide":6,"name":"p6-gain-3","text":"+5.45 pp","textPreview":"+5.45 pp","textChars":8,"textLines":1,"bbox":[731,143,128,26]}
+{"kind":"chart","id":"ch/8va107ql","slide":6,"name":"p6-rruff-fewshot-bars","chartType":"bar","bbox":[62,172,880,468]}
+{"kind":"notes","id":"nt/x8f69ofe","slide":6,"text":"本页强调真实标签效率，而不是再次重复上一页的五种子稳定性。\nRRUFF-301 包含 301 个唯一 RRUFF 实测样本，每个样本对应一条规范化 PXRD 谱；301 不代表 301 种不同矿物。\n数据覆盖 7 个晶系，每类 43 条：10 条进入 adaptation pool，33 条进入 locked test。\nK=1/2/5 是 labels per class；每个 episode 的支持集因此共有 7/14/35 条真实标注谱。\n图中数值为 5 个 pretraining seeds × 5 个 episode seeds 共 25 组配对运行的平均 Macro-F1。\nK=1: 0.2847 → 0.3280 (+4.33 pp)\nK=2: 0.3026 → 0.3486 (+4.60 pp)\nK=5: 0.3555 → 0.4099 (+5.45 pp)\n该证据为 retrospectively verified locked-test few-shot 结果，不表述为 provenance-complete prospective confirmatory run。\n[Sources]\n- E:/AI4science/xrd_robustness/reports/rruff301_fewshot_results.json\n- E:/AI4science/xrd_robustness/data/real_xrd/rruff371/contracts/dataset_contract.json\n- E:/AI4science/xrd_robustness/data/real_xrd/rruff371/splits/rruff301_manifest.json\n- E:/AI4science/xrd_robustness/data/real_xrd/rruff371/manifests/rruff371_master_manifest.csv"}

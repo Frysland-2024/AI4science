@@ -1,0 +1,58 @@
+{
+  "class_counts": {
+    "cubic": 53,
+    "hexagonal": 53,
+    "monoclinic": 53,
+    "orthorhombic": 53,
+    "tetragonal": 53,
+    "triclinic": 53,
+    "trigonal": 53
+  },
+  "dataset_id": "rruff-real-pxrd-371-v2",
+  "integrity": {
+    "legacy_spectrum_hashes_preserved": true,
+    "maximum_new_sample_correlation_at_inclusion": 0.9760145098338745,
+    "maximum_samples_for_one_class_mineral_pair": 4,
+    "unique_rruff_ids": 371
+  },
+  "manifest_sha256": "EBF6B35ABAF78C716498D327CDD02EF3FFC3E53662AFC56A5CB009A10B96B142",
+  "real_test_execution_authorized": false,
+  "redistribution_rights_asserted": false,
+  "role_counts": {
+    "legacy_rruff70": 70,
+    "rruff371_extension": 301
+  },
+  "sample_count": 371,
+  "schema_version": "rruff371-measured-pxrd-v2",
+  "selection_relaxations": {
+    "cubic": [],
+    "hexagonal": [
+      "pairwise Pearson ceiling relaxed to 0.980 to fill quota",
+      "pairwise Pearson ceiling relaxed to 0.995 to fill quota",
+      "maximum samples for one mineral name relaxed from 3 to 4; pairwise Pearson ceiling remains 0.995"
+    ],
+    "monoclinic": [],
+    "orthorhombic": [],
+    "tetragonal": [],
+    "triclinic": [],
+    "trigonal": []
+  },
+  "selection_rules": {
+    "canonical_grid": "10-80 degrees, 0.02 degree step, max normalized",
+    "exact_measured_powder_description": true,
+    "maximum_samples_per_mineral_name": "3 normally; one class may relax to 4 only when recorded in selection_relaxations",
+    "model_outputs_used": false,
+    "paired_dif_required": true,
+    "pairwise_pearson_policy": "greedy 0.95, then 0.98/0.995 only if quota requires",
+    "xrd_confirmed_identification": true
+  },
+  "selection_unit": "unique_RRUFF_sample_id",
+  "source_archive_sha256": {
+    "DIF.zip": "3B540DB61664CACDD22268FFBAC6AB586CA6BCE389B7399CC3E9BAAEB6607B03",
+    "Refinement_Data.zip": "7E075457EBAC5AD8C5841E699857E7666E6FEAE1F8E8DD00945DC6818D60D5F6",
+    "Refinement_Output_Data.zip": "A51E4F7399051889A3D699DADB99C2139476D3D17EA47BAF85E3EBF3DF4F5C12",
+    "XY_Processed.zip": "C0B079535AB3E6077212B7A8F6CED28129CBE538FC03B1479061430F219FF9CB",
+    "XY_RAW.zip": "948A133482BB3C99DA80194CC2848933AEE668129BEB209150F7F850CD4B0587"
+  },
+  "status": "FROZEN_MODEL_BLIND_DATASET"
+}

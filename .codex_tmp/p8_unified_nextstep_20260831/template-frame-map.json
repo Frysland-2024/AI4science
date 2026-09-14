@@ -1,0 +1,29 @@
+{
+  "outputSlides": [
+    {"outputSlide": 1, "sourceSlide": 1, "narrativeRole": "preserve-only source slide", "reuseMode": "duplicate-slide", "editTargets": []},
+    {"outputSlide": 2, "sourceSlide": 2, "narrativeRole": "preserve-only source slide", "reuseMode": "duplicate-slide", "editTargets": []},
+    {"outputSlide": 3, "sourceSlide": 3, "narrativeRole": "preserve-only source slide", "reuseMode": "duplicate-slide", "editTargets": []},
+    {"outputSlide": 4, "sourceSlide": 4, "narrativeRole": "preserve-only source slide", "reuseMode": "duplicate-slide", "editTargets": []},
+    {"outputSlide": 5, "sourceSlide": 5, "narrativeRole": "preserve-only source slide", "reuseMode": "duplicate-slide", "editTargets": []},
+    {"outputSlide": 6, "sourceSlide": 6, "narrativeRole": "preserve-only source slide", "reuseMode": "duplicate-slide", "editTargets": []},
+    {"outputSlide": 7, "sourceSlide": 7, "narrativeRole": "preserve-only source slide", "reuseMode": "duplicate-slide", "editTargets": []},
+    {
+      "outputSlide": 8,
+      "sourceSlide": 4,
+      "narrativeRole": "show the research progression from qualitative classification to quantitative inversion through one shared physical-constraint idea",
+      "reuseMode": "duplicate-slide",
+      "editTargets": [
+        {"sourceElementId": "sh/jadsz2xk", "action": "rewrite-and-reposition", "reason": "Use the inherited title slot for the qualitative-to-quantitative progression title."},
+        {"sourceElementId": "sh/1cj2d8b6", "action": "rewrite", "reason": "Set the appended slide page marker."},
+        {"sourceElementId": "sh/w72947yt", "action": "rewrite-and-reposition", "reason": "Use the inherited primary metric slot as the current-stage heading."},
+        {"sourceElementId": "sh/x8vaxsfe", "action": "rewrite-and-reposition", "reason": "Use the inherited supporting slot for the current-stage explanation."},
+        {"sourceElementId": "sh/a5kr2xg3", "action": "rewrite-and-reposition", "reason": "Use the inherited label slot for the explicit same-crystal premise."},
+        {"sourceElementId": "sh/v6tsv2xo", "action": "rewrite-and-reposition", "reason": "Use the inherited value slot for the prediction-consistency relation."},
+        {"sourceElementId": "sh/g36tgryd", "action": "rewrite-and-reposition", "reason": "Use the inherited multiline slot for the single full-width unifying statement."},
+        {"sourceElementId": "sh/h4fa9wfy", "action": "replace", "reason": "Replace the inherited vertical divider with the explicit qualitative-to-quantitative stage transition."},
+        {"sourceElementId": "tb/mhovq5k3", "action": "replace", "reason": "Replace the inherited grid table with the larger right-side quantitative inversion and spectrum-regeneration flow."}
+      ]
+    }
+  ],
+  "omittedSourceSlides": []
+}

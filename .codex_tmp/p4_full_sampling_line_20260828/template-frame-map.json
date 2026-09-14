@@ -1,0 +1,23 @@
+{
+  "outputSlides": [
+    { "outputSlide": 1, "sourceSlide": 1, "narrativeRole": "preserve-only source slide", "reuseMode": "duplicate-slide", "editTargets": [] },
+    { "outputSlide": 2, "sourceSlide": 2, "narrativeRole": "preserve-only source slide", "reuseMode": "duplicate-slide", "editTargets": [] },
+    { "outputSlide": 3, "sourceSlide": 3, "narrativeRole": "preserve-only source slide", "reuseMode": "duplicate-slide", "editTargets": [] },
+    {
+      "outputSlide": 4,
+      "sourceSlide": 4,
+      "narrativeRole": "experiment configuration with dynamic spectrum generation",
+      "reuseMode": "duplicate-slide",
+      "editTargets": [
+        {
+          "action": "rewrite",
+          "shapeId": "sh/g36tgryd",
+          "reason": "Restore the user-required 'same crystal' premise at the start of the final line."
+        }
+      ]
+    },
+    { "outputSlide": 5, "sourceSlide": 5, "narrativeRole": "preserve-only source slide", "reuseMode": "duplicate-slide", "editTargets": [] },
+    { "outputSlide": 6, "sourceSlide": 6, "narrativeRole": "preserve-only source slide", "reuseMode": "duplicate-slide", "editTargets": [] }
+  ],
+  "omittedSourceSlides": []
+}

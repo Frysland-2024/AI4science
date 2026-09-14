@@ -1,0 +1,6 @@
+Source deck: E:\AI4science\outputs\XRD_导师汇报.pptx
+Slides: 7, widescreen 1280 x 720.
+Visual system: white canvas, dark navy conclusions, muted gray support text, deep blue comparison bars, restrained scientific charts.
+Typography and spacing: preserve every inherited text box, chart, divider, footer, page marker, master, layout, and theme setting.
+Insertion contract: duplicate all seven source slides one-to-one. Slides 1-6 are immutable. On slide 7, rewrite only the existing right-side repeat summary and the existing bottom takeaway; preserve both objects' geometry and styling.
+Inherited placeholders: retain all intentionally filled source placeholders. Do not create overlays or new objects.

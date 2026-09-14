@@ -1,0 +1,3 @@
+Slide 3: repositioned only the existing method-chain objects; split two long labels into two lines; slightly enlarged the existing conclusion text; no new scientific content.
+Slide 4: preserved the entire left side; replaced the five loose right-side rows with one native two-column table and a small section heading, using the user's exact wording.
+Slides 1, 2, and 5: no edits and no new visual review.

@@ -1,0 +1,10 @@
+Slide 7 intentionally departs from copied source slide 5 only as follows:
+- Rewrites the title and page marker for the CNRS direct-test role.
+- Repurposes the inherited average-summary text box as the experiment-condition subtitle.
+- Rewrites and consolidates the two remaining right-side summary text boxes.
+- Rewrites and repositions the five inherited delta labels.
+- Replaces the inherited native chart in the same content region with the CNRS five-repeat values and a 0.0-0.3 y-axis.
+- Rewrites the inherited bottom explanation as the requested boundary statement.
+- Rewrites copied speaker notes to remove simulated-test claims and cite the user-provided CNRS values.
+
+No changes are permitted or made to output slides 1-6.

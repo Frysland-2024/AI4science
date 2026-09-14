@@ -1,0 +1,26 @@
+{
+  "split_seed": 20260807,
+  "total": 301,
+  "adaptation": 70,
+  "test": 231,
+  "per_class_adaptation": {
+    "triclinic": 10,
+    "monoclinic": 10,
+    "orthorhombic": 10,
+    "tetragonal": 10,
+    "trigonal": 10,
+    "hexagonal": 10,
+    "cubic": 10
+  },
+  "per_class_test": {
+    "triclinic": 33,
+    "monoclinic": 33,
+    "orthorhombic": 33,
+    "tetragonal": 33,
+    "trigonal": 33,
+    "hexagonal": 33,
+    "cubic": 33
+  },
+  "reclassification_note": "hexagonal samples reclassified using DIF space group (pymatgen.SpaceGroup); original RRUFF CELL PARAMETERS label trigonal as hexagonal",
+  "fix": "v1 had trigonal mislabeled as hexagonal (86 in hexagonal, 0 in trigonal). Fixed by DIF space group lookup for hexagonal-labeled samples only."
+}

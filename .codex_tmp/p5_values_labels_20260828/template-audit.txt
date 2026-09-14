@@ -1,0 +1,1 @@
+The current five-slide deck is the sole design source. Slides 1–4 are immutable. Slide 5 keeps the approved title, source values, chart geometry, axes, colors, legend, summary block, and notes. The chart is rewritten in place to show three-decimal absolute values, and five bounded gain labels are added above the paired groups.

@@ -1,0 +1,3 @@
+No new external sources or assets were introduced.
+The PXRD curve is the existing native chart already present on slide 1 of the source deck.
+

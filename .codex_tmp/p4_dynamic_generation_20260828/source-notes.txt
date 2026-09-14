@@ -1,0 +1,8 @@
+Source deck: E:/AI4science/outputs/XRD_导师汇报.pptx
+Visible wording follows the user's approved plain-language framing.
+Dynamic generation evidence:
+- E:/AI4science/xrd_robustness/src/xrd_robustness/training/runner.py
+- E:/AI4science/xrd_robustness/src/xrd_robustness/online_views.py
+- E:/AI4science/xrd_robustness/src/xrd_robustness/view_manifest.py
+- E:/AI4science/xrd_robustness/scripts/run_simulated_test.py
+Training batches generate paired transient spectra online from the same structure; validation/test random contexts are frozen for reproducible comparisons.

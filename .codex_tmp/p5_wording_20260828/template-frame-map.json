@@ -1,0 +1,24 @@
+{
+  "outputSlides": [
+    { "outputSlide": 1, "sourceSlide": 1, "narrativeRole": "preserve-only source slide", "reuseMode": "duplicate-slide", "editTargets": [] },
+    { "outputSlide": 2, "sourceSlide": 2, "narrativeRole": "preserve-only source slide", "reuseMode": "duplicate-slide", "editTargets": [] },
+    { "outputSlide": 3, "sourceSlide": 3, "narrativeRole": "preserve-only source slide", "reuseMode": "duplicate-slide", "editTargets": [] },
+    { "outputSlide": 4, "sourceSlide": 4, "narrativeRole": "preserve-only source slide", "reuseMode": "duplicate-slide", "editTargets": [] },
+    {
+      "outputSlide": 5,
+      "sourceSlide": 5,
+      "narrativeRole": "simulation repeated-training evidence",
+      "reuseMode": "duplicate-slide",
+      "editTargets": [
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/gfi5grih",
+          "reason": "replace the technical explanation with the exact user-approved plain-language statement"
+        }
+      ]
+    },
+    { "outputSlide": 6, "sourceSlide": 6, "narrativeRole": "preserve-only source slide", "reuseMode": "duplicate-slide", "editTargets": [] },
+    { "outputSlide": 7, "sourceSlide": 7, "narrativeRole": "preserve-only source slide", "reuseMode": "duplicate-slide", "editTargets": [] }
+  ],
+  "omittedSourceSlides": []
+}

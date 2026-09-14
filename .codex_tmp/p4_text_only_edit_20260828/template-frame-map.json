@@ -1,0 +1,50 @@
+{
+  "outputSlides": [
+    {
+      "outputSlide": 1,
+      "sourceSlide": 1,
+      "narrativeRole": "preserve-only",
+      "reuseMode": "duplicate-slide",
+      "editTargets": []
+    },
+    {
+      "outputSlide": 2,
+      "sourceSlide": 2,
+      "narrativeRole": "preserve-only",
+      "reuseMode": "duplicate-slide",
+      "editTargets": []
+    },
+    {
+      "outputSlide": 3,
+      "sourceSlide": 3,
+      "narrativeRole": "preserve-only",
+      "reuseMode": "duplicate-slide",
+      "editTargets": []
+    },
+    {
+      "outputSlide": 4,
+      "sourceSlide": 4,
+      "narrativeRole": "experiment scale and perturbation scope",
+      "reuseMode": "duplicate-slide",
+      "editTargets": [
+        { "action": "delete", "sourceElementId": "sh/p0batw72", "reason": "the slide title already states that five perturbation types are covered" },
+        { "action": "rewrite-and-reposition", "sourceElementId": "sh/oz29krqh", "reason": "explain peak shift in one readable line" },
+        { "action": "rewrite-and-reposition", "sourceElementId": "sh/1wbapc7q", "reason": "explain peak broadening in one readable line" },
+        { "action": "rewrite-and-reposition", "sourceElementId": "sh/et0reh8f", "reason": "explain background change in one readable line" },
+        { "action": "rewrite-and-reposition", "sourceElementId": "sh/ilwf69kv", "reason": "explain counting noise in one readable line" },
+        { "action": "rewrite-and-reposition", "sourceElementId": "sh/5ony1oj6", "reason": "explain preferred orientation in one readable line" },
+        { "action": "delete", "sourceElementId": "ch/etsjm14b", "reason": "mini chart is slower to decode than the requested Chinese explanation" },
+        { "action": "delete", "sourceElementId": "ch/fe10f6lw", "reason": "mini chart is slower to decode than the requested Chinese explanation" },
+        { "action": "delete", "sourceElementId": "ch/gfu1obm1", "reason": "mini chart is slower to decode than the requested Chinese explanation" },
+        { "action": "delete", "sourceElementId": "ch/1g3ihw3m", "reason": "mini chart is slower to decode than the requested Chinese explanation" },
+        { "action": "delete", "sourceElementId": "ch/6psjih4z", "reason": "mini chart is slower to decode than the requested Chinese explanation" },
+        { "action": "delete", "sourceElementId": "sh/2xkrih8b", "reason": "remove table-like row separator" },
+        { "action": "delete", "sourceElementId": "sh/fu9sn2p0", "reason": "remove table-like row separator" },
+        { "action": "delete", "sourceElementId": "sh/sri9s7q9", "reason": "remove table-like row separator" },
+        { "action": "delete", "sourceElementId": "sh/knex8j21", "reason": "remove table-like row separator" },
+        { "action": "rewrite", "sourceElementId": "nt/jyx0ra1s", "reason": "remove source notes that only supported the deleted mini charts" }
+      ]
+    }
+  ],
+  "omittedSourceSlides": []
+}

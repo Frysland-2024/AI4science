@@ -1,0 +1,3 @@
+Slide 5 only: replace the inherited bottom explanation sentence with the exact user-approved wording. Preserve its geometry and typography.
+
+No other deviations are permitted.

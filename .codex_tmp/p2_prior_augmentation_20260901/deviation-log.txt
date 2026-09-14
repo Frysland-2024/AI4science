@@ -1,0 +1,4 @@
+Slide 2 is intentionally changed from a physical-problem evidence page into a prior-work training-data-generation page because the user explicitly changed its narrative role.
+The three source-native PXRD charts are retained but resized and repositioned as the three generated training spectra.
+The page avoids paper cards, timelines, icons, model details, and any preview of slide 3's consistency method.
+Slides 1 and 3-8 are preserved without edits.

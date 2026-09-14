@@ -1,0 +1,7 @@
+Source deck: E:/AI4science/outputs/XRD_导师汇报.pptx
+Targeted edit only: slide 4 lower-left inherited textbox sh/g36tgryd.
+Slides 1, 2, 3, 5, and 6 are immutable in this run.
+The source uses a 1280 x 720 white canvas, navy takeaway titles, a thin navy top rule, compact page markers, and a two-column slide-4 layout.
+Slide 4 keeps its inherited title, main number, Materials Project label, train/validation/test counts, divider, right-side disturbance heading, and native two-column table.
+The existing lower-left explanatory textbox is reused and repositioned; no new primitives, decorative elements, or machine-learning jargon are introduced.
+Only slide 4 is rendered for visual review. Whole-deck checking is limited to opening and mechanical overflow validation.

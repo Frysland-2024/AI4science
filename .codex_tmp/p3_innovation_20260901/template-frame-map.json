@@ -1,0 +1,12 @@
+{
+  "source": "E:/AI4science/outputs/XRD_导师汇报.pptx",
+  "slideCount": 8,
+  "editTargets": {
+    "3": {
+      "role": "method innovation",
+      "preserve": ["title system", "divider", "page number", "two native PXRD charts"],
+      "replace": ["body connectors", "labels", "model bridge", "takeaway hierarchy"]
+    }
+  },
+  "preserveOnly": [1, 2, 4, 5, 6, 7, 8]
+}

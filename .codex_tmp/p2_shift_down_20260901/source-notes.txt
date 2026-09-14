@@ -1,0 +1,3 @@
+Source deck: E:\AI4science\outputs\XRD_导师汇报.pptx
+Scope: Slide 2 only. No external assets or claims were added.
+Requested change: Move the complete baseline-calculated-spectrum module slightly downward while preserving its internal spacing.

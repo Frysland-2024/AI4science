@@ -1,0 +1,39 @@
+{"kind":"slide","id":"sl/ofy9wn61","slide":3,"title":"同一结构即使测出来不同，模型判断也应一致","textShapes":7}
+{"kind":"textbox","id":"sh/03ix43e5","slide":3,"name":"slide-3-title","text":"同一结构即使测出来不同，模型判断也应一致","textPreview":"同一结构即使测出来不同，模型判断也应一致","textChars":20,"textLines":1,"bbox":[58,30,1128,58]}
+{"kind":"textbox","id":"sh/cza94vmx","slide":3,"text":"03 / 04","textPreview":"03 / 04","textChars":7,"textLines":1,"bbox":[1176,40,48,24]}
+{"kind":"shape","id":"sh/d0jax03i","slide":3,"bbox":[58,102,1166,0]}
+{"kind":"shape","id":"sh/298ryl4v","slide":3,"bbox":[640,151,0,22]}
+{"kind":"shape","id":"sh/3ah8rqlg","slide":3,"bbox":[330,173,620,0]}
+{"kind":"shape","id":"sh/obq90bml","slide":3,"bbox":[330,173,0,12]}
+{"kind":"shape","id":"sh/pcjqtg36","slide":3,"bbox":[950,173,0,12]}
+{"kind":"shape","id":"sh/m5cra54z","slide":3,"bbox":[320,181,20,24]}
+{"kind":"shape","id":"sh/n6ls3alk","slide":3,"bbox":[940,181,20,24]}
+{"kind":"shape","id":"sh/n2l4fq98","slide":3,"bbox":[320,296,20,35]}
+{"kind":"shape","id":"sh/m1c3mlsn","slide":3,"bbox":[940,296,20,35]}
+{"kind":"shape","id":"sh/943mhgre","slide":3,"bbox":[490,374,22,42]}
+{"kind":"shape","id":"sh/83ulovat","slide":3,"bbox":[768,374,22,42]}
+{"kind":"textbox","id":"sh/v6l4jq94","slide":3,"text":"同一晶体结构","textPreview":"同一晶体结构","textChars":6,"textLines":1,"bbox":[518,115,244,34]}
+{"kind":"textbox","id":"sh/a5c3ql8z","slide":3,"text":"受测量扰动的谱 A","textPreview":"受测量扰动的谱 A","textChars":9,"textLines":1,"bbox":[100,176,230,28]}
+{"kind":"textbox","id":"sh/x8nml0ra","slide":3,"text":"受测量扰动的谱 B","textPreview":"受测量扰动的谱 B","textChars":9,"textLines":1,"bbox":[950,176,230,28]}
+{"kind":"shape","id":"sh/i9w3u58v","slide":3,"bbox":[260,331,760,43]}
+{"kind":"textbox","id":"sh/e10f2twf","slide":3,"text":"同一个模型","textPreview":"同一个模型","textChars":5,"textLines":1,"bbox":[410,340,460,26]}
+{"kind":"textbox","id":"sh/f29gbyx0","slide":3,"text":"预测 A   ≈   预测 B","textPreview":"预测 A   ≈   预测 B","textChars":15,"textLines":1,"bbox":[220,414,840,124]}
+{"kind":"chart","id":"ch/18j69wbi","slide":3,"name":"Chart","chartType":"scatter","bbox":[160,202,340,100]}
+{"kind":"chart","id":"ch/q18nuxsv","slide":3,"name":"Chart","chartType":"scatter","bbox":[780,202,340,100]}
+{"kind":"notes","id":"nt/ofy9wn61","slide":3,"text":"[Sources]\n- E:\\AI4science\\xrd_robustness\\src\\xrd_robustness\\training\\objectives.py\n- E:\\AI4science\\xrd_robustness\\src\\xrd_robustness\\online_views.py\n- E:/AI4science/xrd_robustness/outputs/public_simulated_test/panel_cache/seed_20260721/in_range.npy\n- E:/AI4science/xrd_robustness/outputs/public_simulated_test/panel_cache/seed_20260722/in_range.npy\n- E:/AI4science/xrd_robustness/outputs/public_simulated_test/panel_cache/index.json\n- E:\\AI4science\\xrd_robustness\\data\\formal_14060\\manifests\\v9_method_transfer_test_seed_20260721.csv\n- E:\\AI4science\\xrd_robustness\\data\\formal_14060\\manifests\\v9_method_transfer_test_seed_20260722.csv"}
+{"kind":"slide","id":"sl/jyx0ra1s","slide":4,"title":"14,060 个晶体结构，覆盖 5 类常见测量扰动","textShapes":12}
+{"kind":"textbox","id":"sh/jadsz2xk","slide":4,"name":"slide-2-title","text":"14,060 个晶体结构，覆盖 5 类常见测量扰动","textPreview":"14,060 个晶体结构，覆盖 5 类常见测量扰动","textChars":25,"textLines":1,"bbox":[58,30,1128,58]}
+{"kind":"textbox","id":"sh/1cj2d8b6","slide":4,"text":"04 / 04","textPreview":"04 / 04","textChars":7,"textLines":1,"bbox":[1176,40,48,24]}
+{"kind":"shape","id":"sh/0ba143al","slide":4,"bbox":[58,102,1166,0]}
+{"kind":"textbox","id":"sh/w72947yt","slide":4,"text":"14,060","textPreview":"14,060","textChars":6,"textLines":1,"bbox":[68,154,390,82]}
+{"kind":"textbox","id":"sh/x8vaxsfe","slide":4,"text":"Materials Project 晶体结构","textPreview":"Materials Project 晶体结构","textChars":22,"textLines":1,"bbox":[72,242,390,34]}
+{"kind":"textbox","id":"sh/a5kr2xg3","slide":4,"text":"训练 / 验证 / 测试","textPreview":"训练 / 验证 / 测试","textChars":12,"textLines":1,"bbox":[72,337,375,28]}
+{"kind":"textbox","id":"sh/v6tsv2xo","slide":4,"text":"9,842 / 2,109 / 2,109","textPreview":"9,842 / 2,109 / 2,109","textChars":21,"textLines":1,"bbox":[72,374,405,48]}
+{"kind":"textbox","id":"sh/g36tgryd","slide":4,"text":"按晶体结构划分，避免同一晶体的不同谱\n同时出现在训练集和测试集。","textPreview":"按晶体结构划分，避免同一晶体的不同谱 | 同时出现在训练集和测试集。","textChars":32,"textLines":2,"bbox":[72,500,392,72]}
+{"kind":"shape","id":"sh/h4fa9wfy","slide":4,"bbox":[500,134,0,502]}
+{"kind":"textbox","id":"sh/oz29krqh","slide":4,"text":"峰位偏移　　峰整体左右移动","textPreview":"峰位偏移　　峰整体左右移动","textChars":13,"textLines":1,"bbox":[545,164,655,32]}
+{"kind":"textbox","id":"sh/1wbapc7q","slide":4,"text":"峰展宽　　　峰变宽、相邻峰可能重叠","textPreview":"峰展宽　　　峰变宽、相邻峰可能重叠","textChars":17,"textLines":1,"bbox":[545,261,655,32]}
+{"kind":"textbox","id":"sh/et0reh8f","slide":4,"text":"背景变化　　基线及背景形状发生变化","textPreview":"背景变化　　基线及背景形状发生变化","textChars":17,"textLines":1,"bbox":[545,358,655,32]}
+{"kind":"textbox","id":"sh/ilwf69kv","slide":4,"text":"计数噪声　　谱线上出现随机波动","textPreview":"计数噪声　　谱线上出现随机波动","textChars":15,"textLines":1,"bbox":[545,455,655,32]}
+{"kind":"textbox","id":"sh/5ony1oj6","slide":4,"text":"择优取向　　各衍射峰的相对强度改变","textPreview":"择优取向　　各衍射峰的相对强度改变","textChars":17,"textLines":1,"bbox":[545,552,655,32]}
+{"kind":"notes","id":"nt/jyx0ra1s","slide":4,"text":"本页只回答两个问题：使用多少独立晶体结构，以及模拟了哪些常见测量扰动。\n右侧用五行中文说明每类扰动对谱图最直接的影响。\n\n[Sources]\n- E:/AI4science/xrd_robustness/configs/experiment.public.json\n- E:/AI4science/xrd_robustness/configs/data.method_transfer.structure_split.json\n- E:/AI4science/xrd_robustness/data/formal_14060/manifests/split_manifest.json\n- E:/AI4science/xrd_robustness/configs/simulation.method_transfer.frozen.json"}

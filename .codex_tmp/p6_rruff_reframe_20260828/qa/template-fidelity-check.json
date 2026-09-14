@@ -1,0 +1,13 @@
+{
+  "status": "pass",
+  "checkedAt": "2026-08-28T12:41:48.138Z",
+  "workspace": "E:\\AI4science\\.codex_tmp\\p6_rruff_reframe_20260828",
+  "finalPptx": "E:\\AI4science\\outputs\\XRD_导师汇报.pptx",
+  "starterPptx": "E:\\AI4science\\.codex_tmp\\p6_rruff_reframe_20260828\\template-starter.pptx",
+  "mapPath": "E:\\AI4science\\.codex_tmp\\p6_rruff_reframe_20260828\\template-frame-map.json",
+  "starterLayoutDir": "E:\\AI4science\\.codex_tmp\\p6_rruff_reframe_20260828\\template-starter-layout",
+  "finalLayoutDir": "E:\\AI4science\\.codex_tmp\\p6_rruff_reframe_20260828\\final-layout-all",
+  "editDir": "E:\\AI4science\\.codex_tmp\\p6_rruff_reframe_20260828",
+  "issueCount": 0,
+  "issues": []
+}

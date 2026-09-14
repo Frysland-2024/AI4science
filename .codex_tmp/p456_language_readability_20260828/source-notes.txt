@@ -1,0 +1,6 @@
+Authoritative source for this round: E:/AI4science/outputs/修改意见.txt
+Current deck: E:/AI4science/outputs/XRD_导师汇报.pptx
+P4: enlarge lower-left headings/body, remove the redundant right-side heading, move/enlarge the existing table, and use natural Materials Project wording.
+P5: replace visible Seed terminology with repeated-training language and add a concise definition below the chart; preserve all frozen values.
+P6: refine only title, subtitle, and first-budget annotation; preserve chart and geometry.
+CNRS is explicitly described as a next step in the review note and is not added in this round.

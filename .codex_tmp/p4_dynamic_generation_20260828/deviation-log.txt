@@ -1,0 +1,4 @@
+Slide 4 only: replaced the inherited lower-left two-line leakage-avoidance statement with a compact four-line explanation of structure-level splitting and online spectrum generation.
+The phrase “随机‘换测量条件’” is highlighted in orange to match the deck's measurement-disturbance color semantics.
+Slide 4 right-side table is unchanged.
+Slides 1, 2, 3, 5, and 6 are unchanged and are not visually re-reviewed.

@@ -1,0 +1,60 @@
+{
+  "outputSlides": [
+    {
+      "outputSlide": 1,
+      "sourceSlide": 1,
+      "narrativeRole": "preserve-only",
+      "reuseMode": "duplicate-slide",
+      "editTargets": []
+    },
+    {
+      "outputSlide": 2,
+      "sourceSlide": 2,
+      "narrativeRole": "preserve-only",
+      "reuseMode": "duplicate-slide",
+      "editTargets": []
+    },
+    {
+      "outputSlide": 3,
+      "sourceSlide": 3,
+      "narrativeRole": "preserve-only",
+      "reuseMode": "duplicate-slide",
+      "editTargets": []
+    },
+    {
+      "outputSlide": 4,
+      "sourceSlide": 4,
+      "narrativeRole": "preserve-only",
+      "reuseMode": "duplicate-slide",
+      "editTargets": []
+    },
+    {
+      "outputSlide": 5,
+      "sourceSlide": 2,
+      "narrativeRole": "simulation robustness result",
+      "reuseMode": "duplicate-slide",
+      "editTargets": [
+        { "action": "rewrite", "sourceElementId": "sh/nu58f2hs", "reason": "replace the inherited title with the requested result claim" },
+        { "action": "rewrite", "sourceElementId": "sh/9072xkry", "reason": "label the newly added result page" },
+        { "action": "rewrite-and-reposition", "sourceElementId": "sh/b29kza94", "reason": "reuse the inherited label for the 5/5 summary" },
+        { "action": "rewrite-and-reposition", "sourceElementId": "sh/a10jqpsj", "reason": "reuse the inherited label for the summary explanation" },
+        { "action": "rewrite-and-reposition", "sourceElementId": "sh/x4r21kru", "reason": "reuse the inherited label for the mean improvement" },
+        { "action": "delete", "sourceElementId": "sh/ove9o7yd", "reason": "remove inherited spectrum-row separator" },
+        { "action": "delete", "sourceElementId": "sh/9wnqhczy", "reason": "remove inherited spectrum-row separator" },
+        { "action": "delete", "sourceElementId": "sh/mtwrmxg7", "reason": "remove the inherited spectrum-page takeaway" },
+        { "action": "delete", "sourceElementId": "ch/47uh8zqh", "reason": "replace the inherited spectrum chart with the requested paired bars" },
+        { "action": "delete", "sourceElementId": "ch/p83y1472", "reason": "replace the inherited spectrum chart with the requested paired bars" },
+        { "action": "delete", "sourceElementId": "ch/25cz6p8b", "reason": "replace the inherited spectrum chart with the requested paired bars" },
+        { "action": "rewrite", "sourceElementId": "nt/hwbqtkby", "reason": "cite the local frozen simulated-test result file" },
+        {
+          "action": "add",
+          "newPrimitiveAllowed": true,
+          "zone": { "left": 72, "top": 136, "width": 860, "height": 478 },
+          "reason": "add the user-requested native 5-group clustered column chart in the cleared inherited content zone",
+          "mustNotOverlapInherited": true
+        }
+      ]
+    }
+  ],
+  "omittedSourceSlides": []
+}

@@ -1,0 +1,70 @@
+{
+  "outputSlides": [
+    {
+      "outputSlide": 1,
+      "sourceSlide": 1,
+      "narrativeRole": "preserve-only source slide",
+      "reuseMode": "duplicate-slide",
+      "editTargets": []
+    },
+    {
+      "outputSlide": 2,
+      "sourceSlide": 2,
+      "narrativeRole": "preserve-only source slide",
+      "reuseMode": "duplicate-slide",
+      "editTargets": []
+    },
+    {
+      "outputSlide": 3,
+      "sourceSlide": 3,
+      "narrativeRole": "preserve-only source slide",
+      "reuseMode": "duplicate-slide",
+      "editTargets": []
+    },
+    {
+      "outputSlide": 4,
+      "sourceSlide": 4,
+      "narrativeRole": "preserve-only source slide",
+      "reuseMode": "duplicate-slide",
+      "editTargets": []
+    },
+    {
+      "outputSlide": 5,
+      "sourceSlide": 5,
+      "narrativeRole": "preserve-only source slide",
+      "reuseMode": "duplicate-slide",
+      "editTargets": []
+    },
+    {
+      "outputSlide": 6,
+      "sourceSlide": 6,
+      "narrativeRole": "RRUFF-301 real-spectrum result",
+      "reuseMode": "duplicate-slide",
+      "editTargets": [
+        {
+          "sourceElementId": "sh/47mt0b6x",
+          "action": "rewrite",
+          "reason": "Replace generic class wording with explicit crystal-system wording."
+        },
+        {
+          "sourceElementId": "ch/8va107ql",
+          "action": "rewrite",
+          "reason": "Clarify each x-axis budget as spectra per crystal system while preserving chart data and styling."
+        },
+        {
+          "sourceElementId": "sh/5svutgni",
+          "action": "rewrite",
+          "reason": "Add the subject '本方法' to the efficiency conclusion and both comparisons."
+        }
+      ]
+    },
+    {
+      "outputSlide": 7,
+      "sourceSlide": 7,
+      "narrativeRole": "preserve-only source slide",
+      "reuseMode": "duplicate-slide",
+      "editTargets": []
+    }
+  ],
+  "omittedSourceSlides": []
+}

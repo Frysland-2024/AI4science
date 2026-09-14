@@ -1,0 +1,33 @@
+All claims are based on user-provided planning content and local workspace evidence. No internet research is used.
+
+Primary sources
+- E:\AI4science\docs\CURRENT_STATE.md
+- E:\AI4science\xrd_robustness\MANUSCRIPT.md
+- E:\AI4science\xrd_robustness\reports\RESULTS.md
+- E:\AI4science\xrd_robustness\reports\validation_results.json
+- E:\AI4science\xrd_robustness\reports\simulated_test_results.json
+- E:\AI4science\xrd_robustness\reports\rruff301_fewshot_results.json
+- E:\AI4science\xrd_robustness\reports\CNRS_318_RESULTS.md
+- E:\AI4science\xrd_robustness\reports\CALIBRATION_ANALYSIS.md
+- E:\AI4science\xrd_robustness\configs\experiment.public.json
+- E:\AI4science\xrd_robustness\configs\data.method_transfer.structure_split.json
+- E:\AI4science\docs\NEXT_PROJECT_XRD_QUANTITATIVE_INVERSION.md
+
+Local source presentation inspected as content only
+- E:\AI4science\outputs\XRD_谭启沟通版_8页_视觉权重修正版.pptx
+
+Current visual assets checked
+- E:\AI4science\xrd_robustness\figures\figure_1_method_overview.svg
+- E:\AI4science\xrd_robustness\figures\figure_2_validation_paired_ood.svg
+- E:\AI4science\xrd_robustness\figures\figure_3_simulated_test_paired_ood.svg
+- E:\AI4science\xrd_robustness\figures\figure_4_metric_overview.svg
+
+Known stale assets explicitly excluded
+- E:\AI4science\outputs\fig2_test_confirmation.png
+- E:\AI4science\outputs\fig3_two_phase_arch.png
+- E:\AI4science\outputs\fig4_summary_table.png
+
+Claim boundaries retained
+- RRUFF values are retrospectively verified locked-test results; historical prospective provenance is incomplete.
+- CNRS is a naturally imbalanced independent zero-shot domain. Its corrected paired-parent 95% interval crosses zero, absolute accuracy remains below the majority-class baseline, and per-class gains are not uniform.
+- The next-stage inversion project has only completed problem definition and planning. V0 is known-phase, single-phase, tetragonal and does not yet include simultaneous microstrain, crystallite size, phase fraction, or multi-phase inversion.

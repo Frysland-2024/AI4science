@@ -1,0 +1,12 @@
+QA checklist
+- Exact slide count: 6
+- Titles are scientific claims, not topic labels
+- Slide 1 contains three real/controlled PXRD traces
+- Slide 2 shows exactly two views entering one shared model and two predictions constrained by JS
+- Slide 3 contains five paired seed lines and all slope upward
+- Slide 4 contains both ERM and consistency curves for K=1/2/5
+- Slide 5 contains five paired seed lines and all slope upward; limitation is small text only
+- Slide 6 contains the forward-verification loop and is explicitly framed as next work
+- No warning icon, AI icon, generic roadmap, KPI card, or decorative crystal illustration
+- All titles fit one line at full-size render
+- No overflow, clipping, broken connectors, or chart/data mismatch

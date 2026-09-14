@@ -1,0 +1,4 @@
+Slides 1-2: no deviation.
+Slide 3: only the two spectrum labels are changed and moved outward so the horizontal structure connector cannot run behind the longer text.
+Slide 4: baseline series are recolored blue and perturbation series orange to match slides 1-2; the legend and split note are rewritten accordingly.
+No new slides, shapes, charts, icons, cards, formulas, parameters, or technical terms are added.

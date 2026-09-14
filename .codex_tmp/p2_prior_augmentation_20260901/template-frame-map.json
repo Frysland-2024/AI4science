@@ -1,0 +1,37 @@
+{
+  "outputSlides": [
+    { "outputSlide": 1, "sourceSlide": 1, "narrativeRole": "immutable", "reuseMode": "preserve-only", "editTargets": [] },
+    {
+      "outputSlide": 2,
+      "sourceSlide": 2,
+      "narrativeRole": "prior-work data-generation process",
+      "reuseMode": "edit-existing-slide",
+      "editTargets": [
+        { "sourceElementId": "sh/nu58f2hs", "action": "rewrite-and-reposition", "role": "title" },
+        { "sourceElementId": "sh/9072xkry", "action": "update", "role": "slide number" },
+        { "sourceElementId": "sh/ozy1ofad", "action": "reposition", "role": "divider" },
+        { "sourceElementId": "sh/b29kza94", "action": "rewrite-and-reposition", "role": "crystal structure step" },
+        { "sourceElementId": "sh/a10jqpsj", "action": "rewrite-and-reposition", "role": "compute PXRD step" },
+        { "sourceElementId": "sh/x4r21kru", "action": "rewrite-restyle-and-reposition", "role": "random perturbation focal step" },
+        { "sourceElementId": "ch/47uh8zqh", "action": "resize-and-reposition", "role": "generated spectrum A" },
+        { "sourceElementId": "ch/p83y1472", "action": "resize-and-reposition", "role": "generated spectrum B" },
+        { "sourceElementId": "ch/25cz6p8b", "action": "resize-and-reposition", "role": "generated spectrum C" },
+        { "sourceElementId": "sh/ove9o7yd", "action": "delete", "role": "obsolete separator" },
+        { "sourceElementId": "sh/9wnqhczy", "action": "delete", "role": "obsolete separator" },
+        { "sourceElementId": "sh/mtwrmxg7", "action": "rewrite-and-reposition", "role": "transition sentence" },
+        { "action": "add", "role": "subtitle", "zone": [58, 94, 1120, 34], "reason": "state why prior works sample perturbations" },
+        { "action": "add", "role": "process arrows", "zone": [190, 250, 580, 90], "reason": "connect the four process stages" },
+        { "action": "add", "role": "generated-spectrum labels", "zone": [770, 190, 460, 320], "reason": "identify three reused native charts" },
+        { "action": "add", "role": "perturbation examples", "zone": [465, 350, 265, 28], "reason": "list representative physical changes without cards" },
+        { "action": "add", "role": "literature footer", "zone": [58, 620, 1164, 52], "reason": "cite representative prior work without taking over the slide" }
+      ]
+    },
+    { "outputSlide": 3, "sourceSlide": 3, "narrativeRole": "immutable", "reuseMode": "preserve-only", "editTargets": [] },
+    { "outputSlide": 4, "sourceSlide": 4, "narrativeRole": "immutable", "reuseMode": "preserve-only", "editTargets": [] },
+    { "outputSlide": 5, "sourceSlide": 5, "narrativeRole": "immutable", "reuseMode": "preserve-only", "editTargets": [] },
+    { "outputSlide": 6, "sourceSlide": 6, "narrativeRole": "immutable", "reuseMode": "preserve-only", "editTargets": [] },
+    { "outputSlide": 7, "sourceSlide": 7, "narrativeRole": "immutable", "reuseMode": "preserve-only", "editTargets": [] },
+    { "outputSlide": 8, "sourceSlide": 8, "narrativeRole": "immutable", "reuseMode": "preserve-only", "editTargets": [] }
+  ],
+  "omittedSourceSlides": []
+}

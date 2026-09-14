@@ -1,0 +1,154 @@
+{
+  "results": [
+    {
+      "seed": "20260711",
+      "method": "dynamic_erm",
+      "accuracy": 0.19480519480519481,
+      "macro_f1": 0.16294584422385114,
+      "per_class_f1": {
+        "triclinic": 0.26744186046511625,
+        "monoclinic": 0.1686746987951807,
+        "orthorhombic": 0.08,
+        "tetragonal": 0.10526315789473684,
+        "trigonal": 0.17777777777777778,
+        "hexagonal": 0.34146341463414637,
+        "cubic": 0.0
+      }
+    },
+    {
+      "seed": "20260711",
+      "method": "js_lambda_60",
+      "accuracy": 0.30735930735930733,
+      "macro_f1": 0.2822259957524799,
+      "per_class_f1": {
+        "triclinic": 0.3620689655172414,
+        "monoclinic": 0.30927835051546393,
+        "orthorhombic": 0.36363636363636365,
+        "tetragonal": 0.25,
+        "trigonal": 0.24615384615384617,
+        "hexagonal": 0.4444444444444444,
+        "cubic": 0.0
+      }
+    },
+    {
+      "seed": "20260712",
+      "method": "dynamic_erm",
+      "accuracy": 0.21645021645021645,
+      "macro_f1": 0.17297199681837663,
+      "per_class_f1": {
+        "triclinic": 0.32786885245901637,
+        "monoclinic": 0.24489795918367346,
+        "orthorhombic": 0.10714285714285714,
+        "tetragonal": 0.0975609756097561,
+        "trigonal": 0.26666666666666666,
+        "hexagonal": 0.16666666666666666,
+        "cubic": 0.0
+      }
+    },
+    {
+      "seed": "20260712",
+      "method": "js_lambda_60",
+      "accuracy": 0.22943722943722944,
+      "macro_f1": 0.19284738446443225,
+      "per_class_f1": {
+        "triclinic": 0.3770491803278688,
+        "monoclinic": 0.21782178217821782,
+        "orthorhombic": 0.16666666666666666,
+        "tetragonal": 0.10526315789473684,
+        "trigonal": 0.17543859649122806,
+        "hexagonal": 0.3076923076923077,
+        "cubic": 0.0
+      }
+    },
+    {
+      "seed": "20260713",
+      "method": "dynamic_erm",
+      "accuracy": 0.2597402597402597,
+      "macro_f1": 0.23457996428401723,
+      "per_class_f1": {
+        "triclinic": 0.27722772277227725,
+        "monoclinic": 0.3064516129032258,
+        "orthorhombic": 0.08888888888888889,
+        "tetragonal": 0.36,
+        "trigonal": 0.1694915254237288,
+        "hexagonal": 0.44,
+        "cubic": 0.0
+      }
+    },
+    {
+      "seed": "20260713",
+      "method": "js_lambda_60",
+      "accuracy": 0.2077922077922078,
+      "macro_f1": 0.1845299867343817,
+      "per_class_f1": {
+        "triclinic": 0.24806201550387597,
+        "monoclinic": 0.21359223300970873,
+        "orthorhombic": 0.17142857142857143,
+        "tetragonal": 0.0,
+        "trigonal": 0.20408163265306123,
+        "hexagonal": 0.45454545454545453,
+        "cubic": 0.0
+      }
+    },
+    {
+      "seed": "20260714",
+      "method": "dynamic_erm",
+      "accuracy": 0.22077922077922077,
+      "macro_f1": 0.1901344576040064,
+      "per_class_f1": {
+        "triclinic": 0.288135593220339,
+        "monoclinic": 0.24193548387096775,
+        "orthorhombic": 0.11320754716981132,
+        "tetragonal": 0.05555555555555555,
+        "trigonal": 0.15384615384615385,
+        "hexagonal": 0.4782608695652174,
+        "cubic": 0.0
+      }
+    },
+    {
+      "seed": "20260714",
+      "method": "js_lambda_60",
+      "accuracy": 0.2683982683982684,
+      "macro_f1": 0.22478771354419222,
+      "per_class_f1": {
+        "triclinic": 0.39705882352941174,
+        "monoclinic": 0.11267605633802817,
+        "orthorhombic": 0.38461538461538464,
+        "tetragonal": 0.08888888888888889,
+        "trigonal": 0.21818181818181817,
+        "hexagonal": 0.37209302325581395,
+        "cubic": 0.0
+      }
+    },
+    {
+      "seed": "20260715",
+      "method": "dynamic_erm",
+      "accuracy": 0.2987012987012987,
+      "macro_f1": 0.2825904766242241,
+      "per_class_f1": {
+        "triclinic": 0.390625,
+        "monoclinic": 0.21621621621621623,
+        "orthorhombic": 0.19230769230769232,
+        "tetragonal": 0.3018867924528302,
+        "trigonal": 0.2608695652173913,
+        "hexagonal": 0.4583333333333333,
+        "cubic": 0.15789473684210525
+      }
+    },
+    {
+      "seed": "20260715",
+      "method": "js_lambda_60",
+      "accuracy": 0.2510822510822511,
+      "macro_f1": 0.21889023937660637,
+      "per_class_f1": {
+        "triclinic": 0.3333333333333333,
+        "monoclinic": 0.2711864406779661,
+        "orthorhombic": 0.2,
+        "tetragonal": 0.1111111111111111,
+        "trigonal": 0.18181818181818182,
+        "hexagonal": 0.43478260869565216,
+        "cubic": 0.0
+      }
+    }
+  ]
+}

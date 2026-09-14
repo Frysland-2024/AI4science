@@ -1,0 +1,4 @@
+Source deck: E:/AI4science/outputs/XRD_导师汇报.pptx
+The added sentence is user-approved interpretation of the existing two-view method and is supported by the existing slide-3 speaker-note sources.
+No external asset or new numerical claim is introduced.
+

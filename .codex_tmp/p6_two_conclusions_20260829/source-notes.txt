@@ -1,0 +1,8 @@
+Source deck: E:/AI4science/outputs/XRD_导师汇报.pptx
+The RRUFF-301 chart data are preserved unchanged from the source deck:
+- 7 labels: 0.285 to 0.328, +4.33 pp
+- 14 labels: 0.303 to 0.349, +4.60 pp
+- 35 labels: 0.355 to 0.410, +5.45 pp
+The two cross-budget comparisons are derived directly from the displayed chart values: 0.349 is approximately 0.356, and 0.328 is greater than 0.303.
+No external assets or new external claims are introduced.
+

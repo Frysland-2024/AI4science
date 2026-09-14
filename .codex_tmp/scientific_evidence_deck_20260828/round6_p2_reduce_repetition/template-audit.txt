@@ -1,0 +1,6 @@
+Source deck: XRD_导师汇报_第五轮_方案A方法页_3页_2026-08-28.pptx
+Slides inspected: 3
+Slide size: 1280 x 720
+Visual system: white canvas, Microsoft YaHei, navy assertion titles, scientific XRD charts, restrained orange and green accents.
+Edit contract: preserve slides 1 and 3 exactly; on slide 2 rewrite only the title and the existing bottom text box. Keep all three charts, labels, rules, notes, masters, layouts, and page markers unchanged.
+Inherited placeholders: no empty visible placeholders found in the imported slide inventory.

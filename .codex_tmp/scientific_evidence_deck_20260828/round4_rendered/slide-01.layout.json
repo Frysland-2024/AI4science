@@ -1,0 +1,620 @@
+{
+  "schema": "openai.presentation.layout/v4",
+  "unit": "px",
+  "slide": {
+    "aid": "sl/esbrga",
+    "id": "esbrga",
+    "slide": 1,
+    "layoutId": "29fce2de-4950-47e2-b324-018103fc92d6",
+    "layoutName": "Title Slide",
+    "layoutType": "title",
+    "masterLayoutId": "1f0b9fd1-9378-486a-8ed7-cbd39faa03c2",
+    "masterLayoutName": "Master",
+    "backgroundColor": "#FFFFFF",
+    "frame": {
+      "left": 0,
+      "top": 0,
+      "width": 1280,
+      "height": 720
+    }
+  },
+  "theme": {
+    "colorSchemeName": "ChatGPT",
+    "colors": {
+      "accent1": "#156082",
+      "accent2": "#E97132",
+      "accent3": "#196B24",
+      "accent4": "#0F9ED5",
+      "accent5": "#A02B93",
+      "accent6": "#4EA72E",
+      "bg1": "#FFFFFF",
+      "bg2": "#000000",
+      "tx1": "#1F1F1F",
+      "tx2": "#FFFFFF",
+      "dk1": "#000000",
+      "lt1": "#FFFFFF",
+      "dk2": "#0E2841",
+      "lt2": "#E8E8E8",
+      "hlink": "#467886",
+      "folHlink": "#96607D"
+    },
+    "typefaces": [
+      "Microsoft YaHei"
+    ]
+  },
+  "inheritedLayers": [
+    {
+      "scope": "layout",
+      "id": "29fce2de-4950-47e2-b324-018103fc92d6",
+      "name": "Title Slide",
+      "type": "title",
+      "parentLayoutId": "1f0b9fd1-9378-486a-8ed7-cbd39faa03c2",
+      "elements": []
+    },
+    {
+      "scope": "master",
+      "id": "1f0b9fd1-9378-486a-8ed7-cbd39faa03c2",
+      "name": "Master",
+      "type": "master",
+      "elements": []
+    }
+  ],
+  "elements": [
+    {
+      "order": 1,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/u58ju1cv",
+      "id": "1",
+      "bbox": [
+        76,
+        62,
+        1128,
+        74
+      ],
+      "geometry": "rect",
+      "text": "让 PXRD 晶系判断不再依赖“怎么测”",
+      "textPreview": "让 PXRD 晶系判断不再依赖“怎么测”",
+      "resolvedFontSize": 54,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 54,
+        "typeface": "Microsoft YaHei",
+        "color": "#143A63",
+        "bold": true,
+        "alignment": "center",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "让 PXRD 晶系判断不再依赖“怎么测”"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "让 PXRD 晶系判断不再依赖“怎么测”",
+          "lineSpacingPercent": 106000,
+          "resolvedTextStyle": {
+            "fontSize": 54,
+            "typeface": "Microsoft YaHei",
+            "color": "#143A63",
+            "bold": true,
+            "alignment": "center",
+            "lineSpacing": 1.06
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "让 PXRD 晶系判断不再依赖“怎么测”",
+              "fontSize": 54,
+              "typeface": "Microsoft YaHei",
+              "color": "#143A63",
+              "bold": true,
+              "alignment": "center",
+              "lineSpacing": 1.06
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 2,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/hsz2pgb6",
+      "id": "2",
+      "bbox": [
+        116,
+        158,
+        1048,
+        42
+      ],
+      "geometry": "rect",
+      "text": "模拟谱训练出的模型，遇到真实实验条件变化后还能稳定判断晶系吗？",
+      "textPreview": "模拟谱训练出的模型，遇到真实实验条件变化后还能稳定判断晶系吗？",
+      "resolvedFontSize": 25,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 25,
+        "typeface": "Microsoft YaHei",
+        "color": "#657384",
+        "alignment": "center",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "模拟谱训练出的模型，遇到真实实验条件变化后还能稳定判断晶系吗？"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "模拟谱训练出的模型，遇到真实实验条件变化后还能稳定判断晶系吗？",
+          "lineSpacingPercent": 106000,
+          "resolvedTextStyle": {
+            "fontSize": 25,
+            "typeface": "Microsoft YaHei",
+            "color": "#657384",
+            "alignment": "center",
+            "lineSpacing": 1.06
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "模拟谱训练出的模型，遇到真实实验条件变化后还能稳定判断晶系吗？",
+              "fontSize": 25,
+              "typeface": "Microsoft YaHei",
+              "color": "#657384",
+              "alignment": "center",
+              "lineSpacing": 1.06
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 3,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/grq1gbul",
+      "id": "3",
+      "bbox": [
+        178,
+        222,
+        924,
+        0
+      ],
+      "geometry": "line",
+      "lineColor": "#D9E0E8",
+      "lineWidth": 1.2
+    },
+    {
+      "order": 4,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/72x0jmt4",
+      "id": "4",
+      "bbox": [
+        104,
+        270,
+        416,
+        30
+      ],
+      "geometry": "rect",
+      "text": "较理想的谱",
+      "textPreview": "较理想的谱",
+      "resolvedFontSize": 22,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 22,
+        "typeface": "Microsoft YaHei",
+        "color": "#285F97",
+        "bold": true,
+        "alignment": "center",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "较理想的谱"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "较理想的谱",
+          "lineSpacingPercent": 106000,
+          "resolvedTextStyle": {
+            "fontSize": 22,
+            "typeface": "Microsoft YaHei",
+            "color": "#285F97",
+            "bold": true,
+            "alignment": "center",
+            "lineSpacing": 1.06
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "较理想的谱",
+              "fontSize": 22,
+              "typeface": "Microsoft YaHei",
+              "color": "#285F97",
+              "bold": true,
+              "alignment": "center",
+              "lineSpacing": 1.06
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 5,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/61ojqhcj",
+      "id": "5",
+      "bbox": [
+        760,
+        270,
+        416,
+        30
+      ],
+      "geometry": "rect",
+      "text": "受测量扰动的谱",
+      "textPreview": "受测量扰动的谱",
+      "resolvedFontSize": 22,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 22,
+        "typeface": "Microsoft YaHei",
+        "color": "#E77A25",
+        "bold": true,
+        "alignment": "center",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "受测量扰动的谱"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "受测量扰动的谱",
+          "lineSpacingPercent": 106000,
+          "resolvedTextStyle": {
+            "fontSize": 22,
+            "typeface": "Microsoft YaHei",
+            "color": "#E77A25",
+            "bold": true,
+            "alignment": "center",
+            "lineSpacing": 1.06
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "受测量扰动的谱",
+              "fontSize": 22,
+              "typeface": "Microsoft YaHei",
+              "color": "#E77A25",
+              "bold": true,
+              "alignment": "center",
+              "lineSpacing": 1.06
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 6,
+      "kind": "chart",
+      "scope": "slide",
+      "aid": "ch/h0rapgve",
+      "id": "6",
+      "bbox": [
+        86,
+        312,
+        452,
+        184
+      ],
+      "chartType": "scatter"
+    },
+    {
+      "order": 7,
+      "kind": "chart",
+      "scope": "slide",
+      "aid": "ch/wzi9wbet",
+      "id": "7",
+      "bbox": [
+        742,
+        312,
+        452,
+        184
+      ],
+      "chartType": "scatter"
+    },
+    {
+      "order": 8,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/jyx0fmt8",
+      "id": "8",
+      "bbox": [
+        548,
+        326,
+        184,
+        32
+      ],
+      "geometry": "rect",
+      "text": "同一晶体",
+      "textPreview": "同一晶体",
+      "resolvedFontSize": 22,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 22,
+        "typeface": "Microsoft YaHei",
+        "color": "#657384",
+        "alignment": "center",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "同一晶体"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "同一晶体",
+          "lineSpacingPercent": 106000,
+          "resolvedTextStyle": {
+            "fontSize": 22,
+            "typeface": "Microsoft YaHei",
+            "color": "#657384",
+            "alignment": "center",
+            "lineSpacing": 1.06
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "同一晶体",
+              "fontSize": 22,
+              "typeface": "Microsoft YaHei",
+              "color": "#657384",
+              "alignment": "center",
+              "lineSpacing": 1.06
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 9,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/yxojmhcn",
+      "id": "9",
+      "bbox": [
+        536,
+        376,
+        208,
+        48
+      ],
+      "geometry": "rect",
+      "text": "晶系不变",
+      "textPreview": "晶系不变",
+      "resolvedFontSize": 34,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 34,
+        "typeface": "Microsoft YaHei",
+        "color": "#143A63",
+        "bold": true,
+        "alignment": "center",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "晶系不变"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "晶系不变",
+          "lineSpacingPercent": 106000,
+          "resolvedTextStyle": {
+            "fontSize": 34,
+            "typeface": "Microsoft YaHei",
+            "color": "#143A63",
+            "bold": true,
+            "alignment": "center",
+            "lineSpacing": 1.06
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "晶系不变",
+              "fontSize": 34,
+              "typeface": "Microsoft YaHei",
+              "color": "#143A63",
+              "bold": true,
+              "alignment": "center",
+              "lineSpacing": 1.06
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 10,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/gfmx8bip",
+      "id": "10",
+      "bbox": [
+        548,
+        446,
+        184,
+        0
+      ],
+      "geometry": "line",
+      "lineColor": "#143A63",
+      "lineWidth": 1.5
+    },
+    {
+      "order": 11,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/hgve1gza",
+      "id": "11",
+      "bbox": [
+        76,
+        654,
+        1128,
+        24
+      ],
+      "geometry": "rect",
+      "text": "阶段性研究汇报 · 2026.08.28",
+      "textPreview": "阶段性研究汇报 · 2026.08.28",
+      "resolvedFontSize": 16,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 16,
+        "typeface": "Microsoft YaHei",
+        "color": "#657384",
+        "alignment": "center",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "阶段性研究汇报 · 2026.08.28"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "阶段性研究汇报 · 2026.08.28",
+          "lineSpacingPercent": 106000,
+          "resolvedTextStyle": {
+            "fontSize": 16,
+            "typeface": "Microsoft YaHei",
+            "color": "#657384",
+            "alignment": "center",
+            "lineSpacing": 1.06
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "阶段性研究汇报 · 2026.08.28",
+              "fontSize": 16,
+              "typeface": "Microsoft YaHei",
+              "color": "#657384",
+              "alignment": "center",
+              "lineSpacing": 1.06
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    }
+  ],
+  "composeRuns": []
+}

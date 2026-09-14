@@ -1,0 +1,8 @@
+No web research or external visual assets were used.
+The five paired Macro-F1 values and summary statistics were verified against:
+E:/AI4science/xrd_robustness/reports/simulated_test_results.json
+Fields used:
+- paired_runs[*].dynamic_erm.mean_single_factor_ood_macro_f1
+- paired_runs[*].js_consistency.mean_single_factor_ood_macro_f1
+- methods.*.mean_single_factor_ood_macro_f1.mean
+- paired_improvements.mean_single_factor_ood_macro_f1

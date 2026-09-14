@@ -1,0 +1,127 @@
+# XRD 鲁棒性
+
+这里做的是：用在线 PXRD 物理扰动做七晶系鲁棒分类。对比 Dynamic ERM 和 Dynamic JS Consistency 两种方法，配置是 ResNet-18-GN、不做额外预处理、AdamW、恒定学习率、`lambda_js=60`。
+
+> **本轮证据结案先看：** [`../docs/PXRD_EVIDENCE_CLOSURE.md`](../docs/PXRD_EVIDENCE_CLOSURE.md)。五类扰动物理/文献依据与 RRUFF-301 composition audit 已正式结案；当前最重要的工作是把 **shared parent identity → measurement equivalence → relationship supervision** 的方法贡献讲清楚，而不是再补实验或加算法。
+
+> **五个方法细节问题也已结案：** [`../docs/PXRD_METHOD_DETAIL_EVIDENCE_CLOSURE.md`](../docs/PXRD_METHOD_DETAIL_EVIDENCE_CLOSURE.md)。其中明确核实了：ERM/JS 是真正同条件对照；formal_14060 先按 parent structure 划分再生成 views；五类扰动只改变观测谱，不会把 structure A 变成 structure B；`lambda_js=60` 来自 Train-only 候选尺度检查后仅用 Validation 选择，而不是看 Test/真实域结果后调出来的。
+
+> **方法贡献的核心一句话：** conventional online simulation mainly treats the simulator as a data generator; this work additionally exploits simulator-retained parent identity so that the simulator becomes **data generator + relationship supervisor**.
+
+## 结果
+
+| 数据集 | Dynamic ERM | Dynamic JS | 配对提升 |
+|---|---:|---:|---:|
+| 模拟验证集 · 单因素分布外 Macro-F1 | 0.658495 ± 0.007417 | 0.705064 ± 0.005841 | `+0.046569` |
+| 模拟测试集 · 单因素分布外 Macro-F1 | 0.65074 ± 0.00721 | 0.70534 ± 0.00977 | `+0.054600`；5/5 为正 |
+| 模拟测试集 · 单因素分布外 Accuracy | 0.65078 ± 0.00780 | 0.70524 ± 0.00856 | `+0.054454`；5/5 为正 |
+| RRUFF-301 · K=1/2/5 few-shot Macro-F1 | 0.2847±0.0269 / 0.3026±0.0407 / 0.3555±0.0302 | 0.3280±0.0329 / 0.3486±0.0335 / 0.4099±0.0271 | `+0.0433 / +0.0460 / +0.0545` |
+| RRUFF-301 · K=1/2/5 few-shot Accuracy | 0.2990±0.0259 / 0.3120±0.0383 / 0.3581±0.0273 | 0.3375±0.0299 / 0.3609±0.0343 / 0.4149±0.0252 | `+0.0384 / +0.0488 / +0.0568` |
+| CNRS-318 · zero-shot pooled Macro-F1 | 0.19118 | 0.20912 | mean seed-paired `+0.01871`（约 `+1.87 pp`）；5/5 为正 |
+
+模拟 OOD、RRUFF few-shot、CNRS zero-shot 与 calibration 形成一致证据链。CNRS-318 的 seed-level Macro-F1 为 `0.18837±0.02634→0.20708±0.02134`、配对提升 `+0.01871±0.00675`，且 5/5 seed 为正；它是独立实验来源上的 zero-shot 外推评测，不是用 CNRS 标签做域适配。Balanced accuracy、accuracy、ECE、NLL 与 Brier 也同向改善。自然不平衡和低支持类别使严格 paired-parent CI 较宽；CI 跨 0 作为不确定性说明保留，不再作为科研成败 Gate。
+
+当前默认采用[三层评价体系](../docs/PXRD_RESULT_REPORTING_STANDARD.md)：community-standard performance 是主科学交流层，reliability 是增强证据层，strict statistical audit 是不确定性与可信度审计层。
+
+## 已结案证据问题
+
+### 五类扰动
+
+物理机制、代表性文献、最终 frozen range 与解释边界已经完成整理。权威入口：
+
+- [`../docs/PXRD_PERTURBATION_EVIDENCE.md`](../docs/PXRD_PERTURBATION_EVIDENCE.md)
+- [`../docs/PXRD_EVIDENCE_CLOSURE.md`](../docs/PXRD_EVIDENCE_CLOSURE.md)
+
+### RRUFF-301 composition audit
+
+RRUFF-301 adaptation pool（70）与 locked test（231）：
+
+- exact RRUFF-ID overlap = `0`；
+- exact spectrum-SHA overlap = `0`；
+- 16,170 个跨 split spectrum pairs 中 maximum Pearson = `0.947785`；
+- Pearson ≥ 0.95 / 0.98 / 0.995 均为 `0` 对；
+- 23 个 shared mineral names 被保留，因为当前 benchmark 是 **in-domain few-shot adaptation / label efficiency**，不是 unseen-mineral generalization。
+
+完整报告：[`reports/RRUFF301_COMPOSITION_AUDIT.md`](reports/RRUFF301_COMPOSITION_AUDIT.md)。这项检查已经结案，不据此修改 frozen split 或重跑模型。
+
+### 五个方法细节问题
+
+仓库与 Git 历史已经完成考古并统一结案：
+
+1. Related Work / 新颖性边界；
+2. Dynamic ERM 与 Dynamic JS 是否在真正相同的训练条件下比较；
+3. formal_14060 数据集如何构建以及如何避免 parent leakage；
+4. 五类扰动是否只改变观测谱，而没有把 structure A 变成 structure B；
+5. `lambda_js=60` 的候选范围与 Validation-only 选择路径。
+
+统一入口：[`../docs/PXRD_METHOD_DETAIL_EVIDENCE_CLOSURE.md`](../docs/PXRD_METHOD_DETAIL_EVIDENCE_CLOSURE.md)。这些问题后续直接用于 Methods、Related Work、PPT 与答辩，不再作为新的实验任务重新开启。
+
+## 结果与证据索引
+
+| 文件 | 作用 |
+|---|---|
+| [`../docs/PXRD_EVIDENCE_CLOSURE.md`](../docs/PXRD_EVIDENCE_CLOSURE.md) | **本轮两个证据问题的结案结果 + 当前方法新颖性 framing** |
+| [`../docs/PXRD_METHOD_DETAIL_EVIDENCE_CLOSURE.md`](../docs/PXRD_METHOD_DETAIL_EVIDENCE_CLOSURE.md) | **五个方法细节问题的本地仓库/Git 历史考古与结案** |
+| [`../docs/PXRD_PERTURBATION_EVIDENCE.md`](../docs/PXRD_PERTURBATION_EVIDENCE.md) | 五类扰动的物理/文献依据、最终范围与历史详细证据入口 |
+| [`reports/RRUFF301_COMPOSITION_AUDIT.md`](reports/RRUFF301_COMPOSITION_AUDIT.md) | RRUFF-301 adaptation/test 只读组成与近重复谱检查 |
+| [`reports/RRUFF301_COMPOSITION_AUDIT.json`](reports/RRUFF301_COMPOSITION_AUDIT.json) | 上述 composition audit 的机器可读结果 |
+| [`reports/RESULTS.md`](reports/RESULTS.md) | 跨域 headline performance、reliability 与严格 audit 摘要 |
+| [`reports/validation_results.json`](reports/validation_results.json) | 冻结模拟验证集汇总 |
+| [`reports/simulated_test_results.json`](reports/simulated_test_results.json) | 冻结模拟 Test 汇总及 SHA 绑定的 Accuracy 扩展 |
+| [`reports/rruff301_fewshot_results.json`](reports/rruff301_fewshot_results.json) | RRUFF-301 K=1/2/5 汇总与结果说明 |
+| [`reports/CNRS_318_RESULTS.md`](reports/CNRS_318_RESULTS.md) | CNRS-318 完成结果、完整性审计与 paired bootstrap |
+| [`reports/CALIBRATION_ANALYSIS.md`](reports/CALIBRATION_ANALYSIS.md) | 模拟 Test 与 CNRS 的概率可靠性分析 |
+| [`reports/CNRS_318_DATASET_AUDIT.md`](reports/CNRS_318_DATASET_AUDIT.md) | CNRS 数据构建与角色审计 |
+| [`reports/CNRS_318_EVALUATION_PROTOCOL.md`](reports/CNRS_318_EVALUATION_PROTOCOL.md) | 原样保留的 pre-run 冻结协议 |
+| [`configs/real.cnrs318.zero_shot.frozen.json`](configs/real.cnrs318.zero_shot.frozen.json) | 冻结配置 |
+| [`manifests/cnrs318_zero_shot_run_record.json`](manifests/cnrs318_zero_shot_run_record.json) | 完成执行、哈希与修正结果绑定 |
+
+[`reports/opxrd_cnrs7cs_independent_parent_audit_20260827.md`](reports/opxrd_cnrs7cs_independent_parent_audit_20260827.md) 是保留的历史审计快照；其 317-parent 结论已被重复代表选择修正后的 318-parent 结果取代，不能当作当前结论。
+
+## 代码结构
+
+| 路径 | 作用 |
+|---|---|
+| `src/xrd_robustness/models/ml4pxrd_resnet1d.py` | ResNet-18-GN 骨干网络 |
+| `src/xrd_robustness/training/objectives.py` | Dynamic ERM 与 JS 一致性目标 |
+| `src/xrd_robustness/simulator.py` | PXRD 物理扰动模拟器 |
+| `src/xrd_robustness/online_views.py` | 同一母体结构的两份配对谱图 |
+| `src/xrd_robustness/training/runner.py` / `xrd-train` | Dynamic ERM 与 JS 一致性训练入口 |
+| `scripts/audit_rruff301_composition.py` | 只读复核 RRUFF-301 split 的 metadata overlap 与 cross-split spectrum similarity |
+| `scripts/build_cnrs318_manifests.py` | 只读核验或显式重建 CNRS-318 冻结 manifests |
+| `scripts/analyze_cnrs318_results.py` | 复核 CNRS 输入、预测、checkpoint、指标与 paired bootstrap |
+| `scripts/build_cnrs318_audit_artifact.py` | 从审计 CSV/JSON 构建含四张核心图的便携技术报告 |
+
+## 安装与测试
+
+```powershell
+python -m pip install -e ".[test]"
+python -m pytest -q
+```
+
+`pytest` 用于检查实现、接口、配置和公开结果文件之间的一致性，不会重新训练模型或复现论文中的完整训练结果。
+
+本地只读复核 RRUFF-301 composition audit：
+
+```powershell
+python scripts/audit_rruff301_composition.py
+```
+
+本地重建 CNRS 审计包时，在本目录运行：
+
+```powershell
+python scripts/analyze_cnrs318_results.py
+python scripts/build_cnrs318_audit_artifact.py
+```
+
+生成的 `outputs/cnrs318_zero_shot/audit/` 被 Git 忽略；其中包含 machine-readable summary、修正 bootstrap、逐 seed/逐类 CSV 和便携报告。原始 3,180 行预测与 `318 × 3501` 输入仍受 run record 的 SHA-256 绑定，不得移动或删除。
+
+## 文档
+
+- [`../docs/CURRENT_STATE.md`](../docs/CURRENT_STATE.md)
+- [`../docs/PXRD_EVIDENCE_CLOSURE.md`](../docs/PXRD_EVIDENCE_CLOSURE.md)
+- [`../docs/PXRD_METHOD_DETAIL_EVIDENCE_CLOSURE.md`](../docs/PXRD_METHOD_DETAIL_EVIDENCE_CLOSURE.md)
+- [`../docs/PXRD_PERTURBATION_EVIDENCE.md`](../docs/PXRD_PERTURBATION_EVIDENCE.md)
+- [`MANUSCRIPT.md`](MANUSCRIPT.md)
+
+数据集、模型权重、生成的谱图、缓存和本地输出都不会提交到 Git。

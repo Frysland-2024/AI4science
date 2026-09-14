@@ -1,0 +1,3 @@
+Slide 1 is simplified from “PXRD spectrum -> classifier -> crystal system” to the user-requested task definition “PXRD spectrum -> crystal system”.
+The subtitle and classifier implementation detail are removed because they duplicate or prematurely introduce later-slide content.
+Slides 2-8 are preserved without edits.

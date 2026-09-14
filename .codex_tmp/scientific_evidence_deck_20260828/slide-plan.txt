@@ -1,0 +1,30 @@
+Communication job
+By the end, the advisor should understand the exact physical problem, the two-view consistency mechanism, the direct evidence from simulated and real spectra, and the next move toward forward-verifiable inversion.
+
+Evidence hierarchy
+H1: Simulated Test OOD improves in all 5/5 paired training seeds; mean gain +5.46 pp.
+H1: RRUFF few-shot improves across K=1/2/5; at K=1 the gain is +4.33 pp.
+H1: CNRS independent-source zero-shot improves in all 5/5 paired seeds, while absolute performance remains low.
+H1: Next phase is forward-verifiable quantitative parameter inversion.
+H2: Exact paired seed values, K-learning-curve values, and the real-spectrum perturbation example.
+H3: Validation results, calibration metrics, confidence intervals, repeated-evaluation counts, and detailed optimizer/configuration choices. These stay out of the six-slide mainline.
+
+Six-slide narrative
+1. Claim: The same structure can produce visibly different PXRD patterns when measurement conditions change.
+   Evidence: one local RRUFF Cassiterite spectrum, overlaid with controlled peak-shift and noise perturbations.
+2. Claim: Two perturbed views from one parent should be mapped by one shared model to consistent predictions.
+   Evidence: two actual spectrum traces, one shared model, two probability outputs, and JS(p1,p2).
+3. Claim: On frozen simulated OOD, all five matched seeds improve and the mean gain is +5.46 pp.
+   Evidence: five paired seed lines.
+4. Claim: RRUFF label efficiency improves at every real-label budget K=1/2/5.
+   Evidence: ERM versus consistency learning curves.
+5. Claim: CNRS zero-shot improves in all five seeds on an independent real-spectrum source.
+   Evidence: five paired seed lines; one small limitation sentence.
+6. Claim: The next step is to infer physical parameters whose forward-rendered XRD reproduces the input.
+   Evidence: input XRD -> a,c,zero shift,FWHM -> forward XRD approximately equal to input.
+
+Visual rules
+- Only three visual types: data plots, PXRD traces, and one necessary method schematic.
+- No AI icons, warning icons, milestone roads, KPI cards, decorative crystal art, or generic process illustrations.
+- Every slide must pass the three-second test: the first visible evidence must directly prove the title claim.
+- White background, navy text, blue baseline, orange consistency, muted gray supporting annotation.

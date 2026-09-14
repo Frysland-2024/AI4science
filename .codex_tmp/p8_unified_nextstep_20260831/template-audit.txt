@@ -1,0 +1,8 @@
+Source: E:\AI4science\outputs\XRD_导师汇报.pptx
+Slides: 7, 1280 x 720.
+Visual system: white background, dark navy titles and primary statements, muted gray secondary text, Microsoft YaHei, thin navy title rule, restrained pale-blue surfaces.
+Reusable source frame: slide 4 provides an inherited two-column layout with a 40/60 split, a title, page marker, separator, five left text slots, and a six-row right table.
+Insertion contract: preserve source slides 1-7 exactly; append one duplicate of source slide 4 as slide 8; rewrite and reposition only the mapped slide-8 elements.
+Inherited placeholders: source layouts and masters expose no visible inherited placeholders; slide-local title and page furniture are preserved through copied elements.
+Speaker-note sources: no external sources are introduced; all new slide copy comes from the user's supplied research plan.
+

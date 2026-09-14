@@ -1,0 +1,6 @@
+Source deck: E:/AI4science/outputs/XRD_导师汇报.pptx
+Slides: 4, all retained one-to-one.
+Visual system: white canvas, dark navy titles, restrained blue/orange scientific palette, flat layout, no cards.
+Typography: inherit all source fonts and sizes. P1-P3 are preserve-only.
+P4 insertion contract: keep title, page number, left data column, structure-level split note, and vertical divider. Replace only the five mini-chart rows on the right with five concise Chinese explanation lines. Reuse the existing five row labels and existing legend text box; delete the five chart objects and four row separators.
+Inherited placeholders: no visible unresolved placeholder prompts in the source inspection.

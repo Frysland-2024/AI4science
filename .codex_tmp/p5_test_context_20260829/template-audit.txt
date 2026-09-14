@@ -1,0 +1,6 @@
+Source: validated seven-slide advisor-report deck with the approved slide 7 wording already applied.
+Slide count: 7.
+Canvas and theme: preserve the imported deck exactly.
+Reusable frame: existing title, divider, chart, right-side summary, footer, and page-number system.
+This round changes slide 5 only. Slides 1-4 and 6-7 are immutable.
+

@@ -1,0 +1,4 @@
+No new external claims, numbers, or assets are introduced.
+Slide 7 retains its existing [Sources] speaker-notes block and frozen CNRS-318 five-repeat Macro-F1 values.
+The requested edits clarify the experimental role: CNRS data does not adjust the model; it is used only for direct testing.
+

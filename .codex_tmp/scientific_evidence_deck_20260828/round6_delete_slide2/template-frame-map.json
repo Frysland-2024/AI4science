@@ -1,0 +1,31 @@
+{
+  "outputSlides": [
+    {
+      "outputSlide": 1,
+      "sourceSlide": 1,
+      "narrativeRole": "opening hook",
+      "reuseMode": "duplicate-slide",
+      "editTargets": []
+    },
+    {
+      "outputSlide": 2,
+      "sourceSlide": 3,
+      "narrativeRole": "plain-language method",
+      "reuseMode": "duplicate-slide",
+      "editTargets": [
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/cza94vmx",
+          "reason": "renumber retained slide after deleting source slide 2",
+          "text": "02 / 02"
+        }
+      ]
+    }
+  ],
+  "omittedSourceSlides": [
+    {
+      "sourceSlide": 2,
+      "reason": "explicitly deleted by the user"
+    }
+  ]
+}

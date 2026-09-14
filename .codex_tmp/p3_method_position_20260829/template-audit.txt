@@ -1,0 +1,4 @@
+Source: current seven-slide advisor-report deck.
+This round modifies slide 3 only. Slides 1-2 and 4-7 are immutable and are not re-rendered or visually re-reviewed.
+The existing large prediction textbox is the reusable inherited slot for the added method-positioning sentence; no new shape or frame is added.
+

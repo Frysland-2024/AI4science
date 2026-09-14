@@ -1,0 +1,19 @@
+{
+  "data_freeze_authorization": "user explicitly requested complete final data freeze on 2026-07-24",
+  "dataset_frozen": true,
+  "evaluation_enabled": false,
+  "manifest_path": "manifests/real_test_manifest.csv",
+  "manifest_sha256": "17236DA1654E43370034DB6F7391C5882583FFAF62147856B8A85D79BC1174C5",
+  "preprocessing_contract_path": "contracts/preprocessing_contract.json",
+  "preprocessing_contract_sha256": "90DCBDC89F641A876DA2E8A927499A3E7225934AE38E820D70AD26640113C9CC",
+  "real_test_execution_authorization": false,
+  "remaining_execution_unlock_requirements": [
+    "one method frozen by Validation",
+    "checkpoint hashes frozen",
+    "simulated Test completed and immutable",
+    "explicit later authorization to execute real test"
+  ],
+  "results_must_not_change_selected_method": true,
+  "role": "final_external_test_only",
+  "selection_use_forbidden": true
+}

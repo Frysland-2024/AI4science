@@ -1,0 +1,52 @@
+{
+  "chartId": "ch/4b61kbil",
+  "bbox": [
+    62,
+    135,
+    880,
+    505
+  ],
+  "chartKeys": [
+    "context",
+    "data",
+    "type"
+  ],
+  "seriesCount": 2,
+  "baselineValues": [
+    0.639,
+    0.6553,
+    0.6577,
+    0.6517,
+    0.65
+  ],
+  "methodValues": [
+    0.6939,
+    0.7167,
+    0.7075,
+    0.6967,
+    0.7118
+  ],
+  "overrideCollectionKeys": [],
+  "overrideProbe": [
+    {
+      "index": 0,
+      "error": "TypeError: overrides.getItemAt is not a function"
+    },
+    {
+      "index": 1,
+      "error": "TypeError: overrides.getItemAt is not a function"
+    },
+    {
+      "index": 2,
+      "error": "TypeError: overrides.getItemAt is not a function"
+    },
+    {
+      "index": 3,
+      "error": "TypeError: overrides.getItemAt is not a function"
+    },
+    {
+      "index": 4,
+      "error": "TypeError: overrides.getItemAt is not a function"
+    }
+  ]
+}

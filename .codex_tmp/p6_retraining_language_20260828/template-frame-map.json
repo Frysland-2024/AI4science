@@ -1,0 +1,58 @@
+{
+  "outputSlides": [
+    {
+      "outputSlide": 1,
+      "sourceSlide": 1,
+      "narrativeRole": "preserve-only source slide",
+      "reuseMode": "duplicate-slide",
+      "editTargets": []
+    },
+    {
+      "outputSlide": 2,
+      "sourceSlide": 2,
+      "narrativeRole": "preserve-only source slide",
+      "reuseMode": "duplicate-slide",
+      "editTargets": []
+    },
+    {
+      "outputSlide": 3,
+      "sourceSlide": 3,
+      "narrativeRole": "preserve-only source slide",
+      "reuseMode": "duplicate-slide",
+      "editTargets": []
+    },
+    {
+      "outputSlide": 4,
+      "sourceSlide": 4,
+      "narrativeRole": "preserve-only source slide",
+      "reuseMode": "duplicate-slide",
+      "editTargets": []
+    },
+    {
+      "outputSlide": 5,
+      "sourceSlide": 5,
+      "narrativeRole": "preserve-only source slide",
+      "reuseMode": "duplicate-slide",
+      "editTargets": []
+    },
+    {
+      "outputSlide": 6,
+      "sourceSlide": 6,
+      "narrativeRole": "RRUFF-301 real-spectrum retraining evidence",
+      "reuseMode": "duplicate-slide",
+      "editTargets": [
+        {
+          "action": "rewrite",
+          "shapeId": "sh/u1kbu1ov",
+          "reason": "Use the user-approved human-language term for the RRUFF stage."
+        },
+        {
+          "action": "rewrite",
+          "shapeId": "sh/47mt0b6x",
+          "reason": "Explain the simulated-training then limited real-spectrum retraining sequence."
+        }
+      ]
+    }
+  ],
+  "omittedSourceSlides": []
+}

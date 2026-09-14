@@ -1,0 +1,15 @@
+{"kind":"slide","id":"sl/gnmp4jqx","slide":7,"title":"完全不用 CNRS 标注数据再训练，5 次重复结果仍全部提升","textShapes":11}
+{"kind":"textbox","id":"sh/cbq1sv25","slide":7,"name":"slide-2-title","text":"完全不用 CNRS 标注数据再训练，5 次重复结果仍全部提升","textPreview":"完全不用 CNRS 标注数据再训练，5 次重复结果仍全部提升","textChars":30,"textLines":1,"bbox":[58,28,1096,62]}
+{"kind":"textbox","id":"sh/cb2tkvap","slide":7,"text":"07 / 07","textPreview":"07 / 07","textChars":7,"textLines":1,"bbox":[1176,40,48,24]}
+{"kind":"shape","id":"sh/dcbud0ra","slide":7,"bbox":[58,102,1166,0]}
+{"kind":"textbox","id":"sh/ydkbm5sv","slide":7,"text":"5 / 5 ↑","textPreview":"5 / 5 ↑","textChars":7,"textLines":1,"bbox":[978,198,225,68]}
+{"kind":"textbox","id":"sh/zedcfa9g","slide":7,"text":"平均 +1.87 pp\n直接测试，结果全部提升","textPreview":"平均 +1.87 pp | 直接测试，结果全部提升","textChars":23,"textLines":2,"bbox":[978,272,238,104]}
+{"kind":"textbox","id":"sh/kzmdova1","slide":7,"text":"CNRS-318｜独立真实实验谱来源｜不使用 CNRS 标注数据再训练，直接测试","textPreview":"CNRS-318｜独立真实实验谱来源｜不使用 CNRS 标注数据再训练，直接测试","textChars":40,"textLines":1,"bbox":[64,108,1158,32]}
+{"kind":"textbox","id":"sh/25ojml43","slide":7,"name":"p5-gain-1","text":"+1.45 pp","textPreview":"+1.45 pp","textChars":8,"textLines":1,"bbox":[158,143,108,24]}
+{"kind":"textbox","id":"sh/p8fih03e","slide":7,"name":"p5-gain-2","text":"+2.87 pp","textPreview":"+2.87 pp","textChars":8,"textLines":1,"bbox":[317,143,108,24]}
+{"kind":"textbox","id":"sh/o761ov2t","slide":7,"name":"p5-gain-3","text":"+1.29 pp","textPreview":"+1.29 pp","textChars":8,"textLines":1,"bbox":[476,143,108,24]}
+{"kind":"textbox","id":"sh/f2d0b6lc","slide":7,"name":"p5-gain-4","text":"+1.46 pp","textPreview":"+1.46 pp","textChars":8,"textLines":1,"bbox":[635,143,108,24]}
+{"kind":"textbox","id":"sh/eh4jil4r","slide":7,"name":"p5-gain-5","text":"+2.28 pp","textPreview":"+2.28 pp","textChars":8,"textLines":1,"bbox":[794,143,108,24]}
+{"kind":"textbox","id":"sh/jedkn654","slide":7,"name":"p5-repeat-explanation","text":"绝对性能仍较低，因此这里把 CNRS 作为独立真实谱来源上的直接迁移证据。","textPreview":"绝对性能仍较低，因此这里把 CNRS 作为独立真实谱来源上的直接迁移证据。","textChars":37,"textLines":1,"bbox":[62,652,880,32]}
+{"kind":"chart","id":"ch/szmd4zyp","slide":7,"name":"p7-cnrs-direct-bars","chartType":"bar","bbox":[62,172,880,468]}
+{"kind":"notes","id":"nt/gnmp4jqx","slide":7,"text":"本页核心结论：模型不使用任何 CNRS 标注数据再训练，直接在 CNRS-318 独立真实实验谱上测试，5 次重复结果全部提升。\n重复 1：0.2067 → 0.2212（+1.45 pp）\n重复 2：0.1469 → 0.1756（+2.87 pp）\n重复 3：0.1842 → 0.1971（+1.29 pp）\n重复 4：0.2149 → 0.2295（+1.46 pp）\n重复 5：0.1892 → 0.2120（+2.28 pp）\n平均：0.1884 → 0.2071（+1.87 pp）\n绝对性能仍较低，因此将该结果解释为独立真实谱来源上的直接迁移证据。\n[Sources]\n- User-provided CNRS-318 five-repeat Macro-F1 values in the current task."}

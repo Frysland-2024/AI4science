@@ -1,0 +1,33 @@
+{
+  "outputSlides": [
+    {
+      "outputSlide": 1,
+      "sourceSlide": 1,
+      "narrativeRole": "minimal task definition",
+      "reuseMode": "edit-existing-slide",
+      "editTargets": [
+        { "sourceElementId": "sh/ul4vaxgb", "action": "rewrite", "role": "title" },
+        { "sourceElementId": "sh/547294r6", "action": "delete", "role": "redundant subtitle" },
+        { "sourceElementId": "sh/k3yl0zql", "action": "reposition", "role": "divider" },
+        { "sourceElementId": "sh/7qp4be9c", "action": "rewrite-and-reposition", "role": "input label" },
+        { "sourceElementId": "ch/b2psje9c", "action": "resize-and-reposition", "role": "representative PXRD spectrum" },
+        { "sourceElementId": "sh/fu94fe98", "action": "delete", "role": "premature classifier implementation detail" },
+        { "sourceElementId": "sh/4r6dg7et", "action": "delete", "role": "old input arrow" },
+        { "sourceElementId": "sh/5sfepcfe", "action": "delete", "role": "old output arrow" },
+        { "sourceElementId": "sh/utg3698n", "action": "reposition", "role": "crystal-system output" },
+        { "sourceElementId": "sh/65g3298r", "action": "reposition", "role": "seven-class qualifier" },
+        { "sourceElementId": "sh/ipovexwn", "action": "reposition", "role": "seven crystal systems list" },
+        { "sourceElementId": "sh/hofulsf2", "action": "keep", "role": "footer" },
+        { "action": "add", "role": "single task-mapping arrow", "zone": [600, 300, 150, 120], "reason": "directly connect PXRD spectrum to crystal-system output" }
+      ]
+    },
+    { "outputSlide": 2, "sourceSlide": 2, "narrativeRole": "immutable", "reuseMode": "preserve-only", "editTargets": [] },
+    { "outputSlide": 3, "sourceSlide": 3, "narrativeRole": "immutable", "reuseMode": "preserve-only", "editTargets": [] },
+    { "outputSlide": 4, "sourceSlide": 4, "narrativeRole": "immutable", "reuseMode": "preserve-only", "editTargets": [] },
+    { "outputSlide": 5, "sourceSlide": 5, "narrativeRole": "immutable", "reuseMode": "preserve-only", "editTargets": [] },
+    { "outputSlide": 6, "sourceSlide": 6, "narrativeRole": "immutable", "reuseMode": "preserve-only", "editTargets": [] },
+    { "outputSlide": 7, "sourceSlide": 7, "narrativeRole": "immutable", "reuseMode": "preserve-only", "editTargets": [] },
+    { "outputSlide": 8, "sourceSlide": 8, "narrativeRole": "immutable", "reuseMode": "preserve-only", "editTargets": [] }
+  ],
+  "omittedSourceSlides": []
+}

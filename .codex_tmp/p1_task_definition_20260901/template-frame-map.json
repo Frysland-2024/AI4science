@@ -1,0 +1,34 @@
+{
+  "outputSlides": [
+    {
+      "outputSlide": 1,
+      "sourceSlide": 1,
+      "narrativeRole": "task definition",
+      "reuseMode": "edit-existing-slide",
+      "editTargets": [
+        { "sourceElementId": "sh/ul4vaxgb", "action": "rewrite-and-reposition", "role": "title" },
+        { "sourceElementId": "sh/547294r6", "action": "rewrite-and-reposition", "role": "subtitle" },
+        { "sourceElementId": "sh/k3yl0zql", "action": "reposition", "role": "divider" },
+        { "sourceElementId": "sh/7qp4be9c", "action": "rewrite-and-reposition", "role": "input label" },
+        { "sourceElementId": "ch/3epsfe9g", "action": "reposition", "role": "representative PXRD spectrum" },
+        { "sourceElementId": "ch/c3itcjqx", "action": "delete", "role": "obsolete second spectrum" },
+        { "sourceElementId": "sh/fu94fe98", "action": "rewrite-and-reposition", "role": "classification model" },
+        { "sourceElementId": "sh/utg3698n", "action": "rewrite-and-reposition", "role": "crystal-system output" },
+        { "sourceElementId": "sh/65g3298r", "action": "rewrite-and-reposition", "role": "output qualifier" },
+        { "sourceElementId": "sh/wn6dc7eh", "action": "delete", "role": "obsolete underline" },
+        { "sourceElementId": "sh/hofulsf2", "action": "keep", "role": "footer" },
+        { "action": "add", "role": "left arrow", "zone": [535, 350, 70, 70], "reason": "connect input chart to classifier" },
+        { "action": "add", "role": "right arrow", "zone": [790, 350, 70, 70], "reason": "connect classifier to output" },
+        { "action": "add", "role": "crystal-system list", "zone": [855, 420, 335, 100], "reason": "state the seven output classes in plain text" }
+      ]
+    },
+    { "outputSlide": 2, "sourceSlide": 2, "narrativeRole": "immutable", "reuseMode": "preserve-only", "editTargets": [] },
+    { "outputSlide": 3, "sourceSlide": 3, "narrativeRole": "immutable", "reuseMode": "preserve-only", "editTargets": [] },
+    { "outputSlide": 4, "sourceSlide": 4, "narrativeRole": "immutable", "reuseMode": "preserve-only", "editTargets": [] },
+    { "outputSlide": 5, "sourceSlide": 5, "narrativeRole": "immutable", "reuseMode": "preserve-only", "editTargets": [] },
+    { "outputSlide": 6, "sourceSlide": 6, "narrativeRole": "immutable", "reuseMode": "preserve-only", "editTargets": [] },
+    { "outputSlide": 7, "sourceSlide": 7, "narrativeRole": "immutable", "reuseMode": "preserve-only", "editTargets": [] },
+    { "outputSlide": 8, "sourceSlide": 8, "narrativeRole": "immutable", "reuseMode": "preserve-only", "editTargets": [] }
+  ],
+  "omittedSourceSlides": []
+}

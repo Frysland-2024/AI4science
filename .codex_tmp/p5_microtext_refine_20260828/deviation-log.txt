@@ -1,0 +1,1 @@
+Slide 5 only: increase gain-label text by about 29 percent and axis/legend microtype by about 15–20 percent. No object is added, deleted, moved, recolored, or resized; no data or visible wording changes.

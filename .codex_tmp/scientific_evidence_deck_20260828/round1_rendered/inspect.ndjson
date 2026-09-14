@@ -1,0 +1,45 @@
+{"kind":"slide","id":"sl/dub8ao","slide":1,"title":"同一晶体的谱会随测量条件变化，但晶系不应改变","textShapes":6}
+{"kind":"textbox","id":"sh/9gf2xk7m","slide":1,"name":"slide-1-title","text":"同一晶体的谱会随测量条件变化，但晶系不应改变","textPreview":"同一晶体的谱会随测量条件变化，但晶系不应改变","textChars":22,"textLines":1,"bbox":[58,30,1128,58]}
+{"kind":"textbox","id":"sh/mtojmpov","slide":1,"text":"01 / 02","textPreview":"01 / 02","textChars":7,"textLines":1,"bbox":[1176,40,48,24]}
+{"kind":"shape","id":"sh/7exkvupg","slide":1,"bbox":[58,102,1166,0]}
+{"kind":"textbox","id":"sh/wjqlsz6x","slide":1,"text":"理想 / 基准谱","textPreview":"理想 / 基准谱","textChars":8,"textLines":1,"bbox":[64,162,154,32]}
+{"kind":"textbox","id":"sh/hkz2147i","slide":1,"text":"峰移或展宽后的谱","textPreview":"峰移或展宽后的谱","textChars":8,"textLines":1,"bbox":[64,316,164,58]}
+{"kind":"textbox","id":"sh/uh83qpo7","slide":1,"text":"加背景 / 噪声后的谱","textPreview":"加背景 / 噪声后的谱","textChars":11,"textLines":1,"bbox":[64,472,166,58]}
+{"kind":"shape","id":"sh/povuxsr6","slide":1,"bbox":[230,264,982,0]}
+{"kind":"shape","id":"sh/4nmtonql","slide":1,"bbox":[230,418,982,0]}
+{"kind":"textbox","id":"sh/3mtcvi90","slide":1,"text":"问题：模型能否不把测量条件误认为结构特征？","textPreview":"问题：模型能否不把测量条件误认为结构特征？","textChars":21,"textLines":1,"bbox":[218,632,844,38]}
+{"kind":"chart","id":"ch/f6t0zi1o","slide":1,"name":"","chartType":"scatter","bbox":[230,126,982,128]}
+{"kind":"chart","id":"ch/wbyhwj25","slide":1,"name":"","chartType":"scatter","bbox":[230,280,982,128]}
+{"kind":"chart","id":"ch/xc7ipoja","slide":1,"name":"","chartType":"scatter","bbox":[230,434,982,154]}
+{"kind":"notes","id":"nt/dub8ao","slide":1,"text":"三条曲线均取 panel_cache 的 row 109，对应同一 mp-10448 母结构；峰移与噪声是项目中已缓存、可复现的测量扰动输出。\n\n[Sources]\n- E:/AI4science/xrd_robustness/outputs/public_simulated_test/panel_cache/seed_20260721/level0.npy\n- E:/AI4science/xrd_robustness/outputs/public_simulated_test/panel_cache/seed_20260721/ood_shift_positive.npy\n- E:/AI4science/xrd_robustness/outputs/public_simulated_test/panel_cache/seed_20260721/ood_noise.npy\n- E:/AI4science/xrd_robustness/outputs/public_simulated_test/panel_cache/index.json\n- E:\\AI4science\\xrd_robustness\\data\\formal_14060\\manifests\\v9_method_transfer_test_seed_20260721.csv"}
+{"kind":"slide","id":"sl/ht97h4","slide":2,"title":"对同一结构的两条扰动谱，模型应给出一致预测","textShapes":11}
+{"kind":"textbox","id":"sh/el8ni5cr","slide":2,"name":"slide-2-title","text":"对同一结构的两条扰动谱，模型应给出一致预测","textPreview":"对同一结构的两条扰动谱，模型应给出一致预测","textChars":21,"textLines":1,"bbox":[58,30,1128,58]}
+{"kind":"textbox","id":"sh/1oz6dkvi","slide":2,"text":"02 / 02","textPreview":"02 / 02","textChars":7,"textLines":1,"bbox":[1176,40,48,24]}
+{"kind":"shape","id":"sh/gnq5kfux","slide":2,"bbox":[58,102,1166,0]}
+{"kind":"shape","id":"sh/rixo7adg","slide":2,"bbox":[640,157,0,25]}
+{"kind":"shape","id":"sh/6hone5wv","slide":2,"bbox":[318,182,644,0]}
+{"kind":"shape","id":"sh/tkf69kv6","slide":2,"bbox":[318,182,0,13]}
+{"kind":"shape","id":"sh/sj65gfe1","slide":2,"bbox":[962,182,0,13]}
+{"kind":"shape","id":"sh/juxo3qd4","slide":2,"bbox":[308,195,20,26]}
+{"kind":"shape","id":"sh/itonalwj","slide":2,"bbox":[952,195,20,26]}
+{"kind":"shape","id":"sh/cvud83mp","slide":2,"bbox":[310,344,22,44]}
+{"kind":"shape","id":"sh/dw3uh8na","slide":2,"bbox":[948,344,22,44]}
+{"kind":"shape","id":"sh/qtsb6t4j","slide":2,"bbox":[354,457,22,43]}
+{"kind":"shape","id":"sh/bulcfy54","slide":2,"bbox":[904,457,22,43]}
+{"kind":"textbox","id":"sh/4rat4jmd","slide":2,"text":"同一母结构","textPreview":"同一母结构","textChars":5,"textLines":1,"bbox":[518,119,244,38]}
+{"kind":"textbox","id":"sh/psjudony","slide":2,"text":"扰动谱 A","textPreview":"扰动谱 A","textChars":5,"textLines":1,"bbox":[154,180,330,28]}
+{"kind":"textbox","id":"sh/2psb294n","slide":2,"text":"扰动谱 B","textPreview":"扰动谱 B","textChars":5,"textLines":1,"bbox":[796,180,330,28]}
+{"kind":"shape","id":"sh/9onupsn2","slide":2,"bbox":[246,388,788,70]}
+{"kind":"textbox","id":"sh/x8z2doba","slide":2,"text":"共享的同一个分类模型  fθ","textPreview":"共享的同一个分类模型  fθ","textChars":14,"textLines":1,"bbox":[362,404,556,38]}
+{"kind":"shape","id":"sh/w7qlkjap","slide":2,"bbox":[246,500,240,64]}
+{"kind":"shape","id":"sh/v6hkbet4","slide":2,"bbox":[794,500,240,64]}
+{"kind":"textbox","id":"sh/a583i9sj","slide":2,"text":"p₁ = fθ(xA)","textPreview":"p₁ = fθ(xA)","textChars":11,"textLines":1,"bbox":[278,516,176,34]}
+{"kind":"textbox","id":"sh/94z294by","slide":2,"text":"p₂ = fθ(xB)","textPreview":"p₂ = fθ(xB)","textChars":11,"textLines":1,"bbox":[826,516,176,34]}
+{"kind":"shape","id":"sh/83qlgjad","slide":2,"bbox":[486,532,308,0]}
+{"kind":"shape","id":"sh/n2xk7et8","slide":2,"bbox":[548,505,184,55]}
+{"kind":"textbox","id":"sh/m1o3e9sn","slide":2,"text":"JS(p₁, p₂)","textPreview":"JS(p₁, p₂)","textChars":10,"textLines":1,"bbox":[568,517,144,28]}
+{"kind":"textbox","id":"sh/10f254b2","slide":2,"text":"p₁  ≈  p₂","textPreview":"p₁  ≈  p₂","textChars":9,"textLines":1,"bbox":[516,574,248,34]}
+{"kind":"textbox","id":"sh/0z6lczah","slide":2,"text":"L = CE₁ + CE₂ + λ JS(p₁, p₂)","textPreview":"L = CE₁ + CE₂ + λ JS(p₁, p₂)","textChars":28,"textLines":1,"bbox":[344,630,592,30]}
+{"kind":"chart","id":"ch/vu987elo","slide":2,"name":"","chartType":"scatter","bbox":[116,208,406,142]}
+{"kind":"chart","id":"ch/grm9s3md","slide":2,"name":"","chartType":"scatter","bbox":[758,208,406,142]}
+{"kind":"notes","id":"nt/ht97h4","slide":2,"text":"[Sources]\n- E:\\AI4science\\xrd_robustness\\src\\xrd_robustness\\training\\objectives.py\n- E:\\AI4science\\xrd_robustness\\src\\xrd_robustness\\online_views.py\n- E:/AI4science/xrd_robustness/outputs/public_simulated_test/panel_cache/seed_20260721/in_range.npy\n- E:/AI4science/xrd_robustness/outputs/public_simulated_test/panel_cache/seed_20260722/in_range.npy\n- E:/AI4science/xrd_robustness/outputs/public_simulated_test/panel_cache/index.json\n- E:\\AI4science\\xrd_robustness\\data\\formal_14060\\manifests\\v9_method_transfer_test_seed_20260721.csv\n- E:\\AI4science\\xrd_robustness\\data\\formal_14060\\manifests\\v9_method_transfer_test_seed_20260722.csv"}

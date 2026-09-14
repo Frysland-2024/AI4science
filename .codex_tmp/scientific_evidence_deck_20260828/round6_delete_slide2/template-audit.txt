@@ -1,0 +1,7 @@
+Source deck: source_round5.pptx
+Slides inspected: 3
+Slide size: 1280 x 720
+Typography: Microsoft YaHei; navy title system; small upper-right page marker on content slides.
+Structure: one imported master and one imported title layout; slide-local scientific charts and shapes are preserved.
+Insertion contract: retain source slides 1 and 3 in their original order, omit source slide 2, and rewrite only the retained method slide page marker from 03 / 03 to 02 / 02.
+Inherited placeholders: none visible or empty in the inspected slide inventory.

@@ -1,0 +1,5 @@
+Scope: slide 2 only. Slides 1 and 3-8 are immutable by explicit user instruction.
+Source pattern: white canvas, left-aligned deep-navy conclusion title, top-right slide number, muted explanatory line, thin divider, native PXRD charts, and restrained blue/orange scientific palette.
+Typography: Microsoft YaHei; deep navy #143A63; method blue #285F97; orange emphasis #E77A25; muted gray #657384.
+Insertion contract: reuse the existing title, page number, divider, three native PXRD charts, and the bottom text slot. Repurpose the three existing left-side labels into the first two process labels and the orange perturbation focus. Delete only the two obsolete horizontal separators. Add minimal arrows, chart labels, subtitle, perturbation examples, literature footer, and speaker-note sources.
+QA boundary: render and visually inspect slide 2 only; do not re-render, compare, or aesthetically review slides 1 and 3-8.

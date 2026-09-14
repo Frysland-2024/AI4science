@@ -1,0 +1,1027 @@
+{
+  "schema": "openai.presentation.layout/v4",
+  "unit": "px",
+  "slide": {
+    "aid": "sl/kpikwu",
+    "id": "kpikwu",
+    "slide": 1,
+    "layoutId": "ac5b6772-08f7-4f6d-9358-9416a7b3f68a",
+    "layoutName": "Title Slide",
+    "layoutType": "title",
+    "masterLayoutId": "68f25bf0-876b-4970-831b-f7464008f4dd",
+    "masterLayoutName": "Master",
+    "backgroundColor": "#FFFFFF",
+    "frame": {
+      "left": 0,
+      "top": 0,
+      "width": 1280,
+      "height": 720
+    }
+  },
+  "theme": {
+    "colorSchemeName": "ChatGPT",
+    "colors": {
+      "accent1": "#156082",
+      "accent2": "#E97132",
+      "accent3": "#196B24",
+      "accent4": "#0F9ED5",
+      "accent5": "#A02B93",
+      "accent6": "#4EA72E",
+      "bg1": "#FFFFFF",
+      "bg2": "#000000",
+      "tx1": "#1F1F1F",
+      "tx2": "#FFFFFF",
+      "dk1": "#000000",
+      "lt1": "#FFFFFF",
+      "dk2": "#0E2841",
+      "lt2": "#E8E8E8",
+      "hlink": "#467886",
+      "folHlink": "#96607D"
+    },
+    "typefaces": [
+      "Microsoft YaHei"
+    ]
+  },
+  "inheritedLayers": [
+    {
+      "scope": "layout",
+      "id": "ac5b6772-08f7-4f6d-9358-9416a7b3f68a",
+      "name": "Title Slide",
+      "type": "title",
+      "parentLayoutId": "68f25bf0-876b-4970-831b-f7464008f4dd",
+      "elements": []
+    },
+    {
+      "scope": "master",
+      "id": "68f25bf0-876b-4970-831b-f7464008f4dd",
+      "name": "Master",
+      "type": "master",
+      "elements": []
+    }
+  ],
+  "elements": [
+    {
+      "order": 1,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/jyhcnyts",
+      "id": "1",
+      "bbox": [
+        60,
+        50,
+        360,
+        34
+      ],
+      "geometry": "rect",
+      "text": "阶段性研究汇报",
+      "textPreview": "阶段性研究汇报",
+      "resolvedFontSize": 18,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 18,
+        "typeface": "Microsoft YaHei",
+        "color": "#607083",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "阶段性研究汇报"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "阶段性研究汇报",
+          "lineSpacingPercent": 108000,
+          "resolvedTextStyle": {
+            "fontSize": 18,
+            "typeface": "Microsoft YaHei",
+            "color": "#607083",
+            "bold": true,
+            "alignment": "left",
+            "lineSpacing": 1.08
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "阶段性研究汇报",
+              "fontSize": 18,
+              "typeface": "Microsoft YaHei",
+              "color": "#607083",
+              "bold": true,
+              "alignment": "left",
+              "lineSpacing": 1.08
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 2,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/kzqtg3ud",
+      "id": "2",
+      "bbox": [
+        60,
+        140,
+        570,
+        154
+      ],
+      "geometry": "rect",
+      "text": "测量等价性约束驱动的\nPXRD 鲁棒分类",
+      "textPreview": "测量等价性约束驱动的 | PXRD 鲁棒分类",
+      "resolvedFontSize": 55,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 55,
+        "typeface": "Microsoft YaHei",
+        "color": "#0B2B50",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "测量等价性约束驱动的"
+          },
+          {
+            "index": 2,
+            "text": "PXRD 鲁棒分类"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "测量等价性约束驱动的",
+          "lineSpacingPercent": 98000,
+          "resolvedTextStyle": {
+            "fontSize": 55,
+            "typeface": "Microsoft YaHei",
+            "color": "#0B2B50",
+            "bold": true,
+            "alignment": "left",
+            "lineSpacing": 0.98
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "测量等价性约束驱动的",
+              "fontSize": 55,
+              "typeface": "Microsoft YaHei",
+              "color": "#0B2B50",
+              "bold": true,
+              "alignment": "left",
+              "lineSpacing": 0.98
+            }
+          ],
+          "marginLeft": 0
+        },
+        {
+          "index": 2,
+          "text": "PXRD 鲁棒分类",
+          "lineSpacingPercent": 98000,
+          "resolvedTextStyle": {
+            "fontSize": 55,
+            "typeface": "Microsoft YaHei",
+            "color": "#0B2B50",
+            "bold": true,
+            "alignment": "left",
+            "lineSpacing": 0.98
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "PXRD 鲁棒分类",
+              "fontSize": 55,
+              "typeface": "Microsoft YaHei",
+              "color": "#0B2B50",
+              "bold": true,
+              "alignment": "left",
+              "lineSpacing": 0.98
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 3,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/l0zupoby",
+      "id": "3",
+      "bbox": [
+        60,
+        332,
+        570,
+        46
+      ],
+      "geometry": "rect",
+      "text": "从模拟 OOD 到实验域迁移，再到定量反演",
+      "textPreview": "从模拟 OOD 到实验域迁移，再到定量反演",
+      "resolvedFontSize": 25,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 25,
+        "typeface": "Microsoft YaHei",
+        "color": "#152536",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "从模拟 OOD 到实验域迁移，再到定量反演"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "从模拟 OOD 到实验域迁移，再到定量反演",
+          "lineSpacingPercent": 108000,
+          "resolvedTextStyle": {
+            "fontSize": 25,
+            "typeface": "Microsoft YaHei",
+            "color": "#152536",
+            "alignment": "left",
+            "lineSpacing": 1.08
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "从模拟 OOD 到实验域迁移，再到定量反演",
+              "fontSize": 25,
+              "typeface": "Microsoft YaHei",
+              "color": "#152536",
+              "alignment": "left",
+              "lineSpacing": 1.08
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 4,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/61sbitc3",
+      "id": "4",
+      "bbox": [
+        60,
+        416,
+        540,
+        92
+      ],
+      "geometry": "rect",
+      "text": "同一晶体在不同测量条件下可以呈现不同谱图，\n但模型对潜在结构的判断应保持一致。",
+      "textPreview": "同一晶体在不同测量条件下可以呈现不同谱图， | 但模型对潜在结构的判断应保持一致。",
+      "resolvedFontSize": 22,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 22,
+        "typeface": "Microsoft YaHei",
+        "color": "#607083",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "同一晶体在不同测量条件下可以呈现不同谱图，"
+          },
+          {
+            "index": 2,
+            "text": "但模型对潜在结构的判断应保持一致。"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "同一晶体在不同测量条件下可以呈现不同谱图，",
+          "lineSpacingPercent": 120000,
+          "resolvedTextStyle": {
+            "fontSize": 22,
+            "typeface": "Microsoft YaHei",
+            "color": "#607083",
+            "alignment": "left",
+            "lineSpacing": 1.2
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "同一晶体在不同测量条件下可以呈现不同谱图，",
+              "fontSize": 22,
+              "typeface": "Microsoft YaHei",
+              "color": "#607083",
+              "alignment": "left",
+              "lineSpacing": 1.2
+            }
+          ],
+          "marginLeft": 0
+        },
+        {
+          "index": 2,
+          "text": "但模型对潜在结构的判断应保持一致。",
+          "lineSpacingPercent": 120000,
+          "resolvedTextStyle": {
+            "fontSize": 22,
+            "typeface": "Microsoft YaHei",
+            "color": "#607083",
+            "alignment": "left",
+            "lineSpacing": 1.2
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "但模型对潜在结构的判断应保持一致。",
+              "fontSize": 22,
+              "typeface": "Microsoft YaHei",
+              "color": "#607083",
+              "alignment": "left",
+              "lineSpacing": 1.2
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 5,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/721cryto",
+      "id": "5",
+      "bbox": [
+        670,
+        56,
+        550,
+        594
+      ],
+      "geometry": "roundRect",
+      "fillColor": "#EAF3FB",
+      "lineColor": "#C9D9E8",
+      "lineWidth": 1
+    },
+    {
+      "order": 6,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/s3atk3u9",
+      "id": "6",
+      "bbox": [
+        712,
+        96,
+        460,
+        42
+      ],
+      "geometry": "rect",
+      "text": "当前证据链",
+      "textPreview": "当前证据链",
+      "resolvedFontSize": 26,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 26,
+        "typeface": "Microsoft YaHei",
+        "color": "#0B2B50",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "当前证据链"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "当前证据链",
+          "lineSpacingPercent": 108000,
+          "resolvedTextStyle": {
+            "fontSize": 26,
+            "typeface": "Microsoft YaHei",
+            "color": "#0B2B50",
+            "bold": true,
+            "alignment": "left",
+            "lineSpacing": 1.08
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "当前证据链",
+              "fontSize": 26,
+              "typeface": "Microsoft YaHei",
+              "color": "#0B2B50",
+              "bold": true,
+              "alignment": "left",
+              "lineSpacing": 1.08
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 7,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/t4jut8bu",
+      "id": "7",
+      "bbox": [
+        712,
+        166,
+        420,
+        64
+      ],
+      "geometry": "rect",
+      "text": "14,060",
+      "textPreview": "14,060",
+      "resolvedFontSize": 48,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "fontSize": 48,
+        "typeface": "Microsoft YaHei",
+        "color": "#0B2B50",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "wrap": "square",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "14,060"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "14,060",
+          "lineSpacingPercent": 108000,
+          "resolvedTextStyle": {
+            "fontSize": 48,
+            "typeface": "Microsoft YaHei",
+            "color": "#0B2B50",
+            "bold": true,
+            "alignment": "left",
+            "lineSpacing": 1.08
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "14,060",
+              "fontSize": 48,
+              "typeface": "Microsoft YaHei",
+              "color": "#0B2B50",
+              "bold": true,
+              "alignment": "left",
+              "lineSpacing": 1.08
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 8,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/m5ob69cz",
+      "id": "8",
+      "bbox": [
+        712,
+        234,
+        420,
+        34
+      ],
+      "geometry": "rect",
+      "text": "母体结构，严格结构级切分",
+      "textPreview": "母体结构，严格结构级切分",
+      "resolvedFontSize": 20,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 20,
+        "typeface": "Microsoft YaHei",
+        "color": "#152536",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "母体结构，严格结构级切分"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "母体结构，严格结构级切分",
+          "lineSpacingPercent": 108000,
+          "resolvedTextStyle": {
+            "fontSize": 20,
+            "typeface": "Microsoft YaHei",
+            "color": "#152536",
+            "bold": true,
+            "alignment": "left",
+            "lineSpacing": 1.08
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "母体结构，严格结构级切分",
+              "fontSize": 20,
+              "typeface": "Microsoft YaHei",
+              "color": "#152536",
+              "bold": true,
+              "alignment": "left",
+              "lineSpacing": 1.08
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 9,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/n6xsfetk",
+      "id": "9",
+      "bbox": [
+        712,
+        310,
+        420,
+        0
+      ],
+      "geometry": "line",
+      "lineColor": "#C8D6E4",
+      "lineWidth": 1
+    },
+    {
+      "order": 10,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/j6dsf6dk",
+      "id": "10",
+      "bbox": [
+        712,
+        336,
+        420,
+        64
+      ],
+      "geometry": "rect",
+      "text": "+5.46 pp",
+      "textPreview": "+5.46 pp",
+      "resolvedFontSize": 48,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "fontSize": 48,
+        "typeface": "Microsoft YaHei",
+        "color": "#E68B54",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "wrap": "square",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "+5.46 pp"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "+5.46 pp",
+          "lineSpacingPercent": 108000,
+          "resolvedTextStyle": {
+            "fontSize": 48,
+            "typeface": "Microsoft YaHei",
+            "color": "#E68B54",
+            "bold": true,
+            "alignment": "left",
+            "lineSpacing": 1.08
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "+5.46 pp",
+              "fontSize": 48,
+              "typeface": "Microsoft YaHei",
+              "color": "#E68B54",
+              "bold": true,
+              "alignment": "left",
+              "lineSpacing": 1.08
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 11,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/i54b61cz",
+      "id": "11",
+      "bbox": [
+        712,
+        404,
+        420,
+        34
+      ],
+      "geometry": "rect",
+      "text": "冻结 Test 单因素 OOD Macro-F1",
+      "textPreview": "冻结 Test 单因素 OOD Macro-F1",
+      "resolvedFontSize": 20,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 20,
+        "typeface": "Microsoft YaHei",
+        "color": "#152536",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "冻结 Test 单因素 OOD Macro-F1"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "冻结 Test 单因素 OOD Macro-F1",
+          "lineSpacingPercent": 108000,
+          "resolvedTextStyle": {
+            "fontSize": 20,
+            "typeface": "Microsoft YaHei",
+            "color": "#152536",
+            "bold": true,
+            "alignment": "left",
+            "lineSpacing": 1.08
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "冻结 Test 单因素 OOD Macro-F1",
+              "fontSize": 20,
+              "typeface": "Microsoft YaHei",
+              "color": "#152536",
+              "bold": true,
+              "alignment": "left",
+              "lineSpacing": 1.08
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 12,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/5svuhgvq",
+      "id": "12",
+      "bbox": [
+        712,
+        480,
+        420,
+        0
+      ],
+      "geometry": "line",
+      "lineColor": "#C8D6E4",
+      "lineWidth": 1
+    },
+    {
+      "order": 13,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/4rmt8bu5",
+      "id": "13",
+      "bbox": [
+        712,
+        506,
+        420,
+        64
+      ],
+      "geometry": "rect",
+      "text": "5 / 5",
+      "textPreview": "5 / 5",
+      "resolvedFontSize": 48,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "fontSize": 48,
+        "typeface": "Microsoft YaHei",
+        "color": "#2E9D67",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "wrap": "square",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "5 / 5"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "5 / 5",
+          "lineSpacingPercent": 108000,
+          "resolvedTextStyle": {
+            "fontSize": 48,
+            "typeface": "Microsoft YaHei",
+            "color": "#2E9D67",
+            "bold": true,
+            "alignment": "left",
+            "lineSpacing": 1.08
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "5 / 5",
+              "fontSize": 48,
+              "typeface": "Microsoft YaHei",
+              "color": "#2E9D67",
+              "bold": true,
+              "alignment": "left",
+              "lineSpacing": 1.08
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 14,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/v2tsb6do",
+      "id": "14",
+      "bbox": [
+        712,
+        574,
+        420,
+        34
+      ],
+      "geometry": "rect",
+      "text": "模拟 Test 与 CNRS 的配对种子方向一致",
+      "textPreview": "模拟 Test 与 CNRS 的配对种子方向一致",
+      "resolvedFontSize": 20,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 20,
+        "typeface": "Microsoft YaHei",
+        "color": "#152536",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "模拟 Test 与 CNRS 的配对种子方向一致"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "模拟 Test 与 CNRS 的配对种子方向一致",
+          "lineSpacingPercent": 108000,
+          "resolvedTextStyle": {
+            "fontSize": 20,
+            "typeface": "Microsoft YaHei",
+            "color": "#152536",
+            "bold": true,
+            "alignment": "left",
+            "lineSpacing": 1.08
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "模拟 Test 与 CNRS 的配对种子方向一致",
+              "fontSize": 20,
+              "typeface": "Microsoft YaHei",
+              "color": "#152536",
+              "bold": true,
+              "alignment": "left",
+              "lineSpacing": 1.08
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 15,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/u1kb21w3",
+      "id": "15",
+      "bbox": [
+        60,
+        664,
+        240,
+        24
+      ],
+      "geometry": "rect",
+      "text": "2026-08-28",
+      "textPreview": "2026-08-28",
+      "resolvedFontSize": 16,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 16,
+        "typeface": "Microsoft YaHei",
+        "color": "#607083",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "2026-08-28"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "2026-08-28",
+          "lineSpacingPercent": 108000,
+          "resolvedTextStyle": {
+            "fontSize": 16,
+            "typeface": "Microsoft YaHei",
+            "color": "#607083",
+            "alignment": "left",
+            "lineSpacing": 1.08
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "2026-08-28",
+              "fontSize": 16,
+              "typeface": "Microsoft YaHei",
+              "color": "#607083",
+              "alignment": "left",
+              "lineSpacing": 1.08
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    }
+  ],
+  "composeRuns": []
+}

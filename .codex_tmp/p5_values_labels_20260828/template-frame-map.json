@@ -1,0 +1,26 @@
+{
+  "outputSlides": [
+    { "outputSlide": 1, "sourceSlide": 1, "narrativeRole": "preserve", "reuseMode": "duplicate-slide", "editTargets": [] },
+    { "outputSlide": 2, "sourceSlide": 2, "narrativeRole": "preserve", "reuseMode": "duplicate-slide", "editTargets": [] },
+    { "outputSlide": 3, "sourceSlide": 3, "narrativeRole": "preserve", "reuseMode": "duplicate-slide", "editTargets": [] },
+    { "outputSlide": 4, "sourceSlide": 4, "narrativeRole": "preserve", "reuseMode": "duplicate-slide", "editTargets": [] },
+    {
+      "outputSlide": 5,
+      "sourceSlide": 5,
+      "narrativeRole": "simulation result evidence",
+      "reuseMode": "duplicate-slide",
+      "editTargets": [
+        { "sourceElementId": "ch/4b61kbil", "action": "rewrite", "reason": "Show three-decimal absolute values for both series" }
+      ],
+      "newPrimitives": [
+        {
+          "kind": "textbox",
+          "count": 5,
+          "boundedZone": { "left": 156, "top": 108, "width": 748, "height": 24 },
+          "reason": "Place each paired improvement above and centered on its bar group"
+        }
+      ]
+    }
+  ],
+  "omittedSourceSlides": []
+}

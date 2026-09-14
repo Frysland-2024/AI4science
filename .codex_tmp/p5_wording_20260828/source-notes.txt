@@ -1,0 +1,4 @@
+User-approved replacement text:
+在相同数据和训练设置下重复训练 5 次，结果都更好。
+
+No external sources were used.

@@ -1,0 +1,29 @@
+{
+  "id": "ch/4b61kbil",
+  "bbox": [
+    62,
+    135,
+    880,
+    505
+  ],
+  "chartType": "bar",
+  "barOptions": {},
+  "hasLegend": true,
+  "legend": {},
+  "xAxis": {},
+  "yAxis": {},
+  "series": [
+    {
+      "name": "基线",
+      "fill": {},
+      "line": {},
+      "dataLabelOverrides": {}
+    },
+    {
+      "name": "一致性训练",
+      "fill": {},
+      "line": {},
+      "dataLabelOverrides": {}
+    }
+  ]
+}

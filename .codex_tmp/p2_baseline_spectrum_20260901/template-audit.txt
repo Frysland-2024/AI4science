@@ -1,0 +1,5 @@
+Scope: slide 2 only.
+Preserve: 16:9 canvas, blue-white scientific theme, Microsoft YaHei typography, navy title and divider, orange perturbation emphasis, three native training spectra, literature footer, page-number convention.
+Change: replace the text-only XRD-computation step with a small native blue baseline-computation spectrum and a short no-perturbation caption.
+Immutable: slides 1 and 3-8; no master, layout, theme, font, page-size, or shared-resource edits.
+

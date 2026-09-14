@@ -1,0 +1,271 @@
+{
+  "dataset_id": "rruff-pipeline-test-v1",
+  "description": "Pipeline smoke test ¡ª 5/class stratified, independent of RRUFF-371",
+  "seed": 20260806,
+  "total": 35,
+  "crystal_systems": [
+    "triclinic",
+    "monoclinic",
+    "orthorhombic",
+    "tetragonal",
+    "trigonal",
+    "hexagonal",
+    "cubic"
+  ],
+  "preprocessing": {
+    "two_theta_min": 10.0,
+    "two_theta_max": 80.0,
+    "step": 0.02,
+    "points": 3501,
+    "normalization": "max",
+    "interpolation": "linear"
+  },
+  "role": "pipeline_smoke_test_only__no_paper_numbers",
+  "samples": [
+    {
+      "rruff_id": "R070475",
+      "crystal_system": "triclinic",
+      "two_theta_min_original": 0.0,
+      "two_theta_max_original": 90.0,
+      "profile_sha256": "7dacb6d51e360bee"
+    },
+    {
+      "rruff_id": "R061088",
+      "crystal_system": "triclinic",
+      "two_theta_min_original": 5.0,
+      "two_theta_max_original": 90.0,
+      "profile_sha256": "0dc9d0f2c77b13af"
+    },
+    {
+      "rruff_id": "R070643",
+      "crystal_system": "triclinic",
+      "two_theta_min_original": 5.0,
+      "two_theta_max_original": 90.0,
+      "profile_sha256": "f84f59e53a4b5a81"
+    },
+    {
+      "rruff_id": "R070457",
+      "crystal_system": "triclinic",
+      "two_theta_min_original": 5.0,
+      "two_theta_max_original": 90.0,
+      "profile_sha256": "01b2d83c938b0172"
+    },
+    {
+      "rruff_id": "R050180",
+      "crystal_system": "triclinic",
+      "two_theta_min_original": 5.0,
+      "two_theta_max_original": 90.0,
+      "profile_sha256": "16597def0d8ae388"
+    },
+    {
+      "rruff_id": "R100069",
+      "crystal_system": "monoclinic",
+      "two_theta_min_original": 5.0,
+      "two_theta_max_original": 90.0,
+      "profile_sha256": "c8e75a0a071a1e3a"
+    },
+    {
+      "rruff_id": "R130059",
+      "crystal_system": "monoclinic",
+      "two_theta_min_original": 5.0,
+      "two_theta_max_original": 90.0,
+      "profile_sha256": "5d5000bf8f52f8fb"
+    },
+    {
+      "rruff_id": "R110054",
+      "crystal_system": "monoclinic",
+      "two_theta_min_original": 5.0,
+      "two_theta_max_original": 90.0,
+      "profile_sha256": "74fc5cd614f8b3c7"
+    },
+    {
+      "rruff_id": "R141030",
+      "crystal_system": "monoclinic",
+      "two_theta_min_original": 5.0,
+      "two_theta_max_original": 90.0,
+      "profile_sha256": "2a0b0eb38da78256"
+    },
+    {
+      "rruff_id": "R141091",
+      "crystal_system": "monoclinic",
+      "two_theta_min_original": 5.0,
+      "two_theta_max_original": 90.0,
+      "profile_sha256": "2e3d1a5b51c1875f"
+    },
+    {
+      "rruff_id": "R120084",
+      "crystal_system": "orthorhombic",
+      "two_theta_min_original": 5.0,
+      "two_theta_max_original": 90.0,
+      "profile_sha256": "81df2159cc9d2364"
+    },
+    {
+      "rruff_id": "R040180",
+      "crystal_system": "orthorhombic",
+      "two_theta_min_original": 5.0,
+      "two_theta_max_original": 90.0,
+      "profile_sha256": "e44f9c5a854a81e9"
+    },
+    {
+      "rruff_id": "R160006",
+      "crystal_system": "orthorhombic",
+      "two_theta_min_original": 5.0,
+      "two_theta_max_original": 90.0,
+      "profile_sha256": "cdbc9984203c8aea"
+    },
+    {
+      "rruff_id": "R100024",
+      "crystal_system": "orthorhombic",
+      "two_theta_min_original": 5.0,
+      "two_theta_max_original": 90.0,
+      "profile_sha256": "ec3b7392a861e81b"
+    },
+    {
+      "rruff_id": "R060844",
+      "crystal_system": "orthorhombic",
+      "two_theta_min_original": 5.0,
+      "two_theta_max_original": 90.0,
+      "profile_sha256": "232f3deacea9ae96"
+    },
+    {
+      "rruff_id": "R070714",
+      "crystal_system": "tetragonal",
+      "two_theta_min_original": 5.0,
+      "two_theta_max_original": 90.0,
+      "profile_sha256": "7d7f55549bb2f1f1"
+    },
+    {
+      "rruff_id": "R100080",
+      "crystal_system": "tetragonal",
+      "two_theta_min_original": 5.0,
+      "two_theta_max_original": 90.0,
+      "profile_sha256": "029c8797fe45fa51"
+    },
+    {
+      "rruff_id": "R110189",
+      "crystal_system": "tetragonal",
+      "two_theta_min_original": 0.0,
+      "two_theta_max_original": 90.0,
+      "profile_sha256": "0d26c1b39fad103d"
+    },
+    {
+      "rruff_id": "R070062",
+      "crystal_system": "tetragonal",
+      "two_theta_min_original": 0.0,
+      "two_theta_max_original": 90.0,
+      "profile_sha256": "c0168cc358ab81a5"
+    },
+    {
+      "rruff_id": "R050187",
+      "crystal_system": "tetragonal",
+      "two_theta_min_original": 5.0,
+      "two_theta_max_original": 90.0,
+      "profile_sha256": "0146336c495e1752"
+    },
+    {
+      "rruff_id": "R060642",
+      "crystal_system": "trigonal",
+      "two_theta_min_original": 5.0,
+      "two_theta_max_original": 90.0,
+      "profile_sha256": "6a0e4422b5034545"
+    },
+    {
+      "rruff_id": "R080128",
+      "crystal_system": "trigonal",
+      "two_theta_min_original": 5.0,
+      "two_theta_max_original": 90.0,
+      "profile_sha256": "b3b35c0aded490aa"
+    },
+    {
+      "rruff_id": "R100142",
+      "crystal_system": "trigonal",
+      "two_theta_min_original": 5.0,
+      "two_theta_max_original": 90.0,
+      "profile_sha256": "2c9fa04e00ee5d0e"
+    },
+    {
+      "rruff_id": "R061109",
+      "crystal_system": "trigonal",
+      "two_theta_min_original": 0.0,
+      "two_theta_max_original": 90.0,
+      "profile_sha256": "e3a0dcf207f9f4bc"
+    },
+    {
+      "rruff_id": "R060149",
+      "crystal_system": "trigonal",
+      "two_theta_min_original": 5.0,
+      "two_theta_max_original": 90.0,
+      "profile_sha256": "3fd7e509debeb977"
+    },
+    {
+      "rruff_id": "R060706",
+      "crystal_system": "hexagonal",
+      "two_theta_min_original": 0.0,
+      "two_theta_max_original": 90.0,
+      "profile_sha256": "a3eaeeb896e4dba6"
+    },
+    {
+      "rruff_id": "R070701",
+      "crystal_system": "hexagonal",
+      "two_theta_min_original": 5.0,
+      "two_theta_max_original": 90.0,
+      "profile_sha256": "a4872a5ffd241bbb"
+    },
+    {
+      "rruff_id": "R050387",
+      "crystal_system": "hexagonal",
+      "two_theta_min_original": 0.0,
+      "two_theta_max_original": 90.0,
+      "profile_sha256": "d8e068ff6e7df762"
+    },
+    {
+      "rruff_id": "R080009",
+      "crystal_system": "hexagonal",
+      "two_theta_min_original": 5.0,
+      "two_theta_max_original": 90.0,
+      "profile_sha256": "e7eba39b748c79ca"
+    },
+    {
+      "rruff_id": "R040002",
+      "crystal_system": "hexagonal",
+      "two_theta_min_original": 5.0,
+      "two_theta_max_original": 89.99,
+      "profile_sha256": "d7e97979d76cbcd8"
+    },
+    {
+      "rruff_id": "R150038",
+      "crystal_system": "cubic",
+      "two_theta_min_original": 5.0,
+      "two_theta_max_original": 90.0,
+      "profile_sha256": "85845abbbc534962"
+    },
+    {
+      "rruff_id": "R060177",
+      "crystal_system": "cubic",
+      "two_theta_min_original": 5.0,
+      "two_theta_max_original": 90.0,
+      "profile_sha256": "d59f08229d772d89"
+    },
+    {
+      "rruff_id": "R060499",
+      "crystal_system": "cubic",
+      "two_theta_min_original": 5.0,
+      "two_theta_max_original": 90.0,
+      "profile_sha256": "e8f155a4a38ab9b7"
+    },
+    {
+      "rruff_id": "R100161",
+      "crystal_system": "cubic",
+      "two_theta_min_original": 5.0,
+      "two_theta_max_original": 90.0,
+      "profile_sha256": "db4f830abe11319b"
+    },
+    {
+      "rruff_id": "R050558",
+      "crystal_system": "cubic",
+      "two_theta_min_original": 5.0,
+      "two_theta_max_original": 90.0,
+      "profile_sha256": "fdaef8d978517e15"
+    }
+  ]
+}

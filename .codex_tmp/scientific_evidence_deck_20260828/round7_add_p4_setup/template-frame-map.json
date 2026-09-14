@@ -1,0 +1,43 @@
+{
+  "source_deck": "E:/AI4science/outputs/XRD_导师汇报_第六轮_P2减重复_3页_2026-08-28.pptx",
+  "output_slide_count": 4,
+  "slides": [
+    {
+      "output_slide": 1,
+      "source_slide": 1,
+      "mode": "preserve",
+      "edits": []
+    },
+    {
+      "output_slide": 2,
+      "source_slide": 2,
+      "mode": "preserve_with_text_edit",
+      "edits": [
+        { "anchor": "sh/9072xkry", "action": "replace_text", "value": "02 / 04" },
+        { "anchor": "sh/mtwrmxg7", "action": "replace_text", "value": "变化来自测量条件，而非晶体结构本身。" }
+      ]
+    },
+    {
+      "output_slide": 3,
+      "source_slide": 3,
+      "mode": "preserve_with_text_edit",
+      "edits": [
+        { "anchor": "sh/cza94vmx", "action": "replace_text", "value": "03 / 04" },
+        { "anchor": "sh/v6l4jq94", "action": "replace_text", "value": "同一晶体结构" }
+      ]
+    },
+    {
+      "output_slide": 4,
+      "source_slide": 2,
+      "mode": "duplicate_and_recompose_body",
+      "preserve": ["title frame", "page marker", "header rule", "theme", "slide master"],
+      "delete": ["source body labels", "source dividers", "source conclusion", "source charts"],
+      "add": [
+        "left data-scale block",
+        "structure-level split note",
+        "five Chinese perturbation labels",
+        "five native mini XRD charts from one cached parent structure"
+      ]
+    }
+  ]
+}

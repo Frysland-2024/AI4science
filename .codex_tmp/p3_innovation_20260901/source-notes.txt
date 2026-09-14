@@ -1,0 +1,5 @@
+Source deck: E:/AI4science/outputs/XRD_导师汇报.pptx
+External sources: none added in this edit.
+Visual assets: reuse the two native PXRD charts already present on slide 3.
+Scientific content: user-provided wording and the existing slide-3 method concept.
+

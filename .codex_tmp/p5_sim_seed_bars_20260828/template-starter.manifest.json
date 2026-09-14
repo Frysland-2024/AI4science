@@ -1,0 +1,67 @@
+{
+  "sourcePptx": "E:\\AI4science\\.codex_tmp\\p5_sim_seed_bars_20260828\\source.pptx",
+  "mapPath": "E:\\AI4science\\.codex_tmp\\p5_sim_seed_bars_20260828\\template-frame-map.json",
+  "output": "E:\\AI4science\\.codex_tmp\\p5_sim_seed_bars_20260828\\template-starter.pptx",
+  "outputBytes": 70312,
+  "sourceSlideCount": 4,
+  "slideCount": 5,
+  "previewDir": "E:\\AI4science\\.codex_tmp\\p5_sim_seed_bars_20260828\\template-starter-preview",
+  "layoutDir": "E:\\AI4science\\.codex_tmp\\p5_sim_seed_bars_20260828\\template-starter-layout",
+  "slides": [
+    {
+      "outputSlide": 1,
+      "sourceSlide": 1,
+      "narrativeRole": "preserve-only",
+      "reuseMode": "duplicate-slide",
+      "editTargetCount": 0,
+      "previewPath": "E:\\AI4science\\.codex_tmp\\p5_sim_seed_bars_20260828\\template-starter-preview\\starter-slide-01.png",
+      "previewRelativePath": "template-starter-preview/starter-slide-01.png",
+      "layoutPath": "E:\\AI4science\\.codex_tmp\\p5_sim_seed_bars_20260828\\template-starter-layout\\starter-slide-01.layout.json",
+      "layoutRelativePath": "template-starter-layout/starter-slide-01.layout.json"
+    },
+    {
+      "outputSlide": 2,
+      "sourceSlide": 2,
+      "narrativeRole": "preserve-only",
+      "reuseMode": "duplicate-slide",
+      "editTargetCount": 0,
+      "previewPath": "E:\\AI4science\\.codex_tmp\\p5_sim_seed_bars_20260828\\template-starter-preview\\starter-slide-02.png",
+      "previewRelativePath": "template-starter-preview/starter-slide-02.png",
+      "layoutPath": "E:\\AI4science\\.codex_tmp\\p5_sim_seed_bars_20260828\\template-starter-layout\\starter-slide-02.layout.json",
+      "layoutRelativePath": "template-starter-layout/starter-slide-02.layout.json"
+    },
+    {
+      "outputSlide": 3,
+      "sourceSlide": 3,
+      "narrativeRole": "preserve-only",
+      "reuseMode": "duplicate-slide",
+      "editTargetCount": 0,
+      "previewPath": "E:\\AI4science\\.codex_tmp\\p5_sim_seed_bars_20260828\\template-starter-preview\\starter-slide-03.png",
+      "previewRelativePath": "template-starter-preview/starter-slide-03.png",
+      "layoutPath": "E:\\AI4science\\.codex_tmp\\p5_sim_seed_bars_20260828\\template-starter-layout\\starter-slide-03.layout.json",
+      "layoutRelativePath": "template-starter-layout/starter-slide-03.layout.json"
+    },
+    {
+      "outputSlide": 4,
+      "sourceSlide": 4,
+      "narrativeRole": "preserve-only",
+      "reuseMode": "duplicate-slide",
+      "editTargetCount": 0,
+      "previewPath": "E:\\AI4science\\.codex_tmp\\p5_sim_seed_bars_20260828\\template-starter-preview\\starter-slide-04.png",
+      "previewRelativePath": "template-starter-preview/starter-slide-04.png",
+      "layoutPath": "E:\\AI4science\\.codex_tmp\\p5_sim_seed_bars_20260828\\template-starter-layout\\starter-slide-04.layout.json",
+      "layoutRelativePath": "template-starter-layout/starter-slide-04.layout.json"
+    },
+    {
+      "outputSlide": 5,
+      "sourceSlide": 2,
+      "narrativeRole": "simulation robustness result",
+      "reuseMode": "duplicate-slide",
+      "editTargetCount": 13,
+      "previewPath": "E:\\AI4science\\.codex_tmp\\p5_sim_seed_bars_20260828\\template-starter-preview\\starter-slide-05.png",
+      "previewRelativePath": "template-starter-preview/starter-slide-05.png",
+      "layoutPath": "E:\\AI4science\\.codex_tmp\\p5_sim_seed_bars_20260828\\template-starter-layout\\starter-slide-05.layout.json",
+      "layoutRelativePath": "template-starter-layout/starter-slide-05.layout.json"
+    }
+  ]
+}
