@@ -57,6 +57,7 @@ Dynamic JS：共同标签 + measurement-equivalence consistency
 | [`docs/GRADUATE_RESEARCH_DIRECTION.md`](docs/GRADUATE_RESEARCH_DIRECTION.md) | 申请叙事、研究方向框架、方向地图与日本导师检索关键词 |
 | [`docs/NEXT_PROJECT_XRD_QUANTITATIVE_INVERSION.md`](docs/NEXT_PROJECT_XRD_QUANTITATIVE_INVERSION.md) | 下一代定量反演计划及论文、代码、数据资源附录 |
 | [`docs/PROJECT_HISTORY.md`](docs/PROJECT_HISTORY.md) | 完整研究演化档案；含日期化决策节点、失败、版本变化和评价体系修正 |
+| [`docs/PROJECT_HISTORY_NOTE_2026-09-19_SENIOR_DISCUSSION_XRD_NEXT_STEP.md`](docs/PROJECT_HISTORY_NOTE_2026-09-19_SENIOR_DISCUSSION_XRD_NEXT_STEP.md) | **2026-09-19 与学长沟通：确认当前 JS/真实域结果，并将下一阶段收敛到限定领域的物理参数定量反演、自洽约束与实际表征落地** |
 | [`docs/PROJECT_HISTORY_NOTE_2026-09-01_AUGMENTATION_TO_PROVENANCE_SUPERVISION.md`](docs/PROJECT_HISTORY_NOTE_2026-09-01_AUGMENTATION_TO_PROVENANCE_SUPERVISION.md) | **2026-09-01 项目发展节点：从随机物理扰动/在线生成的成熟范式，收敛到 parent-provenance relationship supervision 的正式方法定位** |
 | [`docs/PROJECT_HISTORY_NOTE_2026-08-27_CNRS_RECLASSIFICATION.md`](docs/PROJECT_HISTORY_NOTE_2026-08-27_CNRS_RECLASSIFICATION.md) | 冻结 CNRS 协议所链接的独立历史节点 |
 | [`xrd_robustness/README.md`](xrd_robustness/README.md) | 安装、代码结构与结果/证据索引 |
