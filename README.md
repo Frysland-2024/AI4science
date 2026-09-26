@@ -1,5 +1,7 @@
 # AI4Science
 
+> **新成员 / 新 AI / cuifa01 请先从这里开始：** [`docs/CUIFA01_START_HERE.md`](docs/CUIFA01_START_HERE.md)。这份零基础手册把 FerroAI → XRD 的历史、当前 JS 主线、数据/训练流程、主结果、失败分支、claim 边界、代码地图和下一步反演方向放在一个入口里；读完再进入 `CURRENT_STATE.md` 和 `RESULTS.md`。
+
 这个仓库主要做 XRD 鲁棒性研究，代码在 [`xrd_robustness/`](xrd_robustness/)。核心想法是：在线 PXRD 模拟器知道哪些谱图来自同一个母体结构，把这个关系变成一种监督信号，让七晶系分类器在测量条件变化时更稳。
 
 > 状态（2026-08-29）：模拟结果、RRUFF-301 few-shot 与 CNRS-318 zero-shot 已完成；当前在做论文、图表与成果封装。
