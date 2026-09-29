@@ -17,7 +17,7 @@
 
 ### Research story
 
-My project studies robust machine learning for powder X-ray diffraction (PXRD). Simulated spectra provide controlled access to realistic measurement variation, including peak shifts, broadening, preferred orientation, background and noise. The central idea is that a simulator provides useful relationships in addition to labeled samples: multiple perturbed spectra generated from one parent structure are measurements of the same latent physical object.
+My project studies supervised learning and structured supervision for powder X-ray diffraction (PXRD). Simulated spectra provide controlled access to realistic measurement variation, including peak shifts, broadening, preferred orientation, background and noise. The central idea is that a simulator provides useful relationships in addition to labeled samples: multiple perturbed spectra generated from one parent structure are measurements of the same latent physical object.
 
 I converted this relationship into measurement-equivalence supervision. For each parent structure, the training system generates two online views and applies Jensen-Shannon prediction consistency while preserving the same structures, perturbation distribution, backbone, optimization and data exposure as a Dynamic ERM baseline.
 
@@ -25,15 +25,15 @@ The final comparison uses a ResNet-18-GN backbone for seven-crystal-system class
 
 The same scientific conclusion is supported by two experimental domains with complementary roles. On RRUFF-301, JS-pretrained models improved locked-test Macro-F1 by `+0.0433`, `+0.0460` and `+0.0545` at K=1/2/5 labels per class, showing better label efficiency. On the independent, naturally imbalanced CNRS-318 source, all 5/5 frozen zero-shot seed comparisons favored JS (mean paired `+0.0187`); pooled Macro-F1, balanced accuracy, accuracy, ECE, NLL and Brier score also improved. CNRS remains a difficult sim-to-real setting with low absolute accuracy and larger uncertainty in low-support classes, so I present it as supporting independent-source evidence rather than claiming that real-domain classification is solved.
 
-This work strengthened my interest in robust and data-efficient learning for scientific measurements. It also taught me how to convert information already available in a scientific data-generation process into a focused machine-learning hypothesis, a matched comparison and a reproducible result.
+This work strengthened my interest in structured, data-efficient learning for scientific measurements. It also taught me how to convert information already available in a scientific data-generation process into a focused machine-learning hypothesis, a matched comparison and a reproducible result.
 
 ### Application version
 
-My research focuses on robust machine learning for scientific measurements. In powder X-ray diffraction, simulated training patterns can vary with peak position, broadening, preferred orientation, background and noise. I recognized that an online simulator provides more than labeled spectra: it knows which perturbed views originate from the same parent crystal. I used this relationship as measurement-equivalence supervision by adding Jensen-Shannon prediction consistency to a matched Dynamic ERM design. The comparison kept the crystal structures, perturbation distribution, ResNet-18-GN backbone, optimization and two-view data exposure fixed. Across five matched seeds, consistency improved simulated Validation OOD Macro-F1 by `+0.046569`, and the already selected checkpoints achieved `+0.054600` on the simulated Test. JS also improved the full K=1/2/5 RRUFF few-shot learning curve and favored all 5/5 seeds on a second CNRS experimental source, with classification and probability-quality metrics moving together. The project demonstrates how scientific data-generation relationships can become structured supervision for robust and label-efficient classification while retaining honest limits on the remaining sim-to-real gap.
+My research focuses on structured supervision, distribution shift, and data-efficient learning for scientific measurements. In powder X-ray diffraction, simulated training patterns can vary with peak position, broadening, preferred orientation, background and noise. I recognized that an online simulator provides more than labeled spectra: it knows which perturbed views originate from the same parent crystal. I used this relationship as measurement-equivalence supervision by adding Jensen-Shannon prediction consistency to a matched Dynamic ERM design. The comparison kept the crystal structures, perturbation distribution, ResNet-18-GN backbone, optimization and two-view data exposure fixed. Across five matched seeds, consistency improved simulated Validation OOD Macro-F1 by `+0.046569`, and the already selected checkpoints achieved `+0.054600` on the simulated Test. JS also improved the full K=1/2/5 RRUFF few-shot learning curve and favored all 5/5 seeds on a second CNRS experimental source, with classification and probability-quality metrics moving together. The project demonstrates how scientific data-generation relationships can become structured supervision for higher-performing and label-efficient classification under distribution shift while retaining honest limits on the remaining sim-to-real gap.
 
 ### Interview version
 
-I worked on making simulated PXRD classifiers robust to realistic measurement variation. The key insight was that the simulator knows when two spectra are different measurements of the same parent crystal. I turned that relationship into a consistency objective and compared it with matched dynamic training. Five-seed simulated OOD evaluation showed a `+5.46` percentage-point Test gain; the same model family adapted more efficiently across the RRUFF few-shot learning curve and improved all five seed comparisons on an independent CNRS source. That cross-domain evidence made the project a concrete example of using scientific structure as supervision rather than treating simulation only as a source of more samples.
+I worked on using simulator-retained parent identity as additional supervision for PXRD classification under realistic measurement variation. The key insight was that the simulator knows when two spectra are different measurements of the same parent crystal. I turned that relationship into a consistency objective and compared it with matched dynamic training. Five-seed simulated OOD evaluation showed a `+5.46` percentage-point Test gain; the same model family adapted more efficiently across the RRUFF few-shot learning curve and improved all five seed comparisons on an independent CNRS source. That cross-domain evidence made the project a concrete example of using scientific structure as supervision rather than treating simulation only as a source of more samples.
 
 ### Recommended claim language
 
@@ -42,7 +42,7 @@ I worked on making simulated PXRD classifiers robust to realistic measurement va
 - “Five matched seeds showed a `+0.046569` Validation gain and a `+0.054600` simulated Test gain.”
 - “Under identical real-label budgets, JS improved Macro-F1 across the K=1/2/5 RRUFF few-shot learning curve.”
 - “On CNRS-318, all 5/5 seeds and multiple classification and calibration metrics favored JS; uncertainty remains larger because the domain is naturally imbalanced.”
-- “The evidence supports improved robustness and label efficiency, not a claim that zero-shot sim-to-real classification is solved.”
+- “The evidence supports improved classification under measurement shift and higher label efficiency, not a claim that zero-shot sim-to-real classification is solved.”
 
 ---
 
@@ -325,14 +325,14 @@ The current XRD project sits most directly in:
 A-METRO
 ```
 
-because it starts from an experimentally meaningful physical measurement and asks how to infer latent structural information robustly.
+because it starts from an experimentally meaningful physical measurement and asks how to infer latent structural information reliably.
 
 Its transferable methodological components include:
 
 - simulator-based training
 - physically structured augmentation
 - Sim2Real
-- robustness under measurement shift
+- generalization under measurement shift
 - few-shot adaptation
 - uncertainty / calibration
 - measurement-aware machine learning
@@ -408,7 +408,7 @@ Representative problems:
 - few-shot adaptation
 - uncertainty calibration
 - physics-guided learning
-- robust representation learning
+- representation learning under distribution shift
 
 ---
 
@@ -455,7 +455,7 @@ Shared machine learning challenges:
 - instrument-dependent distribution shift
 - simulation-to-experiment gap
 - need for physics-aware representations
-- robust defect/feature recognition
+- reliable defect/feature recognition
 
 ---
 
@@ -490,7 +490,7 @@ The project development story should emphasize:
 
 1. Starting from XRD as a scientific measurement problem.
 2. Identifying that scientific data are generated by physical measurement processes rather than ordinary datasets.
-3. Designing ML methods that exploit physical relationships and improve robustness under measurement shifts.
+3. Designing ML methods that exploit physical relationships and improve classification and generalization under measurement shifts.
 4. Extending this idea toward broader scientific imaging and industrial inspection systems.
 
 The key identity is not "using AI for materials" but:
@@ -612,7 +612,7 @@ with research involving:
 - simulated data
 - noise and instrumental bias
 - sim-to-real transfer
-- robustness under measurement shift
+- generalization under measurement shift
 - uncertainty and calibration
 - low-data or few-shot adaptation
 
@@ -664,7 +664,7 @@ Therefore the broader application identity is:
 
 Within that broad application domain, the more specific methodological interest remains:
 
-> **Machine learning and inference on physical measurement data, especially where physical models, simulated data, real measurement bias, sim-to-real transfer, robustness, low-data adaptation, and uncertainty matter.**
+> **Machine learning and inference on physical measurement data, especially where physical models, simulated data, real measurement bias, sim-to-real transfer, distribution shift, low-data adaptation, and uncertainty matter.**
 
 This also prevents the research direction from being narrowed to image recognition. The relevant data modalities can be images, spectra, one-dimensional curves, diffraction patterns, multidimensional detector data, or other scientific measurements.
 
@@ -691,7 +691,7 @@ A useful three-level hierarchy is:
 | Level | Current interpretation |
 |---|---|
 | Work paradigm / methodological interface | AI-assisted processing, judgment, analysis, and inference on experimental data |
-| Machine-learning questions of interest | Sim2Real, robustness, low-data learning, physics-guided learning, uncertainty, inverse inference |
+| Machine-learning questions of interest | Sim2Real, distribution-shift generalization, low-data learning, physics-guided learning, uncertainty, inverse inference |
 | Concrete application directions | semiconductor inspection/metrology, XRD, SEM/TEM analysis, spectroscopy, scientific-instrument data analysis |
 
 Therefore, **measurement -> inference** should not be treated as a narrow field label or the only possible research direction. It is better understood as a recurring computational interface that can appear inside many concrete domains.
@@ -739,7 +739,7 @@ experimental measurement data
 + machine-learning inference
 + simulation / forward models
 + real-world measurement discrepancy
-+ sim-to-real / robustness / low-data adaptation
++ sim-to-real / distribution-shift generalization / low-data adaptation
 ```
 
 Thus the stable principle for future advisor search and application narratives is:
@@ -1052,7 +1052,7 @@ Positive signs include:
 - data volume growing faster than manual analysis capacity
 - a new automatic-analysis topic appearing in several recent projects
 - few existing students fully dedicated to ML/informatics
-- clear need for classification, parameter extraction, inverse inference, robustness, or high-throughput analysis
+- clear need for classification, parameter extraction, inverse inference, domain transfer/generalization, or high-throughput analysis
 
 This is particularly attractive because the student can contribute through the **measurement-data -> inference** interface without needing to become the person who fabricates the device or designs the instrument.
 
