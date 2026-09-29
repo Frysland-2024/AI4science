@@ -108,7 +108,7 @@ replication.
 
 ## Secondary probabilistic reliability result
 
-A completed post-hoc audit of the frozen models shows that the robustness gain
+A completed post-hoc audit of the frozen models shows that the OOD classification gain
 is accompanied by broadly improved probability quality rather than merely a
 change in hard-label accuracy.
 
@@ -140,7 +140,7 @@ seeds, Macro-F1, ECE, NLL, and Brier all favor JS in **5/5** seed pairs.
 
 The supported result-level conclusion is therefore:
 
-> **Consistency regularization improves both robustness and probabilistic reliability under the evaluated PXRD measurement shifts.**
+> **Consistency regularization improves both classification performance and probabilistic reliability under the evaluated PXRD measurement shifts.**
 
 This does **not** establish JS as a standalone calibration algorithm or prove a
 universal calibration mechanism. CNRS remains strongly over-confident in
@@ -163,7 +163,7 @@ definition is `../configs/experiment.public.json`.
 The simulated OOD gains, RRUFF few-shot learning curve, CNRS five-seed and
 multi-metric improvements, and probability-quality results jointly support the
 conclusion that JS consistency uses shared-parent measurement equivalence to
-learn a model that is more robust than matched Dynamic ERM. This conclusion
+learn a model that performs better than matched Dynamic ERM under the evaluated measurement shifts. This conclusion
 does not claim that zero-shot sim-to-real classification is solved: CNRS
 absolute accuracy remains below the natural-domain majority-class baseline,
 calibration remains poor in absolute terms, and low-support classes retain
