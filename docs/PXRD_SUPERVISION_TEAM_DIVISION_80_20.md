@@ -364,7 +364,7 @@ xrd_robustness/reports/
 
 ```text
 A. 科学说明
-   docs/PXRD_ROBUSTNESS_TEAM_DIVISION_80_20.md
+   docs/PXRD_SUPERVISION_TEAM_DIVISION_80_20.md
    docs/CURRENT_STATE.md
    docs/PXRD_EVIDENCE_CLOSURE.md
 
@@ -404,7 +404,7 @@ E. 协作者输出
 
 核心身份：
 
-> **scientific ML / structured supervision / representation learning under distribution shift**
+> **supervised learning / structured-relational supervision / simulator-provenance supervision**
 
 ### 协作者申请 / 面试版
 
@@ -412,9 +412,11 @@ E. 协作者输出
 
 核心身份：
 
-> **transfer learning / few-shot scientific data / experimental-domain adaptation**
+> **RRUFF few-shot adaptation / label-efficient experimental transfer**
 
 两条叙事相连，但不重复。
+
+> 标签边界：上面的 adaptation / transfer 只描述协作者负责的 RRUFF 真实域子模块；它不定义整个 PXRD 主项目。主项目一级身份仍是 supervised learning，核心方法身份是 same-parent relational supervision。
 
 ---
 
