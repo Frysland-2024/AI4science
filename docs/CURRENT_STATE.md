@@ -1,12 +1,12 @@
 # AI4science 当前状态
 
-**状态日期：** 2026-08-29
+**状态日期：** 2026-09-29
 
 **阶段：** 模拟结果、RRUFF-301 few-shot 与 CNRS-318 zero-shot 均已完成；当前在做论文图表、方法 framing 与成果封装
 
 ## 1. 当前科学设计
 
-当前已经完成的项目想回答一个问题：在线 PXRD 模拟器知道哪些谱图来自同一个母体结构，能不能把这种关系变成额外的监督信号，让七晶系分类器在测量条件变化时更稳。
+当前已经完成的项目首先是一个**监督学习方法研究**：在线 PXRD 模拟器不仅能生成带晶系标签的谱图，还知道哪些谱图来自同一个母体结构。项目要回答的是：能不能把这种 parent provenance 转化为额外的 measurement-equivalence / relationship supervision，使相同晶体结构数据库提供比普通类别标签更多的监督信息，并由此提高七晶系分类、分布外泛化、真实域迁移和少标签适配表现。
 
 最终确定的设计：
 
@@ -20,7 +20,7 @@
 - 划分：训练 9,842 / 验证 2,109 / 测试 2,109；
 - 划分方式：按母体结构严格分开，训练/验证/测试不共享同一母体。
 
-当前方法贡献的统一表述是：
+当前方法贡献的统一表述是（一级 framing 见 [`PXRD_SUPERVISION_FRAMING.md`](PXRD_SUPERVISION_FRAMING.md)）：
 
 > **shared parent identity → measurement equivalence → relationship supervision**
 
