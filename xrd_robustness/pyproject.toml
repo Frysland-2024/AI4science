@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "xrd-robustness"
 version = "0.1.0"
-description = "Physics-grounded robustness experiments for 1D powder XRD"
+description = "Provenance-aware supervised learning experiments for 1D powder XRD"
 requires-python = ">=3.10"
 dependencies = ["numpy>=1.24", "torch>=2.0"]
 
