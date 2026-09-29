@@ -26,6 +26,16 @@
 
 传统 online PXRD simulator 主要承担 `data generator` 的角色；本项目进一步利用 simulator-retained parent identity，使其同时成为 **data generator + relationship supervisor**。JS consistency 是这一 measurement-equivalence supervision 的具体实现，而不是项目声称发明的新算法。
 
+### 当前标签口径
+
+- **项目本体：** supervised learning / PXRD crystal-system classification；
+- **方法核心：** structured / relational supervision from simulator provenance；
+- **具体实现：** JS consistency regularization；
+- **实验设置/结果：** simulated OOD generalization、CNRS zero-shot cross-domain evaluation、RRUFF few-shot adaptation / label efficiency、probability calibration；
+- **大领域背景：** AI4Science / AI for Characterization。
+
+`robust learning`、`representation learning`、`domain adaptation`、`computer vision`、`physics-informed ML` 均不再作为整个项目的一级标签；其中只有 RRUFF K-shot 子实验可准确称为 target-domain adaptation。
+
 ## 2. 已经做完的事
 
 - 在验证集上跑完了五组配对实验；
