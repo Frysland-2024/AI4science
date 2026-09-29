@@ -216,7 +216,7 @@ matched design 控制了 backbone、parent structures、perturbation distributio
 
 > **显式使用 simulator-retained measurement relationship 是否有价值。**
 
-这也解释了为什么项目标题采用 **Measurement-Equivalence Supervision for Robust PXRD Classification**，而不是 “JS Consistency for XRD Classification”。
+这也解释了为什么项目标题采用 **Measurement-Equivalence Supervision from Simulator Provenance for PXRD Classification**，而不是 “JS Consistency for XRD Classification”。
 
 ### 3.5 PPT 核心方法图必须怎么画
 
