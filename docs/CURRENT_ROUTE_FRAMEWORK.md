@@ -129,7 +129,7 @@ Strong A2 signals include:
 - calibration
 - uncertainty quantification
 - domain shift across subjects, devices or acquisition conditions
-- robustness / personalization / low-data adaptation
+- cross-domain generalization / personalization / low-data adaptation
 - physical or physiological forward models
 
 #### CT / MRI / ultrasound: new screening rule
@@ -437,7 +437,7 @@ Transferable components include:
 - physically structured perturbation
 - measurement-equivalence supervision
 - Sim2Real
-- robustness under measurement shift
+- generalization under measurement shift
 - few-shot adaptation
 - calibration / uncertainty
 - measurement-aware machine learning
@@ -446,7 +446,7 @@ This makes the project a strong bridge into:
 
 - **A1**: semiconductor / scientific-instrument measurement inference
 - **A2**: physiological sensing under calibration/domain shift
-- **A3**: industrial measurement robustness
+- **A3**: industrial measurement-domain generalization
 - **B1**: simulator / forward-model / parameter-inference problems, including later movement toward `B1-CM`
 
 The project is therefore an **entry point into quantitative measurement inference**, not a permanent commitment to XRD or materials classification.
