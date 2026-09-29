@@ -2,7 +2,7 @@
 
 **日期：** 2026-09-01  
 **状态：** 正式记录为内部项目分工与后续申请叙事边界。  
-**详细方案：** [`PXRD_ROBUSTNESS_TEAM_DIVISION_80_20.md`](PXRD_ROBUSTNESS_TEAM_DIVISION_80_20.md)
+**详细方案：** [`PXRD_SUPERVISION_TEAM_DIVISION_80_20.md`](PXRD_SUPERVISION_TEAM_DIVISION_80_20.md)
 
 ## 1. 为什么需要重新切分
 
