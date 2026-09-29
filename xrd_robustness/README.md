@@ -1,6 +1,8 @@
-# XRD 鲁棒性
+# PXRD 同源关系监督分类
 
-这里做的是：用在线 PXRD 物理扰动做七晶系鲁棒分类。对比 Dynamic ERM 和 Dynamic JS Consistency 两种方法，配置是 ResNet-18-GN、不做额外预处理、AdamW、恒定学习率、`lambda_js=60`。
+这里做的是：在七晶系监督分类中，把在线 PXRD 模拟器保留的母结构 provenance 转化为同源关系监督。对比 Dynamic ERM 和 Dynamic JS Consistency 两种方法；两者看到相同的母结构、相同的物理扰动分布和相同的双视图数据暴露，唯一关键差异是 JS 是否显式利用“两个视图来自同一母结构”这一 measurement-equivalence 关系。配置为 ResNet-18-GN、不做额外预处理、AdamW、恒定学习率、`lambda_js=60`。
+
+> `xrd_robustness/` 是历史技术目录名，为避免破坏导入、脚本路径与既有复现记录而保留；它不再代表当前项目的一级学术定位。当前 framing 见 [`../docs/PXRD_SUPERVISION_FRAMING.md`](../docs/PXRD_SUPERVISION_FRAMING.md)。
 
 > **本轮证据结案先看：** [`../docs/PXRD_EVIDENCE_CLOSURE.md`](../docs/PXRD_EVIDENCE_CLOSURE.md)。五类扰动物理/文献依据与 RRUFF-301 composition audit 已正式结案；当前最重要的工作是把 **shared parent identity → measurement equivalence → relationship supervision** 的方法贡献讲清楚，而不是再补实验或加算法。
 
