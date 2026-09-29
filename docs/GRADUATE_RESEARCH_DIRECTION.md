@@ -390,6 +390,8 @@ The transferable capability is not restricted to XRD. The same framework can ext
 
 ### Primary Direction
 
+> **Important label boundary for the current PXRD project:** the finished XRD work itself should be described first as **supervised PXRD classification with simulator-provenance relational supervision**. Terms below such as physics-informed ML, domain adaptation, representation learning, Scientific ML, or AI4Science are broader advisor-search / future-direction keywords unless a specific subexperiment actually satisfies them.
+
 #### AI + Characterization
 
 Main keywords:
@@ -397,9 +399,9 @@ Main keywords:
 - scientific machine learning
 - AI for characterization
 - computational microscopy
-- physics-informed machine learning
-- domain adaptation for scientific imaging
-- measurement-aware representation learning
+- physics-guided / physics-aware machine learning
+- sim-to-real and low-data adaptation for scientific measurements
+- structured supervision for scientific measurements
 
 Representative problems:
 
@@ -408,7 +410,7 @@ Representative problems:
 - few-shot adaptation
 - uncertainty calibration
 - physics-guided learning
-- representation learning under distribution shift
+- supervised learning under distribution shift
 
 ---
 
