@@ -6,6 +6,8 @@
 
 > 状态（2026-09-29）：模拟结果、RRUFF-301 few-shot 与 CNRS-318 zero-shot 已完成；当前已统一将项目一级定位修正为“监督学习 + simulator provenance 同源关系监督”，正在进行论文、图表与成果封装。
 
+> **标签层级：** 项目本体 = `supervised learning + PXRD classification`；方法核心 = `structured/relational supervision + simulator provenance + consistency regularization`；OOD、Sim-to-Real、few-shot、calibration 只作为评测/结果标签。不要再把 robustness、representation learning、domain adaptation、CV 或 physics-informed ML 当作整个项目的一级身份。完整规则见 [`docs/PXRD_SUPERVISION_FRAMING.md`](docs/PXRD_SUPERVISION_FRAMING.md)。
+
 > **本轮两个证据问题已经结案。** 五类扰动的物理/文献依据已经完成系统核验；RRUFF-301 composition audit 也确认 adaptation/test 之间无 RRUFF ID 或相同谱图重合，16,170 个跨 split 谱图对中无 Pearson ≥ 0.95。结案结果与当前方法新颖性 framing 统一见 [`docs/PXRD_EVIDENCE_CLOSURE.md`](docs/PXRD_EVIDENCE_CLOSURE.md)。
 
 > **五个方法细节问题也已完成本地仓库/Git 历史考古并结案。** Related Work 边界、ERM–JS 公平对照、formal_14060 数据集构建、五类扰动是否保持 parent structure 不变、以及 `lambda_js=60` 的选择路径，统一见 [`docs/PXRD_METHOD_DETAIL_EVIDENCE_CLOSURE.md`](docs/PXRD_METHOD_DETAIL_EVIDENCE_CLOSURE.md)。这些不是新的实验 TODO；后续直接用于 Methods、Related Work、PPT 和答辩。
