@@ -1,9 +1,11 @@
 # cuifa01 从零接手 AI4Science / PXRD 项目
 
 > **用途：** 给第一次接触这个项目的人看的零基础说明。默认你不知道 XRD、机器学习、这个仓库、历史版本号，也不知道为什么项目会从 FerroAI 一路变成现在这样。  
-> **更新日期：** 2026-09-26  
-> **本说明读取基线：** GitHub `main` 已读取至 `7ae035c7`（在创建本文件之前）。  
+> **更新日期：** 2026-09-29  
+> **本说明读取基线：** GitHub `main` 当前标签口径已同步至 `c77ea213`。  
 > **最重要的规则：** 本文是“入口地图”。当前科学事实以 `docs/CURRENT_STATE.md`、`xrd_robustness/reports/RESULTS.md`、冻结配置和较新的日期化 history note 为准；`archive/` 和旧版本号只用于追溯“为什么改”，不能拿来覆盖当前结论。
+
+> **项目标签规则（2026-09-29 起）：** 先把主项目理解为 **supervised learning + PXRD crystal-system classification**；方法核心是 **same-parent structured / relational supervision from simulator provenance**，JS consistency 是具体实现。OOD、Sim-to-Real、RRUFF few-shot adaptation、CNRS zero-shot 和 calibration 都是评测设置或结果维度。不要因为项目用了 ResNet、做了扰动测试或真实域实验，就把整个项目改称 CV、robust learning、representation learning、domain adaptation 或 physics-informed ML。权威口径见 [`PXRD_SUPERVISION_FRAMING.md`](PXRD_SUPERVISION_FRAMING.md)。
 
 ---
 
@@ -15,7 +17,7 @@
 
 一句话：
 
-> **同一个晶体结构，在不同测量条件下会得到不同的 PXRD。普通 Dynamic ERM 只知道这些谱“标签相同”；本项目进一步利用模拟器保留的“它们来自同一个母结构”这一关系，对两份预测施加 JS consistency，从而让模型对测量变化更稳定。**
+> **同一个晶体结构，在不同测量条件下会得到不同的 PXRD。普通 Dynamic ERM 只利用这些谱的共同类别标签；本项目进一步利用模拟器保留的“它们来自同一个母结构”这一关系，对两份预测施加 JS consistency，把 parent provenance 转化为额外监督，并检验这种监督是否提升分类、跨域泛化和少标签适配表现。**
 
 核心逻辑：
 
