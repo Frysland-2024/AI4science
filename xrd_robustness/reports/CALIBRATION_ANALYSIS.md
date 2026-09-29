@@ -5,7 +5,7 @@
 
 ## Scientific question
 
-The primary study asks whether consistency regularization between two measurement views of the same parent crystal improves robustness to PXRD measurement variation.
+The primary study asks whether consistency regularization between two measurement views of the same parent crystal improves classification and probability quality under PXRD measurement variation.
 
 Because the classifier outputs a complete probability distribution, the frozen models support a second question:
 
@@ -108,7 +108,7 @@ However, the result is not well explained by indiscriminate confidence shrinkage
 
 If JS merely reduced all logits without improving the probability distribution, proper scoring rules could remain unchanged or worsen. Their broad improvement while classification performance also increases supports the stronger result-level statement:
 
-> **Consistency regularization improves both robustness and probabilistic reliability under the evaluated simulated PXRD measurement shifts.**
+> **Consistency regularization improves both classification performance and probabilistic reliability under the evaluated simulated PXRD measurement shifts.**
 
 This is a statement about observed predictive behavior, not proof of a general calibration mechanism.
 
@@ -180,7 +180,7 @@ The present experiments do **not** isolate this mechanism causally. They establi
 4. JS produces lower NLL in 176/180 matched simulated conditions.
 5. These probability improvements accompany, rather than trade off against, higher average Macro-F1 and accuracy.
 6. CNRS-318 shows the same direction for Macro-F1, ECE, NLL, and Brier in all five matched training seeds.
-7. The combined evidence supports describing JS as improving **robustness and probabilistic reliability** under the evaluated PXRD shifts.
+7. The combined evidence supports describing JS as improving **classification performance and probabilistic reliability** under the evaluated PXRD shifts.
 
 ### Not established
 
@@ -193,11 +193,11 @@ The present experiments do **not** isolate this mechanism causally. They establi
 
 ## Relation to the main study
 
-The primary contribution remains the conversion of simulator-defined same-parent provenance into measurement-equivalence supervision for robustness under physically plausible PXRD variation.
+The primary contribution remains the conversion of simulator-defined same-parent provenance into measurement-equivalence supervision for classification under physically plausible PXRD variation.
 
 The reliability result strengthens that story without replacing it:
 
-> **The same consistency objective that improves robustness also yields probability outputs that are less over-confident and better scored by ECE, NLL, and multiclass Brier under the frozen evaluation protocol.**
+> **The same consistency objective that improves classification under measurement shift also yields probability outputs that are less over-confident and better scored by ECE, NLL, and multiclass Brier under the frozen evaluation protocol.**
 
 For scientific measurement analysis, this matters because probability quality can support later selective prediction, uncertainty triage, repeated-measurement decisions, and expert deferral.
 
@@ -205,7 +205,7 @@ For scientific measurement analysis, this matters because probability quality ca
 
 ### Main-text / presentation wording
 
-> Beyond classification accuracy, consistency regularization also improved the quality of predictive probabilities. Across 180 matched simulated-Test conditions, JS Consistency reduced ECE in 180/180 comparisons and multiclass Brier score in 180/180, while NLL improved in 176/180; mean Macro-F1 and accuracy increased simultaneously. The same direction was observed on the independent CNRS-318 experimental domain, where ECE, NLL, and Brier all improved in each of the five matched training seeds. These results support the conclusion that same-parent measurement-view consistency improves both robustness and probabilistic reliability under the evaluated PXRD measurement shifts, although it does not by itself eliminate the broader Sim-to-Real gap.
+> Beyond classification accuracy, consistency regularization also improved the quality of predictive probabilities. Across 180 matched simulated-Test conditions, JS Consistency reduced ECE in 180/180 comparisons and multiclass Brier score in 180/180, while NLL improved in 176/180; mean Macro-F1 and accuracy increased simultaneously. The same direction was observed on the independent CNRS-318 experimental domain, where ECE, NLL, and Brier all improved in each of the five matched training seeds. These results support the conclusion that same-parent measurement-view consistency improves both classification performance and probabilistic reliability under the evaluated PXRD measurement shifts, although it does not by itself eliminate the broader Sim-to-Real gap.
 
 ### Short slide wording
 
