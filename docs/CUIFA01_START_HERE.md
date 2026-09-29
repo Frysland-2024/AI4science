@@ -11,7 +11,7 @@
 
 这个项目现在有两条必须分开的线。
 
-## A. 已完成并冻结的主项目：PXRD 鲁棒七晶系分类
+## A. 已完成并冻结的主项目：PXRD 同源关系监督七晶系分类
 
 一句话：
 
@@ -62,7 +62,7 @@ Dynamic JS ：同样两份 CE + JS(p1,p2)
 但必须同时记住：
 
 > **CNRS 绝对性能依然很低，sim-to-real gap 没有被“解决”。**  
-> 本项目可以说“一致性监督改善了鲁棒性、真实域适配标签效率和外部域趋势”，不能说“已经解决真实 XRD 自动分类”。
+> 本项目可以说“一致性监督提高了分类表现、分布外/跨域泛化、真实域适配标签效率和外部域趋势”，不能说“已经解决真实 XRD 自动分类”。
 
 ## B. 下一阶段：定量反演 / AI + 表征
 
@@ -70,7 +70,7 @@ Dynamic JS ：同样两份 CE + JS(p1,p2)
 
 ```text
 XRD
-→ robust structural recognition
+→ stable structural recognition
 → quantitative physical parameters
 → physics / self-consistency check
 → refinement initialization
@@ -311,7 +311,7 @@ PXRD 的优势是：
 
 > **哪里存在“可控干预 + 稳定标签 + 可复现实验”的科学数据问题？**
 
-XRD 和“不变性 / 鲁棒性”问题自然对上了。
+XRD 和“同一结构在不同测量实现下应保持一致判断”的监督问题自然对上了。
 
 ---
 
@@ -339,7 +339,7 @@ XRD 和“不变性 / 鲁棒性”问题自然对上了。
 
 > **同一个晶体结构，在标签不变的合理测量变化下，模型的判断能不能保持稳定？**
 
-这就是整个 XRD robustness 项目的原点。
+这就是整个 XRD 同源关系监督项目的原点。
 
 ---
 
@@ -868,7 +868,7 @@ Accuracy：
 
 所以最稳妥的主结论：
 
-> **在完全匹配的数据暴露与训练条件下，显式使用 same-parent measurement-equivalence consistency，提高了 simulator-defined OOD robustness。**
+> **在完全匹配的数据暴露与训练条件下，显式使用 same-parent measurement-equivalence consistency，提高了 simulator-defined OOD classification performance。**
 
 ---
 
@@ -1267,7 +1267,7 @@ parent provenance
 
 # 22. 这个项目现在最干净的三条科学结论
 
-## 结论 1：总体鲁棒性提高
+## 结论 1：总体分类与分布外泛化性能提高
 
 > same-parent consistency 在模拟 OOD 上稳定改善七晶系分类，5/5 matched seeds 正向。
 
