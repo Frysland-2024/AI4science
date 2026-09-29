@@ -121,7 +121,7 @@ described at the top of this report.
 - **Absolute performance is low.** Balanced accuracy (`0.218→0.239`) is above the
   seven-class uniform reference (`1/7≈0.143`), but overall accuracy (`0.200→0.210`)
   remains below the majority-class baseline (`87/318≈0.274`). The result is evidence
-  about relative zero-shot robustness, not a solved sim-to-real classifier.
+  about relative zero-shot cross-domain classification performance, not a solved sim-to-real classifier.
 - **ECE is high** (0.68 ERM / 0.61 JS): the models are over-confident out of domain, a
   typical zero-shot signature.
 - **Monoclinic and tetragonal decline.** The larger drop is tetragonal
