@@ -4,7 +4,7 @@
 
 这个仓库当前主线是 **PXRD 监督学习中的同源关系监督**，代码保留在历史目录 [`xrd_robustness/`](xrd_robustness/)。核心问题不是把项目定义为“扰动后性能掉多少”，而是：在线 PXRD 模拟器除了生成带晶系标签的谱图，还保留哪些谱来自同一个母体结构；能否把这种 provenance 转化为 measurement-equivalence supervision，使同一晶体结构数据库提供更多有效监督信息，并进一步提高七晶系分类、分布外泛化、真实域迁移和少标签适配表现。
 
-> 状态（2026-08-29）：模拟结果、RRUFF-301 few-shot 与 CNRS-318 zero-shot 已完成；当前在做论文、图表与成果封装。
+> 状态（2026-09-29）：模拟结果、RRUFF-301 few-shot 与 CNRS-318 zero-shot 已完成；当前已统一将项目一级定位修正为“监督学习 + simulator provenance 同源关系监督”，正在进行论文、图表与成果封装。
 
 > **本轮两个证据问题已经结案。** 五类扰动的物理/文献依据已经完成系统核验；RRUFF-301 composition audit 也确认 adaptation/test 之间无 RRUFF ID 或相同谱图重合，16,170 个跨 split 谱图对中无 Pearson ≥ 0.95。结案结果与当前方法新颖性 framing 统一见 [`docs/PXRD_EVIDENCE_CLOSURE.md`](docs/PXRD_EVIDENCE_CLOSURE.md)。
 
