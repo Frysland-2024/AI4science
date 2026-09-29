@@ -1,7 +1,7 @@
-# PXRD 鲁棒性项目：80/20 双人贡献切分方案
+# PXRD 同源关系监督项目：80/20 双人贡献切分方案
 
 **日期：** 2026-09-01  
-**性质：** 已完成 PXRD robustness / measurement-equivalence supervision 项目的内部协作切分方案。  
+**性质：** 已完成 PXRD measurement-equivalence / relationship-supervision 项目的内部协作切分方案。  
 **适用范围：** `xrd_robustness/` 当前已经冻结并完成的 Dynamic ERM / Dynamic JS 主线、模拟 OOD、RRUFF-301 few-shot、CNRS-318 zero-shot。  
 **目的：** 在不重新打开主实验、不重写 scientific claim 的前提下，把约 20% 的工作切成一个边界清晰、可以独立讲述的真实域迁移模块；约 80% 的方法学主线保持集中。
 
@@ -17,7 +17,7 @@ Provenance-Aware Measurement-Equivalence Supervision
         ↓
 回答：在线模拟器保留的 parent provenance
 能否从“数据生成信息”转化为“关系监督”，
-从而提升对物理测量扰动的鲁棒性？
+从而让相同数据库中的监督信息被更充分利用，并提升物理测量变化下的分类与泛化表现？
 
 协作者（约 20–25%）
 Experimental Few-Shot Adaptation & Label Efficiency
@@ -28,7 +28,7 @@ Experimental Few-Shot Adaptation & Label Efficiency
 
 一句话边界：
 
-> **主负责人负责“怎样从 simulator provenance 学到更稳健的表示”；协作者负责“这种表示到了真实实验域以后，能不能更省标签地适配”。**
+> **主负责人负责“怎样把 simulator provenance 转化为额外关系监督”；协作者负责“这种监督得到的表示到了真实实验域以后，能不能更省标签地适配”。**
 
 这个切法不是把同一个算法硬拆成两半，而是把研究链条自然拆成：
 
@@ -400,15 +400,15 @@ E. 协作者输出
 
 ### 主负责人申请 / 面试版
 
-> I noticed that an online scientific simulator provides more than synthetic samples: it retains provenance indicating which measurements originate from the same underlying crystal. I converted this parent identity into measurement-equivalence supervision and tested whether explicit consistency improves PXRD robustness under matched data exposure. I led the simulator design, matched ERM–JS comparison, multi-seed OOD experiments, and cross-domain evaluation.
+> I noticed that an online scientific simulator provides more than synthetic samples: it retains provenance indicating which measurements originate from the same underlying crystal. I converted this parent identity into measurement-equivalence supervision and tested whether explicit consistency improves PXRD classification under unseen measurement shifts with matched data exposure. I led the simulator design, matched ERM–JS comparison, multi-seed OOD experiments, and cross-domain evaluation.
 
 核心身份：
 
-> **scientific ML / structured supervision / robust representation learning**
+> **scientific ML / structured supervision / representation learning under distribution shift**
 
 ### 协作者申请 / 面试版
 
-> I investigated whether robustness learned from physics-based simulation improves label-efficient adaptation to experimental PXRD. Using frozen ERM- and consistency-pretrained representations, I designed and evaluated matched K-shot adaptation on a curated RRUFF experimental benchmark, including split auditing, repeated low-label evaluation, and learning-curve analysis.
+> I investigated whether representations learned from physics-based simulation improve label-efficient adaptation to experimental PXRD. Using frozen ERM- and consistency-pretrained representations, I designed and evaluated matched K-shot adaptation on a curated RRUFF experimental benchmark, including split auditing, repeated low-label evaluation, and learning-curve analysis.
 
 核心身份：
 
