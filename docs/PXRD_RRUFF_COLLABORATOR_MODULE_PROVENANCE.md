@@ -1,7 +1,7 @@
 # PXRD RRUFF 真实域模块：协作者实际贡献与执行溯源
 
 **日期：** 2026-09-01  
-**性质：** 对 `PXRD_ROBUSTNESS_TEAM_DIVISION_80_20.md` 的事实归属补充。  
+**性质：** 对 `PXRD_SUPERVISION_TEAM_DIVISION_80_20.md` 的事实归属补充。  
 **状态：** 正式记录；不修改既有实验结果，不重写历史 Git commit。
 
 ## 1. 核心事实修正
