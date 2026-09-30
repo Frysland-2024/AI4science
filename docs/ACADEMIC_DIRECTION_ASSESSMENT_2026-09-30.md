@@ -168,7 +168,6 @@ XRD 项目涉及学习目标、训练设计和数据评估；量子散射项目�
 - **[S4]** [training/objectives.py](../xrd_robustness/src/xrd_robustness/training/objectives.py)：本次抽查的 Dynamic ERM 与 Dynamic JS 核心实现。
 - **[S5]** [RESULTS.md](../xrd_robustness/reports/RESULTS.md)：模拟 Test、RRUFF 与 CNRS 的结果、统计口径及局限。
 - **[S6]** [NEXT_PROJECT_XRD_QUANTITATIVE_INVERSION.md](NEXT_PROJECT_XRD_QUANTITATIVE_INVERSION.md)：已知相参考条件下的定量反演规划；评估时尚未启动训练。
-- **[S7]** [quantum-scattering README](https://github.com/Frysland-2024/quantum-scattering/blob/ed816d3a5b9d8a5878da81a06643b90a1853af2e/README.md)：量子散射项目说明。注：该标识为本次读取的 README blob SHA，不是 commit；稳定内容入口见下一行。
-  - [对应 Git blob](https://api.github.com/repos/Frysland-2024/quantum-scattering/git/blobs/ed816d3a5b9d8a5878da81a06643b90a1853af2e)；[当前 README](https://github.com/Frysland-2024/quantum-scattering/blob/main/README.md)。
+- **[S7]** [quantum-scattering README](https://github.com/Frysland-2024/quantum-scattering/blob/main/README.md)：量子散射项目说明；本次读取的内容 blob SHA 为 `ed816d3a5b9d8a5878da81a06643b90a1853af2e`。该标识用于核对文件内容，不作为 commit 或 branch 使用。
 
 相关申请方向文档：[GRADUATE_RESEARCH_DIRECTION.md](GRADUATE_RESEARCH_DIRECTION.md)。本评估提供补充判断，不自动覆盖已有申请范围、个人偏好或最新决策。
