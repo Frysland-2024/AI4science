@@ -60,6 +60,7 @@ Dynamic JS：共同标签 + measurement-equivalence consistency
 | [`docs/PXRD_PERTURBATION_EVIDENCE.md`](docs/PXRD_PERTURBATION_EVIDENCE.md) | 五类扰动的物理/文献依据、最终冻结范围与历史详细证据入口 |
 | [`docs/PXRD_RESULT_REPORTING_STANDARD.md`](docs/PXRD_RESULT_REPORTING_STANDARD.md) | 当前三层评价体系与各域默认汇报模板 |
 | [`docs/GRADUATE_RESEARCH_DIRECTION.md`](docs/GRADUATE_RESEARCH_DIRECTION.md) | 申请叙事、研究方向框架、方向地图与日本导师检索关键词 |
+| [`docs/ACADEMIC_DIRECTION_ASSESSMENT_2026-09-30.md`](docs/ACADEMIC_DIRECTION_ASSESSMENT_2026-09-30.md) | **FRYSLAND 学术方向评估：基础背景、科研价值与边界、方向匹配及下一阶段准备（日期化评估，不覆盖项目结论）** |
 | [`docs/AI_TASK_ENGINEERING_PROMPT_METHOD.md`](docs/AI_TASK_ENGINEERING_PROMPT_METHOD.md) | **AI 协作方法论：把 Prompt Engineering 理解为任务工程，用清晰目标、范围、标准、自主权、停止条件和交付格式减少反复纠偏与 GPT 焦虑** |
 | [`docs/NEXT_PROJECT_XRD_QUANTITATIVE_INVERSION.md`](docs/NEXT_PROJECT_XRD_QUANTITATIVE_INVERSION.md) | 下一代定量反演计划及论文、代码、数据资源附录 |
 | [`docs/PROJECT_HISTORY.md`](docs/PROJECT_HISTORY.md) | 完整研究演化档案；含日期化决策节点、失败、版本变化和评价体系修正 |
