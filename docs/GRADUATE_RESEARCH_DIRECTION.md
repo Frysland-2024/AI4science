@@ -313,6 +313,38 @@ For each program, evaluate separately:
 5. industry exits
 6. whether the computational role matches the intended branch
 
+### High-priority advisor-screening trap: the `AI4Materials` label can be misleading
+
+Do **not** treat labels such as `AI for Materials`, `Materials Informatics`, `Machine Learning for Materials`, or `AI4Science` as sufficient evidence that a group is methodologically aligned with the intended direction.
+
+A common false positive is:
+
+```text
+DFT / materials database
+    -> property prediction surrogate
+    -> large-scale screening
+```
+
+In this pattern, machine learning may be important computationally but remains primarily a **tool inside an existing materials-discovery pipeline**. That is not automatically the same as a group whose research object includes machine-learning methodology for scientific measurements.
+
+The preferred pattern is closer to:
+
+```text
+measurement / characterization / imaging / spectroscopy
+    + physical generation mechanism
+    + machine-learning methodology
+    -> inference / Sim2Real / low-data adaptation / uncertainty / inverse analysis
+```
+
+The strongest targets are groups where the methodological question can transfer across scientific data modalities rather than being tied to one material-property benchmark.
+
+**Screening rule:** always ask, `If the material system were replaced by another scientific measurement domain, would the machine-learning question still make sense?`
+
+- If **yes**, the work is more likely method-centered and transferable.
+- If **no**, and the ML component mainly accelerates DFT/database screening or replaces an expensive simulator, classify it primarily as materials/computational-materials work rather than assuming it is the desired AI-method direction.
+
+This is a **high-priority anti-misclassification rule** for future advisor searches. Lab names and homepage keywords should never override inspection of recent papers, student projects, data modalities, and the actual role played by ML.
+
 This is especially important for broad programs such as Nano, Applied Physics, EE, BME, Engineering Physics, or Materials programs whose titles alone do not determine the real research and career exits.
 
 ---
