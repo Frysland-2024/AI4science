@@ -1,4 +1,4 @@
-# Adapted in part from ML4pXRDs (Copyright (c) 2023 aimat-lab), MIT License.
+# Adapted in part from ML4pXRDs (aimat-lab), MIT License.
 # See THIRD_PARTY_NOTICES.md at the repository root for attribution.
 
 """PyTorch port of the ML4pXRDs 1D ResNet family.
