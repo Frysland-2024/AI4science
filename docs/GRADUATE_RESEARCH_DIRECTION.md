@@ -345,6 +345,42 @@ The strongest targets are groups where the methodological question can transfer 
 
 This is a **high-priority anti-misclassification rule** for future advisor searches. Lab names and homepage keywords should never override inspection of recent papers, student projects, data modalities, and the actual role played by ML.
 
+### High-priority RP rule: do not let past project division mechanically determine future research proposals
+
+The division of labor inside the current PXRD collaboration is **evidence of past contribution**, not a binding partition of future research interests.
+
+Do **not** infer:
+
+```text
+person A owned simulator / consistency work
+    -> person A's future RP must be structured supervision
+
+person B owned RRUFF / few-shot work
+    -> person B's future RP must be domain adaptation
+```
+
+That inference is too strong and can artificially narrow both applicants.
+
+Future RP design should instead be determined by the intersection of:
+
+1. the applicant's genuine research interests;
+2. the target advisor's active research problems and available data / infrastructure;
+3. the applicant's demonstrated transferable skills;
+4. a scientifically coherent next question;
+5. realistic feasibility for the intended degree period.
+
+Past project ownership should be used to answer:
+
+> `What evidence shows that I can work on this kind of problem?`
+
+not:
+
+> `Which exact subproblem am I forever assigned to?`
+
+The current collaboration can therefore support overlapping or even convergent future RPs, provided each proposal is independently motivated, scientifically coherent, and honestly connected to the applicant's own experience.
+
+**Stable rule:** contribution provenance constrains what each person may honestly claim about the past; it does **not** prescribe what each person is allowed to study in the future.
+
 This is especially important for broad programs such as Nano, Applied Physics, EE, BME, Engineering Physics, or Materials programs whose titles alone do not determine the real research and career exits.
 
 ---
