@@ -150,7 +150,7 @@ def test_current_pxrd_reporting_policy_has_four_tiers() -> None:
     ):
         assert heading in policy
     assert "CI crosses zero" in policy
-    assert "experiment failed" in policy
+    assert "不自动等于实验失败" in policy
     assert "不得删除或隐藏不利统计结果" in policy
 
 
