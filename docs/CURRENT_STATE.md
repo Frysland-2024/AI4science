@@ -184,7 +184,6 @@ python -m pytest -q
 
 相关文档：
 
-- [`NEXT_PROJECT_XRD_QUANTITATIVE_INVERSION.md`](NEXT_PROJECT_XRD_QUANTITATIVE_INVERSION.md)
 - [`PROJECT_HISTORY.md`](PROJECT_HISTORY.md)
 
 该项目目前仅完成问题定义、边界收缩和执行规划。必须先完成四方结构数量审计与可辨识性 Gate，才创建 `xrd_inversion/` 代码目录并启动训练。
