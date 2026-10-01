@@ -2,6 +2,8 @@
 
 > **新成员 / 新 AI / cuifa01 请先从这里开始：** [`docs/CUIFA01_START_HERE.md`](docs/CUIFA01_START_HERE.md)。这份零基础手册把 FerroAI → XRD 的历史、当前 JS 主线、数据/训练流程、主结果、失败分支、claim 边界、代码地图和下一步反演方向放在一个入口里；读完再进入 `CURRENT_STATE.md` 和 `RESULTS.md`。
 
+> **AI / Codex 工作协议：** 任何涉及项目进展、当前方法、结果、下一步或历史决策的问题，先按 [`AGENTS.md`](AGENTS.md) 的 source-of-truth 与工具路由执行；详细科研闭环见 [`docs/RESEARCH_WORKFLOW.md`](docs/RESEARCH_WORKFLOW.md)。聊天记忆不得覆盖当前仓库事实。
+
 这个仓库当前主线是 **PXRD 监督学习中的同源关系监督**，代码保留在历史目录 [`xrd_robustness/`](xrd_robustness/)。核心问题不是把项目定义为“扰动后性能掉多少”，而是：在线 PXRD 模拟器除了生成带晶系标签的谱图，还保留哪些谱来自同一个母体结构；能否把这种 provenance 转化为 measurement-equivalence supervision，使同一晶体结构数据库提供更多有效监督信息，并进一步提高七晶系分类、分布外泛化、真实域迁移和少标签适配表现。
 
 > 状态（2026-09-29）：模拟结果、RRUFF-301 few-shot 与 CNRS-318 zero-shot 已完成；当前已统一将项目一级定位修正为“监督学习 + simulator provenance 同源关系监督”，正在进行论文、图表与成果封装。
@@ -52,7 +54,9 @@ Dynamic JS：共同标签 + measurement-equivalence consistency
 
 | 文件 | 用途 |
 |---|---|
+| [`AGENTS.md`](AGENTS.md) | **仓库级 AI/Codex 工作合同：source-of-truth、工具路由、实验完整性与写回规则** |
 | [`docs/CURRENT_STATE.md`](docs/CURRENT_STATE.md) | 项目现状、进度和下一步 |
+| [`docs/RESEARCH_WORKFLOW.md`](docs/RESEARCH_WORKFLOW.md) | **固定科研流程：项目状态、文献、实验、结果、写作与申请材料的标准闭环** |
 | [`docs/PXRD_SUPERVISION_FRAMING.md`](docs/PXRD_SUPERVISION_FRAMING.md) | **当前项目一级定位：监督学习 + simulator provenance 关系监督；规定术语、claim 层级与禁用 framing** |
 | [`docs/PXRD_EVIDENCE_CLOSURE.md`](docs/PXRD_EVIDENCE_CLOSURE.md) | **本轮两个证据问题的结案结果 + measurement-equivalence / relationship-supervision 新颖性 framing** |
 | [`docs/PXRD_NOVELTY_LITERATURE_LINEAGE.md`](docs/PXRD_NOVELTY_LITERATURE_LINEAGE.md) | **随机物理扰动 / on-the-fly generation 的文献谱系，以及“从 data generation 到 provenance-aware relational supervision”的正式 novelty framing** |
