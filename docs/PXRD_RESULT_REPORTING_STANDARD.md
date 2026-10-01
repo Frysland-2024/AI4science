@@ -227,10 +227,10 @@ CNRS 常规推荐写法：
 
 关于“哪些结果需要汇报”，当前优先级为：
 
-1. `docs/PXRD_EFFECTIVE_RESULT_SELECTION_STANDARD.md`；
-2. 本文件 `docs/PXRD_RESULT_REPORTING_STANDARD.md`；
-3. `xrd_robustness/reports/RESULTS.md` 作为冻结事实来源；
-4. Tier C / D 的 protocol、audit、run record、JSON、manifest 作为内部证据库。
+1. 本文件 `docs/PXRD_RESULT_REPORTING_STANDARD.md`；
+2. `xrd_robustness/reports/RESULTS.md` 作为冻结结果事实来源；
+3. `docs/PXRD_EVIDENCE_CLOSURE.md` 与相关公开 audit 作为 claim-boundary / evidence 入口；
+4. Tier C / D 的 protocol、audit、run record、JSON、manifest 作为审计证据库。
 
 若旧文件把 bootstrap、hash、provenance 或其他内部指标放得比 XRD performance 更高，按当前标准重新组织汇报，但不改动历史原始记录。
 
