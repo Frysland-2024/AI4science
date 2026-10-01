@@ -43,6 +43,14 @@ The main comparison uses a ResNet-18-GN backbone and lambda_js = 60.
 
 Full result definitions, uncertainty treatment, and dataset-role boundaries are documented in [xrd_robustness/reports/RESULTS.md](xrd_robustness/reports/RESULTS.md) and [docs/PXRD_RESULT_REPORTING_STANDARD.md](docs/PXRD_RESULT_REPORTING_STANDARD.md).
 
+Machine-readable headline summaries:
+
+- [validation_results.json](xrd_robustness/reports/validation_results.json)
+- [simulated_test_results.json](xrd_robustness/reports/simulated_test_results.json)
+- [rruff301_fewshot_results.json](xrd_robustness/reports/rruff301_fewshot_results.json)
+
+The manuscript draft is tracked in [xrd_robustness/MANUSCRIPT.md](xrd_robustness/MANUSCRIPT.md).
+
 ## Repository structure
 
 ~~~text
@@ -110,4 +118,4 @@ A manuscript citation will be added once the author list and persistent identifi
 
 ## License and third-party code
 
-This repository is released under the **MIT License**. The ResNet implementation in xrd_robustness is a PyTorch port based on the MIT-licensed ML4pXRDs implementation by aimat-lab. See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+This repository is released under the [MIT License](LICENSE). The ResNet implementation in xrd_robustness is a PyTorch port based on the MIT-licensed ML4pXRDs implementation by aimat-lab. See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
