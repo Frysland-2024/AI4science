@@ -2,8 +2,8 @@
   "schema_version": "rruff301-composition-audit-v1",
   "purpose": "read_only_descriptive_composition_audit_not_a_gate",
   "source_files": {
-    "master_manifest": "E:\\AI4science\\xrd_robustness\\data\\real_xrd\\rruff371\\manifests\\rruff371_master_manifest.csv",
-    "split": "E:\\AI4science\\xrd_robustness\\data\\real_xrd\\rruff371\\splits\\rruff301_adaptation_test_split.csv"
+    "master_manifest": "xrd_robustness/data/real_xrd/rruff371/manifests/rruff371_master_manifest.csv",
+    "split": "xrd_robustness/data/real_xrd/rruff371/splits/rruff301_adaptation_test_split.csv"
   },
   "counts": {
     "adaptation_pool": 70,
