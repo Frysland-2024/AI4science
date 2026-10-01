@@ -128,7 +128,7 @@ RRUFF-301 当前回答的是：
 
 > shared parent identity defines measurement equivalence and supplies the relationship used by the consistency objective.
 
-这两句话应该成为全文、PPT 和申请叙事的共同核心，而不是被埋在 Methods 里。
+这两句话应该成为全文、技术报告和公开项目叙事的共同核心，而不是被埋在 Methods 里。
 
 ### 3.2 不应该怎么讲
 
@@ -281,7 +281,7 @@ JS 只是最右/最下游的 objective realization。
 
 - 把这套 framing 写进 Introduction、Methods、Discussion；
 - 把 `shared parent identity → measurement equivalence → relationship supervision` 做成 PPT/论文的核心方法图；
-- 让标题、摘要、图、结果解释和申请叙事使用同一套语言。
+- 让标题、摘要、图和结果解释使用同一套语言。
 
 **不需要：**新算法、新 loss、新训练、新数据域或重新调参。
 
