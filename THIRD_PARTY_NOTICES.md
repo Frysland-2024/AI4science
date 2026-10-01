@@ -6,10 +6,9 @@ This repository contains or adapts components from third-party open-source proje
 
 The file xrd_robustness/src/xrd_robustness/models/ml4pxrd_resnet1d.py is a PyTorch port of the 1D ResNet family implemented in ML4pXRDs, including architecture logic described in the upstream training/utils/resnet_keras_1D.py and training/models.py::build_model_resnet_i.
 
-Upstream license:
+Upstream repository: https://github.com/aimat-lab/ML4pXRDs
 
-MIT License  
-Copyright (c) 2023 aimat-lab
+Upstream license: **MIT**.
 
 The upstream MIT permission and warranty disclaimer apply to the adapted portions. The upstream license is compatible with this repository's MIT license.
 
