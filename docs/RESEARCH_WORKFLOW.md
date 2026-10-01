@@ -26,7 +26,7 @@ Read:
 
 1. `CURRENT_STATE.md` to learn today's answer;
 2. `PROJECT_HISTORY.md` to reconstruct the evolution;
-3. dated history notes / commits around the transition.
+3. relevant commits around the transition.
 
 Do not flatten the history into a tidy post-hoc story. Preserve uncertainty, failed attempts, and changed assumptions.
 
@@ -106,7 +106,7 @@ Add:
 - `PXRD_METHOD_DETAIL_EVIDENCE_CLOSURE.md` for implementation/history questions;
 - `PXRD_RESULT_REPORTING_STANDARD.md` for metric/statistics questions;
 - `PXRD_NOVELTY_LITERATURE_LINEAGE.md` for novelty/related-work questions;
-- `PROJECT_HISTORY.md` for research-evolution questions.
+- `PROJECT_HISTORY.md` and Git history for research-evolution questions.
 
 ## 4. Literature-review protocol
 
@@ -166,8 +166,6 @@ The strict audit strengthens or limits interpretation; it does not silently repl
 - a methodological correction changes how prior work is interpreted;
 - a major project transition should be preserved for admissions / retrospective writing.
 
-### Create a dated history note when
-the event is complex enough that future readers should be able to understand it without reconstructing a long chat or many commits.
 
 ## 8. Communication / artifact workflow
 
