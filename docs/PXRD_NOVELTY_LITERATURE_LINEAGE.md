@@ -1,7 +1,7 @@
 # PXRD 方法新颖性：文献谱系与正式 framing
 
 **记录日期：** 2026-09-01  
-**状态：** 当前分类项目的正式写作口径；用于 Introduction、Related Work、PPT、答辩与申请材料。  
+**状态：** 当前分类项目的正式写作口径；用于 Introduction、Related Work、技术报告与公开说明。  
 **边界：** 本文档固定“如何定位已有范式与本项目增量”，不宣称已经完成穷尽式 first/novelty search。
 
 ## 1. 最终核心判断
@@ -284,7 +284,7 @@ PXRD / XRD
 当前主线：把 parent provenance 转化为 relationship supervision
 ```
 
-因此，以后申请文案描述 XRD 项目的发展过程时，应突出：
+因此，以后描述 XRD 项目的发展过程时，应突出：
 
 > **研究重点从“扩大数据覆盖”推进到了“理解并利用模拟器生成过程中蕴含的监督结构”。**
 
