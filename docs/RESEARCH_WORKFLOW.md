@@ -1,44 +1,41 @@
 # AI4science Research Workflow
 
 **Effective date:** 2026-10-02  
-**Purpose:** Turn the repository plus connected research tools into a repeatable workflow instead of relying on conversational memory.
+**Purpose:** Keep literature review, experimentation, result interpretation, and project history reproducible instead of relying on conversational memory.
 
-This document expands the operating rules in [`../AGENTS.md`](../AGENTS.md). Scientific truth remains in the relevant configs, artifacts, current-state documents, and result files.
+This document expands the operating rules in [`../AGENTS.md`](../AGENTS.md).
 
 ## 1. Four canonical entry points
 
 ### A. "Where is the project now?"
+
 Read, in order:
 
-1. latest Git commits;
+1. latest relevant commits;
 2. `CURRENT_STATE.md`;
-3. relevant result / closure document;
-4. only then older history if needed.
+3. the relevant result / evidence-closure document;
+4. older history only if needed.
 
-Output should clearly separate:
-- completed;
-- active;
-- archived;
-- future/optional.
+Separate completed, active, archived, and future/optional work.
 
 ### B. "Why did we do/change this?"
+
 Read:
 
-1. `CURRENT_STATE.md` to learn today's answer;
-2. `PROJECT_HISTORY.md` to reconstruct the evolution;
-3. dated history notes / commits around the transition.
+1. `CURRENT_STATE.md` for today's interpretation;
+2. `PROJECT_HISTORY.md` for the research evolution;
+3. relevant commits around the transition.
 
 Do not flatten the history into a tidy post-hoc story. Preserve uncertainty, failed attempts, and changed assumptions.
 
 ### C. "Has anyone done this before?"
-Workflow:
 
 ```text
 Current repository claim
         ↓
 Define the exact novelty question
         ↓
-Peer-reviewed academic search
+Search peer-reviewed literature
         ↓
 Read primary papers
         ↓
@@ -49,53 +46,38 @@ Compare claim-by-claim with this repository
 Classify: established / close precedent / partial overlap / unsupported / unknown
 ```
 
-Never search for a vague label alone when the actual claim is more precise. For the current PXRD work, distinguish:
-- online simulation,
-- physical perturbation augmentation,
-- consistency regularization,
-- same-parent / provenance relations,
-- measurement-equivalence supervision,
+For the current PXRD study, distinguish:
+
+- online simulation;
+- physical perturbation augmentation;
+- consistency regularization;
+- same-parent / provenance relations;
+- measurement-equivalence supervision;
 - real-domain evaluation.
 
 ### D. "What do the results say?"
-Workflow:
 
 ```text
-Machine-readable raw result
+Machine-readable result
         ↓
-Check run/seed/split identity
+Check run / seed / split identity
         ↓
-Recompute or aggregate
+Recompute or aggregate if needed
         ↓
 Compare against the frozen baseline
         ↓
 Report community-standard performance
         ↓
-Add reliability / strict audit as secondary layers
+Add reliability / strict audit as supporting layers
         ↓
 Write only supported claims
 ```
 
-Do not quote a metric from chat memory when a result file exists.
+Do not quote an exact metric from memory when a result artifact exists.
 
-## 2. Tool map
+## 2. PXRD evidence set
 
-| Need | Preferred capability | Rule |
-|---|---|---|
-| committed project facts | GitHub | first stop for project questions |
-| local machine / terminal / running job | Remote Desktop Commander | use only on authorized machine |
-| peer-reviewed evidence | Consensus / SciSpace / Sider Scholar | primary literature first |
-| web/code/supplement/dataset discovery | Exa / Parallel Search / web | use after claim is defined |
-| model/dataset ecosystem | Hugging Face | inspect concrete resources |
-| exact math/symbolic checks | Wolfram | use where precision matters |
-| result aggregation and audit | Data Analytics | start from raw CSV/JSON |
-| collaborative docs | Google Drive | repository remains scientific source of truth |
-| presentation generation | Gamma / Canva | content must be repository-grounded |
-| outreach / meetings | Gmail / Calendar | use verified project facts |
-
-## 3. PXRD evidence workflow
-
-For the current PXRD project, use this minimum reading set unless the question is narrower:
+For a general project question, start from:
 
 - `CURRENT_STATE.md`
 - `PXRD_SUPERVISION_FRAMING.md`
@@ -103,14 +85,15 @@ For the current PXRD project, use this minimum reading set unless the question i
 - `../xrd_robustness/reports/RESULTS.md`
 
 Add:
-- `PXRD_METHOD_DETAIL_EVIDENCE_CLOSURE.md` for implementation/history questions;
+
+- `PXRD_METHOD_DETAIL_EVIDENCE_CLOSURE.md` for implementation/fairness/history questions;
 - `PXRD_RESULT_REPORTING_STANDARD.md` for metric/statistics questions;
 - `PXRD_NOVELTY_LITERATURE_LINEAGE.md` for novelty/related-work questions;
-- `PROJECT_HISTORY.md` for research-evolution questions.
+- `PROJECT_HISTORY.md` and Git history for research-evolution questions.
 
-## 4. Literature-review protocol
+## 3. Literature-review protocol
 
-For each important precedent, record at least:
+For each important precedent, record:
 
 - citation / DOI;
 - exact task;
@@ -120,95 +103,84 @@ For each important precedent, record at least:
 - what physical information is used;
 - whether parent provenance or paired views are used;
 - evaluation domain;
-- what overlaps with our work;
+- what overlaps with this project;
 - what does not overlap;
 - confidence level.
 
-A paper title or abstract alone is insufficient for a strong novelty claim.
+A title or abstract alone is insufficient for a strong novelty claim.
 
-## 5. Experiment protocol
+## 4. Experiment protocol
 
-Before running a scientific experiment:
+Before a scientific experiment:
 
-1. State the question in one sentence.
-2. Identify the only factor intended to change.
-3. Freeze data, split, backbone, optimizer, budget, seeds, and metrics as appropriate.
-4. Record whether the run is exploratory, validation, confirmatory, diagnostic, or final.
-5. Define the stopping/selection rule before opening final results when feasible.
-6. Store machine-readable outputs.
-7. Keep failed/negative runs when scientifically relevant.
-8. Update state/history only after interpreting the evidence.
+1. state the question in one sentence;
+2. identify the intended changing factor;
+3. freeze data, split, backbone, optimizer, budget, seeds, and metrics as appropriate;
+4. record whether the run is exploratory, validation, confirmatory, diagnostic, or final;
+5. define stopping/selection rules before opening final results when feasible;
+6. store machine-readable outputs;
+7. retain failed or negative runs when scientifically relevant;
+8. update current state/history only after interpreting the evidence.
 
 If a question is already marked CLOSED, do not reopen it merely because another analysis could be run.
 
-## 6. Result-reporting protocol
+## 5. Result-reporting protocol
 
-Use three layers:
+Use the project reporting hierarchy in `PXRD_RESULT_REPORTING_STANDARD.md`.
 
-1. **Performance layer:** Macro-F1, balanced accuracy, accuracy, mean ± SD, multi-seed consistency, learning curves, per-class results as appropriate.
-2. **Reliability layer:** ECE, NLL, Brier or related probability-quality evidence.
-3. **Strict audit:** paired/bootstrap intervals, class-stratified uncertainty, leakage/composition checks.
+At minimum distinguish:
 
-The strict audit strengthens or limits interpretation; it does not silently replace the community's normal performance-reporting language.
+1. **community-standard performance** — Macro-F1, balanced accuracy, accuracy, learning curves, per-class results as appropriate;
+2. **supporting evidence** — multi-seed consistency, failure analysis, ECE/NLL/Brier, mechanism diagnostics;
+3. **strict audit / reproducibility** — paired/bootstrap uncertainty, leakage checks, manifests, hashes, run records.
 
-## 7. Repository write-back protocol
+Strict audit strengthens or limits interpretation; it does not silently replace the community's normal performance-reporting language.
 
-### Update `CURRENT_STATE.md` when
+## 6. Repository write-back protocol
+
+Update `CURRENT_STATE.md` when:
+
 - the active method changes;
 - a major result is finalized;
 - an evidence question changes status;
 - the current next step changes materially;
 - the official project framing changes.
 
-### Update `PROJECT_HISTORY.md` when
-- a previously plausible route is rejected or archived;
+Update `PROJECT_HISTORY.md` when:
+
+- a plausible route is rejected or archived;
 - a new idea changes the research question;
-- a methodological correction changes how prior work is interpreted;
-- a major project transition should be preserved for admissions / retrospective writing.
+- a methodological correction changes how earlier evidence is interpreted;
+- a major project transition should remain visible to future readers.
 
-### Create a dated history note when
-the event is complex enough that future readers should be able to understand it without reconstructing a long chat or many commits.
+Lower-level engineering history can remain in Git commits.
 
-## 8. Communication / artifact workflow
+## 7. Public artifact workflow
 
-### PPT or advisor report
+For a README, manuscript, technical report, figure, or presentation:
+
 ```text
 CURRENT_STATE + RESULTS
         ↓
-select 1–3 supported claims
+select supported claims
         ↓
 choose the simplest evidence for each claim
         ↓
-build narrative
+draft the narrative/figure
         ↓
-Gamma / Canva / slides tooling
-        ↓
-final fact check against repository
+fact-check against repository evidence
 ```
 
-### Admissions narrative
-Use `PROJECT_HISTORY.md` for evolution and `CURRENT_STATE.md` for today's interpretation. Do not rewrite failed branches as if the final answer had been obvious from the beginning.
+Do not let the communication layer create a stronger claim than the evidence layer.
 
-### Email / outreach
-Verify names, dates, project claims, and requested attachments before drafting/sending.
+## 8. Definition of "done"
 
-## 9. Minimal answer discipline
+A research task is complete at the relevant level when:
 
-The user prefers concise answers. Use the full workflow internally, but expose only:
-- the answer;
-- the decisive evidence;
-- the immediate consequence.
+- **question answered:** an evidence-backed answer exists;
+- **analysis done:** a reproducible artifact/result exists;
+- **decision done:** current state/history is updated if material;
+- **engineering done:** implementation is validated;
+- **communication done:** the artifact is fact-checked against current repository state.
 
-Long process narration is unnecessary unless requested.
-
-## 10. Definition of "done"
-
-A research task is done when the relevant level is complete:
-
-- **question answered:** evidence-backed answer exists;
-- **analysis done:** reproducible artifact/result exists;
-- **decision done:** current state/history updated if material;
-- **engineering done:** implementation validated;
-- **communication done:** artifact is fact-checked against current repository state.
-
-A useful result that remains only inside a chat is **not** a durable project decision.
+A material scientific result that exists only in a chat is not a durable project decision.

@@ -1,94 +1,123 @@
-# AI4Science
+# AI4science — Provenance-Aware Supervision for PXRD Classification
 
-> **新成员 / 新 AI / cuifa01 请先从这里开始：** [`docs/CUIFA01_START_HERE.md`](docs/CUIFA01_START_HERE.md)。这份零基础手册把 FerroAI → XRD 的历史、当前 JS 主线、数据/训练流程、主结果、失败分支、claim 边界、代码地图和下一步反演方向放在一个入口里；读完再进入 `CURRENT_STATE.md` 和 `RESULTS.md`。
+[![XRD tests](https://github.com/Frysland-2024/AI4science/actions/workflows/xrd-tests.yml/badge.svg)](https://github.com/Frysland-2024/AI4science/actions/workflows/xrd-tests.yml)
 
-> **AI / Codex 工作协议：** 任何涉及项目进展、当前方法、结果、下一步或历史决策的问题，先按 [`AGENTS.md`](AGENTS.md) 的 source-of-truth 与工具路由执行；详细科研闭环见 [`docs/RESEARCH_WORKFLOW.md`](docs/RESEARCH_WORKFLOW.md)。聊天记忆不得覆盖当前仓库事实。
+Research code, frozen configurations, result summaries, and audit material for **provenance-aware supervised learning on powder X-ray diffraction (PXRD)**.
 
-这个仓库当前主线是 **PXRD 监督学习中的同源关系监督**，代码保留在历史目录 [`xrd_robustness/`](xrd_robustness/)。核心问题不是把项目定义为“扰动后性能掉多少”，而是：在线 PXRD 模拟器除了生成带晶系标签的谱图，还保留哪些谱来自同一个母体结构；能否把这种 provenance 转化为 measurement-equivalence supervision，使同一晶体结构数据库提供更多有效监督信息，并进一步提高七晶系分类、分布外泛化、真实域迁移和少标签适配表现。
+The central question is simple: an online PXRD simulator knows not only the crystal-system label, but also **which perturbed spectra came from the same parent crystal**. This repository studies whether that parent identity can be turned into additional supervision.
 
-> 状态（2026-09-29）：模拟结果、RRUFF-301 few-shot 与 CNRS-318 zero-shot 已完成；当前已统一将项目一级定位修正为“监督学习 + simulator provenance 同源关系监督”，正在进行论文、图表与成果封装。
+> **Status:** research code and evidence package; manuscript preparation is ongoing.
 
-> **标签层级：** 项目本体 = `supervised learning + PXRD classification`；方法核心 = `structured/relational supervision + simulator provenance + consistency regularization`；OOD、Sim-to-Real、few-shot、calibration 只作为评测/结果标签。不要再把 robustness、representation learning、domain adaptation、CV 或 physics-informed ML 当作整个项目的一级身份。完整规则见 [`docs/PXRD_SUPERVISION_FRAMING.md`](docs/PXRD_SUPERVISION_FRAMING.md)。
+## Core idea
 
-> **本轮两个证据问题已经结案。** 五类扰动的物理/文献依据已经完成系统核验；RRUFF-301 composition audit 也确认 adaptation/test 之间无 RRUFF ID 或相同谱图重合，16,170 个跨 split 谱图对中无 Pearson ≥ 0.95。结案结果与当前方法新颖性 framing 统一见 [`docs/PXRD_EVIDENCE_CLOSURE.md`](docs/PXRD_EVIDENCE_CLOSURE.md)。
+For one parent structure s, the simulator generates two measurement realizations:
 
-> **五个方法细节问题也已完成本地仓库/Git 历史考古并结案。** Related Work 边界、ERM–JS 公平对照、formal_14060 数据集构建、五类扰动是否保持 parent structure 不变、以及 `lambda_js=60` 的选择路径，统一见 [`docs/PXRD_METHOD_DETAIL_EVIDENCE_CLOSURE.md`](docs/PXRD_METHOD_DETAIL_EVIDENCE_CLOSURE.md)。这些不是新的实验 TODO；后续直接用于 Methods、Related Work、PPT 和答辩。
+x1 = g(s, m1), x2 = g(s, m2).
 
-> **当前最重要的写作任务不是补实验或加算法，而是把方法贡献讲清楚：**传统 online simulator 主要是 `data generator`；本项目进一步利用 simulator-retained parent identity，把同一晶体的不同测量 realization 定义为 measurement-equivalent views，从而让 simulator 同时成为 **data generator + relationship supervisor**。
+Both Dynamic ERM and Dynamic JS see the same parent structures, perturbation distribution, and two-view data exposure. The key difference is that Dynamic JS explicitly uses the known same-parent relation through prediction consistency:
 
-## 一眼看懂这个项目
+L = 0.5 CE(p1, y) + 0.5 CE(p2, y) + lambda_JS JS(p1, p2).
 
-```text
-同一个母体晶体结构
-      ↓ 在线物理扰动
-两份不同测量条件下的 PXRD 谱图
-      ↓
-shared parent identity
-      ↓
-measurement equivalence
-      ↓
-Dynamic ERM：只使用共同晶系标签
-Dynamic JS：共同标签 + measurement-equivalence consistency
-      ↓
-更稳定的分布外泛化
-```
+~~~text
+parent crystal
+   ├─ measurement realization 1 ─► PXRD view x1 ─┐
+   └─ measurement realization 2 ─► PXRD view x2 ─┤
+                                                  ├─ shared parent identity
+                                                  └─ measurement-equivalence supervision
+~~~
 
-## 研究结果
+The contribution is therefore **not** a new JS-divergence algorithm. It is the use of **simulator-retained provenance as relationship supervision**.
 
-在 ResNet-18-GN 上对比了 Dynamic ERM 和 Dynamic JS Consistency 两种方法，一致性权重 `lambda_js=60`。
+## Headline results
 
-| 数据集 | Dynamic ERM | Dynamic JS | 配对提升 |
+The main comparison uses a ResNet-18-GN backbone and lambda_js = 60.
+
+| Evaluation | Dynamic ERM | Dynamic JS | Paired change |
 |---|---:|---:|---:|
-| 模拟验证集 · 单因素分布外 Macro-F1 | 0.658495 ± 0.007417 | 0.705064 ± 0.005841 | `+0.046569` |
-| 模拟测试集 · 单因素分布外 Macro-F1 | 0.65074 ± 0.00721 | 0.70534 ± 0.00977 | `+0.054600`；5/5 为正 |
-| 模拟测试集 · 单因素分布外 Accuracy | 0.65078 ± 0.00780 | 0.70524 ± 0.00856 | `+0.054454`；5/5 为正 |
-| RRUFF-301 · K=1/2/5 few-shot Macro-F1 | 0.2847±0.0269 / 0.3026±0.0407 / 0.3555±0.0302 | 0.3280±0.0329 / 0.3486±0.0335 / 0.4099±0.0271 | `+0.0433 / +0.0460 / +0.0545` |
-| RRUFF-301 · K=1/2/5 few-shot Accuracy | 0.2990±0.0259 / 0.3120±0.0383 / 0.3581±0.0273 | 0.3375±0.0299 / 0.3609±0.0343 / 0.4149±0.0252 | `+0.0384 / +0.0488 / +0.0568` |
-| CNRS-318 · zero-shot pooled Macro-F1 | 0.19118 | 0.20912 | mean seed-paired `+0.01871`（约 `+1.87 pp`）；5/5 为正 |
+| Simulated single-factor OOD Macro-F1 | 0.65074 ± 0.00721 | 0.70534 ± 0.00977 | **+0.05460**; 5/5 seeds positive |
+| Simulated single-factor OOD Accuracy | 0.65078 ± 0.00780 | 0.70524 ± 0.00856 | **+0.05445**; 5/5 seeds positive |
+| RRUFF-301 K=1 Macro-F1 | 0.2847 ± 0.0269 | 0.3280 ± 0.0329 | **+0.0433** |
+| RRUFF-301 K=2 Macro-F1 | 0.3026 ± 0.0407 | 0.3486 ± 0.0335 | **+0.0460** |
+| RRUFF-301 K=5 Macro-F1 | 0.3555 ± 0.0302 | 0.4099 ± 0.0271 | **+0.0545** |
+| CNRS-318 zero-shot seed-level Macro-F1 | 0.18837 ± 0.02634 | 0.20708 ± 0.02134 | **+0.01871 ± 0.00675**; 5/5 seeds positive |
 
-模拟 OOD 的 5/5 seed、RRUFF 的三档 few-shot label budget、CNRS 的 5/5 seed 与概率可靠性结果共同支持 JS 学到更稳健的模型。CNRS 的 seed-level Macro-F1 为 `0.18837±0.02634→0.20708±0.02134`，配对提升 `+0.01871±0.00675`；它是自然不平衡的第二实验来源上的 zero-shot 压力测试，不是使用 CNRS 标签做过域适配。其 pooled balanced accuracy `0.2182→0.2388`、accuracy `0.2000→0.2101`、ECE `0.6826→0.6124` 也同向改善，但绝对 sim-to-real 表现仍弱。
+Full result definitions, uncertainty treatment, and dataset-role boundaries are documented in [xrd_robustness/reports/RESULTS.md](xrd_robustness/reports/RESULTS.md) and [docs/PXRD_RESULT_REPORTING_STANDARD.md](docs/PXRD_RESULT_REPORTING_STANDARD.md).
 
-当前评价采用三层证据体系：社区常用 performance 指标承担主科学叙事；ECE/NLL/Brier 等 reliability 指标作为增强证据；paired/class-stratified parent bootstrap、95% CI 和逐类不确定性作为严格统计审计。CNRS 的修正后 95% CI `[−0.009339, +0.046107]` 如实保留，但 CI 跨 0 只表示效应估计仍不确定，不再单独充当科研成败 Gate。详见 [`docs/PXRD_RESULT_REPORTING_STANDARD.md`](docs/PXRD_RESULT_REPORTING_STANDARD.md)。
+Machine-readable headline summaries:
 
-## 文档
+- [validation_results.json](xrd_robustness/reports/validation_results.json)
+- [simulated_test_results.json](xrd_robustness/reports/simulated_test_results.json)
+- [rruff301_fewshot_results.json](xrd_robustness/reports/rruff301_fewshot_results.json)
 
-| 文件 | 用途 |
-|---|---|
-| [`AGENTS.md`](AGENTS.md) | **仓库级 AI/Codex 工作合同：source-of-truth、工具路由、实验完整性与写回规则** |
-| [`docs/CURRENT_STATE.md`](docs/CURRENT_STATE.md) | 项目现状、进度和下一步 |
-| [`docs/RESEARCH_WORKFLOW.md`](docs/RESEARCH_WORKFLOW.md) | **固定科研流程：项目状态、文献、实验、结果、写作与申请材料的标准闭环** |
-| [`docs/PXRD_SUPERVISION_FRAMING.md`](docs/PXRD_SUPERVISION_FRAMING.md) | **当前项目一级定位：监督学习 + simulator provenance 关系监督；规定术语、claim 层级与禁用 framing** |
-| [`docs/PXRD_EVIDENCE_CLOSURE.md`](docs/PXRD_EVIDENCE_CLOSURE.md) | **本轮两个证据问题的结案结果 + measurement-equivalence / relationship-supervision 新颖性 framing** |
-| [`docs/PXRD_NOVELTY_LITERATURE_LINEAGE.md`](docs/PXRD_NOVELTY_LITERATURE_LINEAGE.md) | **随机物理扰动 / on-the-fly generation 的文献谱系，以及“从 data generation 到 provenance-aware relational supervision”的正式 novelty framing** |
-| [`docs/PXRD_METHOD_DETAIL_EVIDENCE_CLOSURE.md`](docs/PXRD_METHOD_DETAIL_EVIDENCE_CLOSURE.md) | **五个方法细节问题的仓库考古结案：Related Work、公平对照、formal_14060、structure-preserving 扰动、λ=60 选择历史** |
-| [`docs/PXRD_PERTURBATION_EVIDENCE.md`](docs/PXRD_PERTURBATION_EVIDENCE.md) | 五类扰动的物理/文献依据、最终冻结范围与历史详细证据入口 |
-| [`docs/PXRD_RESULT_REPORTING_STANDARD.md`](docs/PXRD_RESULT_REPORTING_STANDARD.md) | 当前三层评价体系与各域默认汇报模板 |
-| [`docs/GRADUATE_RESEARCH_DIRECTION.md`](docs/GRADUATE_RESEARCH_DIRECTION.md) | 申请叙事、研究方向框架、方向地图与日本导师检索关键词 |
-| [`docs/ACADEMIC_DIRECTION_ASSESSMENT_2026-09-30.md`](docs/ACADEMIC_DIRECTION_ASSESSMENT_2026-09-30.md) | **FRYSLAND 学术方向评估：基础背景、科研价值与边界、方向匹配及下一阶段准备（日期化评估，不覆盖项目结论）** |
-| [`docs/AI_TASK_ENGINEERING_PROMPT_METHOD.md`](docs/AI_TASK_ENGINEERING_PROMPT_METHOD.md) | **AI 协作方法论：把 Prompt Engineering 理解为任务工程，用清晰目标、范围、标准、自主权、停止条件和交付格式减少反复纠偏与 GPT 焦虑** |
-| [`docs/NEXT_PROJECT_XRD_QUANTITATIVE_INVERSION.md`](docs/NEXT_PROJECT_XRD_QUANTITATIVE_INVERSION.md) | 下一代定量反演计划及论文、代码、数据资源附录 |
-| [`docs/PROJECT_HISTORY.md`](docs/PROJECT_HISTORY.md) | 完整研究演化档案；含日期化决策节点、失败、版本变化和评价体系修正 |
-| [`docs/PROJECT_HISTORY_NOTE_2026-09-19_SENIOR_DISCUSSION_XRD_NEXT_STEP.md`](docs/PROJECT_HISTORY_NOTE_2026-09-19_SENIOR_DISCUSSION_XRD_NEXT_STEP.md) | **2026-09-19 与学长沟通：确认当前 JS/真实域结果，并将下一阶段收敛到限定领域的物理参数定量反演、自洽约束与实际表征落地** |
-| [`docs/PROJECT_HISTORY_NOTE_2026-09-01_AUGMENTATION_TO_PROVENANCE_SUPERVISION.md`](docs/PROJECT_HISTORY_NOTE_2026-09-01_AUGMENTATION_TO_PROVENANCE_SUPERVISION.md) | **2026-09-01 项目发展节点：从随机物理扰动/在线生成的成熟范式，收敛到 parent-provenance relationship supervision 的正式方法定位** |
-| [`docs/PROJECT_HISTORY_NOTE_2026-08-27_CNRS_RECLASSIFICATION.md`](docs/PROJECT_HISTORY_NOTE_2026-08-27_CNRS_RECLASSIFICATION.md) | 冻结 CNRS 协议所链接的独立历史节点 |
-| [`xrd_robustness/README.md`](xrd_robustness/README.md) | 安装、代码结构与结果/证据索引 |
-| [`xrd_robustness/MANUSCRIPT.md`](xrd_robustness/MANUSCRIPT.md) | 论文正文框架 |
-| [`xrd_robustness/reports/RRUFF301_COMPOSITION_AUDIT.md`](xrd_robustness/reports/RRUFF301_COMPOSITION_AUDIT.md) | RRUFF-301 adaptation/test 的只读组成与近重复谱检查 |
-| [`xrd_robustness/reports/RESULTS.md`](xrd_robustness/reports/RESULTS.md) | 结果汇总 |
-| [`xrd_robustness/reports/CNRS_318_RESULTS.md`](xrd_robustness/reports/CNRS_318_RESULTS.md) | CNRS-318 zero-shot 结果、完整性审计与修正后的 paired bootstrap |
-| [`xrd_robustness/reports/CALIBRATION_ANALYSIS.md`](xrd_robustness/reports/CALIBRATION_ANALYSIS.md) | 模拟 Test 与 CNRS 概率可靠性分析 |
-| [`xrd_robustness/reports/validation_results.json`](xrd_robustness/reports/validation_results.json) | 验证集结果（JSON） |
-| [`xrd_robustness/reports/simulated_test_results.json`](xrd_robustness/reports/simulated_test_results.json) | 测试集结果（JSON） |
-| [`xrd_robustness/reports/rruff301_fewshot_results.json`](xrd_robustness/reports/rruff301_fewshot_results.json) | RRUFF-301 few-shot 机器可读汇总 |
+The manuscript draft is tracked in [xrd_robustness/MANUSCRIPT.md](xrd_robustness/MANUSCRIPT.md).
 
-建议先读 `CURRENT_STATE.md`、`PXRD_EVIDENCE_CLOSURE.md`、`PXRD_METHOD_DETAIL_EVIDENCE_CLOSURE.md` 和 `RESULTS.md`；需要扰动参数依据时再看 `PXRD_PERTURBATION_EVIDENCE.md`，需要文献谱系和 novelty framing 时看 `PXRD_NOVELTY_LITERATURE_LINEAGE.md`，只有追溯旧判断、失败实验或方法转变时才查 `PROJECT_HISTORY.md` 与对应的日期化 history note。当前科学说法以当前状态、结案文档、评价规范和结果文件为准，历史档案不覆盖当前结论。
+## Repository structure
 
-## 快速验证
+~~~text
+AI4science/
+├── xrd_robustness/   # main PXRD classification / relationship-supervision study
+│   ├── src/          # reusable Python package
+│   ├── configs/      # frozen experiment configs
+│   ├── manifests/    # run and provenance manifests
+│   ├── reports/      # compact result and audit artifacts
+│   ├── scripts/      # training, evaluation, audit, and figure scripts
+│   └── tests/        # implementation and evidence-contract tests
+├── xrd_inversion/    # secondary numerical PXRD inversion work
+├── docs/             # scientific framing, evidence, reporting, and project history
+└── .github/workflows # CI
+~~~
 
-```powershell
-cd xrd_robustness
+## Quick start
+
+Main package documentation: [xrd_robustness/README.md](xrd_robustness/README.md).
+
+### Main PXRD classification package
+
+~~~bash
+git clone https://github.com/Frysland-2024/AI4science.git
+cd AI4science/xrd_robustness
+
 python -m pip install -e ".[test]"
-python -m pytest -q
-```
+python -m pytest -q -m "not data_bound"
+~~~
 
-这里的 `pytest` 用来核对实现、接口、配置和公开结果文件之间是否一致；它不会重新训练模型，也不会复现论文中的完整训练结果。数据集、模型权重、生成的谱图、虚拟环境、文献和本地输出都不会提交到 Git。
+The public test suite validates code, interfaces, configs, and tracked evidence artifacts. It does **not** retrain all models.
+
+Optional scientific and plotting dependencies:
+
+~~~bash
+python -m pip install -e ".[science,figures,test]"
+~~~
+
+## Data and reproducibility
+
+Raw external datasets, model checkpoints, generated spectra, and large intermediate arrays are intentionally not committed. The repository keeps compact configs, manifests, scripts, hashes, summary results, and audits needed to understand and verify the reported evidence chain.
+
+See [docs/DATA_AND_REPRODUCIBILITY.md](docs/DATA_AND_REPRODUCIBILITY.md) for data requirements and reproducibility levels.
+
+## Scientific scope and limitations
+
+- The primary task is **seven-crystal-system PXRD classification**.
+- RRUFF-301 is an **in-domain few-shot adaptation / label-efficiency** evaluation, not an unseen-mineral benchmark.
+- CNRS-318 is an independent **zero-shot external-domain** evaluation. Its labels are reconstructed from deposited structures and were not independently verified by manual spectrum-level phase analysis.
+- CNRS absolute sim-to-real performance remains low; the result is evidence about the *relative* ERM–JS comparison, not a claim that experimental PXRD classification is solved.
+- The project uses JS consistency as a controlled implementation of provenance-aware supervision; it does not claim JS divergence itself is novel.
+
+## Documentation
+
+Start here:
+
+- [docs/CURRENT_STATE.md](docs/CURRENT_STATE.md) — current scientific state
+- [docs/PXRD_SUPERVISION_FRAMING.md](docs/PXRD_SUPERVISION_FRAMING.md) — task and method framing
+- [docs/PXRD_EVIDENCE_CLOSURE.md](docs/PXRD_EVIDENCE_CLOSURE.md) — evidence closure and claim boundaries
+- [docs/PXRD_METHOD_DETAIL_EVIDENCE_CLOSURE.md](docs/PXRD_METHOD_DETAIL_EVIDENCE_CLOSURE.md) — implementation and fairness audit
+- [docs/PXRD_NOVELTY_LITERATURE_LINEAGE.md](docs/PXRD_NOVELTY_LITERATURE_LINEAGE.md) — related-work lineage
+- [docs/PROJECT_HISTORY.md](docs/PROJECT_HISTORY.md) — concise public research-evolution timeline
+
+## Citation
+
+A manuscript citation will be added once the author list and persistent identifier are frozen. Until then, cite the repository URL together with the commit hash used. See [CITATION.md](CITATION.md).
+
+## License and third-party code
+
+This repository is released under the [MIT License](LICENSE). The ResNet implementation in xrd_robustness is a PyTorch port based on the MIT-licensed ML4pXRDs implementation by aimat-lab. See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).

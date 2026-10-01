@@ -22,9 +22,9 @@ Tier D — engineering / reproducibility：本地保存，不做结果汇报
 > **常规科研汇报只使用 Tier A + Tier B。**  
 > **Tier C + Tier D 留在本地 JSON / CSV / audit / config / log / code 中，用于审计、复现和排障。**
 
-这里的“常规汇报”包括：导师汇报、PPT 结果页、论文 Results 主文、项目总结、申请材料和对外 README headline。
+这里的“常规汇报”包括：论文 Results 主文、项目总结、技术报告和对外 README headline。
 
-Tier C / D 只有在审稿人、导师或内部核查**明确询问统计审计、复现或工程执行问题**时才调出。
+Tier C / D 只有在审稿人、读者或内部核查**明确询问统计审计、复现或工程执行问题**时才调出。
 
 ---
 
@@ -134,13 +134,13 @@ CNRS 可以表述为：
 只有在以下情形调出：
 
 - 审稿人要求统计不确定性；
-- 导师专门询问统计证据；
+- 读者或审稿人专门询问统计证据；
 - 内部审计；
 - 复核某项结果是否稳定。
 
 `CI crosses zero` 的正确含义仍是：在该 resampling model 下效应估计存在较大不确定性。它不自动等于实验失败、方法无效或 Tier A/B 结果作废。
 
-CNRS 修正后的 class-stratified paired-parent 95% CI `[−0.009339, +0.046107]` 应继续永久保存，但**不放在常规导师汇报主结果页或 Results 主表里**。
+CNRS 修正后的 class-stratified paired-parent 95% CI `[−0.009339, +0.046107]` 应继续永久保存，但**不放在 headline 结果表或 Results 主表里**。
 
 ---
 
@@ -227,10 +227,10 @@ CNRS 常规推荐写法：
 
 关于“哪些结果需要汇报”，当前优先级为：
 
-1. `docs/PXRD_EFFECTIVE_RESULT_SELECTION_STANDARD.md`；
-2. 本文件 `docs/PXRD_RESULT_REPORTING_STANDARD.md`；
-3. `xrd_robustness/reports/RESULTS.md` 作为冻结事实来源；
-4. Tier C / D 的 protocol、audit、run record、JSON、manifest 作为内部证据库。
+1. 本文件 `docs/PXRD_RESULT_REPORTING_STANDARD.md`；
+2. `xrd_robustness/reports/RESULTS.md` 作为冻结结果事实来源；
+3. `docs/PXRD_EVIDENCE_CLOSURE.md` 与相关公开 audit 作为 claim-boundary / evidence 入口；
+4. Tier C / D 的 protocol、audit、run record、JSON、manifest 作为审计证据库。
 
 若旧文件把 bootstrap、hash、provenance 或其他内部指标放得比 XRD performance 更高，按当前标准重新组织汇报，但不改动历史原始记录。
 
@@ -243,4 +243,4 @@ CNRS 常规推荐写法：
 > **Tier A + Tier B 才是“要汇报的结果”。**  
 > **Tier C + Tier D 是“要保存的证据”，默认留在本地机器可读记录和审计文件中。**
 
-以后生成 PPT、导师汇报、项目总结、Results 表和申请材料时，默认只读取 Tier A / B 作为输出候选。
+以后生成公开 README、项目总结、技术报告和 Results 表时，默认只读取 Tier A / B 作为输出候选。

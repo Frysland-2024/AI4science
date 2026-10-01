@@ -2,7 +2,7 @@
 
 **状态：当前有效**  
 **日期：2026-09-29**  
-**作用：** 统一 README、论文、PPT、技术报告、申请材料与 AI/Codex 后续回答中的项目定位。
+**作用：** 统一 README、论文、技术报告与后续公开说明中的项目定位。
 
 ## 1. 一句话定位
 
@@ -71,7 +71,7 @@
 
 ## 7. 术语规则
 
-当前项目介绍、论文摘要、PPT、申请文案和对外口述优先使用：supervised learning、structured / relational supervision、simulator provenance、parent identity、measurement equivalence、consistency regularization、data / supervision efficiency、OOD generalization、sim-to-real transfer、few-shot adaptation / label efficiency。
+当前项目介绍、论文摘要、技术报告、README 和对外口述优先使用：supervised learning、structured / relational supervision、simulator provenance、parent identity、measurement equivalence、consistency regularization、data / supervision efficiency、OOD generalization、sim-to-real transfer、few-shot adaptation / label efficiency。
 
 不要再把整个项目的一级定位写成某种“扰动抵抗能力研究”。
 
@@ -112,7 +112,7 @@
 
 ### 8.4 四级标签：更大的应用与学科背景
 
-可以用于申请与方向介绍，但不能替代方法定义：
+可以用于更广泛的研究方向介绍，但不能替代方法定义：
 
 - **AI4Science / Scientific ML**
 - **AI for Characterization / AI + 表征**

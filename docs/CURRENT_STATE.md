@@ -155,8 +155,8 @@
 1. 首先打磨并固定方法新颖性 framing：`simulator from data generator to relationship supervisor`。
 2. 把该 framing 做成 PPT / manuscript 的核心方法图，视觉重点放在 `shared parent identity → measurement equivalence → supervision`，而不是把 JS 画成最大创新模块。
 3. 从 `reports/validation_results.json`、`reports/simulated_test_results.json` 和真实域结果文件生成论文与 PPT 图表。
-4. 完成 Introduction、Methods、Results 和 Discussion，使标题、摘要、方法图和申请叙事使用同一套 measurement-equivalence 语言。
-5. 将组会 PPT、技术报告和一页项目摘要整理为申请可复用成果。
+4. 完成 Introduction、Methods、Results 和 Discussion，使标题、摘要、方法图和公开项目叙事使用同一套 measurement-equivalence 语言。
+5. 将技术报告、方法图和一页项目摘要整理为可公开复用的成果材料。
 6. 把 RRUFF-301 few-shot 与 CNRS-318 zero-shot 分表写入正文并补齐结果图；不重开模型选择、不修改 frozen split、不事后删改真实域样本。
 
 复现当前工程检查的命令：
@@ -184,7 +184,6 @@ python -m pytest -q
 
 相关文档：
 
-- [`NEXT_PROJECT_XRD_QUANTITATIVE_INVERSION.md`](NEXT_PROJECT_XRD_QUANTITATIVE_INVERSION.md)
 - [`PROJECT_HISTORY.md`](PROJECT_HISTORY.md)
 
 该项目目前仅完成问题定义、边界收缩和执行规划。必须先完成四方结构数量审计与可辨识性 Gate，才创建 `xrd_inversion/` 代码目录并启动训练。

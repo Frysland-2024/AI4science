@@ -13,7 +13,7 @@
 | 4. 五类扰动是否只改变观测谱，而没有把 structure A 变成 structure B | **CLOSED** | 是。代码先由固定 parent structure 计算 ideal peak table，后续扰动只作用于峰位坐标、峰宽、相对峰强、背景和噪声；不重写母体原子结构、晶格或 crystal-system label。因此 structure A 经扰动后仍是 structure A 的另一种测量 realization |
 | 5. `lambda_js=60` 是怎么选出来的 | **CLOSED** | 先用 Train-only 梯度尺度把候选固定为 `[3,30,60]`，再仅用 Validation 按预先定义的 OOD + in-range 规则选择 60；选择时没有使用 simulated Test、RRUFF 或 CNRS，之后不再 retune |
 
-> 五项都已经有本地证据，可以结案。当前剩下的是把这些已结案事实写进 Methods、Related Work、PPT 和申请叙事，而不是再补实验。
+> 五项都已经有本地证据，可以结案。当前剩下的是把这些已结案事实写进 Methods、Related Work、技术报告和公开项目叙事，而不是再补实验。
 
 ---
 
@@ -41,7 +41,7 @@ KBSS 思想吸收笔记明确记录：KBSS 提供的是“同一对象不同视�
 - 历史文件：`00_project_context/KBSS_PROJECT_RELEVANCE.md`
 - 历史 commit：`f36be82b2a0b5fd3c58ec87a58fa6e3ba839f217`
 
-项目申请叙事历史稿也已经把方法转折记录为：最初是“generate more realistic synthetic data and train a model”，后来转向“what additional supervision is hidden in the scientific data-generation process”；并明确写出 Dynamic ERM 与 Dynamic JS 看同样的两份 view，区别在于 JS 使用 simulator provenance：
+项目历史记录也已经把方法转折记录为：最初是“generate more realistic synthetic data and train a model”，后来转向“what additional supervision is hidden in the scientific data-generation process”；并明确写出 Dynamic ERM 与 Dynamic JS 看同样的两份 view，区别在于 JS 使用 simulator provenance：
 
 - 历史文件：`00_project_context/APPLICATION_RESEARCH_NARRATIVE_V1_20260808.md`
 
@@ -467,4 +467,4 @@ crystal_system(x1) = crystal_system(x2) = h(s)
 4. **五类扰动是否保持 structure A 不变：CLOSED。当前实现是 structure-preserving / label-preserving measurement transformation。**
 5. **`lambda_js=60` 选择路径：CLOSED。**
 
-这些结论以后直接作为论文 Methods、Related Work、PPT、答辩和申请叙事的事实依据。除非项目 scientific claim 或当前实现发生实质变化，否则不要把它们重新列为“需要补实验”的开放问题。
+这些结论以后直接作为论文 Methods、Related Work、技术报告和公开说明的事实依据。除非项目 scientific claim 或当前实现发生实质变化，否则不要把它们重新列为“需要补实验”的开放问题。

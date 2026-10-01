@@ -60,6 +60,8 @@ def test_public_report_directory_matches_positive_allowlist() -> None:
         "CNRS_318_RESULTS.md",
         "CALIBRATION_ANALYSIS.md",
         "opxrd_cnrs7cs_independent_parent_audit_20260827.md",
+        "RRUFF301_COMPOSITION_AUDIT.md",
+        "RRUFF301_COMPOSITION_AUDIT.json",
     }
 
 
@@ -136,39 +138,46 @@ def test_community_reporting_extensions_are_machine_readable() -> None:
     ] == 24
 
 
-def test_current_pxrd_reporting_policy_has_three_layers() -> None:
+def test_current_pxrd_reporting_policy_has_four_tiers() -> None:
     policy = (
         REPOSITORY_ROOT / "docs/PXRD_RESULT_REPORTING_STANDARD.md"
     ).read_text(encoding="utf-8")
     for heading in (
-        "Layer A — community-standard performance",
-        "Layer B — reliability",
-        "Layer C — strict statistical audit",
+        "Tier A — XRD community-standard performance",
+        "Tier B — supporting scientific evidence",
+        "Tier C — strict statistical audit",
+        "Tier D — engineering / reproducibility",
     ):
         assert heading in policy
     assert "CI crosses zero" in policy
-    assert "experiment failed" in policy
-    assert "不得删除或隐藏不利统计结果" in policy
+    assert "不自动等于实验失败" in policy
+    assert "不得删除或篡改不利统计结果" in policy
 
 
 def test_public_document_links_resolve() -> None:
     expected_links = {
         REPOSITORY_ROOT / "README.md": {
             "docs/CURRENT_STATE.md",
-            "docs/GRADUATE_RESEARCH_DIRECTION.md",
+            "docs/DATA_AND_REPRODUCIBILITY.md",
             "docs/PROJECT_HISTORY.md",
             "xrd_robustness/README.md",
             "xrd_robustness/MANUSCRIPT.md",
             "xrd_robustness/reports/RESULTS.md",
             "xrd_robustness/reports/validation_results.json",
             "xrd_robustness/reports/simulated_test_results.json",
+            "xrd_robustness/reports/rruff301_fewshot_results.json",
+            "CITATION.md",
+            "LICENSE",
+            "THIRD_PARTY_NOTICES.md",
         },
         PROJECT_ROOT / "README.md": {
             "../docs/CURRENT_STATE.md",
+            "../docs/DATA_AND_REPRODUCIBILITY.md",
             "MANUSCRIPT.md",
             "reports/RESULTS.md",
             "reports/validation_results.json",
             "reports/simulated_test_results.json",
+            "reports/rruff301_fewshot_results.json",
         },
         PROJECT_ROOT / "reports/RESULTS.md": {
             "validation_results.json",

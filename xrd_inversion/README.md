@@ -1,45 +1,49 @@
 # PXRD quantitative inversion
 
-**Active status (2026-09-07):** this directory now contains the numerical / forward-inversion infrastructure only. The Stage-1 `structure–measurement factorization` branch has been archived after its preregistered **NO-GO** result and is no longer an active next task.
+Experimental numerical infrastructure for a **known-phase, single-phase tetragonal PXRD inversion** study.
 
-- Archive summary: `docs/archive/XRD_FACTORIZATION_STAGE1_ARCHIVED_20260907.md`
-- Exact pre-cleanup snapshot: branch `archive/xrd-factorization-stage1-20260907`
-- Snapshot commit: `93da7d9f5cb3b2389439243d636bba6dcd5f68f9`
+This is a secondary research line and is intentionally separated from the completed classification evidence in xrd_robustness.
 
-Do not restart the archived factorization-v1 implementation from `main`; any future revival requires a new version and a new preregistered Gate.
+## Status
 
-This directory contains the repaired smoke and formal Week-1 numerical gates
-for the known-phase, single-phase, tetragonal inversion V0. It reads the frozen `xrd_robustness` structures,
-authoritative parent split, reflection cache, and measurement configuration
-without modifying that project.
+A previous Stage-1 structure–measurement factorization proposal received a preregistered **NO-GO** and is archived. The surviving code focuses on numerical forward/inversion verification rather than reviving that factorization claim.
 
-The current active implementation covers:
+Current infrastructure includes:
 
-- tetragonal parent/split/cell audit;
-- P0 forward correctness, cache identity, Bragg-metric, zero-shift, and FWHM checks;
-- a cached CUDA float64 forward with strict CPU-P0 profile parity;
-- P1 multi-anchor autograd Jacobians plus a fixed finite-difference step sweep;
-- P2-R deterministic multistart recoverability and P2-L nominal-start local capture;
-- a full-parameter unmodelled-nuisance diagnostic that does not enter the clean Gate;
-- a structural near-duplicate audit and an independent renderer holdout frozen unopened.
+- parent/split/cell audits;
+- forward-model correctness checks;
+- CUDA float64 / CPU parity checks;
+- autograd Jacobian and finite-difference verification;
+- deterministic multistart recoverability tests;
+- local-capture diagnostics;
+- nuisance diagnostics;
+- structural near-duplicate auditing;
+- an independent-renderer holdout contract.
 
-The exact formal run passes P0, CUDA parity, P1, and all 288/288 clean P2-R cases across the three staircases. P2-L passes only 181/288 clean cases, preserving the intended nominal-basin diagnostic rather than turning it into a numerical Gate failure. Five non-conventional stored cells are explicitly quarantined for V0. The structural audit found no same-composition candidate pairs in its proxy scope, but did find broad anonymous-prototype overlap across the current split; that overlap must be handled as a pre-ML split-policy issue.
+The formal numerical run passed P0, CUDA parity, P1, and 288/288 clean P2-R recoverability cases. P2-L remained a diagnostic and passed 181/288 cases.
 
-Run from the repository root with the existing science environment:
+## Install
 
-```powershell
-& '.venvs\xrd_test\Scripts\python.exe' 'xrd_inversion\scripts\run_week1_pilot.py'
-```
+From the repository root:
 
-Run the exact formal 24-parent x 4-trial numerical Gate with:
+~~~bash
+python -m pip install -e "./xrd_inversion[gpu]"
+~~~
 
-```powershell
-& '.venvs\xrd_test\Scripts\python.exe' 'xrd_inversion\scripts\run_week1_pilot.py' `
-  --config 'xrd_inversion\configs\week1_formal_gate.json'
-```
+Run the public tests:
 
-Outputs are written to `xrd_inversion/reports/` and `xrd_inversion/manifests/`. The frozen pilot choices live in `xrd_inversion/configs/week1_repaired_smoke.json` and `xrd_inversion/configs/week1_formal_gate.json`. Formal P2 writes ignored, atomic per-parent checkpoints under `xrd_inversion/checkpoints/week1_formal/` and validates their config/source/manifest contract before resuming.
+~~~bash
+python -m pytest -q xrd_inversion/tests
+~~~
 
-## Execution policy
+## Example execution
 
-All tensorizable forward rendering, residual evaluation, and Jacobians are GPU-first on the local RTX 4060. Week-1 numerical physics uses CUDA float64 with TF32 and autocast disabled. Candidate banks are scored in batches of 16; formal candidate counts are frozen at S1=256, S2=512, and S3=1024 from one nested scrambled-Sobol design. CPU is limited to the authoritative P0 oracle, one-time nuisance observations, SciPy trust-region control flow, and file/provenance audits.
+~~~bash
+python xrd_inversion/scripts/run_week1_pilot.py --config xrd_inversion/configs/week1_formal_gate.json
+~~~
+
+Large historical per-trial JSON outputs and pairwise audit tables are intentionally omitted from the public tree. Compact Markdown reports, configs, and smaller audit artifacts remain under reports/ and manifests/.
+
+## Scope boundary
+
+This module should not be read as evidence for the main relationship-supervision classification claim. It is a separate numerical research track.
