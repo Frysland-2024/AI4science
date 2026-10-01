@@ -34,6 +34,13 @@ prediction consistency
 
 See [reports/RESULTS.md](reports/RESULTS.md) for definitions, uncertainty, and additional metrics.
 
+Public result artifacts:
+
+- [reports/validation_results.json](reports/validation_results.json)
+- [reports/simulated_test_results.json](reports/simulated_test_results.json)
+- [reports/rruff301_fewshot_results.json](reports/rruff301_fewshot_results.json)
+- [MANUSCRIPT.md](MANUSCRIPT.md)
+
 ## Install
 
 ~~~bash
@@ -68,6 +75,7 @@ xrd-train --help
 
 ## Evidence and reproducibility
 
+- [../docs/CURRENT_STATE.md](../docs/CURRENT_STATE.md)
 - [../docs/PXRD_SUPERVISION_FRAMING.md](../docs/PXRD_SUPERVISION_FRAMING.md)
 - [../docs/PXRD_EVIDENCE_CLOSURE.md](../docs/PXRD_EVIDENCE_CLOSURE.md)
 - [../docs/PXRD_METHOD_DETAIL_EVIDENCE_CLOSURE.md](../docs/PXRD_METHOD_DETAIL_EVIDENCE_CLOSURE.md)
