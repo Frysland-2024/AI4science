@@ -107,3 +107,4 @@ desktop.ini
 xrd_inversion/reports/week1_formal_results.json
 xrd_inversion/reports/week1_pilot_results.json
 xrd_inversion/manifests/week1_structural_near_duplicate_pairs.csv
+xrd_inversion/reports/week1_repaired_smoke_results.json
