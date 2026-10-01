@@ -1,5 +1,7 @@
 # AI4science 当前状态
 
+> **权威性说明：** 本文件记录当前科学状态与当前执行口径。历史版本、旧聊天和 `PROJECT_HISTORY.md` 用于解释“为什么改变”，不得覆盖这里的当前结论；AI/Agent 工作规则见 [`../AGENTS.md`](../AGENTS.md) 与 [`RESEARCH_WORKFLOW.md`](RESEARCH_WORKFLOW.md)。
+
 **状态日期：** 2026-09-29
 
 **阶段：** 模拟结果、RRUFF-301 few-shot 与 CNRS-318 zero-shot 均已完成；当前在做论文图表、方法 framing 与成果封装
