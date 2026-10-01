@@ -18,7 +18,7 @@ When sources disagree, use the following order unless the user explicitly makes 
    - `docs/PXRD_RESULT_REPORTING_STANDARD.md`
 4. `xrd_robustness/reports/RESULTS.md` and machine-readable result JSON/CSV files.
 5. `README.md` and subsystem READMEs.
-6. `docs/PROJECT_HISTORY.md` and dated history notes for **why the project changed**.
+6. `docs/PROJECT_HISTORY.md` and Git history for **why the project changed**.
 7. Chat memory, summaries, or prior conversational recollections.
 
 Historical documents explain evolution; they do not override the current state.
@@ -30,7 +30,7 @@ For any question about AI4science/XRD **progress, current method, results, next 
 1. Read the latest repository commits.
 2. Read `docs/CURRENT_STATE.md`.
 3. Read only the additional files needed for the question.
-4. If the question is historical, consult `docs/PROJECT_HISTORY.md` and the relevant dated history note.
+4. If the question is historical, consult `docs/PROJECT_HISTORY.md` and relevant commits.
 5. Do not answer from conversational memory alone.
 
 A recent commit does not automatically change the scientific state; inspect what it changed.
@@ -102,7 +102,7 @@ Update the repository when a discussion changes any of the following:
 Write-back destinations:
 
 - **Current truth:** `docs/CURRENT_STATE.md`
-- **Why/when the decision changed:** append to `docs/PROJECT_HISTORY.md` or create a dated history note when the event needs a self-contained record.
+- **Why/when the decision changed:** update `docs/PROJECT_HISTORY.md` when the event materially changes the public research timeline; use Git commits for lower-level historical detail.
 - **Result change:** update the relevant report + machine-readable artifact + `CURRENT_STATE.md`.
 - **Framing change:** update the relevant framing document + `CURRENT_STATE.md`.
 - **Workflow change:** update this file and/or `docs/RESEARCH_WORKFLOW.md`.
