@@ -155,8 +155,8 @@
 1. 首先打磨并固定方法新颖性 framing：`simulator from data generator to relationship supervisor`。
 2. 把该 framing 做成 PPT / manuscript 的核心方法图，视觉重点放在 `shared parent identity → measurement equivalence → supervision`，而不是把 JS 画成最大创新模块。
 3. 从 `reports/validation_results.json`、`reports/simulated_test_results.json` 和真实域结果文件生成论文与 PPT 图表。
-4. 完成 Introduction、Methods、Results 和 Discussion，使标题、摘要、方法图和申请叙事使用同一套 measurement-equivalence 语言。
-5. 将组会 PPT、技术报告和一页项目摘要整理为申请可复用成果。
+4. 完成 Introduction、Methods、Results 和 Discussion，使标题、摘要、方法图和公开项目叙事使用同一套 measurement-equivalence 语言。
+5. 将技术报告、方法图和一页项目摘要整理为可公开复用的成果材料。
 6. 把 RRUFF-301 few-shot 与 CNRS-318 zero-shot 分表写入正文并补齐结果图；不重开模型选择、不修改 frozen split、不事后删改真实域样本。
 
 复现当前工程检查的命令：
