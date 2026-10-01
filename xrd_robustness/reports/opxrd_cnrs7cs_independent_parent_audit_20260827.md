@@ -183,7 +183,7 @@ parent_component_has_formal_14060_match
 
 ## Reproduction command and core code path
 
-The calculation was run from `E:/AI4science` with:
+The calculation was run from the repository root with:
 
 ```powershell
 $env:PYTHONPATH = (Resolve-Path 'xrd_robustness\scripts').Path
