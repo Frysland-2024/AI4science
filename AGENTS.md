@@ -1,72 +1,68 @@
-# AGENTS.md — AI4science Agent Working Contract
+# AGENTS.md — AI4science Research Agent Contract
 
 **Effective date:** 2026-10-02  
-**Scope:** All AI assistants, coding agents, research agents, and collaborators working in this repository.
+**Scope:** AI assistants, coding agents, research agents, and collaborators working in this repository.
 
-This file defines **how an agent must obtain project truth, choose tools, make changes, and write important decisions back to the repository**. It is an operating contract, not a scientific-results document.
+This file defines how an agent should obtain project truth, change the codebase, and preserve scientific provenance. It is an operating contract, not a scientific-results document.
 
 ## 1. Source-of-truth hierarchy
 
-When sources disagree, use the following order unless the user explicitly makes a new decision:
+When sources disagree, use the following order unless a new scientific decision explicitly supersedes it:
 
-1. Current frozen configs, raw/result artifacts, run records, and code relevant to the claim.
-2. `docs/CURRENT_STATE.md` for the current project state and current scientific framing.
-3. Current closure / reporting / framing documents, especially:
+1. Frozen configs, machine-readable results, run records, manifests, and code relevant to the claim.
+2. `docs/CURRENT_STATE.md` for the current project state and scientific framing.
+3. Current evidence / reporting / framing documents, especially:
    - `docs/PXRD_SUPERVISION_FRAMING.md`
    - `docs/PXRD_EVIDENCE_CLOSURE.md`
    - `docs/PXRD_METHOD_DETAIL_EVIDENCE_CLOSURE.md`
    - `docs/PXRD_RESULT_REPORTING_STANDARD.md`
-4. `xrd_robustness/reports/RESULTS.md` and machine-readable result JSON/CSV files.
-5. `README.md` and subsystem READMEs.
-6. `docs/PROJECT_HISTORY.md` and Git history for **why the project changed**.
-7. Chat memory, summaries, or prior conversational recollections.
+4. `xrd_robustness/reports/RESULTS.md` and linked machine-readable result artifacts.
+5. Package and repository READMEs.
+6. `docs/PROJECT_HISTORY.md` and Git history for why the project changed.
+7. Conversational summaries or recollection.
 
-Historical documents explain evolution; they do not override the current state.
+Historical documents explain evolution; they do not override current state.
 
 ## 2. Mandatory first step for project questions
 
-For any question about AI4science/XRD **progress, current method, results, next step, project identity, or why a decision was made**:
+For questions about progress, current method, results, next steps, project identity, or historical decisions:
 
-1. Read the latest repository commits.
-2. Read `docs/CURRENT_STATE.md`.
-3. Read only the additional files needed for the question.
-4. If the question is historical, consult `docs/PROJECT_HISTORY.md` and relevant commits.
-5. Do not answer from conversational memory alone.
+1. inspect the latest relevant commits;
+2. read `docs/CURRENT_STATE.md`;
+3. read only the evidence files needed for the question;
+4. for historical questions, consult `docs/PROJECT_HISTORY.md` and relevant commits;
+5. do not answer from conversational memory alone.
 
-A recent commit does not automatically change the scientific state; inspect what it changed.
+A recent commit does not automatically change the scientific state; inspect what changed.
 
-## 3. Tool-routing rules
+## 3. Evidence-routing rules
 
 ### Project state / implementation / provenance
-Use **GitHub** first. Repository evidence is authoritative for committed project facts.
+Start from the repository and tracked evidence.
 
-### Local files, running jobs, checkpoints, environments, or terminal work
-Use **Remote Desktop Commander** when an authorized machine is connected. Do not infer local state from GitHub.
+### Local-only assets
+If the question depends on local checkpoints, ignored datasets, running jobs, or machine-specific outputs, inspect an authorized local environment. Do not infer local state from Git alone.
 
-### Literature novelty / "has anyone done this?" / related work
-First establish the current project claim from the repository, then use academic-search sources such as **Consensus / SciSpace / Sider Scholar**, followed by **Exa / Parallel Search / web** when code, supplements, datasets, author pages, or newer materials are needed. Distinguish:
-- what the paper actually claims,
-- what its code/data show,
-- and what is our interpretation.
+### Literature novelty / related work
+First define the exact repository claim, then search primary literature. When important, inspect the paper, supplement, code, and dataset rather than relying on titles or snippets.
 
-### Models / datasets / public ML resources
-Use **Hugging Face** when relevant.
+Separate:
+- what a source explicitly claims;
+- what its implementation/data demonstrate;
+- and what is an interpretation.
 
-### Mathematical or symbolic verification
-Use **Wolfram** when exact symbolic/numerical verification materially improves confidence.
+### Experimental results
+Read the underlying CSV/JSON/result record before quoting exact numbers. Recompute or aggregate when needed; do not reconstruct exact values from memory.
 
-### Experimental results / CSV / JSON / metrics
-Read the underlying result files first, then use the **Data Analytics** workflow for aggregation, paired comparisons, plots, uncertainty, and report-quality analysis. Never reconstruct exact numbers from memory.
+### Mathematical checks
+Use exact symbolic or numerical verification when precision materially affects the conclusion.
 
-### Presentations / visual communication
-Ground all scientific content in repository evidence first; then use **Gamma / Canva** for presentation and visual refinement. Visual convenience must not alter scientific claims.
-
-### Applications / outreach
-Use repository-backed project facts first; then **Google Drive**, **Gmail**, and **Google Calendar** for documents, correspondence, and scheduling.
+### Public communication
+Ground figures, reports, manuscripts, and summaries in repository evidence. Presentation convenience must not alter scientific claims.
 
 ## 4. Current PXRD framing guardrail
 
-The current project hierarchy is:
+The current hierarchy is:
 
 - **Project:** supervised learning / PXRD crystal-system classification.
 - **Method core:** structured / relational supervision from simulator provenance.
@@ -82,32 +78,32 @@ Do not casually relabel the whole project as robustness research, representation
 - Do not alter frozen test data, selected checkpoints, seeds, metrics, or hyperparameters after seeing final results.
 - Do not add a new loss/model/experiment merely to make the story look stronger.
 - Preserve negative, uncertain, and cross-zero statistical results.
-- Distinguish performance evidence, reliability evidence, and strict statistical audit according to `docs/PXRD_RESULT_REPORTING_STANDARD.md`.
+- Distinguish headline performance, supporting reliability evidence, and strict statistical audit according to `docs/PXRD_RESULT_REPORTING_STANDARD.md`.
 - A local engineering change is not automatically a scientific change.
 
-## 6. Write-back rule
+## 6. Repository write-back rule
 
-Important discussion must not remain only in chat.
+Important scientific discussion must not remain only in chat.
 
-Update the repository when a discussion changes any of the following:
+Update the repository when a discussion changes:
 
 - project identity or scientific framing;
 - active vs archived method;
 - experiment protocol, frozen configuration, or evaluation role;
 - interpretation of a major result;
-- evidence status (OPEN / CLOSED / ACTIVE WRITING);
+- evidence status;
 - next-step research direction;
-- application narrative that materially changes how the project evolution is explained.
+- the public explanation of how the project evolved.
 
 Write-back destinations:
 
 - **Current truth:** `docs/CURRENT_STATE.md`
-- **Why/when the decision changed:** update `docs/PROJECT_HISTORY.md` when the event materially changes the public research timeline; use Git commits for lower-level historical detail.
-- **Result change:** update the relevant report + machine-readable artifact + `CURRENT_STATE.md`.
-- **Framing change:** update the relevant framing document + `CURRENT_STATE.md`.
-- **Workflow change:** update this file and/or `docs/RESEARCH_WORKFLOW.md`.
+- **Major research evolution:** `docs/PROJECT_HISTORY.md`
+- **Result change:** relevant report + machine-readable artifact + `CURRENT_STATE.md`
+- **Framing change:** relevant framing/evidence document + `CURRENT_STATE.md`
+- **Workflow change:** this file and/or `docs/RESEARCH_WORKFLOW.md`
 
-Minor explanations, tutoring, brainstorming, and wording alternatives do **not** need repository write-back.
+Minor tutoring, brainstorming, and wording alternatives do not require repository write-back.
 
 ## 7. Decision-record format
 
@@ -124,7 +120,7 @@ Status: ACTIVE / ARCHIVED / CLOSED / FUTURE
 Relevant files / commits
 ```
 
-The purpose is to preserve the real research path, including false starts and corrections, for future scientific writing and admissions narratives.
+The purpose is to preserve the real research path, including false starts and corrections, for scientific and retrospective writing.
 
 ## 8. Default working loop
 
@@ -141,7 +137,7 @@ Make the smallest justified change
       ↓
 Validate
       ↓
-Write material decisions/results back to GitHub
+Write material decisions/results back to the repository
 ```
 
-The goal is not maximum tool usage. The goal is a reproducible chain from question → evidence → decision → repository record.
+The goal is a reproducible chain from question → evidence → decision → repository record.
