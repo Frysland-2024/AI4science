@@ -1,0 +1,189 @@
+{
+  "batch_size": 128,
+  "cnrs": {
+    "n_parents_per_seed_method": 318,
+    "n_prediction_rows": 3180,
+    "per_seed_paired": {
+      "metrics": {
+        "accuracy": {
+          "max_delta": 0.02515723270440251,
+          "mean_delta_js_minus_erm": 0.01006289308176101,
+          "min_delta": -0.009433962264150941,
+          "negative_pairs": 1,
+          "positive_pairs": 4,
+          "zero_pairs": 0
+        },
+        "brier": {
+          "max_delta": -0.057702458556520675,
+          "mean_delta_js_minus_erm": -0.11823503890895944,
+          "min_delta": -0.18830422546580272,
+          "negative_pairs": 5,
+          "positive_pairs": 0,
+          "zero_pairs": 0
+        },
+        "ece": {
+          "max_delta": -0.022885810372964333,
+          "mean_delta_js_minus_erm": -0.06927178867583002,
+          "min_delta": -0.10826459199002691,
+          "negative_pairs": 5,
+          "positive_pairs": 0,
+          "zero_pairs": 0
+        },
+        "macro_f1": {
+          "max_delta": 0.02863230700382291,
+          "mean_delta_js_minus_erm": 0.018713073457056785,
+          "min_delta": 0.012943180900660406,
+          "negative_pairs": 0,
+          "positive_pairs": 5,
+          "zero_pairs": 0
+        },
+        "mean_confidence": {
+          "max_delta": -0.016596502196863705,
+          "mean_delta_js_minus_erm": -0.06008725303149074,
+          "min_delta": -0.11769855425417797,
+          "negative_pairs": 5,
+          "positive_pairs": 0,
+          "zero_pairs": 0
+        },
+        "mean_entropy": {
+          "max_delta": 0.31732283755673246,
+          "mean_delta_js_minus_erm": 0.15226862474465883,
+          "min_delta": 0.04146285704945135,
+          "negative_pairs": 0,
+          "positive_pairs": 5,
+          "zero_pairs": 0
+        },
+        "nll": {
+          "max_delta": -1.2394104968250605,
+          "mean_delta_js_minus_erm": -2.2014222798014416,
+          "min_delta": -4.30255209057206,
+          "negative_pairs": 5,
+          "positive_pairs": 0,
+          "zero_pairs": 0
+        }
+      },
+      "n_pairs": 5
+    },
+    "pooled_delta_js_minus_erm": {
+      "accuracy": 0.010062893081761004,
+      "brier": -0.11823503890895926,
+      "ece": -0.07015014611325165,
+      "macro_f1": 0.01794292560723476,
+      "mean_confidence": -0.06008725303149076,
+      "mean_entropy": 0.1522686247446589,
+      "nll": -2.2014222798014407
+    },
+    "pooled_metrics": {
+      "dynamic_erm": {
+        "accuracy": 0.2,
+        "brier": 1.433840876340878,
+        "ece": 0.6825702260312794,
+        "macro_f1": 0.1911761931899363,
+        "mean_confidence": 0.8825702260312794,
+        "mean_entropy": 0.2897024102936399,
+        "nll": 8.3199878403929
+      },
+      "dynamic_js": {
+        "accuracy": 0.21006289308176102,
+        "brier": 1.3156058374319188,
+        "ece": 0.6124200799180277,
+        "macro_f1": 0.20911911879717107,
+        "mean_confidence": 0.8224829729997887,
+        "mean_entropy": 0.4419710350382988,
+        "nll": 6.118565560591459
+      }
+    }
+  },
+  "device": "cuda",
+  "schema_version": "calibration-audit-v1",
+  "simulated": {
+    "condition_count_per_method": 180,
+    "frozen_ece_reproduction": {
+      "comparisons": 0,
+      "max_absolute_error": 0.0
+    },
+    "method_means_across_conditions": {
+      "dynamic_erm": {
+        "accuracy": 0.618241926136663,
+        "brier": 0.6484120195621698,
+        "ece": 0.2899336026507593,
+        "macro_f1": 0.6182819210411787,
+        "mean_confidence": 0.9079046318625369,
+        "mean_entropy": 0.23510163149752947,
+        "nll": 2.6677716832634895
+      },
+      "dynamic_js": {
+        "accuracy": 0.6720747062852326,
+        "brier": 0.518434409801679,
+        "ece": 0.20446104545386262,
+        "macro_f1": 0.6710778479402777,
+        "mean_confidence": 0.8760932071437186,
+        "mean_entropy": 0.3194644700279316,
+        "nll": 1.632069784193972
+      }
+    },
+    "paired": {
+      "metrics": {
+        "accuracy": {
+          "max_delta": 0.19819819819819817,
+          "mean_delta_js_minus_erm": 0.053832780148569626,
+          "min_delta": -0.006638217164532945,
+          "negative_pairs": 1,
+          "positive_pairs": 179,
+          "zero_pairs": 0
+        },
+        "brier": {
+          "max_delta": -0.014869203899555705,
+          "mean_delta_js_minus_erm": -0.12997760976049086,
+          "min_delta": -0.42469592765824193,
+          "negative_pairs": 180,
+          "positive_pairs": 0,
+          "zero_pairs": 0
+        },
+        "ece": {
+          "max_delta": -0.01288180398737565,
+          "mean_delta_js_minus_erm": -0.08547255719689674,
+          "min_delta": -0.253797665881342,
+          "negative_pairs": 180,
+          "positive_pairs": 0,
+          "zero_pairs": 0
+        },
+        "macro_f1": {
+          "max_delta": 0.19423249076249205,
+          "mean_delta_js_minus_erm": 0.052795926899099045,
+          "min_delta": -0.01332609035650334,
+          "negative_pairs": 4,
+          "positive_pairs": 176,
+          "zero_pairs": 0
+        },
+        "mean_confidence": {
+          "max_delta": 0.010905410961948858,
+          "mean_delta_js_minus_erm": -0.03181142471881833,
+          "min_delta": -0.11333160617443105,
+          "negative_pairs": 151,
+          "positive_pairs": 29,
+          "zero_pairs": 0
+        },
+        "mean_entropy": {
+          "max_delta": 0.2942662207460591,
+          "mean_delta_js_minus_erm": 0.08436283853040213,
+          "min_delta": -0.022861700856969702,
+          "negative_pairs": 28,
+          "positive_pairs": 152,
+          "zero_pairs": 0
+        },
+        "nll": {
+          "max_delta": 0.8380354263085046,
+          "mean_delta_js_minus_erm": -1.0357018990695177,
+          "min_delta": -4.06055965491002,
+          "negative_pairs": 176,
+          "positive_pairs": 4,
+          "zero_pairs": 0
+        }
+      },
+      "n_pairs": 180
+    }
+  },
+  "simulated_calibration_interpretation": "support_with_heterogeneity",
+  "status": "completed"
+}
