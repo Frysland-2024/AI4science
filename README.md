@@ -69,6 +69,8 @@ AI4science/
 
 ## Quick start
 
+Main package documentation: [xrd_robustness/README.md](xrd_robustness/README.md).
+
 ### Main PXRD classification package
 
 ~~~bash
