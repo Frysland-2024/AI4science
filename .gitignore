@@ -99,3 +99,11 @@ desktop.ini
 
 # Local-only historical record (kept on disk, not tracked in git)
 00_project_context/PROJECT_JOURNEY.md
+
+# Public-repository hygiene
+/archive/
+/YIFENG_RRUFF_HANDOFF_AUDIT/
+/YIFENG_RRUFF_HANDOFF_PACKAGE_*/
+xrd_inversion/reports/week1_formal_results.json
+xrd_inversion/reports/week1_pilot_results.json
+xrd_inversion/manifests/week1_structural_near_duplicate_pairs.csv
