@@ -370,3 +370,42 @@ AI4Science
 一句话总结：
 
 > **不要用“有没有 AI”区分材料模拟和材料信息，要用“科研问题的主要推理引擎是什么”来区分。**
+
+
+## 11. 方向进一步明确：XRD 是起点，不是终点（2026-10-05）
+
+当前长期目标不是把研究身份锁定在 XRD / PXRD 本身，也不是简单从 XRD 平移到 XPS/XAS。
+
+更准确的目标是：
+
+> **以 XRD/PXRD 为第一个训练场，逐步进入更大的 scientific measurement / AI for Characterization / data-driven metrology 世界。**
+
+理想扩展路径包括：
+
+```text
+XRD / PXRD
+→ spectroscopy
+→ electron microscopy / STEM / CL
+→ X-ray CT / tomography
+→ multimodal characterization
+→ inverse / reconstruction / uncertainty / active measurement
+```
+
+因此未来判断课题和导师时，不应只问：
+
+> “和现在的 XRD 项目像不像？”
+
+还必须问：
+
+> **“这个环境能否让已有的 measurement-learning 能力迁移到更多计测模态与更一般的逆问题？”**
+
+### 新的优先级含义
+
+- **谱学连续性**是优点，但不是最高目标；
+- **跨模态 measurement science 能力**更重要；
+- 优先学习可迁移的方法：inverse problems、reconstruction、signal/image learning、uncertainty、measurement correction、active measurement、multimodal fusion；
+- XRD 是申请叙事中的起点和方法证明，不应成为未来研究边界。
+
+一句话：
+
+> **不是“做 XRD 的人”，而是“从 XRD 出发做 AI for Measurement / Characterization 的人”。**
