@@ -113,6 +113,7 @@ Start here:
 - [docs/PXRD_METHOD_DETAIL_EVIDENCE_CLOSURE.md](docs/PXRD_METHOD_DETAIL_EVIDENCE_CLOSURE.md) — implementation and fairness audit
 - [docs/PXRD_NOVELTY_LITERATURE_LINEAGE.md](docs/PXRD_NOVELTY_LITERATURE_LINEAGE.md) — related-work lineage
 - [docs/PROJECT_HISTORY.md](docs/PROJECT_HISTORY.md) — concise public research-evolution timeline
+- [docs/FUTURE_UNDERGRAD_THESIS_PLAN.md](docs/FUTURE_UNDERGRAD_THESIS_PLAN.md) — candidate undergraduate thesis plan for physics-guided PXRD inversion (not active)
 
 ## Citation
 
