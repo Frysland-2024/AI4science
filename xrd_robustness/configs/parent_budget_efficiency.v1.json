@@ -81,7 +81,7 @@
   },
   "evaluation": {
     "evaluation_seeds": [20260721, 20260722, 20260723],
-    "batch_size": 128,
+    "batch_size": 256,
     "validation_profiles": ["ood_shift_negative", "ood_shift_positive", "ood_broadening", "ood_noise", "ood_background", "ood_texture"],
     "validation_evaluation_seed": 20260721,
     "test_profiles": ["ood_shift_negative", "ood_shift_positive", "ood_broadening", "ood_noise", "ood_background", "ood_texture", "in_range", "level0"],
