@@ -180,3 +180,13 @@ python -m pytest -q
 - 本次计划**不复活**旧解耦 Stage-1 NO-GO，也不影响当前 JS-only 论文或 frozen tests。
 
 正式规划与申请用文字见 **[FUTURE_UNDERGRAD_THESIS_PLAN.md](FUTURE_UNDERGRAD_THESIS_PLAN.md)**；未来如实际开题发生变化，须单独记录新决策与证据。
+
+## 9. 2026-10-13 独立母结构数量效率实验（PROPOSED，尚未运行）
+
+从早期暂缓的 sample-efficiency 设想中恢复 **10% / 25% / 50% / 100% 的 Train 母结构预算曲线**，检验在相同独立结构数、相同双视图曝光和优化预算下，利用同源关系的 Dynamic JS 是否比 Dynamic ERM 更充分使用晶体结构数据。
+
+- 本实验是现有 `shared parent identity → relationship supervision` 主张的**独立补充机制/效率验证**，不是新模型、不是 RRUFF few-shot 标签效率，也不替代冻结的主实验。
+- 采用原 Train 9,842 母结构的晶系分层嵌套子集；ResNet-18-GN、`lambda_js=60` 不变；配对 seed 和模拟协议固定，训练曝光量/优化步数必须统一。
+- 已识别工程风险：目前公共 `runner.py` 的 epoch 末尾可能有不完整 batch，而且每 epoch 进行验证与保存，不适合直接充当完全公平的预算比较入口。CODEX LUNA 应先完成独立固定步数入口、数据审计、单元测试与 smoke，才能执行大规模 run。
+- 当前模拟 Test 已在正式论文中使用过；本次应标明为 **post-main supplementary follow-up**，不能声称是全新未打开的 confirmatory Test。
+- 状态 **PROPOSED / READY FOR CODEX IMPLEMENTATION / NOT_RUN**；完整任务与结果交付标准见 [PXRD_PARENT_STRUCTURE_EFFICIENCY_PLAN.md](PXRD_PARENT_STRUCTURE_EFFICIENCY_PLAN.md)。原主实验的报告、划分、权重和历史结果均不得修改。
