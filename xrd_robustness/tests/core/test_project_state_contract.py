@@ -62,6 +62,7 @@ def test_public_report_directory_matches_positive_allowlist() -> None:
         "opxrd_cnrs7cs_independent_parent_audit_20260827.md",
         "RRUFF301_COMPOSITION_AUDIT.md",
         "RRUFF301_COMPOSITION_AUDIT.json",
+        "PARENT_BUDGET_EFFICIENCY.md",
     }
 
 
