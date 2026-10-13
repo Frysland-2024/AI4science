@@ -114,6 +114,7 @@ Start here:
 - [docs/PXRD_NOVELTY_LITERATURE_LINEAGE.md](docs/PXRD_NOVELTY_LITERATURE_LINEAGE.md) — related-work lineage
 - [docs/PROJECT_HISTORY.md](docs/PROJECT_HISTORY.md) — concise public research-evolution timeline
 - [docs/FUTURE_UNDERGRAD_THESIS_PLAN.md](docs/FUTURE_UNDERGRAD_THESIS_PLAN.md) — candidate undergraduate thesis plan for physics-guided PXRD inversion (not active)
+- [docs/PXRD_PARENT_STRUCTURE_EFFICIENCY_PLAN.md](docs/PXRD_PARENT_STRUCTURE_EFFICIENCY_PLAN.md) — planned supplementary experiment on training-parent sample efficiency (not run)
 
 ## Citation
 
