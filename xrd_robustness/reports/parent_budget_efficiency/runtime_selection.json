@@ -1,0 +1,12 @@
+{
+  "source_commit": "0749c635a4d858106066fa8a0e4759039cbd1a3c",
+  "source_branch": "codex/parent-budget-efficiency",
+  "source_frozen_config_sha256": "f8e531868741dfaabc484b9f73e711196911b82bd8836d2fae14ee409b2b406c",
+  "runtime_config_sha256": "64915fb6b6546f4830a085a955ed1f79fdcb9af3e9029d46acf09ef8bd46d685",
+  "benchmark_sha256": "16bd25def07c5d413c3dc4cde9df1c014fa6d721cf566d2aa7f5ba1468199b4a",
+  "selected_workers": 12,
+  "selected_prefetch_batches": 12,
+  "measured_replicates": 2,
+  "paired_optimizer_steps_per_second": 24.928992879931954,
+  "scientific_fields_changed": []
+}

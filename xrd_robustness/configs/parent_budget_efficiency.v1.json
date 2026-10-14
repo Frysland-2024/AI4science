@@ -1,0 +1,103 @@
+{
+  "schema_version": "parent-structure-efficiency-v1",
+  "status": "frozen_before_new_scores",
+  "scope": "supplementary_post_main_simulated_parent_budget_follow_up",
+  "scientific_question": "At matched independent-parent budgets and identical generated two-view streams, does Dynamic JS (lambda=60) outperform Dynamic ERM?",
+  "data": {
+    "dataset_root": "data/formal_14060",
+    "official_split": "parent-level, frozen; train=9842, validation=2109, test=2109",
+    "source_records_sha256": "05D5D33F200194612A8CDBE29D9443FC7BAD9C245F66D185364B6A75915CC6C",
+    "split_manifest_sha256": "B9D3B72E42EA0FD549DAE34425FF61D2D650D5DD7FE6F337D747CB952CF43293",
+    "peak_cache_manifest_sha256": "6AE0CFD1B5B29671E2F532D7A094F2FC412CABD64E4CF77D42915937BACC8D18",
+    "test_role": "already used by the main study; supplementary post-main follow-up, not an untouched confirmatory test"
+  },
+  "subset_selection": {
+    "selection_seed": 20261013,
+    "unit": "unique parent_structure_id",
+    "stratification": "crystal_system",
+    "rank": "SHA256(parent-structure-efficiency-v1 NUL selection_seed NUL crystal_system NUL parent_structure_id)",
+    "apportionment": "Hamilton largest remainder at each exact budget; ties follow CRYSTAL_SYSTEMS order; per-class prefixes form nested subsets",
+    "budgets": {"10": 984, "25": 2460, "50": 4921, "100": 9842},
+    "frozen_manifest": "manifests/parent_budget_efficiency/parent_subsets.v1.json"
+  },
+  "matrix": {
+    "methods": ["dynamic_erm", "dynamic_js"],
+    "lambda_js": 60.0,
+    "training_seeds": [20260711, 20260712, 20260713, 20260714, 20260715],
+    "execution_order": "for each seed in listed order, finish all four budgets and both paired methods before the next seed"
+  },
+  "model": {
+    "architecture": "ResNet-18-GN",
+    "model_id": "18",
+    "input_length": 3501,
+    "num_classes": 7,
+    "input_normalization": "frozen simulator output normalization"
+  },
+  "training": {
+    "profile": "train",
+    "optimizer": "AdamW",
+    "learning_rate": 0.0001,
+    "weight_decay": 0.0001,
+    "scheduler": "none",
+    "batch_size_parents": 16,
+    "optimizer_steps_per_model": 49280,
+    "validation_interval_steps": 6160,
+    "parent_occurrences_per_model": 788480,
+    "generated_views_per_model": 1576960,
+    "batching": "full batches only; deterministic shuffled cycles can cross cycle boundaries",
+    "pairing": "within each budget and seed, initialize ERM and JS from identical model weights and render one ordered two-view batch shared by both methods at every step",
+    "historical_budget_basis": "49280 is the median selected-best-checkpoint global_step among the 10 available historical V9 checkpoints (steps are not the missing historical terminal-step record); it is a new common supplementary budget, not a V9 reproduction",
+    "checkpoint_selection": "highest mean validation single-factor OOD Macro-F1 across six profiles on validation split at evaluation seed 20260721; ties use higher validation in-range Macro-F1 then earlier step"
+  },
+  "performance": {
+    "selection_basis": "local end-to-end benchmark comparing the historical 8/8 formal default with higher-prefetch alternatives before any scientific run",
+    "dynamic_prefetch": {
+      "worker_processes": 8,
+      "prefetch_batches": 8,
+      "worker_native_threads": 1,
+      "multiprocessing_start_method": "spawn",
+      "peak_cache_name": "peak_tables_v7_reflection",
+      "quality_gate": false,
+      "pin_memory": true,
+      "non_blocking_h2d": true
+    },
+    "cpu_threads": {"main_intraop": 2, "main_interop": 1},
+    "cuda_math": {
+      "float32_matmul_precision": "high",
+      "allow_tf32_matmul": true,
+      "allow_tf32_cudnn": true,
+      "cudnn_benchmark": true,
+      "cudnn_deterministic": true
+    },
+    "optimizer": {"name": "AdamW", "fused": true, "zero_grad_set_to_none": true},
+    "automatic_mixed_precision": {
+      "enabled": true,
+      "dtype": "bfloat16",
+      "gradient_scaler": false,
+      "fallback_to_float32": true
+    },
+    "torch_compile": {"enabled": false, "reason": "historical laptop probe found no working Triton installation"},
+    "execution_concurrency": 1
+  },
+  "evaluation": {
+    "evaluation_seeds": [20260721, 20260722, 20260723],
+    "batch_size": 256,
+    "validation_profiles": ["ood_shift_negative", "ood_shift_positive", "ood_broadening", "ood_noise", "ood_background", "ood_texture"],
+    "validation_evaluation_seed": 20260721,
+    "test_profiles": ["ood_shift_negative", "ood_shift_positive", "ood_broadening", "ood_noise", "ood_background", "ood_texture", "in_range", "level0"],
+    "primary": "mean single-factor OOD Macro-F1 across 6 profiles, 3 evaluation seeds, and the unchanged formal Test parents",
+    "secondary": ["in-range Macro-F1", "level0 Macro-F1", "accuracy", "per-profile Macro-F1", "per-class F1"],
+    "prediction": "one generated view per parent and profile; softmax probabilities; same convention as frozen simulated-Test panel evaluation"
+  },
+  "resources": {
+    "execution": "local machine only",
+    "gpu": "use available local CUDA GPU; no cloud compute or purchases",
+    "output_root": "<explicit local ignored directory outside tracked source>",
+    "checkpoint_policy": "keep last and validation-selected best checkpoints outside Git"
+  },
+  "interpretation": {
+    "same_budget_gain": "report matched-seed JS minus ERM differences at each measured parent count",
+    "data_savings": "only estimate equivalent-parent counts when the target is bracketed by measured points; no extrapolation",
+    "claim_boundary": "same-budget performance improvement does not by itself establish fewer-parent data efficiency"
+  }
+}

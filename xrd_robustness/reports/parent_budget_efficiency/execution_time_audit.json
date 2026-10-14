@@ -1,0 +1,16 @@
+{
+  "completed_pair_wall_seconds": 44065.28400000007,
+  "completed_pairs": 20,
+  "device_wide_gpu_busy_equivalent_hours": 5.286899723001642,
+  "device_wide_gpu_busy_equivalent_seconds": 19032.83900280591,
+  "end_to_end_wall_hours": 12.85527987,
+  "end_to_end_wall_seconds": 46279.007532,
+  "gpu_scope_note": "Sampled whole-device utilization; may include other processes and is not attributable solely to the experiment.",
+  "gpu_telemetry_coverage_seconds": 46260.41585326195,
+  "gpu_telemetry_sample_count": 9109,
+  "interrupted_partial_pair_count": 1,
+  "interrupted_partial_pair_wall_seconds": 2122.0,
+  "matrix_completed_at": "2026-10-14T10:57:09+08:00",
+  "matrix_started_at": "2026-10-13T22:05:50+08:00",
+  "total_pair_compute_wall_seconds": 46187.28400000007
+}
