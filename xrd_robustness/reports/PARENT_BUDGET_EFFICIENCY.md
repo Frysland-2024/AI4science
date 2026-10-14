@@ -53,6 +53,8 @@ The Test split and all original frozen configs, checkpoints, reports, and source
 
 Actual method runs: **40/40**.
 
+Before the scored matrix, a source-side preliminary launch was stopped before its first validation checkpoint when an evaluation batch-size audit found a mismatch with the recovered V9 protocol (128 versus 256). It produced no checkpoint or score; the frozen supplementary evaluation batch size was corrected to 256 before the formal matrix. On CUIFA, the transfer inventory check also rejected an unexpected Python `__pycache__` entry during preflight; the package was reverified before scientific training. Neither event is counted among the 40 method runs.
+
 ## Results
 
 Primary outcome is the mean Macro-F1 across six single-factor simulated OOD profiles, averaged over the three frozen evaluation seeds. In-range, level0, accuracy, profile-level, and per-class metrics are reported as secondary outcomes.

@@ -10,6 +10,23 @@
     "virtual environment",
     "GPU telemetry time series"
   ],
+  "pre_matrix_events": [
+    {
+      "event": "source_preliminary_launch_stopped",
+      "stage": "before first validation checkpoint",
+      "detail": "Evaluation batch size 128 did not match the recovered V9 protocol batch size 256.",
+      "recovery": "Frozen supplementary evaluation batch size set to 256 before the scored matrix.",
+      "checkpoint_or_score_produced": false,
+      "counted_in_formal_matrix": false
+    },
+    {
+      "event": "transfer_inventory_preflight_rejected_extra_file",
+      "stage": "CUIFA preflight before formal training",
+      "detail": "Unexpected Python __pycache__ entry was present in the transfer package inventory.",
+      "recovery": "Transfer integrity verification passed before scientific training began.",
+      "counted_in_formal_matrix": false
+    }
+  ],
   "interrupted_pairs": [
     {
       "budget_percent": 10,

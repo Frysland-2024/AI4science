@@ -199,6 +199,7 @@ python -m pytest -q
 - 采用原 Train 9,842 母结构的晶系分层嵌套子集；ResNet-18-GN、`lambda_js=60` 不变；配对 seed 和模拟协议固定，训练曝光量/优化步数必须统一。
 - 为避开公共 epoch runner 的 partial batch 和逐 epoch 验证行为，已使用独立固定步数配对入口与确定性嵌套母结构子集；公平性检查和 matched-view smoke 通过，协议与实现见本节链接的计划、配置及结果报告。
 - 运行使用 RTX 4070 Ti SUPER 16 GB，自动选择 12 workers / 12 prefetch、BF16、TF32、fused AdamW、pin memory 与 non-blocking H2D；20 个完成配对运行累计 12.24 小时，端到端矩阵墙钟时间 12.86 小时。采样所得约 5.29 GPU busy-equivalent hours 是整卡遥测，可能包含其他进程，不能视为实验独占 GPU 时间。
+- 正式矩阵前，源端一次预启动在首个验证检查点前发现评估 batch size 与 V9 协议不一致（128 对 256），未产生检查点或分数；冻结配置改为 256 后才运行矩阵。CUIFA 转移完整性预检曾拦截意外的 Python `__pycache__` 文件；重新通过完整性验证后才开始科研训练。这两项预检均不计入 40 个模型。
 - 迁移时一组 10% 配对运行在 step 43,120 遇到 Windows dashboard 文件替换 PermissionError；修正监控原子替换后，该配对从 step 0 重跑并完成。失败尝试留在本地审计，不计入 40 个完成模型。
 - CUIFA 基准为 24.93 paired optimizer steps/s，来源机器 RTX 4060 Laptop 基准为 11.79 steps/s，约 2.12×；两边 GPU 和 worker 设置不同，该比值不代表仅软件优化的因果效果。
 - 状态 **COMPLETED**；完整冻结设计见 [PXRD_PARENT_STRUCTURE_EFFICIENCY_PLAN.md](PXRD_PARENT_STRUCTURE_EFFICIENCY_PLAN.md)，结果与审计见上述报告和归档文件。原主实验报告、划分、权重和历史结果未修改。
