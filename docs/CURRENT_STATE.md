@@ -2,9 +2,9 @@
 
 > **权威性说明：** 本文件记录当前科学状态与当前执行口径。历史版本、旧聊天和 `PROJECT_HISTORY.md` 用于解释“为什么改变”，不得覆盖这里的当前结论；AI/Agent 工作规则见 [`../AGENTS.md`](../AGENTS.md) 与 [`RESEARCH_WORKFLOW.md`](RESEARCH_WORKFLOW.md)。
 
-**状态日期：** 2026-09-29
+**状态日期：** 2026-10-14
 
-**阶段：** 模拟结果、RRUFF-301 few-shot 与 CNRS-318 zero-shot 均已完成；当前在做论文图表、方法 framing 与成果封装
+**阶段：** 模拟主实验、RRUFF-301 few-shot、CNRS-318 zero-shot 与母结构预算补充实验均已完成；当前在做论文图表、方法 framing 与成果封装
 
 ## 1. 当前科学设计
 
@@ -50,6 +50,7 @@
 - 完成 CNRS-318 的 10-checkpoint zero-shot 外部域评测、原始输入复建和结果完整性审计；
 - 完成模拟 Test 与 CNRS 的概率可靠性审计；
 - 完成跨平台换行规范化哈希校验与全量回归测试（`117 passed`）；
+- 完成 CUIFA 台式机迁移后的母结构预算补充实验（40/40 模型、20/20 配对运行），并完成结果、运行时间与迁移环境归档；
 - 完成五类扰动物理/文献依据的当前主线汇总，确认该问题不是新的科研 TODO；
 - 完成 RRUFF-301 adaptation/test 的只读 composition audit：301 个 RRUFF ID 全部唯一，ID overlap = 0，spectrum-SHA overlap = 0，16,170 个跨 split 谱图对中 maximum Pearson = `0.947785`，没有 Pearson ≥ 0.95 的近重复谱。
 
@@ -181,12 +182,23 @@ python -m pytest -q
 
 正式规划与申请用文字见 **[FUTURE_UNDERGRAD_THESIS_PLAN.md](FUTURE_UNDERGRAD_THESIS_PLAN.md)**；未来如实际开题发生变化，须单独记录新决策与证据。
 
-## 9. 2026-10-13 独立母结构数量效率实验（PROPOSED，尚未运行）
+## 9. 2026-10-14 独立母结构数量效率实验（COMPLETED，post-main supplementary analysis）
 
-从早期暂缓的 sample-efficiency 设想中恢复 **10% / 25% / 50% / 100% 的 Train 母结构预算曲线**，检验在相同独立结构数、相同双视图曝光和优化预算下，利用同源关系的 Dynamic JS 是否比 Dynamic ERM 更充分使用晶体结构数据。
+从早期暂缓的 sample-efficiency 设想中恢复 **10% / 25% / 50% / 100% 的 Train 母结构预算曲线**。CUIFA 台式机迁移后，按冻结协议完成 40 个模型（4 档预算 × 5 seeds × ERM/JS）和 20 个配对运行；每个模型均完成 49,280 步。结果报告、逐 seed 指标、配对差值、图表和运行审计见 [`../xrd_robustness/reports/PARENT_BUDGET_EFFICIENCY.md`](../xrd_robustness/reports/PARENT_BUDGET_EFFICIENCY.md) 与 [`../xrd_robustness/reports/parent_budget_efficiency/`](../xrd_robustness/reports/parent_budget_efficiency/)。
+
+| Train 母结构预算 | Dynamic ERM Test Macro-F1 | Dynamic JS Test Macro-F1 | 配对差值 JS−ERM | 正向 seeds |
+|---:|---:|---:|---:|---:|
+| 984（10%） | 0.43156 ± 0.00438 | 0.48763 ± 0.00393 | +0.05607 | 5/5 |
+| 2,460（25%） | 0.51925 ± 0.00357 | 0.57098 ± 0.00803 | +0.05173 | 5/5 |
+| 4,921（50%） | 0.59349 ± 0.00413 | 0.63611 ± 0.00589 | +0.04261 | 5/5 |
+| 9,842（100%） | 0.64589 ± 0.00648 | 0.69985 ± 0.00496 | +0.05396 | 5/5 |
+
+`±` 为五 seed 的 sample SD。四档预算下 JS 的同预算性能均高于 ERM，但实测曲线不支持更低预算 JS 达到更高预算 ERM 的均值；因此**没有证据支持可量化的母结构节省**。该结论限于实测预算，不外推比例。模拟 Test 已被主研究使用，本结果明确属于 post-main supplementary analysis，不是首次打开的独立盲测。
 
 - 本实验是现有 `shared parent identity → relationship supervision` 主张的**独立补充机制/效率验证**，不是新模型、不是 RRUFF few-shot 标签效率，也不替代冻结的主实验。
 - 采用原 Train 9,842 母结构的晶系分层嵌套子集；ResNet-18-GN、`lambda_js=60` 不变；配对 seed 和模拟协议固定，训练曝光量/优化步数必须统一。
-- 已识别工程风险：目前公共 `runner.py` 的 epoch 末尾可能有不完整 batch，而且每 epoch 进行验证与保存，不适合直接充当完全公平的预算比较入口。CODEX LUNA 应先完成独立固定步数入口、数据审计、单元测试与 smoke，才能执行大规模 run。
-- 当前模拟 Test 已在正式论文中使用过；本次应标明为 **post-main supplementary follow-up**，不能声称是全新未打开的 confirmatory Test。
-- 状态 **PROPOSED / READY FOR CODEX IMPLEMENTATION / NOT_RUN**；完整任务与结果交付标准见 [PXRD_PARENT_STRUCTURE_EFFICIENCY_PLAN.md](PXRD_PARENT_STRUCTURE_EFFICIENCY_PLAN.md)。原主实验的报告、划分、权重和历史结果均不得修改。
+- 为避开公共 epoch runner 的 partial batch 和逐 epoch 验证行为，已使用独立固定步数配对入口与确定性嵌套母结构子集；公平性检查和 matched-view smoke 通过，协议与实现见本节链接的计划、配置及结果报告。
+- 运行使用 RTX 4070 Ti SUPER 16 GB，自动选择 12 workers / 12 prefetch、BF16、TF32、fused AdamW、pin memory 与 non-blocking H2D；20 个完成配对运行累计 12.24 小时，端到端矩阵墙钟时间 12.86 小时。采样所得约 5.29 GPU busy-equivalent hours 是整卡遥测，可能包含其他进程，不能视为实验独占 GPU 时间。
+- 迁移时一组 10% 配对运行在 step 43,120 遇到 Windows dashboard 文件替换 PermissionError；修正监控原子替换后，该配对从 step 0 重跑并完成。失败尝试留在本地审计，不计入 40 个完成模型。
+- CUIFA 基准为 24.93 paired optimizer steps/s，来源机器 RTX 4060 Laptop 基准为 11.79 steps/s，约 2.12×；两边 GPU 和 worker 设置不同，该比值不代表仅软件优化的因果效果。
+- 状态 **COMPLETED**；完整冻结设计见 [PXRD_PARENT_STRUCTURE_EFFICIENCY_PLAN.md](PXRD_PARENT_STRUCTURE_EFFICIENCY_PLAN.md)，结果与审计见上述报告和归档文件。原主实验报告、划分、权重和历史结果未修改。

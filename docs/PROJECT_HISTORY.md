@@ -148,15 +148,28 @@ The conceptual path is now recorded as: provenance-aware PXRD classification (co
 
 **Status:** FUTURE / CANDIDATE; see [FUTURE_UNDERGRAD_THESIS_PLAN.md](FUTURE_UNDERGRAD_THESIS_PLAN.md).
 
-## 12. 2026-10-13: revisit simulated parent-structure efficiency (planned, not run)
+## 12. 2026-10-14: CUIFA migration and simulated parent-structure budget study (completed)
 
-An earlier design for `10/25/50/100%` stratified nested training-parent subsets was restored to test the supervision-efficiency consequence of parent provenance. The unit of information is the **independent parent structure**, not synthetic spectrum count. Two-view Dynamic ERM and Dynamic JS (`lambda=60`) will be compared at identical parent, generated-view and optimizer-step budgets.
+The deferred `10/25/50/100%` stratified nested parent subset study was completed after migrating the frozen project checkout and formal data package to the CUIFA desktop. The repository source was pinned at commit `0749c635a4d858106066fa8a0e4759039cbd1a3c` on `codex/parent-budget-efficiency`; the protocol retained the independent parent structure as the information unit and compared two-view Dynamic ERM with Dynamic JS (`lambda=60`) at identical generated-view and optimizer-step budgets. Five seeds (`20260711`–`20260715`) were run at each of four budgets, for 40 completed models and 20 matched pairs, each model completing 49,280 steps.
 
-This design was previously deferred while the JS-only method was still being stabilized; revisiting it **after freezing the main method** now makes it a precise supplementary test. It does not change the original study, does not rerun RRUFF few-shot adaptation, and does not claim that equivalent performance has already been achieved with fewer parents.
+The frozen simulated Test Macro-F1 results (mean ± sample SD across five seeds) were:
 
-The first task is code/data audit and matched fixed-step implementation, because the public epoch-based runner has partial-batch and per-epoch validation behavior that must not confound different parent budgets. The old simulated Test has already been evaluated; this new analysis will be explicitly post-main supplementary work.
+| Parent budget | ERM | JS | Paired JS−ERM | Positive seeds |
+|---:|---:|---:|---:|---:|
+| 984 (10%) | 0.43156 ± 0.00438 | 0.48763 ± 0.00393 | +0.05607 | 5/5 |
+| 2,460 (25%) | 0.51925 ± 0.00357 | 0.57098 ± 0.00803 | +0.05173 | 5/5 |
+| 4,921 (50%) | 0.59349 ± 0.00413 | 0.63611 ± 0.00589 | +0.04261 | 5/5 |
+| 9,842 (100%) | 0.64589 ± 0.00648 | 0.69985 ± 0.00496 | +0.05396 | 5/5 |
 
-**Status:** PROPOSED / NOT_RUN; protocol: [PXRD_PARENT_STRUCTURE_EFFICIENCY_PLAN.md](PXRD_PARENT_STRUCTURE_EFFICIENCY_PLAN.md).
+JS was consistently higher at the same measured parent budget. No lower-budget JS mean reached a higher-budget ERM mean, so the results do **not** support a quantitative parent-structure saving claim. Because the simulated Test was already used in the main study, this is reported as post-main supplementary analysis, not a newly opened confirmatory test. The original main-study split, reports, weights, and results were left intact.
+
+On the RTX 4070 Ti SUPER 16 GB system, the selected runtime used 12 workers / 12 prefetch, BF16, TF32, fused AdamW, pinned memory, non-blocking transfers, and limited CPU intra-op threads. CUIFA benchmarked 24.93 paired optimizer steps/s compared with 11.79 steps/s on the source RTX 4060 Laptop, a 2.12× rate ratio across different GPUs and worker settings; this is not an isolated software-speed effect. All 20 successful pairs accumulated 12.24 hours of pair runtime, and end-to-end matrix wall time was 12.86 hours. Device-wide sampled telemetry integrated to about 5.29 busy-equivalent GPU hours and may include other GPU processes, so it is not attributed solely to this study.
+
+One 10% pair was interrupted at step 43,120 by a Windows `PermissionError` while replacing the progress dashboard. After correcting the monitoring file replacement, that pair was restarted from step 0 and completed. The interrupted attempt is preserved in local audit data and is excluded from the 40 completed models. The handoff's transfer, artifact allowlist, and final deliverable requirements are recorded in the source transfer file; raw data, checkpoints, generated-spectrum caches, and telemetry traces remain local.
+
+The report, machine-readable aggregates, figures, runtime audit, and sanitized execution manifest are in [`../xrd_robustness/reports/PARENT_BUDGET_EFFICIENCY.md`](../xrd_robustness/reports/PARENT_BUDGET_EFFICIENCY.md) and [`../xrd_robustness/reports/parent_budget_efficiency/`](../xrd_robustness/reports/parent_budget_efficiency/). The frozen design remains documented in [`PXRD_PARENT_STRUCTURE_EFFICIENCY_PLAN.md`](PXRD_PARENT_STRUCTURE_EFFICIENCY_PLAN.md).
+
+**Status:** COMPLETED; supplementary conclusion recorded in `CURRENT_STATE.md` and the parent-budget report.
 
 ## Current perspective
 

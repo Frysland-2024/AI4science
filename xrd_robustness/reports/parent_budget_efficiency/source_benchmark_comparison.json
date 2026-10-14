@@ -1,0 +1,36 @@
+{
+  "caveat": "The source benchmark used an RTX 4060 Laptop GPU and 8/8; CUIFA used an RTX 4070 Ti SUPER and 12/12. The observed ratio includes hardware and runtime differences and is not a software-only effect. The historical ~8-hour run is user recollection, not verified wall-time provenance.",
+  "cuifa_machine": {
+    "40_method_training_plus_validation_hours": 11.075104897766542,
+    "benchmark_artifact": "cuiFA_benchmark.json",
+    "benchmark_sha256": "16BD25DEF07C5D413C3DC4CDE9DF1C014FA6D721CF566D2AA7F5BA1468199B4A",
+    "gpu": "NVIDIA GeForce RTX 4070 Ti SUPER",
+    "memory_mib": 16376,
+    "paired_optimizer_steps_per_second": 24.928992879931954,
+    "prefetch_batches": 12,
+    "runtime_selection_artifact": "runtime_selection.json",
+    "validation_pair_seconds_per_checkpoint": 2.0880206000074395,
+    "workers": 12
+  },
+  "observed_comparison": {
+    "actual_completed_pair_wall_hours": 12.240356666666687,
+    "benchmark_estimated_full_matrix_speed_ratio": 2.1394226585647385,
+    "device_wide_gpu_busy_equivalent_hours": 5.286899723001642,
+    "end_to_end_wall_hours": 12.85527987,
+    "interrupted_partial_pair_hours": 0.5894444444444444,
+    "paired_step_rate_ratio": 2.115118530248518,
+    "validation_pair_speed_ratio": 5.01563701046572
+  },
+  "schema_version": "parent-budget-efficiency-benchmark-comparison-v1",
+  "source_machine": {
+    "40_method_training_plus_validation_hours": 23.694330364263053,
+    "benchmark_artifact": "PXRD_Transfer_to_CUIFA/03_EXPERIMENT/source_preflight/benchmark.json",
+    "benchmark_sha256": "96EA79FDD8D4E5540FAEE9EBD1CD710F40AF9716F1F6FBFD0BBC5F2484519CB6",
+    "gpu": "NVIDIA GeForce RTX 4060 Laptop GPU",
+    "memory_mib": 8188,
+    "paired_optimizer_steps_per_second": 11.78609733848008,
+    "prefetch_batches": 8,
+    "validation_pair_seconds_per_checkpoint": 10.472753400012152,
+    "workers": 8
+  }
+}

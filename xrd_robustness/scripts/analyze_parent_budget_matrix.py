@@ -458,6 +458,9 @@ def _write_report(
 
     benchmark = provenance.get("benchmark") or {}
     if benchmark:
+        runtime = provenance.get("performance_runtime") or {}
+        workers = runtime.get("prefetch_workers", "unknown")
+        prefetch = runtime.get("prefetch_batches", "unknown")
         lines.extend(
             [
                 "",
@@ -485,7 +488,35 @@ def _write_report(
                 "",
                 f"Each paired cell updates ERM and JS together; estimates therefore count 4/12/20 paired cells for 8/24/40 individual method runs. One-time Validation panel-cache construction took {benchmark.get('validation_panel_cache_seconds', float('nan')):.1f} s. Estimates include eight FP32 Validation passes per paired cell and exclude one-time panel construction, checkpoint I/O, Test panel construction/evaluation, and machine contention. The ~8 h historical figure is user recollection, not verified wall-time; compare it with these measurements rather than treating it as a benchmark.",
                 "",
-                "The selected training setup reuses the V9 online physical-rendering prefetcher, worker-local peak cache, structure-invariant reflection/preferred-orientation work, pinned memory, non-blocking H2D, two CPU intra-op threads, BF16 autocast, fused AdamW, and TF32. The selected 8/8 worker/queue setting matches the formal V9 ten-run script default; measured 12/12 and 16/16 settings did not show a stable end-to-end advantage. Validation and Test inference use FP32.",
+                f"The selected training setup used {workers}/{prefetch} workers/queued batches, as recorded before the formal runs. It reuses the V9 online physical-rendering prefetcher, worker-local peak cache, structure-invariant reflection/preferred-orientation work, pinned memory, non-blocking H2D, two CPU intra-op threads, BF16 autocast, fused AdamW, and TF32. Validation and Test inference use FP32.",
+            ]
+        )
+
+    runtime_audit = provenance.get("runtime_audit") or {}
+    source_comparison = provenance.get("source_benchmark_comparison") or {}
+    if runtime_audit:
+        lines.extend(
+            [
+                "",
+                "## Executed runtime",
+                "",
+                f"The matrix ran from {runtime_audit.get('matrix_started_at', 'unavailable')} to {runtime_audit.get('matrix_completed_at', 'unavailable')} ({runtime_audit.get('end_to_end_wall_hours', float('nan')):.2f} h end-to-end wall time). The 20 completed paired cells sum to {runtime_audit.get('completed_pair_wall_seconds', 0) / 3600:.2f} h; one interrupted 10% cell attempt added {runtime_audit.get('interrupted_partial_pair_wall_seconds', 0) / 3600:.2f} h before that cell was restarted from step 0.",
+                "",
+                f"Sampled whole-device telemetry integrates to {runtime_audit.get('device_wide_gpu_busy_equivalent_seconds', 0) / 3600:.2f} GPU-busy-equivalent hours over {runtime_audit.get('gpu_telemetry_sample_count', 0):,} samples. This is device-wide utilization and may include other processes; it is not attributable solely to this experiment.",
+            ]
+        )
+    if source_comparison:
+        source = source_comparison.get("source_machine", {})
+        target = source_comparison.get("cuifa_machine", {})
+        observed = source_comparison.get("observed_comparison", {})
+        lines.extend(
+            [
+                "",
+                "## Source-machine benchmark comparison",
+                "",
+                f"The source Windows laptop (RTX 4060 Laptop GPU, {source.get('workers')}/{source.get('prefetch_batches')}) measured {source.get('paired_optimizer_steps_per_second', float('nan')):.3f} paired optimizer steps/s and projected {source.get('40_method_training_plus_validation_hours', float('nan')):.2f} h for 40 method runs. CUIFA (RTX 4070 Ti SUPER, {target.get('workers')}/{target.get('prefetch_batches')}) measured {target.get('paired_optimizer_steps_per_second', float('nan')):.3f} paired steps/s and projected {target.get('40_method_training_plus_validation_hours', float('nan')):.2f} h; the measured paired-step rate ratio is {observed.get('paired_step_rate_ratio', float('nan')):.2f}×.",
+                "",
+                f"Observed completed-cell wall time was {observed.get('actual_completed_pair_wall_hours', float('nan')):.2f} h, plus {observed.get('interrupted_partial_pair_hours', float('nan')):.2f} h for the interrupted partial attempt; end-to-end wall time was {observed.get('end_to_end_wall_hours', float('nan')):.2f} h. The historical ~8-hour run is an unverified recollection. The rate comparison includes both a GPU change and runtime-setting change, so it is not a software-only speedup estimate.",
             ]
         )
 
@@ -495,7 +526,9 @@ def _write_report(
             "## Figures and machine-readable results",
             "",
             "- [Learning curve](parent_budget_efficiency/learning_curve.png)",
+            "  Error bars show sample SD across the five training seeds.",
             "- [Paired differences](parent_budget_efficiency/paired_deltas.png)",
+            "  Error bars show sample SD across the five matched training-seed differences; the dashed line marks zero.",
             "- [Summary JSON](parent_budget_efficiency/results.json)",
             "- [Per-seed metrics CSV](parent_budget_efficiency/per_seed_metrics.csv)",
             "- [Paired-difference CSV](parent_budget_efficiency/paired_deltas.csv)",
@@ -529,6 +562,18 @@ def main() -> int:
     output_root = args.output_root.resolve()
     config = json.loads((PROJECT_ROOT / "configs" / "parent_budget_efficiency.v1.json").read_text(encoding="utf-8"))
     runtime = _configure_training_runtime(config, device)
+    runtime_selection_path = output_root / "runtime_selection.json"
+    runtime_selection = (
+        json.loads(runtime_selection_path.read_text(encoding="utf-8"))
+        if runtime_selection_path.is_file()
+        else {}
+    )
+    runtime["prefetch_workers"] = int(
+        runtime_selection.get("selected_workers", runtime.get("prefetch_workers", 0))
+    )
+    runtime["prefetch_batches"] = int(
+        runtime_selection.get("selected_prefetch_batches", runtime.get("prefetch_batches", 0))
+    )
     simulation_path = PROJECT_ROOT / "configs" / "simulation.method_transfer.frozen.json"
     simulation = json.loads(simulation_path.read_text(encoding="utf-8"))
     split_rows = load_split_rows(args.data_root.resolve())
@@ -664,6 +709,11 @@ def main() -> int:
                         for crystal in CRYSTAL_SYSTEMS
                     }
                 )
+                # Keep the nested aggregation inputs alongside the flat report
+                # columns. _summarize consumes per_seed rows and expects both
+                # mappings to compute cross-seed/profile summaries.
+                row["ood_macro_f1_by_profile"] = summary["ood_macro_f1_by_profile"]
+                row["per_class_f1"] = summary["per_class_f1"]
                 test_rows.append(row)
                 run_records.append(
                     {
@@ -683,16 +733,49 @@ def main() -> int:
         summary["paired_deltas"],
     )
     _plots(summary, report_dir)
+    benchmark_path = next(
+        (
+            path
+            for path in (output_root / "benchmark.json", output_root / "cuiFA_benchmark.json")
+            if path.is_file()
+        ),
+        None,
+    )
+    benchmark = json.loads(benchmark_path.read_text(encoding="utf-8")) if benchmark_path else None
+    if benchmark is not None:
+        benchmark["benchmark_run_sources"] = [
+            Path(value).name for value in benchmark.get("benchmark_run_sources", [])
+        ]
+        benchmark["resource_telemetry_csv"] = [
+            Path(value).name for value in benchmark.get("resource_telemetry_csv", [])
+        ]
+        benchmark["validation_panel_cache_path"] = "local benchmark cache (excluded from Git)"
+        for setting in benchmark.get("settings", []):
+            for measurement in setting.get("replicate_measurements", []):
+                if measurement.get("source"):
+                    measurement["source"] = Path(measurement["source"]).name
+    runtime_audit_path = output_root / "execution_time_audit.json"
+    runtime_audit = (
+        json.loads(runtime_audit_path.read_text(encoding="utf-8"))
+        if runtime_audit_path.is_file()
+        else None
+    )
+    source_comparison_path = output_root / "source_benchmark_comparison.json"
+    source_comparison = (
+        json.loads(source_comparison_path.read_text(encoding="utf-8"))
+        if source_comparison_path.is_file()
+        else None
+    )
     provenance = {
         "source_records_count": 14060,
         "peak_tables_verified": 14060,
         "subset_manifest_sha256": sha256_file(PROJECT_ROOT / "manifests" / "parent_budget_efficiency" / "parent_subsets.v1.json"),
         "protocol_config_sha256": sha256_file(PROJECT_ROOT / "configs" / "parent_budget_efficiency.v1.json"),
-        "output_root": str(output_root),
+        "output_root": "CUIFA local ignored output directory (excluded from Git)",
         "performance_runtime": runtime,
-        "benchmark": json.loads((output_root / "benchmark.json").read_text(encoding="utf-8"))
-        if (output_root / "benchmark.json").is_file()
-        else None,
+        "benchmark": benchmark,
+        "runtime_audit": runtime_audit,
+        "source_benchmark_comparison": source_comparison,
     }
     results = {
         "schema_version": "parent-budget-efficiency-results-v1",
