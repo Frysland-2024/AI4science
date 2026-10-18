@@ -1,125 +1,96 @@
-# AI4science — Provenance-Aware Supervision for PXRD Classification
+# AI4science | Learning from PXRD simulations
 
 [![XRD tests](https://github.com/Frysland-2024/AI4science/actions/workflows/xrd-tests.yml/badge.svg)](https://github.com/Frysland-2024/AI4science/actions/workflows/xrd-tests.yml)
+[Research guide](docs/REVIEWER_GUIDE.md) · [Results & limitations](xrd_robustness/reports/RESULTS.md) · [Main implementation](xrd_robustness/) · [Research evolution](docs/PROJECT_HISTORY.md)
 
-Research code, frozen configurations, result summaries, and audit material for **provenance-aware supervised learning on powder X-ray diffraction (PXRD)**.
+**Research focus:** supervised machine learning for **seven-crystal-system classification from powder X-ray diffraction (PXRD)**. We investigate whether a simulator can provide more than synthetic patterns and class labels: **it also knows which different measurements come from the same parent crystal.**
 
-The central question is simple: an online PXRD simulator knows not only the crystal-system label, but also **which perturbed spectra came from the same parent crystal**. This repository studies whether that parent identity can be turned into additional supervision.
+**中文一句话：** 用同一晶体在不同测量条件下产生的两张 XRD 模拟谱，构造“同源关系监督”，并检验它是否比普通动态数据增强更有利于晶系识别、抗扰动和少量真实谱适配。
 
-> **Status:** research code and evidence package; manuscript preparation is ongoing.
+**Status (October 2026):** the main Dynamic ERM vs Dynamic JS comparison and its simulated/experimental evaluations are completed; manuscript preparation is ongoing. A separate PXRD inversion numerical track exists, while the proposed undergraduate thesis direction and parent-budget learning-curve supplement are **not completed results**.
 
-## Core idea
+## The idea, in one figure
 
-For one parent structure s, the simulator generates two measurement realizations:
+![Two measurement views from one parent crystal and the matched ERM–JS learning setup](xrd_robustness/figures/figure_1_method_overview.png)
 
-x1 = g(s, m1), x2 = g(s, m2).
+A parent crystal structure has a fixed crystal-system label, but its measured diffraction pattern changes with peak shift, broadening, preferred orientation, background, and noise.
 
-Both Dynamic ERM and Dynamic JS see the same parent structures, perturbation distribution, and two-view data exposure. The key difference is that Dynamic JS explicitly uses the known same-parent relation through prediction consistency:
+- **Standard use of a simulator:** generate many labeled PXRD patterns and train a classifier.
+- **This study:** retain the *same-parent* relationship between two independently perturbed observations; use that relationship as an additional consistency signal.
+- **Controlled question:** with **identical parent structures, two-view exposure, perturbation distribution, backbone and training budget**, does explicit same-parent consistency improve generalization beyond Dynamic ERM?
 
-L = 0.5 CE(p1, y) + 0.5 CE(p2, y) + lambda_JS JS(p1, p2).
+For simulated views **x₁ = g(s, m₁)** and **x₂ = g(s, m₂)** from the same structure **s**, the supervised objectives are:
 
 ~~~text
-parent crystal
-   ├─ measurement realization 1 ─► PXRD view x1 ─┐
-   └─ measurement realization 2 ─► PXRD view x2 ─┤
-                                                  ├─ shared parent identity
-                                                  └─ measurement-equivalence supervision
+Dynamic ERM:  L = 0.5 CE(p1, y) + 0.5 CE(p2, y)
+Dynamic JS:   L = 0.5 CE(p1, y) + 0.5 CE(p2, y) + λ · JS(p1, p2)
 ~~~
 
-The contribution is therefore **not** a new JS-divergence algorithm. It is the use of **simulator-retained provenance as relationship supervision**.
+Here **p1** and **p2** are the predicted seven-class distributions; **λ = 60** was selected on validation. Both methods use the same **ResNet-18-GN** backbone. The contribution is **using simulator-retained provenance as relationship supervision**, **not** inventing JS divergence, online simulation, or the ResNet architecture.
 
-## Headline results
+## Results at a glance
 
-The main comparison uses a ResNet-18-GN backbone and lambda_js = 60.
+The primary simulated study uses **14,060 unique parent structures** (9,842 train / 2,109 validation / 2,109 test), separated at the parent level, with **five matched training seeds**.
 
-| Evaluation | Dynamic ERM | Dynamic JS | Paired change |
+| Evaluation (Macro-F1 unless noted) | Dynamic ERM | Dynamic JS | JS − ERM |
 |---|---:|---:|---:|
-| Simulated single-factor OOD Macro-F1 | 0.65074 ± 0.00721 | 0.70534 ± 0.00977 | **+0.05460**; 5/5 seeds positive |
-| Simulated single-factor OOD Accuracy | 0.65078 ± 0.00780 | 0.70524 ± 0.00856 | **+0.05445**; 5/5 seeds positive |
-| RRUFF-301 K=1 Macro-F1 | 0.2847 ± 0.0269 | 0.3280 ± 0.0329 | **+0.0433** |
-| RRUFF-301 K=2 Macro-F1 | 0.3026 ± 0.0407 | 0.3486 ± 0.0335 | **+0.0460** |
-| RRUFF-301 K=5 Macro-F1 | 0.3555 ± 0.0302 | 0.4099 ± 0.0271 | **+0.0545** |
-| CNRS-318 zero-shot seed-level Macro-F1 | 0.18837 ± 0.02634 | 0.20708 ± 0.02134 | **+0.01871 ± 0.00675**; 5/5 seeds positive |
+| **Simulated Test:** mean single-factor OOD | 0.6507 | **0.7053** | **+5.46 percentage points**; 5/5 seeds |
+| **RRUFF-301:** 1 real label / class | 0.2847 | **0.3280** | **+4.33 pp** |
+| **RRUFF-301:** 2 real labels / class | 0.3026 | **0.3486** | **+4.60 pp** |
+| **RRUFF-301:** 5 real labels / class | 0.3555 | **0.4099** | **+5.45 pp** |
+| **CNRS-318:** zero-shot external source, seed-level mean | 0.1884 | **0.2071** | **+1.87 pp**; 5/5 seeds |
 
-Full result definitions, uncertainty treatment, and dataset-role boundaries are documented in [xrd_robustness/reports/RESULTS.md](xrd_robustness/reports/RESULTS.md) and [docs/PXRD_RESULT_REPORTING_STANDARD.md](docs/PXRD_RESULT_REPORTING_STANDARD.md).
+![Paired simulated-Test evaluation across the five matched seeds](xrd_robustness/figures/figure_3_simulated_test_paired_ood.png)
 
-Machine-readable headline summaries:
+**How to interpret the three evaluations:**
 
-- [validation_results.json](xrd_robustness/reports/validation_results.json)
-- [simulated_test_results.json](xrd_robustness/reports/simulated_test_results.json)
-- [rruff301_fewshot_results.json](xrd_robustness/reports/rruff301_fewshot_results.json)
+1. **Simulated OOD:** the same-parent consistency objective improves classification under held-out measurement perturbations. The largest profile-specific gains occur for **peak broadening and preferred orientation**; see [perturbation evidence](docs/PXRD_PERTURBATION_EVIDENCE.md) and the [full results](xrd_robustness/reports/RESULTS.md).
+2. **RRUFF-301 few-shot:** the pretrained models are adapted using the **same small real-label budgets**. The comparison concerns **label efficiency on this curated experimental domain**, *not* generalization to unseen minerals.
+3. **CNRS-318 zero-shot:** the frozen simulated-data-trained models are tested on an **independent, naturally imbalanced experimental source**, without CNRS-label tuning. This is a **relative cross-domain comparison**, not a high-accuracy application claim: absolute performance is low; CNRS accuracy remains below its majority-class baseline, and a parent-level bootstrap interval for the Macro-F1 gain crosses zero.
 
-The manuscript draft is tracked in [xrd_robustness/MANUSCRIPT.md](xrd_robustness/MANUSCRIPT.md).
+Across secondary reliability analyses, ECE/NLL/Brier generally improve as well, but these are supporting measures rather than the principal contribution. Precise mean ± SD, paired designs, statistical uncertainty, dataset limitations, and per-class behavior are preserved in [RESULTS.md](xrd_robustness/reports/RESULTS.md), [CNRS details](xrd_robustness/reports/CNRS_318_RESULTS.md), and [calibration analysis](xrd_robustness/reports/CALIBRATION_ANALYSIS.md). Machine-readable [simulated Test](xrd_robustness/reports/simulated_test_results.json) and [RRUFF few-shot](xrd_robustness/reports/rruff301_fewshot_results.json) summaries are tracked.
 
-## Repository structure
+## What is actually implemented?
 
-~~~text
-AI4science/
-├── xrd_robustness/   # main PXRD classification / relationship-supervision study
-│   ├── src/          # reusable Python package
-│   ├── configs/      # frozen experiment configs
-│   ├── manifests/    # run and provenance manifests
-│   ├── reports/      # compact result and audit artifacts
-│   ├── scripts/      # training, evaluation, audit, and figure scripts
-│   └── tests/        # implementation and evidence-contract tests
-├── xrd_inversion/    # secondary numerical PXRD inversion work
-├── docs/             # scientific framing, evidence, reporting, and project history
-└── .github/workflows # CI
-~~~
+| Research/engineering component | Inspect the evidence or code |
+|---|---|
+| **Physics-motivated PXRD measurement simulation** and online generation of paired views | [Simulator](xrd_robustness/src/xrd_robustness/simulator.py) · [Online views](xrd_robustness/src/xrd_robustness/online_views.py) · [Frozen simulation config](xrd_robustness/configs/simulation.method_transfer.frozen.json) |
+| **Parent-disjoint structure splits** and dataset construction | [Structure-split code](xrd_robustness/src/xrd_robustness/structure_split.py) · [Public experiment contract](xrd_robustness/configs/experiment.public.json) |
+| **Matched two-view ERM / JS training**, shared 1D ResNet backbone | [Training objectives](xrd_robustness/src/xrd_robustness/training/objectives.py) · [Training runner](xrd_robustness/src/xrd_robustness/training/runner.py) · [ResNet](xrd_robustness/src/xrd_robustness/models/ml4pxrd_resnet1d.py) |
+| **Frozen OOD/real-domain evaluation**, reproducibility and leakage checks | [Evaluation scripts](xrd_robustness/scripts/) · [Evidence audit](docs/PXRD_METHOD_DETAIL_EVIDENCE_CLOSURE.md) · [Tests](xrd_robustness/tests/) |
+| **Result interpretation and scientific reporting** | [Results](xrd_robustness/reports/RESULTS.md) · [Manuscript draft](xrd_robustness/MANUSCRIPT.md) · [Figures](xrd_robustness/figures/) |
 
-## Quick start
+This is a **controlled application of established ML components to a physically structured supervision problem**. The 1D ResNet implementation draws on the MIT-licensed **ML4pXRDs** codebase; see [third-party notices](THIRD_PARTY_NOTICES.md).
 
-Main package documentation: [xrd_robustness/README.md](xrd_robustness/README.md).
+## Explore the repository
 
-### Main PXRD classification package
+| Track | Status | Purpose |
+|---|---|---|
+| **[xrd_robustness/](xrd_robustness/)** | **Completed experiments / writing** | Main PXRD classification study: matched ERM–JS, simulated OOD, RRUFF few-shot, CNRS zero-shot |
+| **[xrd_inversion/](xrd_inversion/)** | **Separate numerical research infrastructure** | Known-phase tetragonal PXRD forward/inversion validation; numerical gates have results, **not** a completed ML inversion claim |
+| **[docs/PXRD_PARENT_STRUCTURE_EFFICIENCY_PLAN.md](docs/PXRD_PARENT_STRUCTURE_EFFICIENCY_PLAN.md)** | **Proposed; not yet run** | Follow-up question: can same-parent supervision achieve better performance with fewer *independent crystal structures*? |
+| **[docs/FUTURE_UNDERGRAD_THESIS_PLAN.md](docs/FUTURE_UNDERGRAD_THESIS_PLAN.md)** | **Future candidate; not started** | Possible physics-constrained continuous-parameter inversion thesis |
+
+For the reasoning behind changes such as **PAMPT → ResNet**, abandonment of the Residual branch, and the shift from generic robustness framing to relationship supervision, see the [project history](docs/PROJECT_HISTORY.md). Negative and archived results are intentionally retained.
+
+## Verify the public code
 
 ~~~bash
 git clone https://github.com/Frysland-2024/AI4science.git
 cd AI4science/xrd_robustness
-
 python -m pip install -e ".[test]"
 python -m pytest -q -m "not data_bound"
 ~~~
 
-The public test suite validates code, interfaces, configs, and tracked evidence artifacts. It does **not** retrain all models.
+This verifies the **public, non-data-bound code and evidence contracts**, **not** the full historical GPU training. Raw external datasets, trained checkpoints and large intermediate data are not redistributed. See [data and reproducibility levels](docs/DATA_AND_REPRODUCIBILITY.md) and the package [quick-start guide](xrd_robustness/README.md).
 
-Optional scientific and plotting dependencies:
+## For academic readers
 
-~~~bash
-python -m pip install -e ".[science,figures,test]"
-~~~
+- **[5-minute research / reviewer guide](docs/REVIEWER_GUIDE.md):** which files answer the scientific and ML questions.
+- **[Current scientific state](docs/CURRENT_STATE.md):** authoritative status and claim boundaries.
+- **[Supervision framing](docs/PXRD_SUPERVISION_FRAMING.md):** why the method is about same-parent relations, not a new divergence.
+- **[Literature lineage](docs/PXRD_NOVELTY_LITERATURE_LINEAGE.md):** precedents and novelty boundaries.
+- **[Research timeline](docs/PROJECT_HISTORY.md):** documented decisions, failed attempts and redirections.
+- **[Manuscript scaffold](xrd_robustness/MANUSCRIPT.md):** paper-oriented narrative, with writing still in progress.
 
-## Data and reproducibility
-
-Raw external datasets, model checkpoints, generated spectra, and large intermediate arrays are intentionally not committed. The repository keeps compact configs, manifests, scripts, hashes, summary results, and audits needed to understand and verify the reported evidence chain.
-
-See [docs/DATA_AND_REPRODUCIBILITY.md](docs/DATA_AND_REPRODUCIBILITY.md) for data requirements and reproducibility levels.
-
-## Scientific scope and limitations
-
-- The primary task is **seven-crystal-system PXRD classification**.
-- RRUFF-301 is an **in-domain few-shot adaptation / label-efficiency** evaluation, not an unseen-mineral benchmark.
-- CNRS-318 is an independent **zero-shot external-domain** evaluation. Its labels are reconstructed from deposited structures and were not independently verified by manual spectrum-level phase analysis.
-- CNRS absolute sim-to-real performance remains low; the result is evidence about the *relative* ERM–JS comparison, not a claim that experimental PXRD classification is solved.
-- The project uses JS consistency as a controlled implementation of provenance-aware supervision; it does not claim JS divergence itself is novel.
-
-## Documentation
-
-Start here:
-
-- [docs/CURRENT_STATE.md](docs/CURRENT_STATE.md) — current scientific state
-- [docs/PXRD_SUPERVISION_FRAMING.md](docs/PXRD_SUPERVISION_FRAMING.md) — task and method framing
-- [docs/PXRD_EVIDENCE_CLOSURE.md](docs/PXRD_EVIDENCE_CLOSURE.md) — evidence closure and claim boundaries
-- [docs/PXRD_METHOD_DETAIL_EVIDENCE_CLOSURE.md](docs/PXRD_METHOD_DETAIL_EVIDENCE_CLOSURE.md) — implementation and fairness audit
-- [docs/PXRD_NOVELTY_LITERATURE_LINEAGE.md](docs/PXRD_NOVELTY_LITERATURE_LINEAGE.md) — related-work lineage
-- [docs/PROJECT_HISTORY.md](docs/PROJECT_HISTORY.md) — concise public research-evolution timeline
-- [docs/FUTURE_UNDERGRAD_THESIS_PLAN.md](docs/FUTURE_UNDERGRAD_THESIS_PLAN.md) — candidate undergraduate thesis plan for physics-guided PXRD inversion (not active)
-- [docs/PXRD_PARENT_STRUCTURE_EFFICIENCY_PLAN.md](docs/PXRD_PARENT_STRUCTURE_EFFICIENCY_PLAN.md) — planned supplementary experiment on training-parent sample efficiency (not run)
-
-## Citation
-
-A manuscript citation will be added once the author list and persistent identifier are frozen. Until then, cite the repository URL together with the commit hash used. See [CITATION.md](CITATION.md).
-
-## License and third-party code
-
-This repository is released under the [MIT License](LICENSE). The ResNet implementation in xrd_robustness is a PyTorch port based on the MIT-licensed ML4pXRDs implementation by aimat-lab. See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+**Citation:** a paper citation will be added after the author list and identifier are finalized. Until then, cite the [repository](https://github.com/Frysland-2024/AI4science) with the commit hash; see [CITATION.md](CITATION.md). **License:** [MIT](LICENSE).
