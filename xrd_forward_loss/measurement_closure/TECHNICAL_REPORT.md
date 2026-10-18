@@ -74,7 +74,9 @@ B 的 nuisance scaled-coordinate MAE（坐标顺序为 zero-shift/FWHM/backgroun
 
 失败保留：P0 首次运行因 Pymatgen API 名称变化在 Gate 前退出；P1 v1 因背景自由度不可辨识而失败；P3 首次正式运行完成 A 和 λ 候选后，在续训 B 时将 RNG ByteTensor 错映射到 CUDA。没有放宽 Gate；P3 修复后从新目录内的全新 formal 数据与 seed 重新执行，且把第一次尝试的保守耗时计入预算。失败日志、数据和 checkpoint manifest 纳入 PR；46 个原始 checkpoint 权重保存在当前 worktree 的 `results/p3_issue19_20261018/` 下，不纳入 Git。
 
-训练源 commit 为 `0e90eac79c1ae58252b4848a921bf43ee6d2669c`；配置 SHA-256 为 `b17a9db0eed38557f4b06a092f8d4a35437619025f78532119e3a923ddf2251f`；`formal_data.npz` SHA-256 为 `88401a857bc7a4849731fbb5e881b37efef7483e0ec13415f977db035e333a29`；CIF SHA-256 为 `e854c9868f643183904606b8c24463f8f0bacc1cca90f283641b33346db748b4`。命令与 exit code 见 `results/p3_issue19_20261018/command_log.json`，每个 smoke、失败与正式 checkpoint 的 SHA/大小见 `checkpoint_manifest.json`。46 个 optimizer checkpoint 共约 8.92 GiB，完整保留在当前 worktree，不纳入 Git；compact 数据、history、metrics、prediction arrays 与图表在 PR 中跟踪。
+训练源 commit 为 `0e90eac79c1ae58252b4848a921bf43ee6d2669c`；配置 SHA-256 为 `b17a9db0eed38557f4b06a092f8d4a35437619025f78532119e3a923ddf2251f`；`formal_data.npz` SHA-256 为 `88401a857bc7a4849731fbb5e881b37efef7483e0ec13415f977db035e333a29`；CIF SHA-256 为 `e854c9868f643183904606b8c24463f8f0bacc1cca90f283641b33346db748b4`。命令与 exit code 见 `results/p3_issue19_20261018/command_log.json`，46 个原始 checkpoint 的 SHA/大小台账见 `checkpoint_manifest.json`。
+
+原始 46 个 checkpoint 共 `9,579,304,254` bytes（约 8.92 GiB）；每个文件都重复保存 best/last 两份 FP32 模型权重和 Adam 状态。训练结束后保留 12 个最终模型（A/B × simple/V9 × 3 seeds）的 FP32 `best_model_state`，合计 `624,709,422` bytes（约 596 MiB）；逐张量核对与原始权重完全相同，并已用 RTX 4060 的现有加载函数逐个成功加载。其余训练状态和 34 个中间 checkpoint 已清理，释放 `8,954,594,832` bytes（约 8.34 GiB，93.48%）。当前小 checkpoint 可用于模型推理/重算，不含 optimizer、last state、RNG 和训练 history，不能从中断点续训；这些实验记录仍由单独的 history、metrics、数组、配置和原始哈希台账保留。优化详情及精简权重哈希见 `results/p3_issue19_20261018/checkpoint_space_optimization.json`。compact 数据、history、metrics、prediction arrays 与图表在 PR 中跟踪。
 
 主要机器结果：
 

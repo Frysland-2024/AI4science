@@ -256,7 +256,7 @@ See [adapter contract](../xrd_forward_loss/V9_PERTURBATION_ADAPTER.md) and [pilo
 
 **Question / previous assumption:** 用户指出，PR #11/#16 中固定零点和最窄峰宽的 clean forward 与加入零点偏移、展宽、背景和噪声的 observed profile 不一致；PR #17 虽改用 simulator-provided clean reference，却不能作为未知真实实验 clean target 的替代。单纯物理梯度正确还不足以说明 loss 解释了测量过程。
 
-**Evidence:** 在 COD 9014273 BaTiO₃/P4mm 模板上，P0 的 Torch/Pymatgen/V9 整谱 parity 通过；P1/P2 的测量期望谱 parity、autograd/有限差分、未知 q+eta 可辨识、non-oracle profile fit 和噪声期望 Gate 均通过。v1 因两个自由背景形状系数在 max-normalization 下不可辨识而失败；依据冻结 V9 `background_variation=0` 固定形状后 v2 通过，阈值未改。P3 在 RTX 4060 完成 512 q、3 paired seeds、simple/V9 A/B；test 未用于 λ 选择。第一次正式运行因 checkpoint RNG state 被加载到 CUDA 而在续训 B 前失败；traceback 和 checkpoint manifest 纳入 PR，18 个原始 checkpoint 保存在当前 worktree（不纳入 Git）；修复恢复状态设备后从新 formal 输出完整重跑，并把首次尝试保守 630 秒纳入 2 小时累计预算。
+**Evidence:** 在 COD 9014273 BaTiO₃/P4mm 模板上，P0 的 Torch/Pymatgen/V9 整谱 parity 通过；P1/P2 的测量期望谱 parity、autograd/有限差分、未知 q+eta 可辨识、non-oracle profile fit 和噪声期望 Gate 均通过。v1 因两个自由背景形状系数在 max-normalization 下不可辨识而失败；依据冻结 V9 `background_variation=0` 固定形状后 v2 通过，阈值未改。P3 在 RTX 4060 完成 512 q、3 paired seeds、simple/V9 A/B；test 未用于 λ 选择。第一次正式运行因 checkpoint RNG state 被加载到 CUDA 而在续训 B 前失败；traceback 和 46 个原始 checkpoint 的 SHA 台账纳入 PR；随后完成本地存储优化，保留 12 个逐张量等价的 FP32 最佳权重推理快照（约 596 MiB），释放约 8.34 GiB，精简快照不支持断点续训。修复 RNG 恢复设备后从新 formal 输出完整重跑，并把首次尝试保守 630 秒纳入 2 小时累计预算。
 
 **Decision / result:** measurement-aware expected forward 的训练闭环工程可行。结果并非一致胜出：simple 的两维 q MAE A `0.013533 ± 0.000849`、B `0.013676 ± 0.001923`；V9 的 A `0.032235 ± 0.001255`、B `0.030554 ± 0.002580`。V9 下 B 的 q MAE 小幅降低，但 nuisance 估计误差和 observed expected-profile residual 高于 A 路径；A 的 residual 评估另有逐样本 eta profile fitting 成本。保留为效果尚未确立的单 CIF exploratory result，不宣称普遍精度增益。
 

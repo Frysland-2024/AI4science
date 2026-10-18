@@ -231,4 +231,4 @@ python -m pytest -q
 
 512 个同一 CIF 的参数样本、3 paired seeds 和两类合成测量条件下，simple q MAE 为 A `0.013533`、B `0.013676`；V9 为 A `0.032235`、B `0.030554`。B 只在 V9 的两维 q MAE 略低，simple 略高；V9 nuisance head 对 zero-shift 的误差较大。结论是闭环工程可行、效果尚未确立；不得概括为更好的参数反演方法，也不构成真实谱或未见结构证据。
 
-本次累计 smoke、失败尝试保守计时、正式训练和 λ 选择 `1386.05/7200 s`，在 RTX 4060 完成。失败运行、命令 exit codes、逐 seed 指标、数据/配置 SHA、checkpoint SHA 和训练记录均已留档。详情见 [Issue #19 报告](MEASUREMENT_AWARE_FORWARD_CLOSURE_REPORT_20261018.md) 和 [技术报告](../xrd_forward_loss/measurement_closure/TECHNICAL_REPORT.md)。本次不改 frozen JS 分类、旧 PR 结果、Stage-1 factorization NO-GO 或 12 周研究规划；新增工作以独立 Draft PR 交审。
+本次累计 smoke、失败尝试保守计时、正式训练和 λ 选择 `1386.05/7200 s`，在 RTX 4060 完成。失败运行、命令 exit codes、逐 seed 指标、数据/配置 SHA、原始 checkpoint SHA 台账和训练记录均已留档。本地清理重复模型副本与 optimizer 状态后，保留 12 个最终 FP32 最佳权重推理快照（约 596 MiB），释放约 8.34 GiB；精简快照不能续训。详情见 [Issue #19 报告](MEASUREMENT_AWARE_FORWARD_CLOSURE_REPORT_20261018.md) 和 [技术报告](../xrd_forward_loss/measurement_closure/TECHNICAL_REPORT.md)。本次不改 frozen JS 分类、旧 PR 结果、Stage-1 factorization NO-GO 或 12 周研究规划；新增工作以独立 Draft PR 交审。
