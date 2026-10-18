@@ -10,7 +10,7 @@ The new gate used the original training-fold tetragonal parent `mp-1007758` (HfC
 
 ## New numerical checks
 
-At anchor `q=[0.11,-0.13,0,-1]`, the transformed-profile Jacobian columns for `du,dv` are nonzero and full rank. Its singular values are `[39.4990, 11.7564]`, condition number `3.3598`. Central finite differences over three steps gave best relative L2 errors `5.85e-6` for `du` and `1.15e-6` for `dv`. The end-to-end reconstruction MSE gradient to a predicted two-coordinate tensor was finite; scalar-loss autograd versus central finite difference had relative errors `2.68e-7` and `1.62e-7` for `du,dv`.
+At anchor `q=[0.11,-0.13,0,-1]`, the transformed-profile Jacobian columns for `du,dv` are nonzero and full rank. Its singular values are `[39.4990, 11.7564]`, condition number `3.3598`. Central finite differences over three steps gave best relative L2 errors `5.85e-6` for `du` and `1.15e-6` for `dv`. The end-to-end reconstruction MSE gradient to a predicted two-coordinate tensor was finite; in the final pilot gate JSON, scalar-loss autograd versus central finite difference had relative errors `3.25e-7` and `1.38e-6` for `du,dv`. The earlier degenerate-initialization gate had different errors and is retained separately with that failed run.
 
 The actual A/B smoke path also passed: each method completed one training epoch on a 64-pattern subset, with finite total loss and validation MAE. This confirms that the NN output can enter the forward graph and return gradients to the NN.
 
