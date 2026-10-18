@@ -1,0 +1,51 @@
+{
+  "scope": "one COD tetragonal BaTiO3 CIF; synthetic parameter draws; feasibility only",
+  "cod_id": "9014273",
+  "cif_sha256": "e854c9868f643183904606b8c24463f8f0bacc1cca90f283641b33346db748b4",
+  "cif_source": "https://www.crystallography.net/cod/9014273.cif",
+  "structural_reference_doi": "10.1103/PhysRev.105.856",
+  "space_group_expected": "P4mm #99",
+  "a0_angstrom": 3.986,
+  "c0_angstrom": 4.026,
+  "pymatgen_peak_coverage": 1.0,
+  "jacobian_condition": 2.966359016044183,
+  "sobol_power": 7,
+  "epochs": 4,
+  "seed": 20261021,
+  "counts": {
+    "train": 90,
+    "validation": 19,
+    "test": 19
+  },
+  "note": "Single seed screening only; lambda=1.0 inherited for engineering smoke, not validated for BaTiO3",
+  "models": {
+    "A": {
+      "train_seconds": 0.9378348999889567,
+      "validation_mae": 0.24164877831935883,
+      "test_parameter_mae_normalized": {
+        "du": 0.05254906631614033,
+        "dv": 0.4328694999414055,
+        "mean_two_parameter": 0.2427092831287729
+      },
+      "test_lattice_mae_angstrom": {
+        "a": 0.004972946272762159,
+        "c": 0.012663934940092441
+      },
+      "test_clean_rmse": 0.09194187477059117
+    },
+    "B": {
+      "train_seconds": 0.6881002000300214,
+      "validation_mae": 0.26168712973594666,
+      "test_parameter_mae_normalized": {
+        "du": 0.06314641756838874,
+        "dv": 0.44565182186565117,
+        "mean_two_parameter": 0.25439911971701995
+      },
+      "test_lattice_mae_angstrom": {
+        "a": 0.00464233790128161,
+        "c": 0.013511853928186704
+      },
+      "test_clean_rmse": 0.09252443539714095
+    }
+  }
+}
