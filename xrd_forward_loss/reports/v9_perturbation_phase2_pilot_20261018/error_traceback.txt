@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "C:\Users\Lenovo\.codex\worktrees\v9-forward-loss-reuse\AI4science\xrd_forward_loss\scripts\run_v9_perturbation_pilot.py", line 826, in main
+    save_plots(output_dir, arrays, results, abs_errors, axis, splits["test"])
+  File "C:\Users\Lenovo\.codex\worktrees\v9-forward-loss-reuse\AI4science\xrd_forward_loss\scripts\run_v9_perturbation_pilot.py", line 535, in save_plots
+    axes[coordinate].boxplot(values, labels=labels, showmeans=True)
+  File "E:\AI4science\.venvs\xrd_test\Lib\site-packages\matplotlib\_api\deprecation.py", line 477, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\AI4science\.venvs\xrd_test\Lib\site-packages\matplotlib\__init__.py", line 1528, in inner
+    return func(
+           ^^^^^
+TypeError: Axes.boxplot() got an unexpected keyword argument 'labels'

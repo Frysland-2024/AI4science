@@ -212,3 +212,15 @@ python -m pytest -q
 - 已识别工程风险：目前公共 `runner.py` 的 epoch 末尾可能有不完整 batch，而且每 epoch 进行验证与保存，不适合直接充当完全公平的预算比较入口。CODEX LUNA 应先完成独立固定步数入口、数据审计、单元测试与 smoke，才能执行大规模 run。
 - 当前模拟 Test 已在正式论文中使用过；本次应标明为 **post-main supplementary follow-up**，不能声称是全新未打开的 confirmatory Test。
 - 状态 **PROPOSED / READY FOR CODEX IMPLEMENTATION / NOT_RUN**；完整任务与结果交付标准见 [PXRD_PARENT_STRUCTURE_EFFICIENCY_PLAN.md](PXRD_PARENT_STRUCTURE_EFFICIENCY_PLAN.md)。原主实验的报告、划分、权重和历史结果均不得修改。
+
+## 10. V9 扰动复用于 Forward Loss 的新工程 Pilot（PRELIMINARY）
+
+在 PR #11 head 上独立开发了 V9 测量扰动适配器与一项新的 HfCd 工程 Pilot；没有改写 PR #11 的原始 noisy-input Forward Loss 结果。新 B 明确使用模拟器生成的 clean reference，属于 **simulator-supervised clean-reference forward loss**，不能称作真实实验谱上的无监督重建。
+
+- 128 个同一训练折四方 HfCd 母结构的参数样本，按 90/19/19 划分；A/B 共用样本、网络、配对 seeds 和优化预算，比较简单 Poisson+线性背景输入及 V9 扰动输入。
+- V9 Poisson–Gaussian 噪声、平滑背景、面积稳定峰展宽、全谱 2θ 零点偏移均已接入并通过算子检查。March–Dollase 保持关闭。零点和峰宽只扰动输入，不改晶格参数标签。
+- V9 与 Torch clean renderer 的 max-abs 差 `1.04e-7`； Forward Loss 梯度有限差分检查通过，晶格 Jacobian 条件数 `3.36`。
+- 三 seed 结果是混合证据：simple 输入下 B 平均 normalized-q MAE `0.05208`，A `0.05913`；V9 输入下 B `0.06842`，A `0.07293`。但 V9 下 B 的 clean-spectrum RMSE 略高（`0.04365` vs `0.04299`），晶格 `a` MAE 也略高，不能据此宣称全面改善。
+- 所有结果来自单一已知 HfCd 结构的模拟参数泛化；没有 CIF 文件，结构来自冻结的本地 standardized-structure JSON。未验证铁电陶瓷、实验谱、未见结构或精修初值效用。
+
+配置、逐样本扰动和 seed、原始谱阵列、Gate、A/B JSON、重算校验、图表和报告见 [`xrd_forward_loss/reports/v9_perturbation_phase2_pilot_20261018/`](../xrd_forward_loss/reports/v9_perturbation_phase2_pilot_20261018/)；接口说明见 [`V9_PERTURBATION_ADAPTER.md`](../xrd_forward_loss/V9_PERTURBATION_ADAPTER.md)。该工作保存在由 PR #11 head 分出的独立 stacked PR；PR 仍需人工审核，未自动合并。

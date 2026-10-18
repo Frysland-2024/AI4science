@@ -1,0 +1,40 @@
+{
+  "gate": "baseline V9 renderer vs differentiable forward at same q, no measurement nuisance",
+  "passed": true,
+  "max_abs_tolerance": 2e-06,
+  "rmse_tolerance": 2e-07,
+  "max_abs_error": 1.0400803317064368e-07,
+  "max_probe_rmse": 2.1200761723630996e-09,
+  "probes": [
+    {
+      "q": [
+        -0.4604798242449761,
+        -0.21747658252716065
+      ],
+      "max_abs_error": 6.004754926625111e-08,
+      "rmse": 1.64035442423025e-09,
+      "v9_max": 1.0,
+      "forward_max": 1.0
+    },
+    {
+      "q": [
+        -0.4753869041800499,
+        -0.7766090258955956
+      ],
+      "max_abs_error": 6.101002324258632e-08,
+      "rmse": 1.516674460890835e-09,
+      "v9_max": 1.0,
+      "forward_max": 1.0
+    },
+    {
+      "q": [
+        -0.4727845907211304,
+        0.24996249377727509
+      ],
+      "max_abs_error": 1.0400803317064368e-07,
+      "rmse": 2.1200761723630996e-09,
+      "v9_max": 1.0,
+      "forward_max": 1.0
+    }
+  ]
+}

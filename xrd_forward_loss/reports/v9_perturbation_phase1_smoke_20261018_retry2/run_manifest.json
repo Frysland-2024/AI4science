@@ -1,0 +1,443 @@
+{
+  "run_id": "v9_perturbation_phase1_smoke_20261018_retry2",
+  "status": "complete",
+  "phase": "phase1_noise_background",
+  "smoke_only": true,
+  "started_at_utc": "2026-10-18T11:02:13.552818+00:00",
+  "finished_at_utc": "2026-10-18T11:02:20.124906+00:00",
+  "config_path": "xrd_forward_loss\\configs\\v9_disturbance_clean_reference_pilot.json",
+  "config_sha256": "2801ab28d547fddd63eab21c801ec0195c2aaf6e8de69496fdb0b1a8d741a144",
+  "source_root_label": "authorized local dataset source",
+  "git_head": "f88bb5e0340bd5f47f80149c0a9464ae92711943",
+  "device_requested": "cuda",
+  "gates": {
+    "v9_operators": {
+      "gate": "V9 noise/background/broadening/global-shift operator checks",
+      "generation_order": [
+        "optional_reflection_aware_orientation_disabled",
+        "global_2theta_shift",
+        "area_stable_gaussian_broadening",
+        "smooth_nonnegative_background",
+        "poisson_plus_count_domain_gaussian_readout",
+        "clip_negative_values",
+        "single_max_normalization"
+      ],
+      "poisson_gaussian": {
+        "passed": true,
+        "observed_mean": 0.5000405299113339,
+        "observed_variance": 0.00010017722600568883,
+        "expected_variance": 0.00010016,
+        "metadata": {
+          "noise_model": "poisson_gaussian",
+          "poisson_count_scale": 5000.0,
+          "expected_count_mean": 2500.0,
+          "shot_noise_std": 0.010000091801785823,
+          "electronic_noise_std": 0.0,
+          "electronic_noise_std_counts": 2.0,
+          "electronic_noise_std_intensity": 0.0004,
+          "expected_count_min": 2500.0,
+          "expected_count_max": 2500.0,
+          "sampled_count_sum": 125010421,
+          "zero_count_fraction": 0.0,
+          "noise_std_empirical": 0.01000885737762752
+        }
+      },
+      "smooth_background": {
+        "passed": true,
+        "max_second_difference": 8.532698124452676e-10,
+        "metadata": {
+          "background_model": "polynomial",
+          "background_order": 2,
+          "background_variation": 0.2,
+          "background_anchor_count": 33,
+          "background_gp_length_scale": 0.2,
+          "background_floor_fraction": 0.1,
+          "background_min": 0.0008,
+          "background_max": 0.008,
+          "background_mean": 0.0035292026165143404,
+          "background_integral": 0.24702676720833408
+        }
+      },
+      "peak_broadening": {
+        "passed": true,
+        "area_relative_error": 4.871501502190512e-08
+      },
+      "whole_pattern_zero_shift": {
+        "passed": true,
+        "shift_deg": 0.05,
+        "peak_centroid_errors_deg": [
+          5.475858382911203e-06,
+          9.072110714186676e-07
+        ]
+      },
+      "march_dollase": {
+        "enabled": false,
+        "reason": "not needed for this one-parent pilot; no orientation nuisance is sampled"
+      },
+      "passed": true
+    },
+    "renderer_compatibility": {
+      "gate": "baseline V9 renderer vs differentiable forward at same q, no measurement nuisance",
+      "passed": true,
+      "max_abs_tolerance": 2e-06,
+      "rmse_tolerance": 2e-07,
+      "max_abs_error": 1.0400803317064368e-07,
+      "max_probe_rmse": 2.1200761723630996e-09,
+      "probes": [
+        {
+          "q": [
+            -0.4604798242449761,
+            -0.21747658252716065
+          ],
+          "max_abs_error": 6.004754926625111e-08,
+          "rmse": 1.64035442423025e-09,
+          "v9_max": 1.0,
+          "forward_max": 1.0
+        },
+        {
+          "q": [
+            -0.4753869041800499,
+            -0.7766090258955956
+          ],
+          "max_abs_error": 6.101002324258632e-08,
+          "rmse": 1.516674460890835e-09,
+          "v9_max": 1.0,
+          "forward_max": 1.0
+        },
+        {
+          "q": [
+            -0.4727845907211304,
+            0.24996249377727509
+          ],
+          "max_abs_error": 1.0400803317064368e-07,
+          "rmse": 2.1200761723630996e-09,
+          "v9_max": 1.0,
+          "forward_max": 1.0
+        }
+      ]
+    },
+    "forward_loss": {
+      "gate": "differentiable clean-reference reconstruction and lattice identifiability",
+      "active_parameters": [
+        "du",
+        "dv"
+      ],
+      "jacobian_singular_values": [
+        39.49901957296282,
+        11.756350551164028
+      ],
+      "jacobian_condition_number": 3.359802806241765,
+      "jacobian_full_rank": true,
+      "jacobian_finite_difference": {
+        "du": {
+          "relative_l2_error_by_step": [
+            9.36659989911784e-05,
+            2.3418949232641852e-05,
+            5.8548986452994555e-06
+          ],
+          "best_relative_l2_error": 5.8548986452994555e-06
+        },
+        "dv": {
+          "relative_l2_error_by_step": [
+            1.8402421680074608e-05,
+            4.600709858121065e-06,
+            1.1501985894935103e-06
+          ],
+          "best_relative_l2_error": 1.1501985894935103e-06
+        }
+      },
+      "clean_reference_objective": 0.034916514721908314,
+      "clean_reference_autograd_gradient": [
+        0.17610060004760597,
+        -0.16530361592909487
+      ],
+      "clean_reference_loss_gradient_finite_difference": [
+        {
+          "coordinate": "du",
+          "autograd": 0.17610060004760597,
+          "finite_difference": 0.17610060669900895,
+          "relative_error": 3.7770471712892774e-08
+        },
+        {
+          "coordinate": "dv",
+          "autograd": -0.16530361592909487,
+          "finite_difference": -0.16530361580904818,
+          "relative_error": 7.262194122754259e-10
+        }
+      ],
+      "passed": true
+    }
+  },
+  "artifacts": {
+    "dataset_npz": "pilot_samples.npz",
+    "sample_provenance": "sample_records.jsonl",
+    "config_copy": "pilot_config.json",
+    "smoke_results": "smoke_results.json",
+    "technical_report": "TECHNICAL_REPORT.md"
+  },
+  "cuda": {
+    "available": true,
+    "device_name": "NVIDIA GeForce RTX 4060 Laptop GPU",
+    "device_index": 0,
+    "runtime": "12.6"
+  },
+  "runtime": {
+    "python": "3.11.9",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "torch": "2.13.0+cu126",
+    "scipy": "1.17.1",
+    "pymatgen": "2026.5.4",
+    "numpy": "2.4.6",
+    "device": "cuda:0",
+    "tf32": false,
+    "deterministic_algorithms": true
+  },
+  "dataset": {
+    "material_id": "mp-1007758",
+    "formula": "HfCd",
+    "source_split": "train",
+    "structure_fingerprint": "3372b44a22899c7f335410eb74d2f7e8f50270ef242a7fddc21af142f05cd46f",
+    "structure_source": "xrd_robustness/data/formal_14060/mp_processed/structure_records.jsonl",
+    "cif_source": null,
+    "cif_source_note": "The selected local source stores standardized_structure JSON, not a CIF file.",
+    "lattice_angstrom": {
+      "a": 3.0472637,
+      "c": 9.16246376
+    },
+    "space_group": 129,
+    "nsites": 4,
+    "pattern_count": 128,
+    "split_counts": {
+      "train": 90,
+      "validation": 19,
+      "test": 19
+    },
+    "split_indices": {
+      "train": [
+        90,
+        74,
+        103,
+        117,
+        100,
+        68,
+        13,
+        104,
+        15,
+        63,
+        85,
+        101,
+        7,
+        25,
+        79,
+        122,
+        52,
+        105,
+        112,
+        48,
+        46,
+        29,
+        19,
+        127,
+        66,
+        124,
+        27,
+        2,
+        96,
+        80,
+        83,
+        78,
+        5,
+        99,
+        58,
+        53,
+        17,
+        64,
+        14,
+        102,
+        110,
+        106,
+        33,
+        119,
+        116,
+        126,
+        11,
+        86,
+        93,
+        87,
+        34,
+        8,
+        123,
+        60,
+        23,
+        20,
+        26,
+        43,
+        125,
+        31,
+        3,
+        65,
+        81,
+        4,
+        36,
+        39,
+        37,
+        111,
+        71,
+        9,
+        62,
+        121,
+        97,
+        77,
+        108,
+        50,
+        12,
+        41,
+        0,
+        118,
+        75,
+        47,
+        67,
+        1,
+        59,
+        113,
+        18,
+        76,
+        24,
+        107
+      ],
+      "validation": [
+        10,
+        82,
+        73,
+        98,
+        88,
+        91,
+        49,
+        32,
+        61,
+        55,
+        38,
+        21,
+        109,
+        30,
+        42,
+        120,
+        22,
+        16,
+        84
+      ],
+      "test": [
+        92,
+        72,
+        28,
+        45,
+        69,
+        94,
+        89,
+        40,
+        6,
+        51,
+        54,
+        114,
+        56,
+        57,
+        95,
+        70,
+        115,
+        44,
+        35
+      ]
+    },
+    "two_theta_grid": {
+      "two_theta_min": 10.0,
+      "two_theta_max": 80.0,
+      "step": 0.02,
+      "wavelength_angstrom": 1.54184
+    },
+    "dataset_sha256": "b0e24297d2a34fac6dc84ddd5fe069629c2ba8c400c378881a85f0cf960cab1a",
+    "config_sha256": "2801ab28d547fddd63eab21c801ec0195c2aaf6e8de69496fdb0b1a8d741a144",
+    "v9_frozen_config_sha256": "1451f111430332cd426244436b5b9263100d1be7caa2e0b036bd03cd09814371",
+    "clean_forward_contract": "tetragonal_torch_dense_v1",
+    "v9_renderer_contract": "xrd_robustness_v7_independent_implementation",
+    "clean_renderer_compatibility": {
+      "gate": "baseline V9 renderer vs differentiable forward at same q, no measurement nuisance",
+      "passed": true,
+      "max_abs_tolerance": 2e-06,
+      "rmse_tolerance": 2e-07,
+      "max_abs_error": 1.0400803317064368e-07,
+      "max_probe_rmse": 2.1200761723630996e-09,
+      "probes": [
+        {
+          "q": [
+            -0.4604798242449761,
+            -0.21747658252716065
+          ],
+          "max_abs_error": 6.004754926625111e-08,
+          "rmse": 1.64035442423025e-09,
+          "v9_max": 1.0,
+          "forward_max": 1.0
+        },
+        {
+          "q": [
+            -0.4753869041800499,
+            -0.7766090258955956
+          ],
+          "max_abs_error": 6.101002324258632e-08,
+          "rmse": 1.516674460890835e-09,
+          "v9_max": 1.0,
+          "forward_max": 1.0
+        },
+        {
+          "q": [
+            -0.4727845907211304,
+            0.24996249377727509
+          ],
+          "max_abs_error": 1.0400803317064368e-07,
+          "rmse": 2.1200761723630996e-09,
+          "v9_max": 1.0,
+          "forward_max": 1.0
+        }
+      ]
+    },
+    "profile_transform": "log1p(100 * per-pattern-max-normalized profile) / log(101)",
+    "ordering": "clean expected intensity -> measurement background -> Poisson plus count-domain Gaussian readout -> clip -> one max normalization -> log1p transform",
+    "normalization_policy": "One final max normalization per measured profile; no normalization is applied between background and count sampling.",
+    "scope": "single known tetragonal HfCd parent; parameter samples are split, not parent structures",
+    "npz_sha256": "87fcb3f6a40a90ac18b0775f94408cc6d0e24690556b01257ff51119d6ec8e2b",
+    "sample_records_sha256": "817e60d3c64fa1c73e43d5bb17d0d39f24ccd6fc5149bae1ba3caf223cfacec8"
+  },
+  "smoke": {
+    "simple_A": {
+      "finite_training_loss": true,
+      "finite_validation_mae": true,
+      "updates": 1,
+      "training_seconds": 0.3938501999946311,
+      "peak_memory_allocated_mb": 320.53369140625,
+      "train_sample_count": 16
+    },
+    "simple_B": {
+      "finite_training_loss": true,
+      "finite_validation_mae": true,
+      "updates": 1,
+      "training_seconds": 0.05817809997824952,
+      "peak_memory_allocated_mb": 426.42236328125,
+      "train_sample_count": 16
+    },
+    "v9_A": {
+      "finite_training_loss": true,
+      "finite_validation_mae": true,
+      "updates": 1,
+      "training_seconds": 0.04955930000869557,
+      "peak_memory_allocated_mb": 421.21044921875,
+      "train_sample_count": 16
+    },
+    "v9_B": {
+      "finite_training_loss": true,
+      "finite_validation_mae": true,
+      "updates": 1,
+      "training_seconds": 0.05868309998186305,
+      "peak_memory_allocated_mb": 428.24267578125,
+      "train_sample_count": 16
+    }
+  }
+}

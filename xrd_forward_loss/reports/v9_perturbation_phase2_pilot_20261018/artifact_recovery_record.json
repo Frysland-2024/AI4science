@@ -1,0 +1,17 @@
+{
+  "recovered_at_utc": "2026-10-18T11:05:48.375208+00:00",
+  "original_status": "failed",
+  "original_error": {
+    "type": "TypeError",
+    "message": "Axes.boxplot() got an unexpected keyword argument 'labels'"
+  },
+  "reason": "training and result serialization completed; only Matplotlib boxplot label keyword was incompatible",
+  "result_json_sha256_before_and_after": "08cf898ea91e66ab4316c743f38fe4dc94a53614fc8edc794ac6f372c98cb0ba",
+  "history_json_sha256_before_and_after": "30f904b522fedccbabeb4a68e27c965747ab2710083406cfe743d2179c515427",
+  "original_manifest_snapshot": "run_manifest_pre_plot_recovery.json",
+  "generated_artifacts": [
+    "parameter_error.png",
+    "xrd_overlay.png",
+    "TECHNICAL_REPORT.md"
+  ]
+}
