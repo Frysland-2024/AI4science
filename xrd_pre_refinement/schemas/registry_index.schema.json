@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:ai4science:xrd-pre-refinement-registry-index-v1",
+  "title": "XRD pre-refinement registry index",
+  "type": "object",
+  "required": ["schema_version", "families"],
+  "properties": {
+    "schema_version": {"const": "xrd-pre-refinement-registry-v1"},
+    "families": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["family_id", "config"],
+        "properties": {
+          "family_id": {"type": "string", "minLength": 1},
+          "config": {"type": "string", "minLength": 1}
+        }
+      }
+    }
+  }
+}

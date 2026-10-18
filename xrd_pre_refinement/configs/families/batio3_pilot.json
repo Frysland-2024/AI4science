@@ -1,0 +1,106 @@
+{
+  "schema_version": "xrd-pre-refinement-family-v1",
+  "family_id": "batio3_pilot",
+  "status": "active_demo",
+  "description": "Temporary BaTiO3 software smoke family only; not the collaborator-confirmed research family.",
+  "nominal_composition": {
+    "formula": "BaTiO3",
+    "valid_composition_window": "Stoichiometric reference structures only; no dopants, defects, or composition range are modeled."
+  },
+  "source_context": {
+    "citation": "Nakatani et al., Acta Crystallographica Section B 72 (2016), 151-159, DOI 10.1107/S2052520615022544.",
+    "article_url": "https://journals.iucr.org/paper?buy=yes&cnor=bp5079",
+    "official_supplementary_cif_url": "https://doi.org/10.1107/S2052520615022544/bp5079sup1.cif",
+    "official_supplementary_cif_retrieved": false,
+    "local_artifact_method": "The local CIFs are manual transcriptions of the article's published coordinate tables, not downloaded official supplementary CIF files.",
+    "experiment_scope": "Published structure solution used synthetic single-crystal specimens. The experiment reports P4mm at 298 K and Pm-3m at 413 K; the transition near 413 K is specific to that specimen and study.",
+    "pressure": "Not specified in the cited source tables.",
+    "accessed_on": "2026-10-18"
+  },
+  "instrument": {
+    "radiation": "Cu Kα1, λ=1.5406 Å; explicit generic simulation assumption, not the wavelength used for the cited single-crystal structure determination.",
+    "wavelength_angstrom": 1.5406,
+    "two_theta_min_deg": 10.0,
+    "two_theta_max_deg": 80.0,
+    "step_deg": 0.02
+  },
+  "model_config": {
+    "model_id": "template-normalized-rmse-v1",
+    "calibration_id": null,
+    "status": "ENGINEERING_BASELINE_ONLY"
+  },
+  "template_measurement": {
+    "delta_2theta_deg": 0.0,
+    "fwhm_deg": 0.08,
+    "background_to_peak_ratio": 0.0,
+    "noise_std_ratio": 0.0,
+    "interpretation": "Deterministic common-grid rendering choice for the template-distance smoke test; not an instrument response measurement."
+  },
+  "pilot_measurement": {
+    "delta_2theta_deg": 0.02,
+    "fwhm_deg": 0.1,
+    "background_to_peak_ratio": 0.04,
+    "noise_std_ratio": 0.005,
+    "interpretation": "Small synthetic perturbations chosen only to exercise the pipeline; not sourced from a laboratory instrument or treated as a validated prior."
+  },
+  "pilot_observation_candidate": "batio3_p4mm_298k",
+  "mixture_stress_candidates": ["batio3_pm3m_413k", "batio3_p4mm_298k"],
+  "mixture_stress_coefficients": [0.5, 0.5],
+  "discriminability_notes": "For these nominal reference structures the tetragonal (002)/(200) separation decreases as c/a approaches 1, including on heating toward this specimen's transition. Instrumental broadening or microstrain comparable to the peak separation, weak signal, texture, background, and overlapping phases can also make the patterns harder to distinguish. This is qualitative guidance, not a validated resolution threshold or parameter prior.",
+  "candidates": [
+    {
+      "candidate_id": "batio3_pm3m_413k",
+      "phase_id": "BaTiO3 cubic reference structure at 413 K",
+      "composition": "BaTiO3",
+      "space_group": {"symbol": "Pm-3m", "number": 221},
+      "cif_path": "../structures/BaTiO3_Pm-3m_413K_published-table-transcription.cif",
+      "cif_source": {
+        "citation": "Nakatani et al., Acta Crystallographica Section B 72 (2016), 151-159, Table 4; DOI 10.1107/S2052520615022544.",
+        "url": "https://journals.iucr.org/paper?buy=yes&cnor=bp5079",
+        "official_supplementary_cif_url": "https://doi.org/10.1107/S2052520615022544/bp5079sup1.cif",
+        "artifact_status": "manual_published_table_transcription_not_official_supplementary_cif",
+        "accessed_on": "2026-10-18",
+        "sha256": "ff88fea08f5ff7f214df877be2f93c30db8ac4e20f107c45ac6d7086e7627666"
+      },
+      "validity": {
+        "conditions": "Published synthetic single-crystal structure refinement at 413 K; the paper reports this sample as cubic Pm-3m above its approximately 413 K transition. Pressure is not specified in the source table.",
+        "status": "literature_reference_only_for_simulated_engineering_demo",
+        "powder_profile_note": "The single-crystal-refined unit cell is used to generate an idealized random-powder profile; no powder measurement is claimed."
+      },
+      "parameterization": {
+        "reference_values": {"a_angstrom": 4.0097},
+        "constraints": "Cubic metric a=b=c.",
+        "allowed_range": {"a_angstrom": [4.0095, 4.0099]},
+        "range_status": "reported_standard_uncertainty_window_only_not_model_domain",
+        "range_note": "Bounds reflect the published 4.0097(2) Å standard uncertainty; they are not a validated physical prior or trained prediction interval."
+      }
+    },
+    {
+      "candidate_id": "batio3_p4mm_298k",
+      "phase_id": "BaTiO3 tetragonal reference structure at 298 K",
+      "composition": "BaTiO3",
+      "space_group": {"symbol": "P4mm", "number": 99},
+      "cif_path": "../structures/BaTiO3_P4mm_298K_published-table-transcription.cif",
+      "cif_source": {
+        "citation": "Nakatani et al., Acta Crystallographica Section B 72 (2016), 151-159, Table 3; DOI 10.1107/S2052520615022544.",
+        "url": "https://journals.iucr.org/paper?buy=yes&cnor=bp5079",
+        "official_supplementary_cif_url": "https://doi.org/10.1107/S2052520615022544/bp5079sup1.cif",
+        "artifact_status": "manual_published_table_transcription_not_official_supplementary_cif",
+        "accessed_on": "2026-10-18",
+        "sha256": "b352c3d534a112b71f488f848e24ae5d09d0e0a21dd9b217d6c1d9456cd43a77"
+      },
+      "validity": {
+        "conditions": "Published synthetic single-crystal structure refinement at 298 K; the paper reports this sample as tetragonal P4mm below its approximately 413 K transition. Pressure is not specified in the source table.",
+        "status": "literature_reference_only_for_simulated_engineering_demo",
+        "powder_profile_note": "The single-crystal-refined unit cell is used to generate an idealized random-powder profile; no powder measurement is claimed."
+      },
+      "parameterization": {
+        "reference_values": {"a_angstrom": 3.9925, "b_angstrom": 3.9925, "c_angstrom": 4.0373, "ti_z_fractional": 0.4898, "o1_z_fractional": 0.0216, "o2_z_fractional": 0.5132},
+        "constraints": "Tetragonal metric a=b; atomic coordinates are fixed at the literature reference values in this engineering smoke test.",
+        "allowed_range": {"a_angstrom": [3.9923, 3.9927], "b_angstrom": [3.9923, 3.9927], "c_angstrom": [4.0370, 4.0376]},
+        "range_status": "reported_standard_uncertainty_window_only_not_model_domain",
+        "range_note": "Bounds reflect the published 3.9925(2) Å and 4.0373(3) Å standard uncertainties; they are not a validated physical prior or trained prediction interval."
+      }
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "schema_version": "xrd-pre-refinement-registry-v1",
+  "families": [
+    {"family_id": "batio3_pilot", "config": "families/batio3_pilot.json"},
+    {"family_id": "family_template", "config": "families/family_template.json"}
+  ]
+}

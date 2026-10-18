@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "xrd-pre-refinement"
+version = "0.1.0"
+description = "Modular engineering baseline for PXRD pre-refinement assistance"
+requires-python = ">=3.10"
+dependencies = ["numpy>=1.24"]
+
+[project.optional-dependencies]
+science = ["pymatgen", "scipy>=1.10"]
+figures = ["matplotlib>=3.8"]
+test = ["pytest>=8", "jsonschema>=4.20"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src", "../xrd_robustness/src"]

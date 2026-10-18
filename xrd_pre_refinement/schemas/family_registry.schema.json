@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:ai4science:xrd-pre-refinement-family-v1",
+  "title": "XRD pre-refinement material family config",
+  "type": "object",
+  "required": ["schema_version", "family_id", "status", "nominal_composition", "instrument", "model_config", "candidates"],
+  "properties": {
+    "schema_version": {"const": "xrd-pre-refinement-family-v1"},
+    "family_id": {"type": "string", "minLength": 1},
+    "status": {"enum": ["active_demo", "unconfigured"]},
+    "description": {"type": "string"},
+    "nominal_composition": {"type": "object", "required": ["formula", "valid_composition_window"], "properties": {"formula": {"type": ["string", "null"]}, "valid_composition_window": {"type": ["string", "object", "null"]}}},
+    "instrument": {"type": "object", "required": ["wavelength_angstrom", "two_theta_min_deg", "two_theta_max_deg", "step_deg"], "properties": {"radiation": {"type": ["string", "null"]}, "wavelength_angstrom": {"type": "number", "exclusiveMinimum": 0}, "two_theta_min_deg": {"type": "number"}, "two_theta_max_deg": {"type": "number"}, "step_deg": {"type": "number", "exclusiveMinimum": 0}}},
+    "model_config": {"type": "object", "required": ["status"]},
+    "candidates": {"type": "array", "items": {"type": "object", "required": ["candidate_id", "phase_id", "composition", "space_group", "cif_path", "cif_source", "validity", "parameterization"], "properties": {"candidate_id": {"type": "string"}, "phase_id": {"type": "string"}, "composition": {"type": "string"}, "space_group": {"type": "object", "required": ["symbol", "number"]}, "cif_path": {"type": "string"}, "cif_source": {"type": "object", "required": ["citation", "url", "accessed_on", "sha256"]}, "validity": {"type": "object", "required": ["conditions", "status"]}, "parameterization": {"type": "object", "required": ["reference_values", "allowed_range", "range_status"]}}}}
+  },
+  "allOf": [
+    {"if": {"properties": {"status": {"const": "unconfigured"}}}, "then": {"properties": {"candidates": {"maxItems": 0}}}},
+    {"if": {"properties": {"status": {"const": "active_demo"}}}, "then": {"properties": {"candidates": {"minItems": 1}}}}
+  ]
+}

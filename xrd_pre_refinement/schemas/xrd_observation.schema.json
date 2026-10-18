@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:ai4science:xrd-observation-v1",
+  "title": "XRD observation with routing metadata",
+  "type": "object",
+  "required": ["schema_version", "sample_id", "family_id", "nominal_composition", "instrument", "two_theta_deg", "intensity"],
+  "properties": {
+    "schema_version": {"const": "xrd-observation-v1"},
+    "sample_id": {"type": "string", "minLength": 1},
+    "family_id": {"type": ["string", "null"]},
+    "nominal_composition": {"type": ["string", "null"]},
+    "instrument": {
+      "type": "object",
+      "required": ["radiation", "wavelength_angstrom", "two_theta_min_deg", "two_theta_max_deg", "step_deg"],
+      "properties": {
+        "radiation": {"type": ["string", "null"]},
+        "wavelength_angstrom": {"type": "number", "exclusiveMinimum": 0},
+        "two_theta_min_deg": {"type": "number"},
+        "two_theta_max_deg": {"type": "number"},
+        "step_deg": {"type": "number", "exclusiveMinimum": 0}
+      }
+    },
+    "two_theta_deg": {"type": "array", "minItems": 2, "items": {"type": "number"}},
+    "intensity": {"type": "array", "minItems": 2, "items": {"type": "number"}}
+  }
+}

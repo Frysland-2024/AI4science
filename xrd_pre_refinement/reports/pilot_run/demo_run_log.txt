@@ -1,0 +1,30 @@
+{
+  "status": "SIMULATED_ENGINEERING_DEMO_COMPLETE",
+  "out": "E:\\AI4science\\xrd_pre_refinement\\reports\\pilot_run",
+  "top_ranked_candidate": "batio3_p4mm_298k",
+  "ranking_scores_are_probabilities": false,
+  "limited_fit_summary": {
+    "batio3_pm3m_413k": {
+      "fit_success": true,
+      "normalized_rmse_before": 0.6772312425014143,
+      "normalized_rmse_after": 0.652587399938548,
+      "fitted_values": {
+        "a_angstrom": 4.01138284937193,
+        "delta_2theta_deg": -0.0006582607241660173
+      }
+    },
+    "batio3_p4mm_298k": {
+      "fit_success": true,
+      "normalized_rmse_before": 0.28648544307088836,
+      "normalized_rmse_after": 0.10918557484006422,
+      "fitted_values": {
+        "a_angstrom": 3.9923993885153495,
+        "c_angstrom": 4.037119589641085,
+        "delta_2theta_deg": 0.01874742875221543
+      }
+    }
+  },
+  "review_required": true,
+  "mixture_review_required": true,
+  "figure": "E:\\AI4science\\xrd_pre_refinement\\reports\\pilot_run\\batio3_template_comparison.png"
+}

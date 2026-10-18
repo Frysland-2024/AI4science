@@ -1,0 +1,16 @@
+{
+  "schema_version": "xrd-pre-refinement-family-v1",
+  "family_id": "family_template",
+  "status": "unconfigured",
+  "description": "Empty schema scaffold; replace only after the collaborator confirms family and nominal composition.",
+  "nominal_composition": {"formula": null, "valid_composition_window": null},
+  "instrument": {
+    "radiation": null,
+    "wavelength_angstrom": 1.5406,
+    "two_theta_min_deg": 10.0,
+    "two_theta_max_deg": 80.0,
+    "step_deg": 0.02
+  },
+  "model_config": {"model_id": null, "calibration_id": null, "status": "NOT_CONFIGURED"},
+  "candidates": []
+}

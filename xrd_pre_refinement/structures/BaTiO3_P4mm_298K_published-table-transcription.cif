@@ -1,0 +1,42 @@
+data_BaTiO3_298K
+_audit_creation_method 'Manual transcription from published IUCr article table; not the official supplementary CIF'
+_chemical_formula_sum 'Ba O3 Ti'
+_space_group_name_H-M_alt 'P 4 m m'
+_space_group_IT_number 99
+_cell_length_a 3.9925(2)
+_cell_length_b 3.9925(2)
+_cell_length_c 4.0373(3)
+_cell_angle_alpha 90
+_cell_angle_beta 90
+_cell_angle_gamma 90
+_cell_formula_units_Z 1
+_diffrn_ambient_temperature 298
+_journal_name_full 'Acta Crystallographica Section B'
+_journal_volume 72
+_journal_page_first 151
+_journal_page_last 159
+_journal_year 2016
+_journal_paper_doi 10.1107/S2052520615022544
+loop_
+_symmetry_equiv_pos_site_id
+_symmetry_equiv_pos_as_xyz
+1 'x, y, z'
+2 '-y, x, z'
+3 '-x, -y, z'
+4 'y, -x, z'
+5 '-x, y, z'
+6 'y, x, z'
+7 'x, -y, z'
+8 '-y, -x, z'
+loop_
+_atom_site_label
+_atom_site_type_symbol
+_atom_site_fract_x
+_atom_site_fract_y
+_atom_site_fract_z
+_atom_site_U_iso_or_equiv
+_atom_site_occupancy
+Ba Ba 0.0000 0.0000 0.0000 0.00337(3) 1.0
+Ti Ti 0.5000 0.5000 0.4898(10) 0.00536(18) 1.0
+O1 O 0.5000 0.5000 0.0216(14) 0.0057(6) 1.0
+O2 O 0.5000 0.0000 0.5132(14) 0.0054(5) 1.0

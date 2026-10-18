@@ -16,6 +16,8 @@
 - RQ3：Top-K 结构模板与参数初值能否提升传统数值精修的初始化效率/成功率，而非仅提供漂亮分类图？
 - RQ4（保护性问题）：单相假设不成立（例如两相共存）时，系统能否**停止自信地给单相结论**？
 
+**研究定位补充（2026-10-18）：** Forward model 是 AI 建议与观测 XRD、传统数值精修之间的物理接口与可检验环节；不把“新物理反演框架”本身作为新颖性主张。核心问题是：在已知材料家族与公平计算预算下，模拟训练 AI 能否比物理模板及兼容的数值基线给出更有用的候选结构和参数初值，同时保持经验证的可靠性并减少后续精修时间或失败率？公开的 [CrystalShift.jl](https://github.com/MingChiangChang/CrystalShift.jl) 已有 training-free 候选组合搜索、对称性约束晶格 pseudo-refinement 和模型比较；因此应先做兼容性审计，再决定将其纳为可选强基线。W0 审计结论见 [`CRYSTALSHIFT_AUDIT.md`](../xrd_pre_refinement/reports/CRYSTALSHIFT_AUDIT.md)。
+
 ## 1. 严格区分：相概率、混相比例、参数不确定性
 
 ```text
@@ -151,7 +153,7 @@ Sample X | known family | simulation-calibrated single-phase hypotheses:
 
 ## 10. 学长材料家族未确定前的独立推进（W0 / pre-data sprint；2026-10-18 补充）
 
-**状态：EXECUTION PROPOSAL / NOT YET EXECUTED。** 本节不是推翻 W1–W12 方案，而是为了避免前置材料依赖成为等待瓶颈。所有 W0 结果标注为 **engineering demonstration / simulated pilot**，不等于确定研究家族或正式科学结果。
+**状态：W0 ENGINEERING SPRINT COMPLETED（2026-10-18，后续补充有限拟合与 CrystalShift 技术审计）；正式 W1–W12 研究仍为 PROPOSED / NOT_STARTED。** 本节的 pre-data sprint 不推翻 W1–W12 方案。W0 结果均为 **engineering demonstration / simulated pilot**，不等于确定研究家族或正式科学结果；实际交付与复现结果见 [`xrd_pre_refinement/reports/W0_HANDOFF.md`](../xrd_pre_refinement/reports/W0_HANDOFF.md)。
 
 **原则：可迁移基础优先，临时体系小规模试验，大训练等家族与结构协议确认后再开始。** 不让 Codex 改写冻结的 `xrd_robustness/` 研究，也不因为工程复用重新开启封存的 factorization Stage-1。
 
@@ -161,8 +163,8 @@ Sample X | known family | simulation-calibrated single-phase hypotheses:
 |---|---|---|
 | D1–3 | 清点现有 `xrd_robustness` ResNet/模拟扰动/校准脚本与 `xrd_inversion` forward、Jacobian、精修接口；列出缺失功能和兼容性边界 | 一页模块复用矩阵；不复制已冻结结果充作新实验 |
 | D4–6 | 定义通用材料注册表 `family_id, composition, instrument, candidate_id, cif_source, space_group, parameterization, allowed_range`；推理报告 JSON schema 设计为 Top-K 单相假设、相条件参数/区间、谱残差、review 标记 | 两个空/模拟家族配置可通过 schema 验证；一份 mock pre-refinement report |
-| D7–10 | 仅作工程试验，临时取有可靠公开 CIF 的 **BaTiO3** 两个候选（例如 C/Pm-3m、T/P4mm，需核查各结构相条件、温度与 CIF 来源），生成各自的少量模拟谱及测量扰动；检查峰位、结构因子/强度、谱图轴和共同仪器参数。若 C/T 区分不足，直接记录为发现而非强行做高精度分类 | 两类模板对应的谱图叠加图、forward sanity checks、配置可替换的证明 |
-| D11–14 | 建立一个极小 baseline（物理模板比较/最近谱，或小型 CE 分类 smoke），测试报告接口从 XRD → Top-K → 参数占位/简单估计 → forward 比较能串起来；模拟一个 OOD/混相导致需要复核的案例。若条件尚未满足，优先把物理模板/参数可辨识检查做扎实，不必训练模型 | 可复现命令、1–2 张示例输出、未解决问题、W2 汇报 4–6 页 |
+| D7–10 | 仅作工程试验，临时使用有明确同行评审结构表来源的 **BaTiO3** 两个候选（C/Pm-3m、T/P4mm）；记录原文的样品/温度条件、核对转录的空间群/组成和共同波长下的理论谱。官方 supplementary CIF 本次未取回，仓库结构文件明确标作论文表格转录件 | 两类参考模板谱图、峰位/对称性核验与配置可替换的证明；不把它们称为正式粉末候选 |
+| D11–14 | 建立 normalized-RMSE 物理模板 baseline；至少两个候选分别经过 forward 重构、观测谱比较和有限参数优化；保留混相/失配的人工复核出口；审计 CrystalShift 等公开物理方法，避免重复实现成熟的候选相搜索流程 | 可复现命令、Top-K 与逐候选拟合前后谱/残差、有限搜索边界、方法审计和未解决问题 |
 
 **禁止此时急做：** 多家族各训练完整大模型；大规模超参数搜索；宣称对实验 PZT/KNN 适用；把 BaTiO3 两个 CIF 的大量增强视为大量独立结构；从随机混相谱给出可信 wt%；未经校准报告真实谱置信度；用未验证的临时数据拆分得出广域泛化结论。
 
@@ -173,6 +175,8 @@ Sample X | known family | simulation-calibrated single-phase hypotheses:
 ### 转入正式家族的迁移 Gate
 
 家族确定后，把临时 BaTiO3 配置保留为工程 smoke，另建实际家族的结构清单、可调参数范围和独立测试策略。先做结构模板核验和新的模拟数据审计，再决定新任务的训练配置。若与临时体系不兼容，应保留通用 schema、报告器和测试接口，重新实现必要的相物理；不强行复用不适用的 forward。
+
+W0 的两个有界拟合只证明程序路径可以被执行，并没有建立参数可信度；其 RMS 改善不能替代正式恢复误差、区间覆盖或传统精修预算对照。CrystalShift 的可运行性未验证；若本地环境、输入格式和候选体系兼容，再用同一候选/谱/资源预算进行比较。
 
 **本节选择 BaTiO3 并非学长的确定数据，也不代表对其具体相共存/测量可辨识性有额外实验结论。**
 

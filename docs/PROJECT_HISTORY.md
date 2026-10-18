@@ -182,6 +182,32 @@ The first task is code/data audit and matched fixed-step implementation, because
 
 **Decision status:** ARCHITECTURE CANDIDATE / NOT ADOPTED AS 12-WEEK MUST-DO / NO DATA OR MODEL RESULTS. Preserve one-family scientific MVP, allow a second-family configuration smoke only after core milestones. See [FERROELECTRIC_PRE_REFINEMENT_12W_PLAN.md](FERROELECTRIC_PRE_REFINEMENT_12W_PLAN.md#9-新的前置构想多材料家族路由--分家族专家discussion--not-yet-adopted). The main frozen JS-only results and archived inversion NO-GO remain unchanged.
 
+## 15. 2026-10-18: W0 pre-refinement engineering sprint completed
+
+**Date / prior assumption:** 2026-10-18. The proposed pre-refinement system could not advance until the collaborator selected a material family; transferable software work and a small structure-backed smoke case could proceed independently.
+
+**Evidence / decision:** Audited current PXRD and inversion modules, added an isolated metadata-first family registry, JSON schemas, an uncalibrated template-ranking baseline and a reusable adapter to the existing simulator. A small BaTiO₃ demo used 2016 published single-crystal structure tables (298 K P4mm and 413 K Pm-3m) to generate idealized powder profiles. The repo CIFs are explicit table transcriptions, not downloaded official supplementary files. The W0 follow-up ran both candidates through forward reconstruction, spectrum comparison, and bounded numerical optimization of symmetry-allowed cell metrics plus 2theta zero shift. On one synthetic tetragonal observation, P4mm normalized RMSE changed 0.286485 → 0.109186 and Pm-3m changed 0.677231 → 0.652587. Thirteen tests pass. These remain engineering diagnostics: no trained parameter predictor, intervals, empirical recovery test, or measured refinement benefit. Template ranking scores remain uncalibrated distances, and the mixture case remains an arbitrary profile-intensity interface smoke test.
+
+**What changes now:** W0 engineering infrastructure is complete and reproducible; run artifacts, provenance, limitations and the next collaborator handoff step are recorded in [`xrd_pre_refinement/reports/W0_HANDOFF.md`](../xrd_pre_refinement/reports/W0_HANDOFF.md).
+
+**What does not change:** The selected research family remains unknown; the formal 12-week study is still PROPOSED / NOT_STARTED. No model training, experimental result, probability calibration or quantitative phase analysis was produced. The frozen JS-only results and archived factorization NO-GO are unchanged.
+
+**Status:** W0 ENGINEERING COMPLETED / FORMAL STUDY NOT_STARTED. Relevant code: [`xrd_pre_refinement/`](../xrd_pre_refinement/README.md).
+
+## 16. 2026-10-18: forward-model role and CrystalShift prior-art correction
+
+**Date / previous assumption:** 2026-10-18. The pre-refinement direction already proposed AI candidate/parameter outputs with a physical forward check. The W0 acceptance was initially implemented only as Top-K ranking plus reference-profile residuals.
+
+**New evidence and reasoning:** The user clarified that a minimum demo must send at least two reference candidates through forward reconstruction, observed-spectrum comparison and a limited parameter optimization. A static audit of the public [`CrystalShift.jl`](https://github.com/MingChiangChang/CrystalShift.jl) source at commit `d95bb2561a504258639fa18e0d25a06684c7c0d5`, its MIT license and its 2025 paper found an existing training-free method combining symmetry-constrained lattice pseudo-refinement, best-first multi-phase candidate search and Bayesian model comparison. The paper also describes its limitations relative to full Rietveld treatment. CrystalShift is relevant prior art and a potential strong baseline; its Julia runtime is absent on the current workstation, so local execution and integration remain unverified. Details are in [`CRYSTALSHIFT_AUDIT.md`](../xrd_pre_refinement/reports/CRYSTALSHIFT_AUDIT.md).
+
+**Decision:** The research question is not to invent a new physical phase-search framework. The forward model is the bridge that makes AI-proposed candidate structures and parameter initializations testable against the measured pattern and conventional numerical refinement. The question is whether simulation-trained AI improves the usefulness and reliability of those initializations, and reduces downstream refinement time or failure under fair comparison with physical-template and compatible numerical baselines. W0 therefore adds a deliberately narrow bounded fit for both BaTiO₃ candidates, not CrystalShift's tree search, combination probabilities or texture-peak optimization.
+
+**What changes now:** The report, handoff, architecture, current state and 12-week candidate plan record the two-candidate forward-fit path and its strict limits. A future CrystalShift comparison is a time-boxed feasibility option after actual family, CIFs, axis/wavelength, runtime and compute budget are confirmed.
+
+**What does not change:** W0's single synthetic-profile result is not evidence of parameter accuracy or saved refinement time. The real material family is still unknown; the 12-week project remains PROPOSED / NOT_STARTED. Frozen PXRD classification evidence and archived inversion NO-GO remain unchanged.
+
+**Status:** ACTIVE research-positioning clarification / W0 fit implemented / CrystalShift execution NOT_RUN.
+
 ## Current perspective
 
 The project is no longer summarized as "a JS loss for XRD" or "an XRD robustness benchmark."

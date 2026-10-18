@@ -1,0 +1,126 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:ai4science:xrd-pre-refinement-report-v1",
+  "title": "XRD pre-refinement report",
+  "type": "object",
+  "required": [
+    "schema_version", "sample_id", "family_route", "model",
+    "single_phase_hypotheses", "coexistence_hypothesis", "phase_fraction",
+    "single_phase_adequacy", "review", "observation"
+  ],
+  "properties": {
+    "schema_version": {"const": "xrd-pre-refinement-report-v1"},
+    "sample_id": {"type": "string"},
+    "family_route": {
+      "type": "object",
+      "required": ["status", "family_id", "composition_status", "review_required", "message"]
+    },
+    "model": {
+      "type": "object",
+      "required": ["model_id", "model_status", "calibration_status", "score_interpretation", "parameter_fit_status"]
+    },
+    "single_phase_hypotheses": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "candidate_id", "phase_id", "ranking_metric", "ranking_score",
+          "single_phase_probability", "probability_status", "conditional_parameters",
+          "forward_check", "rank"
+        ],
+        "properties": {
+          "single_phase_probability": {"type": ["number", "null"], "minimum": 0, "maximum": 1},
+          "probability_status": {"enum": ["NOT_CALIBRATED", "CALIBRATED_SINGLE_PHASE_MODEL_PROBABILITY"]},
+          "ranking_score": {"type": "number"},
+          "rank": {"type": "integer", "minimum": 1},
+          "conditional_parameters": {
+            "type": "object",
+            "required": ["status", "values", "interval", "interval_status"]
+          },
+          "forward_check": {
+            "type": "object",
+            "required": [
+              "normalized_rmse", "fit_status", "reconstructed_profile_available",
+              "reconstructed_profile", "residual_observed_minus_reconstructed"
+            ],
+            "properties": {
+              "reconstructed_profile": {"type": "array", "items": {"type": "number"}},
+              "residual_observed_minus_reconstructed": {"type": "array", "items": {"type": "number"}}
+            }
+          },
+          "limited_forward_fit": {
+            "type": "object",
+            "required": [
+              "status", "optimizer", "objective", "candidate_space_group",
+              "cell_metric_constraint", "fitted_parameter_names", "initial_values",
+              "fitted_values", "search_bounds", "bound_basis", "fixed_parameters",
+              "fit_success", "optimizer_message", "function_evaluations",
+              "normalized_rmse_before", "normalized_rmse_after", "parameter_interval",
+              "parameter_interval_status", "fitted_forward_profile",
+              "residual_observed_minus_fitted", "interpretation"
+            ],
+            "properties": {
+              "status": {"const": "LIMITED_FORWARD_FIT_DEMO"},
+              "optimizer": {"type": "string"},
+              "objective": {"type": "string"},
+              "candidate_space_group": {"type": "object"},
+              "cell_metric_constraint": {"type": "string"},
+              "fitted_parameter_names": {"type": "array", "items": {"type": "string"}},
+              "initial_values": {"type": "object"},
+              "fitted_values": {"type": "object"},
+              "search_bounds": {"type": "object"},
+              "bound_basis": {"type": "string"},
+              "fixed_parameters": {"type": "object"},
+              "fit_success": {"type": "boolean"},
+              "optimizer_message": {"type": "string"},
+              "function_evaluations": {"type": "integer", "minimum": 1},
+              "normalized_rmse_before": {"type": "number", "minimum": 0},
+              "normalized_rmse_after": {"type": "number", "minimum": 0},
+              "parameter_interval": {"type": ["object", "null"]},
+              "parameter_interval_status": {"const": "NOT_ESTIMATED"},
+              "fitted_forward_profile": {"type": "array", "items": {"type": "number"}},
+              "residual_observed_minus_fitted": {"type": "array", "items": {"type": "number"}},
+              "interpretation": {"type": "string"}
+            }
+          }
+        }
+      }
+    },
+    "coexistence_hypothesis": {
+      "type": "object",
+      "required": ["included", "model_probability", "status", "simulated_intensity_weights", "weight_basis"],
+      "properties": {
+        "model_probability": {"type": ["number", "null"], "minimum": 0, "maximum": 1},
+        "simulated_intensity_weights": {"type": ["object", "null"]}
+      }
+    },
+    "phase_fraction": {
+      "type": "object",
+      "required": ["status", "value", "basis", "warning"],
+      "properties": {
+        "status": {"enum": ["NOT_ESTIMATED", "ESTIMATED_WITH_VALIDATED_REFINEMENT_MODEL"]},
+        "value": {"type": ["number", "object", "null"]},
+        "basis": {"type": ["string", "null"]},
+        "warning": {"type": "string"}
+      }
+    },
+    "single_phase_adequacy": {"enum": ["SUPPORTED_BY_VALIDATED_CRITERION", "NOT_ESTABLISHED", "INSUFFICIENT_SINGLE_PHASE_EXPLANATION"]},
+    "review": {
+      "type": "object",
+      "required": ["status", "required", "reasons"],
+      "properties": {
+        "status": {"enum": ["REVIEW_REQUIRED", "REVIEW_NOT_REQUIRED"]},
+        "required": {"type": "boolean"},
+        "reasons": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "observation": {
+      "type": "object",
+      "required": ["two_theta_deg", "intensity"],
+      "properties": {
+        "two_theta_deg": {"type": "array", "items": {"type": "number"}},
+        "intensity": {"type": "array", "items": {"type": "number"}}
+      }
+    }
+  }
+}

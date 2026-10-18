@@ -2,9 +2,9 @@
 
 > **权威性说明：** 本文件记录当前科学状态与当前执行口径。历史版本、旧聊天和 `PROJECT_HISTORY.md` 用于解释“为什么改变”，不得覆盖这里的当前结论；AI/Agent 工作规则见 [`../AGENTS.md`](../AGENTS.md) 与 [`RESEARCH_WORKFLOW.md`](RESEARCH_WORKFLOW.md)。
 
-**状态日期：** 2026-09-29
+**状态日期：** 2026-10-18
 
-**阶段：** 模拟结果、RRUFF-301 few-shot 与 CNRS-318 zero-shot 均已完成；当前在做论文图表、方法 framing 与成果封装
+**阶段：** PXRD 分类主线的模拟、RRUFF-301 few-shot 与 CNRS-318 zero-shot 结果均已完成；当前继续论文封装。同时，下一阶段预精修项目的 W0 工程 sprint 已完成，正式 12 周研究仍为 PROPOSED / NOT_STARTED。
 
 ## 1. 当前科学设计
 
@@ -198,3 +198,13 @@ python -m pytest -q
 - 已识别工程风险：目前公共 `runner.py` 的 epoch 末尾可能有不完整 batch，而且每 epoch 进行验证与保存，不适合直接充当完全公平的预算比较入口。CODEX LUNA 应先完成独立固定步数入口、数据审计、单元测试与 smoke，才能执行大规模 run。
 - 当前模拟 Test 已在正式论文中使用过；本次应标明为 **post-main supplementary follow-up**，不能声称是全新未打开的 confirmatory Test。
 - 状态 **PROPOSED / READY FOR CODEX IMPLEMENTATION / NOT_RUN**；完整任务与结果交付标准见 [PXRD_PARENT_STRUCTURE_EFFICIENCY_PLAN.md](PXRD_PARENT_STRUCTURE_EFFICIENCY_PLAN.md)。原主实验的报告、划分、权重和历史结果均不得修改。
+
+## 10. 2026-10-18 预精修项目 W0 工程 sprint（完成；正式研究未启动）
+
+已在隔离目录 [`xrd_pre_refinement/`](../xrd_pre_refinement/README.md) 完成代码审计、metadata-first family registry、输入/输出 schema、Top-K normalized-RMSE 模板 baseline、两个候选各自的 limited forward fit，以及 CrystalShift.jl 静态技术审计。**13 项测试通过，2 个 spglib deprecation warnings**；运行产物与限制见 [`W0_HANDOFF.md`](../xrd_pre_refinement/reports/W0_HANDOFF.md)。
+
+BaTiO₃ 结构依据为 Nakatani 等人 2016 年单晶结构研究的论文表格，仓库 CIF 是人工转录件，不是官方 supplementary CIF。模拟粉末谱、Cu Kα1 波长及测量扰动仅属工程设定。两候选都进行了 forward 重构、同一模拟谱比较和有界晶格/2theta 零点优化；P4mm normalized RMSE 为 0.286485 → 0.109186，Pm-3m 为 0.677231 → 0.652587。搜索盒仅是演示设置；拟合无误差区间、恢复准确度或实验精修收益结论。Top-K 分数不是概率；无模型训练、校准、自动混相检测或相分数估计。
+
+**研究定位：** forward model 是模拟训练 AI 的候选/参数初值与真实 XRD/传统数值精修之间的物理接口和验证环节，不将“新物理反演框架”作为独立新颖性主张。正式问题是 AI 能否相对物理模板/兼容数值基线改善候选结构与参数初值的可靠性，并在公平预算下提升后续精修效率。CrystalShift.jl 已有 training-free 候选组合搜索与晶格 pseudo-refinement；已审阅公开源码和论文，但本机未发现 Julia，尚未实际运行或集成。
+
+**当前状态边界：** W0 工程交付完成；铁电材料家族仍待学长确认；原定 12 周研究依旧 PROPOSED / NOT_STARTED。W0 没有更改 `xrd_robustness/` 冻结结果、旧 xrd_inversion NO-GO 或已归档结构。

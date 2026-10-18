@@ -1,0 +1,9 @@
+.............                                                            [100%]
+============================== warnings summary ===============================
+tests/test_parameter_fit.py::test_both_reference_candidates_run_bounded_forward_fit[0]
+tests/test_parameter_fit.py::test_both_reference_candidates_run_bounded_forward_fit[0]
+  E:\AI4science\.venvs\xrd_test\Lib\site-packages\spglib\spg.py:438: DeprecationWarning: Set OLD_ERROR_HANDLING to false and catch the errors directly.
+    _set_no_error(_throw)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+13 passed, 2 warnings in 2.23s
