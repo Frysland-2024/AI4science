@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "preset": "forward_ab",
+  "experiment_id": "batio3_measurement_aware_exploratory_pilot",
+  "scope": {
+    "material": "BaTiO3",
+    "phase": "tetragonal P4mm",
+    "structure_source": "public COD 9014273; provenance and parity gate still required",
+    "claim_boundary": "single-CIF conditional interpolation; not real-experiment refinement"
+  },
+  "split": {
+    "sample_limit": 512,
+    "fractions": {"train": 0.70, "validation": 0.15, "test": 0.15},
+    "split_before_measurement_views": true,
+    "group_key": "q_parameter_sample",
+    "exploratory_not_blind": true
+  },
+  "seeds": [20261018, 20261019, 20261020],
+  "smoke": {"sample_limit": 128, "seed_count": 1, "max_epochs": 4},
+  "pilot": {
+    "methods": ["A_parameter_supervised", "B_measurement_aware_expected_forward"],
+    "max_epochs_per_seed": 24,
+    "paired_seeds": true,
+    "lambda_candidates": [0.1, 1.0],
+    "lambda_selection": "validation_only; never select on test",
+    "nuisance_policy": "non_oracle_estimated_or_blocked"
+  },
+  "scientific_training_budget_seconds": 7200,
+  "reviewed_backend": null
+}

@@ -1,0 +1,9 @@
+{
+  "schema_version": 1,
+  "preset": "forward_speed_benchmark",
+  "matrix_sizes": [512, 1024, 2048],
+  "warmup": 2,
+  "repeats": 5,
+  "dtype": "float32",
+  "minimum_free_vram_bytes": 536870912
+}
