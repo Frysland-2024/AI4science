@@ -204,3 +204,10 @@ python -m pytest -q
 - 已识别工程风险：目前公共 `runner.py` 的 epoch 末尾可能有不完整 batch，而且每 epoch 进行验证与保存，不适合直接充当完全公平的预算比较入口。CODEX LUNA 应先完成独立固定步数入口、数据审计、单元测试与 smoke，才能执行大规模 run。
 - 当前模拟 Test 已在正式论文中使用过；本次应标明为 **post-main supplementary follow-up**，不能声称是全新未打开的 confirmatory Test。
 - 状态 **PROPOSED / READY FOR CODEX IMPLEMENTATION / NOT_RUN**；完整任务与结果交付标准见 [PXRD_PARENT_STRUCTURE_EFFICIENCY_PLAN.md](PXRD_PARENT_STRUCTURE_EFFICIENCY_PLAN.md)。原主实验的报告、划分、权重和历史结果均不得修改。
+
+
+## 2026-10-14 completed parent-budget supplement (post-main)
+
+The formerly proposed parent-budget experiment is complete: 4 budgets (984/2460/4921/9842) × 5 seeds × 2 methods = 40 scored models, 20 pairs. At each budget Dynamic JS outperformed matched Dynamic ERM on the simulated Test by +0.05607 / +0.05173 / +0.04261 / +0.05396 Macro-F1 respectively, with 5/5 paired seeds positive at every budget. The already-used Test makes this explicitly post-main supplementary evidence. No measured budget crossing supports a quantitative crystal-structure saving claim. Full frozen protocol, raw aggregates, audit limitations and figures: [PARENT_BUDGET_EFFICIENCY.md](../xrd_robustness/reports/PARENT_BUDGET_EFFICIENCY.md).
+
+Research-role clarification (reported by project lead): Frysland-2024 led the problem formulation and experiment design, including both RRUFF/CNRS real-domain protocols and this parent-budget study; Cuifa01 contributed to engineering, transfer and GPU experiment execution. Git commit authorship is preserved; eventual paper authorship is a separate scholarly decision.
