@@ -77,7 +77,7 @@ The **ResNet implementation is adapted from ML4pXRDs** under the [third-party no
 
 - **Main study:** [xrd_robustness](../xrd_robustness/) — completed experimental comparisons, manuscript in progress.
 - **Separate numerical investigation:** [xrd_inversion](../xrd_inversion/) — contains forward-model / recoverability gates; its formal report records **288/288** clean P2-R successes while other nominal-start and nuisance diagnostics fail. **No neural training** was run for those numerical gates, and this is **not** evidence of a completed ML inversion model.
-- **Planned supplementary study:** [parent-structure efficiency protocol](PXRD_PARENT_STRUCTURE_EFFICIENCY_PLAN.md) — proposed test of whether JS extracts more value per **unique training crystal structure**; it has **no new result yet**.
+- **Completed supplementary study:** [parent-structure efficiency results](../xrd_robustness/reports/PARENT_BUDGET_EFFICIENCY.md) — 40 models across four independent-parent budgets. JS performs better at each matched budget, but no quantitative parent saving is demonstrated; this reuses a previously evaluated Test.
 - **Possible future thesis:** [physics-constrained parameter inversion](FUTURE_UNDERGRAD_THESIS_PLAN.md) — a **candidate plan**, not an approved or executed experiment.
 - **Archived directions:** see [project history](PROJECT_HISTORY.md) and [factorization NO-GO archive](archive/XRD_FACTORIZATION_STAGE1_ARCHIVED_20260907.md). Failed routes and changes in interpretation are preserved rather than presented as results.
 

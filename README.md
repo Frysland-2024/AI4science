@@ -7,7 +7,7 @@
 
 **中文一句话：** 用同一晶体在不同测量条件下产生的两张 XRD 模拟谱，构造“同源关系监督”，并检验它是否比普通动态数据增强更有利于晶系识别、抗扰动和少量真实谱适配。
 
-**Status (October 2026):** the main Dynamic ERM vs Dynamic JS comparison and its simulated/experimental evaluations are completed; manuscript preparation is ongoing. A separate PXRD inversion numerical track exists, while the proposed undergraduate thesis direction and parent-budget learning-curve supplement are **not completed results**.
+**Status (October 2026):** the main Dynamic ERM vs Dynamic JS comparison and its simulated/experimental evaluations are completed; manuscript preparation is ongoing. A separate PXRD inversion numerical track exists, while the proposed undergraduate thesis direction is **not a completed result**; the parent-budget learning-curve supplement is **completed**.
 
 ## The idea, in one figure
 
@@ -68,7 +68,7 @@ This is a **controlled application of established ML components to a physically 
 |---|---|---|
 | **[xrd_robustness/](xrd_robustness/)** | **Completed experiments / writing** | Main PXRD classification study: matched ERM–JS, simulated OOD, RRUFF few-shot, CNRS zero-shot |
 | **[xrd_inversion/](xrd_inversion/)** | **Separate numerical research infrastructure** | Known-phase tetragonal PXRD forward/inversion validation; numerical gates have results, **not** a completed ML inversion claim |
-| **[docs/PXRD_PARENT_STRUCTURE_EFFICIENCY_PLAN.md](docs/PXRD_PARENT_STRUCTURE_EFFICIENCY_PLAN.md)** | **Proposed; not yet run** | Follow-up question: can same-parent supervision achieve better performance with fewer *independent crystal structures*? |
+| **[Parent-budget efficiency results](xrd_robustness/reports/PARENT_BUDGET_EFFICIENCY.md)** | **Completed supplementary experiment** | 40 runs; four parent budgets, five seeds, improved same-budget performance but no demonstrated quantitative structure saving |
 | **[docs/FUTURE_UNDERGRAD_THESIS_PLAN.md](docs/FUTURE_UNDERGRAD_THESIS_PLAN.md)** | **Historical 2026-10-08 candidate; not started** | Initial concept: physics-constrained continuous-parameter inversion thesis |
 | **[docs/FERROELECTRIC_PRE_REFINEMENT_12W_PLAN.md](docs/FERROELECTRIC_PRE_REFINEMENT_12W_PLAN.md)** | **Proposed 2026-10-18; not started** | 12-week simulation-trained, calibrated Top-K phase/parameter pre-refinement assistance; coexistence treated as a mandatory single-phase failure stress test |
 
@@ -95,3 +95,12 @@ This verifies the **public, non-data-bound code and evidence contracts**, **not*
 - **[Manuscript scaffold](xrd_robustness/MANUSCRIPT.md):** paper-oriented narrative, with writing still in progress.
 
 **Citation:** a paper citation will be added after the author list and identifier are finalized. Until then, cite the [repository](https://github.com/Frysland-2024/AI4science) with the commit hash; see [CITATION.md](CITATION.md). **License:** [MIT](LICENSE).
+
+
+## Parent-structure budget efficiency supplement (completed 2026-10-14)
+
+This follow-up used four independent training-parent budgets (984 / 2,460 / 4,921 / 9,842), five matched seeds and equal 49,280-step training budgets per model: **40/40 completed runs**. On the previously used simulated Test, paired mean single-factor OOD Macro-F1 improvements from Dynamic JS over ERM were **+0.0561 / +0.0517 / +0.0426 / +0.0540** respectively (5/5 positive seeds at every budget). **This supports improved same-budget performance, not a measured reduction in the number of parent structures needed**. It is a post-main supplementary analysis, not an untouched blind Test. See [report](xrd_robustness/reports/PARENT_BUDGET_EFFICIENCY.md) and [machine-readable results](xrd_robustness/reports/parent_budget_efficiency/).
+
+### Research roles and contributions
+
+**Research design and leadership:** Frysland-2024 (Van / project owner) led the research formulation and experimental design, including the same-parent consistency comparison, simulated OOD evaluation, both RRUFF and CNRS real-domain evaluations, and the parent-structure efficiency study. **Engineering and execution:** Cuifa01 contributed to the code implementation, desktop transfer, GPU execution and experiment artifact preparation, especially for the parent-budget study. This role description does not alter Git commit authorship or decide future manuscript authorship, which must reflect documented substantive contributions and be agreed separately.

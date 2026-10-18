@@ -1,0 +1,419 @@
+{
+  "benchmark_run_count": 2,
+  "benchmark_run_sources": [
+    "benchmark_repeat1.json",
+    "cuiFA_benchmark.json"
+  ],
+  "gpu": {
+    "nvidia_smi": "NVIDIA GeForce RTX 4070 Ti SUPER, 16376 MiB, 591.86",
+    "torch_memory_bytes": 17170956288,
+    "torch_name": "NVIDIA GeForce RTX 4070 Ti SUPER"
+  },
+  "historical_eight_hour_comparison": {
+    "note": "8/24/40 are individual method-run counts; each paired cell runs ERM and JS together, so the estimate uses 4/12/20 paired cells and excludes one-time panel-cache construction and artifact transfer",
+    "source": "user recollection; not verified local wall-time provenance"
+  },
+  "not_scientific_result": true,
+  "protocol_config_sha256": "F8E531868741DFAABC484B9F73E711196911B82BD8836D2FAE14EE409B2B406C",
+  "resource_telemetry_csv": [
+    "telemetry_repeat1.csv",
+    "telemetry_repeat2.csv"
+  ],
+  "schema_version": "parent-budget-gpu-benchmark-v1",
+  "scope": "short_end_to_end_online_physics_h2d_and_paired_backward_benchmark",
+  "settings": [
+    {
+      "direct_vs_prefetch_render_bitwise_equal": true,
+      "elapsed_seconds": 2.1164019999996526,
+      "generated_views_per_second": 668.3860258156536,
+      "measured_steps": 48,
+      "paired_optimizer_steps_per_second": 20.887063306739176,
+      "parent_occurrences_per_second": 334.1930129078268,
+      "peak_cuda_allocated_bytes": 13270881792,
+      "prefetch_batches": 4,
+      "prefetch_wait_seconds_in_measured_section": 0.0331669000297552,
+      "replicate_count": 2,
+      "replicate_measurements": [
+        {
+          "paired_optimizer_steps_per_second": 19.09412536607456,
+          "source": "benchmark_repeat1.json",
+          "validation_pair_seconds_per_checkpoint": 3.7725674000103027
+        },
+        {
+          "paired_optimizer_steps_per_second": 22.68000124740379,
+          "source": "cuiFA_benchmark.json",
+          "validation_pair_seconds_per_checkpoint": 2.835803300011321
+        }
+      ],
+      "runtime": {
+        "amp_dtype": "bfloat16",
+        "amp_enabled": true,
+        "bf16_supported": true,
+        "fused_adamw": true,
+        "gpu_memory_bytes": 17170956288,
+        "gpu_name": "NVIDIA GeForce RTX 4070 Ti SUPER",
+        "main_interop_threads": 1,
+        "main_intraop_threads": 2,
+        "non_blocking_h2d": true,
+        "pin_memory": true,
+        "prefetch_batches": 4,
+        "prefetch_generation": "bounded-online-per-consumed-batch-v1",
+        "prefetch_result_order": "absolute-step-then-batch-offset",
+        "prefetch_sharding": "sha256-material-id-mod-v1",
+        "prefetch_workers": 4,
+        "quality_gate": false,
+        "tf32_cudnn": true,
+        "tf32_matmul": true,
+        "worker_native_threads": 1,
+        "worker_peak_cache": "lazy-static-shard",
+        "worker_thread_policy": "fixed-native-thread-env-v1"
+      },
+      "time_estimates": {
+        "24": {
+          "method_runs": 24,
+          "paired_cells": 12,
+          "training_hours": 7.864517105842557,
+          "training_plus_validation_hours": 7.9526287151761785,
+          "validation_checks_per_cell": 8,
+          "validation_hours": 0.08811160933362165
+        },
+        "40": {
+          "method_runs": 40,
+          "paired_cells": 20,
+          "training_hours": 13.107528509737595,
+          "training_plus_validation_hours": 13.254381191960299,
+          "validation_checks_per_cell": 8,
+          "validation_hours": 0.14685268222270276
+        },
+        "8": {
+          "method_runs": 8,
+          "paired_cells": 4,
+          "training_hours": 2.621505701947519,
+          "training_plus_validation_hours": 2.6508762383920597,
+          "validation_checks_per_cell": 8,
+          "validation_hours": 0.02937053644454055
+        }
+      },
+      "validation_checks_per_cell": 8,
+      "validation_pair_seconds_per_checkpoint": 3.304185350010812,
+      "warmup_steps": 16,
+      "workers": 4
+    },
+    {
+      "direct_vs_prefetch_render_bitwise_equal": true,
+      "elapsed_seconds": 1.9895601000025636,
+      "generated_views_per_second": 768.9869671798406,
+      "measured_steps": 48,
+      "paired_optimizer_steps_per_second": 24.030842724370018,
+      "parent_occurrences_per_second": 384.4934835899203,
+      "peak_cuda_allocated_bytes": 850147840,
+      "prefetch_batches": 6,
+      "prefetch_wait_seconds_in_measured_section": 0.034228799922857434,
+      "replicate_count": 2,
+      "replicate_measurements": [
+        {
+          "paired_optimizer_steps_per_second": 23.935749268205377,
+          "source": "benchmark_repeat1.json",
+          "validation_pair_seconds_per_checkpoint": 2.097936200007098
+        },
+        {
+          "paired_optimizer_steps_per_second": 24.12593618053466,
+          "source": "cuiFA_benchmark.json",
+          "validation_pair_seconds_per_checkpoint": 2.0839776000066195
+        }
+      ],
+      "runtime": {
+        "amp_dtype": "bfloat16",
+        "amp_enabled": true,
+        "bf16_supported": true,
+        "fused_adamw": true,
+        "gpu_memory_bytes": 17170956288,
+        "gpu_name": "NVIDIA GeForce RTX 4070 Ti SUPER",
+        "main_interop_threads": 1,
+        "main_intraop_threads": 2,
+        "non_blocking_h2d": true,
+        "pin_memory": true,
+        "prefetch_batches": 6,
+        "prefetch_generation": "bounded-online-per-consumed-batch-v1",
+        "prefetch_result_order": "absolute-step-then-batch-offset",
+        "prefetch_sharding": "sha256-material-id-mod-v1",
+        "prefetch_workers": 6,
+        "quality_gate": false,
+        "tf32_cudnn": true,
+        "tf32_matmul": true,
+        "worker_native_threads": 1,
+        "worker_peak_cache": "lazy-static-shard",
+        "worker_thread_policy": "fixed-native-thread-env-v1"
+      },
+      "time_estimates": {
+        "24": {
+          "method_runs": 24,
+          "paired_cells": 12,
+          "training_hours": 6.83565984559008,
+          "training_plus_validation_hours": 6.89141869625693,
+          "validation_checks_per_cell": 8,
+          "validation_hours": 0.05575885066684956
+        },
+        "40": {
+          "method_runs": 40,
+          "paired_cells": 20,
+          "training_hours": 11.3927664093168,
+          "training_plus_validation_hours": 11.485697827094883,
+          "validation_checks_per_cell": 8,
+          "validation_hours": 0.0929314177780826
+        },
+        "8": {
+          "method_runs": 8,
+          "paired_cells": 4,
+          "training_hours": 2.2785532818633603,
+          "training_plus_validation_hours": 2.2971395654189766,
+          "validation_checks_per_cell": 8,
+          "validation_hours": 0.01858628355561652
+        }
+      },
+      "validation_checks_per_cell": 8,
+      "validation_pair_seconds_per_checkpoint": 2.0909569000068586,
+      "warmup_steps": 16,
+      "workers": 6
+    },
+    {
+      "direct_vs_prefetch_render_bitwise_equal": true,
+      "elapsed_seconds": 1.9806119999993825,
+      "generated_views_per_second": 779.6565739030981,
+      "measured_steps": 48,
+      "paired_optimizer_steps_per_second": 24.364267934471815,
+      "parent_occurrences_per_second": 389.82828695154905,
+      "peak_cuda_allocated_bytes": 850147840,
+      "prefetch_batches": 8,
+      "prefetch_wait_seconds_in_measured_section": 0.03600730006291997,
+      "replicate_count": 2,
+      "replicate_measurements": [
+        {
+          "paired_optimizer_steps_per_second": 24.49360242412205,
+          "source": "benchmark_repeat1.json",
+          "validation_pair_seconds_per_checkpoint": 2.0830236000037985
+        },
+        {
+          "paired_optimizer_steps_per_second": 24.234933444821582,
+          "source": "cuiFA_benchmark.json",
+          "validation_pair_seconds_per_checkpoint": 2.0820442999975057
+        }
+      ],
+      "runtime": {
+        "amp_dtype": "bfloat16",
+        "amp_enabled": true,
+        "bf16_supported": true,
+        "fused_adamw": true,
+        "gpu_memory_bytes": 17170956288,
+        "gpu_name": "NVIDIA GeForce RTX 4070 Ti SUPER",
+        "main_interop_threads": 1,
+        "main_intraop_threads": 2,
+        "non_blocking_h2d": true,
+        "pin_memory": true,
+        "prefetch_batches": 8,
+        "prefetch_generation": "bounded-online-per-consumed-batch-v1",
+        "prefetch_result_order": "absolute-step-then-batch-offset",
+        "prefetch_sharding": "sha256-material-id-mod-v1",
+        "prefetch_workers": 8,
+        "quality_gate": false,
+        "tf32_cudnn": true,
+        "tf32_matmul": true,
+        "worker_native_threads": 1,
+        "worker_peak_cache": "lazy-static-shard",
+        "worker_thread_policy": "fixed-native-thread-env-v1"
+      },
+      "time_estimates": {
+        "24": {
+          "method_runs": 24,
+          "paired_cells": 12,
+          "training_hours": 6.742113783531898,
+          "training_plus_validation_hours": 6.797648022198582,
+          "validation_checks_per_cell": 8,
+          "validation_hours": 0.055534238666684055
+        },
+        "40": {
+          "method_runs": 40,
+          "paired_cells": 20,
+          "training_hours": 11.236856305886496,
+          "training_plus_validation_hours": 11.329413370330968,
+          "validation_checks_per_cell": 8,
+          "validation_hours": 0.09255706444447342
+        },
+        "8": {
+          "method_runs": 8,
+          "paired_cells": 4,
+          "training_hours": 2.2473712611772996,
+          "training_plus_validation_hours": 2.265882674066194,
+          "validation_checks_per_cell": 8,
+          "validation_hours": 0.018511412888894685
+        }
+      },
+      "validation_checks_per_cell": 8,
+      "validation_pair_seconds_per_checkpoint": 2.082533950000652,
+      "warmup_steps": 16,
+      "workers": 8
+    },
+    {
+      "direct_vs_prefetch_render_bitwise_equal": true,
+      "elapsed_seconds": 1.9105495999974664,
+      "generated_views_per_second": 797.7277721578225,
+      "measured_steps": 48,
+      "paired_optimizer_steps_per_second": 24.928992879931954,
+      "parent_occurrences_per_second": 398.86388607891126,
+      "peak_cuda_allocated_bytes": 850147840,
+      "prefetch_batches": 12,
+      "prefetch_wait_seconds_in_measured_section": 0.0392188999830978,
+      "replicate_count": 2,
+      "replicate_measurements": [
+        {
+          "paired_optimizer_steps_per_second": 24.73432500797154,
+          "source": "benchmark_repeat1.json",
+          "validation_pair_seconds_per_checkpoint": 2.0938050000113435
+        },
+        {
+          "paired_optimizer_steps_per_second": 25.123660751892363,
+          "source": "cuiFA_benchmark.json",
+          "validation_pair_seconds_per_checkpoint": 2.0822362000035355
+        }
+      ],
+      "runtime": {
+        "amp_dtype": "bfloat16",
+        "amp_enabled": true,
+        "bf16_supported": true,
+        "fused_adamw": true,
+        "gpu_memory_bytes": 17170956288,
+        "gpu_name": "NVIDIA GeForce RTX 4070 Ti SUPER",
+        "main_interop_threads": 1,
+        "main_intraop_threads": 2,
+        "non_blocking_h2d": true,
+        "pin_memory": true,
+        "prefetch_batches": 12,
+        "prefetch_generation": "bounded-online-per-consumed-batch-v1",
+        "prefetch_result_order": "absolute-step-then-batch-offset",
+        "prefetch_sharding": "sha256-material-id-mod-v1",
+        "prefetch_workers": 12,
+        "quality_gate": false,
+        "tf32_cudnn": true,
+        "tf32_matmul": true,
+        "worker_native_threads": 1,
+        "worker_peak_cache": "lazy-static-shard",
+        "worker_thread_policy": "fixed-native-thread-env-v1"
+      },
+      "time_estimates": {
+        "24": {
+          "method_runs": 24,
+          "paired_cells": 12,
+          "training_hours": 6.589382389326394,
+          "training_plus_validation_hours": 6.645062938659925,
+          "validation_checks_per_cell": 8,
+          "validation_hours": 0.05568054933353172
+        },
+        "40": {
+          "method_runs": 40,
+          "paired_cells": 20,
+          "training_hours": 10.982303982210656,
+          "training_plus_validation_hours": 11.075104897766542,
+          "validation_checks_per_cell": 8,
+          "validation_hours": 0.0928009155558862
+        },
+        "8": {
+          "method_runs": 8,
+          "paired_cells": 4,
+          "training_hours": 2.196460796442131,
+          "training_plus_validation_hours": 2.2150209795533082,
+          "validation_checks_per_cell": 8,
+          "validation_hours": 0.01856018311117724
+        }
+      },
+      "validation_checks_per_cell": 8,
+      "validation_pair_seconds_per_checkpoint": 2.0880206000074395,
+      "warmup_steps": 16,
+      "workers": 12
+    },
+    {
+      "direct_vs_prefetch_render_bitwise_equal": true,
+      "elapsed_seconds": 1.9651155000028666,
+      "generated_views_per_second": 782.126447331176,
+      "measured_steps": 48,
+      "paired_optimizer_steps_per_second": 24.44145147909925,
+      "parent_occurrences_per_second": 391.063223665588,
+      "peak_cuda_allocated_bytes": 850147840,
+      "prefetch_batches": 16,
+      "prefetch_wait_seconds_in_measured_section": 0.040198699993197806,
+      "replicate_count": 2,
+      "replicate_measurements": [
+        {
+          "paired_optimizer_steps_per_second": 24.456857771577166,
+          "source": "benchmark_repeat1.json",
+          "validation_pair_seconds_per_checkpoint": 2.0878495999932056
+        },
+        {
+          "paired_optimizer_steps_per_second": 24.426045186621337,
+          "source": "cuiFA_benchmark.json",
+          "validation_pair_seconds_per_checkpoint": 2.08161919999111
+        }
+      ],
+      "runtime": {
+        "amp_dtype": "bfloat16",
+        "amp_enabled": true,
+        "bf16_supported": true,
+        "fused_adamw": true,
+        "gpu_memory_bytes": 17170956288,
+        "gpu_name": "NVIDIA GeForce RTX 4070 Ti SUPER",
+        "main_interop_threads": 1,
+        "main_intraop_threads": 2,
+        "non_blocking_h2d": true,
+        "pin_memory": true,
+        "prefetch_batches": 16,
+        "prefetch_generation": "bounded-online-per-consumed-batch-v1",
+        "prefetch_result_order": "absolute-step-then-batch-offset",
+        "prefetch_sharding": "sha256-material-id-mod-v1",
+        "prefetch_workers": 16,
+        "quality_gate": false,
+        "tf32_cudnn": true,
+        "tf32_matmul": true,
+        "worker_native_threads": 1,
+        "worker_peak_cache": "lazy-static-shard",
+        "worker_thread_policy": "fixed-native-thread-env-v1"
+      },
+      "time_estimates": {
+        "24": {
+          "method_runs": 24,
+          "paired_cells": 12,
+          "training_hours": 6.7208228941369095,
+          "training_plus_validation_hours": 6.776415811470034,
+          "validation_checks_per_cell": 8,
+          "validation_hours": 0.05559291733312421
+        },
+        "40": {
+          "method_runs": 40,
+          "paired_cells": 20,
+          "training_hours": 11.201371490228182,
+          "training_plus_validation_hours": 11.294026352450055,
+          "validation_checks_per_cell": 8,
+          "validation_hours": 0.09265486222187368
+        },
+        "8": {
+          "method_runs": 8,
+          "paired_cells": 4,
+          "training_hours": 2.2402742980456365,
+          "training_plus_validation_hours": 2.2588052704900115,
+          "validation_checks_per_cell": 8,
+          "validation_hours": 0.018530972444374735
+        }
+      },
+      "validation_checks_per_cell": 8,
+      "validation_pair_seconds_per_checkpoint": 2.0847343999921577,
+      "warmup_steps": 16,
+      "workers": 16
+    }
+  ],
+  "simulation_config_sha256": "167CBFFD23C37BF57A5C9BB8974EB28BD17E908BFE3A88218EF96E9CF98CB010",
+  "source_branch": "codex/parent-budget-efficiency",
+  "source_commit": "0749c635a4d858106066fa8a0e4759039cbd1a3c",
+  "step_budget_per_cell": 49280,
+  "subset_manifest_sha256": "8A484426AA1DDEABCD11084FAE8F7CAE4A2B56B6B230D0DCAC466E50F043422D",
+  "validation_interval_steps": 6160,
+  "validation_panel_cache_path": "local benchmark cache (excluded from Git)",
+  "validation_panel_cache_seconds": 0.15595759999996517
+}
