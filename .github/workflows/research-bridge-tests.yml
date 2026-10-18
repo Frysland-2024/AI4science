@@ -1,0 +1,24 @@
+name: Research Bridge - offline checks
+on:
+  pull_request:
+    paths:
+      - "research_bridge/**"
+      - ".github/workflows/research-bridge-tests.yml"
+  push:
+    paths:
+      - "research_bridge/**"
+      - ".github/workflows/research-bridge-tests.yml"
+jobs:
+  offline-tests:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Python syntax check
+        run: python -m compileall -q research_bridge
+      - name: Run mocks (no Codex calls and no secrets)
+        run: python -m unittest discover -s research_bridge/tests -v
