@@ -1,0 +1,231 @@
+{
+  "run_kind": "simulated_engineering_demo_not_scientific_result",
+  "date": "2026-10-18",
+  "git_commit": "74ac5aadf9a96c943c5b0c388d279b37260769d4",
+  "working_tree_dirty_at_run": true,
+  "python": "3.11.9",
+  "numpy": "2.4.6",
+  "command": "python xrd_pre_refinement/scripts/run_batio3_pilot.py",
+  "registry_sha256": "efeb527895b79204163700d3010abae88cb8f4afe2dab6ea18a06cfc478e2df0",
+  "family_config_sha256": "6bed4cd4d22fdf7d114a00e43f15b12492585d53c9dbbf7ee519186a538dfac9",
+  "instrument": {
+    "radiation": "Cu Kα1, λ=1.5406 Å; explicit generic simulation assumption, not the wavelength used for the cited single-crystal structure determination.",
+    "wavelength_angstrom": 1.5406,
+    "two_theta_min_deg": 10.0,
+    "two_theta_max_deg": 80.0,
+    "step_deg": 0.02
+  },
+  "template_measurement": {
+    "delta_2theta_deg": 0.0,
+    "fwhm_deg": 0.08,
+    "background_to_peak_ratio": 0.0,
+    "noise_std_ratio": 0.0,
+    "interpretation": "Deterministic common-grid rendering choice for the template-distance smoke test; not an instrument response measurement."
+  },
+  "measurement": {
+    "delta_2theta_deg": 0.02,
+    "fwhm_deg": 0.1,
+    "background_to_peak_ratio": 0.04,
+    "noise_std_ratio": 0.005,
+    "interpretation": "Small synthetic perturbations chosen only to exercise the pipeline; not sourced from a laboratory instrument or treated as a validated prior."
+  },
+  "noise_seed_observation": 812,
+  "observation_candidate_id": "batio3_p4mm_298k",
+  "limited_forward_fit": {
+    "candidate_count": 2,
+    "fitted_candidate_ids": [
+      "batio3_pm3m_413k", "batio3_p4mm_298k"
+    ],
+    "parameter_intervals": "NOT_ESTIMATED",
+    "bound_interpretation": "engineering demo search limits only; not validated priors",
+    "per_candidate": {
+      "batio3_pm3m_413k": {
+        "fit_success": true,
+        "normalized_rmse_before": 0.6772312425014143,
+        "normalized_rmse_after": 0.652587399938548,
+        "fitted_values": {
+          "a_angstrom": 4.01138284937193,
+          "delta_2theta_deg": -0.0006582607241660173
+        },
+        "search_bounds": {
+          "a_angstrom": [
+            3.9896514999999995, 4.029748499999999
+          ],
+          "delta_2theta_deg": [
+            -0.05, 0.05
+          ]
+        },
+        "function_evaluations": 22
+      },
+      "batio3_p4mm_298k": {
+        "fit_success": true,
+        "normalized_rmse_before": 0.28648544307088836,
+        "normalized_rmse_after": 0.10918557484006422,
+        "fitted_values": {
+          "a_angstrom": 3.9923993885153495,
+          "c_angstrom": 4.037119589641085,
+          "delta_2theta_deg": 0.01874742875221543
+        },
+        "search_bounds": {
+          "a_angstrom": [
+            3.9725375, 4.0124625
+          ],
+          "c_angstrom": [
+            4.0171135, 4.0574864999999996
+          ],
+          "delta_2theta_deg": [
+            -0.05, 0.05
+          ]
+        },
+        "function_evaluations": 16
+      }
+    }
+  },
+  "source_context": {
+    "citation": "Nakatani et al., Acta Crystallographica Section B 72 (2016), 151-159, DOI 10.1107/S2052520615022544.",
+    "article_url": "https://journals.iucr.org/paper?buy=yes&cnor=bp5079",
+    "official_supplementary_cif_url": "https://doi.org/10.1107/S2052520615022544/bp5079sup1.cif",
+    "official_supplementary_cif_retrieved": false,
+    "local_artifact_method": "The local CIFs are manual transcriptions of the article's published coordinate tables, not downloaded official supplementary CIF files.",
+    "experiment_scope": "Published structure solution used synthetic single-crystal specimens. The experiment reports P4mm at 298 K and Pm-3m at 413 K; the transition near 413 K is specific to that specimen and study.",
+    "pressure": "Not specified in the cited source tables.",
+    "accessed_on": "2026-10-18"
+  },
+  "discriminability_notes": "For these nominal reference structures the tetragonal (002)/(200) separation decreases as c/a approaches 1, including on heating toward this specimen's transition. Instrumental broadening or microstrain comparable to the peak separation, weak signal, texture, background, and overlapping phases can also make the patterns harder to distinguish. This is qualitative guidance, not a validated resolution threshold or parameter prior.",
+  "representative_feature_comparison": {
+    "wavelength_angstrom": 1.5406,
+    "cubic_200_two_theta_deg": 45.19044,
+    "tetragonal_002_two_theta_deg": 44.86462,
+    "tetragonal_200_two_theta_deg": 45.39596,
+    "tetragonal_002_200_split_deg": 0.5313400000000001,
+    "observation_fwhm_deg": 0.1,
+    "split_to_observation_fwhm_ratio": 5.3134000000000015,
+    "interpretation": "Ideal structure-derived powder calculation at the explicit simulation wavelength; this ratio is not an experimental resolution guarantee."
+  },
+  "source_code_sha256": {
+    "scripts/run_batio3_pilot.py": "be0cf4050ade90a6dcb9f1927e9ae2b55948bd8490a4cd079e3e1b618be42204",
+    "src/xrd_pre_refinement/__init__.py": "272b9e87edd6f04ba6d24cb3b4104785a945bb4bd941bcd5a857cf9a39090ab6",
+    "src/xrd_pre_refinement/baseline.py": "d60918263f4ca29747994518d66140268ff58e4e3e1a934d7f9418c7a6562180",
+    "src/xrd_pre_refinement/observation.py": "a92542a9a5fb19f9501246a73d944a88cdb2b92a94e8ae701caaa6ef82bb5465",
+    "src/xrd_pre_refinement/parameter_fit.py": "282c81d1a7056f0277606a08832e8f2137adc24311ee01b0fb1fc2cc319808bc",
+    "src/xrd_pre_refinement/registry.py": "6422e42c0b0a4247114473c0bd6d1396fb29b8d6606f09131751cfb0f45a8907",
+    "src/xrd_pre_refinement/reporting.py": "ef640713fc983c1f0ce22053345fbc4f59996efea2d81ed20e1b3cdce9672796",
+    "src/xrd_pre_refinement/simulation.py": "f64ca94342d0a9d805f5086db5e360f401550a65eb81e8c6737ffd379e278b02"
+  },
+  "candidates": [
+    {
+      "candidate_id": "batio3_pm3m_413k",
+      "cif_sha256": "ff88fea08f5ff7f214df877be2f93c30db8ac4e20f107c45ac6d7086e7627666",
+      "space_group_from_cif": {
+        "symbol": "Pm-3m",
+        "number": 221
+      },
+      "sites": 5,
+      "reduced_formula": "BaTiO3",
+      "cif_source": {
+        "citation": "Nakatani et al., Acta Crystallographica Section B 72 (2016), 151-159, Table 4; DOI 10.1107/S2052520615022544.",
+        "url": "https://journals.iucr.org/paper?buy=yes&cnor=bp5079",
+        "official_supplementary_cif_url": "https://doi.org/10.1107/S2052520615022544/bp5079sup1.cif",
+        "artifact_status": "manual_published_table_transcription_not_official_supplementary_cif",
+        "accessed_on": "2026-10-18",
+        "sha256": "ff88fea08f5ff7f214df877be2f93c30db8ac4e20f107c45ac6d7086e7627666"
+      },
+      "representative_ideal_bragg_peaks": {
+        "around_45_deg": [
+          {
+            "two_theta_deg": 45.19044,
+            "relative_intensity": 90.3438,
+            "hkl_families": [
+              [
+                2, 0, 0
+              ]
+            ]
+          }
+        ],
+        "around_66_deg": [
+          {
+            "two_theta_deg": 65.82624,
+            "relative_intensity": 53.50109,
+            "hkl_families": [
+              [
+                2, 2, 0
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "candidate_id": "batio3_p4mm_298k",
+      "cif_sha256": "b352c3d534a112b71f488f848e24ae5d09d0e0a21dd9b217d6c1d9456cd43a77",
+      "space_group_from_cif": {
+        "symbol": "P4mm",
+        "number": 99
+      },
+      "sites": 5,
+      "reduced_formula": "BaTiO3",
+      "cif_source": {
+        "citation": "Nakatani et al., Acta Crystallographica Section B 72 (2016), 151-159, Table 3; DOI 10.1107/S2052520615022544.",
+        "url": "https://journals.iucr.org/paper?buy=yes&cnor=bp5079",
+        "official_supplementary_cif_url": "https://doi.org/10.1107/S2052520615022544/bp5079sup1.cif",
+        "artifact_status": "manual_published_table_transcription_not_official_supplementary_cif",
+        "accessed_on": "2026-10-18",
+        "sha256": "b352c3d534a112b71f488f848e24ae5d09d0e0a21dd9b217d6c1d9456cd43a77"
+      },
+      "representative_ideal_bragg_peaks": {
+        "around_45_deg": [
+          {
+            "two_theta_deg": 44.86462,
+            "relative_intensity": 45.97235,
+            "hkl_families": [
+              [
+                0, 0, 2
+              ]
+            ]
+          },
+          {
+            "two_theta_deg": 45.39596,
+            "relative_intensity": 89.65681,
+            "hkl_families": [
+              [
+                2, 0, 0
+              ]
+            ]
+          }
+        ],
+        "around_66_deg": [
+          {
+            "two_theta_deg": 65.73366,
+            "relative_intensity": 53.51956,
+            "hkl_families": [
+              [
+                2, 0, 2
+              ]
+            ]
+          },
+          {
+            "two_theta_deg": 66.14606,
+            "relative_intensity": 26.51659,
+            "hkl_families": [
+              [
+                2, 2, 0
+              ]
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "model_training": "NOT_RUN",
+  "probability_calibration": "NOT_FITTED",
+  "phase_fraction_estimation": "NOT_IMPLEMENTED",
+  "mix_recipe": {
+    "candidate_ids": [
+      "batio3_pm3m_413k", "batio3_p4mm_298k"
+    ],
+    "coefficients": [
+      0.5, 0.5
+    ],
+    "interpretation": "arbitrary normalized profile-intensity mixing coefficients only; not phase fractions"
+  }
+}

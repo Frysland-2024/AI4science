@@ -1,0 +1,13 @@
+# Generated Python and test state — never commit
+__pycache__/
+*.py[cod]
+.pytest_cache/
+*.egg-info/
+build/
+dist/
+.venv/
+# Local-only training checkpoints
+*.pt
+*.pth
+*.ckpt
+*.safetensors
