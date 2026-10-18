@@ -184,3 +184,7 @@ A research task is complete at the relevant level when:
 - **communication done:** the artifact is fact-checked against current repository state.
 
 A material scientific result that exists only in a chat is not a durable project decision.
+
+## 9. AutoLab P0 report-only contract
+
+The current `pxrd_autolab/` P0 runner accepts only `fixture_smoke` and `recorded_report` modes. It never calls a trainer. Fixture values must remain labeled synthetic; recorded values must be derived from machine-readable evidence and retain run/config/input hashes. A successful report run ends in `AWAITING_REVIEW`; a failed forward numerical gate or budget becomes `BLOCKED`, and missing or invalid evidence becomes `FAILED`. Reviewers must inspect raw results and the scientific claim boundary before reusing a generated draft. See [PXRD_AUTOMATED_RESEARCH_PIPELINE_PLAN_20261018.md](PXRD_AUTOMATED_RESEARCH_PIPELINE_PLAN_20261018.md) and [pxrd_autolab/README.md](../pxrd_autolab/README.md).

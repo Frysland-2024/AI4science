@@ -1,6 +1,6 @@
 # PXRD AutoLab：自动化科研执行与可审计证据流水线（2026-10-18）
 
-**状态：PROPOSED / ARCHITECTURE & DELIVERY CONTRACT / NOT_IMPLEMENTED / NO_AUTOMATED_RUNS。** 本文记录拟建工程，不宣称已完成自动调度、无人值守实验、图表或双周报告；不修改已冻结的 V9 研究。本文的自动化范围必须服从 [AGENTS.md](../AGENTS.md) 的证据优先级与科研诚信要求。
+**状态：P0 IMPLEMENTED ON `feat/pxrd-autolab-v1`, PENDING PR REVIEW / REPORT-ONLY / NO_NEW_SCIENTIFIC_RUNS。** 当前实现锁定配置、记录运行状态与日志、校验既有 Forward Loss 记录、重算报告指标并生成图表和双周简报草稿；不实现训练、调度或自动批准。代码尚待 PR 审核合并，不宣称无人值守实验已完成，也不修改已冻结的 V9 研究。本文的自动化范围必须服从 [AGENTS.md](../AGENTS.md) 的证据优先级与科研诚信要求。
 
 **发起背景与科学目标：** 用户在确定“尽量前置完成科研，双周真实汇报，同时推进课程、硕士申请与 GRE”的时间策略后，提出能否建立自动科研流。要自动化的是**执行与证据整理**，不是让 AI 自由重定义科研问题。首个实际用例是 [铁电陶瓷前向重构 Loss 候选计划](FERROELECTRIC_PRE_REFINEMENT_12W_PLAN.md)：借鉴 PQ-Net 参数回归、DRNets 物理重构思想，比较 **A = supervised PXRD parameter inversion** 和 **B = 相同 NN + differentiable forward reconstruction loss**。在有据可查的已知单相候选与可靠 forward 上做小 pilot；材料家族待合作学长确认。
 
@@ -78,13 +78,13 @@ runs/                                    # generated local/object-store only, gi
 
 **技术栈：** Python + PyTorch + 现有模拟/forward + `pytest` + 机器可读 YAML/JSON + `matplotlib`；先用本地 CSV/JSON 管理实验（最低依赖），规模上来再考虑 MLflow。无需首版就装 W&B、多智能体平台、消息队列、复杂数据库或 K8s。
 
-**单命令目标（设计示例，当前尚不存在）：**
+**P0 单命令：**
 
 ```bash
-python -m pxrd_autolab.run --config pxrd_autolab/configs/forward_ab_smoke.yaml
+python -m pxrd_autolab.run --config pxrd_autolab/configs/fixture_smoke.json --repo-root .
 ```
 
-任务必须具有 `--dry-run`、`--resume`、`--max-steps` 或相当预算闸门；实际 CLI 由实现与测试决定，不能把本段命令误认为已成功运行。
+`fixture_smoke` 只使用显式标注的合成夹具；记录现有 pilot 则用 `forward_loss_recorded.json` 和 `--input-root` 指定的证据目录。P0 提供 `--dry-run`、`--max-steps` 和硬 `max_seconds` 预算闸门。每次调用生成新 run ID，不覆盖先前运行。下方记录了 P0 的实际范围与验证。
 
 ## 4. 数据合同、状态机与自动关卡
 
@@ -108,7 +108,9 @@ python -m pxrd_autolab.run --config pxrd_autolab/configs/forward_ab_smoke.yaml
 4. **最小报告器**：消费真实 metrics.json，绘制 A/B 指标表和损失曲线（不存在指标就显示 UNKNOWN/NOT_RUN），生成 `report.md` 与 `biweekly_brief.md`；任何图注明 run_id 与数据角色。
 5. **GitHub Actions**：只跑 config schema、unit tests、短 CPU smoke；PR 审查后合并。
 
-**P0 验收：** 用单条命令真实执行配置校验、受控 smoke、产出报告；故意注入梯度 Gate 不通过/缺文件/超预算时**确实停止**；重复运行不会静默覆盖先前结果；生成物可由 run_id 对应到 Git commit、配置 hash；运行文档与失败记录可以复现。
+**P0 验收：** 用单条命令真实执行配置校验、受控 smoke、产出报告；故意注入前向数值 Gate 不通过/缺文件/超预算时**确实停止**；重复运行不会静默覆盖先前结果；生成物可由 run_id 对应到 Git commit、配置 hash；运行文档与失败记录可以复现。
+
+**P0 实现记录（2026-10-18）：** `pxrd_autolab/` 是独立报告和审计包。它提供严格 JSON 配置校验及 raw/canonical SHA-256 锁定、唯一 run 目录、有限状态机、`run.log`/`events.jsonl`/`failure.json`、输入与输出哈希、报告指标从 seed-level JSON 重算、validation-only lambda 选择校验、A/B 指标图、训练参数/重构 loss 与验证误差曲线、`report.md` 和 `biweekly_brief.md` 草稿。`fixture_smoke` 不训练；`recorded_report` 只读取 `xrd_forward_loss/reports/pilot_20261018/` 已完成的结果。缺少输入会记为 `FAILED`，前向 Gate 未通过或预算越界会记为 `BLOCKED`。本次没有启动新的训练或产生新的科学结果。CPU 测试和实际 pilot 的 report-only 读取结果见 [pxrd_autolab/README.md](../pxrd_autolab/README.md)；测试由 PR CI 覆盖。GPU 训练器、恢复/调度、自动发送和自动批准仍属于后续工作。
 
 ### P1（第二个 PR；满足物理 Gate 才进入）
 - 替换 mock 为**有可靠 CIF/forward 的限定单相模拟任务**；复现普通监督参数回归 A；接入可微 forward reconstruction B。

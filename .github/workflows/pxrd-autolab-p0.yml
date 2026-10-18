@@ -1,0 +1,33 @@
+name: PXRD AutoLab P0
+
+on:
+  push:
+    paths:
+      - "pxrd_autolab/**"
+      - ".github/workflows/pxrd-autolab-p0.yml"
+  pull_request:
+    paths:
+      - "pxrd_autolab/**"
+      - ".github/workflows/pxrd-autolab-p0.yml"
+
+jobs:
+  cpu-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: pxrd_autolab/pyproject.toml
+      - name: Install AutoLab P0 and test dependencies
+        run: python -m pip install -e "./pxrd_autolab[test]"
+      - name: Run failure and report tests
+        run: python -m pytest ./pxrd_autolab/tests -q
+      - name: Run CPU fixture smoke
+        run: >-
+          python -m pxrd_autolab.run
+          --config ./pxrd_autolab/configs/fixture_smoke.json
+          --repo-root .
+          --runs-root "$RUNNER_TEMP/pxrd-autolab-runs"
