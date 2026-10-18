@@ -181,6 +181,14 @@ python -m pytest -q
 
 正式规划与申请用文字见 **[FUTURE_UNDERGRAD_THESIS_PLAN.md](FUTURE_UNDERGRAD_THESIS_PLAN.md)**；未来如实际开题发生变化，须单独记录新决策与证据。
 
+### 2026-10-18：铁电陶瓷预精修辅助的新版 12 周候选规划（PROPOSED / NOT_STARTED）
+
+在 2026-10-08 连续参数＋可微重构 Loss 候选思路基础上，进一步收敛了面向真实应用的下一阶段方案：**一个待定铁电陶瓷家族、模拟谱主训练、Top-K 单相结构候选及经模拟域检验的概率校准、逐候选参数初值与不确定性、物理正向核验、精修前指导**。学长少量真实谱主要用于外部案例，不作为主训练集。重构 Loss 降为可选消融，不作为项目启动的必需步骤。
+
+**两相共存不被排除**：12 周主任务暂以候选单相为核心，但必须用物理合理的合成混相作单相假设失配压力测试，允许 `REVIEW_REQUIRED` 拒判；进一步两相模型提示仅为可选，质量分数定量另立后续课题。**单相 Softmax 的 70% R / 30% C 是互斥候选解释概率，不是两相含量。** ECE 是模拟域可靠性评估，不保证真实域概率准确。
+
+本规划**不是已实施工作、已批准开题或对旧 xrd_inversion/JS 主线的改写**。详情与每双周里程碑见 [FERROELECTRIC_PRE_REFINEMENT_12W_PLAN.md](FERROELECTRIC_PRE_REFINEMENT_12W_PLAN.md)。旧 [FUTURE_UNDERGRAD_THESIS_PLAN.md](FUTURE_UNDERGRAD_THESIS_PLAN.md) 原文保留作为 10 月 8 日历史提案。
+
 ## 9. 2026-10-13 独立母结构数量效率实验（PROPOSED，尚未运行）
 
 从早期暂缓的 sample-efficiency 设想中恢复 **10% / 25% / 50% / 100% 的 Train 母结构预算曲线**，检验在相同独立结构数、相同双视图曝光和优化预算下，利用同源关系的 Dynamic JS 是否比 Dynamic ERM 更充分使用晶体结构数据。
