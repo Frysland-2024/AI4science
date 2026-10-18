@@ -69,7 +69,8 @@ This is a **controlled application of established ML components to a physically 
 | **[xrd_robustness/](xrd_robustness/)** | **Completed experiments / writing** | Main PXRD classification study: matched ERM–JS, simulated OOD, RRUFF few-shot, CNRS zero-shot |
 | **[xrd_inversion/](xrd_inversion/)** | **Separate numerical research infrastructure** | Known-phase tetragonal PXRD forward/inversion validation; numerical gates have results, **not** a completed ML inversion claim |
 | **[docs/PXRD_PARENT_STRUCTURE_EFFICIENCY_PLAN.md](docs/PXRD_PARENT_STRUCTURE_EFFICIENCY_PLAN.md)** | **Proposed; not yet run** | Follow-up question: can same-parent supervision achieve better performance with fewer *independent crystal structures*? |
-| **[docs/FUTURE_UNDERGRAD_THESIS_PLAN.md](docs/FUTURE_UNDERGRAD_THESIS_PLAN.md)** | **Future candidate; not started** | Possible physics-constrained continuous-parameter inversion thesis |
+| **[docs/FUTURE_UNDERGRAD_THESIS_PLAN.md](docs/FUTURE_UNDERGRAD_THESIS_PLAN.md)** | **Historical 2026-10-08 candidate; not started** | Initial concept: physics-constrained continuous-parameter inversion thesis |
+| **[docs/FERROELECTRIC_PRE_REFINEMENT_12W_PLAN.md](docs/FERROELECTRIC_PRE_REFINEMENT_12W_PLAN.md)** | **Proposed 2026-10-18; not started** | 12-week simulation-trained, calibrated Top-K phase/parameter pre-refinement assistance; coexistence treated as a mandatory single-phase failure stress test |
 
 For the reasoning behind changes such as **PAMPT → ResNet**, abandonment of the Residual branch, and the shift from generic robustness framing to relationship supervision, see the [project history](docs/PROJECT_HISTORY.md). Negative and archived results are intentionally retained.
 
