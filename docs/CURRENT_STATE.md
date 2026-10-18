@@ -224,3 +224,9 @@ python -m pytest -q
 - 所有结果来自单一已知 HfCd 结构的模拟参数泛化；没有 CIF 文件，结构来自冻结的本地 standardized-structure JSON。未验证铁电陶瓷、实验谱、未见结构或精修初值效用。
 
 配置、逐样本扰动和 seed、原始谱阵列、Gate、A/B JSON、重算校验、图表和报告见 [`xrd_forward_loss/reports/v9_perturbation_phase2_pilot_20261018/`](../xrd_forward_loss/reports/v9_perturbation_phase2_pilot_20261018/)；接口说明见 [`V9_PERTURBATION_ADAPTER.md`](../xrd_forward_loss/V9_PERTURBATION_ADAPTER.md)。该工作保存在由 PR #11 head 分出的独立 stacked PR；PR 仍需人工审核，未自动合并。
+
+## 11. 2026-10-18 测量一致 Forward 闭环及 BaTiO3 有界 A/B
+
+在独立 `codex/measurement-aware-closure-20261018` 工程分支完成了 COD 9014273 单 CIF 测量闭环审计与一个 512 样本、3 配对 seed、每 run 最多 24 epochs 的合成 A/B。新 expected profile 显式建模 2theta 零点、Gaussian FWHM、非负平滑背景和相对强度；Torch 与独立 V9/Pymatgen clean renderer 的四 q 探针整谱 RMSE 为 `2.8e-9–4.3e-9`，q 梯度有限差分相对误差 `8.7e-7`。标称 joint q/eta Jacobian 满秩、条件数 `17.44`；受限无噪声 profile fit 回收成功。以上均为单模型、单 CIF 数值 Gate。
+
+配对训练中，B 在简单合成输入平均 q-MAE 较低（`0.01616` vs A `0.01959`），在较强 V9-style 合成输入平均更高（`0.04084` vs A `0.03773`）。B 使用额外合成 eta 标签和期望谱监督；较强条件不支持普遍改善。当前证据不是 full V9 pipeline、未见结构迁移或真实 PXRD。完整 gate、逐 seed 指标、运行记录和限制见 [测量一致 Forward 闭环报告](MEASUREMENT_AWARE_FORWARD_CLOSURE_REPORT_20261018.md) 与 `xrd_forward_loss/measurement_closure/`。

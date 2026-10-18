@@ -250,6 +250,20 @@ The first engineering step should be a minimal P0 (manifest, state machine, safe
 
 See [adapter contract](../xrd_forward_loss/V9_PERTURBATION_ADAPTER.md) and [pilot report](../xrd_forward_loss/reports/v9_perturbation_phase2_pilot_20261018/TECHNICAL_REPORT.md). The failure encountered after training due to a Matplotlib keyword mismatch is preserved in the run log and traceback; plots/report were recovered without retraining or changing result/history JSON.
 
+## 20. 2026-10-18: measurement-aware BaTiO3 closure and bounded paired pilot
+
+**Question / previous assumption:** The PR #11 objective compared a clean nuisance-fixed forward profile to a perturbed observed profile; PR #17 changed the target to simulator-provided clean reference, which is numerically consistent but does not explain a measurement with unknown nuisance.
+
+**Evidence:** On COD 9014273 BaTiO3 P4mm, Torch clean profiles matched the independent V9/Pymatgen renderer across four q probes (full-profile RMSE `2.76e-9`–`4.34e-9`). A new differentiable expected profile models zero shift, Gaussian width, smooth nonnegative background and relative scale. q-gradient finite differences agreed to `8.65e-7`; the nominal joint q/eta Jacobian was full rank (7), condition `17.44`; a bounded noiseless unknown-nuisance profile fit recovered its synthetic truth. In a deliberate nuisance-mismatched example, fixed clean-forward q fit displaced by `[-0.1055,-0.0999]`, while expected-forward residual/gradient at truth was zero by construction.
+
+**Decision / result:** A single 512-sample, 3 paired-seed, up-to-24-epoch synthetic A/B was run. B predicted eta and used disclosed synthetic eta labels plus expected-profile loss. B had lower mean q-MAE in the simple condition (`0.01616` vs `0.01959`) but higher mean q-MAE in the V9-style condition (`0.04084` vs `0.03773`); no general benefit is supported. The condition is V9-style Torch synthetic, not the full V9 pipeline. See [measurement-aware report](MEASUREMENT_AWARE_FORWARD_CLOSURE_REPORT_20261018.md), gate JSON, and per-seed run artifacts under `xrd_forward_loss/measurement_closure/`.
+
+**What changes:** This bounded closure is an engineering evidence branch and supplies a differentiable nuisance-aware forward prototype plus reproduction artifacts.
+
+**What does not change:** Frozen classification/V9 evidence, prior pilot outcomes, and real-data claims remain untouched. The single-CIF interpolation, exact-model identifiability smoke, extra eta supervision and synthetic nuisance ranges do not establish real instrument performance or unseen-structure transfer.
+
+**Status:** PRELIMINARY ENGINEERING PILOT COMPLETE / NO GENERAL A/B BENEFIT ESTABLISHED.
+
 ## Current perspective
 
 The project is no longer summarized as "a JS loss for XRD" or "an XRD robustness benchmark."
