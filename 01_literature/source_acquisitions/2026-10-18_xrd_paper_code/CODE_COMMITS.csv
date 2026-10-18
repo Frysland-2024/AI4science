@@ -1,5 +1,0 @@
-repository,remote,commit,acquisition_method
-CrystalShift.jl,https://github.com/MingChiangChang/CrystalShift.jl,d95bb2561a504258639fa18e0d25a06684c7c0d5,shallow_git_clone
-CrystalTree.jl,https://github.com/MingChiangChang/CrystalTree.jl,cfe9c7d48801de5c4f8e25b77e528ec408318119,shallow_git_clone
-PhaseDifformer,https://github.com/quantumbeam/PhaseDifformer,afaccfff188ab65c617f83d6c2e6b14378d9392b,shallow_git_clone
-DONUT,https://github.com/AdvancedPhotonSource/DONUT,090c10bdf99333d3670dc26e617a93364f714bdc,pinned_source_files_snapshot
