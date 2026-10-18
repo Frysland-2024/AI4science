@@ -38,6 +38,24 @@ class WorkerTests(unittest.TestCase):
         for key in ("OPENAI_API_KEY", "CODEX_API_KEY", "CODEX_ACCESS_TOKEN"):
             self.assertNotIn(key, env)
 
+    def test_windows_codex_cmd_resolution(self):
+        """Windows npm uses codex.cmd; never rely on a PowerShell alias."""
+        with patch.object(w.shutil, "which", side_effect=lambda name: {
+            "codex.cmd": r"C:\\Users\\student\\AppData\\Roaming\\npm\\codex.cmd"
+        }.get(name)):
+            self.assertTrue(w.codex_executable(windows=True).endswith("codex.cmd"))
+
+    def test_nonwindows_codex_resolution(self):
+        with patch.object(w.shutil, "which", side_effect=lambda name: {
+            "codex": "/usr/bin/codex"
+        }.get(name)):
+            self.assertEqual(w.codex_executable(windows=False), "/usr/bin/codex")
+
+    def test_windows_fails_without_codex_cli(self):
+        with patch.object(w.shutil, "which", return_value=None):
+            with self.assertRaises(w.BridgeError):
+                w.codex_executable(windows=True)
+
     def test_dry_run_never_calls_model(self):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
