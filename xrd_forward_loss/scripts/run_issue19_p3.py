@@ -337,7 +337,10 @@ def fit_model(
         best_validation = float(checkpoint["best_validation_q_mae"])
         best_epoch = int(checkpoint["best_epoch"])
         history = list(checkpoint["history"])
-        generator.set_state(checkpoint["shuffle_generator_state"])
+        # Checkpoints are loaded onto the training device for model and optimizer
+        # state. Torch's Generator.set_state requires a CPU ByteTensor even when
+        # the generator itself targets CUDA.
+        generator.set_state(checkpoint["shuffle_generator_state"].cpu())
 
     train_idx = torch.as_tensor(splits["train"], device=device, dtype=torch.long)
     max_grad = float(training_cfg["gradient_clip_norm"])
