@@ -896,6 +896,7 @@ def formal_stage(
     forward: Any,
     forward_cfg: dict[str, Any],
     structure: Structure,
+    prior_training_seconds: float = 0.0,
 ) -> dict[str, Any]:
     smoke_path = output_root / "smoke" / "smoke_report.json"
     if not smoke_path.exists():
@@ -974,10 +975,15 @@ def formal_stage(
     histories: dict[str, list[dict[str, float]]] = {}
     training_started = time.perf_counter()
     prior_smoke_seconds = float(smoke["training_wallclock_seconds"])
+    prior_training_seconds = float(prior_training_seconds)
     budget_seconds = float(training_cfg["wallclock_budget_hours"]) * 3600.0
 
     def assert_budget():
-        elapsed = prior_smoke_seconds + (time.perf_counter() - training_started)
+        elapsed = (
+            prior_smoke_seconds
+            + prior_training_seconds
+            + (time.perf_counter() - training_started)
+        )
         if elapsed > budget_seconds:
             partial = {
                 "status": "BLOCKED_BUDGET",
@@ -1171,6 +1177,9 @@ def formal_stage(
                 del model
                 torch.cuda.empty_cache()
     evaluation_seconds = time.perf_counter() - test_started
+    current_training_seconds = max(
+        0.0, time.perf_counter() - training_started - evaluation_seconds
+    )
 
     aggregate: dict[str, Any] = {}
     for condition in CONDITIONS:
@@ -1230,9 +1239,11 @@ def formal_stage(
         "per_seed": per_seed,
         "aggregate": aggregate,
         "training_runs": run_costs,
+        "prior_failed_attempt_training_wallclock_seconds": prior_training_seconds,
         "training_plus_smoke_wallclock_seconds": prior_smoke_seconds
-        + (time.perf_counter() - training_started),
-        "training_only_wallclock_seconds_formal": time.perf_counter() - training_started,
+        + prior_training_seconds
+        + current_training_seconds,
+        "training_only_wallclock_seconds_formal": current_training_seconds,
         "test_evaluation_wallclock_seconds_excluded_from_training_budget": evaluation_seconds,
         "hard_budget_seconds": budget_seconds,
         "test_used_for_selection": False,
@@ -1307,6 +1318,12 @@ def main() -> int:
         type=Path,
         default=Path("xrd_forward_loss/measurement_closure/results/p1p2_v2_final_20261018/p1_numeric_gates.json"),
     )
+    parser.add_argument(
+        "--prior-training-seconds",
+        type=float,
+        default=0.0,
+        help="training seconds consumed by a preserved failed formal attempt in the same budget",
+    )
     args = parser.parse_args()
     config_path = args.config if args.config.is_absolute() else ROOT / args.config
     p1_path = args.p1_report if args.p1_report.is_absolute() else ROOT / args.p1_report
@@ -1330,6 +1347,7 @@ def main() -> int:
             forward=forward,
             forward_cfg=forward_cfg,
             structure=structure,
+            prior_training_seconds=args.prior_training_seconds,
         )
     return 0
 
