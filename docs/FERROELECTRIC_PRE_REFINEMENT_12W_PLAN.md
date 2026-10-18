@@ -149,6 +149,8 @@ Sample X | known family | simulation-calibrated single-phase hypotheses:
 
 **决策记录：** 2026-10-18。此前曾先想任意铁电陶瓷多相 → 再讨论只做单相候选 → 澄清真实谱极少而主要训练走模拟库 → 提出“70% R / 30% C 候选概率＋各候选参数＋不确定性，用于精修前” → 决定以**单一材料家族内的概率化单相候选预精修**为 12 周核心，**两相共存作为必做失配压力测试与可选研究分支**。此为规划定稿版本，不是实验或导师已批准的事实。
 
+> **2026-10-18 文献纠偏（本计划仍为候选）：** 对照 2025 年 CrystalShift、2021 年 PQ-Net 等先例后发现，“物相组合概率＋对称性参数反演＋物理谱图比较”已有成熟公开研究。**Forward Model 不能仅作为模拟数据生成器**：建议同时用于推理阶段的候选物理拟合/局部反演，并以纯物理、纯 NN、NN+Forward 三组合理基线判断 AI 的增量价值。训练期可微重构 Loss 仍是独立可选消融。参见 [文献与 Forward 方法定位](PRE_REFINEMENT_FORWARD_MODEL_RELATED_WORK_20261018.md)，本次没有启动新的模型训练或推翻旧 NO-GO。
+
 ## 10. 学长材料家族未确定前的独立推进（W0 / pre-data sprint；2026-10-18 补充）
 
 **状态：EXECUTION PROPOSAL / NOT YET EXECUTED。** 本节不是推翻 W1–W12 方案，而是为了避免前置材料依赖成为等待瓶颈。所有 W0 结果标注为 **engineering demonstration / simulated pilot**，不等于确定研究家族或正式科学结果。
