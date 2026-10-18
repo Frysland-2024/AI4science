@@ -1,0 +1,34 @@
+{
+  "simple_A": {
+    "finite_training_loss": true,
+    "finite_validation_mae": true,
+    "updates": 1,
+    "training_seconds": 0.32988320000004023,
+    "peak_memory_allocated_mb": 320.53369140625,
+    "train_sample_count": 16
+  },
+  "simple_B": {
+    "finite_training_loss": true,
+    "finite_validation_mae": true,
+    "updates": 1,
+    "training_seconds": 0.06269960000645369,
+    "peak_memory_allocated_mb": 426.42236328125,
+    "train_sample_count": 16
+  },
+  "v9_A": {
+    "finite_training_loss": true,
+    "finite_validation_mae": true,
+    "updates": 1,
+    "training_seconds": 0.053068799956236035,
+    "peak_memory_allocated_mb": 421.21044921875,
+    "train_sample_count": 16
+  },
+  "v9_B": {
+    "finite_training_loss": true,
+    "finite_validation_mae": true,
+    "updates": 1,
+    "training_seconds": 0.0570956000010483,
+    "peak_memory_allocated_mb": 428.24267578125,
+    "train_sample_count": 16
+  }
+}

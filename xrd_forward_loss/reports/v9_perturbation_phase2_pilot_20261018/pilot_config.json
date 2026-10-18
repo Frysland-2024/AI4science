@@ -1,0 +1,104 @@
+{
+  "schema_version": "pxrd-forward-loss-v9-clean-reference-v1",
+  "purpose": "small HfCd engineering pilot; not ferroelectric or experimental validation",
+  "parent_material_id": "mp-1007758",
+  "parent_formula": "HfCd",
+  "parent_source_split": "train",
+  "parameter_names": ["du_normalized", "dv_normalized"],
+  "parameter_q_bounds": [-0.8, 0.8],
+  "fixed_nuisance_q": [0.0, -1.0],
+  "data": {
+    "sobol_seed": 20261041,
+    "sobol_power": 7,
+    "split_seed": 20261042,
+    "train_fraction": 0.70,
+    "validation_fraction": 0.15,
+    "test_fraction": 0.15,
+    "legacy_measurement_seed": 20261043,
+    "legacy_poisson_count_scale": 40000.0,
+    "legacy_background_counts_min": 100.0,
+    "legacy_background_counts_span": 100.0,
+    "v9_sampler_seed": 20261044
+  },
+  "v9_profiles": {
+    "phase1_noise_background": {
+      "severity_level": 1,
+      "background_type": "polynomial",
+      "background_order": 2,
+      "background_variation": {"distribution": "uniform", "min_value": 0.15, "max_value": 0.30, "apply_probability": 1.0},
+      "background_floor_fraction": 0.10,
+      "noise_model": "poisson_gaussian",
+      "noise_stage": "before_normalization",
+      "poisson_count_scale": 30000.0,
+      "electronic_noise_std_counts": {"distribution": "uniform", "min_value": 0.5, "max_value": 1.5, "apply_probability": 1.0},
+      "electronic_noise_std_ratio": 0.0,
+      "delta_2theta_deg": {"distribution": "fixed", "min_value": 0.0, "max_value": 0.0, "apply_probability": 0.0},
+      "fwhm_deg": {"distribution": "fixed", "min_value": 0.08, "max_value": 0.08, "apply_probability": 0.0},
+      "background_to_peak_ratio": {"distribution": "uniform", "min_value": 0.005, "max_value": 0.008, "apply_probability": 1.0},
+      "noise_std_ratio": {"distribution": "fixed", "min_value": 0.0, "max_value": 0.0, "apply_probability": 1.0},
+      "preferred_orientation": {"enabled": false, "model": "march_dollase", "distribution": "fixed", "min_value": 1.0, "max_value": 1.0, "apply_probability": 0.0}
+    },
+    "phase2_add_broadening_and_zero_shift": {
+      "severity_level": 2,
+      "background_type": "polynomial",
+      "background_order": 2,
+      "background_variation": {"distribution": "uniform", "min_value": 0.15, "max_value": 0.30, "apply_probability": 1.0},
+      "background_floor_fraction": 0.10,
+      "noise_model": "poisson_gaussian",
+      "noise_stage": "before_normalization",
+      "poisson_count_scale": 30000.0,
+      "electronic_noise_std_counts": {"distribution": "uniform", "min_value": 0.5, "max_value": 1.5, "apply_probability": 1.0},
+      "electronic_noise_std_ratio": 0.0,
+      "delta_2theta_deg": {"distribution": "uniform", "min_value": -0.06, "max_value": 0.06, "apply_probability": 1.0},
+      "fwhm_deg": {"distribution": "uniform", "min_value": 0.11, "max_value": 0.13, "apply_probability": 1.0},
+      "background_to_peak_ratio": {"distribution": "uniform", "min_value": 0.005, "max_value": 0.008, "apply_probability": 1.0},
+      "noise_std_ratio": {"distribution": "fixed", "min_value": 0.0, "max_value": 0.0, "apply_probability": 1.0},
+      "preferred_orientation": {"enabled": false, "model": "march_dollase", "distribution": "fixed", "min_value": 1.0, "max_value": 1.0, "apply_probability": 0.0}
+    }
+  },
+  "model": {
+    "family": "existing ML4PXRDResNet1D ResNet-18-GN, two bounded continuous outputs",
+    "input_length": 3501,
+    "group_norm_groups": 32,
+    "dense_width": 256,
+    "parameter_output_bound": 0.8,
+    "regression_head_init_std": 0.001
+  },
+  "training": {
+    "optimizer": "Adam",
+    "learning_rate": 0.0005,
+    "weight_decay": 0.0,
+    "batch_size": 32,
+    "final_epochs": 24,
+    "seeds": [20261045, 20261046, 20261047],
+    "reconstruction_weight": 1.0,
+    "gradient_clip_norm": 5.0,
+    "selection": "validation-best by normalized-q MAE; no test-based selection",
+    "smoke_epochs": 1,
+    "smoke_max_train_samples": 16
+  },
+  "forward_model": {
+    "config_path": "xrd_inversion/configs/week1_formal_gate.json",
+    "transform": "log1p(100 * per-pattern-max-normalized profile) / log(101)",
+    "compatibility": false,
+    "dtype": "float64",
+    "device": "cuda",
+    "allow_tf32": false
+  },
+  "physical_gates": {
+    "baseline_v9_forward_profile_max_abs_tolerance": 0.000002,
+    "baseline_v9_forward_profile_rmse_tolerance": 0.0000002,
+    "parameter_jacobian_condition_max": 100.0,
+    "jacobian_finite_difference_relative_max": 0.01,
+    "clean_loss_gradient_relative_max": 0.02,
+    "broadening_area_relative_error_max": 0.01,
+    "global_shift_centroid_error_deg_max": 0.005
+  },
+  "interpretation": {
+    "v9_ranges_are_calibration": false,
+    "v9_ranges_note": "Small fixed engineering stress ranges informed by, but deliberately narrower/different from, the frozen classifier profile; not calibrated to an instrument.",
+    "march_dollase_enabled": false,
+    "clean_reference_loss_name": "simulator-supervised clean-reference forward loss",
+    "scientific_scope": "single known HfCd parent; no ferroelectric, real-spectrum, or unseen-structure claim"
+  }
+}

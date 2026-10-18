@@ -1,0 +1,434 @@
+[
+  {
+    "condition": "simple",
+    "seed": 20261045,
+    "test_index": 89,
+    "mean_absolute_q_error": 0.2490166276693344,
+    "theta_true": [
+      0.7922971844673157,
+      0.7715179324150085
+    ],
+    "theta_predicted": [
+      0.6764070391654968,
+      0.38937482237815857
+    ],
+    "nuisance_metadata": {
+      "simple": {
+        "perturbation_types": [
+          "poisson_count_noise",
+          "linear_count_background"
+        ],
+        "strengths": {
+          "poisson_count_scale": 40000.0,
+          "background_counts_min": 100.0,
+          "background_counts_max": 200.0
+        },
+        "renderer_seed": 1401975388,
+        "normalization": "single per-pattern maximum normalization after background and Poisson sampling"
+      },
+      "v9": {
+        "perturbation_types": [
+          "zero_shift",
+          "peak_broadening",
+          "background",
+          "noise"
+        ],
+        "strengths": {
+          "delta_2theta_deg": -0.032500577838074196,
+          "fwhm_deg": 0.11692504930778784,
+          "background_to_peak_ratio": 0.006637191428053823,
+          "noise_std_ratio": 0.0,
+          "background_type": "polynomial",
+          "severity_level": 2,
+          "zero_shift_active": true,
+          "broadening_active": true,
+          "background_active": true,
+          "noise_active": true,
+          "background_order": 2,
+          "background_variation": 0.16479012485710504,
+          "background_anchor_count": 33,
+          "background_gp_length_scale": 0.2,
+          "background_floor_fraction": 0.1,
+          "noise_model": "poisson_gaussian",
+          "noise_stage": "before_normalization",
+          "poisson_count_scale": 30000.0,
+          "electronic_noise_std_ratio": 0.0,
+          "electronic_noise_std_counts": 0.7622514975283922,
+          "preferred_orientation_active": false,
+          "preferred_orientation_model": "march_dollase",
+          "march_parameter": 1.0,
+          "preferred_axis_policy": "low_index_reflection",
+          "candidate_low_index_count": 16,
+          "orientation_seed": 982386288850831810,
+          "preferred_hkl": null,
+          "preferred_orientation_apply_probability": 0.0,
+          "active_perturbation_count": 4
+        },
+        "sampler_seed": 982386288850831810,
+        "renderer_seed": 625461441,
+        "phase": "phase2_add_broadening_and_zero_shift",
+        "config_profile": "phase2_add_broadening_and_zero_shift"
+      }
+    }
+  },
+  {
+    "condition": "simple",
+    "seed": 20261046,
+    "test_index": 89,
+    "mean_absolute_q_error": 0.2319827526807785,
+    "theta_true": [
+      0.7922971844673157,
+      0.7715179324150085
+    ],
+    "theta_predicted": [
+      0.6876246333122253,
+      0.41222497820854187
+    ],
+    "nuisance_metadata": {
+      "simple": {
+        "perturbation_types": [
+          "poisson_count_noise",
+          "linear_count_background"
+        ],
+        "strengths": {
+          "poisson_count_scale": 40000.0,
+          "background_counts_min": 100.0,
+          "background_counts_max": 200.0
+        },
+        "renderer_seed": 1401975388,
+        "normalization": "single per-pattern maximum normalization after background and Poisson sampling"
+      },
+      "v9": {
+        "perturbation_types": [
+          "zero_shift",
+          "peak_broadening",
+          "background",
+          "noise"
+        ],
+        "strengths": {
+          "delta_2theta_deg": -0.032500577838074196,
+          "fwhm_deg": 0.11692504930778784,
+          "background_to_peak_ratio": 0.006637191428053823,
+          "noise_std_ratio": 0.0,
+          "background_type": "polynomial",
+          "severity_level": 2,
+          "zero_shift_active": true,
+          "broadening_active": true,
+          "background_active": true,
+          "noise_active": true,
+          "background_order": 2,
+          "background_variation": 0.16479012485710504,
+          "background_anchor_count": 33,
+          "background_gp_length_scale": 0.2,
+          "background_floor_fraction": 0.1,
+          "noise_model": "poisson_gaussian",
+          "noise_stage": "before_normalization",
+          "poisson_count_scale": 30000.0,
+          "electronic_noise_std_ratio": 0.0,
+          "electronic_noise_std_counts": 0.7622514975283922,
+          "preferred_orientation_active": false,
+          "preferred_orientation_model": "march_dollase",
+          "march_parameter": 1.0,
+          "preferred_axis_policy": "low_index_reflection",
+          "candidate_low_index_count": 16,
+          "orientation_seed": 982386288850831810,
+          "preferred_hkl": null,
+          "preferred_orientation_apply_probability": 0.0,
+          "active_perturbation_count": 4
+        },
+        "sampler_seed": 982386288850831810,
+        "renderer_seed": 625461441,
+        "phase": "phase2_add_broadening_and_zero_shift",
+        "config_profile": "phase2_add_broadening_and_zero_shift"
+      }
+    }
+  },
+  {
+    "condition": "simple",
+    "seed": 20261047,
+    "test_index": 89,
+    "mean_absolute_q_error": 0.24222707748413086,
+    "theta_true": [
+      0.7922971844673157,
+      0.7715179324150085
+    ],
+    "theta_predicted": [
+      0.6892616152763367,
+      0.39009934663772583
+    ],
+    "nuisance_metadata": {
+      "simple": {
+        "perturbation_types": [
+          "poisson_count_noise",
+          "linear_count_background"
+        ],
+        "strengths": {
+          "poisson_count_scale": 40000.0,
+          "background_counts_min": 100.0,
+          "background_counts_max": 200.0
+        },
+        "renderer_seed": 1401975388,
+        "normalization": "single per-pattern maximum normalization after background and Poisson sampling"
+      },
+      "v9": {
+        "perturbation_types": [
+          "zero_shift",
+          "peak_broadening",
+          "background",
+          "noise"
+        ],
+        "strengths": {
+          "delta_2theta_deg": -0.032500577838074196,
+          "fwhm_deg": 0.11692504930778784,
+          "background_to_peak_ratio": 0.006637191428053823,
+          "noise_std_ratio": 0.0,
+          "background_type": "polynomial",
+          "severity_level": 2,
+          "zero_shift_active": true,
+          "broadening_active": true,
+          "background_active": true,
+          "noise_active": true,
+          "background_order": 2,
+          "background_variation": 0.16479012485710504,
+          "background_anchor_count": 33,
+          "background_gp_length_scale": 0.2,
+          "background_floor_fraction": 0.1,
+          "noise_model": "poisson_gaussian",
+          "noise_stage": "before_normalization",
+          "poisson_count_scale": 30000.0,
+          "electronic_noise_std_ratio": 0.0,
+          "electronic_noise_std_counts": 0.7622514975283922,
+          "preferred_orientation_active": false,
+          "preferred_orientation_model": "march_dollase",
+          "march_parameter": 1.0,
+          "preferred_axis_policy": "low_index_reflection",
+          "candidate_low_index_count": 16,
+          "orientation_seed": 982386288850831810,
+          "preferred_hkl": null,
+          "preferred_orientation_apply_probability": 0.0,
+          "active_perturbation_count": 4
+        },
+        "sampler_seed": 982386288850831810,
+        "renderer_seed": 625461441,
+        "phase": "phase2_add_broadening_and_zero_shift",
+        "config_profile": "phase2_add_broadening_and_zero_shift"
+      }
+    }
+  },
+  {
+    "condition": "v9",
+    "seed": 20261045,
+    "test_index": 89,
+    "mean_absolute_q_error": 0.39804578945040703,
+    "theta_true": [
+      0.7922971844673157,
+      0.7715179324150085
+    ],
+    "theta_predicted": [
+      0.6935448050498962,
+      0.07417873293161392
+    ],
+    "nuisance_metadata": {
+      "simple": {
+        "perturbation_types": [
+          "poisson_count_noise",
+          "linear_count_background"
+        ],
+        "strengths": {
+          "poisson_count_scale": 40000.0,
+          "background_counts_min": 100.0,
+          "background_counts_max": 200.0
+        },
+        "renderer_seed": 1401975388,
+        "normalization": "single per-pattern maximum normalization after background and Poisson sampling"
+      },
+      "v9": {
+        "perturbation_types": [
+          "zero_shift",
+          "peak_broadening",
+          "background",
+          "noise"
+        ],
+        "strengths": {
+          "delta_2theta_deg": -0.032500577838074196,
+          "fwhm_deg": 0.11692504930778784,
+          "background_to_peak_ratio": 0.006637191428053823,
+          "noise_std_ratio": 0.0,
+          "background_type": "polynomial",
+          "severity_level": 2,
+          "zero_shift_active": true,
+          "broadening_active": true,
+          "background_active": true,
+          "noise_active": true,
+          "background_order": 2,
+          "background_variation": 0.16479012485710504,
+          "background_anchor_count": 33,
+          "background_gp_length_scale": 0.2,
+          "background_floor_fraction": 0.1,
+          "noise_model": "poisson_gaussian",
+          "noise_stage": "before_normalization",
+          "poisson_count_scale": 30000.0,
+          "electronic_noise_std_ratio": 0.0,
+          "electronic_noise_std_counts": 0.7622514975283922,
+          "preferred_orientation_active": false,
+          "preferred_orientation_model": "march_dollase",
+          "march_parameter": 1.0,
+          "preferred_axis_policy": "low_index_reflection",
+          "candidate_low_index_count": 16,
+          "orientation_seed": 982386288850831810,
+          "preferred_hkl": null,
+          "preferred_orientation_apply_probability": 0.0,
+          "active_perturbation_count": 4
+        },
+        "sampler_seed": 982386288850831810,
+        "renderer_seed": 625461441,
+        "phase": "phase2_add_broadening_and_zero_shift",
+        "config_profile": "phase2_add_broadening_and_zero_shift"
+      }
+    }
+  },
+  {
+    "condition": "v9",
+    "seed": 20261046,
+    "test_index": 89,
+    "mean_absolute_q_error": 0.39698270335793495,
+    "theta_true": [
+      0.7922971844673157,
+      0.7715179324150085
+    ],
+    "theta_predicted": [
+      0.681427001953125,
+      0.08842270821332932
+    ],
+    "nuisance_metadata": {
+      "simple": {
+        "perturbation_types": [
+          "poisson_count_noise",
+          "linear_count_background"
+        ],
+        "strengths": {
+          "poisson_count_scale": 40000.0,
+          "background_counts_min": 100.0,
+          "background_counts_max": 200.0
+        },
+        "renderer_seed": 1401975388,
+        "normalization": "single per-pattern maximum normalization after background and Poisson sampling"
+      },
+      "v9": {
+        "perturbation_types": [
+          "zero_shift",
+          "peak_broadening",
+          "background",
+          "noise"
+        ],
+        "strengths": {
+          "delta_2theta_deg": -0.032500577838074196,
+          "fwhm_deg": 0.11692504930778784,
+          "background_to_peak_ratio": 0.006637191428053823,
+          "noise_std_ratio": 0.0,
+          "background_type": "polynomial",
+          "severity_level": 2,
+          "zero_shift_active": true,
+          "broadening_active": true,
+          "background_active": true,
+          "noise_active": true,
+          "background_order": 2,
+          "background_variation": 0.16479012485710504,
+          "background_anchor_count": 33,
+          "background_gp_length_scale": 0.2,
+          "background_floor_fraction": 0.1,
+          "noise_model": "poisson_gaussian",
+          "noise_stage": "before_normalization",
+          "poisson_count_scale": 30000.0,
+          "electronic_noise_std_ratio": 0.0,
+          "electronic_noise_std_counts": 0.7622514975283922,
+          "preferred_orientation_active": false,
+          "preferred_orientation_model": "march_dollase",
+          "march_parameter": 1.0,
+          "preferred_axis_policy": "low_index_reflection",
+          "candidate_low_index_count": 16,
+          "orientation_seed": 982386288850831810,
+          "preferred_hkl": null,
+          "preferred_orientation_apply_probability": 0.0,
+          "active_perturbation_count": 4
+        },
+        "sampler_seed": 982386288850831810,
+        "renderer_seed": 625461441,
+        "phase": "phase2_add_broadening_and_zero_shift",
+        "config_profile": "phase2_add_broadening_and_zero_shift"
+      }
+    }
+  },
+  {
+    "condition": "v9",
+    "seed": 20261047,
+    "test_index": 89,
+    "mean_absolute_q_error": 0.3851984068751335,
+    "theta_true": [
+      0.7922971844673157,
+      0.7715179324150085
+    ],
+    "theta_predicted": [
+      0.6948943138122559,
+      0.09852398931980133
+    ],
+    "nuisance_metadata": {
+      "simple": {
+        "perturbation_types": [
+          "poisson_count_noise",
+          "linear_count_background"
+        ],
+        "strengths": {
+          "poisson_count_scale": 40000.0,
+          "background_counts_min": 100.0,
+          "background_counts_max": 200.0
+        },
+        "renderer_seed": 1401975388,
+        "normalization": "single per-pattern maximum normalization after background and Poisson sampling"
+      },
+      "v9": {
+        "perturbation_types": [
+          "zero_shift",
+          "peak_broadening",
+          "background",
+          "noise"
+        ],
+        "strengths": {
+          "delta_2theta_deg": -0.032500577838074196,
+          "fwhm_deg": 0.11692504930778784,
+          "background_to_peak_ratio": 0.006637191428053823,
+          "noise_std_ratio": 0.0,
+          "background_type": "polynomial",
+          "severity_level": 2,
+          "zero_shift_active": true,
+          "broadening_active": true,
+          "background_active": true,
+          "noise_active": true,
+          "background_order": 2,
+          "background_variation": 0.16479012485710504,
+          "background_anchor_count": 33,
+          "background_gp_length_scale": 0.2,
+          "background_floor_fraction": 0.1,
+          "noise_model": "poisson_gaussian",
+          "noise_stage": "before_normalization",
+          "poisson_count_scale": 30000.0,
+          "electronic_noise_std_ratio": 0.0,
+          "electronic_noise_std_counts": 0.7622514975283922,
+          "preferred_orientation_active": false,
+          "preferred_orientation_model": "march_dollase",
+          "march_parameter": 1.0,
+          "preferred_axis_policy": "low_index_reflection",
+          "candidate_low_index_count": 16,
+          "orientation_seed": 982386288850831810,
+          "preferred_hkl": null,
+          "preferred_orientation_apply_probability": 0.0,
+          "active_perturbation_count": 4
+        },
+        "sampler_seed": 982386288850831810,
+        "renderer_seed": 625461441,
+        "phase": "phase2_add_broadening_and_zero_shift",
+        "config_profile": "phase2_add_broadening_and_zero_shift"
+      }
+    }
+  }
+]

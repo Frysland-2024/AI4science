@@ -1,0 +1,51 @@
+{
+  "gate": "differentiable clean-reference reconstruction and lattice identifiability",
+  "active_parameters": [
+    "du",
+    "dv"
+  ],
+  "jacobian_singular_values": [
+    39.49901957296282,
+    11.756350551164028
+  ],
+  "jacobian_condition_number": 3.359802806241765,
+  "jacobian_full_rank": true,
+  "jacobian_finite_difference": {
+    "du": {
+      "relative_l2_error_by_step": [
+        9.36659989911784e-05,
+        2.3418949232641852e-05,
+        5.8548986452994555e-06
+      ],
+      "best_relative_l2_error": 5.8548986452994555e-06
+    },
+    "dv": {
+      "relative_l2_error_by_step": [
+        1.8402421680074608e-05,
+        4.600709858121065e-06,
+        1.1501985894935103e-06
+      ],
+      "best_relative_l2_error": 1.1501985894935103e-06
+    }
+  },
+  "clean_reference_objective": 0.034916514721908314,
+  "clean_reference_autograd_gradient": [
+    0.17610060004760597,
+    -0.16530361592909487
+  ],
+  "clean_reference_loss_gradient_finite_difference": [
+    {
+      "coordinate": "du",
+      "autograd": 0.17610060004760597,
+      "finite_difference": 0.17610060669900895,
+      "relative_error": 3.7770471712892774e-08
+    },
+    {
+      "coordinate": "dv",
+      "autograd": -0.16530361592909487,
+      "finite_difference": -0.16530361580904818,
+      "relative_error": 7.262194122754259e-10
+    }
+  ],
+  "passed": true
+}

@@ -10,7 +10,7 @@ import numpy as np
 import torch
 from torch.nn.utils import clip_grad_norm_
 
-from .losses import paired_losses
+from .losses import clean_reference_paired_losses, paired_losses
 from .model import ParameterRegressor
 
 
@@ -43,8 +43,15 @@ def fit(
     reconstruction_weight: float,
     gradient_clip_norm: float,
     max_train_samples: int | None = None,
+    clean_reference_profiles: np.ndarray | None = None,
 ) -> dict[str, Any]:
-    """Train one model and retain the validation-best state by q MAE."""
+    """Train one model and retain the validation-best state by q MAE.
+
+    When ``clean_reference_profiles`` is provided, B's differentiable profile
+    term targets that simulator-generated clean reference. Inputs remain the
+    condition-specific profiles in ``arrays['noisy']``. Omitting the argument
+    preserves the original PR #11 behavior exactly.
+    """
 
     torch.manual_seed(seed)
     torch.cuda.manual_seed_all(seed)
@@ -53,6 +60,13 @@ def fit(
         torch.cuda.reset_peak_memory_stats(device)
     model = ParameterRegressor().to(device=device, dtype=torch.float32)
     data = _device_tensors(arrays, device)
+    clean_reference = (
+        torch.as_tensor(clean_reference_profiles, dtype=torch.float32, device=device)
+        if clean_reference_profiles is not None
+        else None
+    )
+    if clean_reference is not None and clean_reference.shape != data["noisy"].shape:
+        raise ValueError("clean_reference_profiles must match the observed profile shape")
     train_indices = np.asarray(splits["train"], dtype=np.int64)
     if max_train_samples is not None:
         train_indices = train_indices[:max_train_samples]
@@ -77,13 +91,23 @@ def fit(
             y = data["q"].index_select(0, batch_idx)
             optimizer.zero_grad(set_to_none=True)
             predicted = model(x)
-            losses = paired_losses(
-                predicted,
-                y,
-                x,
-                forward_model=forward_model,
-                reconstruction_weight=reconstruction_weight,
-            )
+            if clean_reference is None:
+                losses = paired_losses(
+                    predicted,
+                    y,
+                    x,
+                    forward_model=forward_model,
+                    reconstruction_weight=reconstruction_weight,
+                )
+            else:
+                clean_target = clean_reference.index_select(0, batch_idx)
+                losses = clean_reference_paired_losses(
+                    predicted,
+                    y,
+                    clean_target,
+                    forward_model=forward_model,
+                    reconstruction_weight=reconstruction_weight,
+                )
             if not torch.isfinite(losses["total"]):
                 raise FloatingPointError("non-finite training objective")
             losses["total"].backward()

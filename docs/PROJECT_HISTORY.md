@@ -232,6 +232,24 @@ The first engineering step should be a minimal P0 (manifest, state machine, safe
 
 **Status:** PROPOSED / NOT IMPLEMENTED / NO NEW SCIENTIFIC RESULTS. See [PXRD_AUTOMATED_RESEARCH_PIPELINE_PLAN_20261018.md](PXRD_AUTOMATED_RESEARCH_PIPELINE_PLAN_20261018.md).
 
+## 19. 2026-10-18: reuse V9 measurement simulation in clean-reference Forward Loss pilot
+
+**Date / status:** 2026-10-18 / PRELIMINARY ENGINEERING PILOT COMPLETE; independent draft PR pending review.
+
+**Question / prior limitation:** The first Forward Loss pilot used the existing simple Poisson-count plus linear-background observation path, and its B reconstruction term compared against the perturbed input. A simulator nuisance could therefore be mistaken for lattice error. The V9 measurement operators already existed but had not been adapted to this single-parent inversion task.
+
+**Implementation and evidence:** Starting from the latest PR #11 head in a separate branch, an adapter now retains V9 peak-table rendering, `PhysicsParameterSampler`, Poisson–Gaussian readout, smooth background, area-stable peak broadening, and one global 2θ offset. Nuisance values and seeds are recorded per sample; lattice truth is shared across simple/V9 views. Phase-1 noise/background and phase-2 broadening/zero-shift profiles passed unit and operator checks. The baseline V9 renderer agrees with the differentiable clean forward (max abs `1.04e-7`, RMSE `2.12e-9`). Clean-reference autograd agrees with finite differences (relative errors below `3.8e-8`); lattice Jacobian condition is `3.36`.
+
+**Decision/result:** A new three-seed, 2×2 HfCd pilot was run with fixed `lambda=1`, common data/network/optimizer budget, and validation-only checkpoint selection. On the V9-input condition, B's normalized two-parameter MAE was `0.06842` vs A `0.07293`, while clean-spectrum RMSE was slightly worse (`0.04365` vs `0.04299`) and lattice-a error was slightly worse. Keep the clean-reference objective as a viable, differentiable supervised auxiliary, but do not claim an overall accuracy gain. The reported summary was independently recomputed from saved prediction JSON and profile arrays with maximum per-seed metric difference zero.
+
+**What changes:** The adapter, phased configs, training loss option, run manifests, stop-on-gate-failure behavior, reports, and a small run are preserved under `xrd_forward_loss/` in an independent stacked PR.
+
+**What does not change:** PR #11 results and failed runs, frozen V9 configs/weights/conclusions, independent renderer holdout, and the prior factorization NO-GO are untouched. This remains a one-parent simulated HfCd engineering study, not real PXRD or ferroelectric validation. March–Dollase remains disabled because no orientation nuisance is needed in this pilot.
+
+**Known limits:** The local HfCd source is a standardized-structure JSON, not a CIF. The q array uses the existing float32 training interface; per-sample records retain float64 Sobol truth, with maximum array-rounding difference about `3e-8`. Stress ranges are not instrument calibration. Ferroelectric work still requires approved target structures/CIFs and phase hypotheses, instrument/background/noise/texture calibration, independent material-level splits, and reference measurements/refinements.
+
+See [adapter contract](../xrd_forward_loss/V9_PERTURBATION_ADAPTER.md) and [pilot report](../xrd_forward_loss/reports/v9_perturbation_phase2_pilot_20261018/TECHNICAL_REPORT.md). The failure encountered after training due to a Matplotlib keyword mismatch is preserved in the run log and traceback; plots/report were recovered without retraining or changing result/history JSON.
+
 ## Current perspective
 
 The project is no longer summarized as "a JS loss for XRD" or "an XRD robustness benchmark."
