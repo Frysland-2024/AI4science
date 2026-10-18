@@ -2,6 +2,25 @@
 
 **状态：NEW TASK / AWAITING IMPLEMENTATION AND PHYSICS GATES。** 用户在讨论 PR #11、#16、#17 后明确质疑重构目标，2026-10-18 选择优先核查 **Forward 重建的目标与测量模型是否一致**，取代原 Issue #18 的“直接迁移 clean-reference loss 再训练”优先级。此任务不声称已证明方法有效或真实谱精修适用。
 
+## 2026-10-18 用户补充授权：物理 Gate 通过后直接训练（优先级最高）
+
+用户在派发后明确补充：“**让他直接在通过检测后进行训练**”。因此本段替换下方 P2 与旧权限合同中“本轮不授权训练 / 只做 numerical smoke”的限制；其他科学和权限边界保持不变。
+
+**触发条件（全部需要通过且留痕）：**
+- P0/P1 的 BaTiO3 CIF / P4mm 结构物理验证、Torch 与独立 Pymatgen/V9 clean 谱全谱（峰位、峰形、相对强度）对照、measurement-aware profile vs observed 期望的一致性、有限差分/自动微分梯度检查均通过。
+- 明确 q=(du,dv)/a,c、测量参数 eta=(2theta zero-shift, FWHM, smooth background 等) 的来源与可辨识边界；oracle eta 真值**只用于诊断**，不能在报告最终新 B 的推理性能时偷用。
+- 必须有 deployable 的 measurement-aware B loss 策略：例如与 A 相同的 q 输出、训练 B 时为当前 profile **估计或优化**受限 nuisance；或让 A/B 使用相同模型预测 q 与 eta 并清楚披露额外 nuisance 监督。若只能让 B 在测试时使用模拟 eta_true，请标注为 **ORACLE-ONLY**，不可将该结果作为正式有应用意义的 A/B 成果。
+- 冻结 split、随机种子、物理参数范围和训练预算；新的输出目录，不覆盖 PR #11/#16/#17 的任何数据和旧 Pilot。
+
+**Gate 通过即直接执行，不再等用户二次确认：**
+1. 按脚本实现轻量级 smoke：128 条参数样本、1 seed、最多 4 epochs；确认 finite loss、loss 路径持续有梯度、训练时间和显存合理。可使用 RTX 4060。
+2. smoke 通过则自动执行 **一个**受控正式 Pilot：**最多 512** 条 BaTiO3 同模板模拟参数样本，**3 个配对训练 seed、最多每 seed 24 epochs**，条件仅 simple vs V9 四扰动、方法 A supervised 与 B measurement-aware reconstruction。A/B 保持相同 backbone、训练输入和样本/更新预算；如添加 eta 预测头，需公平说明对应参数量和标签差异，且不能凭额外 oracle 信息占优。
+3. B loss weight 可以事先固定，或在独立 validation 上从 **最多两个预注册候选**中选择；必须写清选择逻辑。绝不利用旧 Pilot 的 test 指标、新 Pilot 的 test 或真实谱标签挑选超参；本次已有公开测试历史，不能宣称全新未见 benchmark 的确认性评价。
+4. 统一记录全部 seed 的 q-MAE、a/c Å MAE、观测谱期望重构误差及 clean 残差（仅辅助诊断）、运行时间、显存、可辨识失败和所有负结果。对预处理一致性和 loss 数值单位进行检查。若 B 未优于 A，也如实完成并提交。
+5. **STOP**：如果物理 Gate、可辨识/部署假设、数据标签隔离或梯度检查失败，**不得强行启动大训练**；提交 BLOCKED 报告与下一步方案。若 512×3×2×2 在当前 GPU 预计过长，应做有据可查的缩减配置（保留成对 A/B）并标记 exploratory partial，绝不无限扩张、遍历超参或运行多材料大型训练。
+
+**权限边界：** 仅授权本次隔离开发分支的 BaTiO3 单相测量闭环与上述有限 GPU 训练、测试、提交 Draft PR；**不授权更改旧实验、主分支、定时桥接器权限、自动 merge、真实材料结论或无限自动科研**。对比要明确这是单 CIF 条件插值与合成测量扰动，非真实实验谱验证。
+
 ## 一个核心研究问题
 
 既有模型：输入带测量扰动的 PXRD，ResNet 预测固定已知四方结构模板的两个晶格参数坐标 `q=[du,dv]`（对应 a,c）。原 PR #11/#16 B Loss 为
@@ -42,7 +61,7 @@ eta 最小包含全谱 2theta zero shift、物理一致的 FWHM broadening、smo
 ### P2 · 小规模验收，无边界扩张停止
 
 - 首先写 pytest 测试：theta_true 与 nuisance 独立；在干净/带宽度/带零点/带背景几种少量 q 情况的闭环；模型重建相对独立 V9/Pymatgen 参照的谱误差和单位一致性；GPU autograd vs finite difference；噪声期望 vs 单次随机样本区分；限制未知 nuisance 时避免用 truth 的代码路径。记录命令与测试数。
-- 若 P0/P1 通过，再允许 **一个有界的小型 numerical recovery / optimization smoke**（例如 few q × few eta，数分钟量级）。本任务**不授权大规模 NN A/B、正式 test 调参或任何真实谱结论**。失败则出 `BLOCKED` 技术报告，停止。
+- 若 P0/P1 通过，再允许 **一个有界的小型 numerical recovery / optimization smoke**（例如 few q × few eta，数分钟量级）。根据本文件顶部用户补充授权，Gate 通过后可直接进行一次**有边界的 BaTiO3 A/B 训练**（≤512 参数样本、3 个配对 seed、≤24 epochs/seed）；禁止扩展到大规模无界训练、测试集调参或真实谱结论。失败则出 `BLOCKED` 技术报告，停止。
 - 成果：新的 `xrd_forward_loss/measurement_closure/` 或相邻独立模块、单独 config、tests、`docs/MEASUREMENT_AWARE_FORWARD_CLOSURE_REPORT_20261018.md`、可运行的最短命令、结果 JSON/表和必要的质控图。冻结旧 Pilot 的 report/results 不可改动。
 - 在**新独立分支**提交并 push，创建 **Draft PR**（base 优先 PR #17 对应的 `codex/forward-loss-v9-reuse` 分支；如技术差异需要调整则记录原因），PR 描述写清楚已执行/未执行的实验、Gate 与科学边界；不自动 merge。
 
