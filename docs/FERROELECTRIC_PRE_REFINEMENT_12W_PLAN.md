@@ -2,6 +2,8 @@
 
 > **2026-10-18 当前方法优先级收敛（用户明确选择，尚未开始实验）：** 12 周科学主线优先采用 **PQ-Net 风格的模拟 PXRD→连续物理参数 NN 回归 workflow**，结合 DRNets 等先例中的 **训练期 Forward Reconstruction Loss**，设置一项清楚且公平的变量对照：A = 监督回归；B = 相同网络/数据/优化预算的监督回归 + Forward Reconstruction Loss。研究目标是在合作学长确认的**一个**铁电陶瓷家族上核验晶格参数 MAE、重构误差和对传统精修初始化的帮助，少量实验谱作外部案例。先从已知单相/候选结构模板做可微数值与参数可辨识检查，再决定是否合理纳入有限两相共存。其他材料路由、多家族大模型、通用相组合概率、全面 ECE 系统均暂为后续扩展，**不作为本轮必须完成目标**。保留 physics-only 优质对照（例如 CrystalShift 类），不宣称 Forward Loss 本身为新算法；无论收益正负均记录。此为科研目标优先级决定，不等于论文/开题已获批准或新模型已成功训练。
 
+> **并行时间管理方案（2026-10-18）：** [XRD 前置冲刺＋双周真实汇报＋硕士申请/GRE/课程分配](PXRD_FAST_TRACK_BIWEEKLY_APPLICATION_BALANCE_20261018.md)。该文档只安排科研与升学时间，不更改本页科学任务的证据状态，也不允许隐瞒已完成实验。
+
 **状态：PROPOSED / NOT_STARTED / NOT_APPROVED / NO_NEW_RESULTS**  
 **建议名称：** Simulation-Trained, Calibration-Aware AI Assistance for Ferroelectric-Ceramic PXRD Pre-Refinement  
 **预期周期：** 12 周；每 2 周与学长正式复盘一次（W2/4/6/8/10/12）。开始日期、材料家族、人员承诺及正式开题均待确认。  
