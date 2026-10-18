@@ -100,6 +100,23 @@ def codex_env():
         env.pop(key, None)
     return env
 
+def codex_executable(*, windows=None):
+    """Resolve npm's codex.cmd shim explicitly on Windows.
+
+    Python subprocess does not use PowerShell's command resolution. A working
+    'codex' command in an interactive PowerShell session may still fail with
+    FileNotFoundError when subprocess is given the bare name.
+    """
+    if windows is None:
+        windows = os.name == "nt"
+    candidates = ("codex.cmd", "codex.exe", "codex") if windows else ("codex",)
+    for name in candidates:
+        resolved = shutil.which(name)
+        if resolved:
+            return resolved
+    raise BridgeError("Codex CLI not found on PATH; check 'where.exe codex' and npm global installation")
+
+
 def review_task(root, issue, revision_sha):
     with tempfile.TemporaryDirectory(prefix="ai4science-bridge-") as tmp:
         workspace = Path(tmp) / "repo"
@@ -116,7 +133,7 @@ def review_task(root, issue, revision_sha):
             "Issue #" + str(issue["number"]) + ": " + issue["title"] + "\n"
             "<issue_task>\n" + issue["body"] + "\n</issue_task>\n"
         )
-        command(["codex", "exec", "--sandbox", "read-only",
+        command([codex_executable(), "exec", "--sandbox", "read-only",
                  "--skip-git-repo-check", "--output-last-message", str(output), "-"],
                 cwd=workspace, stdin=prompt, timeout=900, env=codex_env())
         if not output.exists() or not output.read_text(encoding="utf-8").strip():
@@ -171,11 +188,11 @@ def main(args=None):
             setup()
             return 0
         if options.doctor:
-            for exe in ("gh", "git", "codex"):
+            for exe in ("gh", "git"):
                 if not shutil.which(exe):
                     raise BridgeError("Missing " + exe)
             print("GitHub account:", gh(["api", "user", "-q", ".login"]).strip())
-            print("Codex login:", command(["codex", "login", "status"]).strip())
+            print("Codex login:", command([codex_executable(), "login", "status"]).strip())
             print("Revision:", revision(root))
             return 0
         if options.interval_seconds < 60:
