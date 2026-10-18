@@ -76,16 +76,19 @@ def record(root, number, status, **details):
 def revision(root):
     if not (root / ".git").is_dir():
         raise BridgeError("Run in a normal Git checkout")
-    local = command(["git", "rev-parse", "HEAD"], cwd=root).strip()
+    # Refresh ONLY Git objects, never checkout/pull or touch untracked local data.
+    # A new GitHub commit must not block the scheduled worker indefinitely.
+    command(["git", "fetch", "--quiet", "origin", "main"], cwd=root, timeout=120)
+    fetched = command(["git", "rev-parse", "FETCH_HEAD"], cwd=root).strip()
     remote = json.loads(gh(["api", "repos/" + REPO + "/commits/main"]))["sha"]
-    if local != remote:
-        raise BridgeError("Local HEAD differs from GitHub main. Sync safely before running.")
-    return local
+    if fetched != remote:
+        raise BridgeError("Remote main changed during fetch; retry at next poll.")
+    return fetched
 
-def snapshot(root, dest):
+def snapshot(root, dest, source_commit):
     archive = dest.parent / "snapshot.tar"
     with archive.open("wb") as fp:
-        p = subprocess.run(["git", "archive", "--format=tar", "HEAD"], cwd=root,
+        p = subprocess.run(["git", "archive", "--format=tar", source_commit], cwd=root,
                            stdout=fp, stderr=subprocess.PIPE)
     if p.returncode:
         raise BridgeError("git archive failed")
@@ -120,7 +123,7 @@ def codex_executable(*, windows=None):
 def review_task(root, issue, revision_sha):
     with tempfile.TemporaryDirectory(prefix="ai4science-bridge-") as tmp:
         workspace = Path(tmp) / "repo"
-        snapshot(root, workspace)
+        snapshot(root, workspace, revision_sha)
         output = Path(tmp) / "answer.md"
         prompt = (
             "Read AGENTS.md and docs/CURRENT_STATE.md. Perform a read-only review "
