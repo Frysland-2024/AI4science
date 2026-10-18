@@ -189,6 +189,12 @@ python -m pytest -q
 
 本规划**不是已实施工作、已批准开题或对旧 xrd_inversion/JS 主线的改写**。详情与每双周里程碑见 [FERROELECTRIC_PRE_REFINEMENT_12W_PLAN.md](FERROELECTRIC_PRE_REFINEMENT_12W_PLAN.md)。旧 [FUTURE_UNDERGRAD_THESIS_PLAN.md](FUTURE_UNDERGRAD_THESIS_PLAN.md) 原文保留作为 10 月 8 日历史提案。
 
+### 2026-10-18：PXRD AutoLab 自动化执行方案（PROPOSED / NOT IMPLEMENTED）
+
+为支持 10 月 18 日前置科研冲刺及双周真实汇报策略，新增 [**PXRD AutoLab：自动科研执行与可审计证据流水线**](PXRD_AUTOMATED_RESEARCH_PIPELINE_PLAN_20261018.md) 作为**科研工程规划**，不改变已冻结 V9 或新的 Forward Loss 科学任务的证据状态。
+
+自动化范围是已人工审阅协议下的模拟数据、物理/梯度/拆分 Gate、受控 A/B、指标图表、不可变实验 manifest、报告草稿与人工最终审核。**当前只有规划，没有新代码、后台执行器或自动科研结果。** P0 先从配置和 provenance 机制、CPU smoke、失败停止及报告器着手；需真实接入工作站后才能谈无人值守 GPU。不得自动改协议、测试集或无限寻找正结果。
+
 ## 9. 2026-10-13 独立母结构数量效率实验（PROPOSED，尚未运行）
 
 从早期暂缓的 sample-efficiency 设想中恢复 **10% / 25% / 50% / 100% 的 Train 母结构预算曲线**，检验在相同独立结构数、相同双视图曝光和优化预算下，利用同源关系的 Dynamic JS 是否比 Dynamic ERM 更充分使用晶体结构数据。
