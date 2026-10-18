@@ -1,6 +1,6 @@
 # Issue #31 / PR #26 fair diagnosis and fresh A/B/C retraining
 
-**Status:** P0–P3 research work completed locally. GitHub Issue comments, branch push, and Draft PR creation are blocked by invalid GitHub credentials (HTTP 401); no merge was attempted. **Date:** 2026-10-19 (Asia/Shanghai).
+**Status:** P0–P3 research work completed; branch `codex/issue31-pr26-fair-diagnostic` pushed at commit `23f344b`. GitHub Issue comments and Draft PR creation are blocked by invalid GitHub credentials (HTTP 401); no merge was attempted. **Date:** 2026-10-19 (Asia/Shanghai).
 
 ## Result
 
@@ -71,7 +71,7 @@ Eta-only evaluation uses the same bounded fit for each selected A/B/C model; B/C
 
 The first diagnostic-driver attempts stopped before recording P1 fits due to two local array-shape mistakes (eta-only input length and SciPy bounds); both were corrected before the successful run. Those failures are retained in the execution record, and no partial result was used. No gate threshold was weakened. The fresh train/test run itself had no failed candidate, exceeded no budget, and all candidates reached 24 epochs.
 
-`gh issue view 31` and an authorized P0 milestone comment attempt returned HTTP 401 because the configured GitHub CLI token is invalid. Consequently the requested Issue #31 milestones, branch push and Draft PR could not be completed from this environment. Local evidence and all attempted/blocked delivery statuses are recorded in `execution_log.jsonl`, `execution_log.json`, and `gate_report.json`. No raw real or unpublished data are included; no model weight blobs are committed; no merge was performed.
+`gh issue view 31`, an authorized P0 milestone comment attempt, and Draft PR creation returned HTTP 401 because the configured GitHub CLI token is invalid. The isolated branch push succeeded, but the requested Issue #31 milestone comments and Draft PR could not be completed from this environment. Local evidence and all attempted/blocked delivery statuses are recorded in `execution_log.jsonl`, `execution_log.json`, and `gate_report.json`. No raw real or unpublished data are included; no model weight blobs are committed; no merge was performed.
 
 ## Reproducibility
 

@@ -282,7 +282,7 @@ See [adapter contract](../xrd_forward_loss/V9_PERTURBATION_ADAPTER.md) and [pilo
 
 **What does NOT change:** Frozen PR #26 formal data/checkpoints/results, V9 classification evidence, prior Issue #19 report and archived experiment results remain untouched. The compact old checkpoints remain inference-only.
 
-**Relevant files / commits:** [overnight report](../overnight_pr26_20261019/TECHNICAL_REPORT.md); [pretraining cause audit](../overnight_pr26_20261019/PRETRAIN_CAUSE_AUDIT.md); frozen config SHA is recorded in `pretrain_manifest.json`. Issue comments, push, and Draft PR are pending because `gh` returned HTTP 401; no merge was attempted.
+**Relevant files / commits:** [overnight report](../overnight_pr26_20261019/TECHNICAL_REPORT.md); [pretraining cause audit](../overnight_pr26_20261019/PRETRAIN_CAUSE_AUDIT.md); frozen config SHA is recorded in `pretrain_manifest.json`. Branch `codex/issue31-pr26-fair-diagnostic` was pushed at `23f344b`; Issue comments and Draft PR creation remain blocked because `gh` returned HTTP 401; no merge was attempted.
 
 ## Current perspective
 

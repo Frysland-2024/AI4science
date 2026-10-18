@@ -1,5 +1,5 @@
 {
-  "status": "PASS_WITH_EXTERNAL_DELIVERY_BLOCKED",
+  "status": "RESEARCH_COMPLETE_DRAFT_PR_BLOCKED",
   "p0_verified": true,
   "p1_fair_diagnostic_completed": true,
   "p1_protocol_fair": true,
@@ -14,5 +14,6 @@
   "no_real_data": true,
   "no_frozen_v9_or_pr26_modifications": true,
   "github_issue_comments": "BLOCKED: gh returned HTTP 401 because configured token is invalid",
-  "push_and_draft_pr": "PENDING"
+  "branch_push": "PUSHED: codex/issue31-pr26-fair-diagnostic",
+  "draft_pr": "BLOCKED: gh returned HTTP 401 because configured token is invalid"
 }

@@ -23,8 +23,12 @@
       "impact": "comments and issue metadata unavailable"
     },
     {
-      "action": "push branch and create Draft PR",
-      "status": "not attempted pending confirmation after local commit; same gh auth failure prevents PR creation"
+      "action": "push branch",
+      "status": "completed; origin/codex/issue31-pr26-fair-diagnostic points to the local commit"
+    },
+    {
+      "action": "create Draft PR against codex/issue19-measurement-closure",
+      "error": "gh pr create returned HTTP 401 because the configured token is invalid"
     }
   ]
 }

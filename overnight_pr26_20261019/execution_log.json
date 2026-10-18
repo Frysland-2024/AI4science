@@ -509,6 +509,20 @@
     "test_rows": 1386
   },
   {
+    "event": "BRANCH_PUSHED",
+    "branch": "codex/issue31-pr26-fair-diagnostic",
+    "commit": "23f344b5ce043775ac4ac526320b2042f227c611"
+  },
+  {
+    "event": "GITHUB_ISSUE_COMMENTS_BLOCKED",
+    "reason": "gh token invalid; HTTP 401"
+  },
+  {
+    "event": "DRAFT_PR_BLOCKED",
+    "base": "codex/issue19-measurement-closure",
+    "reason": "gh token invalid; HTTP 401"
+  },
+  {
     "event": "TRAINING_COMPLETED",
     "gpu_training_seconds": 681.055797999783,
     "run_count": 30,
@@ -524,7 +538,15 @@
     ]
   },
   {
-    "event": "GITHUB_DELIVERY_BLOCKED",
+    "event": "BRANCH_PUSHED",
+    "branch": "codex/issue31-pr26-fair-diagnostic"
+  },
+  {
+    "event": "GITHUB_ISSUE_COMMENTS_BLOCKED",
+    "reason": "gh token invalid; HTTP 401"
+  },
+  {
+    "event": "DRAFT_PR_BLOCKED",
     "reason": "gh token invalid; HTTP 401"
   },
   {

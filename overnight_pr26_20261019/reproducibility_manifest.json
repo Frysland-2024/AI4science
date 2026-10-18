@@ -26,18 +26,18 @@
     },
     {
       "path": "execution_log.jsonl",
-      "bytes": 13032,
-      "sha256": "c5cbfb51d740c3575f0b9c19bd5dfd1e83110e7a33f1a5b1c7c3a3ce8a19eaea"
+      "bytes": 13349,
+      "sha256": "6d4efe087d0a1d27877add8baee72ae807ab3a8835cfe9216c86aefd7d1ccdaa"
     },
     {
       "path": "failures.json",
-      "bytes": 1133,
-      "sha256": "a6d8fd9a6d05eafbf56a895eef924eb1f49af79468af9cf85dc0021b94b64a5e"
+      "bytes": 1278,
+      "sha256": "d137ca3caa580a97b733b01c381ad49b335bfedd41ede848fc5759e963b45210"
     },
     {
       "path": "finalize_outputs.py",
-      "bytes": 8201,
-      "sha256": "3a4526d13b50dc5b7c8ebe38264fcfbdf6a25ce2924263fa15b6650d2baa4dcf"
+      "bytes": 8508,
+      "sha256": "8f474e29c2028d5c091dac80e6b2934d4b5d261841991957edec1e17b7397d72"
     },
     {
       "path": "fresh_data\\fresh_batio3_paired.npz",
@@ -76,8 +76,8 @@
     },
     {
       "path": "gate_report.json",
-      "bytes": 746,
-      "sha256": "dbf12d5fe5397ade85297de746b1692b9fb37596a00106deb434488a8d864503"
+      "bytes": 858,
+      "sha256": "906adda1000f99c4ef5b0371873bf06be4be187604bf6960f85e2a21363f08bb"
     },
     {
       "path": "local_checkpoint_manifest.json",
@@ -166,13 +166,13 @@
     },
     {
       "path": "summary.json",
-      "bytes": 676,
-      "sha256": "cf9604af5e213263a5ecfd05cd7400c8b5257ecc87d1d934b1fabcfc72905089"
+      "bytes": 736,
+      "sha256": "15ef809b98066409c9d18e92bf0be96f84950fac238661644e01ce2f53acfbe6"
     },
     {
       "path": "TECHNICAL_REPORT.md",
-      "bytes": 10385,
-      "sha256": "73b626f3114338adf3cf715fb3c75aaaab37a1807dd10cd12679ee265e5b3040"
+      "bytes": 10477,
+      "sha256": "d8f3cf9fd4edbb231f4b03f28440f86c1f589edc0505e925bc1a701f9450c4ce"
     },
     {
       "path": "training_runs.json",
