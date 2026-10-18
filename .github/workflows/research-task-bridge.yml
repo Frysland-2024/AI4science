@@ -1,0 +1,25 @@
+name: Research Task Bridge tests
+
+on:
+  push:
+    paths:
+      - "research_task_bridge/**"
+      - ".github/ISSUE_TEMPLATE/research-task.yml"
+      - ".github/workflows/research-task-bridge.yml"
+  pull_request:
+    paths:
+      - "research_task_bridge/**"
+      - ".github/ISSUE_TEMPLATE/research-task.yml"
+      - ".github/workflows/research-task-bridge.yml"
+
+jobs:
+  bridge-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Run bridge unit tests (no GPU or scientific data)
+        run: python -m unittest discover -s research_task_bridge/tests -p 'test_*.py' -v
