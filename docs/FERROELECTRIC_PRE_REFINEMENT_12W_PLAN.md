@@ -151,6 +151,20 @@ Sample X | known family | simulation-calibrated single-phase hypotheses:
 
 > **2026-10-18 文献纠偏（本计划仍为候选）：** 对照 2025 年 CrystalShift、2021 年 PQ-Net 等先例后发现，“物相组合概率＋对称性参数反演＋物理谱图比较”已有成熟公开研究。**Forward Model 不能仅作为模拟数据生成器**：建议同时用于推理阶段的候选物理拟合/局部反演，并以纯物理、纯 NN、NN+Forward 三组合理基线判断 AI 的增量价值。训练期可微重构 Loss 仍是独立可选消融。参见 [文献与 Forward 方法定位](PRE_REFINEMENT_FORWARD_MODEL_RELATED_WORK_20261018.md)，本次没有启动新的模型训练或推翻旧 NO-GO。
 
+### 2026-10-18 方法优先级再讨论：Forward Reconstruction Loss 是否应直接作为主方法？
+
+**状态：DISCUSSION / CANDIDATE / NOT STARTED**；用户明确提出：为什么不直接训练带 Forward Reconstruction Loss 的 NN？先前“重构 Loss 仅作为可选消融”的工程保守安排**不是物理/算法不可行判定**。该讨论暂不改变 W0 已授权范围，也不是新增实验结果；需要经正向物理可微数值检验、候选相模型/相共存参数化和数据拆分核验后再确定正式研究协议。
+
+**建议首选新方法候选**：一个基于已知材料家族和有限候选 CIF 的 *supervised physics-guided inverse network*，输入 PXRD，联合输出（a）候选相/相组合得分，（b）候选成立条件下的晶格及少量仪器参数，（c）若显式考虑混相，则是非负的相激活/尺度因子；用经验证可微的 PXRD forward `F_H(theta, nuisance)` 重建谱，采用 `L = lambda_phase L_phase + lambda_param L_param + lambda_recon D(F_H(theta_hat), x)`。其中 phase 分支的梯度是否来自重构项取决于具体连续化/混相门控实现：**若训练时直接使用真值相选择 F_H，重构梯度只会约束参数头，不会自动训练离散分类头**。如果训练 explicit single/dual mixtures，模型选择和物理强度权重必须区别于相概率、质量分数。
+
+**理由及先例**：[Chen et al., *Nature Machine Intelligence* 2021](https://doi.org/10.1038/s42256-021-00384-1) 的 DRNets 将重构与约束推理共同用于相图分解，已经说明类似架构有先例，不能凭“可微 forward loss”独立声称新算法原创；[CrystalShift 2025](https://doi.org/10.1038/s41524-025-01627-0) 则为物理-only 强基线。
+
+**具体前置风险**：旧 `xrd_inversion` 仅验证已知四方单相数值，不意味着其它相与混相强度前向正确；匿名结构原型跨 split 需重新审计；局部 nominal-start capture 曾失败；高峰强度主导的重构项、参数不可辨识、仪器/纹理/背景失配、可微硬选相、混相分数与概率混淆都可能导致似是而非的结果。特别是训练数据与 loss 均来自同一模拟器时，重构 loss 可能与已有监督信息高度重合，不保证泛化收益。
+
+**最小可行对照**：A = `CE + parameter loss`；B = `A + differentiable forward reconstruction loss`；另与 physics-only (CrystalShift 类) 比较，必要时检查 B + 局部精修。首先限定单相且相模板给定，检查参数 MAE/正确梯度和反演可辨识性；再尝试少量明确物理可辨的单/双相结构假设与非负混相强度，不一上来让网络同时学习全部家族和复杂混相。评价应包括相选择、参数 MAE、重构残差、校准、数值初值是否更有用，以及成本；保留无增益结果。
+
+**决策边界**：该方向在研究问题上优先考虑，但 **尚需用户确认正式改动方法优先级并通过 W1–2 feasibility gate**。历史旧 proposal、旧失败 Stage-1 与冻结 V9 不被覆盖。
+
 ## 10. 学长材料家族未确定前的独立推进（W0 / pre-data sprint；2026-10-18 补充）
 
 **状态：EXECUTION PROPOSAL / NOT YET EXECUTED。** 本节不是推翻 W1–W12 方案，而是为了避免前置材料依赖成为等待瓶颈。所有 W0 结果标注为 **engineering demonstration / simulated pilot**，不等于确定研究家族或正式科学结果。
