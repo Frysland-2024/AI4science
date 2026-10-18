@@ -40,16 +40,23 @@ Once you have created an approved GitHub Issue, run a real task:
 python -m research_bridge.worker --once
 ~~~
 
-To check every five minutes while your computer and process stay online:
+To check every five minutes while your computer and process stay online (alternative to Windows Task Scheduler):
 
 ~~~powershell
 python -m research_bridge.worker --watch --interval-seconds 300
 ~~~
 
-Or, after successfully running doctor, dry-run, and a supervised real task, opt in to Windows Task Scheduler:
+Or, after successfully running doctor, dry-run, and a supervised real task, opt in to Windows Task Scheduler. It executes one check every five minutes and writes a local log:
 
 ~~~powershell
 powershell -ExecutionPolicy Bypass -File .\research_bridge\register_windows_task.ps1
+~~~
+
+Inspect scheduled execution and the latest local log:
+
+~~~powershell
+Get-ScheduledTask -TaskName AI4science-Codex-Bridge
+Get-Content .git\research_bridge\scheduled.log -Tail 30
 ~~~
 
 Remove scheduled execution:
@@ -71,7 +78,8 @@ Add both labels **bridge-ready** and **bridge-readonly-approved** only after you
 ## Troubleshooting and security
 
 - **This phase is not an always-on ChatGPT conversation.** It automates the Codex side; ChatGPT analysis is still invoked by you unless a separate triggered analysis service is installed later.
-- The worker requires local HEAD to equal GitHub main; it will not pull over local work. Keep the host synchronized, and do not run two workers on different PCs.
+- The worker fetches the latest remote `main` Git objects and analyzes a commit-specific `git archive` snapshot. It never checks out, overwrites, or resets local files; untracked research work stays untouched. It requires network access for GitHub and Codex. Do not run two workers on different PCs.
+- The scheduled runner logs timestamps, success/failure and task status locally under `.git/research_bridge/scheduled.log`; its previous rotated log is `scheduled.previous.log`. Logs are NOT pushed to GitHub.
 - Use the *ChatGPT account login* in Codex; the worker deliberately strips OPENAI_API_KEY, CODEX_API_KEY and CODEX_ACCESS_TOKEN so it cannot fall back to separately metered API use.
 - Local Windows agent/CLI authentication is **not tested remotely**: Desktop Commander was offline at implementation time.
 - After a crash, manually inspect the Issue and journal before clearing labels/journal. No blind automatic retries.
