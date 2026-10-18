@@ -1,0 +1,57 @@
+{
+  "anchor_q": [
+    0.11,
+    -0.13,
+    0.0,
+    -1.0
+  ],
+  "active_parameters": [
+    "du",
+    "dv"
+  ],
+  "jacobian_column_norms": [
+    39.498897865383434,
+    11.756759456889585
+  ],
+  "jacobian_singular_values": [
+    39.49901957296282,
+    11.756350551164028
+  ],
+  "jacobian_condition_number": 3.359802806241765,
+  "jacobian_full_rank": true,
+  "jacobian_finite_difference": {
+    "du": {
+      "relative_l2_error_by_step": [
+        9.36659989911784e-05,
+        2.3418949232641852e-05,
+        5.8548986452994555e-06
+      ],
+      "best_relative_l2_error": 5.8548986452994555e-06
+    },
+    "dv": {
+      "relative_l2_error_by_step": [
+        1.8402421680074608e-05,
+        4.600709858121065e-06,
+        1.1501985894935103e-06
+      ],
+      "best_relative_l2_error": 1.1501985894935103e-06
+    }
+  },
+  "end_to_end_reconstruction_loss": 0.011589693210883587,
+  "end_to_end_autograd_finite": true,
+  "end_to_end_loss_gradient_finite_difference": [
+    {
+      "coordinate": "du",
+      "autograd": 0.009962573345607606,
+      "finite_difference": 0.009962576016080832,
+      "relative_error": 2.6805047428715094e-07
+    },
+    {
+      "coordinate": "dv",
+      "autograd": -0.00020204131499895807,
+      "finite_difference": -0.0002020412823242751,
+      "relative_error": 1.6172277919282826e-07
+    }
+  ],
+  "passed": true
+}

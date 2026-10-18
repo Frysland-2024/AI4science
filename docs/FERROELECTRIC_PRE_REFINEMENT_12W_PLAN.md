@@ -1,8 +1,8 @@
 # 铁电陶瓷模拟训练 AI 预精修辅助：12 周候选计划（2026-10-18）
 
-> **2026-10-18 当前方法优先级收敛（用户明确选择，尚未开始实验）：** 12 周科学主线优先采用 **PQ-Net 风格的模拟 PXRD→连续物理参数 NN 回归 workflow**，结合 DRNets 等先例中的 **训练期 Forward Reconstruction Loss**，设置一项清楚且公平的变量对照：A = 监督回归；B = 相同网络/数据/优化预算的监督回归 + Forward Reconstruction Loss。研究目标是在合作学长确认的**一个**铁电陶瓷家族上核验晶格参数 MAE、重构误差和对传统精修初始化的帮助，少量实验谱作外部案例。先从已知单相/候选结构模板做可微数值与参数可辨识检查，再决定是否合理纳入有限两相共存。其他材料路由、多家族大模型、通用相组合概率、全面 ECE 系统均暂为后续扩展，**不作为本轮必须完成目标**。保留 physics-only 优质对照（例如 CrystalShift 类），不宣称 Forward Loss 本身为新算法；无论收益正负均记录。此为科研目标优先级决定，不等于论文/开题已获批准或新模型已成功训练。
+> **2026-10-18 当前方法优先级收敛（用户明确选择；有限工程 pilot 已完成）：** 12 周科学主线优先采用 **PQ-Net 风格的模拟 PXRD→连续物理参数 NN 回归 workflow**，结合 DRNets 等先例中的 **训练期 Forward Reconstruction Loss**，设置一项清楚且公平的变量对照：A = 监督回归；B = 相同网络/数据/优化预算的监督回归 + Forward Reconstruction Loss。初步 pilot 在一个四方 HfCd 已知结构上完成了数值梯度 Gate 和三 seed A/B，但它不是铁电陶瓷证据，且没有显示参数 MAE 的改善。后续正式研究仍须在合作学长确认的**一个**铁电陶瓷家族上核验晶格参数 MAE、重构误差和对传统精修初始化的帮助，少量实验谱作外部案例。先从已知单相/候选结构模板做可微数值与参数可辨识检查，再决定是否合理纳入有限两相共存。其他材料路由、多家族大模型、通用相组合概率、全面 ECE 系统均暂为后续扩展，**不作为本轮必须完成目标**。保留 physics-only 优质对照（例如 CrystalShift 类），不宣称 Forward Loss 本身为新算法；无论收益正负均记录。此为科研目标优先级决定，不等于论文/开题已获批准。
 
-**状态：PROPOSED / NOT_STARTED / NOT_APPROVED / NO_NEW_RESULTS**  
+**状态：PROPOSED / ENGINEERING_PILOT_COMPLETE / NOT_APPROVED; FAMILY-SPECIFIC STUDY NOT_STARTED**
 **建议名称：** Simulation-Trained, Calibration-Aware AI Assistance for Ferroelectric-Ceramic PXRD Pre-Refinement  
 **预期周期：** 12 周；每 2 周与学长正式复盘一次（W2/4/6/8/10/12）。开始日期、材料家族、人员承诺及正式开题均待确认。  
 **责任假设：** 本科生负责模拟数据、ML、概率校准、数值评估与交付；合作学长提供有限真实谱、材料/仪器背景与精修解释（可交付数据量未核实）。  
@@ -151,11 +151,11 @@ Sample X | known family | simulation-calibrated single-phase hypotheses:
 
 **决策记录：** 2026-10-18。此前曾先想任意铁电陶瓷多相 → 再讨论只做单相候选 → 澄清真实谱极少而主要训练走模拟库 → 提出“70% R / 30% C 候选概率＋各候选参数＋不确定性，用于精修前” → 决定以**单一材料家族内的概率化单相候选预精修**为 12 周核心，**两相共存作为必做失配压力测试与可选研究分支**。此为规划定稿版本，不是实验或导师已批准的事实。
 
-> **2026-10-18 文献纠偏（本计划仍为候选）：** 对照 2025 年 CrystalShift、2021 年 PQ-Net 等先例后发现，“物相组合概率＋对称性参数反演＋物理谱图比较”已有成熟公开研究。**Forward Model 不能仅作为模拟数据生成器**：建议同时用于推理阶段的候选物理拟合/局部反演，并以纯物理、纯 NN、NN+Forward 三组合理基线判断 AI 的增量价值。训练期可微重构 Loss 仍是独立可选消融。参见 [文献与 Forward 方法定位](PRE_REFINEMENT_FORWARD_MODEL_RELATED_WORK_20261018.md)，本次没有启动新的模型训练或推翻旧 NO-GO。
+> **历史文献纠偏记录：** 当时建议训练期可微重构 Loss 作为独立可选消融；该优先级随后由用户明确指令 supersede，并已完成有限 A/B pilot。当前结果和解释见本文末尾的“Forward Reconstruction Loss pilot”与 [`xrd_forward_loss/FORWARD_LOSS_PILOT_REPORT.md`](../xrd_forward_loss/FORWARD_LOSS_PILOT_REPORT.md)。CrystalShift 仍是尚未运行的 physics-only 比较候选。
 
 ### 2026-10-18 方法优先级再讨论：Forward Reconstruction Loss 是否应直接作为主方法？
 
-**状态：DISCUSSION / CANDIDATE / NOT STARTED**；用户明确提出：为什么不直接训练带 Forward Reconstruction Loss 的 NN？先前“重构 Loss 仅作为可选消融”的工程保守安排**不是物理/算法不可行判定**。该讨论暂不改变 W0 已授权范围，也不是新增实验结果；需要经正向物理可微数值检验、候选相模型/相共存参数化和数据拆分核验后再确定正式研究协议。
+**历史状态：DISCUSSION / CANDIDATE / NOT STARTED；现由用户授权 pilot 后续记录 supersede。** 用户明确提出：为什么不直接训练带 Forward Reconstruction Loss 的 NN？先前“重构 Loss 仅作为可选消融”的工程保守安排**不是物理/算法不可行判定**。后来用户明确授权先做受限的 A/B pilot，结果已记在 [pilot report](../xrd_forward_loss/FORWARD_LOSS_PILOT_REPORT.md)；它没有替代材料家族正式研究的协议审批。
 
 **建议首选新方法候选**：一个基于已知材料家族和有限候选 CIF 的 *supervised physics-guided inverse network*，输入 PXRD，联合输出（a）候选相/相组合得分，（b）候选成立条件下的晶格及少量仪器参数，（c）若显式考虑混相，则是非负的相激活/尺度因子；用经验证可微的 PXRD forward `F_H(theta, nuisance)` 重建谱，采用 `L = lambda_phase L_phase + lambda_param L_param + lambda_recon D(F_H(theta_hat), x)`。其中 phase 分支的梯度是否来自重构项取决于具体连续化/混相门控实现：**若训练时直接使用真值相选择 F_H，重构梯度只会约束参数头，不会自动训练离散分类头**。如果训练 explicit single/dual mixtures，模型选择和物理强度权重必须区别于相概率、质量分数。
 
@@ -165,11 +165,11 @@ Sample X | known family | simulation-calibrated single-phase hypotheses:
 
 **最小可行对照**：A = `CE + parameter loss`；B = `A + differentiable forward reconstruction loss`；另与 physics-only (CrystalShift 类) 比较，必要时检查 B + 局部精修。首先限定单相且相模板给定，检查参数 MAE/正确梯度和反演可辨识性；再尝试少量明确物理可辨的单/双相结构假设与非负混相强度，不一上来让网络同时学习全部家族和复杂混相。评价应包括相选择、参数 MAE、重构残差、校准、数值初值是否更有用，以及成本；保留无增益结果。
 
-**决策边界**：该方向在研究问题上优先考虑，但 **尚需用户确认正式改动方法优先级并通过 W1–2 feasibility gate**。历史旧 proposal、旧失败 Stage-1 与冻结 V9 不被覆盖。
+**决策边界（截至本计划记录）：** 这一 pilot 已经由用户明确授权，且小范围数值 Gate 已通过；正式材料家族研究仍需材料/结构来源、原型分组划分及相应 forward Gate。历史旧 proposal、旧失败 Stage-1 与冻结 V9 不被覆盖。
 
 ## 10. 学长材料家族未确定前的独立推进（W0 / pre-data sprint；2026-10-18 补充）
 
-**状态：EXECUTION PROPOSAL / NOT YET EXECUTED。** 本节不是推翻 W1–W12 方案，而是为了避免前置材料依赖成为等待瓶颈。所有 W0 结果标注为 **engineering demonstration / simulated pilot**，不等于确定研究家族或正式科学结果。
+**状态：PARTIALLY EXECUTED。** 文献审计、已知单结构数值 Gate、孤立 A/B 代码和有限 simulated pilot 已完成，见 [`xrd_forward_loss/`](../xrd_forward_loss/)。材料家族确认、family-specific CIF/forward、按原型分组的多结构数据划分和实验案例仍未执行。本节不是推翻 W1–W12 方案；所有 HfCd 结果标注为 **engineering demonstration / simulated pilot**，不等于确定研究家族或正式科学结果。
 
 **原则：可迁移基础优先，临时体系小规模试验，大训练等家族与结构协议确认后再开始。** 不让 Codex 改写冻结的 `xrd_robustness/` 研究，也不因为工程复用重新开启封存的 factorization Stage-1。
 
@@ -193,4 +193,10 @@ Sample X | known family | simulation-calibrated single-phase hypotheses:
 家族确定后，把临时 BaTiO3 配置保留为工程 smoke，另建实际家族的结构清单、可调参数范围和独立测试策略。先做结构模板核验和新的模拟数据审计，再决定新任务的训练配置。若与临时体系不兼容，应保留通用 schema、报告器和测试接口，重新实现必要的相物理；不强行复用不适用的 forward。
 
 **本节选择 BaTiO3 并非学长的确定数据，也不代表对其具体相共存/测量可辨识性有额外实验结论。**
+
+### 2026-10-18：Forward Reconstruction Loss pilot 结果
+
+用户直接授权后，在独立分支执行了 HfCd 单结构模拟 A/B：A 为监督参数回归，B 仅多加可微重构项；训练 358、验证 77、测试 77 个互斥参数样本，λ 由验证集在 `{0.1,1,10}` 中选为 1.0，三组 matched seed。`du,dv` Jacobian 条件数为 3.36，自动微分和有限差分一致；正式 test 的 mean normalized-q MAE 为 A `0.01495 ± 0.00327`、B `0.01509 ± 0.00120`，干净谱 RMSE 为 A `0.009008 ± 0.001868`、B `0.008497 ± 0.000602`。因此本 pilot 显示谱拟合小幅改善但参数 MAE 未改善；不能据此声称更好的晶格参数或精修初值。完整设置、失败首轮和成本见 [报告](../xrd_forward_loss/FORWARD_LOSS_PILOT_REPORT.md)。
+
+此结果不改变 family-specific 正式任务需以实际铁电材料 CIF 重新通过物理、可辨识和原型分组数据 Gate 的要求。
 
