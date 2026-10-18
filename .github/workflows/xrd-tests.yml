@@ -4,10 +4,12 @@ on:
   push:
     paths:
       - "xrd_robustness/**"
+      - "README.md"
       - ".github/workflows/xrd-tests.yml"
   pull_request:
     paths:
       - "xrd_robustness/**"
+      - "README.md"
       - ".github/workflows/xrd-tests.yml"
 
 jobs:
