@@ -1,0 +1,12 @@
+{
+  "config_sha256": "aad8720f77651603b4d48c9f48d9900efaa3d8b29c37c88a6ef8923fe62e22fd",
+  "dataset_sha256": "799b242b997d4d26ab77cff049b8792538860618cbcbd1843ca52c90fd86ef78",
+  "split_seed": 20261019,
+  "loss_weights": {
+    "eta": 0.1,
+    "profile": 0.1
+  },
+  "max_samples": 512,
+  "max_seeds": 3,
+  "max_epochs_per_run": 24
+}
