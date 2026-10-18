@@ -316,6 +316,8 @@ class CachedTetragonalGPUForward:
         *,
         compatibility: bool = True,
         normalization_index: int | None = None,
+        truncate_support: bool | None = None,
+        reference_scale_width_deg: float | None = None,
     ) -> torch.Tensor:
         """Render one q vector or a batch.
 
@@ -425,6 +427,8 @@ class CachedTetragonalGPUForward:
         )
         if compatibility:
             gaussian = gaussian * support.to(self.dtype)
+        elif truncate_support:
+            gaussian = gaussian * support.to(self.dtype)
         raw = gaussian.sum(dim=1)
         # The CPU oracle stages the unnormalized Gaussian sum through
         # float32 and returns a final float32-normalized profile.  Preserve
@@ -432,6 +436,16 @@ class CachedTetragonalGPUForward:
         # Gaussian calculation themselves in float64.
         if compatibility:
             raw = raw.to(torch.float32).to(self.dtype)
+        if reference_scale_width_deg is not None:
+            reference_width = float(reference_scale_width_deg)
+            if reference_width <= 0:
+                raise ValueError("reference_scale_width_deg must be positive")
+            reference_sigma = reference_width / (2.0 * math.sqrt(2.0 * math.log(2.0)))
+            normalization = group_intensity.amax(dim=1, keepdim=True) / reference_sigma
+            normalized = raw / torch.clamp_min(
+                normalization, torch.finfo(self.dtype).tiny
+            )
+            return normalized[0] if single else normalized
         if not compatibility and normalization_index is not None:
             if not 0 <= normalization_index < raw.shape[1]:
                 raise ValueError("normalization_index is outside the profile axis")

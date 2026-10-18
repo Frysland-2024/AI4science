@@ -6,6 +6,7 @@ import torch
 from torch.nn import functional as F
 
 from .model import compose_full_q
+from .measurement_closure import measurement_reconstruction_loss
 
 
 def paired_losses(
@@ -72,6 +73,38 @@ def clean_reference_paired_losses(
         total = parameter_loss + float(reconstruction_weight) * reconstruction_loss
     return {
         "total": total,
+        "parameter": parameter_loss,
+        "reconstruction": reconstruction_loss,
+    }
+
+
+def measurement_aware_paired_losses(
+    predicted_q: torch.Tensor,
+    predicted_eta: torch.Tensor,
+    target_q: torch.Tensor,
+    observed_profile: torch.Tensor,
+    *,
+    forward_model: object,
+    reconstruction_weight: float = 1.0,
+    background_shape_mode: str = "v9_polynomial",
+) -> dict[str, torch.Tensor]:
+    """Supervised q plus expected measurement-profile reconstruction.
+
+    This deployable loss deliberately receives predicted nuisance estimates and
+    the observed profile only; simulator nuisance truth is excluded.
+    """
+    if reconstruction_weight < 0:
+        raise ValueError("reconstruction weight must be nonnegative")
+    parameter_loss = F.mse_loss(predicted_q, target_q)
+    reconstruction_loss = measurement_reconstruction_loss(
+        forward_model,
+        predicted_q,
+        predicted_eta,
+        observed_profile,
+        background_shape_mode=background_shape_mode,
+    )
+    return {
+        "total": parameter_loss + float(reconstruction_weight) * reconstruction_loss,
         "parameter": parameter_loss,
         "reconstruction": reconstruction_loss,
     }

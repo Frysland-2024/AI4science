@@ -1,0 +1,397 @@
+{
+  "stage": "P1_P2_NUMERICAL_GATES",
+  "source_config": "xrd_forward_loss\\measurement_closure\\configs\\issue19_batio3.json",
+  "source_config_sha256": "8f87fce7482af07770e6db72a6c243bbbd432f8e1857fffd097e4f5be6531388",
+  "p0_reference": "xrd_forward_loss\\measurement_closure\\results\\p0_issue19_retry1_20261018\\p0_reference.json",
+  "target_definition": "deterministic expected profile only; no sampled detector noise is fitted",
+  "unknown_nuisance_degrees_of_freedom": {
+    "q": [
+      "du",
+      "dv"
+    ],
+    "eta": [
+      "2theta zero shift",
+      "FWHM",
+      "background amplitude",
+      "background linear coefficient",
+      "background quadratic coefficient"
+    ],
+    "count_noise": "stochastic observation process, not an estimated realization",
+    "scale": "excluded after per-profile maximum normalization; unidentifiable gauge"
+  },
+  "v9_expected_profile_parity": {
+    "thresholds": {
+      "max_abs": 2e-06,
+      "rmse": 2e-07
+    },
+    "cases": [
+      {
+        "case": "clean",
+        "max_abs_error": 1.9781230542470496e-08,
+        "rmse": 1.725204362506609e-09
+      },
+      {
+        "case": "shift",
+        "max_abs_error": 2.032230417281511e-08,
+        "rmse": 1.7506757319604069e-09
+      },
+      {
+        "case": "broadening",
+        "max_abs_error": 1.8863363315801962e-08,
+        "rmse": 1.8943953113764294e-09
+      },
+      {
+        "case": "background",
+        "max_abs_error": 1.8806217472189246e-08,
+        "rmse": 2.019717921029661e-09
+      },
+      {
+        "case": "combined",
+        "max_abs_error": 1.7668272123128048e-08,
+        "rmse": 2.310002739036811e-09
+      }
+    ]
+  },
+  "gradient_finite_difference": {
+    "coordinates": [
+      "du",
+      "dv",
+      "delta_deg",
+      "fwhm_deg",
+      "background_ratio",
+      "background_linear",
+      "background_quadratic"
+    ],
+    "autograd": [
+      -0.05688508675417934,
+      -0.002574389350588886,
+      0.09721296461998599,
+      0.0069150631839942685,
+      0.211332257350149,
+      0.001626363295325957,
+      -0.004731238677311886
+    ],
+    "central_finite_difference": [
+      -0.05688507238196111,
+      -0.0025743888774584257,
+      0.09721290740997979,
+      0.006915062684097194,
+      0.21133173353927567,
+      0.001626362798523226,
+      -0.004731237490582761
+    ],
+    "steps": [
+      0.0001,
+      0.0001,
+      0.0001,
+      1e-05,
+      1e-05,
+      0.0001,
+      0.0001
+    ],
+    "relative_errors": [
+      2.5265353448679675e-07,
+      1.8378356795531837e-07,
+      5.885018158664441e-07,
+      7.229103494140944e-08,
+      2.478612966535097e-06,
+      3.0546848452794187e-07,
+      2.5082842055342614e-07
+    ],
+    "max_relative_error": 2.478612966535097e-06,
+    "passed": true
+  },
+  "oracle_diagnostic": {
+    "eta_true_used_only_for_diagnostic": true,
+    "q_true": [
+      0.2,
+      -0.15
+    ],
+    "eta_true": [
+      0.04,
+      0.12,
+      0.006,
+      0.0,
+      0.0
+    ],
+    "loss_at_truth": 0.0,
+    "q_gradient_at_truth": [
+      0.0,
+      0.0
+    ]
+  },
+  "mismatched_clean_vs_observed": {
+    "clean_eta_reference": [
+      0.0,
+      0.08,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "observed_expected_eta": [
+      0.04,
+      0.12,
+      0.006,
+      0.0,
+      0.0
+    ],
+    "loss_at_true_q": 0.010489451938060697,
+    "gradient_du_dv_at_true_q": [
+      0.055709161843376695,
+      0.0005855487581543217
+    ],
+    "q_only_best_fit": {
+      "success": true,
+      "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+      "iterations": 12,
+      "evaluations": 60,
+      "loss": 0.008618692895863991,
+      "q": [
+        0.13950044920697385,
+        -0.1491214654780393
+      ],
+      "at_bound": false
+    },
+    "q_bias": [
+      -0.06049955079302616,
+      0.0008785345219606833
+    ],
+    "true_lattice_angstrom": [
+      3.9959774666366985,
+      4.030028013671167
+    ],
+    "biased_lattice_angstrom": [
+      3.9935489544559073,
+      4.027614191463542
+    ],
+    "descent_gradient_bias_cosine": 0.9996867471800802
+  },
+  "unknown_nuisance_identifiability": {
+    "scaled_coordinates": [
+      "du/0.8",
+      "dv/0.8",
+      "delta/0.06deg",
+      "width/[0.08,0.13]",
+      "background/[0,0.01]",
+      "linear/0.12",
+      "quadratic/0.08"
+    ],
+    "jacobian_column_norms": [
+      30.363987451381316,
+      10.448330207532901,
+      3.9144047385387477,
+      1.6683864808002389,
+      2.9756267648238697,
+      0.7190417867706005,
+      1.4380835735412012
+    ],
+    "singular_values": [
+      30.584642042096984,
+      10.438395428100746,
+      3.3937422484594073,
+      1.4990117649561587,
+      1.3231140307589342,
+      0.8884225702880809,
+      8.769185683028933e-16
+    ],
+    "condition_number": 3.058464204209698e+16,
+    "max_abs_column_correlation": 0.9999999999999999,
+    "column_correlation_matrix": [
+      [
+        0.9999999999999998,
+        0.0506772266362008,
+        -0.9238990698284617,
+        0.05255708295304356,
+        0.028131623521001896,
+        0.02257696715288921,
+        -0.0225769671528892
+      ],
+      [
+        0.0506772266362008,
+        1.0,
+        -0.06372094755285121,
+        0.13761778354996898,
+        0.06910979688389057,
+        0.056871436972660984,
+        -0.05687143697266099
+      ],
+      [
+        -0.9238990698284617,
+        -0.06372094755285121,
+        0.9999999999999997,
+        -0.11028227433875241,
+        -0.07366959892765912,
+        -0.058067085148860526,
+        0.05806708514886054
+      ],
+      [
+        0.05255708295304356,
+        0.13761778354996898,
+        -0.11028227433875241,
+        1.0,
+        0.5303226778449314,
+        0.4171592546791671,
+        -0.41715925467916715
+      ],
+      [
+        0.028131623521001896,
+        0.06910979688389057,
+        -0.07366959892765912,
+        0.5303226778449314,
+        1.0000000000000007,
+        0.7926542301597445,
+        -0.7926542301597446
+      ],
+      [
+        0.02257696715288921,
+        0.056871436972660984,
+        -0.058067085148860526,
+        0.4171592546791671,
+        0.7926542301597445,
+        1.0,
+        -0.9999999999999999
+      ],
+      [
+        -0.0225769671528892,
+        -0.05687143697266099,
+        0.05806708514886054,
+        -0.41715925467916715,
+        -0.7926542301597446,
+        -0.9999999999999999,
+        0.9999999999999997
+      ]
+    ],
+    "thresholds": {
+      "condition_number_max": 1000.0,
+      "max_abs_column_correlation": 0.995
+    }
+  },
+  "non_oracle_profile_fitting": {
+    "method": "bounded L-BFGS-B over normalized q and eta; inputs are expected profile and candidate parameters only",
+    "starts": [
+      [
+        0.6,
+        -0.5,
+        -0.7,
+        -0.8,
+        -0.6,
+        -0.5,
+        0.5
+      ],
+      [
+        -0.5,
+        0.5,
+        0.7,
+        0.8,
+        0.8,
+        0.6,
+        -0.6
+      ]
+    ],
+    "fits": [
+      {
+        "success": true,
+        "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+        "iterations": 38,
+        "evaluations": 51,
+        "loss": 8.493187602263704e-14,
+        "z": [
+          0.24999988049338304,
+          -0.1875004396987526,
+          0.6666656172436011,
+          0.5999970889261292,
+          0.19999339771238686,
+          -0.0032663454616222915,
+          -0.0016396932595314788
+        ],
+        "q": [
+          0.19999990439470644,
+          -0.1500003517590021
+        ],
+        "eta": [
+          0.039999937034616066,
+          0.11999992722315324,
+          0.005999966988561934,
+          -0.00039196145539467496,
+          -0.0001311754607625183
+        ],
+        "at_bound": false,
+        "q_abs_error": [
+          9.56052935707774e-08,
+          3.5175900209294397e-07
+        ],
+        "q_max_abs_error": 3.5175900209294397e-07,
+        "eta_normalized_abs_error": [
+          1.0494230656687975e-06,
+          2.911073870404124e-06,
+          6.6022876130944486e-06,
+          0.0032663454616222915,
+          0.0016396932595314788
+        ],
+        "eta_normalized_max_abs_error": 0.0032663454616222915
+      },
+      {
+        "success": true,
+        "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+        "iterations": 35,
+        "evaluations": 49,
+        "loss": 1.6196348298435503e-15,
+        "z": [
+          0.25000011558710805,
+          -0.1874999534277161,
+          0.6666674740405824,
+          0.5999999734914483,
+          0.20000109369424665,
+          0.48561742229310956,
+          0.24281096017516515
+        ],
+        "q": [
+          0.20000009246968645,
+          -0.1499999627421729
+        ],
+        "eta": [
+          0.04000004844243494,
+          0.11999999933728621,
+          0.006000005468471233,
+          0.05827409067517315,
+          0.01942487681401321
+        ],
+        "at_bound": false,
+        "q_abs_error": [
+          9.24696864357255e-08,
+          3.725782710128911e-08
+        ],
+        "q_max_abs_error": 9.24696864357255e-08,
+        "eta_normalized_abs_error": [
+          8.073739156122528e-07,
+          2.6508551353998655e-08,
+          1.0936942466954758e-06,
+          0.48561742229310956,
+          0.24281096017516515
+        ],
+        "eta_normalized_max_abs_error": 0.48561742229310956
+      }
+    ],
+    "eta_true_used_by_optimizer": false,
+    "q_true_used_by_optimizer": false
+  },
+  "noise_expectation": {
+    "poisson_count_scale": 30000,
+    "readout_noise": "not required for this Poisson-only repeated-draw check; V9 config includes bounded Gaussian readout",
+    "replicates": 64,
+    "single_realization_transformed_rmse": 0.005242139823175736,
+    "mc_mean_transformed_rmse": 0.000645490404303495,
+    "passed": true
+  },
+  "elapsed_seconds": 6.363567300024442,
+  "gates": {
+    "p0_passed": true,
+    "v9_measurement_profile_parity_passed": true,
+    "gradient_fd_passed": true,
+    "nuisance_local_identifiability_passed": false,
+    "non_oracle_profile_recovery_passed": false,
+    "noise_expectation_mc_passed": true,
+    "all_physics_and_unknown_nuisance_gates_passed": false
+  },
+  "passed": false
+}
