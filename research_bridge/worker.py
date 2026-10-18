@@ -37,6 +37,11 @@ def command(args, cwd=None, stdin=None, timeout=45, env=None):
 def gh(args):
     return command(["gh", *args])
 
+def safe_relpath(name):
+    if not isinstance(name, str) or not name or name.startswith("/") or "\\" in name:
+        return False
+    return all(piece not in ("", ".", "..") for piece in name.split("/"))
+
 def eligible(item):
     labels = {x["name"] for x in item.get("labels", [])}
     return (item.get("state") == "open"
@@ -74,18 +79,27 @@ def record(root, number, status, **details):
     journal(root, number).write_text(json.dumps(data, indent=2), encoding="utf-8")
 
 def revision(root):
-    if not (root / ".git").is_dir():
-        raise BridgeError("Run in a normal Git checkout")
-    local = command(["git", "rev-parse", "HEAD"], cwd=root).strip()
-    remote = json.loads(gh(["api", "repos/" + REPO + "/commits/main"]))["sha"]
-    if local != remote:
-        raise BridgeError("Local HEAD differs from GitHub main. Sync safely before running.")
-    return local
+    """Fetch latest GitHub main without switching/pulling local files.
 
-def snapshot(root, dest):
+    Returns the exact fetched commit. Source snapshots use this frozen commit,
+    so subsequent GitHub writes cannot change an in-flight task.
+    """
+    if not (root / ".git").exists():
+        raise BridgeError("Run in a normal Git checkout")
+    url = command(["git", "remote", "get-url", "origin"], cwd=root).strip().lower()
+    if url.rstrip("/").removesuffix(".git") != "https://github.com/" + REPO.lower():
+        raise BridgeError("Unexpected origin remote; refusing to fetch")
+    command(["git", "fetch", "--no-tags", "origin", "main"], cwd=root, timeout=90)
+    return command(["git", "rev-parse", "--verify", "FETCH_HEAD^{commit}"],
+                   cwd=root).strip()
+
+def snapshot(root, dest, commit=None):
+    # The worker's local checkout is never rewritten or checked out.
+    if commit is None:
+        commit = revision(root)
     archive = dest.parent / "snapshot.tar"
     with archive.open("wb") as fp:
-        p = subprocess.run(["git", "archive", "--format=tar", "HEAD"], cwd=root,
+        p = subprocess.run(["git", "archive", "--format=tar", commit], cwd=root,
                            stdout=fp, stderr=subprocess.PIPE)
     if p.returncode:
         raise BridgeError("git archive failed")
@@ -96,7 +110,7 @@ def snapshot(root, dest):
 
 def codex_env():
     env = os.environ.copy()
-    for key in ("OPENAI_API_KEY", "CODEX_API_KEY", "CODEX_ACCESS_TOKEN", "OPENAI_BASE_URL"):
+    for key in ("OPENAI_API_KEY", "CODEX_API_KEY", "CODEX_ACCESS_TOKEN", "OPENAI_BASE_URL", "GH_TOKEN", "GITHUB_TOKEN", "GIT_ASKPASS", "SSH_ASKPASS"):
         env.pop(key, None)
     return env
 
@@ -120,7 +134,7 @@ def codex_executable(*, windows=None):
 def review_task(root, issue, revision_sha):
     with tempfile.TemporaryDirectory(prefix="ai4science-bridge-") as tmp:
         workspace = Path(tmp) / "repo"
-        snapshot(root, workspace)
+        snapshot(root, workspace, revision_sha)
         output = Path(tmp) / "answer.md"
         prompt = (
             "Read AGENTS.md and docs/CURRENT_STATE.md. Perform a read-only review "
@@ -141,6 +155,11 @@ def review_task(root, issue, revision_sha):
         return output.read_text(encoding="utf-8")[:12000]
 
 def run_once(root, issue, dry_run=False):
+    from . import code_tasks, gpu_tasks
+    if gpu_tasks.eligible(issue):
+        return gpu_tasks.run(root, issue, dry_run=dry_run)
+    if code_tasks.eligible(issue):
+        return code_tasks.run(root, issue, dry_run=dry_run)
     number = issue["number"]
     if journal(root, number).exists():
         print("Already attempted issue", number)
@@ -170,7 +189,9 @@ def run_once(root, issue, dry_run=False):
 
 def setup():
     for name, color in [(READY, "1f6feb"), (APPROVED, "2da44e"),
-                        (RUNNING, "d29922"), (REVIEW, "8250df"), (FAILED, "cf222e")]:
+                        (RUNNING, "d29922"), (REVIEW, "8250df"), (FAILED, "cf222e"),
+                        ("bridge-code-approved", "0969da"),
+                        ("bridge-gpu-approved", "bf8700")]:
         gh(["label", "create", name, "--repo", REPO, "--color", color, "--force"])
 
 def main(args=None):
@@ -198,7 +219,10 @@ def main(args=None):
         if options.interval_seconds < 60:
             raise BridgeError("Polling interval must be at least 60 seconds")
         while True:
-            tasks = [i for i in pending() if not journal(root, i["number"]).exists()]
+            from . import code_tasks, gpu_tasks
+            tasks = pending() + code_tasks.pending() + gpu_tasks.pending()
+            tasks = sorted((i for i in tasks if not journal(root, i["number"]).exists()),
+                           key=lambda i: i["number"])
             if tasks:
                 run_once(root, tasks[0], options.dry_run)
             else:
