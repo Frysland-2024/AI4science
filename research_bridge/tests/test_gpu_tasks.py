@@ -95,13 +95,14 @@ class GPUContractTests(unittest.TestCase):
             stop = out / "STOP"
             stop.touch()
             with patch.object(g.subprocess, "Popen", return_value=FakeProcess()) as popen, \
+                 patch.object(g, "_attach_windows_job", return_value=None), \
                  patch.object(g, "_terminate_tree") as terminate:
                 code, stopped = g._run_process(["trusted-python", "trusted-script.py"],
                                                 cwd=Path(temp), out=out, stop_path=stop,
                                                 env={}, poll_interval=0)
             self.assertTrue(stopped)
             self.assertEqual(code, -9)
-            terminate.assert_called_once_with(1234)
+            terminate.assert_called_once_with(1234, job=None)
             args, kwargs = popen.call_args
             self.assertEqual(args[0], ["trusted-python", "trusted-script.py"])
             self.assertIs(kwargs["shell"], False)
@@ -118,12 +119,61 @@ class GPUContractTests(unittest.TestCase):
             out = Path(temp) / "run"
             out.mkdir()
             with patch.object(g.subprocess, "Popen", return_value=FinishedProcess()), \
+                 patch.object(g, "_attach_windows_job", return_value=None), \
                  patch.object(g, "_terminate_tree") as terminate:
                 code, stopped = g._run_process(["python", "run.py"], cwd=Path(temp), out=out,
                                                stop_path=out / "STOP", env={})
             self.assertEqual(code, 7)
             self.assertFalse(stopped)
-            terminate.assert_called_once_with(1235)
+            terminate.assert_called_once_with(1235, job=None)
+
+    def test_attached_process_job_terminates_descendants_and_closes(self):
+        class FinishedProcess:
+            pid = 1236
+            _handle = 1236
+            returncode = 7
+            def poll(self):
+                return 7
+
+        class FakeJob:
+            def __init__(self):
+                self.terminated = False
+                self.closed = False
+            def terminate(self):
+                self.terminated = True
+                return True
+            def close(self):
+                self.closed = True
+
+        job = FakeJob()
+        with tempfile.TemporaryDirectory() as temp:
+            out = Path(temp) / "run"
+            out.mkdir()
+            with patch.object(g.subprocess, "Popen", return_value=FinishedProcess()), \
+                 patch.object(g, "_attach_windows_job", return_value=job):
+                code, stopped = g._run_process(["python", "run.py"], cwd=Path(temp), out=out,
+                                               stop_path=out / "STOP", env={})
+        self.assertEqual(code, 7)
+        self.assertFalse(stopped)
+        self.assertTrue(job.terminated)
+        self.assertTrue(job.closed)
+
+    @unittest.skipUnless(g.os.name == "nt", "Windows Job Object integration check")
+    def test_windows_job_object_can_attach_and_terminate_cpu_child(self):
+        import sys
+        proc = g.subprocess.Popen([sys.executable, "-c", "import time; time.sleep(30)"])
+        job = None
+        try:
+            job = g._attach_windows_job(proc)
+            self.assertIsNotNone(job)
+            self.assertTrue(job.terminate())
+            proc.wait(timeout=10)
+        finally:
+            if job is not None:
+                job.close()
+            if proc.poll() is None:
+                proc.kill()
+                proc.wait(timeout=10)
 
     def test_blocked_nonzero_run_still_attempts_auto_publication(self):
         sha = "f" * 40

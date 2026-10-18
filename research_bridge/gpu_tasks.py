@@ -131,7 +131,88 @@ def _gpu_env():
     return env
 
 
-def _terminate_tree(pid):
+class _WindowsProcessJob:
+    """Kill descendants together with the runner when the owning handle closes."""
+    def __init__(self, kernel32, handle):
+        self.kernel32 = kernel32
+        self.handle = handle
+
+    def terminate(self):
+        return bool(self.kernel32.TerminateJobObject(self.handle, 1))
+
+    def close(self):
+        if self.handle:
+            self.kernel32.CloseHandle(self.handle)
+            self.handle = None
+
+
+def _attach_windows_job(proc):
+    if os.name != "nt":
+        return None
+    import ctypes
+    from ctypes import wintypes
+
+    class BasicLimitInformation(ctypes.Structure):
+        _fields_ = [
+            ("PerProcessUserTimeLimit", ctypes.c_longlong),
+            ("PerJobUserTimeLimit", ctypes.c_longlong),
+            ("LimitFlags", wintypes.DWORD),
+            ("MinimumWorkingSetSize", ctypes.c_size_t),
+            ("MaximumWorkingSetSize", ctypes.c_size_t),
+            ("ActiveProcessLimit", wintypes.DWORD),
+            ("Affinity", ctypes.c_size_t),
+            ("PriorityClass", wintypes.DWORD),
+            ("SchedulingClass", wintypes.DWORD),
+        ]
+
+    class IoCounters(ctypes.Structure):
+        _fields_ = [(name, ctypes.c_ulonglong) for name in (
+            "ReadOperationCount", "WriteOperationCount", "OtherOperationCount",
+            "ReadTransferCount", "WriteTransferCount", "OtherTransferCount")]
+
+    class ExtendedLimitInformation(ctypes.Structure):
+        _fields_ = [
+            ("BasicLimitInformation", BasicLimitInformation),
+            ("IoInfo", IoCounters),
+            ("ProcessMemoryLimit", ctypes.c_size_t),
+            ("JobMemoryLimit", ctypes.c_size_t),
+            ("PeakProcessMemoryUsed", ctypes.c_size_t),
+            ("PeakJobMemoryUsed", ctypes.c_size_t),
+        ]
+
+    kernel32 = ctypes.WinDLL("kernel32", use_last_error=True)
+    kernel32.CreateJobObjectW.argtypes = (ctypes.c_void_p, wintypes.LPCWSTR)
+    kernel32.CreateJobObjectW.restype = wintypes.HANDLE
+    kernel32.SetInformationJobObject.argtypes = (
+        wintypes.HANDLE, ctypes.c_int, ctypes.c_void_p, wintypes.DWORD)
+    kernel32.SetInformationJobObject.restype = wintypes.BOOL
+    kernel32.AssignProcessToJobObject.argtypes = (wintypes.HANDLE, wintypes.HANDLE)
+    kernel32.AssignProcessToJobObject.restype = wintypes.BOOL
+    kernel32.TerminateJobObject.argtypes = (wintypes.HANDLE, wintypes.UINT)
+    kernel32.TerminateJobObject.restype = wintypes.BOOL
+    kernel32.CloseHandle.argtypes = (wintypes.HANDLE,)
+    kernel32.CloseHandle.restype = wintypes.BOOL
+
+    handle = kernel32.CreateJobObjectW(None, None)
+    if not handle:
+        raise w.BridgeError("Could not create a Windows process job")
+    job = _WindowsProcessJob(kernel32, handle)
+    limits = ExtendedLimitInformation()
+    limits.BasicLimitInformation.LimitFlags = 0x2000  # JOB_OBJECT_LIMIT_KILL_ON_JOB_CLOSE
+    if not kernel32.SetInformationJobObject(
+            handle, 9, ctypes.byref(limits), ctypes.sizeof(limits)):
+        job.close()
+        raise w.BridgeError("Could not configure Windows process-tree cleanup")
+    if not kernel32.AssignProcessToJobObject(handle, wintypes.HANDLE(proc._handle)):
+        job.terminate()
+        job.close()
+        raise w.BridgeError("Could not attach runner to Windows process-tree cleanup")
+    return job
+
+
+def _terminate_tree(pid, job=None):
+    if job is not None and job.terminate():
+        return
     if os.name == "nt":
         try:
             subprocess.run(["taskkill", "/PID", str(pid), "/T", "/F"],
@@ -162,36 +243,51 @@ def _run_process(cmd, *, cwd, out, stop_path, env, poll_interval=STOP_POLL_SECON
     with stdout_path.open("ab") as stdout_log, stderr_path.open("ab") as stderr_log:
         popen_options["stdout"], popen_options["stderr"] = stdout_log, stderr_log
         proc = subprocess.Popen(cmd, **popen_options)
-        while proc.poll() is None:
-            elapsed = time.monotonic() - started
-            if stop_path.exists():
-                _terminate_tree(proc.pid)
-                try:
-                    proc.wait(timeout=10)
-                except subprocess.TimeoutExpired:
-                    proc.kill()
-                    proc.wait()
-                _write_json(out / "heartbeat.json", {
-                    "status": "STOPPED", "updated_utc": _utc_now(),
-                    "elapsed_seconds": round(elapsed, 1),
-                })
-                return proc.returncode, True
-            if elapsed - last_heartbeat >= HEARTBEAT_SECONDS:
-                _write_json(out / "heartbeat.json", {
-                    "status": "RUNNING", "updated_utc": _utc_now(),
-                    "elapsed_seconds": round(elapsed, 1),
-                    "stdout_bytes": stdout_log.tell(), "stderr_bytes": stderr_log.tell(),
-                })
-                last_heartbeat = elapsed
-            time.sleep(poll_interval)
-        code = proc.returncode
-        if code != 0:
+        job = None
+        try:
+            job = _attach_windows_job(proc)
+        except Exception:
             _terminate_tree(proc.pid)
-        _write_json(out / "heartbeat.json", {
-            "status": "EXITED", "updated_utc": _utc_now(),
-            "elapsed_seconds": round(time.monotonic() - started, 1),
-            "return_code": code,
-        })
+            try:
+                proc.wait(timeout=10)
+            except subprocess.TimeoutExpired:
+                proc.kill()
+                proc.wait()
+            raise
+        try:
+            while proc.poll() is None:
+                elapsed = time.monotonic() - started
+                if stop_path.exists():
+                    _terminate_tree(proc.pid, job=job)
+                    try:
+                        proc.wait(timeout=10)
+                    except subprocess.TimeoutExpired:
+                        proc.kill()
+                        proc.wait()
+                    _write_json(out / "heartbeat.json", {
+                        "status": "STOPPED", "updated_utc": _utc_now(),
+                        "elapsed_seconds": round(elapsed, 1),
+                    })
+                    return proc.returncode, True
+                if elapsed - last_heartbeat >= HEARTBEAT_SECONDS:
+                    _write_json(out / "heartbeat.json", {
+                        "status": "RUNNING", "updated_utc": _utc_now(),
+                        "elapsed_seconds": round(elapsed, 1),
+                        "stdout_bytes": stdout_log.tell(), "stderr_bytes": stderr_log.tell(),
+                    })
+                    last_heartbeat = elapsed
+                time.sleep(poll_interval)
+            code = proc.returncode
+            if code != 0:
+                _terminate_tree(proc.pid, job=job)
+            _write_json(out / "heartbeat.json", {
+                "status": "EXITED", "updated_utc": _utc_now(),
+                "elapsed_seconds": round(time.monotonic() - started, 1),
+                "return_code": code,
+            })
+        finally:
+            if job is not None:
+                job.close()
     return code, False
 
 
