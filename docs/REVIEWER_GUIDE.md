@@ -73,6 +73,8 @@ The research-level contribution is the **formulation, implementation, and contro
 
 The **ResNet implementation is adapted from ML4pXRDs** under the [third-party notice](../THIRD_PARTY_NOTICES.md). The repository **does not claim** invention of consistency regularization or of an entirely new backbone. Literature precedence and exact novelty boundaries are analyzed in [the lineage document](PXRD_NOVELTY_LITERATURE_LINEAGE.md).
 
+**Division of project responsibilities:** Per the project lead's clarified attribution, Frysland-2024 was principally responsible for the overall research idea, scientific planning, method selection, and design of the simulation, RRUFF, CNRS, and parent-budget studies. Cuifa01 participated chiefly in execution, providing auxiliary ideas, collecting/organizing data, coding, GPU training and other engineering/experiment support. This is a distinction between *research design leadership* and *implementation/support*, not a claim that Cuifa01 made no intellectual contribution; see [research roles in README](../README.md#research-roles-and-contributions).
+
 ## Scientific boundaries and incomplete tracks
 
 - **Main study:** [xrd_robustness](../xrd_robustness/) — completed experimental comparisons, manuscript in progress.
