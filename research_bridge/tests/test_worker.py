@@ -92,6 +92,23 @@ class WorkerTests(unittest.TestCase):
                 self.assertEqual(labels.call_count, 2)
             self.assertEqual(json.loads(w.journal(root, 42).read_text())["status"], "FAILED")
 
+    def test_revision_uses_remote_commit_without_checkout(self):
+        # Protect untracked/local scientific files: never pull or reset.
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            (root / ".git").mkdir()
+            calls = []
+            def cmd(argv, **kwargs):
+                calls.append(argv)
+                if argv[:3] == ["git", "rev-parse", "FETCH_HEAD"]:
+                    return "abc123\n"
+                return ""
+            with patch.object(w, "command", side_effect=cmd), \
+                 patch.object(w, "gh", return_value='{"sha":"abc123"}'):
+                self.assertEqual(w.revision(root), "abc123")
+            self.assertEqual(calls[0][:3], ["git", "fetch", "--quiet"])
+            self.assertFalse(any("pull" in cmd or "reset" in cmd or "checkout" in cmd for cmd in calls))
+
     def test_missing_git_checkout_blocks(self):
         with tempfile.TemporaryDirectory() as temp:
             with self.assertRaises(w.BridgeError):
