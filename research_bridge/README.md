@@ -1,6 +1,6 @@
 # Research Task Bridge · Read-only + approved coding (2026-10-18)
 
-**Status:** GitHub Issues → locally authenticated Codex CLI → GitHub review has completed a real read-only test (#15). The coding lane is new and must still pass a separately approved live test; no GPU experiments are enabled.
+**Status:** GitHub Issues → locally authenticated Codex CLI → GitHub review has completed a real read-only test (#15). The coding lane is new and must still pass a separately approved live test. The GPU bridge lane now supports approved presets and automatic result branches; scientific A/B remains blocked until its real gates and reviewed backend exist.
 
 ## Two separate, explicitly authorized lanes
 
@@ -59,31 +59,31 @@ Logs/status:
 - No automatic GPU jobs, scientific A/B experiments, publishing claims, PR merges or changes to frozen protocols. Those require a separately designed and approved execution protocol with compute budget, preflight and experiment logs.
 - ChatGPT's separately configured hourly GitHub watch is a status monitor; it is not a two-agent continuous deliberation service.
 
-## Explicitly approved GPU execution and training-speed optimization
+## Approved GPU lane and automatic result publication
 
-The third lane accepts owner-created GitHub Issues titled **[Bridge GPU] ...** carrying **both** `bridge-ready` and `bridge-gpu-approved`. The Issue body must be exactly:
+The GPU lane accepts owner-created `[Bridge GPU] ...` Issues with **both** `bridge-ready` and `bridge-gpu-approved`. The JSON body has exactly these fields; `max_minutes`, executable paths, commands, and extra fields are rejected:
 
 ```json
 {
   "preset": "forward_ab",
   "approved_sha": "40-character-main-commit-sha",
-  "config": "pxrd_autolab/configs/forward_ab_pilot.yaml",
+  "config": "pxrd_autolab/configs/forward_ab_pilot.json",
   "config_sha256": "64-character-SHA256-of-config",
-  "run_id": "unique_run_001",
-  "max_minutes": 45
+  "run_id": "unique_run_001"
 }
 ```
 
-The GPU task dispatches **only** a hard-coded reviewed preset:
-- `forward_ab` uses `pxrd_autolab/run.py`
-- `forward_speed_benchmark` uses `pxrd_autolab/benchmark_gpu.py`
+Only these source-controlled presets and exact config paths are dispatched:
 
-**These preset scripts are not yet in main**, so any GPU Issue remains blocked until a separately reviewed coding PR implements the runner and configuration. This distinction is intentional: user-level permission is granted, but no scientifically justified formal experiment has yet been selected.
+- `forward_ab` → `pxrd_autolab/run.py` and `configs/forward_ab_pilot.json`
+- `forward_speed_benchmark` → `pxrd_autolab/benchmark_gpu.py` and `configs/forward_speed_benchmark.json`
 
-Pre-run checks require current GitHub `main` to match `approved_sha`, an exact config SHA256, a permitted path, a fresh run ID, and a bounded `max_minutes` between 1 and 120. Results stay local in `.git/research_bridge/gpu_runs/<run_id>/`, with a manifest that explicitly says `metrics_verified=false`. Reports are not proof of scientific efficacy. A nonzero exit stops with failure, and the bridge never retries or changes hyperparameters automatically. Script/arguments cannot be supplied by an Issue.
+The worker fetches `main`, requires an exact approved commit and config SHA256, snapshots only tracked source from that commit, and starts the fixed script with a local administrator-selected Python (`AI4SCIENCE_GPU_PYTHON`, the documented local venv default, or the bridge interpreter). An Issue cannot choose the interpreter or pass shell arguments. GPU stdout/stderr stream to local files; the worker writes periodic heartbeats. There is no bridge subprocess wall-clock timeout. To cancel a run, create `.git/research_bridge/gpu_runs/<run_id>/STOP`; the worker checks it periodically and terminates the process tree. Task Scheduler also has no fixed execution limit when registered with the current script.
 
-**Permitted speed optimization:** Codex can implement faster data loading, batching, caching, mixed precision *only with explicit validation of numerical and scientific equivalence*, and benchmark throughput, memory and wall-clock speed. It may propose a draft PR in the approved coding lane. It must not secretly change optimizer, seed, effective batch size, data split, perturbation distribution, number of update steps, checkpoint selection, frozen tests or science claims. The baseline and optimized implementation must be compared under the same protocol.
+Every completed, blocked, stopped, or failed run attempts to publish a small public bundle to `bridge-results/<run_id>`, based on the approved source commit, then open a **Draft PR** to `main`. The allowlist is `run_manifest.json`, `gate_report.json`, `metrics.json`, `TECHNICAL_REPORT.md`, and optional bounded `test_summary.json`. Symlinks, non-text files, files over 256 KiB, bundles over 768 KiB, and unlisted outputs are rejected. Local logs, checkpoints, raw spectra, sample arrays, private data, absolute local paths, and credential-like strings are not published. Publication errors are written to the local run journal and surfaced on the Issue; the worker does not report publication success when a push fails. Draft PRs are never auto-merged, and publication is not scientific certification.
 
-**Training warning:** Timeout currently bounds the launched parent process; child worker processes and GPU memory consumption are not yet enforced by a hardware-level quota. Windows shutdown, sleep, battery rules and task-scheduler execution limits may interrupt training. Do not approve a long or costly task until the runner has reliable checkpointing, child-process shutdown and hardware preflight. A process exiting successfully does not replace physics/evidence review.
+The current `forward_ab` entrypoint is intentionally **blocked**: this source tree has no validated measurement-aware gate suite or reviewed A/B training backend. It refuses training until approved-source tests establish BaTiO₃/reference provenance, independent full-spectrum parity, expected measurement-profile behavior, autograd/finite-difference agreement, q–eta identifiability, non-oracle nuisance handling, and split/leakage safety. A JSON status flag from an Issue is never accepted as gate evidence. Old clean-reference prototypes are not used. The approved config preserves a 7,200-second scientific pilot budget, separate from the bridge's unlimited software runtime; when the backend is eventually reviewed, it must enforce the experiment budget itself.
 
-No approval tag is automatically placed on new issues, and the bridge does not auto-merge draft PRs.
+`forward_speed_benchmark` performs actual CUDA float32 matrix multiplication and reports device, VRAM, and throughput. It does not train a scientific model. If CUDA or PyTorch is unavailable or free VRAM is below the preset threshold, it publishes a blocked result instead of substituting a CPU number.
+
+No approval label is added automatically. See [Windows setup](WINDOWS_SETUP.md) for the scheduler re-registration step. CPU-only bridge tests: `python -m unittest discover -s research_bridge/tests -v`.

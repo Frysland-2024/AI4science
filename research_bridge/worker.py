@@ -69,14 +69,47 @@ def comment(number, message):
         gh(["issue", "comment", str(number), "--repo", REPO, "--body-file", str(p)])
 
 def journal(root, number):
-    p = root / ".git" / "research_bridge"
+    p = git_common_dir(root) / "research_bridge"
     p.mkdir(parents=True, exist_ok=True)
     return p / ("issue-" + str(number) + ".json")
+
+def git_common_dir(root):
+    """Resolve the shared Git directory for normal and linked worktrees."""
+    marker = root / ".git"
+    if marker.is_dir():
+        git_dir = marker.resolve()
+    elif marker.is_file():
+        line = marker.read_text(encoding="utf-8").strip()
+        if not line.lower().startswith("gitdir:"):
+            raise BridgeError("Invalid .git worktree pointer")
+        git_dir = (root / line.split(":", 1)[1].strip()).resolve()
+    else:
+        raise BridgeError("Run in a normal Git checkout")
+    common = git_dir / "commondir"
+    if common.is_file():
+        return (git_dir / common.read_text(encoding="utf-8").strip()).resolve()
+    return git_dir
 
 def record(root, number, status, **details):
     data = {"issue": number, "status": status,
             "updated_utc": dt.datetime.now(dt.timezone.utc).isoformat(), **details}
-    journal(root, number).write_text(json.dumps(data, indent=2), encoding="utf-8")
+    path = journal(root, number)
+    temp = path.with_suffix(".json.tmp")
+    temp.write_text(json.dumps(data, indent=2), encoding="utf-8")
+    temp.replace(path)
+
+def claim(root, number, status, **details):
+    """Atomically reserve a one-shot Issue for a single worker process."""
+    path = journal(root, number)
+    data = {"issue": number, "status": status,
+            "updated_utc": dt.datetime.now(dt.timezone.utc).isoformat(), **details}
+    try:
+        fd = os.open(str(path), os.O_CREAT | os.O_EXCL | os.O_WRONLY)
+    except FileExistsError:
+        return False
+    with os.fdopen(fd, "w", encoding="utf-8") as stream:
+        stream.write(json.dumps(data, indent=2))
+    return True
 
 def revision(root):
     """Fetch latest GitHub main without switching/pulling local files.
