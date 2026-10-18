@@ -1,0 +1,18 @@
+{
+  "status": "PASS_WITH_EXTERNAL_DELIVERY_BLOCKED",
+  "p0_verified": true,
+  "p1_fair_diagnostic_completed": true,
+  "p1_protocol_fair": true,
+  "p2_validation_audit_completed": true,
+  "frozen_preregistration_before_training": true,
+  "physical_gate_report": "xrd_forward_loss/measurement_closure/results/p3_issue19_20261018/gate_report.json: PASS",
+  "pytest": "23 passed",
+  "p3_training_completed": true,
+  "p3_test_evaluated_once": true,
+  "gpu_training_budget_seconds": 7200,
+  "gpu_training_seconds": 681.055797999783,
+  "no_real_data": true,
+  "no_frozen_v9_or_pr26_modifications": true,
+  "github_issue_comments": "BLOCKED: gh returned HTTP 401 because configured token is invalid",
+  "push_and_draft_pr": "PENDING"
+}

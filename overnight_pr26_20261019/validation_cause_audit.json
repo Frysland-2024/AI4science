@@ -1,0 +1,732 @@
+{
+  "status": "COMPLETED",
+  "validation_only": true,
+  "validation_indices_sha256": "31be00571904f4e5baa3f83008befd99efee53ee3818ea8a56d72807b9b9efa7",
+  "no_test_read_for_selection": true,
+  "validation_prediction_diagnostics": [
+    {
+      "condition": "simple",
+      "method": "A",
+      "seed": 20261045,
+      "n_validation": 77,
+      "direct_validation_q_mae": [
+        0.014509827783936046,
+        0.011526097291959567
+      ],
+      "q_abs_correlation": -0.008695148262434702
+    },
+    {
+      "condition": "simple",
+      "method": "A",
+      "seed": 20261046,
+      "n_validation": 77,
+      "direct_validation_q_mae": [
+        0.008750997836907184,
+        0.0158856628438482
+      ],
+      "q_abs_correlation": 0.015714121272197547
+    },
+    {
+      "condition": "simple",
+      "method": "A",
+      "seed": 20261047,
+      "n_validation": 77,
+      "direct_validation_q_mae": [
+        0.009143247725079205,
+        0.012910389287590788
+      ],
+      "q_abs_correlation": -0.03908614710767451
+    },
+    {
+      "condition": "simple",
+      "method": "B",
+      "seed": 20261045,
+      "n_validation": 77,
+      "direct_validation_q_mae": [
+        0.01140362229923922,
+        0.015019175930359908
+      ],
+      "q_abs_correlation": -0.043134074999191585,
+      "nuisance_prediction_mae_physical": [
+        0.0013310690754832495,
+        0.002584431032081696,
+        0.0001817205055612772
+      ],
+      "q_names": [
+        "du",
+        "dv"
+      ],
+      "eta_names": [
+        "zero_shift_deg",
+        "fwhm_deg",
+        "background_peak_ratio"
+      ],
+      "predicted_q_vs_eta_pearson_matrix": [
+        [
+          -0.36654653011451843,
+          0.10914771479168853,
+          -0.23290795726161598
+        ],
+        [
+          -0.3477647727744016,
+          -0.48885052747271607,
+          0.47436710579185265
+        ]
+      ],
+      "q_error_vs_eta_error_pearson_matrix_diagnostic_only": [
+        [
+          0.3726121065526842,
+          0.334590752634478,
+          -0.33717105338376535
+        ],
+        [
+          -0.01759136654756164,
+          -0.3317922504280289,
+          0.29069761543823525
+        ]
+      ]
+    },
+    {
+      "condition": "simple",
+      "method": "B",
+      "seed": 20261046,
+      "n_validation": 77,
+      "direct_validation_q_mae": [
+        0.009661367611941448,
+        0.011306626000139229
+      ],
+      "q_abs_correlation": -0.020941247726674536,
+      "nuisance_prediction_mae_physical": [
+        0.001504822661279997,
+        0.002645702478173485,
+        0.00022737911858019465
+      ],
+      "q_names": [
+        "du",
+        "dv"
+      ],
+      "eta_names": [
+        "zero_shift_deg",
+        "fwhm_deg",
+        "background_peak_ratio"
+      ],
+      "predicted_q_vs_eta_pearson_matrix": [
+        [
+          0.13837753840938086,
+          -0.04094419225780573,
+          -0.10243424884449624
+        ],
+        [
+          -0.09803989805419305,
+          -0.4814709687624719,
+          -0.12029444356238823
+        ]
+      ],
+      "q_error_vs_eta_error_pearson_matrix_diagnostic_only": [
+        [
+          -0.23292001385986907,
+          -0.14561219675267534,
+          0.047609087170547376
+        ],
+        [
+          0.06917832642149052,
+          0.13901527516330778,
+          0.08211467143876225
+        ]
+      ]
+    },
+    {
+      "condition": "simple",
+      "method": "B",
+      "seed": 20261047,
+      "n_validation": 77,
+      "direct_validation_q_mae": [
+        0.010801186774839934,
+        0.010764512171448724
+      ],
+      "q_abs_correlation": -0.00489836964586566,
+      "nuisance_prediction_mae_physical": [
+        0.002772382813803871,
+        0.0027570993017840624,
+        0.0001728288144744069
+      ],
+      "q_names": [
+        "du",
+        "dv"
+      ],
+      "eta_names": [
+        "zero_shift_deg",
+        "fwhm_deg",
+        "background_peak_ratio"
+      ],
+      "predicted_q_vs_eta_pearson_matrix": [
+        [
+          -0.4106686989755956,
+          0.007304984675815972,
+          0.3631035976535519
+        ],
+        [
+          -0.7138158348867076,
+          -0.5432873046026004,
+          -0.040370386158473756
+        ]
+      ],
+      "q_error_vs_eta_error_pearson_matrix_diagnostic_only": [
+        [
+          -0.15532654616080874,
+          -0.3177795566577837,
+          0.260693805870661
+        ],
+        [
+          -0.01920390828095674,
+          -0.2237778064940718,
+          0.13166992983694364
+        ]
+      ]
+    },
+    {
+      "condition": "v9",
+      "method": "A",
+      "seed": 20261045,
+      "n_validation": 77,
+      "direct_validation_q_mae": [
+        0.03811622030591567,
+        0.02251585606945219
+      ],
+      "q_abs_correlation": 0.009414151251037712
+    },
+    {
+      "condition": "v9",
+      "method": "A",
+      "seed": 20261046,
+      "n_validation": 77,
+      "direct_validation_q_mae": [
+        0.04600628658890265,
+        0.015847277089759897
+      ],
+      "q_abs_correlation": 0.011184379235404494
+    },
+    {
+      "condition": "v9",
+      "method": "A",
+      "seed": 20261047,
+      "n_validation": 77,
+      "direct_validation_q_mae": [
+        0.04958887562373436,
+        0.019240819895035254
+      ],
+      "q_abs_correlation": 0.02931726718281247
+    },
+    {
+      "condition": "v9",
+      "method": "B",
+      "seed": 20261045,
+      "n_validation": 77,
+      "direct_validation_q_mae": [
+        0.0340124395663862,
+        0.020524198372920903
+      ],
+      "q_abs_correlation": -0.01547003417944825,
+      "nuisance_prediction_mae_physical": [
+        0.022758114900261955,
+        0.004973663737210018,
+        0.0008016508202944646
+      ],
+      "q_names": [
+        "du",
+        "dv"
+      ],
+      "eta_names": [
+        "zero_shift_deg",
+        "fwhm_deg",
+        "background_peak_ratio"
+      ],
+      "predicted_q_vs_eta_pearson_matrix": [
+        [
+          -0.007899552085643873,
+          0.1250717215176667,
+          0.04438359183612086
+        ],
+        [
+          -0.5074429406625598,
+          0.2020788139026598,
+          0.4022810873954089
+        ]
+      ],
+      "q_error_vs_eta_error_pearson_matrix_diagnostic_only": [
+        [
+          0.9043512420332844,
+          0.0357755453647897,
+          0.03666740420705715
+        ],
+        [
+          0.25893802236246266,
+          -0.08604134294651432,
+          0.10326758532071256
+        ]
+      ]
+    },
+    {
+      "condition": "v9",
+      "method": "B",
+      "seed": 20261046,
+      "n_validation": 77,
+      "direct_validation_q_mae": [
+        0.046760742391713635,
+        0.013738757214666183
+      ],
+      "q_abs_correlation": 0.009644920658625052,
+      "nuisance_prediction_mae_physical": [
+        0.02767920025544421,
+        0.005026841298651661,
+        0.0008156129139782486
+      ],
+      "q_names": [
+        "du",
+        "dv"
+      ],
+      "eta_names": [
+        "zero_shift_deg",
+        "fwhm_deg",
+        "background_peak_ratio"
+      ],
+      "predicted_q_vs_eta_pearson_matrix": [
+        [
+          -0.6244783913803692,
+          0.6036164225251859,
+          0.3977802837378892
+        ],
+        [
+          -0.2122139781999564,
+          0.05217685008345199,
+          -0.048975451003843255
+        ]
+      ],
+      "q_error_vs_eta_error_pearson_matrix_diagnostic_only": [
+        [
+          0.85303122255629,
+          -0.07504219545909975,
+          -0.024936284292566138
+        ],
+        [
+          0.20008823864036465,
+          -0.06958428556503908,
+          0.025256147714590723
+        ]
+      ]
+    },
+    {
+      "condition": "v9",
+      "method": "B",
+      "seed": 20261047,
+      "n_validation": 77,
+      "direct_validation_q_mae": [
+        0.04375173907073867,
+        0.018982849203279948
+      ],
+      "q_abs_correlation": -0.008786151366053516,
+      "nuisance_prediction_mae_physical": [
+        0.031555905687294605,
+        0.004872044347217463,
+        0.0008201807169782408
+      ],
+      "q_names": [
+        "du",
+        "dv"
+      ],
+      "eta_names": [
+        "zero_shift_deg",
+        "fwhm_deg",
+        "background_peak_ratio"
+      ],
+      "predicted_q_vs_eta_pearson_matrix": [
+        [
+          -0.14255609651971468,
+          -0.6017205589540168,
+          -0.5755867568841948
+        ],
+        [
+          -0.6669285179201017,
+          -0.13908053589711403,
+          0.04088802836051131
+        ]
+      ],
+      "q_error_vs_eta_error_pearson_matrix_diagnostic_only": [
+        [
+          0.9488796146072759,
+          -0.0667608262957115,
+          -0.017820576890468905
+        ],
+        [
+          0.0575519214729846,
+          -0.09827928302784444,
+          -0.042722773855878145
+        ]
+      ]
+    }
+  ],
+  "reconstruction_vs_parameter_gradient_diagnostics": [
+    {
+      "condition": "simple",
+      "seed": 20261045,
+      "batches": [
+        {
+          "batch_size": 16,
+          "L_param": 0.00032916979398578405,
+          "L_recon": 0.000237317246501334,
+          "grad_q_param_norm": 0.006414532195776701,
+          "grad_q_recon_norm": 0.005112857092171907,
+          "grad_q_cosine": 0.7728513870124571,
+          "shared_trunk_param_grad_cosine": 0.793971757424397,
+          "shared_trunk_grad_norm_ratio_recon_over_param": 0.8274331092834473
+        },
+        {
+          "batch_size": 16,
+          "L_param": 0.0002652278635650873,
+          "L_recon": 0.0001613194472156465,
+          "grad_q_param_norm": 0.005757906008511782,
+          "grad_q_recon_norm": 0.003810752648860216,
+          "grad_q_cosine": 0.656988384824063,
+          "shared_trunk_param_grad_cosine": 0.6090042730893208,
+          "shared_trunk_grad_norm_ratio_recon_over_param": 0.28511807322502136
+        },
+        {
+          "batch_size": 16,
+          "L_param": 0.00016665959265083075,
+          "L_recon": 0.00012495020928326994,
+          "grad_q_param_norm": 0.004564257804304361,
+          "grad_q_recon_norm": 0.0030612037517130375,
+          "grad_q_cosine": 0.6892246158530754,
+          "shared_trunk_param_grad_cosine": 0.8431650868492072,
+          "shared_trunk_grad_norm_ratio_recon_over_param": 1.0280187129974365
+        },
+        {
+          "batch_size": 16,
+          "L_param": 0.0002872405748348683,
+          "L_recon": 0.0002207922370871529,
+          "grad_q_param_norm": 0.00599208427593112,
+          "grad_q_recon_norm": 0.004777225665748119,
+          "grad_q_cosine": 0.7666371001338617,
+          "shared_trunk_param_grad_cosine": 0.6655151259727403,
+          "shared_trunk_grad_norm_ratio_recon_over_param": 0.6804729104042053
+        },
+        {
+          "batch_size": 13,
+          "L_param": 0.00037059455644339323,
+          "L_recon": 0.0001560190721647814,
+          "grad_q_param_norm": 0.007550797890871763,
+          "grad_q_recon_norm": 0.003565750317648053,
+          "grad_q_cosine": 0.6044998396112505,
+          "shared_trunk_param_grad_cosine": 0.8754375188686612,
+          "shared_trunk_grad_norm_ratio_recon_over_param": 0.9219430685043335
+        }
+      ],
+      "negative_output_gradient_cosine_batches": 0,
+      "negative_shared_trunk_cosine_batches": 0
+    },
+    {
+      "condition": "simple",
+      "seed": 20261046,
+      "batches": [
+        {
+          "batch_size": 16,
+          "L_param": 0.00022760662250220776,
+          "L_recon": 0.00022001791512593627,
+          "grad_q_param_norm": 0.005333931650966406,
+          "grad_q_recon_norm": 0.004998320247977972,
+          "grad_q_cosine": 0.7750407414984818,
+          "shared_trunk_param_grad_cosine": 0.6152903953710132,
+          "shared_trunk_grad_norm_ratio_recon_over_param": 0.6565536260604858
+        },
+        {
+          "batch_size": 16,
+          "L_param": 0.00020535934891086072,
+          "L_recon": 0.00015636111493222415,
+          "grad_q_param_norm": 0.005066548939794302,
+          "grad_q_recon_norm": 0.0037174448370933533,
+          "grad_q_cosine": 0.6798828541028169,
+          "shared_trunk_param_grad_cosine": 0.7694077551603525,
+          "shared_trunk_grad_norm_ratio_recon_over_param": 0.8716713190078735
+        },
+        {
+          "batch_size": 16,
+          "L_param": 0.00011109926708741114,
+          "L_recon": 0.00013366658822633326,
+          "grad_q_param_norm": 0.0037265813443809748,
+          "grad_q_recon_norm": 0.0036197055596858263,
+          "grad_q_cosine": 0.6904534704405151,
+          "shared_trunk_param_grad_cosine": 0.860637226804881,
+          "shared_trunk_grad_norm_ratio_recon_over_param": 1.1680827140808105
+        },
+        {
+          "batch_size": 16,
+          "L_param": 0.00016584924014750868,
+          "L_recon": 0.0001722075539873913,
+          "grad_q_param_norm": 0.004553147591650486,
+          "grad_q_recon_norm": 0.004188540857285261,
+          "grad_q_cosine": 0.7550479631825696,
+          "shared_trunk_param_grad_cosine": 0.6402978216826537,
+          "shared_trunk_grad_norm_ratio_recon_over_param": 0.6294257044792175
+        },
+        {
+          "batch_size": 13,
+          "L_param": 0.00014802855730522424,
+          "L_recon": 0.00014074215141590685,
+          "grad_q_param_norm": 0.0047721718437969685,
+          "grad_q_recon_norm": 0.0037171582225710154,
+          "grad_q_cosine": 0.7419597234730204,
+          "shared_trunk_param_grad_cosine": 0.9056436146490836,
+          "shared_trunk_grad_norm_ratio_recon_over_param": 0.8343890309333801
+        }
+      ],
+      "negative_output_gradient_cosine_batches": 0,
+      "negative_shared_trunk_cosine_batches": 0
+    },
+    {
+      "condition": "simple",
+      "seed": 20261047,
+      "batches": [
+        {
+          "batch_size": 16,
+          "L_param": 0.0002473926870152354,
+          "L_recon": 0.00028392605599947274,
+          "grad_q_param_norm": 0.005560942925512791,
+          "grad_q_recon_norm": 0.005859818309545517,
+          "grad_q_cosine": 0.6750680041847178,
+          "shared_trunk_param_grad_cosine": 0.8450408177515144,
+          "shared_trunk_grad_norm_ratio_recon_over_param": 1.6725300550460815
+        },
+        {
+          "batch_size": 16,
+          "L_param": 0.00023697807046119124,
+          "L_recon": 0.0003201425133738667,
+          "grad_q_param_norm": 0.005442633293569088,
+          "grad_q_recon_norm": 0.006214621942490339,
+          "grad_q_cosine": 0.8376889705963528,
+          "shared_trunk_param_grad_cosine": 0.8961291203105389,
+          "shared_trunk_grad_norm_ratio_recon_over_param": 1.5447156429290771
+        },
+        {
+          "batch_size": 16,
+          "L_param": 0.00011051913315895945,
+          "L_recon": 0.00012102749315090477,
+          "grad_q_param_norm": 0.003716839011758566,
+          "grad_q_recon_norm": 0.0032418102491647005,
+          "grad_q_cosine": 0.7212487201125665,
+          "shared_trunk_param_grad_cosine": 0.5795323820518801,
+          "shared_trunk_grad_norm_ratio_recon_over_param": 0.7370153665542603
+        },
+        {
+          "batch_size": 16,
+          "L_param": 0.00018863301374949515,
+          "L_recon": 0.00023582550056744367,
+          "grad_q_param_norm": 0.004855834413319826,
+          "grad_q_recon_norm": 0.005094739608466625,
+          "grad_q_cosine": 0.7188470331590544,
+          "shared_trunk_param_grad_cosine": 0.6179436992031424,
+          "shared_trunk_grad_norm_ratio_recon_over_param": 1.4956343173980713
+        },
+        {
+          "batch_size": 13,
+          "L_param": 0.00020529430184978992,
+          "L_recon": 0.00019511464051902294,
+          "grad_q_param_norm": 0.005619941279292107,
+          "grad_q_recon_norm": 0.004551281221210957,
+          "grad_q_cosine": 0.45029076769692383,
+          "shared_trunk_param_grad_cosine": 0.5731870214768269,
+          "shared_trunk_grad_norm_ratio_recon_over_param": 1.0040804147720337
+        }
+      ],
+      "negative_output_gradient_cosine_batches": 0,
+      "negative_shared_trunk_cosine_batches": 0
+    },
+    {
+      "condition": "v9",
+      "seed": 20261045,
+      "batches": [
+        {
+          "batch_size": 16,
+          "L_param": 0.001240017358213663,
+          "L_recon": 0.0004802742332685739,
+          "grad_q_param_norm": 0.012449986301362514,
+          "grad_q_recon_norm": 0.004106161184608936,
+          "grad_q_cosine": 0.2619239670648833,
+          "shared_trunk_param_grad_cosine": -0.22818594243037926,
+          "shared_trunk_grad_norm_ratio_recon_over_param": 0.41003790497779846
+        },
+        {
+          "batch_size": 16,
+          "L_param": 0.0008808106067590415,
+          "L_recon": 0.0004267349431756884,
+          "grad_q_param_norm": 0.010492918081581593,
+          "grad_q_recon_norm": 0.0029840641655027866,
+          "grad_q_cosine": -0.055829932675349095,
+          "shared_trunk_param_grad_cosine": 0.2983908716426163,
+          "shared_trunk_grad_norm_ratio_recon_over_param": 0.39851394295692444
+        },
+        {
+          "batch_size": 16,
+          "L_param": 0.0008784369565546513,
+          "L_recon": 0.0004023117071483284,
+          "grad_q_param_norm": 0.010478770360350609,
+          "grad_q_recon_norm": 0.003387903794646263,
+          "grad_q_cosine": -0.08661114279680512,
+          "shared_trunk_param_grad_cosine": 0.22577550610862873,
+          "shared_trunk_grad_norm_ratio_recon_over_param": 0.7947431206703186
+        },
+        {
+          "batch_size": 16,
+          "L_param": 0.0012135442811995745,
+          "L_recon": 0.0004841834888793528,
+          "grad_q_param_norm": 0.012316372245550156,
+          "grad_q_recon_norm": 0.0036526594776660204,
+          "grad_q_cosine": -0.03086293028761579,
+          "shared_trunk_param_grad_cosine": -0.21875830361919354,
+          "shared_trunk_grad_norm_ratio_recon_over_param": 0.5082303285598755
+        },
+        {
+          "batch_size": 13,
+          "L_param": 0.0016622600378468633,
+          "L_recon": 0.00046710274182260036,
+          "grad_q_param_norm": 0.015991633757948875,
+          "grad_q_recon_norm": 0.0037616456393152475,
+          "grad_q_cosine": 0.4841372278789868,
+          "shared_trunk_param_grad_cosine": 0.7171490094961777,
+          "shared_trunk_grad_norm_ratio_recon_over_param": 0.32938697934150696
+        }
+      ],
+      "negative_output_gradient_cosine_batches": 3,
+      "negative_shared_trunk_cosine_batches": 2
+    },
+    {
+      "condition": "v9",
+      "seed": 20261046,
+      "batches": [
+        {
+          "batch_size": 16,
+          "L_param": 0.0010772200766950846,
+          "L_recon": 0.0006864392780698836,
+          "grad_q_param_norm": 0.011603986844420433,
+          "grad_q_recon_norm": 0.005630485713481903,
+          "grad_q_cosine": 0.04298201685941507,
+          "shared_trunk_param_grad_cosine": 0.7148023628076776,
+          "shared_trunk_grad_norm_ratio_recon_over_param": 0.8158130645751953
+        },
+        {
+          "batch_size": 16,
+          "L_param": 0.0011041306424885988,
+          "L_recon": 0.000724674784578383,
+          "grad_q_param_norm": 0.011748035438358784,
+          "grad_q_recon_norm": 0.005591134540736675,
+          "grad_q_cosine": 0.06658237309091665,
+          "shared_trunk_param_grad_cosine": 0.8242744657321084,
+          "shared_trunk_grad_norm_ratio_recon_over_param": 0.34819892048835754
+        },
+        {
+          "batch_size": 16,
+          "L_param": 0.0023317730519920588,
+          "L_recon": 0.0005485201836563647,
+          "grad_q_param_norm": 0.017072539776563644,
+          "grad_q_recon_norm": 0.004562250804156065,
+          "grad_q_cosine": 0.7111035722313156,
+          "shared_trunk_param_grad_cosine": 0.9250781339938724,
+          "shared_trunk_grad_norm_ratio_recon_over_param": 0.36299240589141846
+        },
+        {
+          "batch_size": 16,
+          "L_param": 0.0021546175703406334,
+          "L_recon": 0.000709969608578831,
+          "grad_q_param_norm": 0.01641119085252285,
+          "grad_q_recon_norm": 0.005429718643426895,
+          "grad_q_cosine": 0.5233473720859283,
+          "shared_trunk_param_grad_cosine": 0.8179182211352211,
+          "shared_trunk_grad_norm_ratio_recon_over_param": 0.41654112935066223
+        },
+        {
+          "batch_size": 13,
+          "L_param": 0.002282331231981516,
+          "L_recon": 0.0007291573565453291,
+          "grad_q_param_norm": 0.018738405779004097,
+          "grad_q_recon_norm": 0.0058172596618533134,
+          "grad_q_cosine": 0.3438516402809878,
+          "shared_trunk_param_grad_cosine": 0.9188625792951235,
+          "shared_trunk_grad_norm_ratio_recon_over_param": 0.26419946551322937
+        }
+      ],
+      "negative_output_gradient_cosine_batches": 0,
+      "negative_shared_trunk_cosine_batches": 0
+    },
+    {
+      "condition": "v9",
+      "seed": 20261047,
+      "batches": [
+        {
+          "batch_size": 16,
+          "L_param": 0.0017784952651709318,
+          "L_recon": 0.0006265892880037427,
+          "grad_q_param_norm": 0.014910127967596054,
+          "grad_q_recon_norm": 0.004340311046689749,
+          "grad_q_cosine": -0.09198230243845253,
+          "shared_trunk_param_grad_cosine": -0.15327593742693513,
+          "shared_trunk_grad_norm_ratio_recon_over_param": 0.4837246537208557
+        },
+        {
+          "batch_size": 16,
+          "L_param": 0.0013220664113759995,
+          "L_recon": 0.0006612127763219178,
+          "grad_q_param_norm": 0.012855282984673977,
+          "grad_q_recon_norm": 0.004322707653045654,
+          "grad_q_cosine": -0.1997151318913679,
+          "shared_trunk_param_grad_cosine": 0.7233751145643463,
+          "shared_trunk_grad_norm_ratio_recon_over_param": 0.4980224072933197
+        },
+        {
+          "batch_size": 16,
+          "L_param": 0.0016550385626032948,
+          "L_recon": 0.0005028008599765599,
+          "grad_q_param_norm": 0.014383316971361637,
+          "grad_q_recon_norm": 0.0037046310026198626,
+          "grad_q_cosine": 0.015449443315735409,
+          "shared_trunk_param_grad_cosine": 0.7775764186296352,
+          "shared_trunk_grad_norm_ratio_recon_over_param": 0.508427083492279
+        },
+        {
+          "batch_size": 16,
+          "L_param": 0.001586696831509471,
+          "L_recon": 0.0006753272609785199,
+          "grad_q_param_norm": 0.01408322062343359,
+          "grad_q_recon_norm": 0.004442990757524967,
+          "grad_q_cosine": -0.30725155125697673,
+          "shared_trunk_param_grad_cosine": -0.5063737924419575,
+          "shared_trunk_grad_norm_ratio_recon_over_param": 0.36573460698127747
+        },
+        {
+          "batch_size": 13,
+          "L_param": 0.0016810896340757608,
+          "L_recon": 0.0005969731719233096,
+          "grad_q_param_norm": 0.016081953421235085,
+          "grad_q_recon_norm": 0.00441979942843318,
+          "grad_q_cosine": 0.033350064963678205,
+          "shared_trunk_param_grad_cosine": 0.8344277050473549,
+          "shared_trunk_grad_norm_ratio_recon_over_param": 0.29022017121315
+        }
+      ],
+      "negative_output_gradient_cosine_batches": 3,
+      "negative_shared_trunk_cosine_batches": 2
+    }
+  ],
+  "architecture": {
+    "A_parameters": 13007554,
+    "B_parameters": 13008325,
+    "B_extra_parameters": 771,
+    "same_resnet18_gn_backbone": true,
+    "B_adds_three_eta_outputs_without_eta_supervision": true
+  },
+  "target_audit": {
+    "training_target": "observed noisy profile after per-profile max normalization and log1p_100 transform",
+    "reconstruction_target": "deterministic expectation profile in same transformed space, excludes individual noise realization",
+    "clean_profile": "diagnostic only, not used by B loss",
+    "eta_true": "excluded from inputs, losses and validation selection; diagnostic only"
+  },
+  "elapsed_seconds": 11.817113799974322
+}

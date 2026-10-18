@@ -1,0 +1,16 @@
+{
+  "status": "LOCAL_RESEARCH_AND_TRAINING_COMPLETE",
+  "gate_report": "gate_report.json",
+  "p0": "p0_audit.json",
+  "p1": "p1_summary.json",
+  "p2": "validation_cause_audit.json",
+  "preregistration": "frozen_retrain_config.json",
+  "fresh_training": "fresh_training_summary.json",
+  "fresh_aggregate": "fresh_training_aggregate.json",
+  "test_evaluated_once": true,
+  "caveat": "single public BaTiO3 CIF; synthetic conditional interpolation only; not real XRD or generalization evidence",
+  "external_delivery_blockers": [
+    "GitHub Issue #31 comments could not be posted: gh token invalid (HTTP 401)",
+    "git push and draft PR not yet confirmed"
+  ]
+}

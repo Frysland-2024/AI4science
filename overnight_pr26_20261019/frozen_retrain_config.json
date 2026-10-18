@@ -1,0 +1,58 @@
+{
+  "schema": "issue31_pr26_overnight_fresh_paired_training_v1",
+  "status": "FROZEN_BEFORE_TRAINING",
+  "date": "2026-10-19",
+  "material_scope": "one public BaTiO3 P4mm CIF COD 9014273; synthetic q interpolation only",
+  "source_config": "xrd_forward_loss/measurement_closure/configs/issue19_batio3_v2.json",
+  "source_config_sha256": "b17a9db0eed38557f4b06a092f8d4a35437619025f78532119e3a923ddf2251f",
+  "source_cif_sha256": "e854c9868f643183904606b8c24463f8f0bacc1cca90f283641b33346db748b4",
+  "frozen_pr26_test_data_sha256": "88401a857bc7a4849731fbb5e881b37efef7483e0ec13415f977db035e333a29",
+  "selection_data": "fresh validation split only; old PR26 test is excluded from all choices",
+  "fresh_data": {
+    "parent_q_draws_max": 512,
+    "q_bounds": [-0.8, 0.8],
+    "sobol_seed": 20261071,
+    "split_seed": 20261072,
+    "nuisance_seed": 20261073,
+    "noise_seed": 20261074,
+    "split_fractions": {"train": 0.70, "validation": 0.15, "test": 0.15},
+    "split_unit": "parent q draw before nuisance and noise draws",
+    "conditions": ["simple", "v9"],
+    "real_data": false,
+    "same_structure_as_pilot": true
+  },
+  "methods": {
+    "A": "q parameter MSE only",
+    "B": "q parameter MSE plus lambda times expected observed-profile MSE with predicted eta",
+    "C": "same as B, but detach predicted q only inside the expected-profile auxiliary branch; q remains directly supervised; eta reconstruction path remains differentiable"
+  },
+  "single_preregistered_change": {
+    "name": "detach_q_in_reconstruction_branch",
+    "reason": "Validation showed negative grad_q(L_param) versus grad_q(L_recon) cosine in 6/30 V9 batches (including a seed with negative mean), while all 45 simple batches aligned; V9 du-error/zero-shift-error correlation was 0.85-0.95 across seeds. The intervention isolates the q head from reconstruction gradients while retaining the B nuisance reconstruction path.",
+    "not_claimed": "This is a mechanism diagnostic, not a proven causal explanation or guaranteed improvement."
+  },
+  "training": {
+    "paired_seeds": [20261101, 20261102, 20261103],
+    "max_epochs_per_candidate_condition_seed": 24,
+    "batch_size": 16,
+    "optimizer": "Adam",
+    "learning_rate": 0.0005,
+    "weight_decay": 0.0,
+    "gradient_clip_norm": 5.0,
+    "max_measured_gpu_training_seconds": 7200,
+    "lambda_candidates_for_B_and_C": [0.1, 1.0],
+    "selection_rule": "per method and condition, select lambda by minimum mean best-epoch validation normalized q MAE across all three paired seeds; ties select smaller lambda",
+    "best_epoch_rule": "minimum validation q MAE only",
+    "test_rule": "evaluate selected A/B/C checkpoints once after all validation-only choices; no retraining or retuning after test"
+  },
+  "conditions": {
+    "simple": "fixed zero shift and 0.08 degree FWHM; 100-200 count linear background; Poisson counts; max normalization and log1p_100",
+    "v9": "zero shift, width, background, Poisson plus Gaussian readout; deterministic background shape; March-Dollase off"
+  },
+  "evaluation": {
+    "primary": ["du/dv MAE", "a/c MAE", "paired seed differences"],
+    "profile": "transformed observed-profile RMSE using both equal neutral-eta profile-fit paths and separately labeled direct predicted-eta paths",
+    "report": ["seed-wise results", "failure rates", "solver success", "iteration and runtime", "p95 runtime", "negative and mixed outcomes"],
+    "claim_limit": "single CIF conditional interpolation; no real XRD, unseen compositions, or Rietveld claim"
+  }
+}

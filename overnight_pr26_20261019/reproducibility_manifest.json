@@ -1,0 +1,193 @@
+{
+  "schema": "issue31_pr26_reproducibility_manifest_v1",
+  "source_head": "e261faa",
+  "branch": "codex/issue31-pr26-fair-diagnostic",
+  "python": "C:/Users/Lenovo/.codex/venvs/issue19-measurement-closure/Scripts/python.exe",
+  "torch": "2.13.0+cu126",
+  "cuda_available": true,
+  "fresh_data_sha256": "d43a364e75b2acd46e1b9c5351ffc5b0a9356d750ed9e1a8a449b7776168993d",
+  "frozen_config_sha256": "eda3360a3bd457bb60fac371870b62c896e148ab9f20dec702a9b2d157605d35",
+  "local_checkpoint_manifest": "local_checkpoint_manifest.json",
+  "files": [
+    {
+      "path": "audit_and_diagnostic.py",
+      "bytes": 16272,
+      "sha256": "6254743d08dfc47e018e286fbaeb60e6d1f18935b2145b8acdbbfe53f1262e12"
+    },
+    {
+      "path": "cause_audit.py",
+      "bytes": 5657,
+      "sha256": "b8716a85f7935341e3e65d7cd3c59696bee369adf2891acf00836aca34f5b0b0"
+    },
+    {
+      "path": "direct_inference_cost.py",
+      "bytes": 2374,
+      "sha256": "c6866102f458cc0d3254145cc9327b9dc4f401fb2c9dcb17fdd34ae658369e9c"
+    },
+    {
+      "path": "execution_log.jsonl",
+      "bytes": 13032,
+      "sha256": "c5cbfb51d740c3575f0b9c19bd5dfd1e83110e7a33f1a5b1c7c3a3ce8a19eaea"
+    },
+    {
+      "path": "failures.json",
+      "bytes": 1133,
+      "sha256": "a6d8fd9a6d05eafbf56a895eef924eb1f49af79468af9cf85dc0021b94b64a5e"
+    },
+    {
+      "path": "finalize_outputs.py",
+      "bytes": 8201,
+      "sha256": "3a4526d13b50dc5b7c8ebe38264fcfbdf6a25ce2924263fa15b6650d2baa4dcf"
+    },
+    {
+      "path": "fresh_data\\fresh_batio3_paired.npz",
+      "bytes": 22348111,
+      "sha256": "d43a364e75b2acd46e1b9c5351ffc5b0a9356d750ed9e1a8a449b7776168993d"
+    },
+    {
+      "path": "fresh_data\\split_manifest.json",
+      "bytes": 12124,
+      "sha256": "dfd3d9a10ed62076c4d0a502c6786def65172c25028fe410cb44d049dc89426b"
+    },
+    {
+      "path": "fresh_test_per_sample.csv",
+      "bytes": 687730,
+      "sha256": "b3eab454af5681aeb7f0bc7818e9e6216686560f3d535622ada3b6988c87ef62"
+    },
+    {
+      "path": "fresh_test_per_sample.json",
+      "bytes": 2392924,
+      "sha256": "1e90979c795b1f3a1931d7b9f44843ed1bf8de379a52572a94c86aee00210f95"
+    },
+    {
+      "path": "fresh_training_aggregate.json",
+      "bytes": 19586,
+      "sha256": "ed635e78f2287fa71cd5b43b91b9d418851f951c3d51e5f63800a4d3b2893b27"
+    },
+    {
+      "path": "fresh_training_summary.json",
+      "bytes": 22243,
+      "sha256": "b678fbcd0bde7fcd2809c3caf465238829d6b2f8c313da8f0b882c2cba17658b"
+    },
+    {
+      "path": "frozen_retrain_config.json",
+      "bytes": 3521,
+      "sha256": "eda3360a3bd457bb60fac371870b62c896e148ab9f20dec702a9b2d157605d35"
+    },
+    {
+      "path": "gate_report.json",
+      "bytes": 746,
+      "sha256": "dbf12d5fe5397ade85297de746b1692b9fb37596a00106deb434488a8d864503"
+    },
+    {
+      "path": "local_checkpoint_manifest.json",
+      "bytes": 5888,
+      "sha256": "f907d90e916fe359bc47e75c0f8cf4ec3a4b3c9a0bf1f1cb2a067a19a098d4b9"
+    },
+    {
+      "path": "original_pr26_metrics.json",
+      "bytes": 714619,
+      "sha256": "36746714ce758c7fcae892213f7ee6645f9a78351f4182eaa393cff23b050a31"
+    },
+    {
+      "path": "p0_audit.json",
+      "bytes": 11141,
+      "sha256": "ac967df2074c5273de2af1d2298c372344995d45fb0fec86d605a2b4419d906a"
+    },
+    {
+      "path": "p0_checkpoint_and_metric_audit.csv",
+      "bytes": 1313,
+      "sha256": "05f92012a02c2d3b90f4c438af0611a2c1d95b69739641b77f02b365c165d10f"
+    },
+    {
+      "path": "p1_direct_inference_cost.json",
+      "bytes": 7335,
+      "sha256": "33c270554bb4f2b32c3c034ddb10cf7efaaf4c2b56cae53da6b99a538869f151"
+    },
+    {
+      "path": "p1_per_sample.csv",
+      "bytes": 85167,
+      "sha256": "4cb1f6f261c76fa26dc54283768dffdb4573a50c6d0ce032227f69c1e03e9d8d"
+    },
+    {
+      "path": "p1_per_sample.json",
+      "bytes": 748914,
+      "sha256": "fce9167a5b39611b150fd8cbe5be10b0fcce8610ffc6f3e44de894b5e927ca9f"
+    },
+    {
+      "path": "p1_seed_summary.json",
+      "bytes": 7782,
+      "sha256": "c1b492a3f46700549397855737efbec5ceefc70c32252a5923abe31dcd0ebb30"
+    },
+    {
+      "path": "p1_subset_manifest.json",
+      "bytes": 768,
+      "sha256": "2f54763e557b012124459e38ac0ef3437f40b53ff69323daeb04b8091644a633"
+    },
+    {
+      "path": "p1_summary.json",
+      "bytes": 3088,
+      "sha256": "bc258517d93df0be582ff22ec3be19c5637d505b99b863ac89b7144e9a442b93"
+    },
+    {
+      "path": "p1_summary_uncertainty.json",
+      "bytes": 6938,
+      "sha256": "85b983a8f3fe79cfe0a3fda7ee98b56f575d0ece40535b3d2288cfbf89bda938"
+    },
+    {
+      "path": "p1_worst_cases.json",
+      "bytes": 63097,
+      "sha256": "675978c7736ba1bf805635dc33a7360ba081df07613e8e8090a67750c6412200"
+    },
+    {
+      "path": "PRETRAIN_CAUSE_AUDIT.md",
+      "bytes": 5464,
+      "sha256": "24b5a76bee3469111f1237a659e912a47ff9337f0322362daa4c0b0367c397f8"
+    },
+    {
+      "path": "pretrain_manifest.json",
+      "bytes": 697,
+      "sha256": "a7e6b57bd5535919ad52a448dd250ce7cc97f8faee88e6fa18b53ec9c83d0cf6"
+    },
+    {
+      "path": "run_fresh_training.py",
+      "bytes": 15649,
+      "sha256": "b3a24428f2c559f9caca65ccd8de5d0375cc1d71474ed67e81b2f4f7b04ef16f"
+    },
+    {
+      "path": "split_manifest.json",
+      "bytes": 14508,
+      "sha256": "4db7097ce122aa009c915b0d62694a59e5affb72246ab2344cd5ae7eb1cf6cb5"
+    },
+    {
+      "path": "summarize_and_preserve.py",
+      "bytes": 5078,
+      "sha256": "de5511c08af03a1062a8428bdaa78fef604f5a8371651e077507d58e957fea1a"
+    },
+    {
+      "path": "summary.json",
+      "bytes": 676,
+      "sha256": "cf9604af5e213263a5ecfd05cd7400c8b5257ecc87d1d934b1fabcfc72905089"
+    },
+    {
+      "path": "TECHNICAL_REPORT.md",
+      "bytes": 10385,
+      "sha256": "73b626f3114338adf3cf715fb3c75aaaab37a1807dd10cd12679ee265e5b3040"
+    },
+    {
+      "path": "training_runs.json",
+      "bytes": 227287,
+      "sha256": "f888391a6b1bfc57741853ef1508199e7c8603ce5559265050a2744a1d460df9"
+    },
+    {
+      "path": "training_selection.json",
+      "bytes": 1336,
+      "sha256": "5ed4974f54eec34b484d1b34d26febbcc0da0a9de98da403257d36f95b0f5630"
+    },
+    {
+      "path": "validation_cause_audit.json",
+      "bytes": 24307,
+      "sha256": "3238cdc4afc7852e1376d8b85b95ad11620795750e75dc0d007b583f397f1a7c"
+    }
+  ]
+}

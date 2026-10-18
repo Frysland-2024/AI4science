@@ -232,3 +232,11 @@ python -m pytest -q
 512 个同一 CIF 的参数样本、3 paired seeds 和两类合成测量条件下，simple q MAE 为 A `0.013533`、B `0.013676`；V9 为 A `0.032235`、B `0.030554`。B 只在 V9 的两维 q MAE 略低，simple 略高；V9 nuisance head 对 zero-shift 的误差较大。结论是闭环工程可行、效果尚未确立；不得概括为更好的参数反演方法，也不构成真实谱或未见结构证据。
 
 本次累计 smoke、失败尝试保守计时、正式训练和 λ 选择 `1386.05/7200 s`，在 RTX 4060 完成。失败运行、命令 exit codes、逐 seed 指标、数据/配置 SHA、原始 checkpoint SHA 台账和训练记录均已留档。本地清理重复模型副本与 optimizer 状态后，保留 12 个最终 FP32 最佳权重推理快照（约 596 MiB），释放约 8.34 GiB；精简快照不能续训。详情见 [Issue #19 报告](MEASUREMENT_AWARE_FORWARD_CLOSURE_REPORT_20261018.md) 和 [技术报告](../xrd_forward_loss/measurement_closure/TECHNICAL_REPORT.md)。本次不改 frozen JS 分类、旧 PR 结果、Stage-1 factorization NO-GO 或 12 周研究规划；新增工作以独立 Draft PR 交审。
+
+## 12. Issue #31 / PR #26 公平诊断与新 A/B/C 试验（2026-10-19）
+
+12 个 PR #26 精简推理 checkpoint 已重新核验 SHA、架构加载、GPU 推理与 q-MAE 重算。A/B 在已打开的旧 test 子集上使用同一 nuisance 中性初值、物理边界、目标函数、优化器与预算进行事后公平诊断。仅用 validation 的梯度分析发现 V9 q/reconstruction 梯度存在冲突，且 q 误差与 zero-shift 误差高度相关；新实验前仅预注册了一项改动：仅在 reconstruction 分支 detach q。
+
+新的合成 512-q、三 seed、simple/V9 A/B/C 训练在预算内完成。simple 条件的三 seed 中 C 的 direct q-MAE 均低于 A；V9 条件 C 结果按 seed 混合，B 与 C 的均值均低于 A，而 C 均值略高于 B。等预算 joint q+eta fitting 后三种训练方法的 q 误差与谱残差几乎一致。结果仅属于一个公开 BaTiO₃ CIF 的合成条件插值，不构成真实 XRD、未见成分泛化或 Rietveld 证据。完整记录见 [`overnight_pr26_20261019/`](../overnight_pr26_20261019/)。
+
+实验与证据已在本地完成。GitHub Issue #31 状态评论、分支推送和 Draft PR 因 GitHub CLI 凭证无效（HTTP 401）仍未完成；未尝试合并。冻结 PR #26 与 V9 证据未修改。

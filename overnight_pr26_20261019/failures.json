@@ -1,0 +1,30 @@
+{
+  "status": "RECOVERED_FAILURES_AND_EXTERNAL_BLOCKERS",
+  "local_failures": [
+    {
+      "stage": "P1 diagnostic initial attempt",
+      "error": "eta-only initial vector length mismatch",
+      "impact": "no optimization result was saved",
+      "recovery": "corrected eta input length to match three nuisance bounds",
+      "result": "successful full paired subset diagnostic rerun"
+    },
+    {
+      "stage": "P1 diagnostic second attempt",
+      "error": "physics-only joint initial vector length mismatch",
+      "impact": "no optimization result was saved",
+      "recovery": "used complete q+eta vector with five bounds",
+      "result": "successful full paired subset diagnostic rerun"
+    }
+  ],
+  "external_blockers": [
+    {
+      "action": "GitHub Issue #31 status comments / read",
+      "error": "gh HTTP 401 invalid configured token",
+      "impact": "comments and issue metadata unavailable"
+    },
+    {
+      "action": "push branch and create Draft PR",
+      "status": "not attempted pending confirmation after local commit; same gh auth failure prevents PR creation"
+    }
+  ]
+}

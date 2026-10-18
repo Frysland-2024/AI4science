@@ -266,6 +266,24 @@ See [adapter contract](../xrd_forward_loss/V9_PERTURBATION_ADAPTER.md) and [pilo
 
 **Relevant files / commits:** `xrd_forward_loss/measurement_closure/`; training source commit `0e90eac79c1ae58252b4848a921bf43ee6d2669c`; checkpoint SHA ledger `xrd_forward_loss/measurement_closure/results/p3_issue19_20261018/checkpoint_manifest.json`.
 
+## 21. 2026-10-19: Issue #31 fair PR #26 diagnosis and preregistered A/B/C retraining
+
+**Date / status:** 2026-10-19 / EXPLORATORY SYNTHETIC ROUND COMPLETE; external GitHub delivery blocked by invalid local token.
+
+**Question / previous assumption:** PR #26 reported A/B q error and observed-profile residual, but A used a per-sample nuisance fit while B used its predicted nuisance head. The test-residual comparison therefore had unequal evaluation compute. The extra nuisance head dimensions and gradient influence were also plausible confounds.
+
+**Evidence:** The 12 compact PR #26 inference snapshots passed SHA, architecture loading and CUDA inference; q metrics recomputed from the frozen formal data match the saved seed records. A/B were compared on the same preselected 24-item old-test diagnostic subset with common eta initialization, bounds, objective, solver and iteration budget. The old test is post-hoc only. On validation, V9 q/reconstruction gradient cosine was negative in 6/30 batches, with one seed negative on average; simple condition had no negative q-gradient batches. V9 predicted `du` error and zero-shift error correlations were `0.904`, `0.853`, and `0.949` over three seeds. These observations support a bounded gradient-routing diagnostic but do not establish causation.
+
+**Decision:** Before training, preregister one C change: detach q only on the expected-profile reconstruction path, retain direct q supervision and eta-path gradients. Then run one fresh 512-parent, three-seed A/B/C synthetic BaTiO₃ comparison under validation-only lambda and checkpoint selection.
+
+**Result:** The bounded round completed 30 candidate runs in `681.06/7200` measured GPU seconds and evaluated the fresh test once. C beat A on direct q-MAE in all simple seeds; V9 C versus A was mixed, while both B/C mean direct q-MAE were lower than A and C was slightly higher than B. Equal joint q+eta fitting nearly erased between-method differences. Preserve the mixed outcome; it is not evidence of real-XRD utility, unseen-structure generalization, or Rietveld performance.
+
+**What changes now:** `overnight_pr26_20261019/` contains original metric reproduction, fair post-hoc optimization records, validation cause audit, pretraining frozen config/hash, fresh dataset/splits, raw seed/sample results, failure records and compute/checkpoint manifests. `CURRENT_STATE.md` records the current finding.
+
+**What does NOT change:** Frozen PR #26 formal data/checkpoints/results, V9 classification evidence, prior Issue #19 report and archived experiment results remain untouched. The compact old checkpoints remain inference-only.
+
+**Relevant files / commits:** [overnight report](../overnight_pr26_20261019/TECHNICAL_REPORT.md); [pretraining cause audit](../overnight_pr26_20261019/PRETRAIN_CAUSE_AUDIT.md); frozen config SHA is recorded in `pretrain_manifest.json`. Issue comments, push, and Draft PR are pending because `gh` returned HTTP 401; no merge was attempted.
+
 ## Current perspective
 
 The project is no longer summarized as "a JS loss for XRD" or "an XRD robustness benchmark."

@@ -1,0 +1,96 @@
+{
+  "status": "COMPLETED",
+  "subset_manifest": "p1_subset_manifest.json",
+  "summary": {
+    "simple": {
+      "A": {
+        "n": 72,
+        "direct_q_mae_mean": 0.01295087399258693,
+        "eta_only_profile_rmse_mean": 0.008581321370660604,
+        "eta_only_nuisance_scaled_mae_mean": 0.04266026335124348,
+        "eta_only_success_rate": 1.0,
+        "eta_only_seconds_mean": 0.08286582917046165,
+        "joint_q_mae_mean": 0.0002858987689186392,
+        "joint_profile_rmse_mean": 0.00569274142559462,
+        "joint_nuisance_scaled_mae_mean": 0.0034019011882807934,
+        "joint_success_rate": 1.0,
+        "joint_seconds_mean": 0.13070919583454574
+      },
+      "B": {
+        "n": 72,
+        "direct_q_mae_mean": 0.012434843736830067,
+        "eta_only_profile_rmse_mean": 0.008379203784512837,
+        "eta_only_nuisance_scaled_mae_mean": 0.04186920884546674,
+        "eta_only_success_rate": 1.0,
+        "eta_only_seconds_mean": 0.09192288472048757,
+        "joint_q_mae_mean": 0.00029644101859225755,
+        "joint_profile_rmse_mean": 0.005693131380103331,
+        "joint_nuisance_scaled_mae_mean": 0.0035361324868910925,
+        "joint_success_rate": 1.0,
+        "joint_seconds_mean": 0.14276907083209758
+      }
+    },
+    "v9": {
+      "A": {
+        "n": 72,
+        "direct_q_mae_mean": 0.02868095941505291,
+        "eta_only_profile_rmse_mean": 0.012731903229565605,
+        "eta_only_nuisance_scaled_mae_mean": 0.12539199543470808,
+        "eta_only_success_rate": 1.0,
+        "eta_only_seconds_mean": 0.0856939277784679,
+        "joint_q_mae_mean": 0.0004299066641108503,
+        "joint_profile_rmse_mean": 0.006176706614533936,
+        "joint_nuisance_scaled_mae_mean": 0.005748181818595679,
+        "joint_success_rate": 1.0,
+        "joint_seconds_mean": 0.15887539583329474
+      },
+      "B": {
+        "n": 72,
+        "direct_q_mae_mean": 0.027873286377871412,
+        "eta_only_profile_rmse_mean": 0.012044983256838344,
+        "eta_only_nuisance_scaled_mae_mean": 0.11372612130705807,
+        "eta_only_success_rate": 1.0,
+        "eta_only_seconds_mean": 0.08052804028233772,
+        "joint_q_mae_mean": 0.00042937101314777286,
+        "joint_profile_rmse_mean": 0.006176626404940179,
+        "joint_nuisance_scaled_mae_mean": 0.005715159634634697,
+        "joint_success_rate": 1.0,
+        "joint_seconds_mean": 0.15533182499994938
+      }
+    }
+  },
+  "optimizer": "SciPy L-BFGS-B with torch autograd, float64 forward, transformed-profile MSE",
+  "eta_neutral_initialization": [
+    0.0,
+    0.105,
+    0.005
+  ],
+  "eta_bounds": [
+    [
+      -0.06,
+      0.06
+    ],
+    [
+      0.08,
+      0.13
+    ],
+    [
+      0.0,
+      0.01
+    ]
+  ],
+  "q_bounds": [
+    [
+      -0.8,
+      0.8
+    ],
+    [
+      -0.8,
+      0.8
+    ]
+  ],
+  "max_iterations": 50,
+  "predeclared_objective_mse_tolerance": 1e-06,
+  "all_methods_same_initial_eta_optimizer_bounds_objective_budget": true,
+  "total_elapsed_seconds_including_p0_and_p1": 113.38957860000664
+}

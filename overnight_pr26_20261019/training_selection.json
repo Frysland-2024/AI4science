@@ -1,0 +1,54 @@
+{
+  "status": "FROZEN_BEFORE_TEST",
+  "rule": "per method and condition, select lambda by minimum mean best-epoch validation normalized q MAE across all three paired seeds; ties select smaller lambda",
+  "selection": {
+    "simple": {
+      "B": {
+        "mean_validation_q_mae_by_lambda": {
+          "0.1": 0.020968712866306305,
+          "1.0": 0.018596882931888103
+        },
+        "selected_lambda": 1.0,
+        "test_used": false
+      },
+      "C": {
+        "mean_validation_q_mae_by_lambda": {
+          "0.1": 0.014672342377404371,
+          "1.0": 0.018424062058329582
+        },
+        "selected_lambda": 0.1,
+        "test_used": false
+      }
+    },
+    "v9": {
+      "B": {
+        "mean_validation_q_mae_by_lambda": {
+          "0.1": 0.031061035270492237,
+          "1.0": 0.03204211095968882
+        },
+        "selected_lambda": 0.1,
+        "test_used": false
+      },
+      "C": {
+        "mean_validation_q_mae_by_lambda": {
+          "0.1": 0.030187773207823437,
+          "1.0": 0.033245595172047615
+        },
+        "selected_lambda": 0.1,
+        "test_used": false
+      }
+    }
+  },
+  "selected_lambda": {
+    "simple": {
+      "B": 1.0,
+      "C": 0.1,
+      "A": 0.0
+    },
+    "v9": {
+      "B": 0.1,
+      "C": 0.1,
+      "A": 0.0
+    }
+  }
+}

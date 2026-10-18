@@ -1,0 +1,13 @@
+{
+  "status": "FROZEN_BEFORE_TRAINING",
+  "branch": "codex/issue31-pr26-fair-diagnostic",
+  "source_head": "e261faa",
+  "files_sha256": {
+    "frozen_retrain_config.json": "eda3360a3bd457bb60fac371870b62c896e148ab9f20dec702a9b2d157605d35",
+    "validation_cause_audit.json": "3238cdc4afc7852e1376d8b85b95ad11620795750e75dc0d007b583f397f1a7c",
+    "audit_and_diagnostic.py": "6254743d08dfc47e018e286fbaeb60e6d1f18935b2145b8acdbbfe53f1262e12",
+    "run_fresh_training.py": "b3a24428f2c559f9caca65ccd8de5d0375cc1d71474ed67e81b2f4f7b04ef16f"
+  },
+  "test_data_used_for_preregistration": false,
+  "note": "config and cause audit frozen before fresh training; no subsequent config edits"
+}
