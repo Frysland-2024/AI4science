@@ -1,0 +1,21 @@
+{
+  "schema_version": "pxrd-autolab-p0-v1",
+  "run_name": "xrd-forward-loss-recorded-report",
+  "mode": "recorded_report",
+  "data_role": "same-parent HfCd conditional interpolation; one known structure",
+  "claim_scope": "One known HfCd parent with disjoint parameter draws. This pilot does not establish unseen-structure generalization or broad experimental-domain performance.",
+  "budget": {
+    "max_steps": 0,
+    "max_seconds": 120
+  },
+  "execution": {
+    "planned_steps": 0
+  },
+  "inputs": {
+    "results_json": "xrd_forward_loss/reports/pilot_20261018/results.json",
+    "forward_gate_json": "xrd_forward_loss/reports/pilot_20261018/forward_gate.json",
+    "lambda_selection_json": "xrd_forward_loss/reports/pilot_20261018/lambda_selection.json",
+    "training_histories_json": "xrd_forward_loss/reports/pilot_20261018/training_histories.json",
+    "pilot_manifest_json": "xrd_forward_loss/reports/pilot_20261018/run_manifest.json"
+  }
+}

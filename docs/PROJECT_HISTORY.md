@@ -216,7 +216,9 @@ The user proposed automating repetitive experimental work after choosing a small
 
 The first engineering step should be a minimal P0 (manifest, state machine, safe CPU smoke, reporting and tests), then a P1 scientific pilot, followed by optional GPU scheduling if an authorized worker is accessible. Scientific decisions and claims stay with researchers. No changes to frozen V9 evidence or archived Stage-1 NO-GO.
 
-**Status:** PROPOSED / NOT IMPLEMENTED / NO NEW SCIENTIFIC RESULTS. See [PXRD_AUTOMATED_RESEARCH_PIPELINE_PLAN_20261018.md](PXRD_AUTOMATED_RESEARCH_PIPELINE_PLAN_20261018.md).
+**Engineering update (2026-10-18):** P0 was implemented on the independent branch `feat/pxrd-autolab-v1` and is pending PR review. The report-only runner passed CPU fixture tests and consumed the already-recorded `xrd_forward_loss` pilot to produce review drafts. No trainer was called and no scientific results were added.
+
+**Status:** P0 IMPLEMENTED / PR REVIEW PENDING / NO NEW SCIENTIFIC RESULTS. See [PXRD_AUTOMATED_RESEARCH_PIPELINE_PLAN_20261018.md](PXRD_AUTOMATED_RESEARCH_PIPELINE_PLAN_20261018.md) and [pxrd_autolab/README.md](../pxrd_autolab/README.md).
 
 ## 19. 2026-10-18: reconcile tiny one-parent pilot with possible multi-material horizontal extension
 

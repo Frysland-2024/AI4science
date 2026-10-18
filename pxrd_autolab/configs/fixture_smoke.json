@@ -1,0 +1,38 @@
+{
+  "schema_version": "pxrd-autolab-p0-v1",
+  "run_name": "pxrd-autolab-cpu-fixture",
+  "mode": "fixture_smoke",
+  "data_role": "synthetic_pipeline_fixture_only",
+  "claim_scope": "Pipeline plumbing only. Values below are invented test fixtures and are not scientific results.",
+  "budget": {
+    "max_steps": 0,
+    "max_seconds": 60
+  },
+  "execution": {
+    "planned_steps": 0
+  },
+  "fixture": {
+    "kind": "synthetic_pipeline_fixture",
+    "gate_passed": true,
+    "metrics": {
+      "A": {
+        "q_mae_mean_two_parameter": 0.12,
+        "clean_spectral_rmse": 0.04
+      },
+      "B": {
+        "q_mae_mean_two_parameter": 0.11,
+        "clean_spectral_rmse": 0.03
+      }
+    },
+    "history": {
+      "A": [
+        {"epoch": 1, "validation_q_mae": 0.3},
+        {"epoch": 2, "validation_q_mae": 0.2}
+      ],
+      "B": [
+        {"epoch": 1, "validation_q_mae": 0.28},
+        {"epoch": 2, "validation_q_mae": 0.18}
+      ]
+    }
+  }
+}
