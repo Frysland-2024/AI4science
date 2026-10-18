@@ -1,0 +1,88 @@
+{
+  "schema": "issue19_command_log_v1",
+  "date": "2026-10-18",
+  "worktree": "C:\\Users\\Lenovo\\.codex\\worktrees\\issue19-forward-measurement\\AI4science",
+  "branch": "codex/issue19-measurement-closure",
+  "base_branch": "codex/forward-loss-v9-reuse",
+  "python": "C:\\Users\\Lenovo\\.codex\\venvs\\issue19-measurement-closure\\Scripts\\python.exe",
+  "command_capture_note": "Commands are recorded with their effective interpreter and arguments. For successful stages before P3, arguments are reconstructed from the immutable output/config metadata because the terminal did not emit a command journal. The initial P0 failure command is copied from its failure artifact.",
+  "commands": [
+    {
+      "stage": "P0 initial attempt",
+      "command": "python xrd_forward_loss/scripts/run_issue19_p0.py --output xrd_forward_loss/measurement_closure/results/p0_issue19_20261018",
+      "exit_code": 1,
+      "status": "FAILED_BEFORE_GATE_EVALUATION",
+      "reason": "Installed Pymatgen SpacegroupAnalyzer has no get_space_group method."
+    },
+    {
+      "stage": "P0 retry",
+      "command": "C:\\Users\\Lenovo\\.codex\\venvs\\issue19-measurement-closure\\Scripts\\python.exe xrd_forward_loss/scripts/run_issue19_p0.py --output xrd_forward_loss/measurement_closure/results/p0_issue19_retry1_20261018",
+      "exit_code": 0,
+      "status": "PASS",
+      "artifact": "xrd_forward_loss/measurement_closure/results/p0_issue19_retry1_20261018/p0_reference.json"
+    },
+    {
+      "stage": "P1/P2 v1 identifiability attempt",
+      "command": "C:\\Users\\Lenovo\\.codex\\venvs\\issue19-measurement-closure\\Scripts\\python.exe xrd_forward_loss/scripts/run_issue19_numeric_gates.py --output xrd_forward_loss/measurement_closure/results/p0_issue19_retry1_20261018 --p0 xrd_forward_loss/measurement_closure/results/p0_issue19_retry1_20261018/p0_reference.json --config xrd_forward_loss/measurement_closure/configs/issue19_batio3.json",
+      "exit_code": 2,
+      "status": "GATE_FAIL_PRESERVED",
+      "artifact": "xrd_forward_loss/measurement_closure/results/p0_issue19_retry1_20261018/p1_numeric_gates.json",
+      "reason": "Two free background-shape coefficients were locally non-identifiable after max normalization; condition number 3.06e16 and exact absolute column correlation 1."
+    },
+    {
+      "stage": "P1/P2 fixed-template v2 numerical gate",
+      "command": "C:\\Users\\Lenovo\\.codex\\venvs\\issue19-measurement-closure\\Scripts\\python.exe xrd_forward_loss/scripts/run_issue19_numeric_gates.py --output xrd_forward_loss/measurement_closure/results/p1p2_fixed_template_20261018 --p0 xrd_forward_loss/measurement_closure/results/p0_issue19_retry1_20261018/p0_reference.json --config xrd_forward_loss/measurement_closure/configs/issue19_batio3_v2_numericrun.json",
+      "exit_code": 0,
+      "status": "PASS",
+      "artifact": "xrd_forward_loss/measurement_closure/results/p1p2_fixed_template_20261018/p1_numeric_gates.json"
+    },
+    {
+      "stage": "P1/P2 v2 production gate report",
+      "command": "C:\\Users\\Lenovo\\.codex\\venvs\\issue19-measurement-closure\\Scripts\\python.exe xrd_forward_loss/scripts/run_issue19_numeric_gates.py --output xrd_forward_loss/measurement_closure/results/p1p2_v2_final_20261018 --p0 xrd_forward_loss/measurement_closure/results/p0_issue19_retry1_20261018/p0_reference.json --config xrd_forward_loss/measurement_closure/configs/issue19_batio3_v2_numericrun.json",
+      "exit_code": 0,
+      "status": "PASS",
+      "artifact": "xrd_forward_loss/measurement_closure/results/p1p2_v2_final_20261018/p1_numeric_gates.json"
+    },
+    {
+      "stage": "P2 test suite",
+      "command": "C:\\Users\\Lenovo\\.codex\\venvs\\issue19-measurement-closure\\Scripts\\python.exe -m pytest -q xrd_forward_loss/tests",
+      "exit_code": 0,
+      "result": "23 passed in 2.54 seconds"
+    },
+    {
+      "stage": "P1/P2 final integrated rerun",
+      "command": "C:\\Users\\Lenovo\\.codex\\venvs\\issue19-measurement-closure\\Scripts\\python.exe xrd_forward_loss/scripts/run_issue19_numeric_gates.py --output xrd_forward_loss/measurement_closure/results/p1p2_v2_final_integrated_20261018 --p0 xrd_forward_loss/measurement_closure/results/p0_issue19_retry1_20261018/p0_reference.json --config xrd_forward_loss/measurement_closure/configs/issue19_batio3_v2_numericrun.json",
+      "exit_code": 0,
+      "status": "PASS",
+      "artifact": "xrd_forward_loss/measurement_closure/results/p1p2_v2_final_integrated_20261018/p1_numeric_gates.json"
+    },
+    {
+      "stage": "P3 smoke",
+      "command": "C:\\Users\\Lenovo\\.codex\\venvs\\issue19-measurement-closure\\Scripts\\python.exe xrd_forward_loss/scripts/run_issue19_p3.py --stage smoke --output-root xrd_forward_loss/measurement_closure/results/p3_issue19_20261018",
+      "exit_code": 0,
+      "status": "PASS",
+      "artifact": "xrd_forward_loss/measurement_closure/results/p3_issue19_20261018/smoke/smoke_report.json"
+    },
+    {
+      "stage": "P3 formal attempt 1",
+      "command": "C:\\Users\\Lenovo\\.codex\\venvs\\issue19-measurement-closure\\Scripts\\python.exe xrd_forward_loss/scripts/run_issue19_p3.py --stage formal --output-root xrd_forward_loss/measurement_closure/results/p3_issue19_20261018",
+      "exit_code": 1,
+      "status": "FAILED_BEFORE_TEST_EVALUATION",
+      "artifact": "xrd_forward_loss/measurement_closure/results/p3_issue19_20261018/formal_attempt1_failed_rng_resume/failure_summary.json"
+    },
+    {
+      "stage": "RNG restore fix validation",
+      "command": "C:\\Users\\Lenovo\\.codex\\venvs\\issue19-measurement-closure\\Scripts\\python.exe -m py_compile xrd_forward_loss/scripts/run_issue19_p3.py; plus a CUDA Generator.set_state(checkpoint_state.cpu()) smoke",
+      "exit_code": 0,
+      "result": "py_compile passed and CUDA generator accepted the restored CPU ByteTensor."
+    },
+    {
+      "stage": "P3 formal retry",
+      "command": "C:\\Users\\Lenovo\\.codex\\venvs\\issue19-measurement-closure\\Scripts\\python.exe xrd_forward_loss/scripts/run_issue19_p3.py --stage formal --output-root xrd_forward_loss/measurement_closure/results/p3_issue19_20261018 --prior-training-seconds 630",
+      "exit_code": 0,
+      "status": "COMPLETED_EXPLORATORY_PILOT",
+      "artifact": "xrd_forward_loss/measurement_closure/results/p3_issue19_20261018/formal/ab_results.json",
+      "source_commit": "0e90eac79c1ae58252b4848a921bf43ee6d2669c"
+    }
+  ]
+}

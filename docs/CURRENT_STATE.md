@@ -224,3 +224,11 @@ python -m pytest -q
 - 所有结果来自单一已知 HfCd 结构的模拟参数泛化；没有 CIF 文件，结构来自冻结的本地 standardized-structure JSON。未验证铁电陶瓷、实验谱、未见结构或精修初值效用。
 
 配置、逐样本扰动和 seed、原始谱阵列、Gate、A/B JSON、重算校验、图表和报告见 [`xrd_forward_loss/reports/v9_perturbation_phase2_pilot_20261018/`](../xrd_forward_loss/reports/v9_perturbation_phase2_pilot_20261018/)；接口说明见 [`V9_PERTURBATION_ADAPTER.md`](../xrd_forward_loss/V9_PERTURBATION_ADAPTER.md)。该工作保存在由 PR #11 head 分出的独立 stacked PR；PR 仍需人工审核，未自动合并。
+
+## 11. Issue #19：测量一致的 Forward 闭环（PRELIMINARY ENGINEERING PILOT COMPLETE）
+
+用户指出旧 reconstruction 目标与扰动 observed profile 不一致后，独立工作分支完成公开 BaTiO₃ CIF 上的 P0–P2 物理/梯度/未知 nuisance Gate，并在通过后按授权完成 P3 A/B。Torch/V9 全谱 parity、有限差分梯度、q+eta 局部可辨识、non-oracle profile recovery、噪声期望和 23 项测试均通过。P1 v1 的自由背景形状失败已保留；v2 按冻结的 V9 variation=0 固定形状，不降低 Gate 阈值。
+
+512 个同一 CIF 的参数样本、3 paired seeds 和两类合成测量条件下，simple q MAE 为 A `0.013533`、B `0.013676`；V9 为 A `0.032235`、B `0.030554`。B 只在 V9 的两维 q MAE 略低，simple 略高；V9 nuisance head 对 zero-shift 的误差较大。结论是闭环工程可行、效果尚未确立；不得概括为更好的参数反演方法，也不构成真实谱或未见结构证据。
+
+本次累计 smoke、失败尝试保守计时、正式训练和 λ 选择 `1386.05/7200 s`，在 RTX 4060 完成。失败运行、命令 exit codes、逐 seed 指标、数据/配置 SHA、checkpoint SHA 和训练记录均已留档。详情见 [Issue #19 报告](MEASUREMENT_AWARE_FORWARD_CLOSURE_REPORT_20261018.md) 和 [技术报告](../xrd_forward_loss/measurement_closure/TECHNICAL_REPORT.md)。本次不改 frozen JS 分类、旧 PR 结果、Stage-1 factorization NO-GO 或 12 周研究规划；新增工作以独立 Draft PR 交审。

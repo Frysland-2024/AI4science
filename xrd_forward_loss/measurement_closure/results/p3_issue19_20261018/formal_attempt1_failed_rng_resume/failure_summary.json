@@ -1,0 +1,33 @@
+{
+  "status": "FAILED_BEFORE_TEST_EVALUATION",
+  "stage": "B_selected_checkpoint_resume",
+  "command": "C:\\Users\\Lenovo\\.codex\\venvs\\issue19-measurement-closure\\Scripts\\python.exe xrd_forward_loss/scripts/run_issue19_p3.py --stage formal --output-root xrd_forward_loss/measurement_closure/results/p3_issue19_20261018",
+  "exit_code": 1,
+  "source_commit": "1787d3d726984066f1c41ee45c27c9df0b9cc24d",
+  "config_sha256": "b17a9db0eed38557f4b06a092f8d4a35437619025f78532119e3a923ddf2251f",
+  "data_sha256": "88401a857bc7a4849731fbb5e881b37efef7483e0ec13415f977db035e333a29",
+  "exception": "TypeError: RNG state must be a torch.ByteTensor",
+  "root_cause": "Checkpoint tensors were loaded with map_location=cuda, including the CPU ByteTensor used to restore a CUDA Generator shuffle state. Generator.set_state requires a CPU ByteTensor.",
+  "completed_before_failure": {
+    "formal_data_generation": true,
+    "A_full_runs": 6,
+    "B_lambda_candidate_runs": 12,
+    "validation_lambda_selection": true,
+    "selected_lambda": {
+      "simple": 0.1,
+      "v9": 1.0
+    },
+    "selected_B_full_runs": 0,
+    "test_evaluation": false
+  },
+  "preserved_checkpoint_count": 18,
+  "conservative_budget_seconds_reserved": 630,
+  "budget_accounting_note": "The run occupied approximately 22:37-22:47 local time before failure. 630 seconds is a conservative rounded-up budget reservation; the retry includes it in the two-hour cumulative smoke/training/lambda-selection budget.",
+  "resolution": {
+    "commit": "09720b0",
+    "change": "Restore the generator state with checkpoint['shuffle_generator_state'].cpu().",
+    "retry_source_commit": "0e90eac79c1ae58252b4848a921bf43ee6d2669c",
+    "thresholds_changed": false,
+    "retry": "formal/ab_results.json"
+  }
+}

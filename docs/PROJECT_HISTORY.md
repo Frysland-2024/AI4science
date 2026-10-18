@@ -250,6 +250,22 @@ The first engineering step should be a minimal P0 (manifest, state machine, safe
 
 See [adapter contract](../xrd_forward_loss/V9_PERTURBATION_ADAPTER.md) and [pilot report](../xrd_forward_loss/reports/v9_perturbation_phase2_pilot_20261018/TECHNICAL_REPORT.md). The failure encountered after training due to a Matplotlib keyword mismatch is preserved in the run log and traceback; plots/report were recovered without retraining or changing result/history JSON.
 
+## 20. 2026-10-18：Issue #19 纠正 Forward 重构目标并完成受控测量闭环
+
+**Date / status:** 2026-10-18 / PRELIMINARY ENGINEERING PILOT COMPLETE; independent Draft PR pending review.
+
+**Question / previous assumption:** 用户指出，PR #11/#16 中固定零点和最窄峰宽的 clean forward 与加入零点偏移、展宽、背景和噪声的 observed profile 不一致；PR #17 虽改用 simulator-provided clean reference，却不能作为未知真实实验 clean target 的替代。单纯物理梯度正确还不足以说明 loss 解释了测量过程。
+
+**Evidence:** 在 COD 9014273 BaTiO₃/P4mm 模板上，P0 的 Torch/Pymatgen/V9 整谱 parity 通过；P1/P2 的测量期望谱 parity、autograd/有限差分、未知 q+eta 可辨识、non-oracle profile fit 和噪声期望 Gate 均通过。v1 因两个自由背景形状系数在 max-normalization 下不可辨识而失败；依据冻结 V9 `background_variation=0` 固定形状后 v2 通过，阈值未改。P3 在 RTX 4060 完成 512 q、3 paired seeds、simple/V9 A/B；test 未用于 λ 选择。第一次正式运行因 checkpoint RNG state 被加载到 CUDA 而在续训 B 前失败；traceback 和 checkpoint manifest 纳入 PR，18 个原始 checkpoint 保存在当前 worktree（不纳入 Git）；修复恢复状态设备后从新 formal 输出完整重跑，并把首次尝试保守 630 秒纳入 2 小时累计预算。
+
+**Decision / result:** measurement-aware expected forward 的训练闭环工程可行。结果并非一致胜出：simple 的两维 q MAE A `0.013533 ± 0.000849`、B `0.013676 ± 0.001923`；V9 的 A `0.032235 ± 0.001255`、B `0.030554 ± 0.002580`。V9 下 B 的 q MAE 小幅降低，但 nuisance 估计误差和 observed expected-profile residual 高于 A 路径；A 的 residual 评估另有逐样本 eta profile fitting 成本。保留为效果尚未确立的单 CIF exploratory result，不宣称普遍精度增益。
+
+**What changes now:** Issue #19 的独立实现、Gate 结果、正式 A/B 与负结果、命令 exit codes、配置和数据 hashes、逐 seed 指标、训练历史和 checkpoint hash manifest 被记录；两小时训练/选择预算 `1386.05/7200 s`。报告见 [结果说明](MEASUREMENT_AWARE_FORWARD_CLOSURE_REPORT_20261018.md) 与 [技术报告](../xrd_forward_loss/measurement_closure/TECHNICAL_REPORT.md)。
+
+**What does not change:** frozen JS-only classification evidence、旧 PR #11/#16/#17 数据、factorization Stage-1 NO-GO、真实域结果和铁电 12 周规划均保持原样。单 CIF 合成条件插值不是未见材料泛化、真实 PXRD 验证或 Rietveld refinement 证据。
+
+**Relevant files / commits:** `xrd_forward_loss/measurement_closure/`; training source commit `0e90eac79c1ae58252b4848a921bf43ee6d2669c`; checkpoint SHA ledger `xrd_forward_loss/measurement_closure/results/p3_issue19_20261018/checkpoint_manifest.json`.
+
 ## Current perspective
 
 The project is no longer summarized as "a JS loss for XRD" or "an XRD robustness benchmark."

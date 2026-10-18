@@ -1,0 +1,150 @@
+{
+  "path": "xrd_forward_loss\\measurement_closure\\configs\\issue19_batio3_v2.json",
+  "sha256": "b17a9db0eed38557f4b06a092f8d4a35437619025f78532119e3a923ddf2251f",
+  "full_config": {
+    "schema_version": "issue19_measurement_closure_batio3_v2",
+    "status": "amended_after_preserved_v1_nonidentifiability_failure; frozen_before_p1p2_v2_and_training",
+    "amendment": {
+      "supersedes": "issue19_batio3.json",
+      "reason": "P1 v1 found exact local non-identifiability between two freely estimated background-shape coefficients under per-profile max normalization. V9 background_variation is frozen at zero, so its polynomial shape is deterministic; v2 fixes that shape and estimates only amplitude. No numerical Gate threshold was changed.",
+      "preserved_failure_report": "xrd_forward_loss/measurement_closure/results/p0_issue19_retry1_20261018/p1_numeric_gates.json"
+    },
+    "scope": "single public BaTiO3 P4mm CIF; conditional du,dv interpolation; synthetic measurements only",
+    "source": {
+      "cif": "xrd_forward_loss/data/public_cif/BaTiO3_COD_9014273_P4mm.cif",
+      "cif_sha256": "e854c9868f643183904606b8c24463f8f0bacc1cca90f283641b33346db748b4",
+      "cod_id": "9014273",
+      "space_group": "P4mm",
+      "space_group_number": 99,
+      "historical_citation": "Shirane et al., Phys. Rev. 105, 856 (1957), DOI 10.1103/PhysRev.105.856"
+    },
+    "forward": {
+      "config": "xrd_inversion/configs/week1_formal_gate.json",
+      "grid": {
+        "two_theta_min_deg": 10.0,
+        "two_theta_max_deg": 80.0,
+        "step_deg": 0.02,
+        "wavelength_angstrom": 1.54184,
+        "peak_padding_deg": 2.5
+      },
+      "q_names": [
+        "du",
+        "dv"
+      ],
+      "q_bounds": [
+        -0.8,
+        0.8
+      ],
+      "q_units": "dimensionless normalized log-lattice coordinates mapped to a,c in angstrom",
+      "nuisance_names": [
+        "delta_2theta_deg",
+        "fwhm_deg",
+        "background_peak_ratio"
+      ],
+      "nuisance_units": [
+        "absolute degrees",
+        "absolute degrees FWHM",
+        "relative to reference clean peak height"
+      ],
+      "noise_model": "Poisson count noise plus Gaussian readout before per-profile max normalization",
+      "forward_dtype": "float64",
+      "device": "cuda"
+    },
+    "gates": {
+      "p0_profile_max_abs_max": 2e-06,
+      "p0_profile_rmse_max": 2e-07,
+      "p0_bragg_max_abs_deg": 1.1e-05,
+      "p1_measurement_profile_max_abs_max": 2e-06,
+      "p1_measurement_profile_rmse_max": 2e-07,
+      "p1_gradient_fd_relative_max": 0.01,
+      "p1_unknown_nuisance_jacobian_condition_max": 1000.0,
+      "p1_unknown_nuisance_max_abs_column_correlation": 0.995,
+      "p1_profile_recovery_q_max_abs": 0.02,
+      "p1_profile_recovery_nuisance_normalized_max_abs": 0.1,
+      "p2_pytest_required": true,
+      "p2_finite_optimization_smoke_required": true,
+      "p2_expected_noise_mc_rmse_max": 0.02
+    },
+    "data": {
+      "q_count_max": 512,
+      "sobol_seed": 20261041,
+      "split_seed": 20261042,
+      "split_fractions": {
+        "train": 0.7,
+        "validation": 0.15,
+        "test": 0.15
+      },
+      "nuisance_seed": 20261043,
+      "smoke_sobol_seed": 20261049,
+      "smoke_split_seed": 20261050,
+      "simple_view": {
+        "name": "simple",
+        "zero_shift_deg": [
+          0.0,
+          0.0
+        ],
+        "fwhm_deg": [
+          0.08,
+          0.08
+        ],
+        "background_counts": [
+          100.0,
+          200.0
+        ],
+        "background_shape_mode": "simple_linear_counts",
+        "poisson_count_scale": 30000.0,
+        "electronic_noise_std_counts": 0.0
+      },
+      "v9_view": {
+        "name": "v9_four_perturbations",
+        "delta_2theta_deg": [
+          -0.06,
+          0.06
+        ],
+        "fwhm_deg": [
+          0.11,
+          0.13
+        ],
+        "background_peak_ratio": [
+          0.005,
+          0.008
+        ],
+        "background_shape": "fixed deterministic V9 nonnegative quadratic polynomial, variation 0, floor fraction 0.10; only its amplitude is estimated",
+        "background_shape_mode": "v9_polynomial",
+        "background_variation": 0.0,
+        "poisson_count_scale": 30000.0,
+        "electronic_noise_std_counts": [
+          0.5,
+          1.5
+        ],
+        "preferred_orientation": false
+      }
+    },
+    "training": {
+      "method_a": "parameter MSE only",
+      "method_b": "parameter MSE plus differentiable expected measurement-profile MSE",
+      "seeds": [
+        20261045,
+        20261046,
+        20261047
+      ],
+      "max_epochs": 24,
+      "smoke_samples": 128,
+      "smoke_max_epochs": 4,
+      "batch_size": 16,
+      "learning_rate": 0.0005,
+      "weight_decay": 0.0,
+      "gradient_clip_norm": 5.0,
+      "validation_lambda_candidates": [
+        0.1,
+        1.0
+      ],
+      "lambda_selection": "lowest validation normalized-q MAE; ties choose smaller lambda; test is never used",
+      "lambda_selection_scope": "lowest mean validation normalized-q MAE across the three paired seed runs within each measurement condition",
+      "wallclock_budget_hours": 2.0,
+      "rng_seed_policy": "same paired seed for A/B and simple/V9; q split is frozen before measurement views are generated",
+      "nuisance_truth_policy": "generation/metadata/oracle diagnostics only; the non-oracle B training and inference loss receives predicted eta and observed profile only"
+    }
+  },
+  "data_sha256": "88401a857bc7a4849731fbb5e881b37efef7483e0ec13415f977db035e333a29"
+}

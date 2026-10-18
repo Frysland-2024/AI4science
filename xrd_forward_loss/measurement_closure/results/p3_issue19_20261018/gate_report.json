@@ -1,0 +1,13 @@
+{
+  "status": "PASS",
+  "p0_passed": true,
+  "p1_p2_passed": true,
+  "smoke_passed": true,
+  "formal_pilot_completed": true,
+  "training_plus_smoke_within_two_hour_budget": true,
+  "no_gate_threshold_lowering": true,
+  "no_test_selection": true,
+  "p1_report": "xrd_forward_loss\\measurement_closure\\results\\p1p2_v2_final_20261018\\p1_numeric_gates.json",
+  "smoke_report": "xrd_forward_loss\\measurement_closure\\results\\p3_issue19_20261018\\smoke\\smoke_report.json",
+  "formal_results": "formal/ab_results.json"
+}
