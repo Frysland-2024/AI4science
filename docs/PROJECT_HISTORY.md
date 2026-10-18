@@ -224,6 +224,14 @@ After successive expansions to multi-family routing, calibrated single/mixed-pha
 
 **Status:** PRELIMINARY ENGINEERING PILOT COMPLETE / FAMILY-SPECIFIC RESEARCH FUTURE. See [pilot report](../xrd_forward_loss/FORWARD_LOSS_PILOT_REPORT.md), [feasibility report](../xrd_forward_loss/FORWARD_FEASIBILITY_REPORT.md), and [handoff](../xrd_forward_loss/NEXT_STAGE_HANDOFF.md).
 
+## 18. 2026-10-18: PXRD AutoLab automation proposal
+
+The user proposed automating repetitive experimental work after choosing a small, literature-based Forward Reconstruction Loss A/B study and a transparent biweekly reporting schedule. The new idea is an auditable engineering workflow: locked config, physics/split/budget gates, paired training, machine-derived metrics and figures, immutable manifests, and draft reports.
+
+The first engineering step should be a minimal P0 (manifest, state machine, safe CPU smoke, reporting and tests), then a P1 scientific pilot, followed by optional GPU scheduling if an authorized worker is accessible. Scientific decisions and claims stay with researchers. No changes to frozen V9 evidence or archived Stage-1 NO-GO.
+
+**Status:** PROPOSED / NOT IMPLEMENTED / NO NEW SCIENTIFIC RESULTS. See [PXRD_AUTOMATED_RESEARCH_PIPELINE_PLAN_20261018.md](PXRD_AUTOMATED_RESEARCH_PIPELINE_PLAN_20261018.md).
+
 ## Current perspective
 
 The project is no longer summarized as "a JS loss for XRD" or "an XRD robustness benchmark."
