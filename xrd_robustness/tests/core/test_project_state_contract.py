@@ -52,6 +52,7 @@ def test_public_report_directory_matches_positive_allowlist() -> None:
         if path.is_file()
     } == {
         "RESULTS.md",
+        "PARENT_BUDGET_EFFICIENCY.md",
         "simulated_test_results.json",
         "rruff301_fewshot_results.json",
         "validation_results.json",
