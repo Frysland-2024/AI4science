@@ -1,2 +1,4 @@
 # Preserve exact frozen AutoLab source/CIF/artifact bytes across platforms.
-pxrd_cross_material_autolab/** -text
+pxrd_cross_material_autolab/** -text whitespace=cr-at-eol
+# Retain the executed source's terminal blank line to preserve its frozen hash.
+pxrd_cross_material_autolab/physics.py whitespace=cr-at-eol,-blank-at-eof

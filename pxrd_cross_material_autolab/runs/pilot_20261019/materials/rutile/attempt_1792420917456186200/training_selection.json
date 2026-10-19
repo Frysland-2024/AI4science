@@ -1,0 +1,28 @@
+{
+  "device": "cuda",
+  "models": [
+    {
+      "best_epoch": 24,
+      "checkpoint_sha256": "e48c100dd2a6e8656dd07028aca6b108abc289ed8c1e045844a9dc157e40ccb9",
+      "seed": 2026101911,
+      "training_seconds": 1.0301664000144228,
+      "validation_q_mae": 0.031704872846603394
+    },
+    {
+      "best_epoch": 24,
+      "checkpoint_sha256": "c21b8e042142647a48b1994e075e59972e4a3a07c5f673eecf20928d26b010b0",
+      "seed": 2026101912,
+      "training_seconds": 0.8031517000054009,
+      "validation_q_mae": 0.030013419687747955
+    },
+    {
+      "best_epoch": 22,
+      "checkpoint_sha256": "707f7044a7d47189a4e7a0caf83513728aeaac53b2a7212c9524f3415f0da785",
+      "seed": 2026101913,
+      "training_seconds": 0.8742775000282563,
+      "validation_q_mae": 0.02543569728732109
+    }
+  ],
+  "status": "FROZEN_BEFORE_TEST",
+  "training_seconds": 2.70759560004808
+}
