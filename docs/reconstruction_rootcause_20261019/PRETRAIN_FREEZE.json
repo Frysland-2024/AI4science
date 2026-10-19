@@ -1,0 +1,23 @@
+{
+  "schema": "reconstruction_rootcause_pretraining_freeze_v1",
+  "status": "FROZEN_BEFORE_TRAINING",
+  "date": "2026-10-19",
+  "frozen_input_manifest_sha256": "8b80fbaef1cfd990396de9f7c94bb34594c83c4a619f63e604cb70f6cadc65ef",
+  "preregistration_sha256": "ceedf1cf73e47904de69cca2e71fb781214ab6cbda9b53e7b7fcdcacfb7bae40",
+  "frozen_config_sha256": "d9c143bea1672f95ca74c960dc6a85b293409dd74cf377ea63b2317700d0232a",
+  "runner_sha256_normalized_lf": "7f7e765ec02b99f33c76aac6f5c153a1777b2a7f27a9f36b6562fa30e762f212",
+  "fresh_data_npz_sha256_raw": "3e4f4951fe2cb8d676871f4a38d32dfd48d317a49fbf6be401b2c9ca25c3e25e",
+  "split_manifest_sha256_normalized_lf": "27229c7c516136995d411fbb727e4470e6c9edbadb2e133e8fcebd840af39c88",
+  "runtime_manifest_sha256_normalized_lf": "3cba800620cc3e42204d702658649ad3bf441b4784005efff538e84c1d3421e4",
+  "split_counts": {
+    "train": 358,
+    "validation": 77,
+    "test": 77
+  },
+  "pretraining_data_gate": "PASS: generated split assertions and data hash pass; training scope contains only 358 train + 77 validation q/profile rows; D has only 358 training zero-shift labels",
+  "test_values_loaded_into_training_arrays": false,
+  "test_metrics_computed_before_training": false,
+  "test_metrics_used_for_selection": false,
+  "training_budget_seconds": 7200,
+  "candidate_count": 30
+}

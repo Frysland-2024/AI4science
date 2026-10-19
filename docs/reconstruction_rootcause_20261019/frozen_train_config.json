@@ -1,0 +1,66 @@
+{
+  "schema": "reconstruction_rootcause_fresh_abd_v1",
+  "date_frozen": "2026-10-19",
+  "status_at_freeze": "FROZEN_BEFORE_TRAINING",
+  "scope": "synthetic single-CIF BaTiO3 P4mm COD 9014273 interpolation only",
+  "source_config": "xrd_forward_loss/measurement_closure/configs/issue19_batio3_v2.json",
+  "source_config_normalized_lf_sha256": "b17a9db0eed38557f4b06a092f8d4a35437619025f78532119e3a923ddf2251f",
+  "source_cif_sha256": "e854c9868f643183904606b8c24463f8f0bacc1cca90f283641b33346db748b4",
+  "old_pr26_test_sha256_excluded": "88401a857bc7a4849731fbb5e881b37efef7483e0ec13415f977db035e333a29",
+  "fresh_data": {
+    "parent_q_draws": 512,
+    "q_bounds": [-0.8, 0.8],
+    "sobol_seed": 20261211,
+    "split_seed": 20261212,
+    "nuisance_seed": 20261213,
+    "noise_seed": 20261214,
+    "split_fractions": {"train": 0.70, "validation": 0.15, "test": 0.15},
+    "expected_split_counts": {"train": 358, "validation": 77, "test": 77},
+    "split_unit": "parent q draw before nuisance and noise draws",
+    "conditions": ["simple", "v9"],
+    "real_data": false,
+    "test_indices_are_never_used_for_preprocessing_or_selection": true
+  },
+  "models": {
+    "architecture": "MeasurementAwareRegressor for A, B, and D; same 1D ResNet-GN backbone and 3-nuisance output head",
+    "parameter_count_expected": 13008325,
+    "A": "direct normalized q MSE only; nuisance outputs receive no direct nuisance or reconstruction loss",
+    "B": "direct normalized q MSE + lambda * measurement-aware expected-profile MSE using predicted eta",
+    "D": "same as B + gamma * MSE(predicted zero shift / 0.06 deg, simulator zero shift / 0.06 deg); gamma=1.0; direct reconstruction-to-q gradient retained",
+    "D_information_note": "D receives simulator zero-shift labels during training and is an extra-information diagnostic, not an equal-information comparison",
+    "inference_note": "No nuisance oracle labels are used at inference"
+  },
+  "selection": {
+    "model_seeds": [20261201, 20261202, 20261203],
+    "lambda_candidates_for_B_and_D": [0.1, 1.0],
+    "A_lambda": 0.0,
+    "best_epoch_rule": "minimum validation mean absolute error across du,dv",
+    "lambda_rule": "for each method and condition independently, choose lambda with minimum mean best-epoch validation q-MAE across all three paired model seeds; ties choose smaller lambda",
+    "test_rule": "evaluate selected A/B/D checkpoints once after every method/condition/lambda/seed candidate completes and all validation selection is frozen",
+    "profile_fit_rule": "on the full test split, compare all methods with the same q-fixed eta-only L-BFGS-B fit, neutral eta start [0,0.105,0.005], same bounds, same objective and max 60 iterations"
+  },
+  "training": {
+    "max_epochs_per_candidate_condition_seed": 24,
+    "batch_size": 16,
+    "optimizer": "Adam",
+    "learning_rate": 0.0005,
+    "weight_decay": 0.0,
+    "gradient_clip_norm": 5.0,
+    "torch_num_threads": 1,
+    "cudnn_deterministic": true,
+    "cudnn_benchmark": false,
+    "candidate_run_count": 30,
+    "hard_budget_seconds_training_plus_validation_selection": 7200,
+    "partial_budget_rule": "mark PARTIAL and do not read test if the full frozen candidate set does not finish within budget"
+  },
+  "primary_decision_criteria": {
+    "V9_support": "D mean held-out normalized q-MAE is at least 5% lower than B; D improves q-MAE in at least 2 of 3 paired model seeds; mean a-MAE and c-MAE are each no more than 5% worse than B",
+    "mechanism_check": "D held-out zero-shift RMSE is at least 20% lower than B",
+    "simple_guardrail": "D mean q-MAE, a-MAE, and c-MAE are each no more than 5% worse than B",
+    "refutation": "If shift RMSE improves but V9 q-MAE does not meet the primary criterion, or q improves only with >5% a/c harm, the proposed nuisance-to-q explanation is not supported",
+    "uncertainty": "report each seed and mean plus sample SD; three paired seeds are exploratory, not a significance test"
+  },
+  "secondary_metrics": ["du and dv MAE", "a and c MAE in angstrom", "zero-shift RMSE", "direct predicted-eta profile RMSE", "matched q-fixed eta-fit profile RMSE", "solver success and iteration counts", "GPU training-plus-validation wall seconds", "failures and outliers"],
+  "stop_criteria": ["source, forward model, or split/hash mismatch", "non-finite loss or gradient", "unexpected data leakage", "candidate incomplete at hard budget", "physical or identifiability gate regression"],
+  "claim_limit": "one public CIF, simulator-generated interpolation data; no real PXRD, unseen structures, chemistry generalization, or Rietveld claim"
+}

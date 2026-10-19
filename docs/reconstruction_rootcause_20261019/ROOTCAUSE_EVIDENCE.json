@@ -1,0 +1,60 @@
+{
+  "schema": "reconstruction_rootcause_evidence_v1",
+  "date": "2026-10-19",
+  "evidence_scope": "simulator-generated single-CIF BaTiO3 P4mm interpolation; historical records and validation only",
+  "source_artifacts": {
+    "issue31_validation_cause_audit": {
+      "path": "overnight_pr26_20261019/validation_cause_audit.json",
+      "sha256": "3238cdc4afc7852e1376d8b85b95ad11620795750e75dc0d007b583f397f1a7c"
+    },
+    "issue31_fresh_data": {
+      "path": "overnight_pr26_20261019/fresh_data/fresh_batio3_paired.npz",
+      "sha256": "d43a364e75b2acd46e1b9c5351ffc5b0a9356d750ed9e1a8a449b7776168993d"
+    },
+    "issue31_training_runs": {
+      "path": "overnight_pr26_20261019/training_runs.json",
+      "sha256": "f888391a6b1bfc57741853ef1508199e7c8603ce5559265050a2744a1d460df9"
+    },
+    "issue19_physical_gate": {
+      "path": "xrd_forward_loss/measurement_closure/results/p3_issue19_20261018/gate_report.json",
+      "sha256": "906adda1000f99c4ef5b0371873bf06be4be187604bf6960f85e2a21363f08bb",
+      "status": "PASS"
+    }
+  },
+  "denominator_correction": {
+    "batches_per_seed_per_condition": 5,
+    "seeds": 3,
+    "batches_per_condition": 15,
+    "old_report_denominator": "incorrectly used 30 V9 and 45 simple",
+    "historical_files_rewritten": false,
+    "gradient_cosine": {
+      "simple_q": {"negative": 0, "total": 15, "minimum": 0.450291, "mean": 0.702382, "maximum": 0.837689},
+      "simple_shared_trunk": {"negative": 0, "total": 15, "minimum": 0.573187, "mean": 0.739347, "maximum": 0.905644},
+      "v9_q": {"negative": 6, "total": 15, "minimum": -0.307252, "mean": 0.114032, "maximum": 0.711104},
+      "v9_shared_trunk": {"negative": 4, "total": 15, "minimum": -0.506374, "mean": 0.444736, "maximum": 0.925078}
+    }
+  },
+  "validation_nuisance_association": {
+    "method": "B",
+    "validation_only": true,
+    "model_seeds": [20261045, 20261046, 20261047],
+    "v9_zero_shift_mae_degrees": [0.022758, 0.027679, 0.031556],
+    "v9_du_error_vs_zero_shift_error_pearson_r": [0.904351, 0.853031, 0.948880],
+    "simple_zero_shift_mae_degrees": [0.001331, 0.001505, 0.002772],
+    "interpretation": "strong simulator-specific association; not causal proof"
+  },
+  "evaluation_corrections": {
+    "old_pr26_test_was_opened": true,
+    "old_pr26_residual_comparison": "A per-profile nuisance fitting and B predicted eta had unequal optimization compute; post-hoc matched refit q-MAE was nearly tied (simple 0.000286 vs 0.000296; V9 0.000430 vs 0.000429); descriptive only",
+    "donut_comparison": "texture-OOD q-MAE about 0.2918 was compared with supervised-initialized joint q+eta refinement about 0.00035 on ordinary noisy profiles; different task and initialization, so it does not establish upstream DONUT failure",
+    "donut_read_only_branch_commit": "codex/donut-pxrd-experiment-20261019@31fc7f7"
+  },
+  "known_observability_gap": [
+    "historical runs log train q/reconstruction loss and validation q-MAE",
+    "historical runs do not log validation reconstruction loss",
+    "historical runs do not log per-epoch nuisance-head saturation or gradients"
+  ],
+  "old_checkpoint_limit": "PR26 inference manifest is present but binary checkpoint files are absent in this worktree, so old weights could not be independently reloaded; the new A/B/D comparison uses freshly initialized matched models and current tracked source",
+  "selected_new_hypothesis": "V9 zero-shift nuisance head is a leading actionable bottleneck; add one simulator zero-shift label loss while retaining B expected-profile reconstruction and the direct reconstruction-to-q gradient",
+  "information_fairness": "D uses extra simulator nuisance labels and is not an equal-information comparison"
+}

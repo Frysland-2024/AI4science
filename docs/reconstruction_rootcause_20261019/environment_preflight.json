@@ -1,0 +1,22 @@
+{
+  "date": "2026-10-19",
+  "python": "C:/Users/Lenovo/.codex/venvs/issue19-measurement-closure/Scripts/python.exe",
+  "torch": "2.13.0+cu126",
+  "cuda_available": true,
+  "cuda_device": "NVIDIA GeForce RTX 4060 Laptop GPU",
+  "concurrency_check": {
+    "nvidia_smi_utilization_percent": 2,
+    "nvidia_smi_memory_used_mib": 2180,
+    "python_processes": [
+      {"pid": 18944, "executable": "E:/AI4science/.venvs/xrd_test/Scripts/python.exe", "torch_or_cuda_modules_loaded": false},
+      {"pid": 24712, "executable": "E:/AI4science/_local/.venvs/phase_router/Scripts/python.exe", "torch_or_cuda_modules_loaded": false},
+      {"pid": 51808, "executable": "C:/Users/Lenovo/AppData/Local/Programs/Python/Python311/python.exe", "torch_or_cuda_modules_loaded": false},
+      {"pid": 54836, "executable": "C:/Users/Lenovo/AppData/Local/Programs/Python/Python311/python.exe", "torch_or_cuda_modules_loaded": false}
+    ],
+    "permission_limited_nvidia_entries_resolved_to": "Windows desktop/UI, browser, ChatGPT, QQ/WeChat and LegionZone processes",
+    "active_concurrent_gpu_training_found": false,
+    "any_process_stopped_or_modified": false,
+    "note": "Windows denied process command-line queries; executable paths and loaded module lists were readable. None of the Python processes had Torch/CUDA modules loaded."
+  },
+  "preflight_conclusion": "GPU training runtime and concurrency checks pass for one bounded round"
+}

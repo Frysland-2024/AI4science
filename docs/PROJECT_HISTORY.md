@@ -284,6 +284,26 @@ See [adapter contract](../xrd_forward_loss/V9_PERTURBATION_ADAPTER.md) and [pilo
 
 **Relevant files / commits:** [overnight report](../overnight_pr26_20261019/TECHNICAL_REPORT.md); [pretraining cause audit](../overnight_pr26_20261019/PRETRAIN_CAUSE_AUDIT.md); frozen config SHA is recorded in `pretrain_manifest.json`. Branch `codex/issue31-pr26-fair-diagnostic` was pushed at `23f344b`; Issue comments and Draft PR creation remain blocked because `gh` returned HTTP 401; no merge was attempted.
 
+## 22. 2026-10-19: reconstruction root-cause audit and preregistered A/B/D retraining
+
+**Date:** 2026-10-19
+
+**Question / previous assumption:** V9 zero-shift error was strongly associated with q error, so directly supervising zero shift might improve lattice recovery while retaining measurement-aware reconstruction.
+
+**New evidence or reasoning:** The frozen Issue 19 fixed-background physical gates passed, while free background shape was non-identifiable. Corrected Issue 31 validation gradients show intermittent V9 conflict (negative q cosine in 6/15 batches; shared-trunk conflict in 4/15). These observations are mechanism and association evidence, not causal proof. DONUT and old PR26 comparisons had data-domain or compute mismatches. One fresh split and one D intervention were preregistered before training; D adds simulator zero-shift labels and therefore receives extra information.
+
+**Decision:** Run one bounded fresh synthetic A/B/D comparison while preserving the reconstruction-to-q path. All 30 candidates completed 24 epochs. Validation selected lambda and the fresh test was evaluated once. D reduced V9 zero-shift RMSE by 53.1% versus B but worsened q-MAE by 42.6% (all three paired seeds), a-MAE by 16.0%, and c-MAE by 19.5%. It also failed the simple a-MAE guardrail. The preregistered causal hypothesis is **not supported**.
+
+**What changes now:** Preserve this negative result and its full per-seed and per-sample records. Do not select D as an improved inverse model. `CURRENT_STATE.md` records the finding; `docs/reconstruction_rootcause_20261019/` contains the audit, frozen protocol/config, fresh data and split, run logs, checkpoint hashes, plots, metrics, and reproducibility manifest.
+
+**What does NOT change:** This is one CIF and synthetic condition interpolation only. It does not establish real PXRD performance, unseen-structure generalization, or Rietveld utility. Frozen PR #26, Issue #31, Issue #19, and V9 evidence remain unchanged; no conclusion about general upstream DONUT performance is made.
+
+**Supplementary required evaluation:** The task document also required joint q+eta refinement and a neutral-start physics-only baseline, which were absent from the frozen protocol secondary metrics. After the primary result was fixed, a disclosed post-hoc pass ran 1,386 model-start joint fits and 154 neutral-start fits with fixed bounds and optimizer settings. All model-start fits converged, with q-MAE `0.000311-0.000439`; neutral-start q-MAE was `0.09464` for simple and `0.01664` for V9. This does not alter the preregistered decision or checkpoint selection.
+
+**Status:** CLOSED for this preregistered test; alternative causes remain open.
+
+**Relevant files / commits:** [FRESH_RESULTS.md](reconstruction_rootcause_20261019/FRESH_RESULTS.md), [CAUSE_RANKING.md](reconstruction_rootcause_20261019/CAUSE_RANKING.md), [PREREGISTRATION.md](reconstruction_rootcause_20261019/PREREGISTRATION.md), and [reproducibility_manifest.json](reconstruction_rootcause_20261019/reproducibility_manifest.json). Branch `codex/reconstruction-rootcause-retrain-20261019` is prepared for publication.
+
 ## Current perspective
 
 The project is no longer summarized as "a JS loss for XRD" or "an XRD robustness benchmark."

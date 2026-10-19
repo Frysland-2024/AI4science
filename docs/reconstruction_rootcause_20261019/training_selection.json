@@ -1,0 +1,57 @@
+{
+  "status": "FROZEN_BEFORE_TEST",
+  "rule": "for each method and condition independently, choose lambda with minimum mean best-epoch validation q-MAE across all three paired model seeds; ties choose smaller lambda",
+  "best_epoch_rule": "minimum validation mean absolute error across du,dv",
+  "selection": {
+    "simple": {
+      "B": {
+        "mean_best_validation_q_mae_by_lambda": {
+          "0.1": 0.015599657781422138,
+          "1.0": 0.018961730723579723
+        },
+        "selected_lambda": 0.1,
+        "test_used": false
+      },
+      "D": {
+        "mean_best_validation_q_mae_by_lambda": {
+          "0.1": 0.01969343361755212,
+          "1.0": 0.01619238592684269
+        },
+        "selected_lambda": 1.0,
+        "test_used": false
+      }
+    },
+    "v9": {
+      "B": {
+        "mean_best_validation_q_mae_by_lambda": {
+          "0.1": 0.03185094396273295,
+          "1.0": 0.031667242447535195
+        },
+        "selected_lambda": 1.0,
+        "test_used": false
+      },
+      "D": {
+        "mean_best_validation_q_mae_by_lambda": {
+          "0.1": 0.04574905335903168,
+          "1.0": 0.043296776711940765
+        },
+        "selected_lambda": 1.0,
+        "test_used": false
+      }
+    }
+  },
+  "selected_lambda": {
+    "simple": {
+      "A": 0.0,
+      "B": 0.1,
+      "D": 1.0
+    },
+    "v9": {
+      "A": 0.0,
+      "B": 1.0,
+      "D": 1.0
+    }
+  },
+  "training_records_sha256": "346c751aa9b20bdbd7ce224910374ae73130f52827a5f6a9ac7b15ec9568934e",
+  "fresh_data_sha256": "3e4f4951fe2cb8d676871f4a38d32dfd48d317a49fbf6be401b2c9ca25c3e25e"
+}
