@@ -1,0 +1,12 @@
+{
+  "comparison.png": "edc80e7722a9cc769d0e1b6d07097ee9b3084f2cbdc9c62e2f68cb9250b89803",
+  "events.jsonl": "fb6bd4d04bbb1f3817733c2b1d9dffb485c3a6132176bf18700f798a22b617b8",
+  "learning_curves.json": "0f63db5bfaf755fb1e6e8acae5b710eb548f2f656d8dd9a1ab6e7a55faf4d949",
+  "metrics.json": "f9411ebd19f02536606b033437e5d3733001922bcc64ee8d9dd79675f48564f7",
+  "per_sample.csv": "c34291cf9cfde6a35d3d9c0bf1155f3a8e47728a7e720ea587d5f72775e78f77",
+  "per_sample.jsonl": "378d158e07f76215bc41b37831cff9e1f6df1eb06d69db4a690c85a04d1ce29c",
+  "result.json": "1a86d431fed65c44b50041cb7b5728ddeb9d987651771c94b262d7c37de1fc88",
+  "split_manifest.json": "5435b17eae717909ca8f287066b7f124c85f91b176616c5e46f340af2e0f6687",
+  "test_opened.json": "c0755327582403086b5d6dd98e97462d50b172314ba1a7f07aaadf65cc31e373",
+  "training_selection.json": "cdd5a84b75ad2dca6613c4c4c945a977a2e3c0315e582e6ab887b62c0b8110c4"
+}

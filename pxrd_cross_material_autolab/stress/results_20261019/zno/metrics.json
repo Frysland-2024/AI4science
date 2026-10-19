@@ -1,0 +1,97 @@
+[
+  {
+    "boundary_rate": 0.0,
+    "convergence_rate": 1.0,
+    "lattice_mae_angstrom": [
+      8.088002292183649e-05,
+      0.0001498489576783335
+    ],
+    "material": "zno",
+    "mean_nfev": 240.0,
+    "mean_seconds": 0.08230019376787823,
+    "median_seconds": 0.0825399000023026,
+    "method": "N+A",
+    "multistart_disagreement_mean": 0.0,
+    "n": 16,
+    "p95_seconds": 0.1006030750577338,
+    "profile_rmse": 0.005299533163050088,
+    "q_mae": 0.0013417227490315465,
+    "seed": 2026101911
+  },
+  {
+    "boundary_rate": 0.0,
+    "convergence_rate": 1.0,
+    "lattice_mae_angstrom": [
+      8.07016131904037e-05,
+      0.0001497327623746214
+    ],
+    "material": "zno",
+    "mean_nfev": 231.0,
+    "mean_seconds": 0.0782108125022205,
+    "median_seconds": 0.07655700002214871,
+    "method": "N+A",
+    "multistart_disagreement_mean": 0.0,
+    "n": 16,
+    "p95_seconds": 0.0924020499951439,
+    "profile_rmse": 0.005299533088724439,
+    "q_mae": 0.0013397922643244848,
+    "seed": 2026101912
+  },
+  {
+    "boundary_rate": 0.0,
+    "convergence_rate": 1.0,
+    "lattice_mae_angstrom": [
+      8.081384698341298e-05,
+      0.00014961143238068075
+    ],
+    "material": "zno",
+    "mean_nfev": 244.0,
+    "mean_seconds": 0.0807468562561553,
+    "median_seconds": 0.07930000001215376,
+    "method": "N+A",
+    "multistart_disagreement_mean": 0.0,
+    "n": 16,
+    "p95_seconds": 0.1010174499679124,
+    "profile_rmse": 0.0052995331100268465,
+    "q_mae": 0.001340073189747675,
+    "seed": 2026101913
+  },
+  {
+    "boundary_rate": 0.0,
+    "convergence_rate": 1.0,
+    "lattice_mae_angstrom": [
+      8.083058384730779e-05,
+      0.00014974702581860289
+    ],
+    "material": "zno",
+    "mean_nfev": 288.5,
+    "mean_seconds": 0.09649971874750918,
+    "median_seconds": 0.09236264997161925,
+    "method": "P0",
+    "multistart_disagreement_mean": 0.0,
+    "n": 16,
+    "p95_seconds": 0.12593099995865487,
+    "profile_rmse": 0.00529953309770622,
+    "q_mae": 0.0013408529823291323,
+    "seed": 0
+  },
+  {
+    "boundary_rate": 0.0,
+    "convergence_rate": 1.0,
+    "lattice_mae_angstrom": [
+      8.079861785717513e-05,
+      0.00014968830729555904
+    ],
+    "material": "zno",
+    "mean_nfev": 995.5,
+    "mean_seconds": 0.3361306375009008,
+    "median_seconds": 0.3355246499995701,
+    "method": "P3",
+    "multistart_disagreement_mean": 4.800039891663006e-06,
+    "n": 16,
+    "p95_seconds": 0.4127008249924984,
+    "profile_rmse": 0.005299533065794291,
+    "q_mae": 0.0013403251257659492,
+    "seed": 0
+  }
+]

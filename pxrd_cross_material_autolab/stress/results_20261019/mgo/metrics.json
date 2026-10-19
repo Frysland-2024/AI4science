@@ -1,0 +1,92 @@
+[
+  {
+    "boundary_rate": 0.0,
+    "convergence_rate": 1.0,
+    "lattice_mae_angstrom": [
+      0.0001404457812555493
+    ],
+    "material": "mgo",
+    "mean_nfev": 175.875,
+    "mean_seconds": 0.051154087497707224,
+    "median_seconds": 0.05110524999327026,
+    "method": "N+A",
+    "multistart_disagreement_mean": 0.0,
+    "n": 16,
+    "p95_seconds": 0.06707659999665339,
+    "profile_rmse": 0.004731542686335485,
+    "q_mae": 0.0016672101288638516,
+    "seed": 2026101911
+  },
+  {
+    "boundary_rate": 0.0,
+    "convergence_rate": 1.0,
+    "lattice_mae_angstrom": [
+      0.00014019497288225713
+    ],
+    "material": "mgo",
+    "mean_nfev": 183.75,
+    "mean_seconds": 0.05390911875292659,
+    "median_seconds": 0.05206124999676831,
+    "method": "N+A",
+    "multistart_disagreement_mean": 0.0,
+    "n": 16,
+    "p95_seconds": 0.0705689500173321,
+    "profile_rmse": 0.004731542514789434,
+    "q_mae": 0.0016642328214885045,
+    "seed": 2026101912
+  },
+  {
+    "boundary_rate": 0.0,
+    "convergence_rate": 1.0,
+    "lattice_mae_angstrom": [
+      0.0001402187351748907
+    ],
+    "material": "mgo",
+    "mean_nfev": 170.625,
+    "mean_seconds": 0.04933662500116043,
+    "median_seconds": 0.04916175003745593,
+    "method": "N+A",
+    "multistart_disagreement_mean": 0.0,
+    "n": 16,
+    "p95_seconds": 0.059246399978292175,
+    "profile_rmse": 0.0047315425060659635,
+    "q_mae": 0.0016645148999897292,
+    "seed": 2026101913
+  },
+  {
+    "boundary_rate": 0.0,
+    "convergence_rate": 1.0,
+    "lattice_mae_angstrom": [
+      0.000140160937231959
+    ],
+    "material": "mgo",
+    "mean_nfev": 232.3125,
+    "mean_seconds": 0.066540206236823,
+    "median_seconds": 0.059892999968724325,
+    "method": "P0",
+    "multistart_disagreement_mean": 0.0,
+    "n": 16,
+    "p95_seconds": 0.09330532496096566,
+    "profile_rmse": 0.004731542493446833,
+    "q_mae": 0.0016638287895530566,
+    "seed": 0
+  },
+  {
+    "boundary_rate": 0.0,
+    "convergence_rate": 1.0,
+    "lattice_mae_angstrom": [
+      0.0001402100864899558
+    ],
+    "material": "mgo",
+    "mean_nfev": 704.8125,
+    "mean_seconds": 0.2040109812442097,
+    "median_seconds": 0.1986425499781035,
+    "method": "P3",
+    "multistart_disagreement_mean": 0.46697624190181614,
+    "n": 16,
+    "p95_seconds": 0.2540943750063889,
+    "profile_rmse": 0.004731542484905822,
+    "q_mae": 0.0016644122327878802,
+    "seed": 0
+  }
+]

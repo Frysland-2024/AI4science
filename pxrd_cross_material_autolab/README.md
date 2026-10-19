@@ -25,3 +25,15 @@ The manager checks all physical gates before entering research training and abor
 `PASS` for an experiment means the registered procedure completed, not a neural scientific win. A skipped unsupported candidate remains visible; the root manager conservatively returns `BLOCKED` when any requested candidate was skipped. Delivery reports distinguish this machine state from a completed supported subset (`PARTIAL`). No hidden gate relaxation or test-driven rescue is permitted.
 
 The primary P3 budget is three optimizations versus one for P0/N+A. The equal-evaluation sensitivity uses a total ceiling of600 (200 for each P3 start) and reports actual counts, including SciPy finite-difference overshoot. This does not claim matched wall time. Training is reported separately and cannot be hidden in inference-only Pareto conclusions.
+## Reproduce the independent mismatch supplement
+
+The original primary result files retain their original optional-stress `NOT_RUN` flag. A separate post-primary exploratory protocol was then frozen under `stress/` and executed on112 new parents, with no retraining or reuse of the primary test observations. Its report is linked from the final overview.
+
+After a fresh primary reproduction has completed and its manager lock is gone:
+
+```powershell
+& $autolabPython -m pxrd_cross_material_autolab.stress.run --primary pxrd_cross_material_autolab/runs/replication_<date> --output pxrd_cross_material_autolab/stress/replication_<date>
+& $autolabPython -m pxrd_cross_material_autolab.stress.run --verify --output pxrd_cross_material_autolab/stress/replication_<date>
+```
+
+The stress output directory must be new. Original private checkpoints/normalization remain local; a fresh checkout must reproduce training before reproducing stress. The reporting helpers use saved metrics only; `build_delivery` rebuilds the primary overview and `finalize_delivery` appends the completed stress evidence for the original fixed run paths. They do not generate spectra, fit models or tune parameters. A preserved UTF-8/BOM report-decoding failure and its single report-only correction are recorded under `reports/failures/`; no scientific run was repeated.

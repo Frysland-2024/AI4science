@@ -1,0 +1,38 @@
+{
+  "disk_free_bytes": 201783500800,
+  "git": {
+    "command": [
+      "git",
+      "rev-parse",
+      "HEAD"
+    ],
+    "exit_code": 0,
+    "seconds": 0.0216977596282959,
+    "stderr": "",
+    "stdout": "70b81455df6d9ba8be036251959f6d350392e001\n"
+  },
+  "gpu": {
+    "command": [
+      "nvidia-smi",
+      "--query-gpu=name,memory.used,utilization.gpu",
+      "--format=csv,noheader,nounits"
+    ],
+    "exit_code": 0,
+    "seconds": 0.0478208065032959,
+    "stderr": "",
+    "stdout": "NVIDIA GeForce RTX 4060 Laptop GPU, 2386, 23\n"
+  },
+  "gpu_processes": {
+    "command": [
+      "nvidia-smi",
+      "--query-compute-apps=pid,process_name,used_memory",
+      "--format=csv,noheader,nounits"
+    ],
+    "exit_code": 0,
+    "seconds": 0.04747319221496582,
+    "stderr": "",
+    "stdout": "3984, [Insufficient Permissions], [N/A]\n36228, C:\\Windows\\SystemApps\\MicrosoftWindows.Client.CBS_cw5n1h2txyewy\\CrossDeviceResume.exe, [N/A]\n49896, C:\\Program Files\\NVIDIA Corporation\\NVIDIA App\\CEF\\NVIDIA Overlay.exe, [N/A]\n23164, C:\\Program Files\\NVIDIA Corporation\\NVIDIA App\\CEF\\NVIDIA Overlay.exe, [N/A]\n49848, C:\\Windows\\explorer.exe, [N/A]\n22988, C:\\Windows\\SystemApps\\MicrosoftWindows.Client.CBS_cw5n1h2txyewy\\SearchHost.exe, [N/A]\n12468, C:\\Windows\\SystemApps\\Microsoft.Windows.StartMenuExperienceHost_cw5n1h2txyewy\\StartMenuExperienceHost.exe, [N/A]\n40768, C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\155.0.4283.60\\msedgewebview2.exe, [N/A]\n27396, C:\\Windows\\SystemApps\\Microsoft.LockApp_cw5n1h2txyewy\\LockApp.exe, [N/A]\n45024, C:\\Windows\\SystemApps\\MicrosoftWindows.Client.CBS_cw5n1h2txyewy\\TextInputHost.exe, [N/A]\n27508, C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\155.0.4283.60\\msedgewebview2.exe, [N/A]\n17656, C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\155.0.4283.60\\msedgewebview2.exe, [N/A]\n43772, C:\\Windows\\SystemApps\\ShellExperienceHost_cw5n1h2txyewy\\ShellExperienceHost.exe, [N/A]\n41760, C:\\Windows\\System32\\ApplicationFrameHost.exe, [N/A]\n29140, C:\\Windows\\ImmersiveControlPanel\\SystemSettings.exe, [N/A]\n52936, D:\\QQ.exe, [N/A]\n46664, D:\\QQEX.exe, [N/A]\n38520, D:\\Weixin\\Weixin.exe, [N/A]\n36436, C:\\Users\\Lenovo\\AppData\\Roaming\\Tencent\\xwechat\\XPlugin\\Plugins\\RadiumWMPF\\WeChatAppEx.exe, [N/A]\n53304, D:\\Weixin\\Weixin.exe, [N/A]\n29872, C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\155.0.4283.62\\msedgewebview2.exe, [N/A]\n32036, C:\\Program Files\\WindowsApps\\Microsoft.WindowsTerminal_1.24.12741.0_x64__8wekyb3d8bbwe\\WindowsTerminal.exe, [N/A]\n37324, [Insufficient Permissions], [N/A]\n47908, D:\\steam\\bin\\cef\\cef.win64\\steamwebhelper.exe, [N/A]\n34016, C:\\Program Files (x86)\\Microsoft\\Copilot\\Application\\copilotapp.exe, [N/A]\n56260, C:\\Program Files\\WindowsApps\\Microsoft.ScreenSketch_11.2608.41.0_x64__8wekyb3d8bbwe\\SnippingTool\\SnippingTool.exe, [N/A]\n19460, C:\\Program Files\\WindowsApps\\OpenAI.Codex_26.1013.4894.0_x64__2p2nqsd0c76g0\\app\\ChatGPT.exe, [N/A]\n47808, C:\\Users\\Lenovo\\AppData\\Local\\OpenAI\\Codex\\runtimes\\cua_node\\78fb63cda1a9e2b2\\bin\\node_modules\\@oai\\sky\\bin\\windows\\swift\\x64\\codex-computer-use-swift.exe, [N/A]\n49016, C:\\Program Files\\NetEase\\CloudMusic\\cloudmusic.exe, [N/A]\n28416, D:\\workbuddy\\WorkBuddy.exe, [N/A]\n19776, C:\\Program Files\\WindowsApps\\Microsoft.YourPhone_1.26082.121.0_x64__8wekyb3d8bbwe\\PhoneExperienceHost.exe, [N/A]\n43908, C:\\Program Files\\bilibili\\哔哩哔哩.exe, [N/A]\n57136, C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe, [N/A]\n55420, C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe, [N/A]\n18144, C:\\Windows\\System32\\ShellHost.exe, [N/A]\n"
+  },
+  "platform": "Windows-10-10.0.26200-SP0",
+  "python": "3.11.9 (tags/v3.11.9:de54cf5, Apr  2 2024, 10:12:12) [MSC v.1938 64 bit (AMD64)]"
+}

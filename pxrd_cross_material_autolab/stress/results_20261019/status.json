@@ -1,0 +1,14 @@
+{
+  "elapsed_seconds": 111.27891325950623,
+  "finished": 1792421765.7747095,
+  "materials": {
+    "batio3": "PASS",
+    "ceo2": "PASS",
+    "grossular": "PASS",
+    "mgo": "PASS",
+    "rutile": "PASS",
+    "silicon": "PASS",
+    "zno": "PASS"
+  },
+  "status": "PASS"
+}

@@ -1,0 +1,263 @@
+[
+  {
+    "NA_boundary_max": 0.0,
+    "NA_convergence_min": 1.0,
+    "NA_equal_q_mae_mean": 0.0009692713262363789,
+    "NA_lattice_mae_mean_angstrom": [
+      5.674108818043807e-05,
+      9.878096240159959e-05
+    ],
+    "NA_mean_plus_amortized_training_seconds": 0.10429517662498367,
+    "NA_mean_seconds": 0.09458557489324054,
+    "NA_q_mae_mean": 0.0009692713262363789,
+    "NA_q_mae_sd": 3.477692781777982e-07,
+    "NA_training_amortized_seconds": 0.009709601731743116,
+    "P0_boundary": 0.0,
+    "P0_convergence": 1.0,
+    "P0_equal_q_mae": 0.0009690167409030485,
+    "P0_lattice_mae_angstrom": [
+      5.673235142381735e-05,
+      9.8748788410613e-05
+    ],
+    "P0_mean_seconds": 0.10917184026095436,
+    "P0_q_mae": 0.0009690167409030485,
+    "P3_boundary": 0.0,
+    "P3_convergence": 1.0,
+    "P3_disagreement_mean": 0.045896799423908424,
+    "P3_equal_q_mae": 0.001188023443690595,
+    "P3_lattice_mae_angstrom": [
+      5.673592133463164e-05,
+      9.87514052952037e-05
+    ],
+    "P3_mean_seconds": 0.34646816883166626,
+    "P3_q_mae": 0.0009690553811162899,
+    "material": "batio3",
+    "primary_NA_nfev": 199.13419913419912,
+    "primary_P0_nfev": 228.15584415584416,
+    "primary_P3_nfev": 729.974025974026,
+    "registered_decision": "NEURAL_RUNTIME_PARETO",
+    "training_gpu_seconds": 2.2429180000326596
+  },
+  {
+    "NA_boundary_max": 0.0,
+    "NA_convergence_min": 1.0,
+    "NA_equal_q_mae_mean": 0.0015807615868684863,
+    "NA_lattice_mae_mean_angstrom": [
+      0.00013316335607781743
+    ],
+    "NA_mean_plus_amortized_training_seconds": 0.06296523203478634,
+    "NA_mean_seconds": 0.05139269653679521,
+    "NA_q_mae_mean": 0.0015807615868684863,
+    "NA_q_mae_sd": 4.724041858930524e-07,
+    "NA_training_amortized_seconds": 0.011572535497991135,
+    "P0_boundary": 0.03896103896103896,
+    "P0_convergence": 1.0,
+    "P0_equal_q_mae": 0.06833059397112018,
+    "P0_lattice_mae_angstrom": [
+      0.005756169236127126
+    ],
+    "P0_mean_seconds": 0.06421243246454238,
+    "P0_q_mae": 0.06833059397112018,
+    "P3_boundary": 0.0,
+    "P3_convergence": 1.0,
+    "P3_disagreement_mean": 0.4855000495210149,
+    "P3_equal_q_mae": 0.0015815881355274613,
+    "P3_lattice_mae_angstrom": [
+      0.00013315712042726835
+    ],
+    "P3_mean_seconds": 0.20219496883037683,
+    "P3_q_mae": 0.0015806875644266084,
+    "material": "mgo",
+    "primary_NA_nfev": 175.66666666666666,
+    "primary_P0_nfev": 222.45454545454547,
+    "primary_P3_nfev": 698.2727272727273,
+    "registered_decision": "NEURAL_RUNTIME_PARETO",
+    "training_gpu_seconds": 2.673255700035952
+  },
+  {
+    "NA_boundary_max": 0.0,
+    "NA_convergence_min": 1.0,
+    "NA_equal_q_mae_mean": 0.0011773360953358236,
+    "NA_lattice_mae_mean_angstrom": [
+      0.00012741131223727555
+    ],
+    "NA_mean_plus_amortized_training_seconds": 0.0833361411287784,
+    "NA_mean_seconds": 0.07085981645351236,
+    "NA_q_mae_mean": 0.0011773360953358236,
+    "NA_q_mae_sd": 2.7380531906361154e-07,
+    "NA_training_amortized_seconds": 0.012476324675266038,
+    "P0_boundary": 0.0,
+    "P0_convergence": 1.0,
+    "P0_equal_q_mae": 0.0011774897118751366,
+    "P0_lattice_mae_angstrom": [
+      0.0001274279366191159
+    ],
+    "P0_mean_seconds": 0.08099703636328846,
+    "P0_q_mae": 0.0011774897118751366,
+    "P3_boundary": 0.0,
+    "P3_convergence": 1.0,
+    "P3_disagreement_mean": 0.31533525121306155,
+    "P3_equal_q_mae": 0.0011774931053648038,
+    "P3_lattice_mae_angstrom": [
+      0.00012742394479990017
+    ],
+    "P3_mean_seconds": 0.2607394740243999,
+    "P3_q_mae": 0.0011774528257246027,
+    "material": "ceo2",
+    "primary_NA_nfev": 161.21212121212122,
+    "primary_P0_nfev": 187.1818181818182,
+    "primary_P3_nfev": 602.7272727272727,
+    "registered_decision": "NEURAL_RUNTIME_PARETO",
+    "training_gpu_seconds": 2.882030999986455
+  },
+  {
+    "NA_boundary_max": 0.0,
+    "NA_convergence_min": 1.0,
+    "NA_equal_q_mae_mean": 0.001434501075719138,
+    "NA_lattice_mae_mean_angstrom": [
+      0.00013136145154598615,
+      8.515908332815978e-05
+    ],
+    "NA_mean_plus_amortized_training_seconds": 0.11849921428899834,
+    "NA_mean_seconds": 0.10677802121519712,
+    "NA_q_mae_mean": 0.001434501075719138,
+    "NA_q_mae_sd": 1.632554700327393e-07,
+    "NA_training_amortized_seconds": 0.011721193073801213,
+    "P0_boundary": 0.0,
+    "P0_convergence": 1.0,
+    "P0_equal_q_mae": 0.0014343307520282254,
+    "P0_lattice_mae_angstrom": [
+      0.00013136522436370384,
+      8.513649321138308e-05
+    ],
+    "P0_mean_seconds": 0.11621979740372702,
+    "P0_q_mae": 0.0014343307520282254,
+    "P3_boundary": 0.0,
+    "P3_convergence": 1.0,
+    "P3_disagreement_mean": 0.04245861504561458,
+    "P3_equal_q_mae": 0.0021897058469053433,
+    "P3_lattice_mae_angstrom": [
+      0.00013136119713179944,
+      8.513074929225343e-05
+    ],
+    "P3_mean_seconds": 0.39148021558021473,
+    "P3_q_mae": 0.0014342603023160415,
+    "material": "rutile",
+    "primary_NA_nfev": 233.52380952380952,
+    "primary_P0_nfev": 255.58441558441558,
+    "primary_P3_nfev": 863.1688311688312,
+    "registered_decision": "NEURAL_RUNTIME_PARETO",
+    "training_gpu_seconds": 2.70759560004808
+  },
+  {
+    "NA_boundary_max": 0.0,
+    "NA_convergence_min": 1.0,
+    "NA_equal_q_mae_mean": 0.001231536107058749,
+    "NA_lattice_mae_mean_angstrom": [
+      7.669917408718593e-05,
+      0.00013359898969014856
+    ],
+    "NA_mean_plus_amortized_training_seconds": 0.09027878268323516,
+    "NA_mean_seconds": 0.07650488095148367,
+    "NA_q_mae_mean": 0.001231536107058749,
+    "NA_q_mae_sd": 3.9846218280909186e-07,
+    "NA_training_amortized_seconds": 0.013773901731751505,
+    "P0_boundary": 0.0,
+    "P0_convergence": 1.0,
+    "P0_equal_q_mae": 0.002607989808187586,
+    "P0_lattice_mae_angstrom": [
+      0.0001404483213596381,
+      0.00031813156542943703
+    ],
+    "P0_mean_seconds": 0.09429063116859451,
+    "P0_q_mae": 0.002607989808187586,
+    "P3_boundary": 0.0,
+    "P3_convergence": 1.0,
+    "P3_disagreement_mean": 0.17097920173553782,
+    "P3_equal_q_mae": 0.004233474902422709,
+    "P3_lattice_mae_angstrom": [
+      7.670383654840822e-05,
+      0.00013361872145154698
+    ],
+    "P3_mean_seconds": 0.3104784948027136,
+    "P3_q_mae": 0.0012316667161901664,
+    "material": "zno",
+    "primary_NA_nfev": 229.0909090909091,
+    "primary_P0_nfev": 286.3376623376623,
+    "primary_P3_nfev": 942.1298701298701,
+    "registered_decision": "NEURAL_RUNTIME_PARETO",
+    "training_gpu_seconds": 3.1817713000345975
+  },
+  {
+    "NA_boundary_max": 0.0,
+    "NA_convergence_min": 1.0,
+    "NA_equal_q_mae_mean": 0.0012215100264725805,
+    "NA_lattice_mae_mean_angstrom": [
+      0.0001326730900152881
+    ],
+    "NA_mean_plus_amortized_training_seconds": 0.08136348051948318,
+    "NA_mean_seconds": 0.06693915887438445,
+    "NA_q_mae_mean": 0.0012215100264725805,
+    "NA_q_mae_sd": 2.76525913885178e-07,
+    "NA_training_amortized_seconds": 0.014424321645098733,
+    "P0_boundary": 0.0,
+    "P0_convergence": 1.0,
+    "P0_equal_q_mae": 0.0012215852517733813,
+    "P0_lattice_mae_angstrom": [
+      0.00013268126053609443
+    ],
+    "P0_mean_seconds": 0.07514642467707178,
+    "P0_q_mae": 0.0012215852517733813,
+    "P3_boundary": 0.0,
+    "P3_convergence": 1.0,
+    "P3_disagreement_mean": 0.12251299321213752,
+    "P3_equal_q_mae": 0.0012215744260983688,
+    "P3_lattice_mae_angstrom": [
+      0.00013268046545139217
+    ],
+    "P3_mean_seconds": 0.2496342168835161,
+    "P3_q_mae": 0.0012215779314947552,
+    "material": "silicon",
+    "primary_NA_nfev": 162.6969696969697,
+    "primary_P0_nfev": 184.72727272727272,
+    "primary_P3_nfev": 611.1818181818181,
+    "registered_decision": "NEURAL_RUNTIME_PARETO",
+    "training_gpu_seconds": 3.3320183000178076
+  },
+  {
+    "NA_boundary_max": 0.0,
+    "NA_convergence_min": 1.0,
+    "NA_equal_q_mae_mean": 0.001201930342646199,
+    "NA_lattice_mae_mean_angstrom": [
+      0.0002847853753866066
+    ],
+    "NA_mean_plus_amortized_training_seconds": 0.36635379264059625,
+    "NA_mean_seconds": 0.3516590826841297,
+    "NA_q_mae_mean": 0.001201930342646199,
+    "NA_q_mae_sd": 1.7455952879913647e-07,
+    "NA_training_amortized_seconds": 0.014694709956466556,
+    "P0_boundary": 0.0,
+    "P0_convergence": 1.0,
+    "P0_equal_q_mae": 0.0012024990000830953,
+    "P0_lattice_mae_angstrom": [
+      0.0002849201130797247
+    ],
+    "P0_mean_seconds": 0.40262557792419856,
+    "P0_q_mae": 0.0012024990000830953,
+    "P3_boundary": 0.0,
+    "P3_convergence": 1.0,
+    "P3_disagreement_mean": 0.5999196170427668,
+    "P3_equal_q_mae": 0.0012023360397024954,
+    "P3_lattice_mae_angstrom": [
+      0.0002848483821281796
+    ],
+    "P3_mean_seconds": 1.2468546389612707,
+    "P3_q_mae": 0.0012021962611976791,
+    "material": "grossular",
+    "primary_NA_nfev": 168.1818181818182,
+    "primary_P0_nfev": 193.63636363636363,
+    "primary_P3_nfev": 596.1818181818181,
+    "registered_decision": "NEURAL_RUNTIME_PARETO",
+    "training_gpu_seconds": 3.394477999943774
+  }
+]

@@ -1,0 +1,312 @@
+{
+  "data": {
+    "noise_seed": 2026101904,
+    "nuisance_seed": 2026101903,
+    "parent_seed": 2026101901,
+    "parents": 512,
+    "split_seed": 2026101902,
+    "test": 77,
+    "train": 358,
+    "validation": 77
+  },
+  "disk_budget_bytes": 10000000000,
+  "fairness": {
+    "total_maxfun": 600
+  },
+  "gpu_budget_seconds": 14400,
+  "grid_size": 1024,
+  "materials": [
+    {
+      "cell": {
+        "angle_alpha": "90",
+        "angle_beta": "90",
+        "angle_gamma": "90",
+        "length_a": "3.986",
+        "length_b": "3.986",
+        "length_c": "4.026"
+      },
+      "cif_path": "pxrd_cross_material_autolab/materials/BaTiO3_COD_9014273_P4mm.cif",
+      "cif_sha256": "e854c9868f643183904606b8c24463f8f0bacc1cca90f283641b33346db748b4",
+      "citation": {
+        "_journal_name_full": "Physical Review",
+        "_journal_page_first": "856",
+        "_journal_page_last": "860",
+        "_journal_paper_doi": "10.1103/PhysRev.105.856",
+        "_journal_volume": "105",
+        "_journal_year": "1957"
+      },
+      "composition": "Ba O3 Ti",
+      "crystal_system": "tetragonal",
+      "id": "batio3",
+      "license": "Scientific use with source publication attribution per CIF header",
+      "permission_evidence": "Explicit text in pinned CIF header",
+      "source_commit": "3506a8295f8d3219ce39aaf939a1265b7769378f",
+      "source_kind": "pinned_git_blob",
+      "source_url": "https://www.crystallography.net/cod/9014273.cif",
+      "spacegroup": 99,
+      "verification_scope": "Public source identity, formula, reported space group, header permission; expanded site geometry and physical gates independently required before training",
+      "verified": true
+    },
+    {
+      "cell": {
+        "angle_alpha": "90",
+        "angle_beta": "90",
+        "angle_gamma": "90",
+        "length_a": "4.212",
+        "length_b": "4.212",
+        "length_c": "4.212"
+      },
+      "cif_path": "pxrd_cross_material_autolab/materials/MgO_COD_9000505.cif",
+      "cif_sha256": "73e348f73ec4e2e41f2ea08cbe5f393366e7cfeb55285eebbb185ace7ec94923",
+      "citation": {
+        "_journal_name_full": "American Mineralogist",
+        "_journal_page_first": "266",
+        "_journal_page_last": "271",
+        "_journal_volume": "61",
+        "_journal_year": "1976"
+      },
+      "composition": "Mg O",
+      "crystal_system": "cubic",
+      "id": "mgo",
+      "license": "Scientific use with source publication attribution per CIF header",
+      "permission_evidence": "Explicit text in pinned CIF header",
+      "source_commit": "3506a8295f8d3219ce39aaf939a1265b7769378f",
+      "source_kind": "pinned_git_blob",
+      "source_url": "https://www.crystallography.net/cod/9000505.cif",
+      "spacegroup": 225,
+      "verification_scope": "Public source identity, formula, reported space group, header permission; expanded site geometry and physical gates independently required before training",
+      "verified": true
+    },
+    {
+      "cell": {
+        "angle_alpha": "90",
+        "angle_beta": "90",
+        "angle_gamma": "90",
+        "length_a": "5.4110",
+        "length_b": "5.4110",
+        "length_c": "5.4110"
+      },
+      "cif_path": "pxrd_cross_material_autolab/materials/CeO2_COD_9009008.cif",
+      "cif_sha256": "cfb862ebff35ab342a254a267eff4d94a86a18ae284142289e7b56d8d7b8e099",
+      "citation": {
+        "_journal_name_full": "Crystal Structures",
+        "_journal_page_first": "239",
+        "_journal_page_last": "444",
+        "_journal_volume": "1",
+        "_journal_year": "1963"
+      },
+      "composition": "Ce O2",
+      "crystal_system": "cubic",
+      "id": "ceo2",
+      "license": "Scientific use with source publication attribution per CIF header",
+      "permission_evidence": "Explicit text in pinned CIF header",
+      "source_commit": "3506a8295f8d3219ce39aaf939a1265b7769378f",
+      "source_kind": "pinned_git_blob",
+      "source_url": "https://www.crystallography.net/cod/9009008.cif",
+      "spacegroup": 225,
+      "verification_scope": "Public source identity, formula, reported space group, header permission; expanded site geometry and physical gates independently required before training",
+      "verified": true
+    },
+    {
+      "cell": {
+        "angle_alpha": "90",
+        "angle_beta": "90",
+        "angle_gamma": "90",
+        "length_a": "4.593",
+        "length_b": "4.593",
+        "length_c": "2.959"
+      },
+      "cif_path": "pxrd_cross_material_autolab/materials/rutile_COD_9004141.cif",
+      "cif_sha256": "ce9abab142351e802bde3eb40dbb554bb3ccec08e8c6ddc4299c0c532e9794ce",
+      "citation": {
+        "_journal_name_full": "The Canadian Mineralogist",
+        "_journal_page_first": "77",
+        "_journal_page_last": "85",
+        "_journal_volume": "17",
+        "_journal_year": "1979"
+      },
+      "cod": "9004141",
+      "composition": "O2 Ti",
+      "crystal_system": "tetragonal",
+      "id": "rutile",
+      "license": "Scientific use with source publication attribution per CIF header",
+      "permission_evidence": "Explicit use permission/public domain statement in pinned CIF header",
+      "source_kind": "public_cod_https",
+      "source_url": "https://www.crystallography.net/cod/9004141.cif",
+      "spacegroup": 136,
+      "status": "FETCHED",
+      "verification_scope": "Public source identity, formula, reported space group, header permission; expanded site geometry and physical gates independently required before training",
+      "verified": true
+    },
+    {
+      "cell": {
+        "angle_alpha": "90",
+        "angle_beta": "90",
+        "angle_gamma": "120",
+        "length_a": "3.24950",
+        "length_b": "3.24950",
+        "length_c": "5.2069"
+      },
+      "cif_path": "pxrd_cross_material_autolab/materials/zno_COD_9008877.cif",
+      "cif_sha256": "29e747c3b8a40e7e1bf6f26ef00ed895e8dfdd4a110ba34a5ee9c7d587782ace",
+      "citation": {
+        "_journal_name_full": "Crystal Structures",
+        "_journal_page_first": "85",
+        "_journal_page_last": "237",
+        "_journal_volume": "1",
+        "_journal_year": "1963"
+      },
+      "cod": "9008877",
+      "composition": "O Zn",
+      "crystal_system": "hexagonal",
+      "id": "zno",
+      "license": "Scientific use with source publication attribution per CIF header",
+      "permission_evidence": "Explicit use permission/public domain statement in pinned CIF header",
+      "source_kind": "public_cod_https",
+      "source_url": "https://www.crystallography.net/cod/9008877.cif",
+      "spacegroup": 186,
+      "status": "FETCHED",
+      "verification_scope": "Public source identity, formula, reported space group, header permission; expanded site geometry and physical gates independently required before training",
+      "verified": true
+    },
+    {
+      "cell": {
+        "angle_alpha": "90",
+        "angle_beta": "90",
+        "angle_gamma": "90",
+        "length_a": "5.43070",
+        "length_b": "5.43070",
+        "length_c": "5.43070"
+      },
+      "cif_path": "pxrd_cross_material_autolab/materials/silicon_COD_9008565.cif",
+      "cif_sha256": "46fb44ccdf93d1c3c1ecbe5b04ab0dea28c786bac20467b3a7511199af50e386",
+      "citation": {
+        "_journal_name_full": "Crystal Structures",
+        "_journal_page_first": "7",
+        "_journal_page_last": "83",
+        "_journal_volume": "1",
+        "_journal_year": "1963"
+      },
+      "cod": "9008565",
+      "composition": "Si",
+      "crystal_system": "cubic",
+      "id": "silicon",
+      "license": "Scientific use with source publication attribution per CIF header",
+      "permission_evidence": "Explicit use permission/public domain statement in pinned CIF header",
+      "source_kind": "public_cod_https",
+      "source_url": "https://www.crystallography.net/cod/9008565.cif",
+      "spacegroup": 227,
+      "status": "FETCHED",
+      "verification_scope": "Public source identity, formula, reported space group, header permission; expanded site geometry and physical gates independently required before training",
+      "verified": true
+    },
+    {
+      "cell": {
+        "angle_alpha": "90",
+        "angle_beta": "90",
+        "angle_gamma": "90",
+        "length_a": "11.847",
+        "length_b": "11.847",
+        "length_c": "11.847"
+      },
+      "cif_path": "pxrd_cross_material_autolab/materials/Grossular_COD_9001868.cif",
+      "cif_sha256": "d6b3d78a1d487de504d4d47db9cbd1a2dc28e51e99c9c43a0565c8e1325cbb1e",
+      "citation": {
+        "_journal_name_full": "American Mineralogist",
+        "_journal_page_first": "740",
+        "_journal_page_last": "747",
+        "_journal_volume": "82",
+        "_journal_year": "1997"
+      },
+      "composition": "Al2 Ca3 O12 Si3",
+      "crystal_system": "cubic",
+      "id": "grossular",
+      "license": "Scientific use with source publication attribution per CIF header",
+      "source_commit": "b9454163993d5fe0a9b5f0860617490a5a8c51cb",
+      "source_kind": "pinned_git_blob",
+      "source_url": "https://www.crystallography.net/cod/9001868.cif",
+      "spacegroup": 230,
+      "verification_scope": "Public source identity, formula, reported space group, header permission; expanded site geometry and physical gates independently required before training",
+      "verified": true
+    },
+    {
+      "cell": {
+        "angle_alpha": "90",
+        "angle_beta": "90",
+        "angle_gamma": "120",
+        "length_a": "4.9900",
+        "length_b": "4.9900",
+        "length_c": "17.0615"
+      },
+      "cif_path": "pxrd_cross_material_autolab/materials/calcite_COD_9000095.cif",
+      "cif_sha256": "d8a1cf92866da8814ef104b1626117490d9d4fbad823ef5dbf1cd2954488da52",
+      "citation": {
+        "_journal_name_full": "American Mineralogist",
+        "_journal_page_first": "1283",
+        "_journal_page_last": "1316",
+        "_journal_volume": "46",
+        "_journal_year": "1961"
+      },
+      "cod": "9000095",
+      "composition": "C Ca O3",
+      "crystal_system": "trigonal",
+      "id": "calcite",
+      "license": "Scientific use with source publication attribution per CIF header",
+      "permission_evidence": "Explicit use permission/public domain statement in pinned CIF header",
+      "source_kind": "public_cod_https",
+      "source_url": "https://www.crystallography.net/cod/9000095.cif",
+      "spacegroup": 167,
+      "status": "FETCHED",
+      "verification_scope": "Public source identity, formula, reported space group, header permission; expanded site geometry and physical gates independently required before training",
+      "verified": true
+    },
+    {
+      "cell": {
+        "angle_alpha": "90",
+        "angle_beta": "90",
+        "angle_gamma": "120",
+        "length_a": "4.7606(5)",
+        "length_b": "4.7606(5)",
+        "length_c": "12.994(1)"
+      },
+      "cif_path": "pxrd_cross_material_autolab/materials/corundum_COD_1000017.cif",
+      "cif_sha256": "845d76ec5cdc1385f21130ce9b42f0f8357493e801e428305cb60ad20a6de33a",
+      "citation": {
+        "_journal_coden_ASTM": "PSSABA",
+        "_journal_page_first": "425",
+        "_journal_page_last": "433",
+        "_journal_paper_doi": "10.1002/pssa.2210870204",
+        "_journal_volume": "87",
+        "_journal_year": "1985"
+      },
+      "cod": "1000017",
+      "composition": "Al2 O3",
+      "crystal_system": "trigonal",
+      "id": "corundum",
+      "license": "Public domain per CIF header",
+      "permission_evidence": "Explicit use permission/public domain statement in pinned CIF header",
+      "source_kind": "public_cod_https",
+      "source_url": "https://www.crystallography.net/cod/1000017.cif",
+      "spacegroup": 167,
+      "status": "FETCHED",
+      "verification_scope": "Public source identity, formula, reported space group, header permission; expanded site geometry and physical gates independently required before training",
+      "verified": true
+    }
+  ],
+  "minimum_free_bytes": 1000000000,
+  "optimizer": {
+    "maxfun": 1000,
+    "maxiter": 100
+  },
+  "training": {
+    "batch_size": 32,
+    "epochs": 24,
+    "lr": 0.001,
+    "seeds": [
+      2026101911,
+      2026101912,
+      2026101913
+    ]
+  },
+  "wall_budget_seconds": 28800
+}

@@ -1,0 +1,89 @@
+{
+  "materials": {
+    "batio3": {
+      "attempt": "pxrd_cross_material_autolab\\runs\\pilot_20261019\\materials\\batio3\\attempt_1792420646692620900",
+      "result": "pxrd_cross_material_autolab\\runs\\pilot_20261019\\materials\\batio3\\attempt_1792420646692620900\\result.json",
+      "stage": "experiment",
+      "status": "PASS",
+      "time": 1792420762.6652894
+    },
+    "calcite": {
+      "reason": {
+        "reason": "Unsupported crystal system: trigonal",
+        "status": "FAIL",
+        "traceback": "Traceback (most recent call last):\n  File \"E:\\AI4science\\_local\\worktrees\\pxrd_cross_material_autolab_20261019\\pxrd_cross_material_autolab\\manager.py\", line 146, in run\n    model=physics.PowderModel(material[\"cif_path\"],grid_size=config.get(\"grid_size\",1024))\n          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"E:\\AI4science\\_local\\worktrees\\pxrd_cross_material_autolab_20261019\\pxrd_cross_material_autolab\\physics.py\", line 27, in __init__\n    raise ValueError('Unsupported crystal system: '+self.system)\nValueError: Unsupported crystal system: trigonal\n"
+      },
+      "stage": "physical_gate",
+      "status": "SKIPPED",
+      "time": 1792420646.5942764
+    },
+    "ceo2": {
+      "attempt": "pxrd_cross_material_autolab\\runs\\pilot_20261019\\materials\\ceo2\\attempt_1792420829072753200",
+      "result": "pxrd_cross_material_autolab\\runs\\pilot_20261019\\materials\\ceo2\\attempt_1792420829072753200\\result.json",
+      "stage": "experiment",
+      "status": "PASS",
+      "time": 1792420917.363616
+    },
+    "corundum": {
+      "reason": {
+        "reason": "Unsupported crystal system: trigonal",
+        "status": "FAIL",
+        "traceback": "Traceback (most recent call last):\n  File \"E:\\AI4science\\_local\\worktrees\\pxrd_cross_material_autolab_20261019\\pxrd_cross_material_autolab\\manager.py\", line 146, in run\n    model=physics.PowderModel(material[\"cif_path\"],grid_size=config.get(\"grid_size\",1024))\n          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"E:\\AI4science\\_local\\worktrees\\pxrd_cross_material_autolab_20261019\\pxrd_cross_material_autolab\\physics.py\", line 27, in __init__\n    raise ValueError('Unsupported crystal system: '+self.system)\nValueError: Unsupported crystal system: trigonal\n"
+      },
+      "stage": "physical_gate",
+      "status": "SKIPPED",
+      "time": 1792420646.6098216
+    },
+    "grossular": {
+      "attempt": "pxrd_cross_material_autolab\\runs\\pilot_20261019\\materials\\grossular\\attempt_1792421221038356600",
+      "result": "pxrd_cross_material_autolab\\runs\\pilot_20261019\\materials\\grossular\\attempt_1792421221038356600\\result.json",
+      "stage": "experiment",
+      "status": "PASS",
+      "time": 1792421637.9392703
+    },
+    "mgo": {
+      "attempt": "pxrd_cross_material_autolab\\runs\\pilot_20261019\\materials\\mgo\\attempt_1792420762723427700",
+      "result": "pxrd_cross_material_autolab\\runs\\pilot_20261019\\materials\\mgo\\attempt_1792420762723427700\\result.json",
+      "stage": "experiment",
+      "status": "PASS",
+      "time": 1792420828.9972777
+    },
+    "rutile": {
+      "attempt": "pxrd_cross_material_autolab\\runs\\pilot_20261019\\materials\\rutile\\attempt_1792420917456186200",
+      "result": "pxrd_cross_material_autolab\\runs\\pilot_20261019\\materials\\rutile\\attempt_1792420917456186200\\result.json",
+      "stage": "experiment",
+      "status": "PASS",
+      "time": 1792421041.071344
+    },
+    "silicon": {
+      "attempt": "pxrd_cross_material_autolab\\runs\\pilot_20261019\\materials\\silicon\\attempt_1792421136432255200",
+      "result": "pxrd_cross_material_autolab\\runs\\pilot_20261019\\materials\\silicon\\attempt_1792421136432255200\\result.json",
+      "stage": "experiment",
+      "status": "PASS",
+      "time": 1792421220.8902576
+    },
+    "zno": {
+      "attempt": "pxrd_cross_material_autolab\\runs\\pilot_20261019\\materials\\zno\\attempt_1792421041191186400",
+      "result": "pxrd_cross_material_autolab\\runs\\pilot_20261019\\materials\\zno\\attempt_1792421041191186400\\result.json",
+      "stage": "experiment",
+      "status": "PASS",
+      "time": 1792421136.193576
+    }
+  },
+  "status": {
+    "material_statuses": [
+      "PASS",
+      "SKIPPED",
+      "PASS",
+      "SKIPPED",
+      "PASS",
+      "PASS",
+      "PASS",
+      "PASS",
+      "PASS"
+    ],
+    "stage": "run",
+    "status": "BLOCKED",
+    "time": 1792421637.9517615
+  }
+}

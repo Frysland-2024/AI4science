@@ -1,0 +1,35 @@
+{
+  "status": "PASS",
+  "identity": {
+    "cif_sha256": {
+      "batio3": "e854c9868f643183904606b8c24463f8f0bacc1cca90f283641b33346db748b4",
+      "calcite": "d8a1cf92866da8814ef104b1626117490d9d4fbad823ef5dbf1cd2954488da52",
+      "ceo2": "cfb862ebff35ab342a254a267eff4d94a86a18ae284142289e7b56d8d7b8e099",
+      "corundum": "845d76ec5cdc1385f21130ce9b42f0f8357493e801e428305cb60ad20a6de33a",
+      "grossular": "d6b3d78a1d487de504d4d47db9cbd1a2dc28e51e99c9c43a0565c8e1325cbb1e",
+      "mgo": "73e348f73ec4e2e41f2ea08cbe5f393366e7cfeb55285eebbb185ace7ec94923",
+      "rutile": "ce9abab142351e802bde3eb40dbb554bb3ccec08e8c6ddc4299c0c532e9794ce",
+      "silicon": "46fb44ccdf93d1c3c1ecbe5b04ab0dea28c786bac20467b3a7511199af50e386",
+      "zno": "29e747c3b8a40e7e1bf6f26ef00ed895e8dfdd4a110ba34a5ee9c7d587782ace"
+    },
+    "config_sha256": "f74942f5542560bb302bd90d0e64239b6a0ff1999065ee7a56909fc40a27ec35",
+    "preregistration_sha256": "7e630b7bc4198ec0cef99b6be7056e0b41b6d230cf9e11dd63801db7620508c8",
+    "source_sha256": {
+      "E:\\AI4science\\_local\\worktrees\\pxrd_cross_material_autolab_20261019\\pxrd_cross_material_autolab\\__main__.py": "f702be4fcada679ceb1c5a281a7d10f0c1d9f19b40fbb36691085a48b3593d18",
+      "E:\\AI4science\\_local\\worktrees\\pxrd_cross_material_autolab_20261019\\pxrd_cross_material_autolab\\experiment.py": "fbb7bdc93c851a4f90c9aac898f9f7808f14536acde6027a17c02005744cc357",
+      "E:\\AI4science\\_local\\worktrees\\pxrd_cross_material_autolab_20261019\\pxrd_cross_material_autolab\\manager.py": "261a7e56014289cbd9eea9a967c6def43122eb2eaee45ad5b78f3a16fee7bb0d",
+      "E:\\AI4science\\_local\\worktrees\\pxrd_cross_material_autolab_20261019\\pxrd_cross_material_autolab\\physics.py": "2b8def953e025e029ed152ffb1ab876d7724c306adbb91332cfed6157fd78817",
+      "E:\\AI4science\\_local\\worktrees\\pxrd_cross_material_autolab_20261019\\pxrd_cross_material_autolab\\test_experiment.py": "3b029a4bee2ebc8760d2bcce1584c47610a863fbccadbbbd24095216740dcd64",
+      "E:\\AI4science\\_local\\worktrees\\pxrd_cross_material_autolab_20261019\\pxrd_cross_material_autolab\\test_physics.py": "57d4f291a1a1f702998c2f7f821710a68ff56fee4f5f33cfa8c2fc28f98b8eda"
+    }
+  },
+  "metrics_recomputed": [
+    "pxrd_cross_material_autolab\\runs\\pilot_20261019\\materials\\batio3\\attempt_1792420646692620900\\per_sample.jsonl",
+    "pxrd_cross_material_autolab\\runs\\pilot_20261019\\materials\\ceo2\\attempt_1792420829072753200\\per_sample.jsonl",
+    "pxrd_cross_material_autolab\\runs\\pilot_20261019\\materials\\grossular\\attempt_1792421221038356600\\per_sample.jsonl",
+    "pxrd_cross_material_autolab\\runs\\pilot_20261019\\materials\\mgo\\attempt_1792420762723427700\\per_sample.jsonl",
+    "pxrd_cross_material_autolab\\runs\\pilot_20261019\\materials\\rutile\\attempt_1792420917456186200\\per_sample.jsonl",
+    "pxrd_cross_material_autolab\\runs\\pilot_20261019\\materials\\silicon\\attempt_1792421136432255200\\per_sample.jsonl",
+    "pxrd_cross_material_autolab\\runs\\pilot_20261019\\materials\\zno\\attempt_1792421041191186400\\per_sample.jsonl"
+  ]
+}

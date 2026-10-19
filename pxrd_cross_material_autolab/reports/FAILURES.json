@@ -1,0 +1,575 @@
+{
+  "optimizer_attempt_count": 8330,
+  "primary": [
+    {
+      "any_attempt_nonconverged": 0,
+      "boundary_rows": 0,
+      "material": "batio3",
+      "method": "P0",
+      "nonconverged_attempts": 0,
+      "rows": 77,
+      "selected_nonconverged": 0
+    },
+    {
+      "any_attempt_nonconverged": 0,
+      "boundary_rows": 0,
+      "material": "batio3",
+      "method": "P3",
+      "nonconverged_attempts": 0,
+      "rows": 77,
+      "selected_nonconverged": 0
+    },
+    {
+      "any_attempt_nonconverged": 0,
+      "boundary_rows": 0,
+      "material": "batio3",
+      "method": "P0_equal_eval",
+      "nonconverged_attempts": 0,
+      "rows": 77,
+      "selected_nonconverged": 0
+    },
+    {
+      "any_attempt_nonconverged": 76,
+      "boundary_rows": 0,
+      "material": "batio3",
+      "method": "P3_equal_eval",
+      "nonconverged_attempts": 185,
+      "rows": 77,
+      "selected_nonconverged": 45
+    },
+    {
+      "any_attempt_nonconverged": 0,
+      "boundary_rows": 0,
+      "material": "batio3",
+      "method": "N+A",
+      "nonconverged_attempts": 0,
+      "rows": 231,
+      "selected_nonconverged": 0
+    },
+    {
+      "any_attempt_nonconverged": 0,
+      "boundary_rows": 0,
+      "material": "batio3",
+      "method": "N+A_equal_eval",
+      "nonconverged_attempts": 0,
+      "rows": 231,
+      "selected_nonconverged": 0
+    },
+    {
+      "any_attempt_nonconverged": 0,
+      "boundary_rows": 0,
+      "material": "ceo2",
+      "method": "P0",
+      "nonconverged_attempts": 0,
+      "rows": 77,
+      "selected_nonconverged": 0
+    },
+    {
+      "any_attempt_nonconverged": 0,
+      "boundary_rows": 0,
+      "material": "ceo2",
+      "method": "P3",
+      "nonconverged_attempts": 0,
+      "rows": 77,
+      "selected_nonconverged": 0
+    },
+    {
+      "any_attempt_nonconverged": 0,
+      "boundary_rows": 0,
+      "material": "ceo2",
+      "method": "P0_equal_eval",
+      "nonconverged_attempts": 0,
+      "rows": 77,
+      "selected_nonconverged": 0
+    },
+    {
+      "any_attempt_nonconverged": 63,
+      "boundary_rows": 0,
+      "material": "ceo2",
+      "method": "P3_equal_eval",
+      "nonconverged_attempts": 89,
+      "rows": 77,
+      "selected_nonconverged": 8
+    },
+    {
+      "any_attempt_nonconverged": 0,
+      "boundary_rows": 0,
+      "material": "ceo2",
+      "method": "N+A",
+      "nonconverged_attempts": 0,
+      "rows": 231,
+      "selected_nonconverged": 0
+    },
+    {
+      "any_attempt_nonconverged": 0,
+      "boundary_rows": 0,
+      "material": "ceo2",
+      "method": "N+A_equal_eval",
+      "nonconverged_attempts": 0,
+      "rows": 231,
+      "selected_nonconverged": 0
+    },
+    {
+      "any_attempt_nonconverged": 0,
+      "boundary_rows": 0,
+      "material": "grossular",
+      "method": "P0",
+      "nonconverged_attempts": 0,
+      "rows": 77,
+      "selected_nonconverged": 0
+    },
+    {
+      "any_attempt_nonconverged": 0,
+      "boundary_rows": 0,
+      "material": "grossular",
+      "method": "P3",
+      "nonconverged_attempts": 0,
+      "rows": 77,
+      "selected_nonconverged": 0
+    },
+    {
+      "any_attempt_nonconverged": 0,
+      "boundary_rows": 0,
+      "material": "grossular",
+      "method": "P0_equal_eval",
+      "nonconverged_attempts": 0,
+      "rows": 77,
+      "selected_nonconverged": 0
+    },
+    {
+      "any_attempt_nonconverged": 68,
+      "boundary_rows": 0,
+      "material": "grossular",
+      "method": "P3_equal_eval",
+      "nonconverged_attempts": 94,
+      "rows": 77,
+      "selected_nonconverged": 10
+    },
+    {
+      "any_attempt_nonconverged": 0,
+      "boundary_rows": 0,
+      "material": "grossular",
+      "method": "N+A",
+      "nonconverged_attempts": 0,
+      "rows": 231,
+      "selected_nonconverged": 0
+    },
+    {
+      "any_attempt_nonconverged": 0,
+      "boundary_rows": 0,
+      "material": "grossular",
+      "method": "N+A_equal_eval",
+      "nonconverged_attempts": 0,
+      "rows": 231,
+      "selected_nonconverged": 0
+    },
+    {
+      "any_attempt_nonconverged": 0,
+      "boundary_rows": 3,
+      "material": "mgo",
+      "method": "P0",
+      "nonconverged_attempts": 0,
+      "rows": 77,
+      "selected_nonconverged": 0
+    },
+    {
+      "any_attempt_nonconverged": 0,
+      "boundary_rows": 0,
+      "material": "mgo",
+      "method": "P3",
+      "nonconverged_attempts": 0,
+      "rows": 77,
+      "selected_nonconverged": 0
+    },
+    {
+      "any_attempt_nonconverged": 0,
+      "boundary_rows": 3,
+      "material": "mgo",
+      "method": "P0_equal_eval",
+      "nonconverged_attempts": 0,
+      "rows": 77,
+      "selected_nonconverged": 0
+    },
+    {
+      "any_attempt_nonconverged": 74,
+      "boundary_rows": 0,
+      "material": "mgo",
+      "method": "P3_equal_eval",
+      "nonconverged_attempts": 148,
+      "rows": 77,
+      "selected_nonconverged": 23
+    },
+    {
+      "any_attempt_nonconverged": 0,
+      "boundary_rows": 0,
+      "material": "mgo",
+      "method": "N+A",
+      "nonconverged_attempts": 0,
+      "rows": 231,
+      "selected_nonconverged": 0
+    },
+    {
+      "any_attempt_nonconverged": 0,
+      "boundary_rows": 0,
+      "material": "mgo",
+      "method": "N+A_equal_eval",
+      "nonconverged_attempts": 0,
+      "rows": 231,
+      "selected_nonconverged": 0
+    },
+    {
+      "any_attempt_nonconverged": 0,
+      "boundary_rows": 0,
+      "material": "rutile",
+      "method": "P0",
+      "nonconverged_attempts": 0,
+      "rows": 77,
+      "selected_nonconverged": 0
+    },
+    {
+      "any_attempt_nonconverged": 0,
+      "boundary_rows": 0,
+      "material": "rutile",
+      "method": "P3",
+      "nonconverged_attempts": 0,
+      "rows": 77,
+      "selected_nonconverged": 0
+    },
+    {
+      "any_attempt_nonconverged": 0,
+      "boundary_rows": 0,
+      "material": "rutile",
+      "method": "P0_equal_eval",
+      "nonconverged_attempts": 0,
+      "rows": 77,
+      "selected_nonconverged": 0
+    },
+    {
+      "any_attempt_nonconverged": 77,
+      "boundary_rows": 0,
+      "material": "rutile",
+      "method": "P3_equal_eval",
+      "nonconverged_attempts": 218,
+      "rows": 77,
+      "selected_nonconverged": 64
+    },
+    {
+      "any_attempt_nonconverged": 0,
+      "boundary_rows": 0,
+      "material": "rutile",
+      "method": "N+A",
+      "nonconverged_attempts": 0,
+      "rows": 231,
+      "selected_nonconverged": 0
+    },
+    {
+      "any_attempt_nonconverged": 0,
+      "boundary_rows": 0,
+      "material": "rutile",
+      "method": "N+A_equal_eval",
+      "nonconverged_attempts": 0,
+      "rows": 231,
+      "selected_nonconverged": 0
+    },
+    {
+      "any_attempt_nonconverged": 0,
+      "boundary_rows": 0,
+      "material": "silicon",
+      "method": "P0",
+      "nonconverged_attempts": 0,
+      "rows": 77,
+      "selected_nonconverged": 0
+    },
+    {
+      "any_attempt_nonconverged": 0,
+      "boundary_rows": 0,
+      "material": "silicon",
+      "method": "P3",
+      "nonconverged_attempts": 0,
+      "rows": 77,
+      "selected_nonconverged": 0
+    },
+    {
+      "any_attempt_nonconverged": 0,
+      "boundary_rows": 0,
+      "material": "silicon",
+      "method": "P0_equal_eval",
+      "nonconverged_attempts": 0,
+      "rows": 77,
+      "selected_nonconverged": 0
+    },
+    {
+      "any_attempt_nonconverged": 63,
+      "boundary_rows": 0,
+      "material": "silicon",
+      "method": "P3_equal_eval",
+      "nonconverged_attempts": 86,
+      "rows": 77,
+      "selected_nonconverged": 8
+    },
+    {
+      "any_attempt_nonconverged": 0,
+      "boundary_rows": 0,
+      "material": "silicon",
+      "method": "N+A",
+      "nonconverged_attempts": 0,
+      "rows": 231,
+      "selected_nonconverged": 0
+    },
+    {
+      "any_attempt_nonconverged": 0,
+      "boundary_rows": 0,
+      "material": "silicon",
+      "method": "N+A_equal_eval",
+      "nonconverged_attempts": 0,
+      "rows": 231,
+      "selected_nonconverged": 0
+    },
+    {
+      "any_attempt_nonconverged": 0,
+      "boundary_rows": 0,
+      "material": "zno",
+      "method": "P0",
+      "nonconverged_attempts": 0,
+      "rows": 77,
+      "selected_nonconverged": 0
+    },
+    {
+      "any_attempt_nonconverged": 0,
+      "boundary_rows": 0,
+      "material": "zno",
+      "method": "P3",
+      "nonconverged_attempts": 0,
+      "rows": 77,
+      "selected_nonconverged": 0
+    },
+    {
+      "any_attempt_nonconverged": 0,
+      "boundary_rows": 0,
+      "material": "zno",
+      "method": "P0_equal_eval",
+      "nonconverged_attempts": 0,
+      "rows": 77,
+      "selected_nonconverged": 0
+    },
+    {
+      "any_attempt_nonconverged": 77,
+      "boundary_rows": 2,
+      "material": "zno",
+      "method": "P3_equal_eval",
+      "nonconverged_attempts": 224,
+      "rows": 77,
+      "selected_nonconverged": 70
+    },
+    {
+      "any_attempt_nonconverged": 0,
+      "boundary_rows": 0,
+      "material": "zno",
+      "method": "N+A",
+      "nonconverged_attempts": 0,
+      "rows": 231,
+      "selected_nonconverged": 0
+    },
+    {
+      "any_attempt_nonconverged": 0,
+      "boundary_rows": 0,
+      "material": "zno",
+      "method": "N+A_equal_eval",
+      "nonconverged_attempts": 0,
+      "rows": 231,
+      "selected_nonconverged": 0
+    }
+  ],
+  "record_count": 5950,
+  "stress": [
+    {
+      "any_attempt_nonconverged": 0,
+      "boundary_rows": 0,
+      "material": "batio3",
+      "method": "P0",
+      "nonconverged_attempts": 0,
+      "rows": 16,
+      "selected_nonconverged": 0
+    },
+    {
+      "any_attempt_nonconverged": 0,
+      "boundary_rows": 0,
+      "material": "batio3",
+      "method": "P3",
+      "nonconverged_attempts": 0,
+      "rows": 16,
+      "selected_nonconverged": 0
+    },
+    {
+      "any_attempt_nonconverged": 0,
+      "boundary_rows": 0,
+      "material": "batio3",
+      "method": "N+A",
+      "nonconverged_attempts": 0,
+      "rows": 48,
+      "selected_nonconverged": 0
+    },
+    {
+      "any_attempt_nonconverged": 0,
+      "boundary_rows": 0,
+      "material": "ceo2",
+      "method": "P0",
+      "nonconverged_attempts": 0,
+      "rows": 16,
+      "selected_nonconverged": 0
+    },
+    {
+      "any_attempt_nonconverged": 0,
+      "boundary_rows": 0,
+      "material": "ceo2",
+      "method": "P3",
+      "nonconverged_attempts": 0,
+      "rows": 16,
+      "selected_nonconverged": 0
+    },
+    {
+      "any_attempt_nonconverged": 0,
+      "boundary_rows": 0,
+      "material": "ceo2",
+      "method": "N+A",
+      "nonconverged_attempts": 0,
+      "rows": 48,
+      "selected_nonconverged": 0
+    },
+    {
+      "any_attempt_nonconverged": 0,
+      "boundary_rows": 0,
+      "material": "grossular",
+      "method": "P0",
+      "nonconverged_attempts": 0,
+      "rows": 16,
+      "selected_nonconverged": 0
+    },
+    {
+      "any_attempt_nonconverged": 0,
+      "boundary_rows": 0,
+      "material": "grossular",
+      "method": "P3",
+      "nonconverged_attempts": 0,
+      "rows": 16,
+      "selected_nonconverged": 0
+    },
+    {
+      "any_attempt_nonconverged": 0,
+      "boundary_rows": 0,
+      "material": "grossular",
+      "method": "N+A",
+      "nonconverged_attempts": 0,
+      "rows": 48,
+      "selected_nonconverged": 0
+    },
+    {
+      "any_attempt_nonconverged": 0,
+      "boundary_rows": 0,
+      "material": "mgo",
+      "method": "P0",
+      "nonconverged_attempts": 0,
+      "rows": 16,
+      "selected_nonconverged": 0
+    },
+    {
+      "any_attempt_nonconverged": 0,
+      "boundary_rows": 0,
+      "material": "mgo",
+      "method": "P3",
+      "nonconverged_attempts": 0,
+      "rows": 16,
+      "selected_nonconverged": 0
+    },
+    {
+      "any_attempt_nonconverged": 0,
+      "boundary_rows": 0,
+      "material": "mgo",
+      "method": "N+A",
+      "nonconverged_attempts": 0,
+      "rows": 48,
+      "selected_nonconverged": 0
+    },
+    {
+      "any_attempt_nonconverged": 0,
+      "boundary_rows": 0,
+      "material": "rutile",
+      "method": "P0",
+      "nonconverged_attempts": 0,
+      "rows": 16,
+      "selected_nonconverged": 0
+    },
+    {
+      "any_attempt_nonconverged": 0,
+      "boundary_rows": 0,
+      "material": "rutile",
+      "method": "P3",
+      "nonconverged_attempts": 0,
+      "rows": 16,
+      "selected_nonconverged": 0
+    },
+    {
+      "any_attempt_nonconverged": 0,
+      "boundary_rows": 0,
+      "material": "rutile",
+      "method": "N+A",
+      "nonconverged_attempts": 0,
+      "rows": 48,
+      "selected_nonconverged": 0
+    },
+    {
+      "any_attempt_nonconverged": 0,
+      "boundary_rows": 0,
+      "material": "silicon",
+      "method": "P0",
+      "nonconverged_attempts": 0,
+      "rows": 16,
+      "selected_nonconverged": 0
+    },
+    {
+      "any_attempt_nonconverged": 0,
+      "boundary_rows": 0,
+      "material": "silicon",
+      "method": "P3",
+      "nonconverged_attempts": 0,
+      "rows": 16,
+      "selected_nonconverged": 0
+    },
+    {
+      "any_attempt_nonconverged": 0,
+      "boundary_rows": 0,
+      "material": "silicon",
+      "method": "N+A",
+      "nonconverged_attempts": 0,
+      "rows": 48,
+      "selected_nonconverged": 0
+    },
+    {
+      "any_attempt_nonconverged": 0,
+      "boundary_rows": 0,
+      "material": "zno",
+      "method": "P0",
+      "nonconverged_attempts": 0,
+      "rows": 16,
+      "selected_nonconverged": 0
+    },
+    {
+      "any_attempt_nonconverged": 0,
+      "boundary_rows": 0,
+      "material": "zno",
+      "method": "P3",
+      "nonconverged_attempts": 0,
+      "rows": 16,
+      "selected_nonconverged": 0
+    },
+    {
+      "any_attempt_nonconverged": 0,
+      "boundary_rows": 0,
+      "material": "zno",
+      "method": "N+A",
+      "nonconverged_attempts": 0,
+      "rows": 48,
+      "selected_nonconverged": 0
+    }
+  ]
+}
