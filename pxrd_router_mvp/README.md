@@ -33,6 +33,21 @@ Candidate CIFs are BaTiO₃ P4mm (COD 9014273), MgO rocksalt (COD 9000505), and 
 
 The seven-system classifier is optional and never gates candidate scoring. The deterministic demo is marked **SIMULATED**. See [`../reports/DEMO_VALIDATION.md`](../reports/DEMO_VALIDATION.md) and [`../reports/MVP_IMPLEMENTATION_STATUS.json`](../reports/MVP_IMPLEMENTATION_STATUS.json).
 
+## Local Garnet real-spectrum pilot
+
+The **Garnet real-spectrum pilot** option adds three curated Grossular powder samples from the official local `RRUFF/XY_RAW.zip` archive. It verifies each selected member's SHA-256, parses numeric angle/intensity rows only, and does not parse the same-sample lattice values embedded in XY_RAW headers. The samples retain distinct measured chemistry, locality, and source notes. Other Garnet minerals are not treated as Grossular.
+
+The pinned, independent [COD Grossular structure 9001871](https://www.crystallography.net/cod/9001871.html) is used with `pymatgen`'s `XRDCalculator` for structure-factor intensities and powder reflections. The pilot fits one cubic `a`, zero shift, Gaussian width, scale, and affine background, and compares the optimized result with a nuisance-fitted fixed CIF-cell baseline. It is a constrained powder-profile model, not a full Rietveld refinement. The same-sample RRUFF refined cell is loaded only after the physical fits finish, solely for posthoc evaluation.
+
+Install and launch the existing interface:
+
+```powershell
+python -m pip install -e ".[ui,garnet]"
+streamlit run pxrd_router_mvp/ui/streamlit_app.py
+```
+
+Choose **Garnet real-spectrum pilot**, select one of the curated Grossular IDs, and point the app at the local official RRUFF archive directory (for this workstation, `E:\AI4science\RRUFF`). Full local profiles, run JSON, CSV diagnostics, and PNG overlays stay under the ignored `reports/_local_garnet_pilot/` directory. The tracked evidence and current outcome are in [`../reports/GARNET_REAL_PILOT.md`](../reports/GARNET_REAL_PILOT.md).
+
 ## Optional local RRUFF examples
 
 The app can opt into two **adaptation_pool** RRUFF-371 measured/resampled profiles when pointed at a local licensed data tree. No RRUFF spectrum, DIF, refinement text, or private metadata is bundled or copied. The adapter enforces split membership and the manifest spectrum hash and accepts only R050045 Fluorite (CaF2) and R060745 Rutile (TiO2). See the metadata-only [real-demo audit](../reports/RRUFF_REAL_DEMO_AUDIT.md) for overlay outcomes and posthoc comparisons.
