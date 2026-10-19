@@ -4,6 +4,7 @@ import csv
 import hashlib
 import json
 from pathlib import Path
+import sys
 
 import numpy as np
 import pytest
@@ -17,6 +18,8 @@ from xrd_robustness.parent_budget_efficiency import (
     canonical_json_bytes,
     expected_exposure,
     identity_hash,
+    normalized_text_file_hash,
+    text_file_hash_variants,
     validate_parent_split,
 )
 from xrd_robustness.training.objectives import TrainingStepConfig, run_training_step
@@ -26,6 +29,22 @@ from xrd_robustness.training.paired import paired_optimizer_step
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 MANIFEST_DIR = PROJECT_ROOT / "manifests" / "parent_budget_efficiency"
+sys.path.insert(0, str(PROJECT_ROOT / "scripts"))
+
+from analyze_parent_budget_matrix import (  # noqa: E402
+    CANONICAL_REPORT,
+    _analysis_output_paths,
+    _assert_pair_provenance,
+    _equivalent_parent_estimates,
+    _guard_completed_archive,
+    _pairing_exposure_record,
+    _summarize_pairing_exposure,
+)
+from run_parent_budget_matrix import (  # noqa: E402
+    _complete_pair,
+    _expected_pair_metadata,
+)
+from run_parent_budget_pair import _ensure_eval_cache  # noqa: E402
 
 
 def _sha256(content: bytes) -> str:
@@ -201,3 +220,212 @@ def test_three_step_paired_smoke_shares_identical_two_views(monkeypatch: pytest.
         not torch.equal(models["dynamic_erm"].state_dict()[key], models["dynamic_js"].state_dict()[key])
         for key in models["dynamic_erm"].state_dict()
     )
+
+
+def test_text_config_hash_is_stable_across_line_endings(tmp_path: Path) -> None:
+    lf_path = tmp_path / "simulation-lf.json"
+    crlf_path = tmp_path / "simulation-crlf.json"
+    content = b'{\n  "profiles": []\n}\n'
+    lf_path.write_bytes(content)
+    crlf_path.write_bytes(content.replace(b"\n", b"\r\n"))
+
+    assert normalized_text_file_hash(lf_path) == normalized_text_file_hash(crlf_path)
+    assert normalized_text_file_hash(lf_path) in text_file_hash_variants(crlf_path)
+
+
+def test_evaluation_cache_binding_uses_the_supplied_simulation_hash(tmp_path: Path) -> None:
+    data_root = tmp_path / "data"
+    split_manifest = data_root / "manifests" / "split_manifest.json"
+    split_manifest.parent.mkdir(parents=True)
+    split_manifest.write_text("{}", encoding="utf-8")
+    cache_root = tmp_path / "cache"
+
+    index, panels, labels = _ensure_eval_cache(
+        data_root=data_root,
+        cache_root=cache_root,
+        split_rows=[],
+        simulation={},
+        simulation_config_sha256="A" * 64,
+        eval_seeds=[],
+        profiles=[],
+        split="validation",
+        input_length=4,
+    )
+    assert index["bindings"]["simulation_config_sha256"] == "A" * 64
+    assert panels == {}
+    assert labels.size == 0
+
+    with pytest.raises(ValueError, match="bindings changed"):
+        _ensure_eval_cache(
+            data_root=data_root,
+            cache_root=cache_root,
+            split_rows=[],
+            simulation={},
+            simulation_config_sha256="B" * 64,
+            eval_seeds=[],
+            profiles=[],
+            split="validation",
+            input_length=4,
+        )
+
+
+def test_completed_pair_rejects_changed_protocol_or_data_hashes(tmp_path: Path) -> None:
+    seed = 20260711
+    budget = "10"
+    expected = _expected_pair_metadata(
+        seed=seed,
+        budget=budget,
+        data_subset_sha256="D" * 64,
+        protocol_config_sha256="P" * 64,
+        parent_subset_manifest_sha256="S" * 64,
+        ranked_train_file_sha256="R" * 64,
+        simulation_config_sha256="C" * 64,
+    )
+    result_path = tmp_path / f"seed_{seed}" / "parents_984" / "result.json"
+    result_path.parent.mkdir(parents=True)
+    result_path.write_text(
+        json.dumps({"status": "completed", **expected}),
+        encoding="utf-8",
+    )
+
+    assert _complete_pair(tmp_path, seed, budget, expected=expected)
+    changed = {**expected, "simulation_config_sha256": "X" * 64}
+    with pytest.raises(ValueError, match="incompatible provenance"):
+        _complete_pair(tmp_path, seed, budget, expected=changed)
+
+
+def test_curve_crossings_use_parent_counts_not_percentages() -> None:
+    by_budget = {}
+    for budget in ("10", "25", "50", "100"):
+        erm_value = 0.5 if budget == "25" else 0.4
+        js_value = 0.8 if budget == "10" else 0.45
+        by_budget[budget] = {
+            "methods": {
+                "dynamic_erm": {
+                    "mean": {"single_factor_ood_macro_f1": erm_value},
+                    "per_seed": {
+                        str(seed): {"single_factor_ood_macro_f1": erm_value}
+                        for seed in (1, 2, 3, 4, 5)
+                    },
+                },
+                "dynamic_js": {
+                    "mean": {"single_factor_ood_macro_f1": js_value},
+                    "per_seed": {
+                        str(seed): {"single_factor_ood_macro_f1": js_value}
+                        for seed in (1, 2, 3, 4, 5)
+                    },
+                },
+            }
+        }
+
+    estimates = _equivalent_parent_estimates({"by_budget": by_budget}, complete_matrix=True)
+    crossing = estimates["estimates"][0]
+    assert crossing["erm_parent_count"] == BUDGETS["25"]
+    assert crossing["js_parent_count"] == BUDGETS["10"]
+    assert crossing["erm_budget_percent"] == 25
+    assert crossing["js_budget_percent"] == 10
+
+
+def test_pairing_audit_archives_counts_and_stream_hashes() -> None:
+    expected = expected_exposure(12, 4)
+    run_result = {
+        "expected_exposure_per_method": expected,
+        "actual_exposure": {
+            "optimizer_steps_per_method": expected["optimizer_steps"],
+            "parent_occurrences_per_method": expected["parent_occurrences"],
+            "views_per_method": expected["views"],
+            "expected": expected,
+            "full_batches_only": True,
+            "same_shared_batch_for_erm_and_js": True,
+            "rendered_once_for_pair": True,
+            "samples_stream_sha256": "A" * 64,
+            "paired_two_view_stream_sha256": "B" * 64,
+        },
+    }
+
+    record = _pairing_exposure_record(run_result, seed=20260711, budget="10")
+    audit = _summarize_pairing_exposure([record])
+    assert record["status"] == "verified"
+    assert record["parent_count"] == 984
+    assert record["samples_stream_sha256"] == "A" * 64
+    assert record["paired_two_view_stream_sha256"] == "B" * 64
+    assert audit["verified_pairs"] == 1
+
+
+def test_partial_analysis_stages_outputs_and_protects_completed_archive(tmp_path: Path) -> None:
+    output_root = tmp_path / "run"
+    staged_dir, staged_report = _analysis_output_paths(
+        output_root, None, complete_matrix=False
+    )
+    assert staged_dir == (output_root / "analysis").resolve()
+    assert staged_report != CANONICAL_REPORT
+
+    custom_dir = tmp_path / "custom"
+    custom_output, custom_report = _analysis_output_paths(
+        output_root, custom_dir, complete_matrix=False
+    )
+    assert custom_output == custom_dir.resolve()
+    assert custom_report == custom_dir.resolve() / "PARENT_BUDGET_EFFICIENCY.md"
+
+    archive_dir = tmp_path / "archive"
+    archive_dir.mkdir()
+    results_path = archive_dir / "results.json"
+    results_path.write_text(
+        json.dumps({
+            "status": "completed",
+            "provenance": {"input_fingerprint": {"protocol": "old"}},
+        }),
+        encoding="utf-8",
+    )
+    with pytest.raises(RuntimeError, match="partial analysis cannot replace"):
+        _guard_completed_archive(
+            results_path,
+            archive_dir / "PARENT_BUDGET_EFFICIENCY.md",
+            {"status": "partial", "provenance": {"input_fingerprint": {"protocol": "new"}}},
+            complete_matrix=False,
+        )
+
+
+def test_analyzer_accepts_only_line_ending_variants_of_legacy_input_hashes() -> None:
+    subset_manifest = {"budgets": {"10": {"ordered_parent_ids_sha256": "D" * 64}}}
+    fingerprint = {
+        "protocol_config_sha256": "P" * 64,
+        "subset_manifest_sha256": "S" * 64,
+        "ranked_train_file_sha256": "R" * 64,
+        "simulation_config_sha256": "C" * 64,
+    }
+    variants = {
+        "protocol_config_sha256": {"P" * 64, "p" * 64},
+        "parent_subset_manifest_sha256": {"S" * 64},
+        "ranked_train_file_sha256": {"R" * 64},
+        "simulation_config_sha256": {"C" * 64, "c" * 64},
+    }
+    run_result = {
+        "training_seed": 20260711,
+        "budget_percent": 10,
+        "unique_parent_count": 984,
+        "data_subset_sha256": "D" * 64,
+        "protocol_config_sha256": "p" * 64,
+        "parent_subset_manifest_sha256": "S" * 64,
+        "ranked_train_file_sha256": "R" * 64,
+        "simulation_config_sha256": "c" * 64,
+    }
+
+    _assert_pair_provenance(
+        run_result,
+        seed=20260711,
+        budget="10",
+        subset_manifest=subset_manifest,
+        input_fingerprint=fingerprint,
+        input_hash_variants=variants,
+    )
+    run_result["protocol_config_sha256"] = "Q" * 64
+    with pytest.raises(ValueError, match="incompatible provenance"):
+        _assert_pair_provenance(
+            run_result,
+            seed=20260711,
+            budget="10",
+            subset_manifest=subset_manifest,
+            input_fingerprint=fingerprint,
+            input_hash_variants=variants,
+        )

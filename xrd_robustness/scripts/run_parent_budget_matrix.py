@@ -8,6 +8,7 @@ import json
 from pathlib import Path
 import sys
 import time
+from typing import Any, Mapping
 
 import torch
 
@@ -17,17 +18,65 @@ sys.path.insert(0, str(SCRIPT_DIR))
 sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
 from run_parent_budget_pair import _run_pair  # noqa: E402
+from xrd_robustness.parent_budget_efficiency import (  # noqa: E402
+    BUDGETS as PARENT_COUNTS,
+    text_file_hash_variants,
+)
 
 
 SEEDS = (20260711, 20260712, 20260713, 20260714, 20260715)
 BUDGETS = ("10", "25", "50", "100")
 
 
-def _complete_pair(output_root: Path, seed: int, budget: str) -> bool:
-    result_path = output_root / f"seed_{seed}" / f"parents_{ {'10':984,'25':2460,'50':4921,'100':9842}[budget] }" / "result.json"
+def _expected_pair_metadata(
+    *,
+    seed: int,
+    budget: str,
+    data_subset_sha256: str,
+    protocol_config_sha256: Any,
+    parent_subset_manifest_sha256: Any,
+    ranked_train_file_sha256: Any,
+    simulation_config_sha256: Any,
+) -> dict[str, Any]:
+    return {
+        "training_seed": int(seed),
+        "budget_percent": int(budget),
+        "unique_parent_count": PARENT_COUNTS[budget],
+        "data_subset_sha256": data_subset_sha256,
+        "protocol_config_sha256": protocol_config_sha256,
+        "parent_subset_manifest_sha256": parent_subset_manifest_sha256,
+        "ranked_train_file_sha256": ranked_train_file_sha256,
+        "simulation_config_sha256": simulation_config_sha256,
+    }
+
+
+def _complete_pair(
+    output_root: Path,
+    seed: int,
+    budget: str,
+    *,
+    expected: Mapping[str, Any],
+) -> bool:
+    result_path = output_root / f"seed_{seed}" / f"parents_{PARENT_COUNTS[budget]}" / "result.json"
     if not result_path.is_file():
         return False
-    return json.loads(result_path.read_text(encoding="utf-8")).get("status") == "completed"
+    result = json.loads(result_path.read_text(encoding="utf-8"))
+    if result.get("status") != "completed":
+        return False
+    mismatched = [
+        key for key, value in expected.items()
+        if (
+            result.get(key) not in value
+            if isinstance(value, (set, frozenset))
+            else result.get(key) != value
+        )
+    ]
+    if mismatched:
+        raise ValueError(
+            f"completed pair has incompatible provenance at {result_path}: "
+            f"{', '.join(mismatched)}; use a fresh output root"
+        )
+    return True
 
 
 def main() -> int:
@@ -45,6 +94,26 @@ def main() -> int:
     if requested != tuple(seed for seed in SEEDS if seed in set(requested)):
         raise ValueError("seeds must follow the frozen order 20260711 through 20260715")
     output_root = args.output_root.resolve()
+    protocol_config_path = args.protocol_config.resolve()
+    subset_manifest_path = args.subset_manifest.resolve()
+    ranked_path = args.ranked_parents.resolve()
+    simulation_path = args.simulation_config.resolve()
+    subset_manifest = json.loads(subset_manifest_path.read_text(encoding="utf-8"))
+    pair_hashes = {
+        "protocol_config_sha256": text_file_hash_variants(protocol_config_path),
+        "parent_subset_manifest_sha256": text_file_hash_variants(subset_manifest_path),
+        "ranked_train_file_sha256": text_file_hash_variants(ranked_path),
+        "simulation_config_sha256": text_file_hash_variants(simulation_path),
+    }
+
+    def expected_for(seed: int, budget: str) -> dict[str, Any]:
+        return _expected_pair_metadata(
+            seed=seed,
+            budget=budget,
+            data_subset_sha256=subset_manifest["budgets"][budget]["ordered_parent_ids_sha256"],
+            **pair_hashes,
+        )
+
     if args.device == "auto":
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     else:
@@ -55,7 +124,7 @@ def main() -> int:
     first_requested = SEEDS.index(requested[0])
     for prior_seed in SEEDS[:first_requested]:
         for budget in BUDGETS:
-            if not _complete_pair(output_root, prior_seed, budget):
+            if not _complete_pair(output_root, prior_seed, budget, expected=expected_for(prior_seed, budget)):
                 raise RuntimeError(
                     f"seed-major order requires all budgets for prior seed {prior_seed}; "
                     f"missing parents={budget} pair"
@@ -71,28 +140,39 @@ def main() -> int:
     }
     if matrix_path.exists():
         existing = json.loads(matrix_path.read_text(encoding="utf-8"))
-        progress["completed_pairs"] = list(existing.get("completed_pairs", []))
         progress["started_unix_time"] = existing.get("started_unix_time", progress["started_unix_time"])
+    progress["completed_pairs"] = [
+        f"seed_{completed_seed}:parents_{PARENT_COUNTS[completed_budget]}"
+        for completed_seed in SEEDS
+        for completed_budget in BUDGETS
+        if _complete_pair(
+            output_root,
+            completed_seed,
+            completed_budget,
+            expected=expected_for(completed_seed, completed_budget),
+        )
+    ]
     matrix_path.parent.mkdir(parents=True, exist_ok=True)
 
     for seed in requested:
         for budget in BUDGETS:
-            key = f"seed_{seed}:parents_{ {'10':984,'25':2460,'50':4921,'100':9842}[budget] }"
-            if _complete_pair(output_root, seed, budget):
+            key = f"seed_{seed}:parents_{ PARENT_COUNTS[budget] }"
+            expected = expected_for(seed, budget)
+            if _complete_pair(output_root, seed, budget, expected=expected):
                 if key not in progress["completed_pairs"]:
                     progress["completed_pairs"].append(key)
                 continue
-            pair_dir = output_root / f"seed_{seed}" / f"parents_{ {'10':984,'25':2460,'50':4921,'100':9842}[budget] }"
+            pair_dir = output_root / f"seed_{seed}" / f"parents_{ PARENT_COUNTS[budget] }"
             if pair_dir.exists() and any(pair_dir.iterdir()):
                 raise FileExistsError(
                     f"incomplete pair output exists and will not be overwritten: {pair_dir}"
                 )
             result = _run_pair(
                 data_root=args.data_root.resolve(),
-                config_path=args.protocol_config.resolve(),
-                subset_manifest_path=args.subset_manifest.resolve(),
-                ranked_path=args.ranked_parents.resolve(),
-                simulation_path=args.simulation_config.resolve(),
+                config_path=protocol_config_path,
+                subset_manifest_path=subset_manifest_path,
+                ranked_path=ranked_path,
+                simulation_path=simulation_path,
                 output_root=output_root,
                 budget_key=budget,
                 seed=seed,
@@ -100,12 +180,14 @@ def main() -> int:
             )
             if result.get("status") != "completed":
                 raise RuntimeError(f"pair did not complete: {key}")
+            if not _complete_pair(output_root, seed, budget, expected=expected):
+                raise RuntimeError(f"newly completed pair failed provenance validation: {key}")
             if key not in progress["completed_pairs"]:
                 progress["completed_pairs"].append(key)
             progress["completed_pairs"].sort(
                 key=lambda value: (
                     SEEDS.index(int(value.split(":")[0].removeprefix("seed_"))),
-                    BUDGETS.index(next(k for k, v in {"10":984,"25":2460,"50":4921,"100":9842}.items() if value.endswith(f"parents_{v}"))),
+                    BUDGETS.index(next(k for k, v in PARENT_COUNTS.items() if value.endswith(f"parents_{v}"))),
                 )
             )
             progress["updated_unix_time"] = time.time()
