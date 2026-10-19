@@ -21,7 +21,7 @@
     },
     "E_tests_demo_docs_and_delivery": {
       "status": "PARTIAL",
-      "details": "Eight unittest cases passed; deterministic SIMULATED demos were run for all three CIFs. No real measured data were available. Commit, push, and Draft PR attempt remain pending."
+      "details": "Eight unittest cases passed; deterministic SIMULATED demos were run for all three CIFs. Commit 4667adfc636823834d1c91e7e02763b8a7647ff6 was pushed to the requested branch. Draft PR creation was attempted and returned HTTP 401 because the stored GitHub CLI token is invalid."
     }
   },
   "candidate_support": [
@@ -29,6 +29,13 @@
     {"id": "mgo_rocksalt_cod9000505", "status": "SUPPORTED", "sha256": "73e348f73ec4e2e41f2ea08cbe5f393366e7cfeb55285eebbb185ace7ec94923"},
     {"id": "ceo2_fluorite_cod9009008", "status": "SUPPORTED", "sha256": "cfb862ebff35ab342a254a267eff4d94a86a18ae284142289e7b56d8d7b8e099"}
   ],
+  "delivery": {
+    "branch": "codex/phase-router-inversion-mvp-20261019",
+    "commit": "4667adfc636823834d1c91e7e02763b8a7647ff6",
+    "push": "PASS",
+    "draft_pr_target": "codex/donut-pxrd-four-stage-20261019",
+    "draft_pr_attempt": "BLOCKED_HTTP_401_INVALID_GH_TOKEN"
+  },
   "limitations": [
     "REAL EXPERIMENTAL VALIDATION NOT DONE",
     "no measured-spectrum accuracy or confidence-calibration claim",
