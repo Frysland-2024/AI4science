@@ -76,4 +76,4 @@ The system is a three-CIF, single-phase hypothesis router with simplified neutra
 
 ## Delivery
 
-This review updates the stage statuses in [`MVP_IMPLEMENTATION_STATUS.json`](MVP_IMPLEMENTATION_STATUS.json). The report and status are committed locally on the authorized branch. Push and Draft PR outcomes will be recorded in the status file after the final attempt. No merge is authorized.
+This review updates the stage statuses in [`MVP_IMPLEMENTATION_STATUS.json`](MVP_IMPLEMENTATION_STATUS.json). The report and status were pushed on the authorized branch. The Draft PR attempt found and verified the existing open Draft PR [#37](https://github.com/Frysland-2024/AI4science/pull/37), targeting `codex/donut-pxrd-four-stage-20261019`; no duplicate PR was created. No merge was performed.

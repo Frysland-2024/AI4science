@@ -5,7 +5,7 @@
     "prototype": "PASS",
     "rruff": "PARTIAL",
     "ui": "PASS",
-    "verification": "12/12 tests passed with local RRUFF and frozen checkpoint enabled; all three synthetic CLI demos ranked their generating CIF first; both adaptation-only RRUFF CLI smokes completed; Streamlit health returned HTTP 200; private RRUFF content is absent from tracked files."
+    "verification": "12/12 tests passed with local RRUFF and frozen checkpoint enabled; all three synthetic CLI demos ranked their generating CIF first; both adaptation-only RRUFF CLI smokes completed; Streamlit health returned HTTP 200; private RRUFF content is absent from tracked files; branch push verified and existing open Draft PR #37 confirmed."
   },
   "branch": "codex/phase-router-inversion-mvp-20261019",
   "implementation": "candidate-limited single-phase PXRD router and fixed-prototype lattice refinement",
@@ -42,8 +42,8 @@
     "branch": "codex/phase-router-inversion-mvp-20261019",
     "commit": "8923685a3451fd9eaef7d27b60133d8b664c1661",
     "push": "PASS",
-    "pull_request": "PENDING_FINAL_REVIEW",
-    "draft_pr_attempt": "PENDING_FINAL_REVIEW"
+    "pull_request": "https://github.com/Frysland-2024/AI4science/pull/37",
+    "draft_pr_attempt": "PASS_EXISTING_OPEN_DRAFT_CONFIRMED"
   },
   "limitations": [
     "REAL-SPECTRUM PHASE VALIDATION NOT DONE; RRUFF runs are exploratory adaptation-pool demos only",
