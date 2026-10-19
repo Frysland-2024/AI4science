@@ -72,6 +72,10 @@ The predeclared real-profile gate passed:
 
 This is enough to justify a narrowly scoped physical baseline comparison. It is not enough to claim a general or calibrated real-spectrum solver.
 
+### Concurrent related pilot
+
+A separate Draft [PR #40](https://github.com/Frysland-2024/AI4science/pull/40) was created on the same PR #37 base while this work was in progress. It is preserved and not merged into this branch. PR #40 uses COD 9001871 (`a0=11.619 Å`), three Grossular profiles, wavelength #1, and a broader fit over `a`, zero shift, width, scale, and affine background; its predeclared multistart-spread gate fails (`0.546–0.846 Å`) and its status is `PHYSICS_MODEL_NOT_READY`. This branch instead audits 44 candidates and uses 12 profiles, COD 9001868 (`a0=11.847 Å`), wavelength #2 as a proxy, and only one free structural parameter with the instrument terms fixed. The metrics are not directly comparable. PR #40's instability finding is a reason to keep this branch's interpretation limited and to defer training until the physical model and inputs are reconciled.
+
 **Stage 2 deliverables:** `pxrd_router_mvp/grossular_project.py`, `pxrd_router_mvp/projects/grossular/project.json`, the pinned CIF under `pxrd_router_mvp/projects/grossular/templates/`, `pxrd_router_mvp/tests/test_grossular_project.py`, `tools/run_grossular_pilot.py`, and `reports/garnet_rruff_44/grossular_dev_fit_results.json`.
 
 ## Stage 3 — CIF initial vs five-start physical baseline; no training
