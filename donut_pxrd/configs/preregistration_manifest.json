@@ -28,10 +28,10 @@
   "training_implementation_sha256": {
     "donut_pxrd/src/donut_pxrd/model.py": "f92c8f4ab466d0fb928546f55c569f0990d3e1ad4611e16b060548f19297a311",
     "donut_pxrd/src/donut_pxrd/data.py": "cd19289f479bf202282a90ffb9c08f3236a1b232da1c4e4959dd6acbd8e8deb6",
-    "donut_pxrd/scripts/run_study.py": "a05d9b2949a3f16036064e91f601563eb7b762724a9976d636ddfa2470fbfa63",
+    "donut_pxrd/scripts/run_study.py": "cb2bad2f31ec2571ae9ce4e763bd4edc480eed330921ad37242676155d85760f",
     "donut_pxrd/tests/test_donut_pxrd_model.py": "807017c4098e3fd82f353d81cced7265459e2e561170fc1f2960f8d0910e9def"
   },
-  "pretraining_freeze_amended_at_utc": "2026-10-19T04:05:17+00:00",
+  "pretraining_freeze_amended_at_utc": "2026-10-19T04:05:36+00:00",
   "preflight_gate_passed": true,
   "preflight_results": {
     "profile_parity": {
