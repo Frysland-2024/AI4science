@@ -484,7 +484,7 @@ def train_donut_one(
     optimizer = torch.optim.AdamW(
         [
             {"params": list(model.encoder_blocks.parameters()) + list(model.encoder_fc.parameters()), "lr": float(training["encoder_learning_rate"])},
-            {"params": list(model.decoder_fc.parameters()) + list(model.decoder_blocks.parameters()) + list(model.output_conv.parameters()), "lr": float(training["decoder_learning_rate"])},
+            {"params": list(model.decoder_fc.parameters()) + list(model.decoder_blocks.parameters()), "lr": float(training["decoder_learning_rate"])},
         ]
     )
     generator = torch.Generator(device="cpu"); generator.manual_seed(int(seed) + 400000)
@@ -1441,3 +1441,4 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+
