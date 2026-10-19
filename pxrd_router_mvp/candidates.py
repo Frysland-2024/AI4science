@@ -34,7 +34,14 @@ class Candidate:
 
     @property
     def sha256(self) -> str:
-        return hashlib.sha256(self.cif.read_bytes()).hexdigest()
+        # Some upstream CIF snapshots are CRLF and others LF. Accept the exact
+        # pinned bytes first, then a line-ending-normalized match for Windows.
+        content = self.cif.read_bytes()
+        raw_digest = hashlib.sha256(content).hexdigest()
+        if raw_digest == self.expected_sha256:
+            return raw_digest
+        normalized_digest = hashlib.sha256(content.replace(b"\r\n", b"\n")).hexdigest()
+        return normalized_digest if normalized_digest == self.expected_sha256 else raw_digest
 
 
 CANDIDATES = (

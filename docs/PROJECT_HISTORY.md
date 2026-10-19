@@ -344,3 +344,19 @@ The verified local frozen Dynamic-JS checkpoint (`3ee1beb…c2b6b49`) loaded str
 **What does NOT change:** Existing synthetic BaTiO3/MgO/CeO2 demos and the primary supervised crystal-system research stay unchanged. Frozen classifiers, original spectra, refinement data, locked-test split, and other worktrees remain untouched. No raw or derived RRUFF artifact is committed.
 
 **Relevant files / commits:** `pxrd_router_mvp/rruff_local.py`, `pxrd_router_mvp/classifier_adapter.py`, `reports/RRUFF_REAL_DEMO_AUDIT.md`, `reports/MVP_IMPLEMENTATION_STATUS.json`, and the ignored local overlay files under `reports/_local_rruff_overlays/`.
+
+## 25. 2026-10-19: Grossular real-spectrum physics pilot
+
+**Date / status:** 2026-10-19 / `PHYSICS_MODEL_NOT_READY`; three real spectra were fit and audited, but the forward model fails the predeclared multistart stability gate.
+
+**Question / previous assumption:** Could an independently sourced, composition-appropriate Garnet structure and a bounded single-phase cubic model recover a useful lattice constant from RRUFF real powder profiles before any new learning method is considered?
+
+**Evidence:** The screening audit contained 44 provisional Garnet records, not 44 independent training samples. Four records belonging to frozen evaluation manifests were excluded, and sample-source/locality grouping leaves 39 potential development records before further grouping. Three distinct Grossular localities were selected. All optimizations, including five physical starts per sample, finished before same-sample RRUFF reference cells were read. Best-fit lattice errors versus those posthoc references were +0.0861%, +0.1081%, and +0.0997%, with normalized profile RMSE 0.0177, 0.0123, and 0.0166. However, five-start a spreads were 0.546, 0.846, and 0.674 Å; nuisance/background/intensity residuals remain visible. The study uses an independent COD 9001871 Grossular endmember CIF (AMCSD literature source; `a=11.619 Å`), while measured samples contain substitutions and are not asserted to have identical compositions. Only the known candidate and cubic a were refined, with zero shift, Gaussian width, scale and affine background nuisance parameters.
+
+**Decision:** Keep the result at `PHYSICS_MODEL_NOT_READY`. Peak-position agreement and optimizer termination do not establish a stable physical inversion. Do not begin simulated training or Few-shot Domain Adaptation from this evidence. Do not change the frozen seven-system classifier, frozen splits, or PR #37 implementation outside the isolated stacked branch.
+
+**What changes now:** The local Streamlit router gains a Grossular sample selector and physical-fit view. Tests cover archive integrity, composition/template provenance, header-cell exclusion and optimizer/reference ordering. The report records all three fits, start failures and readiness criteria; raw archive members and full local diagnostics remain outside Git.
+
+**What does not change:** This is not a new neural network, a full Rietveld refinement, a phase-identification claim, or evidence of Few-shot/AI initial-value readiness. The audit count is not an independent-sample count, and no locked evaluation sample was used.
+
+**Relevant files / commits:** `pxrd_router_mvp/garnet_local.py`, `pxrd_router_mvp/candidates/Grossular_COD_9001871.cif`, `pxrd_router_mvp/tests/test_garnet_local.py`, and `reports/GARNET_REAL_PILOT.md`.
