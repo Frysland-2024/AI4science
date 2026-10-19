@@ -1,0 +1,240 @@
+{
+  "audit_id": "rruff_domain_adaptation_20261019",
+  "generated_at_utc": "2026-10-19T08:17:45.777485+00:00",
+  "script_version": "1.0.0",
+  "archive_directory": "E:\\AI4science\\RRUFF",
+  "output_directory": "E:\\AI4science\\xrd_inversion\\audits\\rruff_domain_adaptation",
+  "source_urls": {
+    "XY_RAW.zip": "https://www.rruff.net/zipped_data_files/powder/XY_RAW.zip",
+    "XY_Processed.zip": "https://www.rruff.net/zipped_data_files/powder/XY_Processed.zip",
+    "DIF.zip": "https://www.rruff.net/zipped_data_files/powder/DIF.zip",
+    "Refinement_Data.zip": "https://www.rruff.net/zipped_data_files/powder/Refinement_Data.zip",
+    "Refinement_Output_Data.zip": "https://www.rruff.net/zipped_data_files/powder/Refinement_Output_Data.zip",
+    "cif.zip": "https://www.rruff.net/AMS/zipped_files/cif.zip"
+  },
+  "archive_provenance": {
+    "XY_RAW.zip": {
+      "official_url": "https://www.rruff.net/zipped_data_files/powder/XY_RAW.zip",
+      "size_bytes": 91779732,
+      "sha256": "948a133482bb3c99da80194cc2848933aee668129beb209150f7f850cd4b0587",
+      "local_mtime": "2026-10-19T07:43:48.358924+00:00",
+      "member_count": 3019,
+      "downloaded_this_audit": false,
+      "acquisition_note": "pre-existing local archive; original download date not independently verified"
+    },
+    "XY_Processed.zip": {
+      "official_url": "https://www.rruff.net/zipped_data_files/powder/XY_Processed.zip",
+      "size_bytes": 70340433,
+      "sha256": "c0b079535ab3e6077212b7a8f6ced28129cbe538fc03b1479061430f219ff9cb",
+      "local_mtime": "2026-10-19T07:44:29.007132+00:00",
+      "member_count": 1484,
+      "downloaded_this_audit": false,
+      "acquisition_note": "pre-existing local archive; original download date not independently verified"
+    },
+    "DIF.zip": {
+      "official_url": "https://www.rruff.net/zipped_data_files/powder/DIF.zip",
+      "size_bytes": 7986964,
+      "sha256": "3b540db61664cacdd22268ffbac6ab586ca6bce389b7399cc3e9baaeb6607b03",
+      "local_mtime": "2026-10-19T07:42:04.974692+00:00",
+      "member_count": 3013,
+      "downloaded_this_audit": false,
+      "acquisition_note": "pre-existing local archive; original download date not independently verified"
+    },
+    "Refinement_Data.zip": {
+      "official_url": "https://www.rruff.net/zipped_data_files/powder/Refinement_Data.zip",
+      "size_bytes": 591440,
+      "sha256": "7e075457ebac5ad8c5841e699857e7666e6feae1f8e8dd00945dc6818d60d5f6",
+      "local_mtime": "2026-10-19T07:42:19.619699+00:00",
+      "member_count": 1175,
+      "downloaded_this_audit": false,
+      "acquisition_note": "pre-existing local archive; original download date not independently verified"
+    },
+    "Refinement_Output_Data.zip": {
+      "official_url": "https://www.rruff.net/zipped_data_files/powder/Refinement_Output_Data.zip",
+      "size_bytes": 1447673,
+      "sha256": "a51e4f7399051889a3d699dadb99c2139476d3d17ea47baf85e3ebf3df4f5c12",
+      "local_mtime": "2026-10-19T07:42:27.896094+00:00",
+      "member_count": 1176,
+      "downloaded_this_audit": false,
+      "acquisition_note": "pre-existing local archive; original download date not independently verified"
+    },
+    "cif.zip": {
+      "official_url": "https://www.rruff.net/AMS/zipped_files/cif.zip",
+      "size_bytes": 69005638,
+      "sha256": "f84e8aa19042182dd1c01c25f4d4aa171356bf709c5b888fac706295999687bc",
+      "local_mtime": "2026-10-19T07:50:22.964306+00:00",
+      "member_count": 21720,
+      "downloaded_this_audit": true,
+      "acquisition_note": "downloaded from the official source during this audit; see audit date and SHA-256",
+      "acquisition_date": "2026-10-19"
+    },
+    "CIF_member_count": 21720,
+    "CIF_distinct_mineral_name_keys": 9015,
+    "archive_member_counts": {
+      "XY_RAW.zip": 3019,
+      "XY_Processed.zip": 1484,
+      "DIF.zip": 3013,
+      "Refinement_Data.zip": 1175,
+      "Refinement_Output_Data.zip": 1176,
+      "cif.zip": 21720
+    },
+    "archive_unique_RRUFF_sample_id_counts": {
+      "XY_RAW.zip": 3002,
+      "XY_Processed.zip": 1484,
+      "DIF.zip": 3006,
+      "Refinement_Data.zip": 1175,
+      "Refinement_Output_Data.zip": 1176
+    }
+  },
+  "optional_downloads": {
+    "downloaded_by_this_run": [],
+    "missing": []
+  },
+  "archive_members_without_RRUFF_R_id_in_XY_RAW": [
+    {
+      "member": "Artemisinin__D120011-1__Powder__Xray_Data_XY_RAW__27979c17c298b6084033a53f6f1f.txt",
+      "sha256": "358879252599781b289b5169da2c064e5a1c10e8df52ecfabf845afdaee69ed0"
+    },
+    {
+      "member": "Artesunate__D120001-1__Powder__Xray_Data_XY_RAW__8e37ca9a33942d496b12a6ce086c.txt",
+      "sha256": "78342877d2b33c5d9bc548b332bbcac1d19fb5f5019b5df69f86123a3bcece18"
+    },
+    {
+      "member": "Artesunate__D120024-1__Powder__Xray_Data_XY_RAW__053215b81714a65fb8619746f4b1.txt",
+      "sha256": "5425b976d6e1c569ae5f033becc1eeb0982c11ed14a0ca538ff824a9f6718c45"
+    },
+    {
+      "member": "Atenolol__D120017-1__Powder__Xray_Data_XY_RAW__9a69080420e3623576bd3cd75734.txt",
+      "sha256": "4f3b22e6a88a2ab9c3e5b7b7d4768ffd802f7bafff02d45a48c0bd42b9761a0c"
+    },
+    {
+      "member": "Atorvastatin__D120016-1__Powder__Xray_Data_XY_RAW__3cc9c7e1df02e2a8f3cdebd0c7c1.txt",
+      "sha256": "ed6d836d5f855e2094090c369a4b068fde14920f8ccd7cf9b3bbca266369f90c"
+    },
+    {
+      "member": "Colchicine__D120025-1__Powder__Xray_Data_XY_RAW__1811424dd168737142d97e0e1343.txt",
+      "sha256": "768574e7431aef7c215d903cb9b3f1d850775993e86eb8d99236591e4b0481b7"
+    },
+    {
+      "member": "Corundum__X080007-9__Powder__Xray_Data_XY_RAW__ba3ea72655bcefdee1b9eff7c944.txt",
+      "sha256": "f273b5b2dcd7ed909c7f25b9f5a0bf12a9723597ac1d9a3c3e265bbb43632a4e"
+    },
+    {
+      "member": "Magnesiotaaffeite-2N2S__X090001-9__Powder__Xray_Data_XY_RAW__adf9d69ec9e59753b0e482e8c0f3.txt",
+      "sha256": "e4d39389497a9c295a98a089aa660e58c132180d0b547c441c7d04af6087fe18"
+    },
+    {
+      "member": "Paracetamol__D120007-1__Powder__Xray_Data_XY_RAW__9ad103567b77331245c7a607e2f9.txt",
+      "sha256": "a4fd14dd9637a36a2c1aa0d81b2d18401aa33125d5f7b8211f15fd00855cd6cf"
+    },
+    {
+      "member": "Zircon__X050183__Powder__Xray_Data_XY_RAW__133d700335a8ab4b0dcdf1832fba.txt",
+      "sha256": "77b80e643ad44a7029d9b9ce34f2563911bda3047bd01ff0a614895e7968d1b3"
+    },
+    {
+      "member": "Gadoliniumgalliumgarnet__X090005-9__Powder__Xray_Data_XY_RAW__275d967a4e66098f83cfeaa7d181.txt",
+      "sha256": "dcf67a62aaaf0aab52404e265bff28fb1f174bd5e4f53f2f027d7a8b83a3cc88"
+    },
+    {
+      "member": "Gadoliniumgalliumgarnet__X090006-9__Powder__Xray_Data_XY_RAW__a85e4d8c23ca8c03d2b84204183f.txt",
+      "sha256": "e5ba761a5c6e01ebc71150645a482005f4582f51529952e8a3563dac146b0fd4"
+    },
+    {
+      "member": "Gadoliniumgalliumgarnet__X090007-9__Powder__Xray_Data_XY_RAW__de3551579c295f205695c311d293.txt",
+      "sha256": "e09ab3d7d01a477d7dc2a8159283a6f1e0583be4c4c40918d172a2ce550442fb"
+    },
+    {
+      "member": "Magnesiumstearate__D120003-1__Powder__Xray_Data_XY_RAW__8116eb464b634b3542187ef7291e.txt",
+      "sha256": "2ce521c456162911b6b2baff81138b21c45945e2b582c4a3de9a537b6db8577f"
+    },
+    {
+      "member": "Petermegawite__R210008PowderX-raydiffractiondata__Powder__Xray_Data_XY_RAW__d1a10282e93ada32ddb237a44747.txt",
+      "sha256": "9acef8c79eb2361abb672c8cbda576ee1ea1e47972cbdf6ddac864abfe602b70"
+    },
+    {
+      "member": "Wheatstarch__D120009-1__Powder__Xray_Data_XY_RAW__48531eb6f12df031418922761848.txt",
+      "sha256": "e4c05a5324cc1a3e4dcdc70917195dd464944076b9b3858bcbdc98c1c018c8dd"
+    },
+    {
+      "member": "Yttriumaluminumgarnet__X090003-9__Powder__Xray_Data_XY_RAW__a0d7b002f1215dfdf986c4a7dd51.txt",
+      "sha256": "c95ed59d2a6d85f662782c8262c49566d310a747f401f6f5e3bea3941310590d"
+    }
+  ],
+  "archive_members_without_RRUFF_R_id_count": 17,
+  "screening_counts": {
+    "XY_RAW_archive_members": 3019,
+    "XY_RAW_members_with_parseable_RRUFF_R_sample_ID": 3002,
+    "unique_exact_RRUFF_IDs_in_union_of_indexed_powder_archives": 3256,
+    "unique_exact_RRUFF_IDs_with_raw_profile": 3002,
+    "raw_and_exact_ID_refinement_output_intersection": 1161,
+    "raw_profiles_numerically_valid": 2976,
+    "raw_profile_kinds": {
+      "experimental_powder_candidate": 1298,
+      "calculated_profile": 1695,
+      "non_powder_or_single_crystal": 5,
+      "unknown": 4
+    },
+    "valid_experimental_powder_candidate_profiles": 1272,
+    "powder_profiles_with_metadata_mixture_or_contamination_caveat": 35,
+    "valid_experimental_powder_profiles_without_metadata_mixture_caveat": 1237,
+    "exact_ID_complete_RRUFF_refinement_cell_labels": 1176,
+    "valid_powder_plus_complete_exact_ID_RRUFF_cells": 1133,
+    "valid_powder_plus_complete_exact_ID_RRUFF_cells_without_metadata_mixture_caveat": 1102,
+    "valid_powder_plus_complete_RRUFF_cell_plus_high_CIF_template_compatibility": 853,
+    "valid_powder_plus_complete_RRUFF_cell_plus_high_CIF_template_compatibility_without_metadata_mixture_caveat": 831,
+    "powder_descriptions_saying_cell_parameters_are_from_single_crystal": 37,
+    "such_descriptions_with_complete_exact_ID_RRUFF_cell_labels": 5,
+    "samples_with_shared_numeric_XY_trace_across_IDs": 20,
+    "samples_in_related_RRUFF_subnumber_groups": 6,
+    "family_registry_unclassified_samples": 2846,
+    "unique_CIF_members": 21720,
+    "sample_IDs_with_exact_AMCSD_CIF_name_candidate": 3087
+  },
+  "family_alias_registry": {
+    "Rutile structure type": "Cassiterite|Pyrolusite|Rutile",
+    "Zircon structure type": "Coffinite|Hafnon|Xenotime-(Y)|Zircon",
+    "Garnet": "Almandine|Andradite|Calderite|Goldmanite|Grossular|Henritermierite|Katoite|Kimzeyite|Majorite|Menzerite-(Y)|Momoiite|Pyrope|Schorlomite|Spessartine|Uvarovite|Yttriumaluminumgarnet|Gadoliniumgalliumgarnet",
+    "Pyroxene": "Aegirine|Aegirine-Augite|Augite|Clinoenstatite|Clinoferrosilite|Diopside|Enstatite|Fassaite|Hedenbergite|Jadeite|Jervisite|Johannsenite|Kosmochlor|Kushiroite|Omphacite|Pigeonite|Spodumene|Ureyite|Wollastonite",
+    "Feldspar": "Albite|Andesine|Anorthite|Anorthoclase|Bytownite|Labradorite|Microcline|Orthoclase|Sanidine",
+    "Amphibole": "Actinolite|Anthophyllite|Arfvedsonite|Cummingtonite|Edenite|Gedrite|Glaucophane|Grunerite|Hastingsite|Hornblende|Kaersutite|Magnesio-riebeckite|Magnesiohornblende|Pargasite|Richterite|Riebeckite|Tremolite|Winchite|Ferro-actinolite|Ferrohornblende|Ferro-pargasite|Fluoro-richterite|Potassic-arfvedsonite|Potassic-fluoro-arfvedsonite|Potassic-fluoro-pargasite|Potassic-fluoro-richterite",
+    "Olivine": "Fayalite|Forsterite|Liebenbergite|Olivine|Tephroite|Laihunite|Knebelite",
+    "Spinel": "Spinel|Chromite|Franklinite|Gahnite|Hercynite|Magnesiochromite|Magnetite|Trevorite|Ulvospinel|Maguemite|Qandilite",
+    "Apatite": "Apatite|Chlorapatite|Fluorapatite|Hydroxylapatite|Hydroxyapatite|Mimetite|Pyromorphite|Vanadinite",
+    "Zeolite": "Analcime|Barrerite|Chabazite-Ca|Chabazite-K|Chabazite-Na|Clinoptilolite|Epistilbite|Erionite|Heulandite-Ca|Heulandite-Na|Laumontite|Mordenite|Natrolite|Scolecite|Stilbite-Ca|Thomsonite",
+    "Quartz group": "Quartz|Tridymite|Cristobalite|Coesite|Moganite",
+    "Carbonate group": "Aragonite|Barytocalcite|Calcite|Cerussite|Dolomite|Magnesite|Rhodochrosite|Siderite|Smithsonite|Strontianite|Witherite"
+  },
+  "existing_inversion_forward_model_scope": {
+    "project_readme": "xrd_inversion/README.md states known-phase, single-phase tetragonal PXRD inversion.",
+    "implementation": "xrd_inversion/src/xrd_inversion/gpu_forward.py uses contract tetragonal_torch_dense_v1 and rejects nonconventional tetragonal lattices.",
+    "implication": "Garnet and spinel labels are data-rich but cubic and cannot be used directly by the current forward path; the Rutile P4_2/mnm cohort is tetragonal-compatible."
+  },
+  "family_summary_rows": 12,
+  "top_three_families_by_high_template_compatibility": [
+    "Garnet",
+    "Amphibole",
+    "Pyroxene"
+  ],
+  "most_promising_three_by_audit_judgement": [
+    "Rutile structure type",
+    "Garnet",
+    "Apatite"
+  ],
+  "most_promising_three_rationale": "The Rutile structure type is the only reviewed cohort with useful exact-ID label/template coverage that directly matches the repository's current tetragonal-only forward model (11 labels; 9 high template matches; two independent lattice parameters). Garnet has richer and cleaner family data (44 labels, cubic one-parameter) but needs a cubic forward-model extension. Apatite has 29 labels and a mostly hexagonal target, also outside the current forward model. Spinel is a smaller cubic fallback with 13 labels.",
+  "qualification_definition": {
+    "valid_profile": "at least two finite numeric XY pairs, strictly increasing two-theta, nonconstant intensity",
+    "experimental_powder_candidate": "RRUFF diffraction description says Powder and does not explicitly say the profile is calculated; unresolved descriptions are not counted",
+    "cell_label": "all six cell parameters parsed from exact sample-ID member in Refinement_Output_Data.zip; reported RRUFF refinement estimate, not error-free ground truth",
+    "high_CIF_template_compatibility": "matching crystal system, max sorted-cell/angle metric difference <=3%, and cation-element-set Jaccard >=0.5, with either an exact normalized mineral name or an exact DIF-to-AMCSD database-code link; this supports template compatibility only, never same-specimen identity",
+    "strong_audit_candidate": "valid experimental-powder candidate profile + complete exact-ID RRUFF cell + high template compatibility"
+  },
+  "limitations": [
+    "RRUFF XY_RAW has no explicit wavelength field; the audit records wavelengths only from an exact-ID Refinement_Output_Data match and otherwise reports unknown.",
+    "AMCSD CIF cells are reference-structure evidence, never substituted for exact-ID RRUFF refined cell labels.",
+    "A name/CIF match does not establish same specimen or provenance; only exact normalized names are considered, and confidence requires independent system, cell and chemistry evidence.",
+    "Family aliases are a finite declared registry; unlisted names remain unclassified, so family counts are conservative and scope-limited.",
+    "Family GO/LIMITED_GO/NO_GO entries are qualitative audit judgments, not automatic minimum-size filters; GO means only that a bounded pilot is plausible, not that the scientific method succeeds.",
+    "No split is created and no training/evaluation is performed. Independent DA/test feasibility remains conditional on grouped holdout design.",
+    "Local pre-existing archive mtimes are recorded but cannot establish their original acquisition time; audit verifies current file hashes and official-source URLs."
+  ]
+}
