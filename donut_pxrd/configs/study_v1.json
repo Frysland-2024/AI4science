@@ -1,0 +1,153 @@
+{
+  "schema": "donut_pxrd_study_v1",
+  "status": "FROZEN_BEFORE_MODEL_TRAINING",
+  "frozen_local_date": "2026-10-19",
+  "branch": "codex/donut-pxrd-experiment-20261019",
+  "claim_scope": "synthetic conditional interpolation for one known P4mm BaTiO3 CIF (COD 9014273); not real XRD, unseen-material generalization, or Rietveld refinement",
+  "sources": {
+    "donut_paper_doi": "10.1038/s41524-025-01860-7",
+    "donut_official_repository": "https://github.com/AdvancedPhotonSource/DONUT",
+    "donut_source_commit": "090c10bdf99333d3670dc26e617a93364f714bdc",
+    "donut_source_mirror": "E:/AI4science_DONUT_reference_verified",
+    "cif": "xrd_forward_loss/data/public_cif/BaTiO3_COD_9014273_P4mm.cif",
+    "cif_sha256": "e880d6f9df10ad4a2bb347dbbeae2712817d95e2f16df9390784d916a0c02f9c",
+    "base_forward_config": "xrd_forward_loss/measurement_closure/configs/issue19_batio3_v2.json",
+    "base_forward_config_sha256": "a558304235509b2d00c95e3423e084e5a08af9b1d3ad6e312c0032318df40bd3",
+    "differentiable_forward": "xrd_inversion.src.xrd_inversion.gpu_forward.CachedTetragonalGPUForward",
+    "profile_adapter": "xrd_forward_loss.src.pxrd_forward_loss.measurement_closure.expected_profile",
+    "texture_generator": "xrd_robustness.src.xrd_robustness.preferred_orientation.apply_preferred_orientation"
+  },
+  "data": {
+    "q_coordinates": ["du", "dv"],
+    "q_bounds": [-0.8, 0.8],
+    "max_parent_q_draws": 512,
+    "q_sampling": "scrambled Sobol via repository sample_q_bank",
+    "q_seed": 20261081,
+    "split_seed": 20261082,
+    "split_fractions": {"train": 0.70, "validation": 0.15, "test": 0.15},
+    "split_unit": "unique parent q draw before any nuisance or noise realization",
+    "generator_seeds": {
+      "zero_shift": 20261083,
+      "broadening_background": 20261084,
+      "detector_noise": 20261085,
+      "texture_test": 20261086
+    },
+    "shared_samples_across_conditions": true,
+    "test_policy": "No test q labels or profiles are read for training, checkpoint selection, model selection, or hyperparameter changes. Test metrics are computed only after each condition's checkpoint/selection is frozen. The same fixed test parents are intentionally reused for paired method comparison; this is not an independent replication.",
+    "raw_data_location": "E:/AI4science_DONUT_checkpoints/run_20261019_01/datasets"
+  },
+  "donut_method": {
+    "description": "One-dimensional domain adaptation of DONUT's encoder bottleneck feeding two parallel branches: a symmetric decoder and a fixed differentiable PXRD forward renderer. The latent parameter estimates are unsupervised; truth labels are excluded from train and validation losses.",
+    "encoder": "six convolution / batch-normalization / ReLU / max-pooling blocks; no skip connections",
+    "latent_activation": "1.7159 * tanh(2*z/3), then explicit mapping to each frozen physical range",
+    "decoder": "symmetric 1D convolutional decoder from the constrained latent only",
+    "physics_branch": "fixed CachedTetragonalGPUForward plus expected_profile; no trainable simulator weights",
+    "loss": "SmoothL1(decoder, observed) + 5 * SmoothL1(physics, observed)",
+    "loss_weights": [1.0, 5.0],
+    "optimizer": "AdamW",
+    "encoder_learning_rate": 0.0001,
+    "decoder_learning_rate": 0.00003,
+    "batch_size": 16,
+    "max_epochs_per_seed_condition": 30,
+    "dropout": 0.0,
+    "checkpoint_selection": "minimum validation composite dual-branch loss only; no truth-label selection",
+    "model_seeds": [20261061, 20261062, 20261063],
+    "source_divergence": "Paper reports decoder learning rate 1e-5, batch size 16, 30 epochs and describes 0.1 dropout. Pinned official train_with_thickness.py instantiates batch size 256, 60 epochs and default dropout 0; its AdamW decoder group sets 3e-5, and training.py applies weights (1,5). This run preserves the observed official code's 3e-5 decoder learning rate and zero-dropout default; uses batch 16 and a 30-epoch cap frozen for this PXRD task. No source claim is silently reconciled."
+  },
+  "conditions": {
+    "experiment_1_fixed": {
+      "phase": 1,
+      "latent": ["du", "dv"],
+      "instrument_truth": {"zero_shift_deg": 0.0, "fwhm_deg": 0.08, "background_ratio": 0.0},
+      "noise": "none",
+      "training_parameters": "lattice only; all instrument values fixed in the physical forward branch"
+    },
+    "experiment_2_shift": {
+      "phase": 2,
+      "latent": ["du", "dv", "zero_shift_deg"],
+      "zero_shift_deg": [-0.06, 0.06],
+      "instrument_truth": {"fwhm_deg": 0.08, "background_ratio": 0.0},
+      "noise": "none",
+      "training_parameters": "lattice and zero shift"
+    },
+    "experiment_3_width": {
+      "phase": 3,
+      "latent": ["du", "dv", "zero_shift_deg", "fwhm_deg"],
+      "zero_shift_deg": [-0.06, 0.06],
+      "fwhm_deg": [0.08, 0.13],
+      "background_ratio": 0.0,
+      "noise": "none"
+    },
+    "experiment_3_background": {
+      "phase": 3,
+      "latent": ["du", "dv", "zero_shift_deg", "fwhm_deg", "background_ratio"],
+      "zero_shift_deg": [-0.06, 0.06],
+      "fwhm_deg": [0.08, 0.13],
+      "background_ratio": [0.005, 0.008],
+      "background_shape": "frozen V9 deterministic smooth quadratic polynomial, floor fraction 0.10",
+      "noise": "none"
+    },
+    "experiment_3_noise": {
+      "phase": 3,
+      "latent": ["du", "dv", "zero_shift_deg", "fwhm_deg", "background_ratio"],
+      "zero_shift_deg": [-0.06, 0.06],
+      "fwhm_deg": [0.08, 0.13],
+      "background_ratio": [0.005, 0.008],
+      "background_shape": "frozen V9 deterministic smooth quadratic polynomial, floor fraction 0.10",
+      "noise": {"model": "Poisson counts plus Gaussian readout", "count_scale": 30000, "readout_std_counts": [0.5, 1.5]},
+      "observation_transform": "clip nonnegative; max-normalize each profile; log1p(100*x)/log(101)"
+    },
+    "experiment_3_texture": {
+      "phase": 3,
+      "evaluation_only": true,
+      "training_checkpoint": "experiment_3_noise",
+      "generator": "existing reflection-level March-Dollase PXRD simulator in xrd_robustness",
+      "march_parameter_r": 0.8,
+      "preferred_hkl": [0, 0, 1],
+      "texture_inference_status": "OOD stress only; current differentiable CUDA forward has no March-Dollase operator",
+      "noise": "same Poisson plus Gaussian observation model as experiment_3_noise"
+    }
+  },
+  "baseline_abc": {
+    "source_methods": "overnight_pr26_20261019/run_fresh_training.py and pxrd_forward_loss.model",
+    "methods": {
+      "A": "supervised q MSE only",
+      "B": "q MSE plus lambda times predicted-parameter expected-profile MSE",
+      "C": "B with q detached only in expected-profile branch; direct q supervision remains"
+    },
+    "training_condition": "experiment_3_noise only; same train and validation parent identities as DONUT",
+    "optimizer": "Adam",
+    "learning_rate": 0.0005,
+    "weight_decay": 0.0,
+    "gradient_clip_norm": 5.0,
+    "batch_size": 16,
+    "max_epochs": 24,
+    "seeds": [20261061, 20261062, 20261063],
+    "lambda_candidates_for_b_c": [0.1, 1.0],
+    "selection": "per method; choose the lambda with minimum mean best-epoch validation normalized q MAE across the three seeds; ties choose smaller lambda; no test access"
+  },
+  "classical_lbfgsb": {
+    "objective": "mean squared error between the observed log-normalized spectrum and expected_profile from the fixed differentiable forward model",
+    "parameter_bounds": {"du": [-0.8, 0.8], "dv": [-0.8, 0.8], "zero_shift_deg": [-0.06, 0.06], "fwhm_deg": [0.08, 0.13], "background_ratio": [0.0, 0.01]},
+    "initialization": {"du": 0.0, "dv": 0.0, "zero_shift_deg": 0.0, "fwhm_deg": 0.105, "background_ratio": 0.005},
+    "starts": 1,
+    "max_iterations": 80,
+    "max_function_evaluations": 120,
+    "ftol": 1e-9,
+    "gtol": 1e-7,
+    "maxls": 20,
+    "postprocessing": "same single neutral-start settings for optimizer-only baseline and paired q-initialized refinement track"
+  },
+  "metrics": [
+    "per-seed and per-sample du/dv MAE",
+    "lattice a/c MAE in angstrom",
+    "zero-shift, FWHM, and background-amplitude MAE where identifiable",
+    "observed-profile RMSE",
+    "inference latency p50/p95 and throughput",
+    "failed/non-finite prediction fraction; solver success/failure/iteration counts",
+    "training wall time, GPU time, peak VRAM, parameter count, checkpoint size",
+    "three-seed mean and sample standard deviation"
+  ],
+  "resource_limits": {"max_total_measured_gpu_training_seconds": 28800, "max_epochs_per_donut_seed_condition": 30, "max_q_parents": 512},
+  "l_bfgs_b_results_use": "same frozen test parent identities and observed spectra as the neural methods; no tuning from test outcomes"
+}

@@ -1,0 +1,4 @@
+data/
+local_checkpoints/
+*.pt
+*.pth

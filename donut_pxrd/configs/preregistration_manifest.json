@@ -1,0 +1,131 @@
+{
+  "schema": "donut_pxrd_preregistration_manifest_v1",
+  "status": "FROZEN_BEFORE_MODEL_TRAINING",
+  "frozen_at_utc": "2026-10-19T03:51:22+00:00",
+  "branch": "codex/donut-pxrd-experiment-20261019",
+  "base_commit": "4876f12ded65e515a4b5ccc91b4c9ff2d036fb6a",
+  "study_config_sha256": "cfd0936999d298d860eb8c01eddfc8aaa5bd6172c53a9a95d8aaffc4e9050597",
+  "protocol_sha256": "2c1dbc8839c428eb063c0f541e439e32c951dd54031f1da766850d0f7173c60c",
+  "source_fidelity_audit_sha256": "ac7306f0d85d3faa3ea765b0dbe3bd1f2e7204a37bf0d878d417985757b5006a",
+  "source_commit": "090c10bdf99333d3670dc26e617a93364f714bdc",
+  "cif_sha256": "e880d6f9df10ad4a2bb347dbbeae2712817d95e2f16df9390784d916a0c02f9c",
+  "base_forward_config_sha256": "a558304235509b2d00c95e3423e084e5a08af9b1d3ad6e312c0032318df40bd3",
+  "frozen_data_policy": "No test q labels or profiles are read for training, checkpoint selection, model selection, or hyperparameter changes. Test metrics are computed only after each condition's checkpoint/selection is frozen. The same fixed test parents are intentionally reused for paired method comparison; this is not an independent replication.",
+  "model_seeds": [
+    20261061,
+    20261062,
+    20261063
+  ],
+  "max_parent_q_draws": 512,
+  "max_total_gpu_training_seconds": 28800,
+  "test_access_before_checkpoint_selection": false,
+  "initial_preflight_implementation_sha256": {
+    "donut_pxrd/src/donut_pxrd/model.py": "aed790a485e8fbc95110735faaaa09f6468881805270d277e218ddfdd1a670c2",
+    "donut_pxrd/src/donut_pxrd/data.py": "cd19289f479bf202282a90ffb9c08f3236a1b232da1c4e4959dd6acbd8e8deb6",
+    "donut_pxrd/scripts/run_study.py": "5d338e687b76752226fa5b6e0eb0a4a6ae488a57ea4b7352f8825aad4f454d41",
+    "donut_pxrd/tests/test_model.py": "807017c4098e3fd82f353d81cced7265459e2e561170fc1f2960f8d0910e9def"
+  },
+  "training_implementation_sha256": {
+    "donut_pxrd/src/donut_pxrd/model.py": "f92c8f4ab466d0fb928546f55c569f0990d3e1ad4611e16b060548f19297a311",
+    "donut_pxrd/src/donut_pxrd/data.py": "cd19289f479bf202282a90ffb9c08f3236a1b232da1c4e4959dd6acbd8e8deb6",
+    "donut_pxrd/scripts/run_study.py": "911190903d009ade2813c235abf660a131c0480af57d06f6865edf42f2625f34",
+    "donut_pxrd/tests/test_donut_pxrd_model.py": "807017c4098e3fd82f353d81cced7265459e2e561170fc1f2960f8d0910e9def"
+  },
+  "pretraining_freeze_amended_at_utc": "2026-10-19T04:01:59+00:00",
+  "preflight_gate_passed": true,
+  "preflight_results": {
+    "profile_parity": {
+      "max_abs": 1.0531818717129937e-07,
+      "rmse": 8.22157766217982e-09,
+      "n": 3501
+    },
+    "physics_gradient_fd": {
+      "autograd": [
+        -0.024376056387549378,
+        -0.004863698678406089,
+        0.002327254966268445
+      ],
+      "finite_difference": [
+        -0.024376046240147994,
+        -0.004863698395837714,
+        0.0023272549805200896
+      ],
+      "relative_error": [
+        2.0814284589802656e-07,
+        2.9048713935687858e-08,
+        3.0619001210145532e-09
+      ],
+      "all_nonzero": true,
+      "max_relative_error": 2.0814284589802656e-07
+    },
+    "branch_gradient_flow": {
+      "decoder_to_encoder_gradient_norm": 8.434576034545898,
+      "latent_to_encoder_gradient_norm": 0.09883572906255722
+    },
+    "existing_regression_tests": "50 passed in 3.87s",
+    "preflight_attempts": [
+      {
+        "time_utc": "2026-10-19T03:51:42+00:00",
+        "error": "AttributeError(\"'IndependentGrid' object has no attribute 'wavelength'\")",
+        "recovered": true
+      },
+      {
+        "time_utc": "2026-10-19T03:52:28+00:00",
+        "error": "RuntimeError(\"GPU/independent Pymatgen full-profile parity gate failed: {'max_abs': 2.4870477894345377e-06, 'rmse': 6.659344189816013e-08, 'n': 3501}\")",
+        "recovered": true
+      },
+      {
+        "time_utc": "2026-10-19T03:53:40+00:00",
+        "error": "RuntimeError(\"GPU/independent Pymatgen full-profile parity gate failed: {'max_abs': 0.4523511619173908, 'rmse': 0.0239024027827609, 'n': 3501}\")",
+        "recovered": true
+      },
+      {
+        "time_utc": "2026-10-19T03:54:18+00:00",
+        "error": "RuntimeError(\"GPU/independent Pymatgen full-profile parity gate failed: {'max_abs': 2.6079621785329854e-06, 'rmse': 7.682373096448694e-08, 'n': 3501}\")",
+        "recovered": true
+      },
+      {
+        "time_utc": "2026-10-19T03:55:48+00:00",
+        "error": "RuntimeError(\"upsample_linear1d_backward_out_cuda does not have a deterministic implementation, but you set 'torch.use_deterministic_algorithms(True)'. You can turn off determinism just for this operation, or you can use the 'warn_only=True' option, if that's acceptable for your application. You can also file an issue at https://github.com/pytorch/pytorch/issues to help us prioritize adding deterministic support for this operation.\")",
+        "recovered": true
+      },
+      {
+        "time_utc": "2026-10-19T03:57:38+00:00",
+        "error": "RuntimeError(\"upsample_linear1d_backward_out_cuda does not have a deterministic implementation, but you set 'torch.use_deterministic_algorithms(True)'. You can turn off determinism just for this operation, or you can use the 'warn_only=True' option, if that's acceptable for your application. You can also file an issue at https://github.com/pytorch/pytorch/issues to help us prioritize adding deterministic support for this operation.\")",
+        "recovered": true
+      },
+      {
+        "time_utc": "2026-10-19T03:58:38+00:00",
+        "error": "RuntimeError('pytest gate preflight_existing_regression failed (exit 2)')",
+        "recovered": true
+      },
+      {
+        "time_utc": "2026-10-19T03:59:15+00:00",
+        "error": "RuntimeError('pytest gate preflight_existing_regression failed (exit 2)')",
+        "recovered": true
+      }
+    ],
+    "preflight_recovery_notes": [
+      {
+        "failed_preflight": {
+          "error": "RuntimeError('pytest gate preflight_existing_regression failed (exit 2)')",
+          "traceback": "Traceback (most recent call last):\n  File \"E:\\AI4science\\donut_pxrd\\scripts\\run_study.py\", line 1413, in main\n    return run_preflight_only() if args.preflight_only else run_all()\n           ^^^^^^^^^^^^^^^^^^^^\n  File \"E:\\AI4science\\donut_pxrd\\scripts\\run_study.py\", line 194, in run_preflight_only\n    run_pytest(\"preflight_existing_regression\", [\"xrd_inversion/tests\", \"xrd_forward_loss/tests\", \"donut_pxrd/tests\"])\n  File \"E:\\AI4science\\donut_pxrd\\scripts\\run_study.py\", line 167, in run_pytest\n    raise RuntimeError(f\"pytest gate {label} failed (exit {proc.returncode})\")\nRuntimeError: pytest gate preflight_existing_regression failed (exit 2)\n",
+          "time_utc": "2026-10-19T03:59:15+00:00"
+        },
+        "repairs": [
+          "Removed an unused ideal_peak_table call that passed IndependentGrid where the legacy simulator requires SimulationGrid; it was not part of the parity calculation.",
+          "An exploratory probe against xrd_inversion.independent_renderer exceeded the inherited max-absolute tolerance by 0.608e-6 while RMSE remained below threshold. Replaced that exploratory comparator with the repository's established independent Pymatgen/V9 simulator used by the closure gates; kept both inherited thresholds unchanged and included shift, width, and background in the parity case.",
+          "CachedTetragonalGPUForward.__init__ resets PyTorch deterministic mode to strict after runtime setup. Reapplied warn-only determinism after constructing the fixed forward model; supported deterministic kernels remain enabled, while the decoder's native linear upsample backward is explicitly recorded as potentially nondeterministic.",
+          "The regression-test subprocess did not inherit the in-process source paths and failed collection. Added the repository's four src directories to the subprocess PYTHONPATH; no test assertions or test data were changed.",
+          "The new DONUT test filename collided with an existing test_model.py during combined collection. Renamed it to test_donut_pxrd_model.py; no test assertions or test data were changed."
+        ],
+        "recovered_at_utc": "2026-10-19T03:59:53+00:00"
+      }
+    ],
+    "seeded_runs_are_not_bitwise_guaranteed": true,
+    "reason": "PyTorch 2.13 CUDA has no deterministic backward implementation for the native linear 1D upsample used by the faithful latent-only decoder; deterministic mode is warn-only, so seeded runs are not guaranteed bitwise identical."
+  },
+  "frozen_dataset_sha256": "87f3845bf4863ebfa3b35f55512df0730050d56ddcdf394d750bc955872deecf",
+  "frozen_data_manifest_sha256": "38d9a647d337c7e02c0949a8f036cc2a899e12b5de46d9d3d21fad3e333d18e5",
+  "test_indices_sha256": "12c5fd101e7b5f6aa0003626b7754028bf5fd0dc112b8a2c808a634ea945911f"
+}
