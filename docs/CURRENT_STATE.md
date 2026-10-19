@@ -1,5 +1,7 @@
 # AI4science 当前状态
 
+> **2026-10-19 独立下一阶段候选更新（仅文档决策，不是新训练）**：10 月 18–19 日的 Forward Reconstruction Loss、DONUT-PXRD、Issue #31/A-B-D 失败归因及真实谱 Garnet 稳定性检查，促使本科下一阶段**优先探索“已知候选结构：AI 初值 + 有界物理精修”**。仅有单 BaTiO3 CIF 合成数据上的闭环验证；尚未证明真实谱表现或优于传统多起点物理优化，也未经正式毕设开题批准。详见 [两日研究变迁全记录](PXRD_RESEARCH_JOURNEY_20261018_19.md) 与 [新版下一阶段候选方案/白话说明](PXRD_NEURAL_INITIALIZATION_REFINEMENT_NEXTSTEP_20261019.md)。**本条不改变已经冻结的七晶系 JS 分类研究及其证据。**
+
 > **权威性说明：** 本文件记录当前科学状态与当前执行口径。历史版本、旧聊天和 `PROJECT_HISTORY.md` 用于解释“为什么改变”，不得覆盖这里的当前结论；AI/Agent 工作规则见 [`../AGENTS.md`](../AGENTS.md) 与 [`RESEARCH_WORKFLOW.md`](RESEARCH_WORKFLOW.md)。
 
 **状态日期：** 2026-09-29
