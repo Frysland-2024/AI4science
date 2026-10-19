@@ -1,0 +1,41 @@
+{
+  "date": "2026-10-19",
+  "branch": "codex/phase-router-inversion-mvp-20261019",
+  "implementation": "candidate-limited single-phase PXRD router and fixed-prototype lattice refinement",
+  "stages": {
+    "A_inventory_and_provenance": {
+      "status": "PASS",
+      "details": "Three COD CIFs are present, parsed and SHA-256 pinned. NumPy/SciPy/Matplotlib are available. The optional UI dependencies were installed only in the ignored worktree venv; no frozen classifier weights or PyTorch are available."
+    },
+    "B_headless_physics_and_refinement": {
+      "status": "PASS",
+      "details": "All three CIFs use one general renderer and bounded lattice/zero-shift/width/scale/background fitting. Synthetic end-to-end tests identify and recover each generated candidate."
+    },
+    "C_optional_frozen_classifier": {
+      "status": "PARTIAL",
+      "details": "Graceful unavailable adapter is implemented. No checkpoint or PyTorch exists in this worktree/environment, so no inference or soft-prior run was possible. The route always scores every candidate."
+    },
+    "D_streamlit_uploader_and_plot": {
+      "status": "PASS",
+      "details": "Streamlit uploader and measured-versus-fit/residual plot are implemented. The app launched headlessly from the ignored worktree venv and /_stcore/health returned ok."
+    },
+    "E_tests_demo_docs_and_delivery": {
+      "status": "PARTIAL",
+      "details": "Eight unittest cases passed; deterministic SIMULATED demos were run for all three CIFs. No real measured data were available. Commit, push, and Draft PR attempt remain pending."
+    }
+  },
+  "candidate_support": [
+    {"id": "batio3_p4mm_cod9014273", "status": "SUPPORTED", "sha256": "e880d6f9df10ad4a2bb347dbbeae2712817d95e2f16df9390784d916a0c02f9c"},
+    {"id": "mgo_rocksalt_cod9000505", "status": "SUPPORTED", "sha256": "73e348f73ec4e2e41f2ea08cbe5f393366e7cfeb55285eebbb185ace7ec94923"},
+    {"id": "ceo2_fluorite_cod9009008", "status": "SUPPORTED", "sha256": "cfb862ebff35ab342a254a267eff4d94a86a18ae284142289e7b56d8d7b8e099"}
+  ],
+  "limitations": [
+    "REAL EXPERIMENTAL VALIDATION NOT DONE",
+    "no measured-spectrum accuracy or confidence-calibration claim",
+    "not universal phase or chemical-composition identification",
+    "not Rietveld refinement",
+    "three-candidate single-phase CIF hypothesis set only",
+    "f(s)=Z neutral-atom approximation, Gaussian peaks, no instrument or preferred-orientation model",
+    "optional frozen classifier unavailable"
+  ]
+}

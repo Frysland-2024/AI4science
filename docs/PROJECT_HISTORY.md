@@ -310,3 +310,19 @@ PXRD is the concrete test bed. The broader transferable idea is to identify supe
 **What does not change:** The supervised PXRD classification project identity, frozen V9/PR #26 results, old branches, and archived factorization Stage-1 NO-GO remain unchanged. No real experimental spectra or unseen materials were tested. Original DONUT SXDM geometry and figures were not reproduced.
 
 **Relevant files / commits:** `donut_pxrd/reports/FINAL_TECHNICAL_REPORT.md`, `donut_pxrd/reports/EXPERIMENT_1.md` through `EXPERIMENT_4.md`, `donut_pxrd/results/study_v1/exp4/`, and the pinned source audit in `donut_pxrd/reports/SOURCE_FIDELITY_AUDIT.md`.
+
+## 23. 2026-10-19: independent fixed-CIF phase-router bachelor MVP
+
+**Date / status:** 2026-10-19 / engineering MVP implemented; synthetic checks and headless Streamlit startup pass; real-data validation remains open.
+
+**Question / previous assumption:** Could the single-structure PXRD inversion feasibility work be turned into a small candidate-limited phase assistant without misrepresenting the existing seven-crystal-system classifier as a phase-ID model?
+
+**Evidence / implementation:** The independent `pxrd_router_mvp/` package parses pinned COD CIFs for BaTiO3 P4mm (9014273), MgO rocksalt (9000505), and CeO2 fluorite (9009008), computes approximate kinematic powder profiles, evaluates every candidate, and refines bounded lattice and profile parameters. Eight unit/integration tests pass. Three deterministic CIF-generated synthetic demos each rank the generating candidate first and recover their programmed lattice/zero-shift values closely. The worktree has no frozen classifier weights or PyTorch, so its adapter reports unavailable and the physical router runs without a prior. Streamlit 1.66.0 was installed only in the ignored worktree venv; headless app startup succeeded and the local health endpoint returned `ok`.
+
+**Decision:** Deliver this as a distinct candidate-limited engineering prototype. Keep candidate ranking independent of the previous classifier. Treat any future seven-system probabilities only as a weak optional soft prior, never a gate. Keep measured-spectrum claims unsupported until documented experimental data and wavelength/instrument metadata are available.
+
+**What changes now:** The new package, CIF provenance/hashes, tests, CLI, optional UI, package README, demo validation, and implementation-status record are added in this independent worktree. The existing top-level project README remains unchanged.
+
+**What does not change:** The primary project remains supervised PXRD crystal-system classification with simulator-derived relational supervision. Frozen classifiers/checkpoints, science configs/splits, existing DONUT evidence and other worktrees remain unchanged. No real measurement, GPU retraining, or universal phase-ID claim was introduced.
+
+**Relevant files / commits:** `pxrd_router_mvp/`, `reports/DEMO_VALIDATION.md`, and `reports/MVP_IMPLEMENTATION_STATUS.json`.
