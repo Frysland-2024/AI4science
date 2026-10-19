@@ -1,0 +1,26 @@
+{
+  "selected": {
+    "A": 0.0,
+    "B": 0.1,
+    "C": 0.1
+  },
+  "selection": {
+    "B": {
+      "validation_mean_q_mae_by_lambda": {
+        "0.1": 0.032061358292897545,
+        "1.0": 0.03258957030872504
+      },
+      "selected_lambda": 0.1,
+      "test_used": false
+    },
+    "C": {
+      "validation_mean_q_mae_by_lambda": {
+        "0.1": 0.03209364041686058,
+        "1.0": 0.03321648140748342
+      },
+      "selected_lambda": 0.1,
+      "test_used": false
+    }
+  },
+  "test_used": false
+}
