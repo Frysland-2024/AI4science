@@ -326,3 +326,21 @@ PXRD is the concrete test bed. The broader transferable idea is to identify supe
 **What does not change:** The primary project remains supervised PXRD crystal-system classification with simulator-derived relational supervision. Frozen classifiers/checkpoints, science configs/splits, existing DONUT evidence and other worktrees remain unchanged. No real measurement, GPU retraining, or universal phase-ID claim was introduced.
 
 **Relevant files / commits:** `pxrd_router_mvp/`, `reports/DEMO_VALIDATION.md`, and `reports/MVP_IMPLEMENTATION_STATUS.json`.
+
+## 24. 2026-10-19: RRUFF adaptation-only phase-router follow-up
+
+**Date / status:** 2026-10-19 / PARTIAL; read-only real-spectrum ingestion and overlays work, but phase routing is unsupported for both examples.
+
+**Question / previous assumption:** Could the phase-router MVP demonstrate a genuine local measured profile, use the recorded wavelength and compare an independently fitted candidate against the RRUFF refinement without exposing licensed local data?
+
+**Evidence:** R050045 Fluorite CaF2 and R060745 Rutile TiO2 were verified in `adaptation_pool`; the adapter enforces these IDs, split membership and the manifest spectrum hash. The measured profiles use recorded wavelength #1 (1.541838 Å), matching the frozen simulator's CuKa; wavelength #2 (1.540562 Å) is retained separately as the refinement reference wavelength. Same-sample refined cells are posthoc only. Existing candidates include neither measured composition. With corrected wavelength, MgO ranked first for both: Fluorite RMSE 0.055150 (`a=4.211059 Å`, converged) versus held cubic `a=5.46445 Å`; Rutile RMSE 0.047882 (`a=4.208126 Å`, 60-evaluation cap, solver failed) versus held tetragonal `a=4.6134, c=2.9748 Å`. CeO2 ranked second with RMSE 0.055214 and 0.048312, respectively. The observed-versus-model overlays show profile mismatch; these uncalibrated RMSEs do not establish adequate agreement. No frozen locked-test sample was read.
+
+The verified local frozen Dynamic-JS checkpoint (`3ee1beb…c2b6b49`) loaded strictly with its original ResNet18-GN config and exact input contract. Its highest-probability class was triclinic on both adaptation spectra, although their recorded crystal systems are cubic/tetragonal. Inference is available but weak; the prior remains opt-in and off by default. Independent COD records were identified for CaF2 and rutile, but the host could not retrieve their CIF bytes; no template was invented or derived from either target's refined cell. RRUFF license policy prohibits publishing local spectra, DIF/refinement text and derived metadata without asserted redistribution rights.
+
+**Decision:** Keep the RRUFF adapter as a local, opt-in data-ingestion/diagnostic demo and report `real_demo_requires_better_forward`. Do not claim real-spectrum phase validation or candidate support for CaF2/rutile. Add independently sourced CIF snapshots only after retrieval, provenance and hash verification.
+
+**What changes now:** The application can load only the two permitted adaptation samples locally, show them against every bundled candidate, report held posthoc comparisons, and expose an optional checkpoint-verified symmetry prior. Metadata-only audit, stage status, tests and instructions are updated.
+
+**What does NOT change:** Existing synthetic BaTiO3/MgO/CeO2 demos and the primary supervised crystal-system research stay unchanged. Frozen classifiers, original spectra, refinement data, locked-test split, and other worktrees remain untouched. No raw or derived RRUFF artifact is committed.
+
+**Relevant files / commits:** `pxrd_router_mvp/rruff_local.py`, `pxrd_router_mvp/classifier_adapter.py`, `reports/RRUFF_REAL_DEMO_AUDIT.md`, `reports/MVP_IMPLEMENTATION_STATUS.json`, and the ignored local overlay files under `reports/_local_rruff_overlays/`.

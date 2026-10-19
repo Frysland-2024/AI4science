@@ -4,45 +4,48 @@
   "implementation": "candidate-limited single-phase PXRD router and fixed-prototype lattice refinement",
   "stages": {
     "A_inventory_and_provenance": {
-      "status": "PASS",
-      "details": "Three COD CIFs are present, parsed and SHA-256 pinned. NumPy/SciPy/Matplotlib are available. The optional UI dependencies were installed only in the ignored worktree venv; no frozen classifier weights or PyTorch are available."
+      "status": "PARTIAL",
+      "details": "Three independent COD CIFs are present, parsed and SHA-256 pinned. RRUFF R050045 and R060745 are verified adaptation_pool inputs with manifest hash checks. Independent CaF2/rutile CIF bytes could not be fetched, so these compositions remain unsupported candidates."
     },
     "B_headless_physics_and_refinement": {
-      "status": "PASS",
-      "details": "All three CIFs use one general renderer and bounded lattice/zero-shift/width/scale/background fitting. Synthetic end-to-end tests identify and recover each generated candidate."
+      "status": "PARTIAL",
+      "details": "Synthetic end-to-end tests identify and recover all three bundled CIFs. Corrected RRUFF source wavelength #1 gives MgO as the top candidate for both samples; overlays show profile mismatch, and the R060745 MgO fit hits the 60-evaluation cap. Neither run validates the model because CaF2/rutile candidates are unavailable."
     },
     "C_optional_frozen_classifier": {
       "status": "PARTIAL",
-      "details": "Graceful unavailable adapter is implemented. No checkpoint or PyTorch exists in this worktree/environment, so no inference or soft-prior run was possible. The route always scores every candidate."
+      "details": "A local frozen Dynamic-JS checkpoint was verified by SHA-256 and strict model/config load, then inferred on both adaptation examples at the exact simulator CuKa wavelength. The top output was triclinic for both despite cubic/tetragonal manifest labels. The optional prior is off by default and never filters candidates."
     },
     "D_streamlit_uploader_and_plot": {
       "status": "PASS",
-      "details": "Streamlit uploader and measured-versus-fit/residual plot are implemented. The app launched headlessly from the ignored worktree venv and /_stcore/health returned ok."
+      "details": "The uploader and local adaptation-only RRUFF selector share the measured-versus-fit/residual plot. Streamlit 1.66.0 started headlessly from the isolated venv and /_stcore/health returned HTTP 200 ok. No browser visual inspection was performed."
     },
     "E_tests_demo_docs_and_delivery": {
       "status": "PARTIAL",
-      "details": "Eight unittest cases passed; deterministic SIMULATED demos were run for all three CIFs. Commit 4667adfc636823834d1c91e7e02763b8a7647ff6 was pushed to the requested branch. Draft PR creation was attempted and returned HTTP 401 because the stored GitHub CLI token is invalid."
+      "details": "Twelve deterministic unittest cases passed (including local RRUFF and checkpoint inference checks), along with compileall, JSON parsing, diff check and ignored-overlay verification. Three simulated demos remain. Metadata-only RRUFF audit and regenerated ignored local overlays are recorded. Branch commit and push are pending; no PR or merge is requested."
     }
   },
   "candidate_support": [
     {"id": "batio3_p4mm_cod9014273", "status": "SUPPORTED", "sha256": "e880d6f9df10ad4a2bb347dbbeae2712817d95e2f16df9390784d916a0c02f9c"},
     {"id": "mgo_rocksalt_cod9000505", "status": "SUPPORTED", "sha256": "73e348f73ec4e2e41f2ea08cbe5f393366e7cfeb55285eebbb185ace7ec94923"},
-    {"id": "ceo2_fluorite_cod9009008", "status": "SUPPORTED", "sha256": "cfb862ebff35ab342a254a267eff4d94a86a18ae284142289e7b56d8d7b8e099"}
+    {"id": "ceo2_fluorite_cod9009008", "status": "SUPPORTED", "sha256": "cfb862ebff35ab342a254a267eff4d94a86a18ae284142289e7b56d8d7b8e099"},
+    {"id": "caf2_fluorite_R050045", "status": "NOT_AVAILABLE", "reason": "No independent verified CIF bytes retrieved; local RRUFF measurement is not used as a public template."},
+    {"id": "rutile_tio2_R060745", "status": "NOT_AVAILABLE", "reason": "No independent verified CIF bytes retrieved; local RRUFF measurement is not used as a public template."}
   ],
   "delivery": {
     "branch": "codex/phase-router-inversion-mvp-20261019",
-    "commit": "4667adfc636823834d1c91e7e02763b8a7647ff6",
-    "push": "PASS",
-    "draft_pr_target": "codex/donut-pxrd-four-stage-20261019",
-    "draft_pr_attempt": "BLOCKED_HTTP_401_INVALID_GH_TOKEN"
+    "commit": "PENDING",
+    "push": "PENDING",
+    "pull_request": "NOT_REQUESTED"
   },
   "limitations": [
-    "REAL EXPERIMENTAL VALIDATION NOT DONE",
+    "REAL-SPECTRUM PHASE VALIDATION NOT DONE; RRUFF runs are exploratory adaptation-pool demos only",
     "no measured-spectrum accuracy or confidence-calibration claim",
     "not universal phase or chemical-composition identification",
     "not Rietveld refinement",
     "three-candidate single-phase CIF hypothesis set only",
     "f(s)=Z neutral-atom approximation, Gaussian peaks, no instrument or preferred-orientation model",
-    "optional frozen classifier unavailable"
+    "optional classifier gives poor exploratory zero-shot outputs on these two samples",
+    "RRUFF spectra/DIF/refinement records and overlays are local-only and excluded from Git",
+    "independent CaF2 and rutile CIF bytes unavailable in this network-restricted host"
   ]
 }

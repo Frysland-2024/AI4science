@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import unittest
+import os
 
 import numpy as np
 
@@ -100,6 +101,53 @@ class PhysicalPipelineTests(unittest.TestCase):
         self.assertEqual(a, b)
         self.assertIn("SIMULATED", a["data_label"])
         self.assertFalse(a["classifier"]["available"])
+
+
+class RruffLocalAdapterTests(unittest.TestCase):
+    @unittest.skipUnless(os.environ.get("PXRD_RRUFF_TEST_ROOT"), "local RRUFF tree is optional")
+    def test_adaptation_records_load_with_recorded_wavelength_and_held_reference(self):
+        from pxrd_router_mvp.rruff_local import load_local_example
+        root = os.environ["PXRD_RRUFF_TEST_ROOT"]
+        for rruff_id, mineral, system in (("R050045", "Fluorite", "cubic"), ("R060745", "Rutile", "tetragonal")):
+            with self.subTest(rruff_id=rruff_id):
+                example = load_local_example(root, rruff_id)
+                self.assertEqual(example.mineral, mineral)
+                self.assertEqual(example.crystal_system, system)
+                self.assertEqual(example.wavelength_triplet, (1.541838, 1.540562, 1.544390))
+                self.assertEqual(example.selected_wavelength_angstrom, 1.541838)
+                self.assertEqual(example.refinement_reference_wavelength_angstrom, 1.540562)
+                self.assertIn("posthoc_reference_only", example.refinement_role)
+                self.assertEqual(len(example.spectrum.two_theta), 3501)
+
+    @unittest.skipUnless(os.environ.get("PXRD_RRUFF_TEST_ROOT"), "local RRUFF tree is optional")
+    def test_real_routing_is_adaptation_only_and_every_candidate_is_scored(self):
+        from pxrd_router_mvp.rruff_local import route_local_example
+        payload = route_local_example(os.environ["PXRD_RRUFF_TEST_ROOT"], "R050045")
+        self.assertFalse(payload["frozen_locked_test_used"])
+        self.assertIn("posthoc_reference_only", payload["posthoc_reference_role"])
+        self.assertEqual(payload["real_demo_status"], "real_demo_requires_better_forward")
+        self.assertIn("does not contain", payload["real_demo_warning"])
+        self.assertEqual(len(payload["evaluated_candidate_ids"]), 3)
+        self.assertEqual(len(payload["ranking"]), 3)
+
+    @unittest.skipUnless(os.environ.get("PXRD_RRUFF_TEST_ROOT") and os.environ.get("PXRD_CLASSIFIER_CHECKPOINT"), "local classifier checkpoint is optional")
+    def test_verified_classifier_infers_without_filtering_candidates(self):
+        from pxrd_router_mvp.rruff_local import load_local_example
+        from pxrd_router_mvp.classifier_adapter import load_optional_prior
+        example = load_local_example(os.environ["PXRD_RRUFF_TEST_ROOT"], "R050045")
+        status = load_optional_prior(
+            os.environ["PXRD_CLASSIFIER_CHECKPOINT"],
+            two_theta=example.spectrum.two_theta, intensity=example.spectrum.intensity,
+            wavelength_angstrom=example.selected_wavelength_angstrom,
+        )
+        self.assertTrue(status.available, status.message)
+        self.assertAlmostEqual(sum(status.probabilities), 1.0, places=5)
+        self.assertEqual(len(status.probabilities), 7)
+
+    def test_locked_test_or_other_ids_are_never_loadable(self):
+        from pxrd_router_mvp.rruff_local import load_local_example
+        with self.assertRaisesRegex(ValueError, "only the adaptation examples"):
+            load_local_example(".", "R050031")
 
 
 if __name__ == "__main__":
