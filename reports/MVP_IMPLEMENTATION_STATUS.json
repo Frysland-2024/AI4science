@@ -33,8 +33,8 @@
   ],
   "delivery": {
     "branch": "codex/phase-router-inversion-mvp-20261019",
-    "commit": "PENDING",
-    "push": "PENDING",
+    "commit": "1652f62b8ef30bf73262fc034c5c13dfd47dc43e",
+    "push": "PASS",
     "pull_request": "NOT_REQUESTED"
   },
   "limitations": [
