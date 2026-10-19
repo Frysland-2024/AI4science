@@ -1,0 +1,59 @@
+{
+  "date": "2026-10-19",
+  "final_review": {
+    "report": "reports/EVENING_HANDOFF_20261019.md",
+    "prototype": "PASS",
+    "rruff": "PARTIAL",
+    "ui": "PASS",
+    "verification": "12/12 tests passed with local RRUFF and frozen checkpoint enabled; all three synthetic CLI demos ranked their generating CIF first; both adaptation-only RRUFF CLI smokes completed; Streamlit health returned HTTP 200; private RRUFF content is absent from tracked files; branch push verified and existing open Draft PR #37 confirmed."
+  },
+  "branch": "codex/phase-router-inversion-mvp-20261019",
+  "implementation": "candidate-limited single-phase PXRD router and fixed-prototype lattice refinement",
+  "stages": {
+    "A_inventory_and_provenance": {
+      "status": "PARTIAL",
+      "details": "Three independent COD CIFs are present, parsed and SHA-256 pinned. RRUFF R050045 and R060745 are verified adaptation_pool inputs with manifest hash checks. Independent CaF2/rutile CIF bytes could not be fetched, so these compositions remain unsupported candidates."
+    },
+    "B_headless_physics_and_refinement": {
+      "status": "PARTIAL",
+      "details": "Synthetic end-to-end tests identify and recover all three bundled CIFs. Corrected RRUFF source wavelength #1 gives MgO as the top candidate for both samples; overlays show profile mismatch, and the R060745 MgO fit hits the 60-evaluation cap. Neither run validates the model because CaF2/rutile candidates are unavailable."
+    },
+    "C_optional_frozen_classifier": {
+      "status": "PASS",
+      "details": "A local frozen Dynamic-JS checkpoint was verified by SHA-256 and strict model/config load, then inferred on both adaptation examples at the exact simulator CuKa wavelength. The exploratory top output was triclinic for both despite cubic/tetragonal manifest labels. The optional prior is off by default and never filters candidates; tests confirm every candidate is evaluated."
+    },
+    "D_streamlit_uploader_and_plot": {
+      "status": "PASS",
+      "details": "The uploader and local adaptation-only RRUFF selector share the measured-versus-fit/residual plot. Streamlit 1.66.0 started headlessly from the isolated venv and /_stcore/health returned HTTP 200 ok. No browser visual inspection was performed."
+    },
+    "E_tests_demo_docs_and_delivery": {
+      "status": "PASS",
+      "details": "Final bounded review reran all 12 deterministic unittest cases with local RRUFF and frozen checkpoint enabled; all passed. The three synthetic CLI demos each ranked the generating CIF first (RMSE about 0.003). Both adaptation-only RRUFF CLI smokes completed and are explicitly PARTIAL real-data evidence. Streamlit 1.66.0 headless health returned HTTP 200. Candidate provenance, filename independence, wavelength parsing, rejection of locked-test IDs, residual plots and Git privacy were checked. No browser visual inspection was performed."
+    }
+  },
+  "candidate_support": [
+    {"id": "batio3_p4mm_cod9014273", "status": "SUPPORTED", "sha256": "e880d6f9df10ad4a2bb347dbbeae2712817d95e2f16df9390784d916a0c02f9c"},
+    {"id": "mgo_rocksalt_cod9000505", "status": "SUPPORTED", "sha256": "73e348f73ec4e2e41f2ea08cbe5f393366e7cfeb55285eebbb185ace7ec94923"},
+    {"id": "ceo2_fluorite_cod9009008", "status": "SUPPORTED", "sha256": "cfb862ebff35ab342a254a267eff4d94a86a18ae284142289e7b56d8d7b8e099"},
+    {"id": "caf2_fluorite_R050045", "status": "NOT_AVAILABLE", "reason": "No independent verified CIF bytes retrieved; local RRUFF measurement is not used as a public template."},
+    {"id": "rutile_tio2_R060745", "status": "NOT_AVAILABLE", "reason": "No independent verified CIF bytes retrieved; local RRUFF measurement is not used as a public template."}
+  ],
+  "delivery": {
+    "branch": "codex/phase-router-inversion-mvp-20261019",
+    "reviewed_source_commit": "8923685a3451fd9eaef7d27b60133d8b664c1661",
+    "push": "PASS",
+    "pull_request": "https://github.com/Frysland-2024/AI4science/pull/37",
+    "draft_pr_attempt": "PASS_EXISTING_OPEN_DRAFT_CONFIRMED"
+  },
+  "limitations": [
+    "REAL-SPECTRUM PHASE VALIDATION NOT DONE; RRUFF runs are exploratory adaptation-pool demos only",
+    "no measured-spectrum accuracy or confidence-calibration claim",
+    "not universal phase or chemical-composition identification",
+    "not Rietveld refinement",
+    "three-candidate single-phase CIF hypothesis set only",
+    "f(s)=Z neutral-atom approximation, Gaussian peaks, no instrument or preferred-orientation model",
+    "optional classifier gives poor exploratory zero-shot outputs on these two samples",
+    "RRUFF spectra/DIF/refinement records and overlays are local-only and excluded from Git",
+    "independent CaF2 and rutile CIF bytes unavailable in this network-restricted host"
+  ]
+}

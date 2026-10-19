@@ -310,3 +310,37 @@ PXRD is the concrete test bed. The broader transferable idea is to identify supe
 **What does not change:** The supervised PXRD classification project identity, frozen V9/PR #26 results, old branches, and archived factorization Stage-1 NO-GO remain unchanged. No real experimental spectra or unseen materials were tested. Original DONUT SXDM geometry and figures were not reproduced.
 
 **Relevant files / commits:** `donut_pxrd/reports/FINAL_TECHNICAL_REPORT.md`, `donut_pxrd/reports/EXPERIMENT_1.md` through `EXPERIMENT_4.md`, `donut_pxrd/results/study_v1/exp4/`, and the pinned source audit in `donut_pxrd/reports/SOURCE_FIDELITY_AUDIT.md`.
+
+## 23. 2026-10-19: independent fixed-CIF phase-router bachelor MVP
+
+**Date / status:** 2026-10-19 / engineering MVP implemented; synthetic checks and headless Streamlit startup pass; real-data validation remains open.
+
+**Question / previous assumption:** Could the single-structure PXRD inversion feasibility work be turned into a small candidate-limited phase assistant without misrepresenting the existing seven-crystal-system classifier as a phase-ID model?
+
+**Evidence / implementation:** The independent `pxrd_router_mvp/` package parses pinned COD CIFs for BaTiO3 P4mm (9014273), MgO rocksalt (9000505), and CeO2 fluorite (9009008), computes approximate kinematic powder profiles, evaluates every candidate, and refines bounded lattice and profile parameters. Eight unit/integration tests pass. Three deterministic CIF-generated synthetic demos each rank the generating candidate first and recover their programmed lattice/zero-shift values closely. The worktree has no frozen classifier weights or PyTorch, so its adapter reports unavailable and the physical router runs without a prior. Streamlit 1.66.0 was installed only in the ignored worktree venv; headless app startup succeeded and the local health endpoint returned `ok`.
+
+**Decision:** Deliver this as a distinct candidate-limited engineering prototype. Keep candidate ranking independent of the previous classifier. Treat any future seven-system probabilities only as a weak optional soft prior, never a gate. Keep measured-spectrum claims unsupported until documented experimental data and wavelength/instrument metadata are available.
+
+**What changes now:** The new package, CIF provenance/hashes, tests, CLI, optional UI, package README, demo validation, and implementation-status record are added in this independent worktree. The existing top-level project README remains unchanged.
+
+**What does not change:** The primary project remains supervised PXRD crystal-system classification with simulator-derived relational supervision. Frozen classifiers/checkpoints, science configs/splits, existing DONUT evidence and other worktrees remain unchanged. No real measurement, GPU retraining, or universal phase-ID claim was introduced.
+
+**Relevant files / commits:** `pxrd_router_mvp/`, `reports/DEMO_VALIDATION.md`, and `reports/MVP_IMPLEMENTATION_STATUS.json`.
+
+## 24. 2026-10-19: RRUFF adaptation-only phase-router follow-up
+
+**Date / status:** 2026-10-19 / PARTIAL; read-only real-spectrum ingestion and overlays work, but phase routing is unsupported for both examples.
+
+**Question / previous assumption:** Could the phase-router MVP demonstrate a genuine local measured profile, use the recorded wavelength and compare an independently fitted candidate against the RRUFF refinement without exposing licensed local data?
+
+**Evidence:** R050045 Fluorite CaF2 and R060745 Rutile TiO2 were verified in `adaptation_pool`; the adapter enforces these IDs, split membership and the manifest spectrum hash. The measured profiles use recorded wavelength #1 (1.541838 Å), matching the frozen simulator's CuKa; wavelength #2 (1.540562 Å) is retained separately as the refinement reference wavelength. Same-sample refined cells are posthoc only. Existing candidates include neither measured composition. With corrected wavelength, MgO ranked first for both: Fluorite RMSE 0.055150 (`a=4.211059 Å`, converged) versus held cubic `a=5.46445 Å`; Rutile RMSE 0.047882 (`a=4.208126 Å`, 60-evaluation cap, solver failed) versus held tetragonal `a=4.6134, c=2.9748 Å`. CeO2 ranked second with RMSE 0.055214 and 0.048312, respectively. The observed-versus-model overlays show profile mismatch; these uncalibrated RMSEs do not establish adequate agreement. No frozen locked-test sample was read.
+
+The verified local frozen Dynamic-JS checkpoint (`3ee1beb…c2b6b49`) loaded strictly with its original ResNet18-GN config and exact input contract. Its highest-probability class was triclinic on both adaptation spectra, although their recorded crystal systems are cubic/tetragonal. Inference is available but weak; the prior remains opt-in and off by default. Independent COD records were identified for CaF2 and rutile, but the host could not retrieve their CIF bytes; no template was invented or derived from either target's refined cell. RRUFF license policy prohibits publishing local spectra, DIF/refinement text and derived metadata without asserted redistribution rights.
+
+**Decision:** Keep the RRUFF adapter as a local, opt-in data-ingestion/diagnostic demo and report `real_demo_requires_better_forward`. Do not claim real-spectrum phase validation or candidate support for CaF2/rutile. Add independently sourced CIF snapshots only after retrieval, provenance and hash verification.
+
+**What changes now:** The application can load only the two permitted adaptation samples locally, show them against every bundled candidate, report held posthoc comparisons, and expose an optional checkpoint-verified symmetry prior. Metadata-only audit, stage status, tests and instructions are updated.
+
+**What does NOT change:** Existing synthetic BaTiO3/MgO/CeO2 demos and the primary supervised crystal-system research stay unchanged. Frozen classifiers, original spectra, refinement data, locked-test split, and other worktrees remain untouched. No raw or derived RRUFF artifact is committed.
+
+**Relevant files / commits:** `pxrd_router_mvp/rruff_local.py`, `pxrd_router_mvp/classifier_adapter.py`, `reports/RRUFF_REAL_DEMO_AUDIT.md`, `reports/MVP_IMPLEMENTATION_STATUS.json`, and the ignored local overlay files under `reports/_local_rruff_overlays/`.
