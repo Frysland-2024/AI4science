@@ -30,3 +30,9 @@ At the inspect timestamp, the frozen config and pre-registration matched; exp1, 
 The controller validates NPZ file SHA against its data manifest and checks all three per-seed records, shared 77-parent lists, and recorded checkpoint SHA values. It uses only Python's standard library and does not deserialize PyTorch checkpoints or recompute NumPy array-internal hashes. The existing training script reloads its checkpoints during execution; a separate PyTorch audit remains outside this CPU-only engineering run.
 
 No claim is made here that the DONUT experiments or Experiment 4 are scientifically complete. A passing pipeline smoke verifies orchestration and recovery behavior only.
+
+## Git delivery
+
+- Commit `17381937f578bdc36e0d75002792eb68c1f0f61f` was created on `codex/donut-pxrd-serial-pipeline-20261019` (commit command exit 0).
+- The branch push to `origin/codex/donut-pxrd-serial-pipeline-20261019` succeeded (exit 0; remote ref matched the commit above).
+- Draft PR [#35](https://github.com/Frysland-2024/AI4science/pull/35) was created and verified open, with base `codex/donut-pxrd-four-stage-20261019` and the requested head branch. PR creation and metadata verification both exited 0. It was not merged.
