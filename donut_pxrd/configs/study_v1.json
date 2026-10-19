@@ -1,0 +1,57 @@
+{
+  "study_id": "donut_pxrd_four_stage_20261019_v1",
+  "status": "FROZEN_BEFORE_TRAINING",
+  "scope": "single public BaTiO3 P4mm COD 9014273, conditional q interpolation, synthetic only",
+  "source_commit": "090c10bdf99333d3670dc26e617a93364f714bdc",
+  "source_fidelity_audit": "donut_pxrd/reports/SOURCE_FIDELITY_AUDIT.md",
+  "material": {
+    "cif": "xrd_forward_loss/data/public_cif/BaTiO3_COD_9014273_P4mm.cif",
+    "forward_config": "xrd_inversion/configs/week1_formal_gate.json",
+    "forward_implementation": "xrd_inversion.gpu_forward.CachedTetragonalGPUForward",
+    "expected_profile": "pxrd_forward_loss.measurement_closure.expected_profile",
+    "device": "cuda",
+    "dtype": "float64"
+  },
+  "data": {
+    "q_count": 512,
+    "q_parent_identity": "one unique Sobol q draw per parent; split before nuisance/noise draws",
+    "q_range": [-0.8, 0.8],
+    "sobol_seed": 20261051,
+    "split_seed": 20261052,
+    "split_fraction": {"train": 0.70, "validation": 0.15, "test": 0.15},
+    "nuisance_seed": 20261053,
+    "noise_seed": 20261054,
+    "texture_seed": 20261055,
+    "count_scale": 30000,
+    "input_transform": "per-profile max normalization then log1p(100*x)/log(101), applied identically to every branch",
+    "truth_policy": "q/eta/texture truth used only to generate spectra and post-hoc score; DONUT receives no truth labels in train/validation/model selection"
+  },
+  "seeds": [20261061, 20261062, 20261063],
+  "donut": {
+    "encoder": "1D convolutional encoder, no input skip path",
+    "decoder": "latent-only 1D convolutional decoder; output length matches input",
+    "latent_activation": "1.7159*tanh(2*z/3)",
+    "latent_scaling": "explicit per-coordinate scale into frozen physical bounds",
+    "loss": "SmoothL1(decoder(x), x) + 5*SmoothL1(fixed_physics(latent), x)",
+    "encoder_lr": 0.0001,
+    "decoder_lr": 0.00001,
+    "optimizer": "AdamW",
+    "weight_decay": 0.01,
+    "batch_size": 16,
+    "epochs_max": 30,
+    "validation_selection": "minimum validation composite loss; ties select earliest epoch",
+    "dropout": 0.1
+  },
+  "stages": {
+    "experiment_1": {"latent": ["du", "dv"], "shift": 0.0, "fwhm_deg": 0.08, "background": "fixed simple linear ramp, 100-200 counts", "noise": "Poisson counts", "texture": false},
+    "experiment_2": {"latent": ["du", "dv", "zero_shift"], "shift_bound_deg": 0.06, "fwhm_deg": 0.08, "background": "same fixed simple linear ramp", "noise": "Poisson counts", "texture": false},
+    "experiment_3a": {"latent": ["du", "dv", "zero_shift"], "width_deg": [0.11, 0.13], "inference_width_deg": 0.12, "background": "fixed simple linear ramp", "noise": "Poisson counts", "texture": false},
+    "experiment_3b": {"latent": ["du", "dv", "zero_shift"], "width_deg": [0.11, 0.13], "inference_width_deg": 0.12, "background": "V9 fixed polynomial shape, random amplitude 0.005-0.008; inference background fixed 0.0065", "noise": "Poisson counts", "texture": false},
+    "experiment_3c": {"latent": ["du", "dv", "zero_shift"], "width_deg": [0.11, 0.13], "inference_width_deg": 0.12, "background": "V9 fixed polynomial shape, random amplitude 0.005-0.008; inference background fixed 0.0065", "noise": "Poisson counts plus Gaussian readout 0.5-1.5 counts", "texture": false},
+    "experiment_3d_texture": {"latent": ["du", "dv", "zero_shift"], "generator": "hkl-aware March-Dollase preferred orientation in V9 generator", "inference": "zero-texture differentiable forward; generator-only texture OOD stress", "training_policy": "zero-shot transformation of the frozen texture-free 3c held-out inputs; no retraining", "noise": "Poisson counts plus Gaussian readout 0.5-1.5 counts"},
+    "experiment_4": {"condition": "same final no-texture noisy condition as experiment_3c", "methods": ["A supervised q+shift", "B q+shift plus expected-profile loss", "C detached-q expected-profile loss", "D DONUT-PXRD self-supervised", "E bounded L-BFGS-B q+shift"], "lbfgsb": {"objective": "mean squared error in shared transformed profile domain", "starts": 3, "initializations": [[0, 0, 0], [-0.4, 0.4, 0], [0.4, -0.4, 0]], "bounds": [[-0.8, 0.8], [-0.8, 0.8], [-0.06, 0.06]], "ftol": 1e-12, "gtol": 1e-9, "maxiter": 80, "maxfun": 120, "test_subset": "all frozen test q parents"}}
+  },
+  "budget": {"total_gpu_training_seconds_max": 28800, "per_model_epochs_max": 30, "no_sweeps": true, "stop_on_formal_physics_gate_failure": true},
+  "evaluation": {"primary": ["du/dv/shift MAE", "a/c MAE angstrom", "profile RMSE", "fit failure rate", "CPU/GPU inference p50/p95"], "test_policy": "frozen test is read once after model/checkpoint selection; no tuning on test", "classic_solver": "deterministic; report one result, not fabricated seeds", "latency": "warm-up, CUDA sync around GPU timings; CPU and GPU forward/inference separately"},
+  "weights_storage": "E:\\AI4science_DONUT_checkpoints\\donut_pxrd_four_stage_20261019"
+}

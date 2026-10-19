@@ -240,3 +240,12 @@ python -m pytest -q
 新的合成 512-q、三 seed、simple/V9 A/B/C 训练在预算内完成。simple 条件的三 seed 中 C 的 direct q-MAE 均低于 A；V9 条件 C 结果按 seed 混合，B 与 C 的均值均低于 A，而 C 均值略高于 B。等预算 joint q+eta fitting 后三种训练方法的 q 误差与谱残差几乎一致。结果仅属于一个公开 BaTiO₃ CIF 的合成条件插值，不构成真实 XRD、未见成分泛化或 Rietveld 证据。完整记录见 [`overnight_pr26_20261019/`](../overnight_pr26_20261019/)。
 
 实验与证据已完成；分支 `codex/issue31-pr26-fair-diagnostic` 已推送，提交为 `23f344b`。GitHub Issue #31 状态评论和 Draft PR 创建因 GitHub CLI 凭证无效（HTTP 401）未完成；未尝试合并。冻结 PR #26 与 V9 证据未修改。
+
+
+## 13. 2026-10-19 DONUT-PXRD bounded follow-up (EXPLORATORY COMPLETE)
+
+The preregistered four-stage DONUT-PXRD follow-up completed on one public BaTiO3 P4mm CIF. It adapts DONUT's dual-branch unsupervised training mechanism to 1D PXRD; it is not the project's new primary method or a reproduction of the original 2D SXDM figures. The frozen forward parity, gradient, local-identifiability, source-fidelity and resume checkpoint audits passed.
+
+Across the three stages, DONUT parameter recovery remained weak (exp3c normalized q mean MAE `0.2894` over 77 held-out parent identities per seed). In the fair exp4 comparison on those same 77 noisy exp3c observations, A/B/C direct q MAE averaged `0.0345/0.0348/0.0367` across seeds, while DONUT D averaged `0.2894`; bounded optimizer E achieved best-of-three q MAE `0.000359` on this synthetic condition, with 71/77 solver-success flags. A/B/C and optimizer refinements remain single-material results, not real-spectrum or unseen-material evidence.
+
+The complete reports and raw arrays are under [`donut_pxrd/reports/`](../donut_pxrd/reports/FINAL_TECHNICAL_REPORT.md) and [`donut_pxrd/results/study_v1/`](../donut_pxrd/results/study_v1/). The experiment does not change the supervised PXRD classification framing, frozen V9 results, PR #26 evidence, or the earlier Stage-1 factorization NO-GO. Delivery is through a stacked draft PR targeting `codex/issue31-pr26-fair-diagnostic`; no merge is authorized or attempted.

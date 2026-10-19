@@ -1,0 +1,818 @@
+{
+  "20261061": [
+    {
+      "epoch": 1,
+      "train_total": 0.042614955455064774,
+      "train_decoder": 0.0087335212358638,
+      "train_physics": 0.006776286815495595,
+      "validation_total": 0.03999509513378143,
+      "validation_decoder": 0.007797591667622328,
+      "validation_physics": 0.006439500767737627
+    },
+    {
+      "epoch": 2,
+      "train_total": 0.04015976222960845,
+      "train_decoder": 0.006476972252130508,
+      "train_physics": 0.006736557890215646,
+      "validation_total": 0.03774247169494629,
+      "validation_decoder": 0.005634181015193462,
+      "validation_physics": 0.006421658117324114
+    },
+    {
+      "epoch": 3,
+      "train_total": 0.039658733846052834,
+      "train_decoder": 0.006237521099493555,
+      "train_physics": 0.006684242504770341,
+      "validation_total": 0.03676928952336311,
+      "validation_decoder": 0.005008149892091751,
+      "validation_physics": 0.006352227739989757
+    },
+    {
+      "epoch": 4,
+      "train_total": 0.03941687957748123,
+      "train_decoder": 0.006093495464681283,
+      "train_physics": 0.006664676834707675,
+      "validation_total": 0.03595907688140869,
+      "validation_decoder": 0.004986363183706999,
+      "validation_physics": 0.0061945426277816296
+    },
+    {
+      "epoch": 5,
+      "train_total": 0.03853259219423584,
+      "train_decoder": 0.006041871646986059,
+      "train_physics": 0.006498144028465385,
+      "validation_total": 0.03511060550808907,
+      "validation_decoder": 0.005068504530936479,
+      "validation_physics": 0.006008420325815678
+    },
+    {
+      "epoch": 6,
+      "train_total": 0.03820007926096087,
+      "train_decoder": 0.005980644192870544,
+      "train_physics": 0.006443887098651865,
+      "validation_total": 0.03443287722766399,
+      "validation_decoder": 0.004998179245740175,
+      "validation_physics": 0.0058869396336376665
+    },
+    {
+      "epoch": 7,
+      "train_total": 0.037660733837148415,
+      "train_decoder": 0.005841084857187841,
+      "train_physics": 0.006363929816238258,
+      "validation_total": 0.03396523036062717,
+      "validation_decoder": 0.004952584765851498,
+      "validation_physics": 0.005802529305219651
+    },
+    {
+      "epoch": 8,
+      "train_total": 0.03721003299174101,
+      "train_decoder": 0.005757911272508943,
+      "train_physics": 0.006290424432929443,
+      "validation_total": 0.033800942823290825,
+      "validation_decoder": 0.0049025403335690495,
+      "validation_physics": 0.005779680609703064
+    },
+    {
+      "epoch": 9,
+      "train_total": 0.036962833498483116,
+      "train_decoder": 0.0056794269982239475,
+      "train_physics": 0.006256681259559548,
+      "validation_total": 0.0335121214389801,
+      "validation_decoder": 0.004898677114397287,
+      "validation_physics": 0.005722688883543015
+    },
+    {
+      "epoch": 10,
+      "train_total": 0.03658081218600273,
+      "train_decoder": 0.0056309063473473425,
+      "train_physics": 0.006189981090795734,
+      "validation_total": 0.03416922688484192,
+      "validation_decoder": 0.0048748919740319255,
+      "validation_physics": 0.00585886687040329
+    },
+    {
+      "epoch": 11,
+      "train_total": 0.03639250370147436,
+      "train_decoder": 0.005565333787513816,
+      "train_physics": 0.0061654339584967365,
+      "validation_total": 0.03321172967553139,
+      "validation_decoder": 0.004888209328055382,
+      "validation_physics": 0.0056647038087248806
+    },
+    {
+      "epoch": 12,
+      "train_total": 0.03624958212932815,
+      "train_decoder": 0.005506678322411101,
+      "train_physics": 0.006148580866663352,
+      "validation_total": 0.03310168012976646,
+      "validation_decoder": 0.00484337117522955,
+      "validation_physics": 0.00565166175365448
+    },
+    {
+      "epoch": 13,
+      "train_total": 0.036028190799381424,
+      "train_decoder": 0.005486093016098375,
+      "train_physics": 0.006108419443278209,
+      "validation_total": 0.03302891477942467,
+      "validation_decoder": 0.004833002109080553,
+      "validation_physics": 0.0056391825899481775
+    },
+    {
+      "epoch": 14,
+      "train_total": 0.03593136353985123,
+      "train_decoder": 0.005428451275371987,
+      "train_physics": 0.006100582384058963,
+      "validation_total": 0.03258889205753803,
+      "validation_decoder": 0.004827664885669947,
+      "validation_physics": 0.005552245303988457
+    },
+    {
+      "epoch": 15,
+      "train_total": 0.035881606214072395,
+      "train_decoder": 0.005380127842173628,
+      "train_physics": 0.0061002956581828385,
+      "validation_total": 0.032598279789090155,
+      "validation_decoder": 0.0048153471201658245,
+      "validation_physics": 0.005556586664170027
+    },
+    {
+      "epoch": 16,
+      "train_total": 0.03575465156008368,
+      "train_decoder": 0.005361970169874637,
+      "train_physics": 0.006078536237549522,
+      "validation_total": 0.032330809906125066,
+      "validation_decoder": 0.004822940658777952,
+      "validation_physics": 0.005501573812216521
+    },
+    {
+      "epoch": 17,
+      "train_total": 0.03555346733849982,
+      "train_decoder": 0.005327600094935168,
+      "train_physics": 0.0060451735499436445,
+      "validation_total": 0.033338308334350586,
+      "validation_decoder": 0.004808362852782011,
+      "validation_physics": 0.0057059889659285545
+    },
+    {
+      "epoch": 18,
+      "train_total": 0.034886292384370514,
+      "train_decoder": 0.005299896001815796,
+      "train_physics": 0.0059172793129540005,
+      "validation_total": 0.03167045041918755,
+      "validation_decoder": 0.00480579799041152,
+      "validation_physics": 0.005372930597513914
+    },
+    {
+      "epoch": 19,
+      "train_total": 0.034776342222871987,
+      "train_decoder": 0.005273713467075773,
+      "train_physics": 0.005900525649928529,
+      "validation_total": 0.03194918222725392,
+      "validation_decoder": 0.004785702098160982,
+      "validation_physics": 0.005432695895433426
+    },
+    {
+      "epoch": 20,
+      "train_total": 0.03467694848127987,
+      "train_decoder": 0.005250552891875091,
+      "train_physics": 0.005885279150274785,
+      "validation_total": 0.032005786523222925,
+      "validation_decoder": 0.004779531713575124,
+      "validation_physics": 0.005445250775665045
+    },
+    {
+      "epoch": 21,
+      "train_total": 0.03457344477267369,
+      "train_decoder": 0.005215863575753959,
+      "train_physics": 0.0058715162879746895,
+      "validation_total": 0.03163236603140831,
+      "validation_decoder": 0.004777856357395649,
+      "validation_physics": 0.005370902083814144
+    },
+    {
+      "epoch": 22,
+      "train_total": 0.03412881129137848,
+      "train_decoder": 0.0052008699504253655,
+      "train_physics": 0.005785588326904437,
+      "validation_total": 0.03182767331600189,
+      "validation_decoder": 0.004772215243428945,
+      "validation_physics": 0.005411091633141041
+    },
+    {
+      "epoch": 23,
+      "train_total": 0.03420129086336364,
+      "train_decoder": 0.005186430441782526,
+      "train_physics": 0.005802972141005423,
+      "validation_total": 0.03128032051026821,
+      "validation_decoder": 0.004756815824657678,
+      "validation_physics": 0.005304700834676624
+    },
+    {
+      "epoch": 24,
+      "train_total": 0.03343827317914237,
+      "train_decoder": 0.005161331318642782,
+      "train_physics": 0.00565538836805069,
+      "validation_total": 0.030996505916118623,
+      "validation_decoder": 0.004757473804056644,
+      "validation_physics": 0.005247806524857878
+    },
+    {
+      "epoch": 25,
+      "train_total": 0.03312373971161635,
+      "train_decoder": 0.005157715904161982,
+      "train_physics": 0.005593204668358616,
+      "validation_total": 0.030599483847618104,
+      "validation_decoder": 0.004758914746344089,
+      "validation_physics": 0.005168113857507706
+    },
+    {
+      "epoch": 26,
+      "train_total": 0.033922279415571174,
+      "train_decoder": 0.005109441608352506,
+      "train_physics": 0.005762567581689876,
+      "validation_total": 0.03167304471135139,
+      "validation_decoder": 0.004738708399236203,
+      "validation_physics": 0.00538686728104949
+    },
+    {
+      "epoch": 27,
+      "train_total": 0.033717966759982315,
+      "train_decoder": 0.005111097884566888,
+      "train_physics": 0.005721373827723058,
+      "validation_total": 0.031204810366034508,
+      "validation_decoder": 0.0047422172501683235,
+      "validation_physics": 0.005292518530040979
+    },
+    {
+      "epoch": 28,
+      "train_total": 0.03317517163636892,
+      "train_decoder": 0.005090308902056321,
+      "train_physics": 0.005616972526616376,
+      "validation_total": 0.03064572773873806,
+      "validation_decoder": 0.004717561230063438,
+      "validation_physics": 0.005185633338987828
+    },
+    {
+      "epoch": 29,
+      "train_total": 0.03285217576700708,
+      "train_decoder": 0.005055089946836233,
+      "train_physics": 0.005559417216674141,
+      "validation_total": 0.03118150681257248,
+      "validation_decoder": 0.004719474073499441,
+      "validation_physics": 0.005292406538501382
+    },
+    {
+      "epoch": 30,
+      "train_total": 0.03273827355840932,
+      "train_decoder": 0.005041757861719183,
+      "train_physics": 0.005539303139338027,
+      "validation_total": 0.029908879846334457,
+      "validation_decoder": 0.004723519831895828,
+      "validation_physics": 0.00503707192838192
+    }
+  ],
+  "20261062": [
+    {
+      "epoch": 1,
+      "train_total": 0.05857777271581733,
+      "train_decoder": 0.02444173371338326,
+      "train_physics": 0.0068272077883391276,
+      "validation_total": 0.04244872108101845,
+      "validation_decoder": 0.010177323780953883,
+      "validation_physics": 0.0064542795531451706
+    },
+    {
+      "epoch": 2,
+      "train_total": 0.04538535926005115,
+      "train_decoder": 0.011413304297172504,
+      "train_physics": 0.006794410939935757,
+      "validation_total": 0.03983727023005486,
+      "validation_decoder": 0.007467961963266134,
+      "validation_physics": 0.00647386172786355
+    },
+    {
+      "epoch": 3,
+      "train_total": 0.041466116581274116,
+      "train_decoder": 0.007589752968076778,
+      "train_physics": 0.006775272767180982,
+      "validation_total": 0.037559549510478976,
+      "validation_decoder": 0.005491953063756228,
+      "validation_physics": 0.0064135191962122915
+    },
+    {
+      "epoch": 4,
+      "train_total": 0.040360235973544746,
+      "train_decoder": 0.006803940313503794,
+      "train_physics": 0.00671125916035279,
+      "validation_total": 0.03695683479309082,
+      "validation_decoder": 0.005249083042144775,
+      "validation_physics": 0.006341550219804049
+    },
+    {
+      "epoch": 5,
+      "train_total": 0.04008935748235039,
+      "train_decoder": 0.006671659567433855,
+      "train_physics": 0.006683539497949507,
+      "validation_total": 0.03627125322818756,
+      "validation_decoder": 0.005314773600548506,
+      "validation_physics": 0.006191295944154263
+    },
+    {
+      "epoch": 6,
+      "train_total": 0.03961524253954058,
+      "train_decoder": 0.006662162425725356,
+      "train_physics": 0.006590616018713817,
+      "validation_total": 0.03576620221138001,
+      "validation_decoder": 0.005382174253463745,
+      "validation_physics": 0.006076805479824543
+    },
+    {
+      "epoch": 7,
+      "train_total": 0.039047230682943176,
+      "train_decoder": 0.006631933901782917,
+      "train_physics": 0.006483059315739766,
+      "validation_total": 0.035444651171565054,
+      "validation_decoder": 0.005430544354021549,
+      "validation_physics": 0.006002821400761605
+    },
+    {
+      "epoch": 8,
+      "train_total": 0.03867868447433347,
+      "train_decoder": 0.006576719288916692,
+      "train_physics": 0.006420393049231042,
+      "validation_total": 0.03503783382475376,
+      "validation_decoder": 0.005306067876517773,
+      "validation_physics": 0.005946353171020746
+    },
+    {
+      "epoch": 9,
+      "train_total": 0.038266368858192276,
+      "train_decoder": 0.006487105689618898,
+      "train_physics": 0.00635585267825619,
+      "validation_total": 0.034721840918064115,
+      "validation_decoder": 0.005200984328985215,
+      "validation_physics": 0.005904171150177717
+    },
+    {
+      "epoch": 10,
+      "train_total": 0.03755609691143036,
+      "train_decoder": 0.006411188342810973,
+      "train_physics": 0.006228981701576192,
+      "validation_total": 0.034621404483914375,
+      "validation_decoder": 0.005160020105540753,
+      "validation_physics": 0.005892276857048273
+    },
+    {
+      "epoch": 11,
+      "train_total": 0.03749459860441477,
+      "train_decoder": 0.006329530040207116,
+      "train_physics": 0.006233013700693846,
+      "validation_total": 0.03420996628701687,
+      "validation_decoder": 0.005064283404499293,
+      "validation_physics": 0.005829136539250612
+    },
+    {
+      "epoch": 12,
+      "train_total": 0.03711900001634722,
+      "train_decoder": 0.006259792160404765,
+      "train_physics": 0.00617184151854852,
+      "validation_total": 0.034024155139923094,
+      "validation_decoder": 0.005021125636994838,
+      "validation_physics": 0.005800605844706297
+    },
+    {
+      "epoch": 13,
+      "train_total": 0.037023800384739174,
+      "train_decoder": 0.006175488618243,
+      "train_physics": 0.006169662385693063,
+      "validation_total": 0.034071901068091395,
+      "validation_decoder": 0.00500839976593852,
+      "validation_physics": 0.005812700372189283
+    },
+    {
+      "epoch": 14,
+      "train_total": 0.036644757927759834,
+      "train_decoder": 0.006126887650917406,
+      "train_physics": 0.006103574136353057,
+      "validation_total": 0.034108392894268036,
+      "validation_decoder": 0.005025163292884827,
+      "validation_physics": 0.005816645827144385
+    },
+    {
+      "epoch": 15,
+      "train_total": 0.03659492050823958,
+      "train_decoder": 0.006084002291216799,
+      "train_physics": 0.006102183671749156,
+      "validation_total": 0.0336295735090971,
+      "validation_decoder": 0.005072771478444338,
+      "validation_physics": 0.005711360182613134
+    },
+    {
+      "epoch": 16,
+      "train_total": 0.03641210342554942,
+      "train_decoder": 0.006057541857918967,
+      "train_physics": 0.006070912329723005,
+      "validation_total": 0.0333576537668705,
+      "validation_decoder": 0.004978954792022705,
+      "validation_physics": 0.005675739608705044
+    },
+    {
+      "epoch": 17,
+      "train_total": 0.03622719313463439,
+      "train_decoder": 0.006001882396800363,
+      "train_physics": 0.00604506213541912,
+      "validation_total": 0.033687061816453936,
+      "validation_decoder": 0.005016351770609617,
+      "validation_physics": 0.005734141916036606
+    },
+    {
+      "epoch": 18,
+      "train_total": 0.035929683109988335,
+      "train_decoder": 0.005960079355408316,
+      "train_physics": 0.005993920864294405,
+      "validation_total": 0.03310405649244785,
+      "validation_decoder": 0.004987732321023941,
+      "validation_physics": 0.005623264983296394
+    },
+    {
+      "epoch": 19,
+      "train_total": 0.03572791555653448,
+      "train_decoder": 0.005936208909944347,
+      "train_physics": 0.0059583413050226545,
+      "validation_total": 0.032691682875156405,
+      "validation_decoder": 0.004998624511063099,
+      "validation_physics": 0.005538611579686404
+    },
+    {
+      "epoch": 20,
+      "train_total": 0.03517206069891867,
+      "train_decoder": 0.005905348220435174,
+      "train_physics": 0.005853342509869,
+      "validation_total": 0.03291406072676182,
+      "validation_decoder": 0.004995279666036368,
+      "validation_physics": 0.005583756137639284
+    },
+    {
+      "epoch": 21,
+      "train_total": 0.03534081732125386,
+      "train_decoder": 0.005862526757561643,
+      "train_physics": 0.005895658112738443,
+      "validation_total": 0.03241264596581459,
+      "validation_decoder": 0.004963541124016047,
+      "validation_physics": 0.005489820986986161
+    },
+    {
+      "epoch": 22,
+      "train_total": 0.03555312679837579,
+      "train_decoder": 0.005842311874679897,
+      "train_physics": 0.00594216303737915,
+      "validation_total": 0.03265945352613926,
+      "validation_decoder": 0.004926314018666745,
+      "validation_physics": 0.005546628125011921
+    },
+    {
+      "epoch": 23,
+      "train_total": 0.03516125881477543,
+      "train_decoder": 0.005813696340698263,
+      "train_physics": 0.005869512486716975,
+      "validation_total": 0.03201480358839035,
+      "validation_decoder": 0.004964408930391073,
+      "validation_physics": 0.005410078726708889
+    },
+    {
+      "epoch": 24,
+      "train_total": 0.035125262468405395,
+      "train_decoder": 0.005766869036723738,
+      "train_physics": 0.0058716787835178166,
+      "validation_total": 0.03208007887005806,
+      "validation_decoder": 0.004921944532543421,
+      "validation_physics": 0.005431626830250025
+    },
+    {
+      "epoch": 25,
+      "train_total": 0.03470805740874747,
+      "train_decoder": 0.005750448807426121,
+      "train_physics": 0.00579152163118124,
+      "validation_total": 0.031578390300273894,
+      "validation_decoder": 0.004915106203407049,
+      "validation_physics": 0.005332656856626272
+    },
+    {
+      "epoch": 26,
+      "train_total": 0.03422997810918352,
+      "train_decoder": 0.005728660414562277,
+      "train_physics": 0.00570026347818582,
+      "validation_total": 0.03169452361762524,
+      "validation_decoder": 0.004907111544162035,
+      "validation_physics": 0.005357482191175223
+    },
+    {
+      "epoch": 27,
+      "train_total": 0.034489671821179596,
+      "train_decoder": 0.005707743192982414,
+      "train_physics": 0.005756385664901008,
+      "validation_total": 0.03078451342880726,
+      "validation_decoder": 0.004924335796386003,
+      "validation_physics": 0.005172035563737154
+    },
+    {
+      "epoch": 28,
+      "train_total": 0.03416913188993931,
+      "train_decoder": 0.005686252884080876,
+      "train_physics": 0.005696575865959344,
+      "validation_total": 0.030618955194950104,
+      "validation_decoder": 0.004939969815313816,
+      "validation_physics": 0.005135797057300806
+    },
+    {
+      "epoch": 29,
+      "train_total": 0.03372958699322265,
+      "train_decoder": 0.0056838101059522314,
+      "train_physics": 0.005609155338986412,
+      "validation_total": 0.030970021337270736,
+      "validation_decoder": 0.004907619394361973,
+      "validation_physics": 0.005212480295449495
+    },
+    {
+      "epoch": 30,
+      "train_total": 0.0335853286087513,
+      "train_decoder": 0.0056514275948638506,
+      "train_physics": 0.005586780223023632,
+      "validation_total": 0.03118940070271492,
+      "validation_decoder": 0.004891314078122377,
+      "validation_physics": 0.005259617231786251
+    }
+  ],
+  "20261063": [
+    {
+      "epoch": 1,
+      "train_total": 0.045339189145876015,
+      "train_decoder": 0.011131699035025162,
+      "train_physics": 0.006841498042416313,
+      "validation_total": 0.04382389560341835,
+      "validation_decoder": 0.011507699824869632,
+      "validation_physics": 0.006463239155709744
+    },
+    {
+      "epoch": 2,
+      "train_total": 0.04123051739905192,
+      "train_decoder": 0.006992784915896861,
+      "train_physics": 0.006847546435892582,
+      "validation_total": 0.038355476409196856,
+      "validation_decoder": 0.00587771600112319,
+      "validation_physics": 0.006495552137494087
+    },
+    {
+      "epoch": 3,
+      "train_total": 0.04038577105688012,
+      "train_decoder": 0.006478989091904267,
+      "train_physics": 0.006781356490176657,
+      "validation_total": 0.03721978589892387,
+      "validation_decoder": 0.005151506792753935,
+      "validation_physics": 0.006413655821233988
+    },
+    {
+      "epoch": 4,
+      "train_total": 0.040087244918812874,
+      "train_decoder": 0.006355828301900107,
+      "train_physics": 0.006746283286939497,
+      "validation_total": 0.03677891418337822,
+      "validation_decoder": 0.005099871288985014,
+      "validation_physics": 0.006335808522999286
+    },
+    {
+      "epoch": 5,
+      "train_total": 0.03968422228227491,
+      "train_decoder": 0.0062394129193347435,
+      "train_physics": 0.006688961860440348,
+      "validation_total": 0.03611818626523018,
+      "validation_decoder": 0.005056939832866192,
+      "validation_physics": 0.006212249305099249
+    },
+    {
+      "epoch": 6,
+      "train_total": 0.03925956234983776,
+      "train_decoder": 0.006156217752267485,
+      "train_physics": 0.006620668887120226,
+      "validation_total": 0.035626564919948575,
+      "validation_decoder": 0.005073404125869274,
+      "validation_physics": 0.006110632140189409
+    },
+    {
+      "epoch": 7,
+      "train_total": 0.038712891871514526,
+      "train_decoder": 0.006123056675752868,
+      "train_physics": 0.0065179671484815035,
+      "validation_total": 0.034967107325792314,
+      "validation_decoder": 0.005074358265846968,
+      "validation_physics": 0.005978549737483263
+    },
+    {
+      "epoch": 8,
+      "train_total": 0.037786152861688446,
+      "train_decoder": 0.00602889067047964,
+      "train_physics": 0.0063514524220448475,
+      "validation_total": 0.034747716039419174,
+      "validation_decoder": 0.005031302571296692,
+      "validation_physics": 0.005943282693624497
+    },
+    {
+      "epoch": 9,
+      "train_total": 0.03773059323430061,
+      "train_decoder": 0.005944854397650646,
+      "train_physics": 0.00635714780377305,
+      "validation_total": 0.034456401318311694,
+      "validation_decoder": 0.00497293621301651,
+      "validation_physics": 0.005896693095564842
+    },
+    {
+      "epoch": 10,
+      "train_total": 0.03745622366018917,
+      "train_decoder": 0.005865697040344062,
+      "train_physics": 0.006318105425199737,
+      "validation_total": 0.03428124040365219,
+      "validation_decoder": 0.004925094079226255,
+      "validation_physics": 0.005871229059994221
+    },
+    {
+      "epoch": 11,
+      "train_total": 0.03650044123439685,
+      "train_decoder": 0.00580075332570983,
+      "train_physics": 0.006139937687017347,
+      "validation_total": 0.034130630642175676,
+      "validation_decoder": 0.004939813632518053,
+      "validation_physics": 0.005838163383305073
+    },
+    {
+      "epoch": 12,
+      "train_total": 0.03637045362721319,
+      "train_decoder": 0.005750561537949935,
+      "train_physics": 0.006123978462394165,
+      "validation_total": 0.03353204540908337,
+      "validation_decoder": 0.004909043572843075,
+      "validation_physics": 0.00572460051625967
+    },
+    {
+      "epoch": 13,
+      "train_total": 0.03647703402068304,
+      "train_decoder": 0.005705371316846298,
+      "train_physics": 0.006154332492176605,
+      "validation_total": 0.033354160562157634,
+      "validation_decoder": 0.0049102484248578545,
+      "validation_physics": 0.0056887825950980185
+    },
+    {
+      "epoch": 14,
+      "train_total": 0.03634191741761954,
+      "train_decoder": 0.0056417441279019995,
+      "train_physics": 0.006140034625549679,
+      "validation_total": 0.03403037562966347,
+      "validation_decoder": 0.004878465179353952,
+      "validation_physics": 0.005830382276326418
+    },
+    {
+      "epoch": 15,
+      "train_total": 0.036169670360243836,
+      "train_decoder": 0.005599823395681122,
+      "train_physics": 0.006113969295731057,
+      "validation_total": 0.03320734314620495,
+      "validation_decoder": 0.00487687848508358,
+      "validation_physics": 0.005666092969477177
+    },
+    {
+      "epoch": 16,
+      "train_total": 0.035681725601139275,
+      "train_decoder": 0.005580309818944205,
+      "train_physics": 0.006020283103799043,
+      "validation_total": 0.032739841192960736,
+      "validation_decoder": 0.004884849116206169,
+      "validation_physics": 0.005570998229086399
+    },
+    {
+      "epoch": 17,
+      "train_total": 0.035744884739751404,
+      "train_decoder": 0.005534752697238456,
+      "train_physics": 0.006042026428748732,
+      "validation_total": 0.03298908621072769,
+      "validation_decoder": 0.004892336949706077,
+      "validation_physics": 0.005619349796324969
+    },
+    {
+      "epoch": 18,
+      "train_total": 0.035250727978089584,
+      "train_decoder": 0.005511937460497669,
+      "train_physics": 0.005947758180453726,
+      "validation_total": 0.03385041952133179,
+      "validation_decoder": 0.004889752063900232,
+      "validation_physics": 0.005792133416980505
+    },
+    {
+      "epoch": 19,
+      "train_total": 0.03505051630022733,
+      "train_decoder": 0.005478674100468988,
+      "train_physics": 0.005914368342770183,
+      "validation_total": 0.03258158341050148,
+      "validation_decoder": 0.004848744347691536,
+      "validation_physics": 0.005546567868441344
+    },
+    {
+      "epoch": 20,
+      "train_total": 0.03510670963188876,
+      "train_decoder": 0.00545309087180573,
+      "train_physics": 0.0059307236021951485,
+      "validation_total": 0.03310474082827568,
+      "validation_decoder": 0.004845370445400477,
+      "validation_physics": 0.005651873908936978
+    },
+    {
+      "epoch": 21,
+      "train_total": 0.035385816803444985,
+      "train_decoder": 0.005451615839062825,
+      "train_physics": 0.005986840221221032,
+      "validation_total": 0.033529878780245784,
+      "validation_decoder": 0.004925740789622069,
+      "validation_physics": 0.00572082782164216
+    },
+    {
+      "epoch": 22,
+      "train_total": 0.03450071795479111,
+      "train_decoder": 0.005393620013542797,
+      "train_physics": 0.00582141973807112,
+      "validation_total": 0.03163526132702828,
+      "validation_decoder": 0.004843190032988787,
+      "validation_physics": 0.0053584141656756405
+    },
+    {
+      "epoch": 23,
+      "train_total": 0.03445402297960675,
+      "train_decoder": 0.005365023672904657,
+      "train_physics": 0.005817799808700447,
+      "validation_total": 0.03165798299014568,
+      "validation_decoder": 0.004825740121304989,
+      "validation_physics": 0.005366448685526848
+    },
+    {
+      "epoch": 24,
+      "train_total": 0.03453755176261715,
+      "train_decoder": 0.005351666118139806,
+      "train_physics": 0.005837177047910897,
+      "validation_total": 0.03204641006886959,
+      "validation_decoder": 0.004825753439217806,
+      "validation_physics": 0.005444131325930357
+    },
+    {
+      "epoch": 25,
+      "train_total": 0.034105198862759964,
+      "train_decoder": 0.005316646951858116,
+      "train_physics": 0.005757710309294255,
+      "validation_total": 0.030830949917435645,
+      "validation_decoder": 0.004813091643154621,
+      "validation_physics": 0.0052035716362297535
+    },
+    {
+      "epoch": 26,
+      "train_total": 0.03376805199229199,
+      "train_decoder": 0.005310266481145569,
+      "train_physics": 0.005691557009097027,
+      "validation_total": 0.03343659266829491,
+      "validation_decoder": 0.004831602517515421,
+      "validation_physics": 0.0057209980674088005
+    },
+    {
+      "epoch": 27,
+      "train_total": 0.03343676467952521,
+      "train_decoder": 0.005301587486072727,
+      "train_physics": 0.0056270353253120966,
+      "validation_total": 0.0321898091584444,
+      "validation_decoder": 0.0048335125669836995,
+      "validation_physics": 0.005471259448677301
+    },
+    {
+      "epoch": 28,
+      "train_total": 0.03367034208191478,
+      "train_decoder": 0.005283529971442793,
+      "train_physics": 0.005677362377552882,
+      "validation_total": 0.03110184371471405,
+      "validation_decoder": 0.004861503560096026,
+      "validation_physics": 0.005248067993670702
+    },
+    {
+      "epoch": 29,
+      "train_total": 0.03308580127423224,
+      "train_decoder": 0.005268612066688745,
+      "train_physics": 0.005563437817213328,
+      "validation_total": 0.031302325800061225,
+      "validation_decoder": 0.004791180603206158,
+      "validation_physics": 0.005302228778600693
+    },
+    {
+      "epoch": 30,
+      "train_total": 0.03323238440181898,
+      "train_decoder": 0.005252360528253991,
+      "train_physics": 0.005596004669433055,
+      "validation_total": 0.030687252059578896,
+      "validation_decoder": 0.004787522461265325,
+      "validation_physics": 0.0051799457985907795
+    }
+  ]
+}

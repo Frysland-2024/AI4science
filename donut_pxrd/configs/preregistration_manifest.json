@@ -1,0 +1,26 @@
+﻿{
+    "schema":  "donut_pxrd_preregistration_v1",
+    "status":  "FROZEN_BEFORE_SCORED_TRAINING",
+    "frozen_at":  "2026-10-19",
+    "config_path":  "donut_pxrd/configs/study_v1.json",
+    "config_sha256":  "0b0c5a3ec4c4a8ba8515c4bb6b32f4493f0ca64fe7abd0811dabf498c0996fb4",
+    "source_fidelity_audit_sha256":  "37f8ddd9cee50a525086d72a6b7d4df270948a73721c12fdf13a3724f76b800c",
+    "upstream_commit":  "090c10bdf99333d3670dc26e617a93364f714bdc",
+    "cif_sha256":  "e880d6f9df10ad4a2bb347dbbeae2712817d95e2f16df9390784d916a0c02f9c",
+    "split_policy":  "fixed q parent split before nuisance/noise generation; 358/77/77",
+    "seed_set":  [
+                     20261061,
+                     20261062,
+                     20261063
+                 ],
+    "test_policy":  "test used only after checkpoint selection; no hyperparameter tuning",
+    "budget_gpu_hours":  8,
+    "per_model_epoch_max":  30,
+    "status_at_freeze":  {
+                             "experiment_4":  "NOT_RUN",
+                             "experiment_2":  "NOT_RUN",
+                             "experiment_1":  "NOT_RUN",
+                             "experiment_3":  "NOT_RUN"
+                         },
+    "frozen_commit":  "4876f12ded65e515a4b5ccc91b4c9ff2d036fb6a"
+}

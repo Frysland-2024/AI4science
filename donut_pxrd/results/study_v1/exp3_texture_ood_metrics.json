@@ -1,0 +1,1273 @@
+{
+  "status": "COMPLETE",
+  "classification": "nondifferentiable hkl-aware generator-side March-Dollase texture OOD stress; q+shift physics branch is texture-free",
+  "factors": [
+    {
+      "q_index": 452,
+      "march_parameter": 1.15,
+      "preferred_orientation_enabled": true,
+      "preferred_orientation_model": "march_dollase",
+      "preferred_hkl": [
+        0,
+        0,
+        1
+      ],
+      "orientation_seed": 0,
+      "apply_probability": 0.0,
+      "severity_level": 1,
+      "intensity_factor_min": 0.6575162324319883,
+      "intensity_factor_max": 1.2332376088978148
+    },
+    {
+      "q_index": 402,
+      "march_parameter": 0.85,
+      "preferred_orientation_enabled": true,
+      "preferred_orientation_model": "march_dollase",
+      "preferred_hkl": [
+        0,
+        0,
+        1
+      ],
+      "orientation_seed": 0,
+      "apply_probability": 0.0,
+      "severity_level": 1,
+      "intensity_factor_min": 0.7836612788698953,
+      "intensity_factor_max": 1.6283329940972933
+    },
+    {
+      "q_index": 139,
+      "march_parameter": 0.85,
+      "preferred_orientation_enabled": true,
+      "preferred_orientation_model": "march_dollase",
+      "preferred_hkl": [
+        0,
+        0,
+        1
+      ],
+      "orientation_seed": 0,
+      "apply_probability": 0.0,
+      "severity_level": 1,
+      "intensity_factor_min": 0.7836612788698953,
+      "intensity_factor_max": 1.6283329940972933
+    },
+    {
+      "q_index": 437,
+      "march_parameter": 0.85,
+      "preferred_orientation_enabled": true,
+      "preferred_orientation_model": "march_dollase",
+      "preferred_hkl": [
+        0,
+        0,
+        1
+      ],
+      "orientation_seed": 0,
+      "apply_probability": 0.0,
+      "severity_level": 1,
+      "intensity_factor_min": 0.7836612788698953,
+      "intensity_factor_max": 1.6283329940972933
+    },
+    {
+      "q_index": 299,
+      "march_parameter": 1.15,
+      "preferred_orientation_enabled": true,
+      "preferred_orientation_model": "march_dollase",
+      "preferred_hkl": [
+        0,
+        0,
+        1
+      ],
+      "orientation_seed": 0,
+      "apply_probability": 0.0,
+      "severity_level": 1,
+      "intensity_factor_min": 0.6575162324319883,
+      "intensity_factor_max": 1.2332376088978148
+    },
+    {
+      "q_index": 34,
+      "march_parameter": 0.85,
+      "preferred_orientation_enabled": true,
+      "preferred_orientation_model": "march_dollase",
+      "preferred_hkl": [
+        0,
+        0,
+        1
+      ],
+      "orientation_seed": 0,
+      "apply_probability": 0.0,
+      "severity_level": 1,
+      "intensity_factor_min": 0.7836612788698953,
+      "intensity_factor_max": 1.6283329940972933
+    },
+    {
+      "q_index": 89,
+      "march_parameter": 0.85,
+      "preferred_orientation_enabled": true,
+      "preferred_orientation_model": "march_dollase",
+      "preferred_hkl": [
+        0,
+        0,
+        1
+      ],
+      "orientation_seed": 0,
+      "apply_probability": 0.0,
+      "severity_level": 1,
+      "intensity_factor_min": 0.7836612788698953,
+      "intensity_factor_max": 1.6283329940972933
+    },
+    {
+      "q_index": 279,
+      "march_parameter": 1.15,
+      "preferred_orientation_enabled": true,
+      "preferred_orientation_model": "march_dollase",
+      "preferred_hkl": [
+        0,
+        0,
+        1
+      ],
+      "orientation_seed": 0,
+      "apply_probability": 0.0,
+      "severity_level": 1,
+      "intensity_factor_min": 0.6575162324319883,
+      "intensity_factor_max": 1.2332376088978148
+    },
+    {
+      "q_index": 448,
+      "march_parameter": 0.85,
+      "preferred_orientation_enabled": true,
+      "preferred_orientation_model": "march_dollase",
+      "preferred_hkl": [
+        0,
+        0,
+        1
+      ],
+      "orientation_seed": 0,
+      "apply_probability": 0.0,
+      "severity_level": 1,
+      "intensity_factor_min": 0.7836612788698953,
+      "intensity_factor_max": 1.6283329940972933
+    },
+    {
+      "q_index": 495,
+      "march_parameter": 1.15,
+      "preferred_orientation_enabled": true,
+      "preferred_orientation_model": "march_dollase",
+      "preferred_hkl": [
+        0,
+        0,
+        1
+      ],
+      "orientation_seed": 0,
+      "apply_probability": 0.0,
+      "severity_level": 1,
+      "intensity_factor_min": 0.6575162324319883,
+      "intensity_factor_max": 1.2332376088978148
+    },
+    {
+      "q_index": 52,
+      "march_parameter": 0.85,
+      "preferred_orientation_enabled": true,
+      "preferred_orientation_model": "march_dollase",
+      "preferred_hkl": [
+        0,
+        0,
+        1
+      ],
+      "orientation_seed": 0,
+      "apply_probability": 0.0,
+      "severity_level": 1,
+      "intensity_factor_min": 0.7836612788698953,
+      "intensity_factor_max": 1.6283329940972933
+    },
+    {
+      "q_index": 209,
+      "march_parameter": 0.85,
+      "preferred_orientation_enabled": true,
+      "preferred_orientation_model": "march_dollase",
+      "preferred_hkl": [
+        0,
+        0,
+        1
+      ],
+      "orientation_seed": 0,
+      "apply_probability": 0.0,
+      "severity_level": 1,
+      "intensity_factor_min": 0.7836612788698953,
+      "intensity_factor_max": 1.6283329940972933
+    },
+    {
+      "q_index": 16,
+      "march_parameter": 0.85,
+      "preferred_orientation_enabled": true,
+      "preferred_orientation_model": "march_dollase",
+      "preferred_hkl": [
+        0,
+        0,
+        1
+      ],
+      "orientation_seed": 0,
+      "apply_probability": 0.0,
+      "severity_level": 1,
+      "intensity_factor_min": 0.7836612788698953,
+      "intensity_factor_max": 1.6283329940972933
+    },
+    {
+      "q_index": 274,
+      "march_parameter": 1.15,
+      "preferred_orientation_enabled": true,
+      "preferred_orientation_model": "march_dollase",
+      "preferred_hkl": [
+        0,
+        0,
+        1
+      ],
+      "orientation_seed": 0,
+      "apply_probability": 0.0,
+      "severity_level": 1,
+      "intensity_factor_min": 0.6575162324319883,
+      "intensity_factor_max": 1.2332376088978148
+    },
+    {
+      "q_index": 60,
+      "march_parameter": 1.15,
+      "preferred_orientation_enabled": true,
+      "preferred_orientation_model": "march_dollase",
+      "preferred_hkl": [
+        0,
+        0,
+        1
+      ],
+      "orientation_seed": 0,
+      "apply_probability": 0.0,
+      "severity_level": 1,
+      "intensity_factor_min": 0.6575162324319883,
+      "intensity_factor_max": 1.2332376088978148
+    },
+    {
+      "q_index": 162,
+      "march_parameter": 0.85,
+      "preferred_orientation_enabled": true,
+      "preferred_orientation_model": "march_dollase",
+      "preferred_hkl": [
+        0,
+        0,
+        1
+      ],
+      "orientation_seed": 0,
+      "apply_probability": 0.0,
+      "severity_level": 1,
+      "intensity_factor_min": 0.7836612788698953,
+      "intensity_factor_max": 1.6283329940972933
+    },
+    {
+      "q_index": 81,
+      "march_parameter": 0.85,
+      "preferred_orientation_enabled": true,
+      "preferred_orientation_model": "march_dollase",
+      "preferred_hkl": [
+        0,
+        0,
+        1
+      ],
+      "orientation_seed": 0,
+      "apply_probability": 0.0,
+      "severity_level": 1,
+      "intensity_factor_min": 0.7836612788698953,
+      "intensity_factor_max": 1.6283329940972933
+    },
+    {
+      "q_index": 406,
+      "march_parameter": 1.15,
+      "preferred_orientation_enabled": true,
+      "preferred_orientation_model": "march_dollase",
+      "preferred_hkl": [
+        0,
+        0,
+        1
+      ],
+      "orientation_seed": 0,
+      "apply_probability": 0.0,
+      "severity_level": 1,
+      "intensity_factor_min": 0.6575162324319883,
+      "intensity_factor_max": 1.2332376088978148
+    },
+    {
+      "q_index": 457,
+      "march_parameter": 1.15,
+      "preferred_orientation_enabled": true,
+      "preferred_orientation_model": "march_dollase",
+      "preferred_hkl": [
+        0,
+        0,
+        1
+      ],
+      "orientation_seed": 0,
+      "apply_probability": 0.0,
+      "severity_level": 1,
+      "intensity_factor_min": 0.6575162324319883,
+      "intensity_factor_max": 1.2332376088978148
+    },
+    {
+      "q_index": 303,
+      "march_parameter": 1.15,
+      "preferred_orientation_enabled": true,
+      "preferred_orientation_model": "march_dollase",
+      "preferred_hkl": [
+        0,
+        0,
+        1
+      ],
+      "orientation_seed": 0,
+      "apply_probability": 0.0,
+      "severity_level": 1,
+      "intensity_factor_min": 0.6575162324319883,
+      "intensity_factor_max": 1.2332376088978148
+    },
+    {
+      "q_index": 503,
+      "march_parameter": 1.15,
+      "preferred_orientation_enabled": true,
+      "preferred_orientation_model": "march_dollase",
+      "preferred_hkl": [
+        0,
+        0,
+        1
+      ],
+      "orientation_seed": 0,
+      "apply_probability": 0.0,
+      "severity_level": 1,
+      "intensity_factor_min": 0.6575162324319883,
+      "intensity_factor_max": 1.2332376088978148
+    },
+    {
+      "q_index": 380,
+      "march_parameter": 0.85,
+      "preferred_orientation_enabled": true,
+      "preferred_orientation_model": "march_dollase",
+      "preferred_hkl": [
+        0,
+        0,
+        1
+      ],
+      "orientation_seed": 0,
+      "apply_probability": 0.0,
+      "severity_level": 1,
+      "intensity_factor_min": 0.7836612788698953,
+      "intensity_factor_max": 1.6283329940972933
+    },
+    {
+      "q_index": 331,
+      "march_parameter": 0.85,
+      "preferred_orientation_enabled": true,
+      "preferred_orientation_model": "march_dollase",
+      "preferred_hkl": [
+        0,
+        0,
+        1
+      ],
+      "orientation_seed": 0,
+      "apply_probability": 0.0,
+      "severity_level": 1,
+      "intensity_factor_min": 0.7836612788698953,
+      "intensity_factor_max": 1.6283329940972933
+    },
+    {
+      "q_index": 374,
+      "march_parameter": 1.15,
+      "preferred_orientation_enabled": true,
+      "preferred_orientation_model": "march_dollase",
+      "preferred_hkl": [
+        0,
+        0,
+        1
+      ],
+      "orientation_seed": 0,
+      "apply_probability": 0.0,
+      "severity_level": 1,
+      "intensity_factor_min": 0.6575162324319883,
+      "intensity_factor_max": 1.2332376088978148
+    },
+    {
+      "q_index": 103,
+      "march_parameter": 0.85,
+      "preferred_orientation_enabled": true,
+      "preferred_orientation_model": "march_dollase",
+      "preferred_hkl": [
+        0,
+        0,
+        1
+      ],
+      "orientation_seed": 0,
+      "apply_probability": 0.0,
+      "severity_level": 1,
+      "intensity_factor_min": 0.7836612788698953,
+      "intensity_factor_max": 1.6283329940972933
+    },
+    {
+      "q_index": 296,
+      "march_parameter": 0.85,
+      "preferred_orientation_enabled": true,
+      "preferred_orientation_model": "march_dollase",
+      "preferred_hkl": [
+        0,
+        0,
+        1
+      ],
+      "orientation_seed": 0,
+      "apply_probability": 0.0,
+      "severity_level": 1,
+      "intensity_factor_min": 0.7836612788698953,
+      "intensity_factor_max": 1.6283329940972933
+    },
+    {
+      "q_index": 85,
+      "march_parameter": 0.85,
+      "preferred_orientation_enabled": true,
+      "preferred_orientation_model": "march_dollase",
+      "preferred_hkl": [
+        0,
+        0,
+        1
+      ],
+      "orientation_seed": 0,
+      "apply_probability": 0.0,
+      "severity_level": 1,
+      "intensity_factor_min": 0.7836612788698953,
+      "intensity_factor_max": 1.6283329940972933
+    },
+    {
+      "q_index": 191,
+      "march_parameter": 0.85,
+      "preferred_orientation_enabled": true,
+      "preferred_orientation_model": "march_dollase",
+      "preferred_hkl": [
+        0,
+        0,
+        1
+      ],
+      "orientation_seed": 0,
+      "apply_probability": 0.0,
+      "severity_level": 1,
+      "intensity_factor_min": 0.7836612788698953,
+      "intensity_factor_max": 1.6283329940972933
+    },
+    {
+      "q_index": 118,
+      "march_parameter": 0.85,
+      "preferred_orientation_enabled": true,
+      "preferred_orientation_model": "march_dollase",
+      "preferred_hkl": [
+        0,
+        0,
+        1
+      ],
+      "orientation_seed": 0,
+      "apply_probability": 0.0,
+      "severity_level": 1,
+      "intensity_factor_min": 0.7836612788698953,
+      "intensity_factor_max": 1.6283329940972933
+    },
+    {
+      "q_index": 220,
+      "march_parameter": 1.15,
+      "preferred_orientation_enabled": true,
+      "preferred_orientation_model": "march_dollase",
+      "preferred_hkl": [
+        0,
+        0,
+        1
+      ],
+      "orientation_seed": 0,
+      "apply_probability": 0.0,
+      "severity_level": 1,
+      "intensity_factor_min": 0.6575162324319883,
+      "intensity_factor_max": 1.2332376088978148
+    },
+    {
+      "q_index": 428,
+      "march_parameter": 0.85,
+      "preferred_orientation_enabled": true,
+      "preferred_orientation_model": "march_dollase",
+      "preferred_hkl": [
+        0,
+        0,
+        1
+      ],
+      "orientation_seed": 0,
+      "apply_probability": 0.0,
+      "severity_level": 1,
+      "intensity_factor_min": 0.7836612788698953,
+      "intensity_factor_max": 1.6283329940972933
+    },
+    {
+      "q_index": 17,
+      "march_parameter": 0.85,
+      "preferred_orientation_enabled": true,
+      "preferred_orientation_model": "march_dollase",
+      "preferred_hkl": [
+        0,
+        0,
+        1
+      ],
+      "orientation_seed": 0,
+      "apply_probability": 0.0,
+      "severity_level": 1,
+      "intensity_factor_min": 0.7836612788698953,
+      "intensity_factor_max": 1.6283329940972933
+    },
+    {
+      "q_index": 202,
+      "march_parameter": 0.85,
+      "preferred_orientation_enabled": true,
+      "preferred_orientation_model": "march_dollase",
+      "preferred_hkl": [
+        0,
+        0,
+        1
+      ],
+      "orientation_seed": 0,
+      "apply_probability": 0.0,
+      "severity_level": 1,
+      "intensity_factor_min": 0.7836612788698953,
+      "intensity_factor_max": 1.6283329940972933
+    },
+    {
+      "q_index": 377,
+      "march_parameter": 0.85,
+      "preferred_orientation_enabled": true,
+      "preferred_orientation_model": "march_dollase",
+      "preferred_hkl": [
+        0,
+        0,
+        1
+      ],
+      "orientation_seed": 0,
+      "apply_probability": 0.0,
+      "severity_level": 1,
+      "intensity_factor_min": 0.7836612788698953,
+      "intensity_factor_max": 1.6283329940972933
+    },
+    {
+      "q_index": 474,
+      "march_parameter": 1.15,
+      "preferred_orientation_enabled": true,
+      "preferred_orientation_model": "march_dollase",
+      "preferred_hkl": [
+        0,
+        0,
+        1
+      ],
+      "orientation_seed": 0,
+      "apply_probability": 0.0,
+      "severity_level": 1,
+      "intensity_factor_min": 0.6575162324319883,
+      "intensity_factor_max": 1.2332376088978148
+    },
+    {
+      "q_index": 378,
+      "march_parameter": 0.85,
+      "preferred_orientation_enabled": true,
+      "preferred_orientation_model": "march_dollase",
+      "preferred_hkl": [
+        0,
+        0,
+        1
+      ],
+      "orientation_seed": 0,
+      "apply_probability": 0.0,
+      "severity_level": 1,
+      "intensity_factor_min": 0.7836612788698953,
+      "intensity_factor_max": 1.6283329940972933
+    },
+    {
+      "q_index": 470,
+      "march_parameter": 0.85,
+      "preferred_orientation_enabled": true,
+      "preferred_orientation_model": "march_dollase",
+      "preferred_hkl": [
+        0,
+        0,
+        1
+      ],
+      "orientation_seed": 0,
+      "apply_probability": 0.0,
+      "severity_level": 1,
+      "intensity_factor_min": 0.7836612788698953,
+      "intensity_factor_max": 1.6283329940972933
+    },
+    {
+      "q_index": 277,
+      "march_parameter": 0.85,
+      "preferred_orientation_enabled": true,
+      "preferred_orientation_model": "march_dollase",
+      "preferred_hkl": [
+        0,
+        0,
+        1
+      ],
+      "orientation_seed": 0,
+      "apply_probability": 0.0,
+      "severity_level": 1,
+      "intensity_factor_min": 0.7836612788698953,
+      "intensity_factor_max": 1.6283329940972933
+    },
+    {
+      "q_index": 250,
+      "march_parameter": 1.15,
+      "preferred_orientation_enabled": true,
+      "preferred_orientation_model": "march_dollase",
+      "preferred_hkl": [
+        0,
+        0,
+        1
+      ],
+      "orientation_seed": 0,
+      "apply_probability": 0.0,
+      "severity_level": 1,
+      "intensity_factor_min": 0.6575162324319883,
+      "intensity_factor_max": 1.2332376088978148
+    },
+    {
+      "q_index": 205,
+      "march_parameter": 1.15,
+      "preferred_orientation_enabled": true,
+      "preferred_orientation_model": "march_dollase",
+      "preferred_hkl": [
+        0,
+        0,
+        1
+      ],
+      "orientation_seed": 0,
+      "apply_probability": 0.0,
+      "severity_level": 1,
+      "intensity_factor_min": 0.6575162324319883,
+      "intensity_factor_max": 1.2332376088978148
+    },
+    {
+      "q_index": 187,
+      "march_parameter": 0.85,
+      "preferred_orientation_enabled": true,
+      "preferred_orientation_model": "march_dollase",
+      "preferred_hkl": [
+        0,
+        0,
+        1
+      ],
+      "orientation_seed": 0,
+      "apply_probability": 0.0,
+      "severity_level": 1,
+      "intensity_factor_min": 0.7836612788698953,
+      "intensity_factor_max": 1.6283329940972933
+    },
+    {
+      "q_index": 59,
+      "march_parameter": 0.85,
+      "preferred_orientation_enabled": true,
+      "preferred_orientation_model": "march_dollase",
+      "preferred_hkl": [
+        0,
+        0,
+        1
+      ],
+      "orientation_seed": 0,
+      "apply_probability": 0.0,
+      "severity_level": 1,
+      "intensity_factor_min": 0.7836612788698953,
+      "intensity_factor_max": 1.6283329940972933
+    },
+    {
+      "q_index": 77,
+      "march_parameter": 1.15,
+      "preferred_orientation_enabled": true,
+      "preferred_orientation_model": "march_dollase",
+      "preferred_hkl": [
+        0,
+        0,
+        1
+      ],
+      "orientation_seed": 0,
+      "apply_probability": 0.0,
+      "severity_level": 1,
+      "intensity_factor_min": 0.6575162324319883,
+      "intensity_factor_max": 1.2332376088978148
+    },
+    {
+      "q_index": 492,
+      "march_parameter": 0.85,
+      "preferred_orientation_enabled": true,
+      "preferred_orientation_model": "march_dollase",
+      "preferred_hkl": [
+        0,
+        0,
+        1
+      ],
+      "orientation_seed": 0,
+      "apply_probability": 0.0,
+      "severity_level": 1,
+      "intensity_factor_min": 0.7836612788698953,
+      "intensity_factor_max": 1.6283329940972933
+    },
+    {
+      "q_index": 169,
+      "march_parameter": 0.85,
+      "preferred_orientation_enabled": true,
+      "preferred_orientation_model": "march_dollase",
+      "preferred_hkl": [
+        0,
+        0,
+        1
+      ],
+      "orientation_seed": 0,
+      "apply_probability": 0.0,
+      "severity_level": 1,
+      "intensity_factor_min": 0.7836612788698953,
+      "intensity_factor_max": 1.6283329940972933
+    },
+    {
+      "q_index": 485,
+      "march_parameter": 0.85,
+      "preferred_orientation_enabled": true,
+      "preferred_orientation_model": "march_dollase",
+      "preferred_hkl": [
+        0,
+        0,
+        1
+      ],
+      "orientation_seed": 0,
+      "apply_probability": 0.0,
+      "severity_level": 1,
+      "intensity_factor_min": 0.7836612788698953,
+      "intensity_factor_max": 1.6283329940972933
+    },
+    {
+      "q_index": 249,
+      "march_parameter": 0.85,
+      "preferred_orientation_enabled": true,
+      "preferred_orientation_model": "march_dollase",
+      "preferred_hkl": [
+        0,
+        0,
+        1
+      ],
+      "orientation_seed": 0,
+      "apply_probability": 0.0,
+      "severity_level": 1,
+      "intensity_factor_min": 0.7836612788698953,
+      "intensity_factor_max": 1.6283329940972933
+    },
+    {
+      "q_index": 235,
+      "march_parameter": 0.85,
+      "preferred_orientation_enabled": true,
+      "preferred_orientation_model": "march_dollase",
+      "preferred_hkl": [
+        0,
+        0,
+        1
+      ],
+      "orientation_seed": 0,
+      "apply_probability": 0.0,
+      "severity_level": 1,
+      "intensity_factor_min": 0.7836612788698953,
+      "intensity_factor_max": 1.6283329940972933
+    },
+    {
+      "q_index": 413,
+      "march_parameter": 0.85,
+      "preferred_orientation_enabled": true,
+      "preferred_orientation_model": "march_dollase",
+      "preferred_hkl": [
+        0,
+        0,
+        1
+      ],
+      "orientation_seed": 0,
+      "apply_probability": 0.0,
+      "severity_level": 1,
+      "intensity_factor_min": 0.7836612788698953,
+      "intensity_factor_max": 1.6283329940972933
+    },
+    {
+      "q_index": 186,
+      "march_parameter": 1.15,
+      "preferred_orientation_enabled": true,
+      "preferred_orientation_model": "march_dollase",
+      "preferred_hkl": [
+        0,
+        0,
+        1
+      ],
+      "orientation_seed": 0,
+      "apply_probability": 0.0,
+      "severity_level": 1,
+      "intensity_factor_min": 0.6575162324319883,
+      "intensity_factor_max": 1.2332376088978148
+    },
+    {
+      "q_index": 102,
+      "march_parameter": 1.15,
+      "preferred_orientation_enabled": true,
+      "preferred_orientation_model": "march_dollase",
+      "preferred_hkl": [
+        0,
+        0,
+        1
+      ],
+      "orientation_seed": 0,
+      "apply_probability": 0.0,
+      "severity_level": 1,
+      "intensity_factor_min": 0.6575162324319883,
+      "intensity_factor_max": 1.2332376088978148
+    },
+    {
+      "q_index": 425,
+      "march_parameter": 0.85,
+      "preferred_orientation_enabled": true,
+      "preferred_orientation_model": "march_dollase",
+      "preferred_hkl": [
+        0,
+        0,
+        1
+      ],
+      "orientation_seed": 0,
+      "apply_probability": 0.0,
+      "severity_level": 1,
+      "intensity_factor_min": 0.7836612788698953,
+      "intensity_factor_max": 1.6283329940972933
+    },
+    {
+      "q_index": 242,
+      "march_parameter": 0.85,
+      "preferred_orientation_enabled": true,
+      "preferred_orientation_model": "march_dollase",
+      "preferred_hkl": [
+        0,
+        0,
+        1
+      ],
+      "orientation_seed": 0,
+      "apply_probability": 0.0,
+      "severity_level": 1,
+      "intensity_factor_min": 0.7836612788698953,
+      "intensity_factor_max": 1.6283329940972933
+    },
+    {
+      "q_index": 40,
+      "march_parameter": 0.85,
+      "preferred_orientation_enabled": true,
+      "preferred_orientation_model": "march_dollase",
+      "preferred_hkl": [
+        0,
+        0,
+        1
+      ],
+      "orientation_seed": 0,
+      "apply_probability": 0.0,
+      "severity_level": 1,
+      "intensity_factor_min": 0.7836612788698953,
+      "intensity_factor_max": 1.6283329940972933
+    },
+    {
+      "q_index": 399,
+      "march_parameter": 1.15,
+      "preferred_orientation_enabled": true,
+      "preferred_orientation_model": "march_dollase",
+      "preferred_hkl": [
+        0,
+        0,
+        1
+      ],
+      "orientation_seed": 0,
+      "apply_probability": 0.0,
+      "severity_level": 1,
+      "intensity_factor_min": 0.6575162324319883,
+      "intensity_factor_max": 1.2332376088978148
+    },
+    {
+      "q_index": 208,
+      "march_parameter": 0.85,
+      "preferred_orientation_enabled": true,
+      "preferred_orientation_model": "march_dollase",
+      "preferred_hkl": [
+        0,
+        0,
+        1
+      ],
+      "orientation_seed": 0,
+      "apply_probability": 0.0,
+      "severity_level": 1,
+      "intensity_factor_min": 0.7836612788698953,
+      "intensity_factor_max": 1.6283329940972933
+    },
+    {
+      "q_index": 398,
+      "march_parameter": 1.15,
+      "preferred_orientation_enabled": true,
+      "preferred_orientation_model": "march_dollase",
+      "preferred_hkl": [
+        0,
+        0,
+        1
+      ],
+      "orientation_seed": 0,
+      "apply_probability": 0.0,
+      "severity_level": 1,
+      "intensity_factor_min": 0.6575162324319883,
+      "intensity_factor_max": 1.2332376088978148
+    },
+    {
+      "q_index": 405,
+      "march_parameter": 1.15,
+      "preferred_orientation_enabled": true,
+      "preferred_orientation_model": "march_dollase",
+      "preferred_hkl": [
+        0,
+        0,
+        1
+      ],
+      "orientation_seed": 0,
+      "apply_probability": 0.0,
+      "severity_level": 1,
+      "intensity_factor_min": 0.6575162324319883,
+      "intensity_factor_max": 1.2332376088978148
+    },
+    {
+      "q_index": 61,
+      "march_parameter": 1.15,
+      "preferred_orientation_enabled": true,
+      "preferred_orientation_model": "march_dollase",
+      "preferred_hkl": [
+        0,
+        0,
+        1
+      ],
+      "orientation_seed": 0,
+      "apply_probability": 0.0,
+      "severity_level": 1,
+      "intensity_factor_min": 0.6575162324319883,
+      "intensity_factor_max": 1.2332376088978148
+    },
+    {
+      "q_index": 23,
+      "march_parameter": 1.15,
+      "preferred_orientation_enabled": true,
+      "preferred_orientation_model": "march_dollase",
+      "preferred_hkl": [
+        0,
+        0,
+        1
+      ],
+      "orientation_seed": 0,
+      "apply_probability": 0.0,
+      "severity_level": 1,
+      "intensity_factor_min": 0.6575162324319883,
+      "intensity_factor_max": 1.2332376088978148
+    },
+    {
+      "q_index": 455,
+      "march_parameter": 1.15,
+      "preferred_orientation_enabled": true,
+      "preferred_orientation_model": "march_dollase",
+      "preferred_hkl": [
+        0,
+        0,
+        1
+      ],
+      "orientation_seed": 0,
+      "apply_probability": 0.0,
+      "severity_level": 1,
+      "intensity_factor_min": 0.6575162324319883,
+      "intensity_factor_max": 1.2332376088978148
+    },
+    {
+      "q_index": 122,
+      "march_parameter": 1.15,
+      "preferred_orientation_enabled": true,
+      "preferred_orientation_model": "march_dollase",
+      "preferred_hkl": [
+        0,
+        0,
+        1
+      ],
+      "orientation_seed": 0,
+      "apply_probability": 0.0,
+      "severity_level": 1,
+      "intensity_factor_min": 0.6575162324319883,
+      "intensity_factor_max": 1.2332376088978148
+    },
+    {
+      "q_index": 488,
+      "march_parameter": 0.85,
+      "preferred_orientation_enabled": true,
+      "preferred_orientation_model": "march_dollase",
+      "preferred_hkl": [
+        0,
+        0,
+        1
+      ],
+      "orientation_seed": 0,
+      "apply_probability": 0.0,
+      "severity_level": 1,
+      "intensity_factor_min": 0.7836612788698953,
+      "intensity_factor_max": 1.6283329940972933
+    },
+    {
+      "q_index": 26,
+      "march_parameter": 0.85,
+      "preferred_orientation_enabled": true,
+      "preferred_orientation_model": "march_dollase",
+      "preferred_hkl": [
+        0,
+        0,
+        1
+      ],
+      "orientation_seed": 0,
+      "apply_probability": 0.0,
+      "severity_level": 1,
+      "intensity_factor_min": 0.7836612788698953,
+      "intensity_factor_max": 1.6283329940972933
+    },
+    {
+      "q_index": 173,
+      "march_parameter": 0.85,
+      "preferred_orientation_enabled": true,
+      "preferred_orientation_model": "march_dollase",
+      "preferred_hkl": [
+        0,
+        0,
+        1
+      ],
+      "orientation_seed": 0,
+      "apply_probability": 0.0,
+      "severity_level": 1,
+      "intensity_factor_min": 0.7836612788698953,
+      "intensity_factor_max": 1.6283329940972933
+    },
+    {
+      "q_index": 283,
+      "march_parameter": 1.15,
+      "preferred_orientation_enabled": true,
+      "preferred_orientation_model": "march_dollase",
+      "preferred_hkl": [
+        0,
+        0,
+        1
+      ],
+      "orientation_seed": 0,
+      "apply_probability": 0.0,
+      "severity_level": 1,
+      "intensity_factor_min": 0.6575162324319883,
+      "intensity_factor_max": 1.2332376088978148
+    },
+    {
+      "q_index": 312,
+      "march_parameter": 1.15,
+      "preferred_orientation_enabled": true,
+      "preferred_orientation_model": "march_dollase",
+      "preferred_hkl": [
+        0,
+        0,
+        1
+      ],
+      "orientation_seed": 0,
+      "apply_probability": 0.0,
+      "severity_level": 1,
+      "intensity_factor_min": 0.6575162324319883,
+      "intensity_factor_max": 1.2332376088978148
+    },
+    {
+      "q_index": 493,
+      "march_parameter": 0.85,
+      "preferred_orientation_enabled": true,
+      "preferred_orientation_model": "march_dollase",
+      "preferred_hkl": [
+        0,
+        0,
+        1
+      ],
+      "orientation_seed": 0,
+      "apply_probability": 0.0,
+      "severity_level": 1,
+      "intensity_factor_min": 0.7836612788698953,
+      "intensity_factor_max": 1.6283329940972933
+    },
+    {
+      "q_index": 454,
+      "march_parameter": 1.15,
+      "preferred_orientation_enabled": true,
+      "preferred_orientation_model": "march_dollase",
+      "preferred_hkl": [
+        0,
+        0,
+        1
+      ],
+      "orientation_seed": 0,
+      "apply_probability": 0.0,
+      "severity_level": 1,
+      "intensity_factor_min": 0.6575162324319883,
+      "intensity_factor_max": 1.2332376088978148
+    },
+    {
+      "q_index": 41,
+      "march_parameter": 1.15,
+      "preferred_orientation_enabled": true,
+      "preferred_orientation_model": "march_dollase",
+      "preferred_hkl": [
+        0,
+        0,
+        1
+      ],
+      "orientation_seed": 0,
+      "apply_probability": 0.0,
+      "severity_level": 1,
+      "intensity_factor_min": 0.6575162324319883,
+      "intensity_factor_max": 1.2332376088978148
+    },
+    {
+      "q_index": 294,
+      "march_parameter": 1.15,
+      "preferred_orientation_enabled": true,
+      "preferred_orientation_model": "march_dollase",
+      "preferred_hkl": [
+        0,
+        0,
+        1
+      ],
+      "orientation_seed": 0,
+      "apply_probability": 0.0,
+      "severity_level": 1,
+      "intensity_factor_min": 0.6575162324319883,
+      "intensity_factor_max": 1.2332376088978148
+    },
+    {
+      "q_index": 111,
+      "march_parameter": 1.15,
+      "preferred_orientation_enabled": true,
+      "preferred_orientation_model": "march_dollase",
+      "preferred_hkl": [
+        0,
+        0,
+        1
+      ],
+      "orientation_seed": 0,
+      "apply_probability": 0.0,
+      "severity_level": 1,
+      "intensity_factor_min": 0.6575162324319883,
+      "intensity_factor_max": 1.2332376088978148
+    },
+    {
+      "q_index": 334,
+      "march_parameter": 0.85,
+      "preferred_orientation_enabled": true,
+      "preferred_orientation_model": "march_dollase",
+      "preferred_hkl": [
+        0,
+        0,
+        1
+      ],
+      "orientation_seed": 0,
+      "apply_probability": 0.0,
+      "severity_level": 1,
+      "intensity_factor_min": 0.7836612788698953,
+      "intensity_factor_max": 1.6283329940972933
+    },
+    {
+      "q_index": 295,
+      "march_parameter": 1.15,
+      "preferred_orientation_enabled": true,
+      "preferred_orientation_model": "march_dollase",
+      "preferred_hkl": [
+        0,
+        0,
+        1
+      ],
+      "orientation_seed": 0,
+      "apply_probability": 0.0,
+      "severity_level": 1,
+      "intensity_factor_min": 0.6575162324319883,
+      "intensity_factor_max": 1.2332376088978148
+    },
+    {
+      "q_index": 231,
+      "march_parameter": 0.85,
+      "preferred_orientation_enabled": true,
+      "preferred_orientation_model": "march_dollase",
+      "preferred_hkl": [
+        0,
+        0,
+        1
+      ],
+      "orientation_seed": 0,
+      "apply_probability": 0.0,
+      "severity_level": 1,
+      "intensity_factor_min": 0.7836612788698953,
+      "intensity_factor_max": 1.6283329940972933
+    },
+    {
+      "q_index": 43,
+      "march_parameter": 1.15,
+      "preferred_orientation_enabled": true,
+      "preferred_orientation_model": "march_dollase",
+      "preferred_hkl": [
+        0,
+        0,
+        1
+      ],
+      "orientation_seed": 0,
+      "apply_probability": 0.0,
+      "severity_level": 1,
+      "intensity_factor_min": 0.6575162324319883,
+      "intensity_factor_max": 1.2332376088978148
+    },
+    {
+      "q_index": 330,
+      "march_parameter": 1.15,
+      "preferred_orientation_enabled": true,
+      "preferred_orientation_model": "march_dollase",
+      "preferred_hkl": [
+        0,
+        0,
+        1
+      ],
+      "orientation_seed": 0,
+      "apply_probability": 0.0,
+      "severity_level": 1,
+      "intensity_factor_min": 0.6575162324319883,
+      "intensity_factor_max": 1.2332376088978148
+    }
+  ],
+  "metrics_by_seed": [
+    {
+      "n": 77,
+      "du_mae": 0.4709658501367387,
+      "dv_mae": 0.2878878417024207,
+      "mean_q_mae": 0.37942684591957976,
+      "zero_shift_mae_deg": 0.03189933992379596,
+      "a_mae_angstrom": 0.018741135626884182,
+      "c_mae_angstrom": 0.020802288864669057,
+      "q_shift_signed_corr": -0.27210295693029635,
+      "seed": 20261061
+    },
+    {
+      "n": 77,
+      "du_mae": 0.647672220871046,
+      "dv_mae": 0.3371320369018411,
+      "mean_q_mae": 0.4924021288864436,
+      "zero_shift_mae_deg": 0.03175629890235312,
+      "a_mae_angstrom": 0.027353604109431124,
+      "c_mae_angstrom": 0.025297291562759665,
+      "q_shift_signed_corr": -0.22788840409393982,
+      "seed": 20261062
+    },
+    {
+      "n": 77,
+      "du_mae": 0.6311522865063185,
+      "dv_mae": 0.514778104850224,
+      "mean_q_mae": 0.5729651956782713,
+      "zero_shift_mae_deg": 0.03737989530750329,
+      "a_mae_angstrom": 0.02108714434350055,
+      "c_mae_angstrom": 0.03824924458600028,
+      "q_shift_signed_corr": -0.21475892846280745,
+      "seed": 20261063
+    }
+  ]
+}

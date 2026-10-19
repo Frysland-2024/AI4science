@@ -1,0 +1,198 @@
+{
+  "status": "PASS",
+  "dataset_sha256": "52c34aaaf7a448ce76c98d617c2bf1f10855653210f95b12a23e721f527a8703",
+  "test_parent_count": 77,
+  "raw_row_count": 1001,
+  "rows_by_method": {
+    "A": 231,
+    "B": 231,
+    "C": 231,
+    "D": 231,
+    "E": 77
+  },
+  "same_test_parent_set_all_methods_and_seeds": true,
+  "all_A_to_D_seed_pairs_have_77_rows": true,
+  "classic_E_multistart_count_per_parent": 3,
+  "raw_metrics_recomputed_from_stored_predictions_only": true,
+  "test_used_for_no_selection_or_tuning": true,
+  "checkpoint_count_unique": 24,
+  "checkpoint_manifest": [
+    {
+      "experiment": "exp1",
+      "seed": 20261061,
+      "path": "E:\\AI4science_DONUT_checkpoints\\donut_pxrd_four_stage_20261019\\exp1_seed20261061.pt",
+      "sha256": "486f41caa22619903c411089506564646ce9c66cefc9bfee7b453855ac52c4b3",
+      "bytes": 1770447
+    },
+    {
+      "experiment": "exp1",
+      "seed": 20261062,
+      "path": "E:\\AI4science_DONUT_checkpoints\\donut_pxrd_four_stage_20261019\\exp1_seed20261062.pt",
+      "sha256": "5cd2967c11cdb8f3a622b2ba32950c56cb10dddbc4b16f34bfda700cd42cfd3c",
+      "bytes": 1770447
+    },
+    {
+      "experiment": "exp1",
+      "seed": 20261063,
+      "path": "E:\\AI4science_DONUT_checkpoints\\donut_pxrd_four_stage_20261019\\exp1_seed20261063.pt",
+      "sha256": "a23f8d7c4b88868efb22e8365f8530ebb41eb03e7990a724a209ae535f54ab96",
+      "bytes": 1770447
+    },
+    {
+      "experiment": "exp2",
+      "seed": 20261061,
+      "path": "E:\\AI4science_DONUT_checkpoints\\donut_pxrd_four_stage_20261019\\exp2_seed20261061.pt",
+      "sha256": "8c143596750301f8663fc134a17e4cc48a9d253b0f848d38e8c12a42a26f381c",
+      "bytes": 1787343
+    },
+    {
+      "experiment": "exp2",
+      "seed": 20261062,
+      "path": "E:\\AI4science_DONUT_checkpoints\\donut_pxrd_four_stage_20261019\\exp2_seed20261062.pt",
+      "sha256": "47b0cb3d96165892531664ddb7f51a287b40ffbf204f80bd667e101a0fb8f360",
+      "bytes": 1787343
+    },
+    {
+      "experiment": "exp2",
+      "seed": 20261063,
+      "path": "E:\\AI4science_DONUT_checkpoints\\donut_pxrd_four_stage_20261019\\exp2_seed20261063.pt",
+      "sha256": "d2faf0a784cb5bc8e24926580861b31f74ca2553ed3468013ccac389a4a89e7d",
+      "bytes": 1787343
+    },
+    {
+      "experiment": "exp3a",
+      "seed": 20261061,
+      "path": "E:\\AI4science_DONUT_checkpoints\\donut_pxrd_four_stage_20261019\\exp3a_seed20261061.pt",
+      "sha256": "c873dbe5703804cb56a011dafd105f5c2d6e9eeaa469385227701e34ddb09986",
+      "bytes": 1787429
+    },
+    {
+      "experiment": "exp3a",
+      "seed": 20261062,
+      "path": "E:\\AI4science_DONUT_checkpoints\\donut_pxrd_four_stage_20261019\\exp3a_seed20261062.pt",
+      "sha256": "8dd6d8f0b3773e7db8425bd147f6f029f923836f413da7f9403b9f957829d2a9",
+      "bytes": 1787429
+    },
+    {
+      "experiment": "exp3a",
+      "seed": 20261063,
+      "path": "E:\\AI4science_DONUT_checkpoints\\donut_pxrd_four_stage_20261019\\exp3a_seed20261063.pt",
+      "sha256": "02241491db23a531188d4a955dff56996aaba80648d7db32d1ebb6db88d61498",
+      "bytes": 1787429
+    },
+    {
+      "experiment": "exp3b",
+      "seed": 20261061,
+      "path": "E:\\AI4science_DONUT_checkpoints\\donut_pxrd_four_stage_20261019\\exp3b_seed20261061.pt",
+      "sha256": "344fa9377c34767c89858a1a958ec463f52f31271ebfbfed9254abb0b78cbc0f",
+      "bytes": 1787429
+    },
+    {
+      "experiment": "exp3b",
+      "seed": 20261062,
+      "path": "E:\\AI4science_DONUT_checkpoints\\donut_pxrd_four_stage_20261019\\exp3b_seed20261062.pt",
+      "sha256": "dae09812b7dad28a188ce12d8e0f075b57e1e19b6991848db3af19a243066471",
+      "bytes": 1787429
+    },
+    {
+      "experiment": "exp3b",
+      "seed": 20261063,
+      "path": "E:\\AI4science_DONUT_checkpoints\\donut_pxrd_four_stage_20261019\\exp3b_seed20261063.pt",
+      "sha256": "6ebb7d8c2fd2bc20481a4c82e106d5628b27b3b220aa70938e106d75798d3434",
+      "bytes": 1787429
+    },
+    {
+      "experiment": "exp3c",
+      "seed": 20261061,
+      "path": "E:\\AI4science_DONUT_checkpoints\\donut_pxrd_four_stage_20261019\\exp3c_seed20261061.pt",
+      "sha256": "fad5e4ece7bdb327048739171435e8c47d6b2a5651a89affbe3cea652b55aefd",
+      "bytes": 1787429
+    },
+    {
+      "experiment": "exp3c",
+      "seed": 20261062,
+      "path": "E:\\AI4science_DONUT_checkpoints\\donut_pxrd_four_stage_20261019\\exp3c_seed20261062.pt",
+      "sha256": "1fd539e7f1af6178dde7aafb220613126ecf64a9c167362a79dc0b8169d355dd",
+      "bytes": 1787429
+    },
+    {
+      "experiment": "exp3c",
+      "seed": 20261063,
+      "path": "E:\\AI4science_DONUT_checkpoints\\donut_pxrd_four_stage_20261019\\exp3c_seed20261063.pt",
+      "sha256": "7d147086a33bb51cd83f83c133d93678f346f9cd85f278a8e55475d7802ea00b",
+      "bytes": 1787429
+    },
+    {
+      "experiment": "exp4",
+      "seed": 20261061,
+      "method": "A",
+      "path": "E:\\AI4science_DONUT_checkpoints\\donut_pxrd_four_stage_20261019\\exp4_A_seed20261061.pt",
+      "sha256": "abae055c6647393ecaa20b54490b28545dc5ec55b50bc66d7b40d144fad2e885",
+      "bytes": 52052422
+    },
+    {
+      "experiment": "exp4",
+      "seed": 20261062,
+      "method": "A",
+      "path": "E:\\AI4science_DONUT_checkpoints\\donut_pxrd_four_stage_20261019\\exp4_A_seed20261062.pt",
+      "sha256": "48fbed6ca5731c46fbda8bcdf916415f32f7abef683876322826aa7c9faabf4e",
+      "bytes": 52052422
+    },
+    {
+      "experiment": "exp4",
+      "seed": 20261063,
+      "method": "A",
+      "path": "E:\\AI4science_DONUT_checkpoints\\donut_pxrd_four_stage_20261019\\exp4_A_seed20261063.pt",
+      "sha256": "166e1d8c39f602f29d9213240c2bcd3412db5a2f86da9509874d1b5c61b770a0",
+      "bytes": 52052422
+    },
+    {
+      "experiment": "exp4",
+      "seed": 20261061,
+      "method": "B",
+      "path": "E:\\AI4science_DONUT_checkpoints\\donut_pxrd_four_stage_20261019\\exp4_B_seed20261061.pt",
+      "sha256": "5df86973084f2510338fd15fa8f6409a7744b6f31242363a7a136d3e747eb947",
+      "bytes": 52055494
+    },
+    {
+      "experiment": "exp4",
+      "seed": 20261062,
+      "method": "B",
+      "path": "E:\\AI4science_DONUT_checkpoints\\donut_pxrd_four_stage_20261019\\exp4_B_seed20261062.pt",
+      "sha256": "d3c53a938d94e842e8f2bdbb5743af1cad25d4b55933cf55846ab831e8e453c5",
+      "bytes": 52055494
+    },
+    {
+      "experiment": "exp4",
+      "seed": 20261063,
+      "method": "B",
+      "path": "E:\\AI4science_DONUT_checkpoints\\donut_pxrd_four_stage_20261019\\exp4_B_seed20261063.pt",
+      "sha256": "27ca55e9059e6f9e0f5981f764e7caf1d7d78b2c5905126ff2673b21fac0741d",
+      "bytes": 52055494
+    },
+    {
+      "experiment": "exp4",
+      "seed": 20261061,
+      "method": "C",
+      "path": "E:\\AI4science_DONUT_checkpoints\\donut_pxrd_four_stage_20261019\\exp4_C_seed20261061.pt",
+      "sha256": "d36599bc8548de67bc92e7d039f4953dc97ef7d94488d0601728202bd4174881",
+      "bytes": 52055494
+    },
+    {
+      "experiment": "exp4",
+      "seed": 20261062,
+      "method": "C",
+      "path": "E:\\AI4science_DONUT_checkpoints\\donut_pxrd_four_stage_20261019\\exp4_C_seed20261062.pt",
+      "sha256": "51e97dd977e706e7e2431cbaa3ec060ae0e6e5d243631c17f7ab5cac8e6200a3",
+      "bytes": 52055494
+    },
+    {
+      "experiment": "exp4",
+      "seed": 20261063,
+      "method": "C",
+      "path": "E:\\AI4science_DONUT_checkpoints\\donut_pxrd_four_stage_20261019\\exp4_C_seed20261063.pt",
+      "sha256": "28f62acab2d54e2db223e5eea824092d0594f9f42606aea7ed10b834ffcbc3fa",
+      "bytes": 52055494
+    }
+  ]
+}

@@ -293,3 +293,20 @@ The current research statement is:
 > **Use relationships known by scientific data-generation systems — here, simulator-retained parent provenance — as additional supervision for learning from scientific measurements.**
 
 PXRD is the concrete test bed. The broader transferable idea is to identify supervision that already exists in a scientific measurement process but is normally discarded when observations are reduced to independent (x, y) pairs.
+
+
+## 22. 2026-10-19: bounded DONUT-PXRD four-stage follow-up
+
+**Date / status:** 2026-10-19 / FOUR EXPERIMENTS COMPLETE; stacked draft-PR delivery pending.
+
+**Question / previous assumption:** Could the core dual-branch unsupervised mechanism of DONUT be adapted to one-dimensional powder diffraction and recover lattice and measurement coordinates from observed spectra without training on nuisance truth?
+
+**Evidence:** The source-fidelity audit pinned official DONUT code at `090c10bdf99333d3670dc26e617a93364f714bdc` and verified the relevant upstream file blobs. The PXRD forward model passed parity, gradient, local identifiability and non-oracle fitting gates. Exp1?3 ran three seeds on 77 frozen test parent identities per seed. Accuracy remained weak: exp3c normalized q mean MAE was `0.2894`; March-Dollase was only a nondifferentiable generator-side OOD stress. The 15 pre-existing checkpoint hashes and reloads passed. Exp4 retrained A/B/C on the same exp3c split and compared all methods on the same 77 spectra. Mean direct q MAE was `0.0345` for A, `0.0348` for B, `0.0367` for C, and `0.2894` for DONUT D. Deterministic optimizer E had best-of-three q MAE `0.000359`, with 71/77 best-of-three solver-success flags. A/B/C/D joint fits had 12/231, 8/231, 19/231 and 8/231 unsuccessful SciPy termination flags respectively; flags and returned parameters are preserved per sample. The result is restricted to synthetic interpolation for one public BaTiO3 CIF.
+
+**Decision:** Keep DONUT-PXRD as a bounded negative/mixed exploratory follow-up. Its physics gates pass, but its direct inversion accuracy does not support replacing the existing supervised/measurement-aware routes or changing the primary PXRD classification framing. Preserve the numerical optimizer advantage with its cost and scope clearly stated.
+
+**What changes now:** Stage reports, paired raw A/B/C/D/E results, status, checkpoint SHA manifest and technical report are recorded under `donut_pxrd/`. This supplementary result is included in current-state and history records.
+
+**What does not change:** The supervised PXRD classification project identity, frozen V9/PR #26 results, old branches, and archived factorization Stage-1 NO-GO remain unchanged. No real experimental spectra or unseen materials were tested. Original DONUT SXDM geometry and figures were not reproduced.
+
+**Relevant files / commits:** `donut_pxrd/reports/FINAL_TECHNICAL_REPORT.md`, `donut_pxrd/reports/EXPERIMENT_1.md` through `EXPERIMENT_4.md`, `donut_pxrd/results/study_v1/exp4/`, and the pinned source audit in `donut_pxrd/reports/SOURCE_FIDELITY_AUDIT.md`.

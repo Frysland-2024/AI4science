@@ -1,0 +1,94 @@
+{
+  "schema": "donut_pxrd_execution_status_v1",
+  "as_of_utc": "2026-10-19T04:49:52.470750+00:00",
+  "branch": "codex/donut-pxrd-four-stage-20261019",
+  "source_upstream_commit": "090c10bdf99333d3670dc26e617a93364f714bdc",
+  "protocol_sha256": "0b0c5a3ec4c4a8ba8515c4bb6b32f4493f0ca64fe7abd0811dabf498c0996fb4",
+  "experiment4_preregistration_sha256": "e611ff0af68e20165f424bec4260d6fb90fdab8976d58e68cfa6ca9380e61c69",
+  "dataset_exp3c_sha256": "52c34aaaf7a448ce76c98d617c2bf1f10855653210f95b12a23e721f527a8703",
+  "source_code_sha256": {
+    "donut_pxrd/scripts/run_experiment4.py": "d898d2d2121a2d1e2b5bd7cfccc202a8f1d9e483ab3762370121fef03140d0db",
+    "donut_pxrd/scripts/validate_experiment4.py": "d5e63656b0bd3d0a817dc0af5b11780cab6d48584cffb69302c828c249ebabc3",
+    "donut_pxrd/src/donut_pxrd/model.py": "fc57dd7827828feeb298b2ba25bb0b8ed4491869598d84555e9089aa7548f331"
+  },
+  "source_fidelity_audit": "PASS",
+  "resume_audit": "PASS",
+  "experiment4_raw_pair_audit": "PASS",
+  "experiments": {
+    "experiment_1": {
+      "status": "COMPLETE",
+      "seeds": 3,
+      "test_parents_per_seed": 77,
+      "mean_q_mae": 0.31619751794352297,
+      "scientific_outcome": "weak parameter recovery; negative numeric result retained"
+    },
+    "experiment_2": {
+      "status": "COMPLETE",
+      "seeds": 3,
+      "test_parents_per_seed": 77,
+      "mean_q_mae": 0.33131054689617856,
+      "mean_zero_shift_mae_deg": 0.029813190969162306,
+      "scientific_outcome": "weak parameter recovery with nuisance confounding; result retained"
+    },
+    "experiment_3": {
+      "status": "COMPLETE",
+      "conditions": [
+        "3a broadened width",
+        "3b smooth background",
+        "3c Poisson plus Gaussian readout",
+        "texture OOD stress"
+      ],
+      "seeds_per_retrained_condition": 3,
+      "test_parents_per_seed": 77,
+      "exp3c_mean_q_mae": 0.2893912134120076,
+      "texture_classification": "nondifferentiable generator-side OOD stress, not texture inverse"
+    },
+    "experiment_4": {
+      "status": "COMPLETE",
+      "methods": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E"
+      ],
+      "test_parents": 77,
+      "raw_rows": 1001,
+      "A_to_D_seed_pairs": 3,
+      "E_starts_per_parent": 3,
+      "training_seconds_abc": 357.84430120000616,
+      "joint_optimizer_failures": {
+        "A": 12,
+        "B": 8,
+        "C": 19,
+        "D": 8
+      },
+      "E_bestof3_successes": 71
+    }
+  },
+  "training_budget": {
+    "aggregate_recorded_gpu_training_seconds": 610.560425499978,
+    "max_seconds": 28800,
+    "passed": true
+  },
+  "checkpoint_manifest": "donut_pxrd/results/study_v1/exp4/validation.json",
+  "results": "donut_pxrd/results/study_v1/exp4/raw_paired_results.json",
+  "terminal_delivery": {
+    "branch_push": "PENDING",
+    "draft_pr": "PENDING",
+    "issue_comments": "not posted per user instruction",
+    "merge": "not performed"
+  },
+  "known_instrumentation_gaps": [
+    "CPU latency not measured",
+    "experiment-scoped peak VRAM not captured"
+  ],
+  "recovery": [
+    {
+      "event": "first checkpoint write denied by workspace sandbox",
+      "resolution": "reran the identical frozen Experiment 4 under approved escalated execution; no existing checkpoint was overwritten",
+      "accounting": "Training duration from the failed attempt was not retained and is excluded from aggregate_recorded_gpu_training_seconds; completed rerun timing is retained. The successful-run total is below the 8-hour cap, but the excluded attempt is not represented as measured time.",
+      "status": "RECOVERED"
+    }
+  ]
+}

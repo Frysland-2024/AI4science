@@ -1,0 +1,19 @@
+{
+  "schema": "donut_pxrd_experiment4_preregistration_v1",
+  "status": "FROZEN_BEFORE_EXPERIMENT_4_TRAINING",
+  "date": "2026-10-19",
+  "dataset": "donut_pxrd/results/study_v1/exp3c/data_arrays.npz",
+  "dataset_sha256": "52c34aaaf7a448ce76c98d617c2bf1f10855653210f95b12a23e721f527a8703",
+  "split_policy": "identical frozen 358/77/77 q-parent indices; test evaluated once after all model selection",
+  "methods": {
+    "A": "existing ParameterRegressor, supervised q MSE, zero shift fixed to neutral zero",
+    "B": "existing MeasurementAwareRegressor, supervised q MSE plus expected-profile MSE; q gradient active",
+    "C": "same as B with q detached only on the expected-profile path",
+    "D": "DONUT-PXRD model/checkpoints from Experiment 3c, self-supervised only",
+    "E": "bounded L-BFGS-B on observed transformed-profile MSE from neutral start and method-seeded starts"
+  },
+  "training": {"seeds": [20261061, 20261062, 20261063], "epochs_max": 24, "batch_size": 16, "optimizer": "Adam", "learning_rate": 0.0005, "weight_decay": 0.0, "reconstruction_weight": 1.0, "validation_selection": "lowest validation q MAE, earliest epoch on ties", "no_q_or_eta_truth_in_B_or_C_reconstruction": true},
+  "refinement": {"objective": "mean squared error in the common log1p_100 max-normalized profile domain", "free_parameters": ["du", "dv", "zero_shift_deg", "fwhm_deg", "background_ratio"], "bounds": [[-0.8,0.8],[-0.8,0.8],[-0.06,0.06],[0.08,0.13],[0.0,0.01]], "ftol": 1e-12, "gtol": 1e-9, "maxiter": 80, "maxfun": 120, "neutral_start": [0.0,0.0,0.0,0.105,0.005], "starts_per_classic_sample": 3, "method_seeded_refinement_starts_per_sample": 1},
+  "report": ["direct inference", "joint q+eta refinement", "optimizer-only neutral-start fit", "failure and iteration rates", "CPU/GPU p50/p95 latency", "training/refinement wall time", "GPU peak VRAM", "checkpoint hashes", "paired per-sample arrays"],
+  "test_selection": "No test-tuned model, epoch, weight, optimizer setting, bound, initialization, or solver setting"
+}
