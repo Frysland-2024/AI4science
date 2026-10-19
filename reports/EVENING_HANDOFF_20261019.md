@@ -1,7 +1,7 @@
 # Final bounded review and evening handoff
 
-**Date:** 2026-10-19  
-**Branch:** `codex/phase-router-inversion-mvp-20261019`  
+**Date:** 2026-10-19
+**Branch:** `codex/phase-router-inversion-mvp-20261019`
 **Review scope:** final acceptance and critical-fix pass only. No scientific model, frozen classifier, original data, or candidate library was changed.
 
 ## Acceptance
@@ -76,4 +76,4 @@ The system is a three-CIF, single-phase hypothesis router with simplified neutra
 
 ## Delivery
 
-This review updates the stage statuses in [`MVP_IMPLEMENTATION_STATUS.json`](MVP_IMPLEMENTATION_STATUS.json). The branch is to be pushed after this report is committed. A Draft PR attempt against `codex/donut-pxrd-four-stage-20261019` and its result will be recorded in that status file; no merge is authorized.
+This review updates the stage statuses in [`MVP_IMPLEMENTATION_STATUS.json`](MVP_IMPLEMENTATION_STATUS.json). The report and status are committed locally on the authorized branch. Push and Draft PR outcomes will be recorded in the status file after the final attempt. No merge is authorized.
