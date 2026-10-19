@@ -1,5 +1,12 @@
 {
   "date": "2026-10-19",
+  "final_review": {
+    "report": "reports/EVENING_HANDOFF_20261019.md",
+    "prototype": "PASS",
+    "rruff": "PARTIAL",
+    "ui": "PASS",
+    "verification": "12/12 tests passed with local RRUFF and frozen checkpoint enabled; all three synthetic CLI demos ranked their generating CIF first; both adaptation-only RRUFF CLI smokes completed; Streamlit health returned HTTP 200; private RRUFF content is absent from tracked files."
+  },
   "branch": "codex/phase-router-inversion-mvp-20261019",
   "implementation": "candidate-limited single-phase PXRD router and fixed-prototype lattice refinement",
   "stages": {
@@ -12,16 +19,16 @@
       "details": "Synthetic end-to-end tests identify and recover all three bundled CIFs. Corrected RRUFF source wavelength #1 gives MgO as the top candidate for both samples; overlays show profile mismatch, and the R060745 MgO fit hits the 60-evaluation cap. Neither run validates the model because CaF2/rutile candidates are unavailable."
     },
     "C_optional_frozen_classifier": {
-      "status": "PARTIAL",
-      "details": "A local frozen Dynamic-JS checkpoint was verified by SHA-256 and strict model/config load, then inferred on both adaptation examples at the exact simulator CuKa wavelength. The top output was triclinic for both despite cubic/tetragonal manifest labels. The optional prior is off by default and never filters candidates."
+      "status": "PASS",
+      "details": "A local frozen Dynamic-JS checkpoint was verified by SHA-256 and strict model/config load, then inferred on both adaptation examples at the exact simulator CuKa wavelength. The exploratory top output was triclinic for both despite cubic/tetragonal manifest labels. The optional prior is off by default and never filters candidates; tests confirm every candidate is evaluated."
     },
     "D_streamlit_uploader_and_plot": {
       "status": "PASS",
       "details": "The uploader and local adaptation-only RRUFF selector share the measured-versus-fit/residual plot. Streamlit 1.66.0 started headlessly from the isolated venv and /_stcore/health returned HTTP 200 ok. No browser visual inspection was performed."
     },
     "E_tests_demo_docs_and_delivery": {
-      "status": "PARTIAL",
-      "details": "Twelve deterministic unittest cases passed (including local RRUFF and checkpoint inference checks), along with compileall, JSON parsing, diff check and ignored-overlay verification. Three simulated demos remain. Metadata-only RRUFF audit and regenerated ignored local overlays are recorded. Branch commit and push are pending; no PR or merge is requested."
+      "status": "PASS",
+      "details": "Final bounded review reran all 12 deterministic unittest cases with local RRUFF and frozen checkpoint enabled; all passed. The three synthetic CLI demos each ranked the generating CIF first (RMSE about 0.003). Both adaptation-only RRUFF CLI smokes completed and are explicitly PARTIAL real-data evidence. Streamlit 1.66.0 headless health returned HTTP 200. Candidate provenance, filename independence, wavelength parsing, rejection of locked-test IDs, residual plots and Git privacy were checked. No browser visual inspection was performed."
     }
   },
   "candidate_support": [
@@ -33,9 +40,10 @@
   ],
   "delivery": {
     "branch": "codex/phase-router-inversion-mvp-20261019",
-    "commit": "1652f62b8ef30bf73262fc034c5c13dfd47dc43e",
+    "commit": "8923685a3451fd9eaef7d27b60133d8b664c1661",
     "push": "PASS",
-    "pull_request": "NOT_REQUESTED"
+    "pull_request": "PENDING_FINAL_REVIEW",
+    "draft_pr_attempt": "PENDING_FINAL_REVIEW"
   },
   "limitations": [
     "REAL-SPECTRUM PHASE VALIDATION NOT DONE; RRUFF runs are exploratory adaptation-pool demos only",
