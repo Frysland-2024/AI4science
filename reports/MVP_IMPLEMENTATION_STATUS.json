@@ -40,7 +40,7 @@
   ],
   "delivery": {
     "branch": "codex/phase-router-inversion-mvp-20261019",
-    "commit": "8923685a3451fd9eaef7d27b60133d8b664c1661",
+    "reviewed_source_commit": "8923685a3451fd9eaef7d27b60133d8b664c1661",
     "push": "PASS",
     "pull_request": "https://github.com/Frysland-2024/AI4science/pull/37",
     "draft_pr_attempt": "PASS_EXISTING_OPEN_DRAFT_CONFIRMED"
