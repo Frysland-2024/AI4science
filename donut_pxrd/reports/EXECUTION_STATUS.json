@@ -1,6 +1,6 @@
 {
   "schema": "donut_pxrd_execution_status_v1",
-  "as_of_utc": "2026-10-19T04:49:52.470750+00:00",
+  "as_of_utc": "2026-10-19T04:50:41.662905+00:00",
   "branch": "codex/donut-pxrd-four-stage-20261019",
   "source_upstream_commit": "090c10bdf99333d3670dc26e617a93364f714bdc",
   "protocol_sha256": "0b0c5a3ec4c4a8ba8515c4bb6b32f4493f0ca64fe7abd0811dabf498c0996fb4",
@@ -74,8 +74,8 @@
   "checkpoint_manifest": "donut_pxrd/results/study_v1/exp4/validation.json",
   "results": "donut_pxrd/results/study_v1/exp4/raw_paired_results.json",
   "terminal_delivery": {
-    "branch_push": "PENDING",
-    "draft_pr": "PENDING",
+    "branch_push": "PUSHED: codex/donut-pxrd-four-stage-20261019",
+    "draft_pr": "BLOCKED: GitHub CLI API returned HTTP 401; saved Frysland-2024 token is invalid; no GitHub connector is available",
     "issue_comments": "not posted per user instruction",
     "merge": "not performed"
   },

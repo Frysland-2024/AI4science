@@ -19,4 +19,6 @@ Training used 610.56 recorded GPU seconds in total (252.72 for the pre-existing 
 
 Recovery: the initial default-sandbox process failed to write new checkpoints to the explicitly designated external checkpoint directory. Its training duration was not retained and is excluded from the recorded compute total. The same frozen protocol was rerun under reviewed authorization; no existing checkpoint was overwritten. The 15 original checkpoint hashes were rechecked after completion. The recorded successful-run total is below the 8-hour cap; unrecorded time is not claimed as measured.
 
+Delivery: branch `codex/donut-pxrd-four-stage-20261019` was pushed. Draft PR creation against `codex/issue31-pr26-fair-diagnostic` was attempted and rejected by GitHub API with HTTP 401 because the saved CLI token is invalid; no GitHub connector was available. No Issue comments were posted and no merge was performed.
+
 Source links: [Luo et al., DONUT (2025)](https://doi.org/10.1038/s41524-025-01860-7); [official DONUT code](https://github.com/AdvancedPhotonSource/DONUT), pinned at `090c10bdf99333d3670dc26e617a93364f714bdc`. The detailed source fidelity boundary is recorded in `SOURCE_FIDELITY_AUDIT.md`.
