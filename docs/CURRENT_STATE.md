@@ -254,3 +254,7 @@ python -m pytest -q
 每阶段测试均通过（新增测试每阶段 3 passed；既有回归前置门 50 passed）。CUDA 线性上采样反向算子没有严格确定性实现，因此启用 warn-only 确定性；相同 seed 不保证 bitwise 重现。配置、逐样本原始 CSV、训练记录、机器可读指标、测试日志与报告见 [`donut_pxrd/`](../donut_pxrd/)；权重和冻结生成数据存于本机 `E:\AI4science_DONUT_checkpoints\run_20261019_01`，不纳入 Git，仓库记录其路径和 SHA-256。
 
 该探索不改变 PXRD 分类主线、冻结结果或现行项目 framing。完整决策记录见 [`PROJECT_HISTORY.md`](PROJECT_HISTORY.md) 第 22 节及 [`donut_pxrd/reports/FINAL_TECHNICAL_REPORT.md`](../donut_pxrd/reports/FINAL_TECHNICAL_REPORT.md)。
+
+### 2026-10-19：DONUT 实验 1 种子差异诊断（POST-HOC，验证集限定）
+
+对固定仪器的三个已冻结 checkpoint 做了验证集限定推理；checkpoint SHA 与原执行记录一致，重算验证双分支损失与训练日志差小于 `1e-9`。种子 20261061/20261062 的 `dv` 验证预测分别塌缩到 `-0.765 ± 0.025` / `-0.780 ± 0.021`，目标 `dv` SD 为 `0.459`；归一化约束潜变量接近下界的比例为 `75.3%/83.1%`。对应 normalized-q MAE 为 `0.5124/0.5061`。种子 20261063 没有该饱和现象，q-MAE 为 `0.04034`。这定位了失败表现为种子关联的 `dv` 潜变量饱和，但不能仅凭三个 seed 判断是初始化、样本顺序还是 CUDA 非确定性反向算子导致。未使用测试集行作诊断或调参，未重训、未改冻结协议。详情、机器可读指标和复现脚本见 [诊断报告](../donut_pxrd/reports/EXPERIMENT_1_SEED_VARIABILITY_DIAGNOSTIC.md)、[JSON](../donut_pxrd/results/experiment_1/seed_variability_diagnostic.json) 和 [`diagnose_experiment1_seed_variability.py`](../donut_pxrd/scripts/diagnose_experiment1_seed_variability.py)。本机 checkpoint 与数据的当前可用路径为 `E:\AI4science\_local\checkpoints\donut\run_20261019_01`；原执行记录中的旧路径现已过时。

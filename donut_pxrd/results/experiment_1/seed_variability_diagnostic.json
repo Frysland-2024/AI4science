@@ -1,0 +1,349 @@
+{
+  "schema": "donut_pxrd_experiment1_seed_variability_diagnostic_v1",
+  "scope": "post-hoc descriptive audit of frozen train/validation histories and validation-only inference",
+  "test_indices_or_rows_selected_or_passed_to_model": false,
+  "test_metrics_used_for_selection_or_recomputed": false,
+  "validation_predictions_recomputed_from_frozen_weights": true,
+  "frozen_weights_loaded_without_training": true,
+  "frozen_seed_order": [
+    20261061,
+    20261062,
+    20261063
+  ],
+  "best_validation_reference_seed": 20261063,
+  "loss_definition": "validation_decoder_loss + 5 * validation_physics_loss",
+  "source_files": {
+    "donut_pxrd\\results\\experiment_1\\experiment_1_fixed_training_histories.json": "53db079fc18ce943be114c945a4de0446baa04359db8c74c12106ba0b629eb47",
+    "donut_pxrd\\reports\\EXECUTION_STATUS.json": "288082d3ac0e123493450de982f4883d092a051731e5d446fb7cc0cecb98501f",
+    "donut_pxrd\\configs\\study_v1.json": "cfd0936999d298d860eb8c01eddfc8aaa5bd6172c53a9a95d8aaffc4e9050597",
+    "_local\\checkpoints\\donut\\run_20261019_01\\datasets\\study_v1.npz": "87f3845bf4863ebfa3b35f55512df0730050d56ddcdf394d750bc955872deecf",
+    "_local\\checkpoints\\donut\\run_20261019_01\\datasets\\data_manifest.json": "38d9a647d337c7e02c0949a8f036cc2a899e12b5de46d9d3d21fad3e333d18e5"
+  },
+  "by_seed": {
+    "20261061": {
+      "epochs_completed": 30,
+      "best_epoch": 17,
+      "best_validation_dual_loss_recorded": 0.034609482437372205,
+      "selected_epoch_losses": {
+        "train_total": 0.059201822170744774,
+        "validation_total": 0.034609482437372205,
+        "validation_decoder": 0.00849374607205391,
+        "validation_physics_unweighted": 0.0052231473848223684,
+        "validation_physics_weighted_x5": 0.026115736924111843,
+        "validation_decoder_share_of_composite": 0.24541672792381494,
+        "validation_physics_share_of_composite": 0.7545832720761851
+      },
+      "validation_total_loss_over_epochs": {
+        "minimum": 0.034609482437372205,
+        "median": 0.06410880461335182,
+        "maximum": 0.22788272500038148
+      },
+      "training_total_loss_over_epochs": {
+        "minimum": 0.04706695918803629,
+        "minimum_epoch": 22,
+        "final": 0.08279517454945523
+      },
+      "final_validation_total_loss": 0.07938740700483322,
+      "final_to_selected_validation_loss_ratio": 2.2938050908010306,
+      "checkpoint": {
+        "declared_path": "E:\\AI4science_DONUT_checkpoints\\run_20261019_01\\checkpoints\\experiment_1_fixed\\donut_seed20261061.pt",
+        "located_path": "E:\\AI4science\\_local\\checkpoints\\donut\\run_20261019_01\\checkpoints\\experiment_1_fixed\\donut_seed20261061.pt",
+        "sha256_matches_execution_record": true
+      },
+      "validation_inference": {
+        "checkpoint": {
+          "path": "E:\\AI4science\\_local\\checkpoints\\donut\\run_20261019_01\\checkpoints\\experiment_1_fixed\\donut_seed20261061.pt",
+          "sha256": "515f3d3083b782ee8f8b6806b1e7b687f6244412d7dfd9aca52cb9f799986c7f",
+          "sha256_matches_execution_record": true,
+          "best_epoch_matches_execution_record": true
+        },
+        "n_validation": 77,
+        "q_prediction": {
+          "du_mae": 0.22535129565165032,
+          "dv_mae": 0.799351779613402,
+          "normalized_q_mae": 0.5123515376325262,
+          "du_bias": -0.22275225477801136,
+          "dv_bias": -0.7987434789538382,
+          "du_prediction_mean": -0.19123815422176155,
+          "du_prediction_std": 0.5130275630207269,
+          "du_prediction_min": -0.7911361455917358,
+          "du_prediction_max": 0.6602602005004883,
+          "dv_prediction_mean": -0.7650722451024241,
+          "dv_prediction_std": 0.025106193997132084,
+          "dv_prediction_min": -0.7948518395423889,
+          "dv_prediction_max": -0.6949211955070496,
+          "du_true_std": 0.46362260189703414,
+          "du_pred_std": 0.5130275630207269,
+          "dv_true_std": 0.45872032070557756,
+          "dv_pred_std": 0.025106193997132084,
+          "pearson_by_coordinate": {
+            "du": 0.9628423755535264,
+            "dv": -0.2262991207979593
+          }
+        },
+        "lattice_prediction": {
+          "a_mae_angstrom": 0.004662642062902469,
+          "c_mae_angstrom": 0.03031504796843051
+        },
+        "profile_rmse": {
+          "decoder": {
+            "mean": 0.17164689302444458,
+            "median": 0.094750314950943,
+            "p95": 0.9348119497299194
+          },
+          "physics": {
+            "mean": 0.09939168393611908,
+            "median": 0.10589894652366638,
+            "p95": 0.12859217822551727
+          }
+        },
+        "validation_losses_recomputed_with_original_batching": {
+          "decoder": 0.00849374607205391,
+          "physics_unweighted": 0.0052231473848223684,
+          "composite_decoder_plus_5_physics": 0.03460948299616575,
+          "absolute_difference_from_logged_validation_total": 5.587935461570659e-10
+        },
+        "latent_diagnostics": {
+          "raw_mean_by_coordinate": [
+            -0.7830470461737026,
+            -3.0381443903043674
+          ],
+          "raw_std_by_coordinate": [
+            1.6560698476648303,
+            0.5579257742890341
+          ],
+          "normalized_constrained_mean_by_coordinate": [
+            -0.2390476895966867,
+            -0.9563403067816751
+          ],
+          "normalized_constrained_std_by_coordinate": [
+            0.64128445036651,
+            0.03138274597677177
+          ],
+          "fraction_abs_normalized_constrained_at_least_0_95_by_coordinate": [
+            0.15584415584415584,
+            0.7532467532467533
+          ]
+        }
+      },
+      "selected_validation_loss_ratio_to_best_seed": 3.5735840921557593
+    },
+    "20261062": {
+      "epochs_completed": 30,
+      "best_epoch": 8,
+      "best_validation_dual_loss_recorded": 0.05306301116943359,
+      "selected_epoch_losses": {
+        "train_total": 0.06959970489792201,
+        "validation_total": 0.05306301116943359,
+        "validation_decoder": 0.02754654288291931,
+        "validation_physics_unweighted": 0.005103293806314468,
+        "validation_physics_weighted_x5": 0.025516469031572342,
+        "validation_decoder_share_of_composite": 0.5191288976831764,
+        "validation_physics_share_of_composite": 0.4808711023168235
+      },
+      "validation_total_loss_over_epochs": {
+        "minimum": 0.05306301116943359,
+        "median": 0.08104544878005981,
+        "maximum": 0.1296735316514969
+      },
+      "training_total_loss_over_epochs": {
+        "minimum": 0.06903371619789497,
+        "minimum_epoch": 7,
+        "final": 0.07763620660356853
+      },
+      "final_validation_total_loss": 0.07875317633152008,
+      "final_to_selected_validation_loss_ratio": 1.4841445028450448,
+      "checkpoint": {
+        "declared_path": "E:\\AI4science_DONUT_checkpoints\\run_20261019_01\\checkpoints\\experiment_1_fixed\\donut_seed20261062.pt",
+        "located_path": "E:\\AI4science\\_local\\checkpoints\\donut\\run_20261019_01\\checkpoints\\experiment_1_fixed\\donut_seed20261062.pt",
+        "sha256_matches_execution_record": true
+      },
+      "validation_inference": {
+        "checkpoint": {
+          "path": "E:\\AI4science\\_local\\checkpoints\\donut\\run_20261019_01\\checkpoints\\experiment_1_fixed\\donut_seed20261062.pt",
+          "sha256": "71e487fbfbcb51b248eddce787883093fb0b86525f054cd08e973f11141f1ad2",
+          "sha256_matches_execution_record": true,
+          "best_epoch_matches_execution_record": true
+        },
+        "n_validation": 77,
+        "q_prediction": {
+          "du_mae": 0.19675369826568798,
+          "dv_mae": 0.8154112244774769,
+          "normalized_q_mae": 0.5060824613715824,
+          "du_bias": -0.17272891695187853,
+          "dv_bias": -0.8133498851161498,
+          "du_prediction_mean": -0.14121481639562877,
+          "du_prediction_std": 0.48061380976093987,
+          "du_prediction_min": -0.7968348264694214,
+          "du_prediction_max": 0.6623274683952332,
+          "dv_prediction_mean": -0.7796786512647357,
+          "dv_prediction_std": 0.02067160127914278,
+          "dv_prediction_min": -0.7974202632904053,
+          "dv_prediction_max": -0.7046402096748352,
+          "du_true_std": 0.46362260189703414,
+          "du_pred_std": 0.48061380976093987,
+          "dv_true_std": 0.45872032070557756,
+          "dv_pred_std": 0.02067160127914278,
+          "pearson_by_coordinate": {
+            "du": 0.9406887079620612,
+            "dv": -0.31134469121411207
+          }
+        },
+        "lattice_prediction": {
+          "a_mae_angstrom": 0.00500577280712065,
+          "c_mae_angstrom": 0.029053976935023762
+        },
+        "profile_rmse": {
+          "decoder": {
+            "mean": 0.49234315752983093,
+            "median": 0.11817104369401932,
+            "p95": 1.6045048236846924
+          },
+          "physics": {
+            "mean": 0.09775159507989883,
+            "median": 0.10348066687583923,
+            "p95": 0.12896917760372162
+          }
+        },
+        "validation_losses_recomputed_with_original_batching": {
+          "decoder": 0.02754654288291931,
+          "physics_unweighted": 0.005103293806314468,
+          "composite_decoder_plus_5_physics": 0.053063011914491656,
+          "absolute_difference_from_logged_validation_total": 7.450580638557192e-10
+        },
+        "latent_diagnostics": {
+          "raw_mean_by_coordinate": [
+            -0.7010528377208907,
+            -3.611502957034421
+          ],
+          "raw_std_by_coordinate": [
+            1.7158629224246018,
+            0.7364871526228494
+          ],
+          "normalized_constrained_mean_by_coordinate": [
+            -0.17651852149966382,
+            -0.9745983169489499
+          ],
+          "normalized_constrained_std_by_coordinate": [
+            0.600767262720785,
+            0.025839504256986993
+          ],
+          "fraction_abs_normalized_constrained_at_least_0_95_by_coordinate": [
+            0.19480519480519481,
+            0.8311688311688312
+          ]
+        }
+      },
+      "selected_validation_loss_ratio_to_best_seed": 5.478993594894363
+    },
+    "20261063": {
+      "epochs_completed": 30,
+      "best_epoch": 24,
+      "best_validation_dual_loss_recorded": 0.009684809856116772,
+      "selected_epoch_losses": {
+        "train_total": 0.011976428208467753,
+        "validation_total": 0.009684809856116772,
+        "validation_decoder": 0.006978463102132082,
+        "validation_physics_unweighted": 0.0005412693717516959,
+        "validation_physics_weighted_x5": 0.0027063468587584794,
+        "validation_decoder_share_of_composite": 0.7205575669850709,
+        "validation_physics_share_of_composite": 0.27944243301492916
+      },
+      "validation_total_loss_over_epochs": {
+        "minimum": 0.009684809856116772,
+        "median": 0.01583973867818713,
+        "maximum": 0.07640800029039382
+      },
+      "training_total_loss_over_epochs": {
+        "minimum": 0.008836570722253426,
+        "minimum_epoch": 29,
+        "final": 0.00981904701937152
+      },
+      "final_validation_total_loss": 0.011545544676482677,
+      "final_to_selected_validation_loss_ratio": 1.1921292052203476,
+      "checkpoint": {
+        "declared_path": "E:\\AI4science_DONUT_checkpoints\\run_20261019_01\\checkpoints\\experiment_1_fixed\\donut_seed20261063.pt",
+        "located_path": "E:\\AI4science\\_local\\checkpoints\\donut\\run_20261019_01\\checkpoints\\experiment_1_fixed\\donut_seed20261063.pt",
+        "sha256_matches_execution_record": true
+      },
+      "validation_inference": {
+        "checkpoint": {
+          "path": "E:\\AI4science\\_local\\checkpoints\\donut\\run_20261019_01\\checkpoints\\experiment_1_fixed\\donut_seed20261063.pt",
+          "sha256": "2a366fa23e42c74e2fb87e09187738a1327f4b6696c25c47083fe1a2f83bd556",
+          "sha256_matches_execution_record": true,
+          "best_epoch_matches_execution_record": true
+        },
+        "n_validation": 77,
+        "q_prediction": {
+          "du_mae": 0.02298583982923589,
+          "dv_mae": 0.057686564892336936,
+          "normalized_q_mae": 0.04033620236078641,
+          "du_bias": 0.00012003432523894375,
+          "dv_bias": 0.026744826878239578,
+          "du_prediction_mean": 0.03163413488148869,
+          "du_prediction_std": 0.4538646862229109,
+          "du_prediction_min": -0.7381762862205505,
+          "du_prediction_max": 0.7499064803123474,
+          "dv_prediction_mean": 0.0604160607296538,
+          "dv_prediction_std": 0.4409097673797864,
+          "dv_prediction_min": -0.656007707118988,
+          "dv_prediction_max": 0.6702727675437927,
+          "du_true_std": 0.46362260189703414,
+          "du_pred_std": 0.4538646862229109,
+          "dv_true_std": 0.45872032070557756,
+          "dv_pred_std": 0.4409097673797864,
+          "pearson_by_coordinate": {
+            "du": 0.9983567973335283,
+            "dv": 0.9891436840662293
+          }
+        },
+        "lattice_prediction": {
+          "a_mae_angstrom": 0.0010270732229108357,
+          "c_mae_angstrom": 0.001963567758412856
+        },
+        "profile_rmse": {
+          "decoder": {
+            "mean": 0.11805741488933563,
+            "median": 0.11899367719888687,
+            "p95": 0.12098317593336105
+          },
+          "physics": {
+            "mean": 0.029722200706601143,
+            "median": 0.028672605752944946,
+            "p95": 0.05566924810409546
+          }
+        },
+        "validation_losses_recomputed_with_original_batching": {
+          "decoder": 0.006978463102132082,
+          "physics_unweighted": 0.0005412693717516959,
+          "composite_decoder_plus_5_physics": 0.00968480996089056,
+          "absolute_difference_from_logged_validation_total": 1.0477378860340725e-10
+        },
+        "latent_diagnostics": {
+          "raw_mean_by_coordinate": [
+            0.0984751737930558,
+            0.14200249640875823
+          ],
+          "raw_std_by_coordinate": [
+            1.1922387415352393,
+            1.059547733980542
+          ],
+          "normalized_constrained_mean_by_coordinate": [
+            0.03954266817414981,
+            0.07552007588121627
+          ],
+          "normalized_constrained_std_by_coordinate": [
+            0.5673308632753853,
+            0.5511372083480689
+          ],
+          "fraction_abs_normalized_constrained_at_least_0_95_by_coordinate": [
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "selected_validation_loss_ratio_to_best_seed": 1.0
+    }
+  },
+  "interpretation_limit": "This is descriptive evidence from three seeds on one CIF. It does not isolate random initialization from the documented CUDA nondeterministic backward op, and it does not establish a causal mechanism or unseen-material performance."
+}
