@@ -1,0 +1,12 @@
+read_only_target=true
+repo_root=E:\AI4science_donut_pxrd
+created_utc=2026-10-19T04:17:13+00:00
+preflight=COMPLETE verified=True missing=0
+exp1=COMPLETE verified=True missing=0
+exp2=COMPLETE verified=True missing=0
+exp3a=COMPLETE verified=True missing=0
+exp3b=COMPLETE verified=True missing=0
+exp3c=COMPLETE verified=True missing=0
+texture_ood=COMPLETE verified=True missing=0
+exp4=NOT_RUN verified=False missing=2
+report=NOT_RUN verified=False missing=0

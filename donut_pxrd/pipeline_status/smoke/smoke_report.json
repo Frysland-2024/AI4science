@@ -1,0 +1,18 @@
+{
+  "first_exit_code": 2,
+  "intentional_failure_exit_code": 23,
+  "resume_exit_code": 0,
+  "resume_skips": [
+    "mock_preflight",
+    "mock_exp1",
+    "mock_exp2"
+  ],
+  "scientific_training_launched": false,
+  "stage_order": [
+    "mock_preflight",
+    "mock_exp1",
+    "mock_exp2",
+    "mock_exp3"
+  ],
+  "status": "PASS"
+}
