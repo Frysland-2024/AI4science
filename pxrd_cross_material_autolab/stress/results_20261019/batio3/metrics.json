@@ -1,0 +1,97 @@
+[
+  {
+    "boundary_rate": 0.0,
+    "convergence_rate": 1.0,
+    "lattice_mae_angstrom": [
+      6.40424467888423e-05,
+      0.0003644653931485775
+    ],
+    "material": "batio3",
+    "mean_nfev": 203.5,
+    "mean_seconds": 0.09789800624275813,
+    "median_seconds": 0.09679730000789277,
+    "method": "N+A",
+    "multistart_disagreement_mean": 0.0,
+    "n": 16,
+    "p95_seconds": 0.11646454998117406,
+    "profile_rmse": 0.006838348578450837,
+    "q_mae": 0.0026648690621188945,
+    "seed": 2026101911
+  },
+  {
+    "boundary_rate": 0.0,
+    "convergence_rate": 1.0,
+    "lattice_mae_angstrom": [
+      6.407232986727074e-05,
+      0.0003644727697903749
+    ],
+    "material": "batio3",
+    "mean_nfev": 202.5,
+    "mean_seconds": 0.09563450000496232,
+    "median_seconds": 0.0949257499887608,
+    "method": "N+A",
+    "multistart_disagreement_mean": 0.0,
+    "n": 16,
+    "p95_seconds": 0.1148595000122441,
+    "profile_rmse": 0.006838348569601145,
+    "q_mae": 0.002665102293618599,
+    "seed": 2026101912
+  },
+  {
+    "boundary_rate": 0.0,
+    "convergence_rate": 1.0,
+    "lattice_mae_angstrom": [
+      6.408209079611371e-05,
+      0.00036442986847928793
+    ],
+    "material": "batio3",
+    "mean_nfev": 206.5,
+    "mean_seconds": 0.09627379999801633,
+    "median_seconds": 0.09332975000143051,
+    "method": "N+A",
+    "multistart_disagreement_mean": 0.0,
+    "n": 16,
+    "p95_seconds": 0.11915829998906702,
+    "profile_rmse": 0.006838348574311466,
+    "q_mae": 0.002664897112109633,
+    "seed": 2026101913
+  },
+  {
+    "boundary_rate": 0.0,
+    "convergence_rate": 1.0,
+    "lattice_mae_angstrom": [
+      6.407011598233425e-05,
+      0.00036445411589403065
+    ],
+    "material": "batio3",
+    "mean_nfev": 236.0,
+    "mean_seconds": 0.10843664374624495,
+    "median_seconds": 0.10976900000241585,
+    "method": "P0",
+    "multistart_disagreement_mean": 0.0,
+    "n": 16,
+    "p95_seconds": 0.1197373999748379,
+    "profile_rmse": 0.006838348573250002,
+    "q_mae": 0.0026649725743074183,
+    "seed": 0
+  },
+  {
+    "boundary_rate": 0.0,
+    "convergence_rate": 1.0,
+    "lattice_mae_angstrom": [
+      6.406069911463197e-05,
+      0.0003644881486138951
+    ],
+    "material": "batio3",
+    "mean_nfev": 724.0,
+    "mean_seconds": 0.33434650625349605,
+    "median_seconds": 0.32382675001281314,
+    "method": "P3",
+    "multistart_disagreement_mean": 2.2434640022930483e-06,
+    "n": 16,
+    "p95_seconds": 0.3908992499782471,
+    "profile_rmse": 0.0068383485666871574,
+    "q_mae": 0.0026651248430146126,
+    "seed": 0
+  }
+]

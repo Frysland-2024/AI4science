@@ -1,0 +1,16 @@
+{
+  "material_statuses": [
+    "PASS",
+    "SKIPPED",
+    "PASS",
+    "SKIPPED",
+    "PASS",
+    "PASS",
+    "PASS",
+    "PASS",
+    "PASS"
+  ],
+  "stage": "run",
+  "status": "BLOCKED",
+  "time": 1792421637.9517615
+}

@@ -1,0 +1,10 @@
+{
+  "reason": {
+    "reason": "Unsupported crystal system: trigonal",
+    "status": "FAIL",
+    "traceback": "Traceback (most recent call last):\n  File \"E:\\AI4science\\_local\\worktrees\\pxrd_cross_material_autolab_20261019\\pxrd_cross_material_autolab\\manager.py\", line 146, in run\n    model=physics.PowderModel(material[\"cif_path\"],grid_size=config.get(\"grid_size\",1024))\n          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"E:\\AI4science\\_local\\worktrees\\pxrd_cross_material_autolab_20261019\\pxrd_cross_material_autolab\\physics.py\", line 27, in __init__\n    raise ValueError('Unsupported crystal system: '+self.system)\nValueError: Unsupported crystal system: trigonal\n"
+  },
+  "stage": "physical_gate",
+  "status": "SKIPPED",
+  "time": 1792420646.5942764
+}

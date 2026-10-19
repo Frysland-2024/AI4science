@@ -1,0 +1,206 @@
+{
+  "checks": {
+    "distinguishable_profiles": true,
+    "independent_pymatgen_parity": true,
+    "jacobian_condition": true,
+    "multistart_stability": true,
+    "nonoracle_noiseless_recovery": true,
+    "numerical_gradient": true,
+    "positive_nonempty_peaks": true,
+    "site_geometry": true,
+    "symmetric_positive_bounds": true,
+    "symmetry": true
+  },
+  "details": {
+    "gradient_relative": [
+      7.430336313218769e-08,
+      7.314884172831521e-08,
+      7.21476426726263e-08
+    ],
+    "jacobian_conditions": [
+      17.13030894246201,
+      16.79232712256177,
+      16.463843136516104
+    ],
+    "parity": [
+      {
+        "intensity": 5.551115123125783e-16,
+        "peaks": 8,
+        "position_deg": 1.4210854715202004e-14,
+        "q": [
+          0.0
+        ]
+      },
+      {
+        "intensity": 7.771561172376096e-16,
+        "peaks": 8,
+        "position_deg": 1.4210854715202004e-14,
+        "q": [
+          -0.35
+        ]
+      },
+      {
+        "intensity": 4.440892098500626e-16,
+        "peaks": 8,
+        "position_deg": 1.4210854715202004e-14,
+        "q": [
+          0.35
+        ]
+      }
+    ],
+    "recovery": [
+      {
+        "disagreement": 5.652028845226642e-07,
+        "fits": [
+          {
+            "boundary_hit": false,
+            "eta": [
+              0.034999731956378566,
+              0.34999948493832017,
+              1.0300025323048576,
+              0.024999880880829113,
+              0.009999983221592948
+            ],
+            "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+            "nfev": 154,
+            "nit": 21,
+            "q": [
+              -0.18000038670896953
+            ],
+            "rmse": 1.9618477832371081e-07,
+            "seconds": 0.05979510000906885,
+            "success": true
+          },
+          {
+            "boundary_hit": false,
+            "eta": [
+              0.035000187581696623,
+              0.34999974215680996,
+              1.0300001007411823,
+              0.025000019102880234,
+              0.009999822853098533
+            ],
+            "message": "CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL",
+            "nfev": 140,
+            "nit": 18,
+            "q": [
+              -0.179999821506085
+            ],
+            "rmse": 7.281310119772433e-08,
+            "seconds": 0.05391370004508644,
+            "success": true
+          },
+          {
+            "boundary_hit": false,
+            "eta": [
+              0.03499997968753579,
+              0.3499999143424377,
+              1.0300003084709177,
+              0.025000009147924888,
+              0.009999884249162717
+            ],
+            "message": "CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL",
+            "nfev": 154,
+            "nit": 20,
+            "q": [
+              -0.1799999829536229
+            ],
+            "rmse": 4.238562296219428e-08,
+            "seconds": 0.06144090002635494,
+            "success": true
+          }
+        ],
+        "q_error": 1.7046377087659437e-08,
+        "q_true": [
+          -0.18
+        ]
+      },
+      {
+        "disagreement": 7.892944403065094e-07,
+        "fits": [
+          {
+            "boundary_hit": false,
+            "eta": [
+              0.035000024460521355,
+              0.3499999510383307,
+              1.0300001199796982,
+              0.025000005610428654,
+              0.010000058262205028
+            ],
+            "message": "CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL",
+            "nfev": 147,
+            "nit": 19,
+            "q": [
+              0.1800000323009466
+            ],
+            "rmse": 2.022769256871722e-08,
+            "seconds": 0.05712930002482608,
+            "success": true
+          },
+          {
+            "boundary_hit": false,
+            "eta": [
+              0.03499966757567966,
+              0.3499986767241013,
+              1.0300022832189384,
+              0.024999996997816618,
+              0.009999962083381853
+            ],
+            "message": "CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL",
+            "nfev": 182,
+            "nit": 23,
+            "q": [
+              0.17999965052945385
+            ],
+            "rmse": 2.2491498735504623e-07,
+            "seconds": 0.07046420004917309,
+            "success": true
+          },
+          {
+            "boundary_hit": false,
+            "eta": [
+              0.03500036297292462,
+              0.3500002029186085,
+              1.0299996041413575,
+              0.02499999666171175,
+              0.009999936463742568
+            ],
+            "message": "CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL",
+            "nfev": 140,
+            "nit": 18,
+            "q": [
+              0.18000043982389416
+            ],
+            "rmse": 6.491194971510005e-08,
+            "seconds": 0.054477899975609034,
+            "success": true
+          }
+        ],
+        "q_error": 3.2300946611885095e-08,
+        "q_true": [
+          0.18
+        ]
+      }
+    ],
+    "structure": {
+      "formula": "CeO2",
+      "minimum_site_distance_angstrom": 2.3430317299387977,
+      "sites": 12,
+      "spacegroup": 225,
+      "volume_angstrom3": 158.42824153099997
+    }
+  },
+  "frozen_thresholds": {
+    "gradient_relative": 0.01,
+    "jacobian_condition": 10000000.0,
+    "min_peaks": 3,
+    "multistart_q_disagreement": 0.12,
+    "peak_position_deg": 1e-05,
+    "recovery_q_max": 0.06,
+    "recovery_rmse": 0.003,
+    "relative_intensity": 2e-05
+  },
+  "halt_simulator": false,
+  "reconstruction_B": "SKIPPED: NumPy forward has no autograd implementation",
+  "status": "PASS"
+}

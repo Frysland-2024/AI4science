@@ -1,0 +1,243 @@
+{
+  "budget_recorded": true,
+  "data_hashes": {
+    "normalization.npz": "d558d3a4c27ea334bd32432f4469ca80c2cd1b90a95764eea8d2d79206b66975",
+    "test.npz": "bf046544350194bf80655d7ff8036a32f5ea4ed8fa450eb6d1bd01549914ee18",
+    "train_val.npz": "8a83a8e39e6bb228454361f4bebc006f6fdb611fa8662375b2dac3a4148e0a5e"
+  },
+  "decision": "NEURAL_RUNTIME_PARETO",
+  "gpu_training_seconds": 2.70759560004808,
+  "limitations": [
+    "Independent per-material models; no zero-shot material transfer",
+    "Same-generator synthetic primary; no experimental-XRD validity",
+    "Count noise + Gaussian noise; V9-like nuisance ranges, no texture",
+    "Equal-evaluation sensitivity uses SciPy maxfun ceilings; actual counts retained, numerical derivative batches may overshoot"
+  ],
+  "material": "rutile",
+  "optional_arms": {
+    "N+B": "SKIPPED: non-autograd NumPy renderer",
+    "independent_renderer_stress": "NOT_RUN: primary bounded comparison prioritized",
+    "low_noise": "NOT_RUN: prioritize diverse V9-like materials"
+  },
+  "selection": [
+    {
+      "best_epoch": 24,
+      "checkpoint_sha256": "e48c100dd2a6e8656dd07028aca6b108abc289ed8c1e045844a9dc157e40ccb9",
+      "seed": 2026101911,
+      "training_seconds": 1.0301664000144228,
+      "validation_q_mae": 0.031704872846603394
+    },
+    {
+      "best_epoch": 24,
+      "checkpoint_sha256": "c21b8e042142647a48b1994e075e59972e4a3a07c5f673eecf20928d26b010b0",
+      "seed": 2026101912,
+      "training_seconds": 0.8031517000054009,
+      "validation_q_mae": 0.030013419687747955
+    },
+    {
+      "best_epoch": 22,
+      "checkpoint_sha256": "707f7044a7d47189a4e7a0caf83513728aeaac53b2a7212c9524f3415f0da785",
+      "seed": 2026101913,
+      "training_seconds": 0.8742775000282563,
+      "validation_q_mae": 0.02543569728732109
+    }
+  ],
+  "status": "PASS",
+  "summary": [
+    {
+      "boundary_rate": 0.0,
+      "convergence_rate": 1.0,
+      "lattice_mae_angstrom": [
+        0.00013135491198133298,
+        8.515967955496413e-05
+      ],
+      "material": "rutile",
+      "mean_nfev": 233.87012987012986,
+      "mean_seconds": 0.1076272922128064,
+      "median_seconds": 0.10728870000457391,
+      "method": "N+A",
+      "multistart_disagreement_mean": 0.0,
+      "n": 77,
+      "p95_seconds": 0.1253174200071953,
+      "profile_rmse": 0.0027356565290287582,
+      "q_mae": 0.0014344705178413273,
+      "seed": 2026101911
+    },
+    {
+      "boundary_rate": 0.0,
+      "convergence_rate": 1.0,
+      "lattice_mae_angstrom": [
+        0.000131355999110646,
+        8.514533707169958e-05
+      ],
+      "material": "rutile",
+      "mean_nfev": 232.41558441558442,
+      "mean_seconds": 0.10584812727454421,
+      "median_seconds": 0.10474169999361038,
+      "method": "N+A",
+      "multistart_disagreement_mean": 0.0,
+      "n": 77,
+      "p95_seconds": 0.12654720001155512,
+      "profile_rmse": 0.002735656527227184,
+      "q_mae": 0.0014343552583807014,
+      "seed": 2026101912
+    },
+    {
+      "boundary_rate": 0.0,
+      "convergence_rate": 1.0,
+      "lattice_mae_angstrom": [
+        0.00013137344354597946,
+        8.517223335781563e-05
+      ],
+      "material": "rutile",
+      "mean_nfev": 234.28571428571428,
+      "mean_seconds": 0.10685864415824074,
+      "median_seconds": 0.10617470002034679,
+      "method": "N+A",
+      "multistart_disagreement_mean": 0.0,
+      "n": 77,
+      "p95_seconds": 0.13194569998886435,
+      "profile_rmse": 0.0027356565036882542,
+      "q_mae": 0.001434677450935385,
+      "seed": 2026101913
+    },
+    {
+      "boundary_rate": 0.0,
+      "convergence_rate": 1.0,
+      "lattice_mae_angstrom": [
+        0.00013135491198133298,
+        8.515967955496413e-05
+      ],
+      "material": "rutile",
+      "mean_nfev": 233.87012987012986,
+      "mean_seconds": 0.10688680000890458,
+      "median_seconds": 0.1072468999773264,
+      "method": "N+A_equal_eval",
+      "multistart_disagreement_mean": 0.0,
+      "n": 77,
+      "p95_seconds": 0.12411530002718792,
+      "profile_rmse": 0.0027356565290287582,
+      "q_mae": 0.0014344705178413273,
+      "seed": 2026101911
+    },
+    {
+      "boundary_rate": 0.0,
+      "convergence_rate": 1.0,
+      "lattice_mae_angstrom": [
+        0.000131355999110646,
+        8.514533707169958e-05
+      ],
+      "material": "rutile",
+      "mean_nfev": 232.41558441558442,
+      "mean_seconds": 0.10531817402466889,
+      "median_seconds": 0.1044615000137128,
+      "method": "N+A_equal_eval",
+      "multistart_disagreement_mean": 0.0,
+      "n": 77,
+      "p95_seconds": 0.12887557999929414,
+      "profile_rmse": 0.002735656527227184,
+      "q_mae": 0.0014343552583807014,
+      "seed": 2026101912
+    },
+    {
+      "boundary_rate": 0.0,
+      "convergence_rate": 1.0,
+      "lattice_mae_angstrom": [
+        0.00013137344354597946,
+        8.517223335781563e-05
+      ],
+      "material": "rutile",
+      "mean_nfev": 234.28571428571428,
+      "mean_seconds": 0.1063005857172652,
+      "median_seconds": 0.10488930001156405,
+      "method": "N+A_equal_eval",
+      "multistart_disagreement_mean": 0.0,
+      "n": 77,
+      "p95_seconds": 0.12956828000023962,
+      "profile_rmse": 0.0027356565036882542,
+      "q_mae": 0.001434677450935385,
+      "seed": 2026101913
+    },
+    {
+      "boundary_rate": 0.0,
+      "convergence_rate": 1.0,
+      "lattice_mae_angstrom": [
+        0.00013136522436370384,
+        8.513649321138308e-05
+      ],
+      "material": "rutile",
+      "mean_nfev": 255.58441558441558,
+      "mean_seconds": 0.11621979740372702,
+      "median_seconds": 0.11396739998599514,
+      "method": "P0",
+      "multistart_disagreement_mean": 0.0,
+      "n": 77,
+      "p95_seconds": 0.15052049999358133,
+      "profile_rmse": 0.002735656479851842,
+      "q_mae": 0.0014343307520282254,
+      "seed": 0
+    },
+    {
+      "boundary_rate": 0.0,
+      "convergence_rate": 1.0,
+      "lattice_mae_angstrom": [
+        0.00013136522436370384,
+        8.513649321138308e-05
+      ],
+      "material": "rutile",
+      "mean_nfev": 255.58441558441558,
+      "mean_seconds": 0.11570688311461141,
+      "median_seconds": 0.1142087999614887,
+      "method": "P0_equal_eval",
+      "multistart_disagreement_mean": 0.0,
+      "n": 77,
+      "p95_seconds": 0.14543831998016685,
+      "profile_rmse": 0.002735656479851842,
+      "q_mae": 0.0014343307520282254,
+      "seed": 0
+    },
+    {
+      "boundary_rate": 0.0,
+      "convergence_rate": 1.0,
+      "lattice_mae_angstrom": [
+        0.00013136119713179944,
+        8.513074929225343e-05
+      ],
+      "material": "rutile",
+      "mean_nfev": 863.1688311688312,
+      "mean_seconds": 0.39148021558021473,
+      "median_seconds": 0.38930359994992614,
+      "method": "P3",
+      "multistart_disagreement_mean": 0.04245861504561458,
+      "n": 77,
+      "p95_seconds": 0.473981920001097,
+      "profile_rmse": 0.0027356564535596976,
+      "q_mae": 0.0014342603023160415,
+      "seed": 0
+    },
+    {
+      "boundary_rate": 0.0,
+      "convergence_rate": 0.16883116883116883,
+      "lattice_mae_angstrom": [
+        0.00023984437426904638,
+        0.00010465594775369266
+      ],
+      "material": "rutile",
+      "mean_nfev": 626.9090909090909,
+      "mean_seconds": 0.2835988402578302,
+      "median_seconds": 0.2800831999629736,
+      "method": "P3_equal_eval",
+      "multistart_disagreement_mean": 0.30333086336640597,
+      "n": 77,
+      "p95_seconds": 0.31617056003306065,
+      "profile_rmse": 0.002855541356029946,
+      "q_mae": 0.0021897058469053433,
+      "seed": 0
+    }
+  ],
+  "test_parents": 77,
+  "training_amortized_seconds_per_test_prediction": 0.011721193073801213,
+  "training_device": "cuda",
+  "training_nonamortized_seconds": 2.70759560004808,
+  "training_seconds": 2.70759560004808
+}

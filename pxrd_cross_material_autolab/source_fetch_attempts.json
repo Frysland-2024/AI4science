@@ -1,0 +1,66 @@
+[
+  {
+    "id": "rutile",
+    "cod": "9004141",
+    "status": "FETCHED",
+    "cif_path": "materials/rutile_COD_9004141.cif",
+    "cif_sha256": "ce9abab142351e802bde3eb40dbb554bb3ccec08e8c6ddc4299c0c532e9794ce",
+    "source_url": "https://www.crystallography.net/cod/9004141.cif"
+  },
+  {
+    "id": "zno",
+    "cod": "9008877",
+    "status": "FETCHED",
+    "cif_path": "materials/zno_COD_9008877.cif",
+    "cif_sha256": "29e747c3b8a40e7e1bf6f26ef00ed895e8dfdd4a110ba34a5ee9c7d587782ace",
+    "source_url": "https://www.crystallography.net/cod/9008877.cif"
+  },
+  {
+    "id": "silicon",
+    "cod": "9008565",
+    "status": "FETCHED",
+    "cif_path": "materials/silicon_COD_9008565.cif",
+    "cif_sha256": "46fb44ccdf93d1c3c1ecbe5b04ab0dea28c786bac20467b3a7511199af50e386",
+    "source_url": "https://www.crystallography.net/cod/9008565.cif"
+  },
+  {
+    "id": "calcite",
+    "cod": "9000095",
+    "status": "FETCHED",
+    "cif_path": "materials/calcite_COD_9000095.cif",
+    "cif_sha256": "d8a1cf92866da8814ef104b1626117490d9d4fbad823ef5dbf1cd2954488da52",
+    "source_url": "https://www.crystallography.net/cod/9000095.cif"
+  },
+  {
+    "id": "corundum",
+    "cod": "9007499",
+    "status": "FAIL",
+    "cif_path": "materials/corundum_COD_9007499.cif",
+    "cif_sha256": "9edc2bfb8829b69758bd606daad980589773728f127fb8881c01bc48365162e8",
+    "source_url": "https://www.crystallography.net/cod/9007499.cif",
+    "reason": "Identity mismatch: COD9007499 is Ankangite Ba0.4Ti4O8, COD9000099 is Smithsonite ZnCO3; excluded without relabeling requested prototype"
+  },
+  {
+    "id": "forsterite",
+    "cod": "9000099",
+    "status": "FAIL",
+    "cif_path": "materials/forsterite_COD_9000099.cif",
+    "cif_sha256": "682072f52fd022ce40eaad00b614b2ae87db4a237a86cf7c29901fbb47169296",
+    "source_url": "https://www.crystallography.net/cod/9000099.cif",
+    "reason": "Identity mismatch: COD9007499 is Ankangite Ba0.4Ti4O8, COD9000099 is Smithsonite ZnCO3; excluded without relabeling requested prototype"
+  },
+  {
+    "id": "corundum",
+    "cod": "1000017",
+    "status": "FETCHED",
+    "cif_path": "materials/corundum_COD_1000017.cif",
+    "cif_sha256": "845d76ec5cdc1385f21130ce9b42f0f8357493e801e428305cb60ad20a6de33a",
+    "source_url": "https://www.crystallography.net/cod/1000017.cif"
+  },
+  {
+    "id": "forsterite",
+    "cod": "9000320",
+    "status": "BLOCKED",
+    "reason": "URLError(TimeoutError('_ssl.c:989: The handshake operation timed out'))"
+  }
+]

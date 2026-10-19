@@ -1,0 +1,233 @@
+{
+  "budget_recorded": true,
+  "data_hashes": {
+    "normalization.npz": "7890f9dc84828323bdeffcd81941f6b99b57adcef8e05d7dc5349b6d8769feb2",
+    "test.npz": "8110b9c6e246a8bcc19982c025ffce8e15db93544cf86ad61cd017aa2d3b63ff",
+    "train_val.npz": "7d1f24fc3ee591bd3a8ad1a69f07ed6ca57e22f3fbf37433517bfb6b201900ab"
+  },
+  "decision": "NEURAL_RUNTIME_PARETO",
+  "gpu_training_seconds": 3.3320183000178076,
+  "limitations": [
+    "Independent per-material models; no zero-shot material transfer",
+    "Same-generator synthetic primary; no experimental-XRD validity",
+    "Count noise + Gaussian noise; V9-like nuisance ranges, no texture",
+    "Equal-evaluation sensitivity uses SciPy maxfun ceilings; actual counts retained, numerical derivative batches may overshoot"
+  ],
+  "material": "silicon",
+  "optional_arms": {
+    "N+B": "SKIPPED: non-autograd NumPy renderer",
+    "independent_renderer_stress": "NOT_RUN: primary bounded comparison prioritized",
+    "low_noise": "NOT_RUN: prioritize diverse V9-like materials"
+  },
+  "selection": [
+    {
+      "best_epoch": 23,
+      "checkpoint_sha256": "7732a0684a6b13fd4c509d8dc4c343534a81dee291d57e245fc44fd35bcfab2d",
+      "seed": 2026101911,
+      "training_seconds": 1.1513260999927297,
+      "validation_q_mae": 0.028581595048308372
+    },
+    {
+      "best_epoch": 23,
+      "checkpoint_sha256": "9e5b4f7c46041b7e1f0605b669f7a40bc9be9903a294a2b29fe3d6924dbb14d5",
+      "seed": 2026101912,
+      "training_seconds": 1.0691634999820963,
+      "validation_q_mae": 0.03090956062078476
+    },
+    {
+      "best_epoch": 22,
+      "checkpoint_sha256": "27244060728d7759efea5947aa149c96e5f8fd2f649a0966739b6f400f910c53",
+      "seed": 2026101913,
+      "training_seconds": 1.1115287000429817,
+      "validation_q_mae": 0.03071560151875019
+    }
+  ],
+  "status": "PASS",
+  "summary": [
+    {
+      "boundary_rate": 0.0,
+      "convergence_rate": 1.0,
+      "lattice_mae_angstrom": [
+        0.00013265206560742648
+      ],
+      "material": "silicon",
+      "mean_nfev": 163.0,
+      "mean_seconds": 0.06717575973734356,
+      "median_seconds": 0.06624330003978685,
+      "method": "N+A",
+      "multistart_disagreement_mean": 0.0,
+      "n": 77,
+      "p95_seconds": 0.08142351999413222,
+      "profile_rmse": 0.002708508268259047,
+      "q_mae": 0.001221316456509615,
+      "seed": 2026101911
+    },
+    {
+      "boundary_rate": 0.0,
+      "convergence_rate": 1.0,
+      "lattice_mae_angstrom": [
+        0.00013265971588342936
+      ],
+      "material": "silicon",
+      "mean_nfev": 161.27272727272728,
+      "mean_seconds": 0.06631469480654031,
+      "median_seconds": 0.06521980004617944,
+      "method": "N+A",
+      "multistart_disagreement_mean": 0.0,
+      "n": 77,
+      "p95_seconds": 0.07965680001070724,
+      "profile_rmse": 0.002708508267593314,
+      "q_mae": 0.0012213868919616845,
+      "seed": 2026101912
+    },
+    {
+      "boundary_rate": 0.0,
+      "convergence_rate": 1.0,
+      "lattice_mae_angstrom": [
+        0.00013270748855500844
+      ],
+      "material": "silicon",
+      "mean_nfev": 163.8181818181818,
+      "mean_seconds": 0.06732702207926951,
+      "median_seconds": 0.06635800004005432,
+      "method": "N+A",
+      "multistart_disagreement_mean": 0.0,
+      "n": 77,
+      "p95_seconds": 0.0860977000091225,
+      "profile_rmse": 0.0027085082657675548,
+      "q_mae": 0.0012218267309464421,
+      "seed": 2026101913
+    },
+    {
+      "boundary_rate": 0.0,
+      "convergence_rate": 1.0,
+      "lattice_mae_angstrom": [
+        0.00013265206560742648
+      ],
+      "material": "silicon",
+      "mean_nfev": 163.0,
+      "mean_seconds": 0.0670678142893624,
+      "median_seconds": 0.06602579995524138,
+      "method": "N+A_equal_eval",
+      "multistart_disagreement_mean": 0.0,
+      "n": 77,
+      "p95_seconds": 0.08351171995745972,
+      "profile_rmse": 0.002708508268259047,
+      "q_mae": 0.001221316456509615,
+      "seed": 2026101911
+    },
+    {
+      "boundary_rate": 0.0,
+      "convergence_rate": 1.0,
+      "lattice_mae_angstrom": [
+        0.00013265971588342936
+      ],
+      "material": "silicon",
+      "mean_nfev": 161.27272727272728,
+      "mean_seconds": 0.06701268181779313,
+      "median_seconds": 0.06461880006827414,
+      "method": "N+A_equal_eval",
+      "multistart_disagreement_mean": 0.0,
+      "n": 77,
+      "p95_seconds": 0.08313348001101986,
+      "profile_rmse": 0.002708508267593314,
+      "q_mae": 0.0012213868919616845,
+      "seed": 2026101912
+    },
+    {
+      "boundary_rate": 0.0,
+      "convergence_rate": 1.0,
+      "lattice_mae_angstrom": [
+        0.00013270748855500844
+      ],
+      "material": "silicon",
+      "mean_nfev": 163.8181818181818,
+      "mean_seconds": 0.0672338025934704,
+      "median_seconds": 0.06611690000863746,
+      "method": "N+A_equal_eval",
+      "multistart_disagreement_mean": 0.0,
+      "n": 77,
+      "p95_seconds": 0.08497772000264377,
+      "profile_rmse": 0.0027085082657675548,
+      "q_mae": 0.0012218267309464421,
+      "seed": 2026101913
+    },
+    {
+      "boundary_rate": 0.0,
+      "convergence_rate": 1.0,
+      "lattice_mae_angstrom": [
+        0.00013268126053609443
+      ],
+      "material": "silicon",
+      "mean_nfev": 184.72727272727272,
+      "mean_seconds": 0.07514642467707178,
+      "median_seconds": 0.07382749998942018,
+      "method": "P0",
+      "multistart_disagreement_mean": 0.0,
+      "n": 77,
+      "p95_seconds": 0.10182070001028479,
+      "profile_rmse": 0.002708508267888783,
+      "q_mae": 0.0012215852517733813,
+      "seed": 0
+    },
+    {
+      "boundary_rate": 0.0,
+      "convergence_rate": 1.0,
+      "lattice_mae_angstrom": [
+        0.00013268126053609443
+      ],
+      "material": "silicon",
+      "mean_nfev": 184.72727272727272,
+      "mean_seconds": 0.0752257701317937,
+      "median_seconds": 0.07369049999397248,
+      "method": "P0_equal_eval",
+      "multistart_disagreement_mean": 0.0,
+      "n": 77,
+      "p95_seconds": 0.10250488001620399,
+      "profile_rmse": 0.002708508267888783,
+      "q_mae": 0.0012215852517733813,
+      "seed": 0
+    },
+    {
+      "boundary_rate": 0.0,
+      "convergence_rate": 1.0,
+      "lattice_mae_angstrom": [
+        0.00013268046545139217
+      ],
+      "material": "silicon",
+      "mean_nfev": 611.1818181818181,
+      "mean_seconds": 0.2496342168835161,
+      "median_seconds": 0.24603889998979867,
+      "method": "P3",
+      "multistart_disagreement_mean": 0.12251299321213752,
+      "n": 77,
+      "p95_seconds": 0.29921847997466106,
+      "profile_rmse": 0.002708508251115156,
+      "q_mae": 0.0012215779314947552,
+      "seed": 0
+    },
+    {
+      "boundary_rate": 0.0,
+      "convergence_rate": 0.8961038961038961,
+      "lattice_mae_angstrom": [
+        0.00013268008471624892
+      ],
+      "material": "silicon",
+      "mean_nfev": 549.7272727272727,
+      "mean_seconds": 0.2231988870166847,
+      "median_seconds": 0.22161080001387745,
+      "method": "P3_equal_eval",
+      "multistart_disagreement_mean": 0.14612322788193147,
+      "n": 77,
+      "p95_seconds": 0.2511900000157766,
+      "profile_rmse": 0.002708508282479979,
+      "q_mae": 0.0012215744260983688,
+      "seed": 0
+    }
+  ],
+  "test_parents": 77,
+  "training_amortized_seconds_per_test_prediction": 0.014424321645098733,
+  "training_device": "cuda",
+  "training_nonamortized_seconds": 3.3320183000178076,
+  "training_seconds": 3.3320183000178076
+}

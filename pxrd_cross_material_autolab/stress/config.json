@@ -1,0 +1,12 @@
+﻿{
+  "materials": ["batio3", "mgo", "ceo2", "rutile", "zno", "silicon", "grossular"],
+  "parents_per_material": 16,
+  "parent_seed": 2026101951,
+  "nuisance_seed": 2026101952,
+  "noise_seed": 2026101953,
+  "lorentz_fraction": 0.3,
+  "quadratic_background": 0.03,
+  "maxiter": 100,
+  "maxfun": 1000,
+  "wall_budget_seconds": 28800
+}

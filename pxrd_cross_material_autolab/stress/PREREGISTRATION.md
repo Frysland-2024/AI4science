@@ -1,0 +1,11 @@
+﻿# Exploratory independent-renderer stress registration
+
+Registered AFTER primary tests opened, before this stress sample generation. This is a separate exploratory nuisance-mismatch analysis. It cannot replace, select, rescue or alter primary scores, gates, checkpoints or conclusions.
+
+Use the seven primary supported materials and all three already selected checkpoints, with hash-verified train-only normalization. No retraining or selection. Each material receives 16 NEW q parents U[-.8,.8], using seeds 2026101951 (q), 2026101952 (nuisance), 2026101953 (noise), plus first eight SHA256(material ID) hex digits as integer. These seeds and parents are separate from primary.
+
+Independent pymatgen XRDCalculator recomputes unscaled peak positions and structure factors at every q; normalize intensities using the original simulator nominal reference_max. Profiles sum 0.7 Gaussian +0.3 Lorentzian height-normalized peaks of the same FWHM, plus unmodelled quadratic background .03*xnorm² where xnorm=(2theta-mean)/range. Same primary q bounds, wavelength, grid and nuisance draws: zero U[-.10,.10], FWHM U[.24,.42], scale U[.8,1.2], background U[.02,.06], slope U[-.015,.015]. Poisson 15000 counts/unit plus Gaussian sigma .002.
+
+P0 neutral q, P3 all-zero/all--.5/all-+.5 q, and N+A from each frozen NN use the unchanged original Gaussian fitter (L-BFGS-B maxiter100/maxfun1000), neutral eta and original bounds/tolerances. Select P3 only by observed residual, include all starts and NN inference wall times. True q/eta are generator inputs and posthoc scoring only. No primary observations used. Report all per-sample attempts/errors/residuals/nfev/times/convergence/boundaries and all three seed summaries. No winner threshold or new scientific acceptance gate; exploratory results only.
+
+Before generating any stress observation, freeze this preregistration, config, stress source, primary source/manifest/config and each checkpoint/normalization/selection/CIF hash. Refuse if any primary experiment incomplete or source hash mismatched. New immutable attempt directory; preserve failures and completed samples. Enforce original global eight-hour wall deadline before each material and sample, no GPU training. Do not run concurrently with primary manager. Partial/budget exhaustion is reported. No automatic retry of an opened attempt.

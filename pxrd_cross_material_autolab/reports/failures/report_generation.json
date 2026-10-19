@@ -1,0 +1,11 @@
+{
+  "time": 1792421924.078404,
+  "stage": "post_run_report_generation",
+  "status": "FAIL",
+  "reason": "UTF-8 BOM in separate stress/config.json; report helper used utf-8 rather than utf-8-sig",
+  "script_sha256": "5c001ef58df8f9426bbf1f7a8546a6d24a90931a1a1250175a0e9ba990737690",
+  "exit_code": 1,
+  "research_execution_affected": false,
+  "physical_gates_or_test_changed": false,
+  "retry": "One report-only decoding correction; no training, fitting or evaluation rerun"
+}

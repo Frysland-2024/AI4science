@@ -1,0 +1,23 @@
+{
+  "python_executable": "C:\\Users\\Lenovo\\.codex\\venvs\\issue19-measurement-closure\\Scripts\\python.exe",
+  "python": "3.11.9 (tags/v3.11.9:de54cf5, Apr  2 2024, 10:12:12) [MSC v.1938 64 bit (AMD64)]",
+  "platform": "Windows-10-10.0.26200-SP0",
+  "packages": {
+    "numpy": "2.4.6",
+    "scipy": "1.17.1",
+    "torch": "2.13.0+cu126",
+    "pymatgen": "2026.5.4",
+    "matplotlib": "3.11.2",
+    "pytest": "9.1.1"
+  },
+  "cuda_available": true,
+  "cuda_runtime": "12.6",
+  "gpu": "NVIDIA GeForce RTX 4060 Laptop GPU",
+  "time": 1792420701.7126374,
+  "cpu_tests": {
+    "status": "PASS",
+    "passed": 18,
+    "command": "python -m pytest pxrd_cross_material_autolab -q -p no:cacheprovider",
+    "research_gpu_started_after_tests": true
+  }
+}

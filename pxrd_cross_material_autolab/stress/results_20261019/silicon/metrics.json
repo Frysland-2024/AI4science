@@ -1,0 +1,92 @@
+[
+  {
+    "boundary_rate": 0.0,
+    "convergence_rate": 1.0,
+    "lattice_mae_angstrom": [
+      0.00015540828118615346
+    ],
+    "material": "silicon",
+    "mean_nfev": 164.0625,
+    "mean_seconds": 0.06802579999930458,
+    "median_seconds": 0.06744610000168905,
+    "method": "N+A",
+    "multistart_disagreement_mean": 0.0,
+    "n": 16,
+    "p95_seconds": 0.07824997500574682,
+    "profile_rmse": 0.005088296836178803,
+    "q_mae": 0.0014308310271788855,
+    "seed": 2026101911
+  },
+  {
+    "boundary_rate": 0.0,
+    "convergence_rate": 1.0,
+    "lattice_mae_angstrom": [
+      0.00015543398338785375
+    ],
+    "material": "silicon",
+    "mean_nfev": 161.875,
+    "mean_seconds": 0.06807815625143121,
+    "median_seconds": 0.06678870000177994,
+    "method": "N+A",
+    "multistart_disagreement_mean": 0.0,
+    "n": 16,
+    "p95_seconds": 0.08441337500698864,
+    "profile_rmse": 0.005088296831305062,
+    "q_mae": 0.001431067665198597,
+    "seed": 2026101912
+  },
+  {
+    "boundary_rate": 0.0,
+    "convergence_rate": 1.0,
+    "lattice_mae_angstrom": [
+      0.00015550507270822855
+    ],
+    "material": "silicon",
+    "mean_nfev": 164.5,
+    "mean_seconds": 0.06768522500351537,
+    "median_seconds": 0.06708315000287257,
+    "method": "N+A",
+    "multistart_disagreement_mean": 0.0,
+    "n": 16,
+    "p95_seconds": 0.08501447501475923,
+    "profile_rmse": 0.005088296832432747,
+    "q_mae": 0.0014317221786157922,
+    "seed": 2026101913
+  },
+  {
+    "boundary_rate": 0.0,
+    "convergence_rate": 1.0,
+    "lattice_mae_angstrom": [
+      0.00015543007733659353
+    ],
+    "material": "silicon",
+    "mean_nfev": 185.5,
+    "mean_seconds": 0.07433381875307532,
+    "median_seconds": 0.07122569996863604,
+    "method": "P0",
+    "multistart_disagreement_mean": 0.0,
+    "n": 16,
+    "p95_seconds": 0.09373130000312813,
+    "profile_rmse": 0.005088296835764892,
+    "q_mae": 0.0014310317025118943,
+    "seed": 0
+  },
+  {
+    "boundary_rate": 0.0,
+    "convergence_rate": 1.0,
+    "lattice_mae_angstrom": [
+      0.00015546920829256905
+    ],
+    "material": "silicon",
+    "mean_nfev": 600.25,
+    "mean_seconds": 0.24310770000010962,
+    "median_seconds": 0.23903475000406615,
+    "method": "P3",
+    "multistart_disagreement_mean": 0.3150969904525654,
+    "n": 16,
+    "p95_seconds": 0.2718850750243291,
+    "profile_rmse": 0.0050882968272082055,
+    "q_mae": 0.0014313919779451673,
+    "seed": 0
+  }
+]

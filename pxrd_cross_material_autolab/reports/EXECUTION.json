@@ -1,0 +1,41 @@
+{
+  "commands": [
+    {
+      "command": "python -m pytest pxrd_cross_material_autolab -q -p no:cacheprovider (primary stage)",
+      "exit_code": 0,
+      "passed": 18
+    },
+    {
+      "command": "python -m pytest pxrd_cross_material_autolab/stress/test_stress.py -q -p no:cacheprovider",
+      "exit_code": 0,
+      "passed": 3
+    },
+    {
+      "command": "python -m pxrd_cross_material_autolab dry-run",
+      "exit_code": 0
+    },
+    {
+      "command": "python -m pxrd_cross_material_autolab run --resume",
+      "manager_main_return_code": 2,
+      "manager_status": "BLOCKED",
+      "reason": "Two predeclared unsupported trigonal candidates SKIPPED; seven experiments PASS",
+      "tool_wrapper_exit_code": 1
+    },
+    {
+      "command": "python -m pxrd_cross_material_autolab.stress.run --primary pxrd_cross_material_autolab/runs/pilot_20261019 --output pxrd_cross_material_autolab/stress/results_20261019",
+      "exit_code": 0
+    },
+    {
+      "command": "python -m pxrd_cross_material_autolab.stress.run --verify --output pxrd_cross_material_autolab/stress/results_20261019",
+      "exit_code": 0
+    },
+    {
+      "command": "python -m pxrd_cross_material_autolab.scripts.build_delivery",
+      "exit_code": 0
+    }
+  ],
+  "no_other_process_stopped": true,
+  "no_research_retry": true,
+  "python": "C:/Users/Lenovo/.codex/venvs/issue19-measurement-closure/Scripts/python.exe",
+  "source_code_not_changed_after_primary_freeze": true
+}
