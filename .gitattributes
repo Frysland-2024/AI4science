@@ -1,0 +1,2 @@
+# Preserve exact frozen AutoLab source/CIF/artifact bytes across platforms.
+pxrd_cross_material_autolab/** -text
