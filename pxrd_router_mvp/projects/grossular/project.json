@@ -1,0 +1,58 @@
+{
+  "project_id": "rruff-grossular-single-a",
+  "material": "Grossular garnet end-member family",
+  "mineral_family": "silicate garnet",
+  "formula": "Ca3Al2Si3O12",
+  "structure_template": {
+    "relative_path": "templates/Grossular_COD_9001868.cif",
+    "source_url": "https://www.crystallography.net/cod/9001868.cif",
+    "source_record_url": "https://www.crystallography.net/cod/9001868.html",
+    "source_record": "COD 9001868; Geiger and Armbruster, American Mineralogist 82 (1997), 740-747; 293 K; Ia-3d, space group 230",
+    "source_license": "COD public domain / CC0; retain attribution to the source article",
+    "sha256": "d6b3d78a1d487de504d4d47db9cbd1a2dc28e51e99c9c43a0565c8e1325cbb1e",
+    "same_specimen_as_any_rruff_profile": false
+  },
+  "structure_constraints": {
+    "crystal_system": "cubic",
+    "space_group": "Ia-3d",
+    "space_group_number": 230,
+    "free_lattice_parameter": "a_angstrom",
+    "derived_parameters": "b=c=a; alpha=beta=gamma=90 degrees",
+    "cif_initial_a_angstrom": 11.847,
+    "initial_parameter_bound_fraction": 0.025
+  },
+  "forward_model": {
+    "implementation": "pxrd_router_mvp.crystal.render",
+    "fixed_wavelength_angstrom": 1.540562,
+    "wavelength_basis": "same-ID RRUFF Refinement_Data peak rows use wavelength #2; XY_RAW does not state wavelength",
+    "wavelength_uncertainty": "proxy only; the raw profile has no directly recorded instrument wavelength",
+    "fixed_zero_shift_deg": 0.0,
+    "fixed_fwhm_deg": 0.14,
+    "intensity_scale_and_constant_background": "solved by bounded two-column linear least squares at each candidate a; not structural parameters",
+    "known_approximations": [
+      "neutral-atom zero-angle form factors",
+      "kinematic powder intensities",
+      "Gaussian peak profile",
+      "no K-alpha doublet, preferred orientation, absorption, microstrain, or phase mixture model"
+    ]
+  },
+  "development_data_policy": {
+    "only_sample_ids_absent_from_frozen_rruff371_manifest_and_rruff301_split": true,
+    "locked_test_samples_used_for_development": false,
+    "raw_xy_header_cell_parameters_are_model_inputs": false,
+    "refinement_output_cell_role": "post-fit reference estimate only; never used for initialization, bounds, ranking, or fitting",
+    "raw_spectra_commit_policy": "do not commit or export source profile arrays"
+  },
+  "development_sample_ids": [
+    "R040065-1", "R040066-1", "R050036-1", "R050081-1", "R050312-1", "R060278-1",
+    "R060382-1", "R060442-1", "R060443-1", "R060444-1", "R060499-1", "R070551-1"
+  ],
+  "real_explanation_gate_predeclared": {
+    "synthetic_a_recovery_abs_error_angstrom_max": 0.01,
+    "minimum_fraction_of_development_profiles_with_rmse_improvement": 0.8,
+    "predicted_reflections_to_check_per_profile": 8,
+    "measured_peak_match_window_deg": 0.25,
+    "minimum_predicted_reflection_match_fraction": 0.8,
+    "notes": "Engineering stop/go criterion fixed before reading real-profile results; it is not a calibrated accuracy threshold or publication claim."
+  }
+}

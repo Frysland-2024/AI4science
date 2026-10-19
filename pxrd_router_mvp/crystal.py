@@ -16,7 +16,8 @@ from pathlib import Path
 
 import numpy as np
 
-ATOMIC_NUMBER = {"O": 8, "Mg": 12, "Ti": 22, "Ba": 56, "Ce": 58}
+ATOMIC_NUMBER = {"O": 8, "Al": 13, "Si": 14, "Mg": 12, "Ca": 20,
+                 "Ti": 22, "Ba": 56, "Ce": 58}
 
 
 @dataclass(frozen=True)
@@ -165,7 +166,10 @@ def parse_cif(path: str | Path) -> Crystal:
             element_key = "_atom_site_type_symbol" if "_atom_site_type_symbol" in headers else "_atom_site_label"
             occupancy_key = "_atom_site_occupancy" if "_atom_site_occupancy" in headers else None
             for row in rows:
-                symbol = re.match(r"[A-Za-z]+", row[headers.index(element_key)]).group(0)  # type: ignore[union-attr]
+                # CIF atom labels commonly append site names (for example
+                # ``CaX`` or ``AlY``). The chemical element is the leading
+                # correctly cased one- or two-letter symbol.
+                symbol = re.match(r"[A-Z][a-z]?", row[headers.index(element_key)]).group(0)  # type: ignore[union-attr]
                 symbol = symbol[0].upper() + symbol[1:].lower()
                 site_rows.append((symbol, _scalar(row[headers.index(xkey)]), _scalar(row[headers.index(ykey)]),
                                   _scalar(row[headers.index(zkey)]), _scalar(row[headers.index(occupancy_key)]) if occupancy_key else 1.0))
