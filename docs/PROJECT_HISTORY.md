@@ -302,7 +302,7 @@ See [adapter contract](../xrd_forward_loss/V9_PERTURBATION_ADAPTER.md) and [pilo
 
 **Status:** CLOSED for this preregistered test; alternative causes remain open.
 
-**Relevant files / commits:** [FRESH_RESULTS.md](reconstruction_rootcause_20261019/FRESH_RESULTS.md), [CAUSE_RANKING.md](reconstruction_rootcause_20261019/CAUSE_RANKING.md), [PREREGISTRATION.md](reconstruction_rootcause_20261019/PREREGISTRATION.md), and [reproducibility_manifest.json](reconstruction_rootcause_20261019/reproducibility_manifest.json). Branch `codex/reconstruction-rootcause-retrain-20261019` is prepared for publication.
+**Relevant files / commits:** [FRESH_RESULTS.md](reconstruction_rootcause_20261019/FRESH_RESULTS.md), [CAUSE_RANKING.md](reconstruction_rootcause_20261019/CAUSE_RANKING.md), [PREREGISTRATION.md](reconstruction_rootcause_20261019/PREREGISTRATION.md), and [reproducibility_manifest.json](reconstruction_rootcause_20261019/reproducibility_manifest.json). Branch `codex/reconstruction-rootcause-retrain-20261019` was pushed to origin at `e3db87a`. No draft PR was created because `gh auth status` reports an invalid GitHub token; the task requires authentication before attempting one.
 
 ## Current perspective
 
