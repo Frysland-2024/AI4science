@@ -1,0 +1,165 @@
+{
+  "schema": "donut_pxrd_serial_pipeline_v1",
+  "pipeline_id": "donut_pxrd_serial_pipeline_v1",
+  "study_config_sha256": "0b0c5a3ec4c4a8ba8515c4bb6b32f4493f0ca64fe7abd0811dabf498c0996fb4",
+  "seeds": [20261061, 20261062, 20261063],
+  "allowed_external_roots": [
+    "E:\\AI4science_DONUT_checkpoints\\donut_pxrd_four_stage_20261019"
+  ],
+  "policy": {
+    "q_parent_count": 512,
+    "frozen_split_counts": {"train": 358, "validation": 77, "test": 77},
+    "max_epochs": 30,
+    "test_tuning": false,
+    "run_requires_execute": true,
+    "resume_requires_hash_and_verifier": true,
+    "no_retransplant_existing_training_directories": true
+  },
+  "stages": [
+    {
+      "id": "preflight",
+      "depends_on": [],
+      "command": null,
+      "inputs": [
+        "donut_pxrd/configs/study_v1.json",
+        "donut_pxrd/configs/preregistration_manifest.json",
+        "donut_pxrd/reports/SOURCE_FIDELITY_AUDIT.md",
+        "donut_pxrd/scripts/run_donut_stages.py",
+        "donut_pxrd/scripts/run_experiment4.py",
+        "donut_pxrd/scripts/audit_resume.py",
+        "donut_pxrd/results/resume_audit.json",
+        "xrd_inversion/configs/week1_formal_gate.json",
+        "xrd_forward_loss/data/public_cif/BaTiO3_COD_9014273_P4mm.cif",
+        "xrd_inversion/src/xrd_inversion/gpu_forward.py",
+        "xrd_forward_loss/src/pxrd_forward_loss/measurement_closure.py",
+        "overnight_pr26_20261019/summary.json"
+      ],
+      "required_outputs": [],
+      "verifier": "preflight",
+      "timeout_seconds": 60,
+      "description": "Verify the frozen study, pre-registration, physics/data inputs, pinned source audit, and prior Issue 31 evidence without training."
+    },
+    {
+      "id": "exp1",
+      "depends_on": ["preflight"],
+      "command": ["{python}", "donut_pxrd/scripts/run_donut_stages.py", "--experiment", "1"],
+      "inputs": ["donut_pxrd/configs/study_v1.json", "donut_pxrd/scripts/run_donut_stages.py"],
+      "required_outputs": ["donut_pxrd/results/study_v1/exp1"],
+      "protected_seeds": [20261061, 20261062, 20261063],
+      "protected_artifacts": ["E:\\AI4science_DONUT_checkpoints\\donut_pxrd_four_stage_20261019\\exp1_seed{seed}.pt"],
+      "experiment": "exp1",
+      "verifier": "experiment",
+      "timeout_seconds": 14400,
+      "description": "Run the active script's Experiment 1 interface; output directory is created with exist_ok=False."
+    },
+    {
+      "id": "exp2",
+      "depends_on": ["exp1"],
+      "command": ["{python}", "donut_pxrd/scripts/run_donut_stages.py", "--experiment", "2"],
+      "inputs": ["donut_pxrd/configs/study_v1.json", "donut_pxrd/scripts/run_donut_stages.py"],
+      "required_outputs": ["donut_pxrd/results/study_v1/exp2"],
+      "protected_seeds": [20261061, 20261062, 20261063],
+      "protected_artifacts": ["E:\\AI4science_DONUT_checkpoints\\donut_pxrd_four_stage_20261019\\exp2_seed{seed}.pt"],
+      "experiment": "exp2",
+      "verifier": "experiment",
+      "timeout_seconds": 14400,
+      "description": "Run the active script's Experiment 2 interface."
+    },
+    {
+      "id": "exp3a",
+      "depends_on": ["exp2"],
+      "command": ["{python}", "donut_pxrd/scripts/run_donut_stages.py", "--experiment", "3"],
+      "inputs": ["donut_pxrd/configs/study_v1.json", "donut_pxrd/scripts/run_donut_stages.py"],
+      "required_outputs": [
+        "donut_pxrd/results/study_v1/exp3a",
+        "donut_pxrd/results/study_v1/exp3b",
+        "donut_pxrd/results/study_v1/exp3c"
+      ],
+      "protected_seeds": [20261061, 20261062, 20261063],
+      "protected_artifacts": [
+        "E:\\AI4science_DONUT_checkpoints\\donut_pxrd_four_stage_20261019\\exp3a_seed{seed}.pt",
+        "E:\\AI4science_DONUT_checkpoints\\donut_pxrd_four_stage_20261019\\exp3b_seed{seed}.pt",
+        "E:\\AI4science_DONUT_checkpoints\\donut_pxrd_four_stage_20261019\\exp3c_seed{seed}.pt"
+      ],
+      "experiment": "exp3a",
+      "verifier": "experiment",
+      "timeout_seconds": 21600,
+      "description": "The active API runs exp3a, exp3b, and exp3c together for --experiment 3. All three output folders are protected before launch."
+    },
+    {
+      "id": "exp3b",
+      "depends_on": ["exp3a"],
+      "command": null,
+      "artifact_gate": true,
+      "inputs": ["donut_pxrd/configs/study_v1.json", "donut_pxrd/scripts/run_donut_stages.py"],
+      "required_outputs": ["donut_pxrd/results/study_v1/exp3b"],
+      "experiment": "exp3b",
+      "verifier": "experiment",
+      "timeout_seconds": 60,
+      "description": "Verify the exp3b artifacts produced by the preceding real --experiment 3 invocation."
+    },
+    {
+      "id": "exp3c",
+      "depends_on": ["exp3b"],
+      "command": null,
+      "artifact_gate": true,
+      "inputs": ["donut_pxrd/configs/study_v1.json", "donut_pxrd/scripts/run_donut_stages.py"],
+      "required_outputs": ["donut_pxrd/results/study_v1/exp3c"],
+      "experiment": "exp3c",
+      "verifier": "experiment",
+      "timeout_seconds": 60,
+      "description": "Verify the exp3c artifacts produced by the preceding real --experiment 3 invocation."
+    },
+    {
+      "id": "texture_ood",
+      "depends_on": ["exp3c"],
+      "command": ["{python}", "donut_pxrd/scripts/run_donut_stages.py", "--texture-only"],
+      "inputs": [
+        "donut_pxrd/configs/study_v1.json",
+        "donut_pxrd/scripts/run_donut_stages.py",
+        "donut_pxrd/results/study_v1/exp3c/data_arrays.npz",
+        "donut_pxrd/results/study_v1/exp3c/test_per_seed.json"
+      ],
+      "required_outputs": [
+        "donut_pxrd/results/study_v1/exp3_texture_ood.npz",
+        "donut_pxrd/results/study_v1/exp3_texture_ood_metrics.json"
+      ],
+      "verifier": "texture",
+      "timeout_seconds": 7200,
+      "description": "Run the active script's separate generator-side March-Dollase texture OOD interface."
+    },
+    {
+      "id": "exp4",
+      "depends_on": ["texture_ood"],
+      "command": ["{python}", "donut_pxrd/scripts/run_experiment4.py"],
+      "inputs": [
+        "donut_pxrd/configs/study_v1.json",
+        "donut_pxrd/configs/experiment4_preregistration.json",
+        "donut_pxrd/scripts/run_experiment4.py",
+        "donut_pxrd/results/study_v1/exp3c/data_arrays.npz",
+        "donut_pxrd/results/resume_audit.json"
+      ],
+      "required_outputs": ["donut_pxrd/results/study_v1/exp4"],
+      "protected_seeds": [20261061, 20261062, 20261063],
+      "protected_artifacts": [
+        "E:\\AI4science_DONUT_checkpoints\\donut_pxrd_four_stage_20261019\\exp4_A_seed{seed}.pt",
+        "E:\\AI4science_DONUT_checkpoints\\donut_pxrd_four_stage_20261019\\exp4_B_seed{seed}.pt",
+        "E:\\AI4science_DONUT_checkpoints\\donut_pxrd_four_stage_20261019\\exp4_C_seed{seed}.pt",
+        "E:\\AI4science_DONUT_checkpoints\\donut_pxrd_four_stage_20261019\\exp4_D_seed{seed}.pt"
+      ],
+      "verifier": "experiment4",
+      "timeout_seconds": 14400,
+      "description": "Run A/B/C/D/E plus bounded L-BFGS-B on the frozen common exp3c test set."
+    },
+    {
+      "id": "report",
+      "depends_on": ["exp1", "exp2", "exp3a", "exp3b", "exp3c", "texture_ood", "exp4"],
+      "command": null,
+      "inputs": [],
+      "required_outputs": [],
+      "verifier": "report",
+      "timeout_seconds": 60,
+      "description": "Terminal report gate; reached only after every scientific artifact verifier passes."
+    }
+  ]
+}

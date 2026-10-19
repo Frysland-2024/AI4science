@@ -1,0 +1,198 @@
+{
+  "created_utc": "2026-10-19T04:17:13+00:00",
+  "mode": "inspect",
+  "pipeline_config_sha256": "1181430ee0e7ef452877899002c3431308a9d926f752fbc962202ebf5d956169",
+  "read_only_target": true,
+  "repo_root": "E:\\AI4science_donut_pxrd",
+  "schema": "donut_pxrd_serial_inspect_v1",
+  "stages": [
+    {
+      "evidence": {
+        "checks": {
+          "E:\\AI4science_donut_pxrd\\donut_pxrd\\configs\\preregistration_manifest.json": "2283726868815d982b8e407a5797460b2f26a5ffd1b6f31e97ef5327afaac173",
+          "E:\\AI4science_donut_pxrd\\donut_pxrd\\configs\\study_v1.json": "0b0c5a3ec4c4a8ba8515c4bb6b32f4493f0ca64fe7abd0811dabf498c0996fb4",
+          "E:\\AI4science_donut_pxrd\\donut_pxrd\\reports\\SOURCE_FIDELITY_AUDIT.md": "37f8ddd9cee50a525086d72a6b7d4df270948a73721c12fdf13a3724f76b800c",
+          "E:\\AI4science_donut_pxrd\\donut_pxrd\\results\\resume_audit.json": "789000d189bff966ca7154454799bd0d15ea8c5d1ca126c5954dc9fb98ff7087",
+          "E:\\AI4science_donut_pxrd\\donut_pxrd\\scripts\\audit_resume.py": "40793a8bb0d1a91859f91a8f30d09cb90ec99c9e93d03830937713cd91bf9523",
+          "E:\\AI4science_donut_pxrd\\donut_pxrd\\scripts\\run_donut_stages.py": "d03eba96bd9abc0d27f41289edd6b457dd881ca4918fb64e9d6276b1c92eca4c",
+          "E:\\AI4science_donut_pxrd\\donut_pxrd\\scripts\\run_experiment4.py": "d898d2d2121a2d1e2b5bd7cfccc202a8f1d9e483ab3762370121fef03140d0db",
+          "E:\\AI4science_donut_pxrd\\overnight_pr26_20261019\\summary.json": "15ef809b98066409c9d18e92bf0be96f84950fac238661644e01ce2f53acfbe6",
+          "E:\\AI4science_donut_pxrd\\xrd_forward_loss\\data\\public_cif\\BaTiO3_COD_9014273_P4mm.cif": "e880d6f9df10ad4a2bb347dbbeae2712817d95e2f16df9390784d916a0c02f9c",
+          "E:\\AI4science_donut_pxrd\\xrd_forward_loss\\src\\pxrd_forward_loss\\measurement_closure.py": "b286ac092d2a96573c27d9a287bea8c84bc578372b5a28c4c1191952e62aeaee",
+          "E:\\AI4science_donut_pxrd\\xrd_inversion\\configs\\week1_formal_gate.json": "aad8720f77651603b4d48c9f48d9900efaa3d8b29c37c88a6ef8923fe62e22fd",
+          "E:\\AI4science_donut_pxrd\\xrd_inversion\\src\\xrd_inversion\\gpu_forward.py": "88891d9f42f31d04fd10e93c2d96c42e2edb757ffc3b707d89e88b0a96d97f05"
+        },
+        "scientific_status": "preflight_verified",
+        "study_config_sha256": "0b0c5a3ec4c4a8ba8515c4bb6b32f4493f0ca64fe7abd0811dabf498c0996fb4"
+      },
+      "id": "preflight",
+      "missing": [],
+      "status": "COMPLETE",
+      "verified": true
+    },
+    {
+      "evidence": {
+        "artifact_sha256": {
+          "E:\\AI4science_donut_pxrd\\donut_pxrd\\results\\study_v1\\exp1\\data_arrays.npz": "781455db65de882b62a6e6ecfe82d074eb2f5ccf9f84596b25910835e498ed97",
+          "E:\\AI4science_donut_pxrd\\donut_pxrd\\results\\study_v1\\exp1\\data_manifest.json": "e4e42b665719e8278d119c79d2b1c9bc47e54b7a7a14891e9fd1e80aa6846505",
+          "E:\\AI4science_donut_pxrd\\donut_pxrd\\results\\study_v1\\exp1\\test_per_sample.csv": "90d52a3ae14af6faa661ded9b12a2ee9c8b30180d07a7b01b8b504cf257b979f",
+          "E:\\AI4science_donut_pxrd\\donut_pxrd\\results\\study_v1\\exp1\\test_per_seed.json": "e6512129269b6b506f6d5a39a98b81539954bc97b9c827a983d7604d2bee38c9",
+          "E:\\AI4science_donut_pxrd\\donut_pxrd\\results\\study_v1\\exp1\\training_curves.json": "72d1d8d0f908a65165dbf45b5f962191a9ed57b04658cfe28f9fafb77582c3eb"
+        },
+        "checkpoint_sha256": {
+          "E:\\AI4science_DONUT_checkpoints\\donut_pxrd_four_stage_20261019\\exp1_seed20261061.pt": "486f41caa22619903c411089506564646ce9c66cefc9bfee7b453855ac52c4b3",
+          "E:\\AI4science_DONUT_checkpoints\\donut_pxrd_four_stage_20261019\\exp1_seed20261062.pt": "5cd2967c11cdb8f3a622b2ba32950c56cb10dddbc4b16f34bfda700cd42cfd3c",
+          "E:\\AI4science_DONUT_checkpoints\\donut_pxrd_four_stage_20261019\\exp1_seed20261063.pt": "a23f8d7c4b88868efb22e8365f8530ebb41eb03e7990a724a209ae535f54ab96"
+        },
+        "scientific_status": "artifacts_verified; metrics retained as reported",
+        "seeds_verified": [
+          20261061,
+          20261062,
+          20261063
+        ],
+        "test_parent_count": 77
+      },
+      "id": "exp1",
+      "missing": [],
+      "status": "COMPLETE",
+      "verified": true
+    },
+    {
+      "evidence": {
+        "artifact_sha256": {
+          "E:\\AI4science_donut_pxrd\\donut_pxrd\\results\\study_v1\\exp2\\data_arrays.npz": "ca0cee38a90bd5dc04717ab4b3d4edf864631c68be1c0dbbe938f369fa52341e",
+          "E:\\AI4science_donut_pxrd\\donut_pxrd\\results\\study_v1\\exp2\\data_manifest.json": "b34d1f7be2a51ad1e5ebbf157518e92950de32709e8095a6088010d2b20ba2ed",
+          "E:\\AI4science_donut_pxrd\\donut_pxrd\\results\\study_v1\\exp2\\test_per_sample.csv": "e81805fedaf33b7acff8c30e3b6cb41b11655e0d4140bb8e31d35d0f9ba79fed",
+          "E:\\AI4science_donut_pxrd\\donut_pxrd\\results\\study_v1\\exp2\\test_per_seed.json": "b77bb0c968f2981455b7da9480db00f01e550eb6cdc8cbcad7dfc0ca1ecf9afe",
+          "E:\\AI4science_donut_pxrd\\donut_pxrd\\results\\study_v1\\exp2\\training_curves.json": "984a09f299d403b4e32a2b4d0fd0ffda1856195cc94104e980b3b0231662ebae"
+        },
+        "checkpoint_sha256": {
+          "E:\\AI4science_DONUT_checkpoints\\donut_pxrd_four_stage_20261019\\exp2_seed20261061.pt": "8c143596750301f8663fc134a17e4cc48a9d253b0f848d38e8c12a42a26f381c",
+          "E:\\AI4science_DONUT_checkpoints\\donut_pxrd_four_stage_20261019\\exp2_seed20261062.pt": "47b0cb3d96165892531664ddb7f51a287b40ffbf204f80bd667e101a0fb8f360",
+          "E:\\AI4science_DONUT_checkpoints\\donut_pxrd_four_stage_20261019\\exp2_seed20261063.pt": "d2faf0a784cb5bc8e24926580861b31f74ca2553ed3468013ccac389a4a89e7d"
+        },
+        "scientific_status": "artifacts_verified; metrics retained as reported",
+        "seeds_verified": [
+          20261061,
+          20261062,
+          20261063
+        ],
+        "test_parent_count": 77
+      },
+      "id": "exp2",
+      "missing": [],
+      "status": "COMPLETE",
+      "verified": true
+    },
+    {
+      "evidence": {
+        "artifact_sha256": {
+          "E:\\AI4science_donut_pxrd\\donut_pxrd\\results\\study_v1\\exp3a\\data_arrays.npz": "8fad598d7fca9350395f97ac5f3b01b2c33bbac5eb45851b9ab64b228d7fba30",
+          "E:\\AI4science_donut_pxrd\\donut_pxrd\\results\\study_v1\\exp3a\\data_manifest.json": "cd1986c9574bd833e1026caf6ec986324e6537486303178206425c46deb9ebc0",
+          "E:\\AI4science_donut_pxrd\\donut_pxrd\\results\\study_v1\\exp3a\\test_per_sample.csv": "a7b3096a7f4e0c6c7abd8f487a82f3b60c882a2922b3435f9be2b00e3d0711fa",
+          "E:\\AI4science_donut_pxrd\\donut_pxrd\\results\\study_v1\\exp3a\\test_per_seed.json": "c9bb472572344875842cd233c8abb32cc2029ca44facb629e690e3f9bec1a398",
+          "E:\\AI4science_donut_pxrd\\donut_pxrd\\results\\study_v1\\exp3a\\training_curves.json": "dd0344365141a57ee987e04875abb4160bc5c5ddf81d00f1f022b597c890fa29"
+        },
+        "checkpoint_sha256": {
+          "E:\\AI4science_DONUT_checkpoints\\donut_pxrd_four_stage_20261019\\exp3a_seed20261061.pt": "c873dbe5703804cb56a011dafd105f5c2d6e9eeaa469385227701e34ddb09986",
+          "E:\\AI4science_DONUT_checkpoints\\donut_pxrd_four_stage_20261019\\exp3a_seed20261062.pt": "8dd6d8f0b3773e7db8425bd147f6f029f923836f413da7f9403b9f957829d2a9",
+          "E:\\AI4science_DONUT_checkpoints\\donut_pxrd_four_stage_20261019\\exp3a_seed20261063.pt": "02241491db23a531188d4a955dff56996aaba80648d7db32d1ebb6db88d61498"
+        },
+        "scientific_status": "artifacts_verified; metrics retained as reported",
+        "seeds_verified": [
+          20261061,
+          20261062,
+          20261063
+        ],
+        "test_parent_count": 77
+      },
+      "id": "exp3a",
+      "missing": [],
+      "status": "COMPLETE",
+      "verified": true
+    },
+    {
+      "evidence": {
+        "artifact_sha256": {
+          "E:\\AI4science_donut_pxrd\\donut_pxrd\\results\\study_v1\\exp3b\\data_arrays.npz": "d321db532d1cecc6d45309662a3e9ae7a173165526b08afcf44d431537cd956d",
+          "E:\\AI4science_donut_pxrd\\donut_pxrd\\results\\study_v1\\exp3b\\data_manifest.json": "9a03fe953b23c898e967a5278ecd1cf31daaf9929ac619cf4f771d9f78dcbf37",
+          "E:\\AI4science_donut_pxrd\\donut_pxrd\\results\\study_v1\\exp3b\\test_per_sample.csv": "77296f6a16fe100fc95ac91aa64a6126db2953e9e715c717483c4785931cce5d",
+          "E:\\AI4science_donut_pxrd\\donut_pxrd\\results\\study_v1\\exp3b\\test_per_seed.json": "1d6d17f8cc3f697665eaaffca1ac4707928ff7b293f742b2a55285cdb85faa41",
+          "E:\\AI4science_donut_pxrd\\donut_pxrd\\results\\study_v1\\exp3b\\training_curves.json": "4570385770abae78672c82cf1e92a8ac07afacdb1f705c7daf27e60cff41be88"
+        },
+        "checkpoint_sha256": {
+          "E:\\AI4science_DONUT_checkpoints\\donut_pxrd_four_stage_20261019\\exp3b_seed20261061.pt": "344fa9377c34767c89858a1a958ec463f52f31271ebfbfed9254abb0b78cbc0f",
+          "E:\\AI4science_DONUT_checkpoints\\donut_pxrd_four_stage_20261019\\exp3b_seed20261062.pt": "dae09812b7dad28a188ce12d8e0f075b57e1e19b6991848db3af19a243066471",
+          "E:\\AI4science_DONUT_checkpoints\\donut_pxrd_four_stage_20261019\\exp3b_seed20261063.pt": "6ebb7d8c2fd2bc20481a4c82e106d5628b27b3b220aa70938e106d75798d3434"
+        },
+        "scientific_status": "artifacts_verified; metrics retained as reported",
+        "seeds_verified": [
+          20261061,
+          20261062,
+          20261063
+        ],
+        "test_parent_count": 77
+      },
+      "id": "exp3b",
+      "missing": [],
+      "status": "COMPLETE",
+      "verified": true
+    },
+    {
+      "evidence": {
+        "artifact_sha256": {
+          "E:\\AI4science_donut_pxrd\\donut_pxrd\\results\\study_v1\\exp3c\\data_arrays.npz": "52c34aaaf7a448ce76c98d617c2bf1f10855653210f95b12a23e721f527a8703",
+          "E:\\AI4science_donut_pxrd\\donut_pxrd\\results\\study_v1\\exp3c\\data_manifest.json": "b7996172a4d3ae14799da6efa409e5e634dbf349d9c01a0d5ef3424ec191f2d2",
+          "E:\\AI4science_donut_pxrd\\donut_pxrd\\results\\study_v1\\exp3c\\test_per_sample.csv": "61204773985a52d4c72af1dc7e236e8987b40d2b3417adb68dd7746e44f61f5f",
+          "E:\\AI4science_donut_pxrd\\donut_pxrd\\results\\study_v1\\exp3c\\test_per_seed.json": "fd857bed1864e5c94381d7fa3cd406df3af3804c0ef38ec1a0173c8895f29946",
+          "E:\\AI4science_donut_pxrd\\donut_pxrd\\results\\study_v1\\exp3c\\training_curves.json": "1ffa77047ca0723fa1017f340a05af7ec291ed42e8e3b7b7d2ae3c41ed1aae25"
+        },
+        "checkpoint_sha256": {
+          "E:\\AI4science_DONUT_checkpoints\\donut_pxrd_four_stage_20261019\\exp3c_seed20261061.pt": "fad5e4ece7bdb327048739171435e8c47d6b2a5651a89affbe3cea652b55aefd",
+          "E:\\AI4science_DONUT_checkpoints\\donut_pxrd_four_stage_20261019\\exp3c_seed20261062.pt": "1fd539e7f1af6178dde7aafb220613126ecf64a9c167362a79dc0b8169d355dd",
+          "E:\\AI4science_DONUT_checkpoints\\donut_pxrd_four_stage_20261019\\exp3c_seed20261063.pt": "7d147086a33bb51cd83f83c133d93678f346f9cd85f278a8e55475d7802ea00b"
+        },
+        "scientific_status": "artifacts_verified; metrics retained as reported",
+        "seeds_verified": [
+          20261061,
+          20261062,
+          20261063
+        ],
+        "test_parent_count": 77
+      },
+      "id": "exp3c",
+      "missing": [],
+      "status": "COMPLETE",
+      "verified": true
+    },
+    {
+      "evidence": {
+        "artifact_sha256": {
+          "E:\\AI4science_donut_pxrd\\donut_pxrd\\results\\study_v1\\exp3_texture_ood.npz": "ec765ed02583d147ffede34b26f0d37f18b75f603d09b5ee1d8405804012949b",
+          "E:\\AI4science_donut_pxrd\\donut_pxrd\\results\\study_v1\\exp3_texture_ood_metrics.json": "72f60e94dc1a8b90a736db503b93aa54b009aaf98b1993dd72b859145ea096e5"
+        },
+        "scientific_status": "generator-side texture OOD outputs verified"
+      },
+      "id": "texture_ood",
+      "missing": [],
+      "status": "COMPLETE",
+      "verified": true
+    },
+    {
+      "id": "exp4",
+      "missing": [
+        "E:\\AI4science_donut_pxrd\\donut_pxrd\\results\\study_v1\\exp4\\raw_paired_results.json",
+        "E:\\AI4science_donut_pxrd\\donut_pxrd\\results\\study_v1\\exp4\\summary.json"
+      ],
+      "reason": "experiment 4 raw paired results or summary are missing",
+      "status": "NOT_RUN",
+      "verified": false
+    },
+    {
+      "id": "report",
+      "missing": [],
+      "status": "NOT_RUN",
+      "verified": false
+    }
+  ]
+}
