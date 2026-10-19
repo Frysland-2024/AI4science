@@ -1,0 +1,15 @@
+{
+  "label": "experiment_4_final",
+  "command": [
+    "E:\\AI4science\\.venvs\\xrd_test\\Scripts\\python.exe",
+    "-m",
+    "pytest",
+    "-q",
+    "donut_pxrd/tests"
+  ],
+  "returncode": 0,
+  "elapsed_seconds": 3.199711700028274,
+  "stdout": "...                                                                      [100%]\n3 passed in 2.17s\n",
+  "stderr": "",
+  "time_utc": "2026-10-19T05:04:44+00:00"
+}

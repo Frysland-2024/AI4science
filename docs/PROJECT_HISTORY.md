@@ -284,6 +284,24 @@ See [adapter contract](../xrd_forward_loss/V9_PERTURBATION_ADAPTER.md) and [pilo
 
 **Relevant files / commits:** [overnight report](../overnight_pr26_20261019/TECHNICAL_REPORT.md); [pretraining cause audit](../overnight_pr26_20261019/PRETRAIN_CAUSE_AUDIT.md); frozen config SHA is recorded in `pretrain_manifest.json`. Branch `codex/issue31-pr26-fair-diagnostic` was pushed at `23f344b`; Issue comments and Draft PR creation remain blocked because `gh` returned HTTP 401; no merge was attempted.
 
+## 22. 2026-10-19：DONUT-PXRD 四阶段双分支自监督适配
+
+**Date / status:** 2026-10-19 / FOUR-STAGE SYNTHETIC STUDY COMPLETE; independent Draft PR prepared.
+
+**Question / previous assumption:** DONUT 的双分支自监督训练能否在复用现有可微 PXRD 模拟器的条件下，估计已知四方 BaTiO₃ 合成谱的晶格参数；仪器零点偏移会否造成混淆，逐步加入峰宽、背景、噪声和织构后是否稳健；与 A/B/C 及 L-BFGS-B 相比如何。
+
+**Evidence:** 先核对 DONUT 原论文与官方代码固定版本，再在独立分支适配一维 PXRD；物理分支复用 `CachedTetragonalGPUForward` 和 `expected_profile`。512 个参数样本先按 358/77/77 固定划分，三个 seed 为 20261061/20261062/20261063，测试索引与生成数据均有 SHA-256。测试标签不用于训练、超参数或 checkpoint 选择。四阶段的 q-MAE 依次为：固定仪器 `0.344228`；联合零点偏移 `0.398342`；峰宽/背景/噪声/织构 `0.457009/0.139752/0.228037/0.291768`。零点联合反演的 Jacobian 条件数为 `26.66`，du 与零点偏移灵敏度绝对余弦为 `0.9249`，呈现混淆。
+
+实验 4 在相同噪声测试谱上的 direct q-MAE 为 A/B/C/DONUT `0.033607/0.033578/0.034282/0.228037`；失败率均为 0。相同初始化来源的等预算联合 L-BFGS-B 细化后 q-MAE 为 `0.000343/0.000350/0.000341/0.080026`，失败率仍均为 0；中性初值 L-BFGS-B q-MAE `0.050608`、失败率 0。全研究测得 GPU 训练时间 `2671.169 s`。A/B/C direct 推理 p50 为 `6.62/29.50/22.34 ms`，DONUT 为 `10.07 ms`；joint refinement p50 为 `0.231/0.667/0.602/0.565 s`。所有原始样本、配置、训练日志、机器指标、测试报告和恢复记录均已保存。
+
+**Decision/result:** 四项实验均完成，实验后测试通过。结果显示该模型在这一个合成已知单 CIF 任务上的 direct lattice error 明显高于 A/B/C，联合物理细化也未达到 A/B/C 的 q 误差；不宣称真实实验效用、未见材料泛化或 Rietveld 价值。一次训练参数组引用错误在第一个 optimizer step 前修复；一次织构评估索引错误在核实固定 test 顺序后修复；均保留失败记录，未改变协议。GPU 上的线性上采样反传不支持严格确定性，seed 固定但不承诺 bitwise 重现。
+
+**What changes now:** `donut_pxrd/` 保存源代码核验、冻结配置、运行状态、逐样本 raw CSV、训练日志、机器结果、逐阶段报告和最终报告；数据与模型权重留在本机 `E:\AI4science_DONUT_checkpoints\run_20261019_01`，由仓库 manifest 记录 SHA-256。独立分支 `codex/donut-pxrd-experiment-20261019` 创建 Draft PR 供审查。
+
+**What does NOT change:** 现行 PXRD 分类项目身份、冻结 JS/A/B/C 或 Issue #19 结果、真实域证据与现有 framing 均不修改。本轮是单已知 BaTiO₃ CIF 的合成条件插值，不构成独立材料测试集。
+
+**Status:** COMPLETE / EXPLORATORY SYNTHETIC STUDY. See [`donut_pxrd/reports/FINAL_TECHNICAL_REPORT.md`](../donut_pxrd/reports/FINAL_TECHNICAL_REPORT.md), `EXECUTION_STATUS.json`, and the four `EXPERIMENT_n.md` reports.
+
 ## Current perspective
 
 The project is no longer summarized as "a JS loss for XRD" or "an XRD robustness benchmark."

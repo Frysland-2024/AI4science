@@ -240,3 +240,21 @@ python -m pytest -q
 新的合成 512-q、三 seed、simple/V9 A/B/C 训练在预算内完成。simple 条件的三 seed 中 C 的 direct q-MAE 均低于 A；V9 条件 C 结果按 seed 混合，B 与 C 的均值均低于 A，而 C 均值略高于 B。等预算 joint q+eta fitting 后三种训练方法的 q 误差与谱残差几乎一致。结果仅属于一个公开 BaTiO₃ CIF 的合成条件插值，不构成真实 XRD、未见成分泛化或 Rietveld 证据。完整记录见 [`overnight_pr26_20261019/`](../overnight_pr26_20261019/)。
 
 实验与证据已完成；分支 `codex/issue31-pr26-fair-diagnostic` 已推送，提交为 `23f344b`。GitHub Issue #31 状态评论和 Draft PR 创建因 GitHub CLI 凭证无效（HTTP 401）未完成；未尝试合并。冻结 PR #26 与 V9 证据未修改。
+
+## 13. 独立 DONUT-PXRD 四阶段模拟研究（2026-10-19）
+
+这轮工作在独立分支 `codex/donut-pxrd-experiment-20261019` 完成。先审阅 DONUT 论文和官方实现（固定 commit `090c10bdf99333d3670dc26e617a93364f714bdc`），再把双分支自监督机制接到现有可微 PXRD forward；使用 `CachedTetragonalGPUForward` 与已有 `expected_profile`，没有另写物理模拟器。研究对象是公开 COD 9014273 BaTiO₃/P4mm 单 CIF 上的合成参数插值，不代表真实谱或未见材料泛化。
+
+512 个参数样本在加入仪器扰动前固定按 358/77/77 划分，模型种子为 20261061、20261062、20261063；测试索引 SHA-256 为 `12c5fd101e7b5f6aa0003626b7754028bf5fd0dc112b8a2c808a634ea945911f`。验证集用于 checkpoint 和 A/B/C 的 λ 选择，测试集仅作冻结后评估。四阶段均完成，失败的前置检查和纹理评估尝试及不改协议的修复保存在执行状态与日志中。
+
+结果以冻结的 normalized-q MAE 报告：实验 1 固定仪器参数为 `0.344228`（晶格 a/c MAE `0.004249/0.019800 Å`）；实验 2 联合反演零点偏移后为 `0.398342`，局部 Jacobian 条件数 `26.66`，du 与零点偏移灵敏度绝对余弦 `0.9249`，存在混淆迹象。实验 3 的峰宽、背景、噪声、织构测试 q-MAE 依次为 `0.457009/0.139752/0.228037/0.291768`，均无非有限输出。
+
+实验 4 的同一噪声测试谱直接预测 q-MAE：A/B/C/DONUT 为 `0.033607/0.033578/0.034282/0.228037`，失败率均为 0；p50 推理时间分别为 `6.62/29.50/22.34/10.07 ms`。使用相同 L-BFGS-B 联合 q+仪器参数细化后，q-MAE 为 `0.000343/0.000350/0.000341/0.080026`，p50 为 `0.231/0.667/0.602/0.565 s`，失败率均为 0。中性初值的独立 L-BFGS-B 为 q-MAE `0.050608`、失败率 0、p50 `0.385 s`。15 个 A/B/C 候选训练约 `1031.916 s` GPU 时间，DONUT 训练累计约 `1639.252 s`，全研究累计 `2671.169 s`。这些数值只支持该单 CIF 合成协议下的比较。
+
+每阶段测试均通过（新增测试每阶段 3 passed；既有回归前置门 50 passed）。CUDA 线性上采样反向算子没有严格确定性实现，因此启用 warn-only 确定性；相同 seed 不保证 bitwise 重现。配置、逐样本原始 CSV、训练记录、机器可读指标、测试日志与报告见 [`donut_pxrd/`](../donut_pxrd/)；权重和冻结生成数据存于本机 `E:\AI4science_DONUT_checkpoints\run_20261019_01`，不纳入 Git，仓库记录其路径和 SHA-256。
+
+该探索不改变 PXRD 分类主线、冻结结果或现行项目 framing。完整决策记录见 [`PROJECT_HISTORY.md`](PROJECT_HISTORY.md) 第 22 节及 [`donut_pxrd/reports/FINAL_TECHNICAL_REPORT.md`](../donut_pxrd/reports/FINAL_TECHNICAL_REPORT.md)。
+
+### 2026-10-19：DONUT 实验 1 种子差异诊断（POST-HOC，验证集限定）
+
+对固定仪器的三个已冻结 checkpoint 做了验证集限定推理；checkpoint SHA 与原执行记录一致，重算验证双分支损失与训练日志差小于 `1e-9`。种子 20261061/20261062 的 `dv` 验证预测分别塌缩到 `-0.765 ± 0.025` / `-0.780 ± 0.021`，目标 `dv` SD 为 `0.459`；归一化约束潜变量接近下界的比例为 `75.3%/83.1%`。对应 normalized-q MAE 为 `0.5124/0.5061`。种子 20261063 没有该饱和现象，q-MAE 为 `0.04034`。这定位了失败表现为种子关联的 `dv` 潜变量饱和，但不能仅凭三个 seed 判断是初始化、样本顺序还是 CUDA 非确定性反向算子导致。未使用测试集行作诊断或调参，未重训、未改冻结协议。详情、机器可读指标和复现脚本见 [诊断报告](../donut_pxrd/reports/EXPERIMENT_1_SEED_VARIABILITY_DIAGNOSTIC.md)、[JSON](../donut_pxrd/results/experiment_1/seed_variability_diagnostic.json) 和 [`diagnose_experiment1_seed_variability.py`](../donut_pxrd/scripts/diagnose_experiment1_seed_variability.py)。本机 checkpoint 与数据的当前可用路径为 `E:\AI4science\_local\checkpoints\donut\run_20261019_01`；原执行记录中的旧路径现已过时。

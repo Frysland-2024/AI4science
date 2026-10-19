@@ -1,0 +1,17 @@
+{
+  "label": "preflight_existing_regression",
+  "command": [
+    "E:\\AI4science\\.venvs\\xrd_test\\Scripts\\python.exe",
+    "-m",
+    "pytest",
+    "-q",
+    "xrd_inversion/tests",
+    "xrd_forward_loss/tests",
+    "donut_pxrd/tests"
+  ],
+  "returncode": 0,
+  "elapsed_seconds": 10.32135039998684,
+  "stdout": "..................................................                       [100%]\n50 passed in 3.94s\n",
+  "stderr": "",
+  "time_utc": "2026-10-19T04:37:36+00:00"
+}

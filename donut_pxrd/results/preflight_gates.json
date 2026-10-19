@@ -1,0 +1,36 @@
+{
+  "profile_parity": {
+    "max_abs": 1.0531818717129937e-07,
+    "rmse": 8.22157766217982e-09,
+    "n": 3501
+  },
+  "physics_gradient_fd": {
+    "autograd": [
+      -0.024376056387549378,
+      -0.004863698678406089,
+      0.002327254966268445
+    ],
+    "finite_difference": [
+      -0.024376046240147994,
+      -0.004863698395837714,
+      0.0023272549805200896
+    ],
+    "relative_error": [
+      2.0814284589802656e-07,
+      2.9048713935687858e-08,
+      3.0619001210145532e-09
+    ],
+    "all_nonzero": true,
+    "max_relative_error": 2.0814284589802656e-07
+  },
+  "branch_gradient_flow": {
+    "decoder_to_encoder_gradient_norm": 8.434576034545898,
+    "latent_to_encoder_gradient_norm": 0.09883572906255722
+  },
+  "dataset_npz_sha256": "87f3845bf4863ebfa3b35f55512df0730050d56ddcdf394d750bc955872deecf",
+  "split_counts": {
+    "train": 358,
+    "validation": 77,
+    "test": 77
+  }
+}
