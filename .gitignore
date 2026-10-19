@@ -108,3 +108,9 @@ xrd_inversion/reports/week1_formal_results.json
 xrd_inversion/reports/week1_pilot_results.json
 xrd_inversion/manifests/week1_structural_near_duplicate_pairs.csv
 xrd_inversion/reports/week1_repaired_smoke_results.json
+
+# Private AutoLab spectra and final weights
+/pxrd_cross_material_autolab/runs/**/private/
+/pxrd_cross_material_autolab/**/__pycache__/
+/pxrd_cross_material_autolab/.pytest_cache/
+/pxrd_cross_material_codex.log
