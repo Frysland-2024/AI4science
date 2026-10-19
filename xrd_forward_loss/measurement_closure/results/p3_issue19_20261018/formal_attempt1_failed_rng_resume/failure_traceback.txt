@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "C:\Users\Lenovo\.codex\worktrees\issue19-forward-measurement\AI4science\xrd_forward_loss\scripts\run_issue19_p3.py", line 1335, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "C:\Users\Lenovo\.codex\worktrees\issue19-forward-measurement\AI4science\xrd_forward_loss\scripts\run_issue19_p3.py", line 1322, in main
+    formal_stage(
+  File "C:\Users\Lenovo\.codex\worktrees\issue19-forward-measurement\AI4science\xrd_forward_loss\scripts\run_issue19_p3.py", line 1106, in formal_stage
+    fit = fit_model(
+          ^^^^^^^^^^
+  File "C:\Users\Lenovo\.codex\worktrees\issue19-forward-measurement\AI4science\xrd_forward_loss\scripts\run_issue19_p3.py", line 340, in fit_model
+    generator.set_state(checkpoint["shuffle_generator_state"])
+TypeError: RNG state must be a torch.ByteTensor

@@ -1,0 +1,83 @@
+{
+  "stage": "P3_NN_SMOKE",
+  "status": "PASS",
+  "source_config": "xrd_forward_loss\\measurement_closure\\configs\\issue19_batio3_v2.json",
+  "source_config_sha256": "b17a9db0eed38557f4b06a092f8d4a35437619025f78532119e3a923ddf2251f",
+  "p1_report": "xrd_forward_loss\\measurement_closure\\results\\p1p2_v2_final_20261018\\p1_numeric_gates.json",
+  "q_count": 128,
+  "one_seed": 20261045,
+  "maximum_epochs": 4,
+  "conditions": [
+    "simple",
+    "v9"
+  ],
+  "runs": [
+    {
+      "condition": "simple",
+      "method": "A",
+      "seed": 20261045,
+      "epochs": 4,
+      "best_validation_q_mae": 0.15805920958518982,
+      "elapsed_seconds": 6.434240199974738,
+      "peak_memory_allocated_mb": 431.20703125,
+      "parameter_count": 13007554,
+      "final_total_loss_finite": true,
+      "reconstruction_gradient": null,
+      "checkpoint": "smoke\\checkpoints\\simple_A.pt"
+    },
+    {
+      "condition": "simple",
+      "method": "B",
+      "seed": 20261045,
+      "epochs": 4,
+      "best_validation_q_mae": 0.15748722851276398,
+      "elapsed_seconds": 4.662019200040959,
+      "peak_memory_allocated_mb": 458.20703125,
+      "parameter_count": 13008325,
+      "final_total_loss_finite": true,
+      "reconstruction_gradient": {
+        "q_l2": 0.005163982044905424,
+        "eta_l2": 0.08198245614767075,
+        "q_finite": true,
+        "eta_finite": true
+      },
+      "checkpoint": "smoke\\checkpoints\\simple_B.pt"
+    },
+    {
+      "condition": "v9",
+      "method": "A",
+      "seed": 20261045,
+      "epochs": 4,
+      "best_validation_q_mae": 0.2131771594285965,
+      "elapsed_seconds": 2.783503200043924,
+      "peak_memory_allocated_mb": 428.9765625,
+      "parameter_count": 13007554,
+      "final_total_loss_finite": true,
+      "reconstruction_gradient": null,
+      "checkpoint": "smoke\\checkpoints\\v9_A.pt"
+    },
+    {
+      "condition": "v9",
+      "method": "B",
+      "seed": 20261045,
+      "epochs": 4,
+      "best_validation_q_mae": 0.20312155783176422,
+      "elapsed_seconds": 2.033613800012972,
+      "peak_memory_allocated_mb": 458.0341796875,
+      "parameter_count": 13008325,
+      "final_total_loss_finite": true,
+      "reconstruction_gradient": {
+        "q_l2": 0.005091486033052206,
+        "eta_l2": 0.16944251954555511,
+        "q_finite": true,
+        "eta_finite": true
+      },
+      "checkpoint": "smoke\\checkpoints\\v9_B.pt"
+    }
+  ],
+  "training_wallclock_seconds": 19.05163130001165,
+  "gate_passed": true,
+  "known_label_leakage": false,
+  "eta_true_accessed_by_training_path": false,
+  "data_generation_seconds_excluded_from_training_budget": true
+}

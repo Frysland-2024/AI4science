@@ -1,0 +1,149 @@
+{
+  "stage": "P0",
+  "gate_thresholds": {
+    "max_abs_error": 2e-06,
+    "rmse": 2e-07,
+    "bragg_error_deg": 1.1e-05
+  },
+  "structure": {
+    "cif": "xrd_forward_loss\\data\\public_cif\\BaTiO3_COD_9014273_P4mm.cif",
+    "cif_sha256": "e854c9868f643183904606b8c24463f8f0bacc1cca90f283641b33346db748b4",
+    "formula": "BaTiO3",
+    "sites": 5,
+    "a_angstrom": 3.986,
+    "b_angstrom": 3.986,
+    "c_angstrom": 4.026,
+    "space_group": "P4mm",
+    "space_group_number": 99,
+    "pymatgen_nominal_peak_count": 23,
+    "bragg_law_max_abs_error_deg": 1.4210854715202004e-14
+  },
+  "axis": {
+    "two_theta_min_deg": 10.0,
+    "two_theta_max_deg": 80.0,
+    "step_deg": 0.02,
+    "point_count": 3501,
+    "wavelength_angstrom": 1.54184,
+    "wavelength_name": "CuKa",
+    "peak_calculation_padding_deg": 2.5
+  },
+  "torch_forward": {
+    "contract": "tetragonal_torch_dense_v1",
+    "torch_version": "2.13.0+cu126",
+    "cuda_runtime": "12.6",
+    "device": "cuda",
+    "device_name": "NVIDIA GeForce RTX 4060 Laptop GPU",
+    "dtype": "float64",
+    "reflection_count": 178,
+    "peak_group_count": 24,
+    "gaussian_support": "cpu_floor_ceil_5sigma_with_float32_staging"
+  },
+  "pymatgen_version": "2026.5.4",
+  "clean_profile_parity": {
+    "reference": "Pymatgen XRDCalculator peak table + independent V9 Gaussian renderer",
+    "max_abs_error": 1.1920928955078125e-07,
+    "max_probe_rmse": 4.440312849612458e-09,
+    "probes": [
+      {
+        "q": [
+          0.0,
+          0.0
+        ],
+        "max_abs_error": 5.960464477539063e-08,
+        "rmse": 2.2902845911057027e-09,
+        "relative_l2_error": 4.0362055379401226e-08,
+        "torch_peak_index": 604,
+        "v9_peak_index": 604,
+        "torch_area": 0.5648851722741899,
+        "v9_area": 0.5648851737365326,
+        "peak_count": 23
+      },
+      {
+        "q": [
+          0.6,
+          0.0
+        ],
+        "max_abs_error": 1.1920928955078125e-07,
+        "rmse": 4.440312849612458e-09,
+        "relative_l2_error": 7.721015955330516e-08,
+        "torch_peak_index": 597,
+        "v9_peak_index": 597,
+        "torch_area": 0.5729132572503268,
+        "v9_area": 0.5729132914140727,
+        "peak_count": 23
+      },
+      {
+        "q": [
+          -0.6,
+          0.0
+        ],
+        "max_abs_error": 1.1920928955078125e-07,
+        "rmse": 3.932071112645741e-09,
+        "relative_l2_error": 6.842210021834254e-08,
+        "torch_peak_index": 611,
+        "v9_peak_index": 611,
+        "torch_area": 0.5603430473598465,
+        "v9_area": 0.5603430275626532,
+        "peak_count": 23
+      },
+      {
+        "q": [
+          0.0,
+          0.6
+        ],
+        "max_abs_error": 5.960464477539063e-08,
+        "rmse": 3.0451227977363818e-09,
+        "relative_l2_error": 5.203332883262748e-08,
+        "torch_peak_index": 599,
+        "v9_peak_index": 599,
+        "torch_area": 0.5828453654022356,
+        "v9_area": 0.5828453599630398,
+        "peak_count": 23
+      },
+      {
+        "q": [
+          0.0,
+          -0.6
+        ],
+        "max_abs_error": 5.960464477539063e-08,
+        "rmse": 2.67053388993561e-09,
+        "relative_l2_error": 4.6461714979848995e-08,
+        "torch_peak_index": 1082,
+        "v9_peak_index": 1082,
+        "torch_area": 0.5257113329318956,
+        "v9_area": 0.525711327411468,
+        "peak_count": 23
+      },
+      {
+        "q": [
+          0.6,
+          -0.6
+        ],
+        "max_abs_error": 5.960464477539063e-08,
+        "rmse": 2.5253473292415458e-09,
+        "relative_l2_error": 4.4307659472077166e-08,
+        "torch_peak_index": 1072,
+        "v9_peak_index": 1072,
+        "torch_area": 0.5211883607151792,
+        "v9_area": 0.5211883530179868,
+        "peak_count": 23
+      },
+      {
+        "q": [
+          -0.6,
+          0.6
+        ],
+        "max_abs_error": 5.960464477539063e-08,
+        "rmse": 2.7549858527309766e-09,
+        "relative_l2_error": 4.899125958076309e-08,
+        "torch_peak_index": 606,
+        "v9_peak_index": 606,
+        "torch_area": 0.5485491149859729,
+        "v9_area": 0.5485491050599132,
+        "peak_count": 23
+      }
+    ],
+    "passed": true
+  },
+  "passed": true
+}

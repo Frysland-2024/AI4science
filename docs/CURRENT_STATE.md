@@ -224,3 +224,13 @@ python -m pytest -q
 - 所有结果来自单一已知 HfCd 结构的模拟参数泛化；没有 CIF 文件，结构来自冻结的本地 standardized-structure JSON。未验证铁电陶瓷、实验谱、未见结构或精修初值效用。
 
 配置、逐样本扰动和 seed、原始谱阵列、Gate、A/B JSON、重算校验、图表和报告见 [`xrd_forward_loss/reports/v9_perturbation_phase2_pilot_20261018/`](../xrd_forward_loss/reports/v9_perturbation_phase2_pilot_20261018/)；接口说明见 [`V9_PERTURBATION_ADAPTER.md`](../xrd_forward_loss/V9_PERTURBATION_ADAPTER.md)。该工作保存在由 PR #11 head 分出的独立 stacked PR；PR 仍需人工审核，未自动合并。
+
+## 11. Issue #19：测量一致的 Forward 闭环（PRELIMINARY ENGINEERING PILOT COMPLETE）
+
+用户指出旧 reconstruction 目标与扰动 observed profile 不一致后，独立工作分支完成公开 BaTiO₃ CIF 上的 P0–P2 物理/梯度/未知 nuisance Gate，并在通过后按授权完成 P3 A/B。Torch/V9 全谱 parity、有限差分梯度、q+eta 局部可辨识、non-oracle profile recovery、噪声期望和 23 项测试均通过。P1 v1 的自由背景形状失败已保留；v2 按冻结的 V9 variation=0 固定形状，不降低 Gate 阈值。
+
+512 个同一 CIF 的参数样本、3 paired seeds 和两类合成测量条件下，simple q MAE 为 A `0.013533`、B `0.013676`；V9 为 A `0.032235`、B `0.030554`。B 只在 V9 的两维 q MAE 略低，simple 略高；V9 nuisance head 对 zero-shift 的误差较大。结论是闭环工程可行、效果尚未确立；不得概括为更好的参数反演方法，也不构成真实谱或未见结构证据。
+
+2026-10-18 又完成一项获授权的 post-hoc nuisance 诊断：在相同固定-q、同一 non-oracle eta profile solver 下，shared-fit profile RMSE 为 simple A `0.009456 ± 0.000016` / B `0.009415 ± 0.000491`，V9 A `0.016034 ± 0.000795` / B `0.015621 ± 0.000655`（均值 ± 三 seed sample SD）。paired B−A 差为 simple `−0.000041 ± 0.000477`、V9 `−0.000413 ± 0.001268`，逐 seed 方向混合。该结果说明旧的 A-profile-fit 对 B-native-head 残差对照存在推理预算不等；公平 profile-fit 下 A/B 残差接近，不能确定稳定优势。B 原生 eta 在同一 q 下做 profile fit 后，simple/V9 RMSE 分别降低 `0.006470 ± 0.001435` / `0.011711 ± 0.001283`；V9 native zero-shift RMSE 仍为 `0.032117 ± 0.004448°`。924 次 shared fits 中有 1 次 L-BFGS-B 未收敛，保留计入结果。诊断仍是单 BaTiO₃ 模板的合成、post-hoc 分析，不改变冻结 q 权重的因果解释、项目一级 framing 或真实域证据。详见 [nuisance diagnostic 技术报告](../xrd_forward_loss/measurement_closure/nuisance_diagnostic/TECHNICAL_REPORT.md)。
+
+本次累计 smoke、失败尝试保守计时、正式训练和 λ 选择 `1386.05/7200 s`，在 RTX 4060 完成。失败运行、命令 exit codes、逐 seed 指标、数据/配置 SHA、原始 checkpoint SHA 台账和训练记录均已留档。本地清理重复模型副本与 optimizer 状态后，保留 12 个最终 FP32 最佳权重推理快照（约 596 MiB），释放约 8.34 GiB；精简快照不能续训。详情见 [Issue #19 报告](MEASUREMENT_AWARE_FORWARD_CLOSURE_REPORT_20261018.md) 和 [技术报告](../xrd_forward_loss/measurement_closure/TECHNICAL_REPORT.md)。本次不改 frozen JS 分类、旧 PR 结果、Stage-1 factorization NO-GO 或 12 周研究规划；新增工作以独立 Draft PR 交审。

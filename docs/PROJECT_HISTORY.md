@@ -250,6 +250,38 @@ The first engineering step should be a minimal P0 (manifest, state machine, safe
 
 See [adapter contract](../xrd_forward_loss/V9_PERTURBATION_ADAPTER.md) and [pilot report](../xrd_forward_loss/reports/v9_perturbation_phase2_pilot_20261018/TECHNICAL_REPORT.md). The failure encountered after training due to a Matplotlib keyword mismatch is preserved in the run log and traceback; plots/report were recovered without retraining or changing result/history JSON.
 
+## 20. 2026-10-18：Issue #19 纠正 Forward 重构目标并完成受控测量闭环
+
+**Date / status:** 2026-10-18 / PRELIMINARY ENGINEERING PILOT COMPLETE; independent Draft PR pending review.
+
+**Question / previous assumption:** 用户指出，PR #11/#16 中固定零点和最窄峰宽的 clean forward 与加入零点偏移、展宽、背景和噪声的 observed profile 不一致；PR #17 虽改用 simulator-provided clean reference，却不能作为未知真实实验 clean target 的替代。单纯物理梯度正确还不足以说明 loss 解释了测量过程。
+
+**Evidence:** 在 COD 9014273 BaTiO₃/P4mm 模板上，P0 的 Torch/Pymatgen/V9 整谱 parity 通过；P1/P2 的测量期望谱 parity、autograd/有限差分、未知 q+eta 可辨识、non-oracle profile fit 和噪声期望 Gate 均通过。v1 因两个自由背景形状系数在 max-normalization 下不可辨识而失败；依据冻结 V9 `background_variation=0` 固定形状后 v2 通过，阈值未改。P3 在 RTX 4060 完成 512 q、3 paired seeds、simple/V9 A/B；test 未用于 λ 选择。第一次正式运行因 checkpoint RNG state 被加载到 CUDA 而在续训 B 前失败；traceback 和 46 个原始 checkpoint 的 SHA 台账纳入 PR；随后完成本地存储优化，保留 12 个逐张量等价的 FP32 最佳权重推理快照（约 596 MiB），释放约 8.34 GiB，精简快照不支持断点续训。修复 RNG 恢复设备后从新 formal 输出完整重跑，并把首次尝试保守 630 秒纳入 2 小时累计预算。
+
+**Decision / result:** measurement-aware expected forward 的训练闭环工程可行。结果并非一致胜出：simple 的两维 q MAE A `0.013533 ± 0.000849`、B `0.013676 ± 0.001923`；V9 的 A `0.032235 ± 0.001255`、B `0.030554 ± 0.002580`。V9 下 B 的 q MAE 小幅降低，但 nuisance 估计误差和 observed expected-profile residual 高于 A 路径；A 的 residual 评估另有逐样本 eta profile fitting 成本。保留为效果尚未确立的单 CIF exploratory result，不宣称普遍精度增益。
+
+**What changes now:** Issue #19 的独立实现、Gate 结果、正式 A/B 与负结果、命令 exit codes、配置和数据 hashes、逐 seed 指标、训练历史和 checkpoint hash manifest 被记录；两小时训练/选择预算 `1386.05/7200 s`。报告见 [结果说明](MEASUREMENT_AWARE_FORWARD_CLOSURE_REPORT_20261018.md) 与 [技术报告](../xrd_forward_loss/measurement_closure/TECHNICAL_REPORT.md)。
+
+**What does not change:** frozen JS-only classification evidence、旧 PR #11/#16/#17 数据、factorization Stage-1 NO-GO、真实域结果和铁电 12 周规划均保持原样。单 CIF 合成条件插值不是未见材料泛化、真实 PXRD 验证或 Rietveld refinement 证据。
+
+**Relevant files / commits:** `xrd_forward_loss/measurement_closure/`; training source commit `0e90eac79c1ae58252b4848a921bf43ee6d2669c`; checkpoint SHA ledger `xrd_forward_loss/measurement_closure/results/p3_issue19_20261018/checkpoint_manifest.json`.
+
+## 21. 2026-10-18：Issue #19 等预算 nuisance profile 诊断
+
+**Date / status:** 2026-10-18 / COMPLETED WITH ONE RECORDED PROFILE-FIT NONCONVERGENCE; independent diagnostic Draft PR pending review.
+
+**Question / previous assumption:** P3 的 observed expected-profile RMSE 曾将 A 的固定-q eta profile fit 与 B 的原生 eta head 直接比较，推理计算不相等。需要区分这个评估路径差异、B 的 nuisance-head 误差，以及两种冻结 q 预测经相同 eta solver 后的剩余谱残差。
+
+**Evidence:** 从 `e261faadbc2fba88b2f2289e7900d237a733345a` 隔离分支读取冻结 P3 结果、配置、77 个测试 q index 和 12 个 inference-only 权重。checkpoint 身份、大小和 SHA-256 均与 manifest 匹配；全部权重以冻结推理状态加载，预测 q 与 P3 保存值一致。对 simple/V9、三个配对 seed、各 77 个样本，A 与 B 共同使用一次中心零初始化、受界 L-BFGS-B eta 拟合；q 固定，损失统一为 max-normalized `log1p_100` expected-profile MSE，不使用 `eta_true`/`q_true` 做推理或拟合。
+
+**Decision / result:** shared-fit observed profile RMSE（三 seed 均值 ± sample SD）simple：A `0.009456 ± 0.000016`、B `0.009415 ± 0.000491`；V9：A `0.016034 ± 0.000795`、B `0.015621 ± 0.000655`。paired B−A 差分别为 `−0.000041 ± 0.000477` 和 `−0.000413 ± 0.001268`，每个条件均有 seed 方向相反，因此不构成稳定优势。对 B 固定同一 `q_B`，native eta RMSE 为 `0.015885 ± 0.001492`（simple）和 `0.027332 ± 0.001431`（V9）；shared fit 分别降低 `0.006470 ± 0.001435` 和 `0.011711 ± 0.001283`。V9 B native zero-shift RMSE 为 `0.032117 ± 0.004448°`，mean bias `+0.005290 ± 0.007080°`。924 次 shared fits 中 923 次成功；V9/B/seed 20261046/global test index 435 一次 status-2 `ABNORMAL` 被原样保留并计入 RMSE。结果纠正了“不同推理路径下残差可直接比较”的解读；不证明 nuisance loss 对 q 权重的因果效果。
+
+**What changes now:** 当前 Issue #19 科学状态记录等预算 profile-residual 对照和 nuisance-head/estimator gap；单次诊断脚本、完整运行 manifest、compact 指标、技术报告及中文摘要纳入独立 Draft PR。
+
+**What does not change:** 原 P3 的 q MAE、模型权重、split、lambda/epoch、checkpoint 和原始文件不改；不新增真实域、未见结构、因果 q 改善或 Rietveld claim；PXRD 分类主线和一级 framing 不变。
+
+**Relevant files / commits:** [nuisance diagnostic report](../xrd_forward_loss/measurement_closure/nuisance_diagnostic/TECHNICAL_REPORT.md), [metrics](../xrd_forward_loss/measurement_closure/nuisance_diagnostic/results/20261018/metrics.json), [run manifest](../xrd_forward_loss/measurement_closure/nuisance_diagnostic/results/20261018/run_manifest.json); diagnostic source baseline `e261faadbc2fba88b2f2289e7900d237a733345a`.
+
 ## Current perspective
 
 The project is no longer summarized as "a JS loss for XRD" or "an XRD robustness benchmark."

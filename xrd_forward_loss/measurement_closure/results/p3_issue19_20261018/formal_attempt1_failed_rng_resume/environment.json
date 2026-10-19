@@ -1,0 +1,11 @@
+{
+  "python": "3.11.9",
+  "torch": "2.13.0+cu126",
+  "cuda_available": true,
+  "cuda_runtime": "12.6",
+  "gpu": "NVIDIA GeForce RTX 4060 Laptop GPU",
+  "numpy": "2.4.6",
+  "scipy": "1.17.1",
+  "pymatgen": "2026.5.4",
+  "source_commit_before_training": "1787d3d726984066f1c41ee45c27c9df0b9cc24d"
+}

@@ -1,0 +1,20 @@
+{
+  "simple": {
+    "mean_validation_q_mae_by_lambda": {
+      "0.1": 0.036400621136029564,
+      "1.0": 0.03808863771458467
+    },
+    "selected_lambda": 0.1,
+    "selection_rule": "lowest mean best-epoch validation normalized-q MAE over the three paired seeds; exact ties choose smaller lambda",
+    "test_used": false
+  },
+  "v9": {
+    "mean_validation_q_mae_by_lambda": {
+      "0.1": 0.07549447442094485,
+      "1.0": 0.06363942101597786
+    },
+    "selected_lambda": 1.0,
+    "selection_rule": "lowest mean best-epoch validation normalized-q MAE over the three paired seeds; exact ties choose smaller lambda",
+    "test_used": false
+  }
+}
