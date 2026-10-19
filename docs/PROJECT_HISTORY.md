@@ -266,6 +266,22 @@ See [adapter contract](../xrd_forward_loss/V9_PERTURBATION_ADAPTER.md) and [pilo
 
 **Relevant files / commits:** `xrd_forward_loss/measurement_closure/`; training source commit `0e90eac79c1ae58252b4848a921bf43ee6d2669c`; checkpoint SHA ledger `xrd_forward_loss/measurement_closure/results/p3_issue19_20261018/checkpoint_manifest.json`.
 
+## 21. 2026-10-18：Issue #19 等预算 nuisance profile 诊断
+
+**Date / status:** 2026-10-18 / COMPLETED WITH ONE RECORDED PROFILE-FIT NONCONVERGENCE; independent diagnostic Draft PR pending review.
+
+**Question / previous assumption:** P3 的 observed expected-profile RMSE 曾将 A 的固定-q eta profile fit 与 B 的原生 eta head 直接比较，推理计算不相等。需要区分这个评估路径差异、B 的 nuisance-head 误差，以及两种冻结 q 预测经相同 eta solver 后的剩余谱残差。
+
+**Evidence:** 从 `e261faadbc2fba88b2f2289e7900d237a733345a` 隔离分支读取冻结 P3 结果、配置、77 个测试 q index 和 12 个 inference-only 权重。checkpoint 身份、大小和 SHA-256 均与 manifest 匹配；全部权重以冻结推理状态加载，预测 q 与 P3 保存值一致。对 simple/V9、三个配对 seed、各 77 个样本，A 与 B 共同使用一次中心零初始化、受界 L-BFGS-B eta 拟合；q 固定，损失统一为 max-normalized `log1p_100` expected-profile MSE，不使用 `eta_true`/`q_true` 做推理或拟合。
+
+**Decision / result:** shared-fit observed profile RMSE（三 seed 均值 ± sample SD）simple：A `0.009456 ± 0.000016`、B `0.009415 ± 0.000491`；V9：A `0.016034 ± 0.000795`、B `0.015621 ± 0.000655`。paired B−A 差分别为 `−0.000041 ± 0.000477` 和 `−0.000413 ± 0.001268`，每个条件均有 seed 方向相反，因此不构成稳定优势。对 B 固定同一 `q_B`，native eta RMSE 为 `0.015885 ± 0.001492`（simple）和 `0.027332 ± 0.001431`（V9）；shared fit 分别降低 `0.006470 ± 0.001435` 和 `0.011711 ± 0.001283`。V9 B native zero-shift RMSE 为 `0.032117 ± 0.004448°`，mean bias `+0.005290 ± 0.007080°`。924 次 shared fits 中 923 次成功；V9/B/seed 20261046/global test index 435 一次 status-2 `ABNORMAL` 被原样保留并计入 RMSE。结果纠正了“不同推理路径下残差可直接比较”的解读；不证明 nuisance loss 对 q 权重的因果效果。
+
+**What changes now:** 当前 Issue #19 科学状态记录等预算 profile-residual 对照和 nuisance-head/estimator gap；单次诊断脚本、完整运行 manifest、compact 指标、技术报告及中文摘要纳入独立 Draft PR。
+
+**What does not change:** 原 P3 的 q MAE、模型权重、split、lambda/epoch、checkpoint 和原始文件不改；不新增真实域、未见结构、因果 q 改善或 Rietveld claim；PXRD 分类主线和一级 framing 不变。
+
+**Relevant files / commits:** [nuisance diagnostic report](../xrd_forward_loss/measurement_closure/nuisance_diagnostic/TECHNICAL_REPORT.md), [metrics](../xrd_forward_loss/measurement_closure/nuisance_diagnostic/results/20261018/metrics.json), [run manifest](../xrd_forward_loss/measurement_closure/nuisance_diagnostic/results/20261018/run_manifest.json); diagnostic source baseline `e261faadbc2fba88b2f2289e7900d237a733345a`.
+
 ## Current perspective
 
 The project is no longer summarized as "a JS loss for XRD" or "an XRD robustness benchmark."

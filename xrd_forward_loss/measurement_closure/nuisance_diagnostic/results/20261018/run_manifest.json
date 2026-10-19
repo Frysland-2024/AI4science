@@ -1,0 +1,372 @@
+{
+  "schema": "issue19_nuisance_diagnostic_run_manifest_v1",
+  "status": "COMPLETED_WITH_RECORDED_NONCONVERGENCE",
+  "classification": "exploratory post-hoc; test had prior P3 history",
+  "source_commit_before_diagnostic_changes": "e261faadbc2fba88b2f2289e7900d237a733345a",
+  "branch": "codex/issue19-nuisance-diagnostic-20261018",
+  "full_diagnostic_runs": 1,
+  "command": [
+    "C:\\Users\\Lenovo\\.codex\\venvs\\issue19-measurement-closure\\Scripts\\python.exe",
+    "xrd_forward_loss/measurement_closure/nuisance_diagnostic/run_issue19_nuisance_diagnostic.py",
+    "--mode",
+    "full"
+  ],
+  "return_code": 0,
+  "started_and_completed_runtime_seconds": 127.68180870002834,
+  "input_asset_sha256": {
+    "p3_config": "a558304235509b2d00c95e3423e084e5a08af9b1d3ad6e312c0032318df40bd3",
+    "formal_data_npz": "88401a857bc7a4849731fbb5e881b37efef7483e0ec13415f977db035e333a29",
+    "split_indices_json": "72da070b59b94db27e893f8a49bc4c6e2fd29a3ce53adae11c530aaec4f5e55d",
+    "validation_lambda_selection_json": "f8053bc2b08bf2b568e5a6a9a028bc5650fa37ac015311e4f24cc2121fcfb382",
+    "prior_ab_results_json": "9efc3190f6e8463f42bcb23a89141ed8399eee9211b75abd200ae75a964adf12",
+    "checkpoint_space_optimization_json": "e968228ab3b531fb2c7c4735cd97ba3bbca98c2361913b9782937017d62546ca",
+    "forward_config": "aad8720f77651603b4d48c9f48d9900efaa3d8b29c37c88a6ef8923fe62e22fd",
+    "cif": "e880d6f9df10ad4a2bb347dbbeae2712817d95e2f16df9390784d916a0c02f9c",
+    "p3_source_script": "0dfb6b2ac436f6f37e59503710b3ebd09623213c4e4c8a31df4d0b645f844182",
+    "original_p3_technical_report": "4ec90cd91aeddefa74f38595fd19dcfb07994c12f7a7eb38654247197970dc61",
+    "original_issue19_closure_summary": "54b7b511f1034b793f46a10f648e24ecd44751d260a52d69ee2b0d02a7f23b8c"
+  },
+  "checkpoint_source_root": "C:\\Users\\Lenovo\\.codex\\worktrees\\issue19-forward-measurement\\AI4science\\xrd_forward_loss\\measurement_closure\\results\\p3_issue19_20261018",
+  "checkpoints_sha256_and_identity": [
+    {
+      "path": "formal/checkpoints/inference_only_best/simple_A_seed20261045.pt",
+      "condition": "simple",
+      "method": "A",
+      "seed": 20261045,
+      "sha256": "9f6fa7814d79a5a968de7f6b47031cb4e162c0d659ad39df7918aed6adf18129",
+      "bytes": 52057368,
+      "inference_only": true
+    },
+    {
+      "path": "formal/checkpoints/inference_only_best/simple_A_seed20261046.pt",
+      "condition": "simple",
+      "method": "A",
+      "seed": 20261046,
+      "sha256": "64dfbece6d693c5c36551cdef1b30ad6f9d18f1daf2cbe7c0e3ce519c30b7780",
+      "bytes": 52057368,
+      "inference_only": true
+    },
+    {
+      "path": "formal/checkpoints/inference_only_best/simple_A_seed20261047.pt",
+      "condition": "simple",
+      "method": "A",
+      "seed": 20261047,
+      "sha256": "5843f1b7ad9e47b1e4953348112a2f3998abe07bdd35d65716afcf89ec886111",
+      "bytes": 52057368,
+      "inference_only": true
+    },
+    {
+      "path": "formal/checkpoints/inference_only_best/simple_B_lambda0.1_seed20261045.pt",
+      "condition": "simple",
+      "method": "B",
+      "seed": 20261045,
+      "sha256": "25d2c8cd8f5f03c06ffc1df987db287c3f04ded8a98e9d97d14f781861a8bbcb",
+      "bytes": 52061234,
+      "inference_only": true
+    },
+    {
+      "path": "formal/checkpoints/inference_only_best/simple_B_lambda0.1_seed20261046.pt",
+      "condition": "simple",
+      "method": "B",
+      "seed": 20261046,
+      "sha256": "4b82abd3098f43a9e1e411fb16b006bc90701f129dfc27cad903a8391bd0df4c",
+      "bytes": 52061234,
+      "inference_only": true
+    },
+    {
+      "path": "formal/checkpoints/inference_only_best/simple_B_lambda0.1_seed20261047.pt",
+      "condition": "simple",
+      "method": "B",
+      "seed": 20261047,
+      "sha256": "a6aec5c5d6542640e6b8245f38b5f5909f1e72e5acdbf137bec33007b650937e",
+      "bytes": 52061234,
+      "inference_only": true
+    },
+    {
+      "path": "formal/checkpoints/inference_only_best/v9_A_seed20261045.pt",
+      "condition": "v9",
+      "method": "A",
+      "seed": 20261045,
+      "sha256": "65cbc0b2ac4dcb71615f7a4034af0edebc15a1917f94c5ccd74f7c256fa23c2f",
+      "bytes": 52057076,
+      "inference_only": true
+    },
+    {
+      "path": "formal/checkpoints/inference_only_best/v9_A_seed20261046.pt",
+      "condition": "v9",
+      "method": "A",
+      "seed": 20261046,
+      "sha256": "ddbfe98cdc345277e69b9d5fca617c158b27514482c95ae6fb84b90e41b0bdeb",
+      "bytes": 52057076,
+      "inference_only": true
+    },
+    {
+      "path": "formal/checkpoints/inference_only_best/v9_A_seed20261047.pt",
+      "condition": "v9",
+      "method": "A",
+      "seed": 20261047,
+      "sha256": "202e18faafcbbef16923b457b1bc316ea748d96b5518ce805e1258b9aa3e3375",
+      "bytes": 52057076,
+      "inference_only": true
+    },
+    {
+      "path": "formal/checkpoints/inference_only_best/v9_B_lambda1_seed20261045.pt",
+      "condition": "v9",
+      "method": "B",
+      "seed": 20261045,
+      "sha256": "596ea89eea1c943e3d8b9fa0fe8fc2ae12097cc5c52732ab306a6c89d923960c",
+      "bytes": 52060796,
+      "inference_only": true
+    },
+    {
+      "path": "formal/checkpoints/inference_only_best/v9_B_lambda1_seed20261046.pt",
+      "condition": "v9",
+      "method": "B",
+      "seed": 20261046,
+      "sha256": "fc022d74e1eff40213e9d4295a0831ff6c2c460889a8b66814231d49c57000a3",
+      "bytes": 52060796,
+      "inference_only": true
+    },
+    {
+      "path": "formal/checkpoints/inference_only_best/v9_B_lambda1_seed20261047.pt",
+      "condition": "v9",
+      "method": "B",
+      "seed": 20261047,
+      "sha256": "6580cb745cf20be81bda27aaf70ba7cdf1eb6dde7add14319eff5a5c3d26f63f",
+      "bytes": 52060796,
+      "inference_only": true
+    }
+  ],
+  "checkpoint_load_validation": {
+    "count": 12,
+    "all_inference_state_loads_passed": true
+  },
+  "model_sha256_per_run": [
+    {
+      "condition": "simple",
+      "method": "A",
+      "seed": 20261045,
+      "checkpoint_sha256": "9f6fa7814d79a5a968de7f6b47031cb4e162c0d659ad39df7918aed6adf18129"
+    },
+    {
+      "condition": "simple",
+      "method": "B",
+      "seed": 20261045,
+      "checkpoint_sha256": "25d2c8cd8f5f03c06ffc1df987db287c3f04ded8a98e9d97d14f781861a8bbcb"
+    },
+    {
+      "condition": "simple",
+      "method": "A",
+      "seed": 20261046,
+      "checkpoint_sha256": "64dfbece6d693c5c36551cdef1b30ad6f9d18f1daf2cbe7c0e3ce519c30b7780"
+    },
+    {
+      "condition": "simple",
+      "method": "B",
+      "seed": 20261046,
+      "checkpoint_sha256": "4b82abd3098f43a9e1e411fb16b006bc90701f129dfc27cad903a8391bd0df4c"
+    },
+    {
+      "condition": "simple",
+      "method": "A",
+      "seed": 20261047,
+      "checkpoint_sha256": "5843f1b7ad9e47b1e4953348112a2f3998abe07bdd35d65716afcf89ec886111"
+    },
+    {
+      "condition": "simple",
+      "method": "B",
+      "seed": 20261047,
+      "checkpoint_sha256": "a6aec5c5d6542640e6b8245f38b5f5909f1e72e5acdbf137bec33007b650937e"
+    },
+    {
+      "condition": "v9",
+      "method": "A",
+      "seed": 20261045,
+      "checkpoint_sha256": "65cbc0b2ac4dcb71615f7a4034af0edebc15a1917f94c5ccd74f7c256fa23c2f"
+    },
+    {
+      "condition": "v9",
+      "method": "B",
+      "seed": 20261045,
+      "checkpoint_sha256": "596ea89eea1c943e3d8b9fa0fe8fc2ae12097cc5c52732ab306a6c89d923960c"
+    },
+    {
+      "condition": "v9",
+      "method": "A",
+      "seed": 20261046,
+      "checkpoint_sha256": "ddbfe98cdc345277e69b9d5fca617c158b27514482c95ae6fb84b90e41b0bdeb"
+    },
+    {
+      "condition": "v9",
+      "method": "B",
+      "seed": 20261046,
+      "checkpoint_sha256": "fc022d74e1eff40213e9d4295a0831ff6c2c460889a8b66814231d49c57000a3"
+    },
+    {
+      "condition": "v9",
+      "method": "A",
+      "seed": 20261047,
+      "checkpoint_sha256": "202e18faafcbbef16923b457b1bc316ea748d96b5518ce805e1258b9aa3e3375"
+    },
+    {
+      "condition": "v9",
+      "method": "B",
+      "seed": 20261047,
+      "checkpoint_sha256": "6580cb745cf20be81bda27aaf70ba7cdf1eb6dde7add14319eff5a5c3d26f63f"
+    }
+  ],
+  "frozen_design": {
+    "test_q_indices_sha256": "0038eb6d7a881baffcd55e1bb50b4048c8f7a41b5c43045c81525e2ddf225a8c",
+    "test_count_per_condition_seed": 77,
+    "seeds": [
+      20261045,
+      20261046,
+      20261047
+    ],
+    "selected_lambda": {
+      "simple": 0.1,
+      "v9": 1.0
+    },
+    "no_retraining_or_model_selection": true
+  },
+  "solver": {
+    "method": "L-BFGS-B",
+    "n_starts_per_profile": 1,
+    "start_scaled_z": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scaled_bounds_per_coordinate": [
+      -0.999,
+      0.999
+    ],
+    "options": {
+      "maxiter": 80,
+      "ftol": 1e-10,
+      "gtol": 1e-07,
+      "maxls": 25
+    },
+    "fixed_q": true,
+    "initialization_source": "same canonical zero scaled nuisance coordinate for A and B; never model eta or eta_true",
+    "objective": "mean squared error between expected_profile and supplied observed_profile, both max-normalized log1p_100"
+  },
+  "environment": {
+    "python": "3.11.9",
+    "torch": "2.13.0+cu126",
+    "cuda_runtime": "12.6",
+    "gpu": "NVIDIA GeForce RTX 4060 Laptop GPU",
+    "gpu_free_total_memory_bytes_before_output": [
+      7341080576,
+      8585216000
+    ],
+    "numpy": "2.4.6",
+    "scipy": "1.17.1",
+    "pymatgen": "2026.5.4",
+    "device": "cuda"
+  },
+  "artifacts": {
+    "metrics_json": {
+      "path": "metrics.json",
+      "sha256": "832674b08028021f00fdcbeae29a8e5f27119a291f1bc2af9c2473609fdce69b",
+      "bytes": 130580
+    },
+    "per_example_local_json_gz": {
+      "path": "per_example_local.json.gz",
+      "sha256": "318298cac77259b6e47cddaf706a2b567a7aaad37acc9e4b0e9dd6fd755f841d",
+      "bytes": 222151,
+      "commit": false
+    },
+    "technical_report": {
+      "path": "../../TECHNICAL_REPORT.md",
+      "sha256": "24eae94dcdde76d90adc423f21a6deddd75ef9a4d26595cccb76f1d924f4d448",
+      "commit": true
+    },
+    "chinese_summary": {
+      "path": "SUMMARY_CN.md",
+      "sha256": "1983125af96a271ee83178ddee273fba7adb6cc5b8ae9d0d64ccea322f0fed53",
+      "commit": true
+    }
+  },
+  "diagnostic_source_sha256_at_full_run": "8a75b659c0c4cfa947fd3ff6c6d913d6e5ca91d49f3babc28196c25d1717393a",
+  "diagnostic_source_sha256_in_delivery": "0784f919a1b9979bf1aaa504bd3b4684ce8ddacea922e31e9e971361ea26a5ea",
+  "post_run_source_change": "Formatting-only line wrapping after the fixed run; no executable logic changed. The exact pre-format source hash used at runtime is recorded above.",
+  "validation_commands": [
+    {
+      "name": "read_only_smoke",
+      "command": [
+        "C:/Users/Lenovo/.codex/venvs/issue19-measurement-closure/Scripts/python.exe",
+        "xrd_forward_loss/measurement_closure/nuisance_diagnostic/run_issue19_nuisance_diagnostic.py",
+        "--mode",
+        "smoke",
+        "--sample-count",
+        "2"
+      ],
+      "return_code": 0,
+      "status": "PASS",
+      "samples_per_condition_method": 2,
+      "fit_count": 8,
+      "checkpoint_hashes_verified": 12,
+      "checkpoint_states_loaded": 12,
+      "deterministic_repeats": 4,
+      "runtime_seconds": 4.563384299981408
+    },
+    {
+      "name": "offline_tests",
+      "command": [
+        "C:/Users/Lenovo/.codex/venvs/issue19-measurement-closure/Scripts/python.exe",
+        "-m",
+        "pytest",
+        "-q",
+        "xrd_forward_loss/tests/test_issue19_nuisance_diagnostic.py"
+      ],
+      "return_code": 0,
+      "result": "8 passed in 8.17s"
+    },
+    {
+      "name": "python_compile",
+      "command": [
+        "C:/Users/Lenovo/.codex/venvs/issue19-measurement-closure/Scripts/python.exe",
+        "-m",
+        "py_compile",
+        "xrd_forward_loss/measurement_closure/nuisance_diagnostic/run_issue19_nuisance_diagnostic.py",
+        "xrd_forward_loss/tests/test_issue19_nuisance_diagnostic.py"
+      ],
+      "return_code": 0
+    },
+    {
+      "name": "source_format_guard",
+      "method": "project has no pinned formatter; check every added Python source line <=119 characters",
+      "return_code": 0
+    },
+    {
+      "name": "git_diff_check",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "return_code": 0
+    }
+  ],
+  "fit_convergence_summary": {
+    "total_shared_fits": 924,
+    "successful_fits": 923,
+    "failed_fits": 1,
+    "failure_rate": 0.0010822510822510823,
+    "failures": [
+      {
+        "condition": "v9",
+        "method": "B",
+        "seed": 20261046,
+        "global_test_index": 435,
+        "status": 2,
+        "message": "ABNORMAL: ",
+        "nfev": 59,
+        "nit": 8
+      }
+    ],
+    "failed_fits_retained_in_aggregate": true,
+    "no_retry_or_tuning": true
+  }
+}

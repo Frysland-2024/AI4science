@@ -1,0 +1,3518 @@
+{
+  "schema": "issue19_nuisance_diagnostic_metrics_v1",
+  "status": "COMPLETED_WITH_RECORDED_NONCONVERGENCE",
+  "scope": "single BaTiO3 P4mm CIF; frozen 77 test q indices; two conditions; three paired seeds; fixed q predictions",
+  "interpretation_limit": "No causal effect on frozen q weights; no blind confirmatory test; no real-domain or unseen-structure claim.",
+  "shared_fit_is": "post-hoc test-time bounded eta solver with fixed q; it is not a learned B nuisance head",
+  "fit_cost_implication": "profile optimization cost is reported separately from direct B-head inference and changes deployment significance",
+  "conditions": [
+    "simple",
+    "v9"
+  ],
+  "methods": [
+    "A",
+    "B"
+  ],
+  "seeds": [
+    20261045,
+    20261046,
+    20261047
+  ],
+  "test_count_per_seed_condition": 77,
+  "q_predictions_verified_against_frozen_p3": true,
+  "eta_true_policy": "used only after prediction for descriptive error/correlation metrics; never passed to model, solver, fit initialization, or setting selection",
+  "q_true_policy": "used only after prediction for q/lattice scores and descriptive correlation; never passed to model, solver, or fit setting selection",
+  "prior_frozen_anchors": {
+    "status": "frozen P3 reference values; verification anchors, not targets",
+    "q_mae_normalized": {
+      "simple": {
+        "A": 0.013533,
+        "B": 0.013676
+      },
+      "v9": {
+        "A": 0.032235,
+        "B": 0.030554
+      }
+    },
+    "noncomparable_observed_profile_rmse": {
+      "v9": {
+        "A_profile_fit": 0.016034,
+        "B_native_eta": 0.027332
+      }
+    }
+  },
+  "fit_loss_preprocessing": "expected_profile and observed inputs in max-normalized log1p_100 domain; identical renderer/loss for both methods",
+  "nuisance_coordinates": [
+    {
+      "name": "delta_2theta_deg",
+      "unit": "degree_2theta"
+    },
+    {
+      "name": "fwhm_deg",
+      "unit": "degree_fwhm"
+    },
+    {
+      "name": "background_peak_ratio",
+      "unit": "relative_to_reference_clean_peak_height"
+    }
+  ],
+  "shared_solver": {
+    "method": "L-BFGS-B",
+    "n_starts_per_profile": 1,
+    "start_scaled_z": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scaled_bounds_per_coordinate": [
+      -0.999,
+      0.999
+    ],
+    "options": {
+      "maxiter": 80,
+      "ftol": 1e-10,
+      "gtol": 1e-07,
+      "maxls": 25
+    },
+    "fixed_q": true,
+    "initialization_source": "same canonical zero scaled nuisance coordinate for A and B; never model eta or eta_true",
+    "objective": "mean squared error between expected_profile and supplied observed_profile, both max-normalized log1p_100"
+  },
+  "shared_solver_sha256": "2aaad94cd082b2e4ccb01ffb80c2533e65b009bba732282cec12d6e95d564850",
+  "per_seed": [
+    {
+      "condition": "simple",
+      "method": "A",
+      "seed": 20261045,
+      "checkpoint_sha256": "9f6fa7814d79a5a968de7f6b47031cb4e162c0d659ad39df7918aed6adf18129",
+      "sample_count": 77,
+      "q_prediction_sha256": "57b2c8d5db96a7c8219e4d075f8fe40168f53051fe0506ce1a60b2103751d0a7",
+      "native_eta_prediction_sha256": null,
+      "q_mae_normalized": {
+        "du": 0.013071373421940714,
+        "dv": 0.015022482595999122,
+        "mean_two_coordinate": 0.014046928008969917
+      },
+      "lattice_mae_angstrom": {
+        "a_angstrom": 0.0005542741807756344,
+        "c_angstrom": 0.0007141529073932605
+      },
+      "shared_fit_profile_rmse_transformed": 0.009472786452415198,
+      "shared_fit": {
+        "solver_knobs_sha256": "2aaad94cd082b2e4ccb01ffb80c2533e65b009bba732282cec12d6e95d564850",
+        "n_profiles": 77,
+        "start_scaled_z": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "nfev_total": 911,
+        "nfev_mean": 11.831168831168831,
+        "nit_total": 669,
+        "nit_mean": 8.688311688311689,
+        "failure_count": 0,
+        "failure_rate": 0.0,
+        "boundary_hit_count": 31,
+        "boundary_hit_rate": 0.4025974025974026,
+        "boundary_hit_count_by_coordinate": [
+          0,
+          31,
+          0
+        ],
+        "eta_mean_physical_by_coordinate": [
+          -0.003449038382634027,
+          0.08079021128211142,
+          0.0066624080347803824
+        ],
+        "eta_sd_across_examples_by_coordinate": [
+          0.009027389168336484,
+          0.0012792847458075257,
+          0.00013799462476079785
+        ],
+        "eta_mean_scaled_z_by_coordinate": [
+          -0.05748397304390045,
+          -0.9683915487155434,
+          0.33248160695607665
+        ],
+        "eta_truth_mismatch_after_prediction_only": {
+          "mae_physical_by_coordinate": [
+            0.006883229847906383,
+            0.0007902112821114237,
+            9.885111700306535e-05
+          ],
+          "rmse_physical_by_coordinate": [
+            0.009608915677868287,
+            0.0014965791600813243,
+            0.0001371617548728782
+          ],
+          "mean_scaled_absolute_error_by_coordinate": [
+            0.1147204974651063,
+            0.03160845128445695,
+            0.019770223400613067
+          ]
+        },
+        "q_error_vs_eta_mismatch_pearson_r_descriptive_only": 0.8842926244138679,
+        "cpu_wallclock_seconds_total": 9.214219100249466,
+        "cpu_wallclock_seconds_mean_per_fit": 0.11966518312012293,
+        "gpu_cuda_event_seconds_total": 9.211347724914555,
+        "gpu_cuda_event_seconds_mean_per_fit": 0.1196278925313578
+      },
+      "inference_cost": {
+        "cpu_wallclock_seconds": 0.3057134000118822,
+        "gpu_cuda_event_seconds": 0.30551470947265624
+      }
+    },
+    {
+      "condition": "simple",
+      "method": "B",
+      "seed": 20261045,
+      "checkpoint_sha256": "25d2c8cd8f5f03c06ffc1df987db287c3f04ded8a98e9d97d14f781861a8bbcb",
+      "sample_count": 77,
+      "q_prediction_sha256": "a0fcdbdae1245d47ed865dac7f1b891d715574cc89e527f7ac361f56a8a888f1",
+      "native_eta_prediction_sha256": "53a6efa988510d502247487a95bbc798076f933eb2d02387e91a95e3a87f2e7f",
+      "q_mae_normalized": {
+        "du": 0.01375850547867064,
+        "dv": 0.017941321308010964,
+        "mean_two_coordinate": 0.015849913393340805
+      },
+      "lattice_mae_angstrom": {
+        "a_angstrom": 0.0006486145692564657,
+        "c_angstrom": 0.0006548697076862799
+      },
+      "shared_fit_profile_rmse_transformed": 0.00997965774316674,
+      "shared_fit": {
+        "solver_knobs_sha256": "2aaad94cd082b2e4ccb01ffb80c2533e65b009bba732282cec12d6e95d564850",
+        "n_profiles": 77,
+        "start_scaled_z": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "nfev_total": 917,
+        "nfev_mean": 11.909090909090908,
+        "nit_total": 665,
+        "nit_mean": 8.636363636363637,
+        "failure_count": 0,
+        "failure_rate": 0.0,
+        "boundary_hit_count": 33,
+        "boundary_hit_rate": 0.42857142857142855,
+        "boundary_hit_count_by_coordinate": [
+          0,
+          33,
+          0
+        ],
+        "eta_mean_physical_by_coordinate": [
+          0.0020170482349417215,
+          0.08067184893134657,
+          0.006639642310517748
+        ],
+        "eta_sd_across_examples_by_coordinate": [
+          0.009441657315615977,
+          0.0011020878153260557,
+          0.0001478066459137186
+        ],
+        "eta_mean_scaled_z_by_coordinate": [
+          0.03361747058236204,
+          -0.9731260427461375,
+          0.3279284621035493
+        ],
+        "eta_truth_mismatch_after_prediction_only": {
+          "mae_physical_by_coordinate": [
+            0.007141447966557904,
+            0.0006718489313465649,
+            0.00011528454862164067
+          ],
+          "rmse_physical_by_coordinate": [
+            0.009594563594360912,
+            0.001284602874452217,
+            0.00014930973064998277
+          ],
+          "mean_scaled_absolute_error_by_coordinate": [
+            0.11902413277596507,
+            0.026873957253862588,
+            0.023056909724328133
+          ]
+        },
+        "q_error_vs_eta_mismatch_pearson_r_descriptive_only": 0.8082183956920346,
+        "cpu_wallclock_seconds_total": 9.05890219961293,
+        "cpu_wallclock_seconds_mean_per_fit": 0.11764808051445365,
+        "gpu_cuda_event_seconds_total": 9.056077468872074,
+        "gpu_cuda_event_seconds_mean_per_fit": 0.1176113956996373
+      },
+      "inference_cost": {
+        "cpu_wallclock_seconds": 0.05422700004419312,
+        "gpu_cuda_event_seconds": 0.05405721664428711
+      },
+      "native_head": {
+        "profile_rmse_transformed_at_fixed_q": 0.01622123242463514,
+        "profile_rmse_reduction_after_shared_eta_fit_same_q": 0.006241574681468402,
+        "eta_bias_physical_by_coordinate_after_prediction_only": [
+          -0.0006458716074262924,
+          0.002539472970869628,
+          -0.00017158192005895507
+        ],
+        "eta_rmse_physical_by_coordinate_after_prediction_only": [
+          0.0026838139796815756,
+          0.0025923564144201285,
+          0.00018873113999869973
+        ],
+        "eta_mean_physical_by_coordinate": [
+          -0.0006458716074262924,
+          0.08253947297086964,
+          0.006495084746607712
+        ],
+        "eta_mae_scaled_coordinate_after_prediction_only": [
+          0.031128951799143,
+          0.1015789188347852,
+          0.034316384011790976
+        ],
+        "zero_shift_bias_degree": -0.0006458716074262924,
+        "zero_shift_rmse_degree": 0.0026838139796815756,
+        "q_error_vs_eta_mismatch_pearson_r_descriptive_only": 0.08731412886014021
+      }
+    },
+    {
+      "condition": "simple",
+      "method": "A",
+      "seed": 20261046,
+      "checkpoint_sha256": "64dfbece6d693c5c36551cdef1b30ad6f9d18f1daf2cbe7c0e3ce519c30b7780",
+      "sample_count": 77,
+      "q_prediction_sha256": "b70e38ecb9461c4893618ebd7249a221ca96bedc245bcd93637521dac91c9cbe",
+      "native_eta_prediction_sha256": null,
+      "q_mae_normalized": {
+        "du": 0.011497731105267228,
+        "dv": 0.016498880550362076,
+        "mean_two_coordinate": 0.013998305827814653
+      },
+      "lattice_mae_angstrom": {
+        "a_angstrom": 0.0005138097611502431,
+        "c_angstrom": 0.0006744234908415865
+      },
+      "shared_fit_profile_rmse_transformed": 0.0094526470658217,
+      "shared_fit": {
+        "solver_knobs_sha256": "2aaad94cd082b2e4ccb01ffb80c2533e65b009bba732282cec12d6e95d564850",
+        "n_profiles": 77,
+        "start_scaled_z": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "nfev_total": 880,
+        "nfev_mean": 11.428571428571429,
+        "nit_total": 663,
+        "nit_mean": 8.61038961038961,
+        "failure_count": 0,
+        "failure_rate": 0.0,
+        "boundary_hit_count": 35,
+        "boundary_hit_rate": 0.45454545454545453,
+        "boundary_hit_count_by_coordinate": [
+          0,
+          35,
+          0
+        ],
+        "eta_mean_physical_by_coordinate": [
+          0.003412137649569368,
+          0.08045685510829152,
+          0.006647415243129722
+        ],
+        "eta_sd_across_examples_by_coordinate": [
+          0.007824125508641108,
+          0.0008599955626933705,
+          0.00013919888219538843
+        ],
+        "eta_mean_scaled_z_by_coordinate": [
+          0.05686896082615616,
+          -0.9817257956683384,
+          0.3294830486259449
+        ],
+        "eta_truth_mismatch_after_prediction_only": {
+          "mae_physical_by_coordinate": [
+            0.006014653115855547,
+            0.00045685510829153073,
+            9.808526188948524e-05
+          ],
+          "rmse_physical_by_coordinate": [
+            0.008489087001562486,
+            0.0009688673088395333,
+            0.00013962559034367726
+          ],
+          "mean_scaled_absolute_error_by_coordinate": [
+            0.10024421859759247,
+            0.018274204331661232,
+            0.019617052377897046
+          ]
+        },
+        "q_error_vs_eta_mismatch_pearson_r_descriptive_only": 0.7955348132526066,
+        "cpu_wallclock_seconds_total": 8.410512699978426,
+        "cpu_wallclock_seconds_mean_per_fit": 0.10922743766205747,
+        "gpu_cuda_event_seconds_total": 8.40765627288818,
+        "gpu_cuda_event_seconds_mean_per_fit": 0.10919034120634004
+      },
+      "inference_cost": {
+        "cpu_wallclock_seconds": 0.05600059998687357,
+        "gpu_cuda_event_seconds": 0.0558267822265625
+      }
+    },
+    {
+      "condition": "simple",
+      "method": "B",
+      "seed": 20261046,
+      "checkpoint_sha256": "4b82abd3098f43a9e1e411fb16b006bc90701f129dfc27cad903a8391bd0df4c",
+      "sample_count": 77,
+      "q_prediction_sha256": "a96d59c645a9ac652bb0db9c9d2644d9337aef6aba3890ebfe88b4b1dcb970e8",
+      "native_eta_prediction_sha256": "060b97e5813b834c7fa0ba1b97e5ccebc2d09127e11bae609fe4350d2721f401",
+      "q_mae_normalized": {
+        "du": 0.010263903935548753,
+        "dv": 0.014130030048696647,
+        "mean_two_coordinate": 0.012196966992122698
+      },
+      "lattice_mae_angstrom": {
+        "a_angstrom": 0.0004384723648280797,
+        "c_angstrom": 0.0006732986330598437
+      },
+      "shared_fit_profile_rmse_transformed": 0.009090854695975436,
+      "shared_fit": {
+        "solver_knobs_sha256": "2aaad94cd082b2e4ccb01ffb80c2533e65b009bba732282cec12d6e95d564850",
+        "n_profiles": 77,
+        "start_scaled_z": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "nfev_total": 868,
+        "nfev_mean": 11.272727272727273,
+        "nit_total": 644,
+        "nit_mean": 8.363636363636363,
+        "failure_count": 0,
+        "failure_rate": 0.0,
+        "boundary_hit_count": 42,
+        "boundary_hit_rate": 0.5454545454545454,
+        "boundary_hit_count_by_coordinate": [
+          0,
+          42,
+          0
+        ],
+        "eta_mean_physical_by_coordinate": [
+          -0.0018202954177398657,
+          0.08019542664789513,
+          0.006633349075293028
+        ],
+        "eta_sd_across_examples_by_coordinate": [
+          0.008475076476552514,
+          0.00039378287610776524,
+          0.00010976180504996549
+        ],
+        "eta_mean_scaled_z_by_coordinate": [
+          -0.030338256962331084,
+          -0.9921829340841942,
+          0.3266698150586057
+        ],
+        "eta_truth_mismatch_after_prediction_only": {
+          "mae_physical_by_coordinate": [
+            0.00543717946466717,
+            0.00019542664789513382,
+            7.208470875518278e-05
+          ],
+          "rmse_physical_by_coordinate": [
+            0.008614382132906205,
+            0.00043731304309166575,
+            0.00011402303585584199
+          ],
+          "mean_scaled_absolute_error_by_coordinate": [
+            0.09061965774445284,
+            0.007817065915805353,
+            0.014416941751036555
+          ]
+        },
+        "q_error_vs_eta_mismatch_pearson_r_descriptive_only": 0.7719614036521051,
+        "cpu_wallclock_seconds_total": 8.449609999719542,
+        "cpu_wallclock_seconds_mean_per_fit": 0.10973519480155249,
+        "gpu_cuda_event_seconds_total": 8.446843322753907,
+        "gpu_cuda_event_seconds_mean_per_fit": 0.10969926393186889
+      },
+      "inference_cost": {
+        "cpu_wallclock_seconds": 0.05733620002865791,
+        "gpu_cuda_event_seconds": 0.05552835083007813
+      },
+      "native_head": {
+        "profile_rmse_transformed_at_fixed_q": 0.014254218367610462,
+        "profile_rmse_reduction_after_shared_eta_fit_same_q": 0.005163363671635026,
+        "eta_bias_physical_by_coordinate_after_prediction_only": [
+          -0.00026897425781404404,
+          0.002802473724662476,
+          -0.00022651609097853456
+        ],
+        "eta_rmse_physical_by_coordinate_after_prediction_only": [
+          0.001940110322252516,
+          0.00293428968833207,
+          0.0002389604990909059
+        ],
+        "eta_mean_physical_by_coordinate": [
+          -0.00026897425781404404,
+          0.08280247372466248,
+          0.006440150575688133
+        ],
+        "eta_mae_scaled_coordinate_after_prediction_only": [
+          0.024961621605761736,
+          0.11209894898649925,
+          0.04530321819570685
+        ],
+        "zero_shift_bias_degree": -0.00026897425781404404,
+        "zero_shift_rmse_degree": 0.001940110322252516,
+        "q_error_vs_eta_mismatch_pearson_r_descriptive_only": 0.09375187623353864
+      }
+    },
+    {
+      "condition": "simple",
+      "method": "A",
+      "seed": 20261047,
+      "checkpoint_sha256": "5843f1b7ad9e47b1e4953348112a2f3998abe07bdd35d65716afcf89ec886111",
+      "sample_count": 77,
+      "q_prediction_sha256": "5b8e4a27a3bd4808d77e12b2d8b16b121c4deb4ff3c3949de0cd8a67e5976978",
+      "native_eta_prediction_sha256": null,
+      "q_mae_normalized": {
+        "du": 0.011291732458857364,
+        "dv": 0.01381540760010869,
+        "mean_two_coordinate": 0.012553570029483027
+      },
+      "lattice_mae_angstrom": {
+        "a_angstrom": 0.0004255751985052085,
+        "c_angstrom": 0.0007091749320308075
+      },
+      "shared_fit_profile_rmse_transformed": 0.009441710190576892,
+      "shared_fit": {
+        "solver_knobs_sha256": "2aaad94cd082b2e4ccb01ffb80c2533e65b009bba732282cec12d6e95d564850",
+        "n_profiles": 77,
+        "start_scaled_z": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "nfev_total": 888,
+        "nfev_mean": 11.532467532467532,
+        "nit_total": 653,
+        "nit_mean": 8.480519480519481,
+        "failure_count": 0,
+        "failure_rate": 0.0,
+        "boundary_hit_count": 42,
+        "boundary_hit_rate": 0.5454545454545454,
+        "boundary_hit_count_by_coordinate": [
+          0,
+          42,
+          0
+        ],
+        "eta_mean_physical_by_coordinate": [
+          0.000705530291828668,
+          0.08024546394219116,
+          0.006639791118660919
+        ],
+        "eta_sd_across_examples_by_coordinate": [
+          0.00932939314403772,
+          0.0004945551234408328,
+          0.00010459746702782576
+        ],
+        "eta_mean_scaled_z_by_coordinate": [
+          0.011758838197144472,
+          -0.9901814423123542,
+          0.3279582237321828
+        ],
+        "eta_truth_mismatch_after_prediction_only": {
+          "mae_physical_by_coordinate": [
+            0.005966098799434786,
+            0.00024546394219114657,
+            7.31317250603318e-05
+          ],
+          "rmse_physical_by_coordinate": [
+            0.009295428515844395,
+            0.0005492366443088091,
+            0.00010733517170033142
+          ],
+          "mean_scaled_absolute_error_by_coordinate": [
+            0.09943497999057978,
+            0.009818557687645864,
+            0.014626345012066359
+          ]
+        },
+        "q_error_vs_eta_mismatch_pearson_r_descriptive_only": 0.8445078745607686,
+        "cpu_wallclock_seconds_total": 8.56100489984965,
+        "cpu_wallclock_seconds_mean_per_fit": 0.11118188181622922,
+        "gpu_cuda_event_seconds_total": 8.558136550903319,
+        "gpu_cuda_event_seconds_mean_per_fit": 0.11114463053121193
+      },
+      "inference_cost": {
+        "cpu_wallclock_seconds": 0.057374600030016154,
+        "gpu_cuda_event_seconds": 0.05725180816650391
+      }
+    },
+    {
+      "condition": "simple",
+      "method": "B",
+      "seed": 20261047,
+      "checkpoint_sha256": "a6aec5c5d6542640e6b8245f38b5f5909f1e72e5acdbf137bec33007b650937e",
+      "sample_count": 77,
+      "q_prediction_sha256": "f44306da8df9a285e327922a39559788f03bfd2b26f91c85682d93a6d896225b",
+      "native_eta_prediction_sha256": "737e9c060ce50fca2350554f1adcb30cc2bd1557758d644a972e20fd8f130428",
+      "q_mae_normalized": {
+        "du": 0.012429613513379139,
+        "dv": 0.013530527196776167,
+        "mean_two_coordinate": 0.012980070355077653
+      },
+      "lattice_mae_angstrom": {
+        "a_angstrom": 0.00048795727177797807,
+        "c_angstrom": 0.0007092006239699696
+      },
+      "shared_fit_profile_rmse_transformed": 0.009174763648951348,
+      "shared_fit": {
+        "solver_knobs_sha256": "2aaad94cd082b2e4ccb01ffb80c2533e65b009bba732282cec12d6e95d564850",
+        "n_profiles": 77,
+        "start_scaled_z": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "nfev_total": 826,
+        "nfev_mean": 10.727272727272727,
+        "nit_total": 647,
+        "nit_mean": 8.402597402597403,
+        "failure_count": 0,
+        "failure_rate": 0.0,
+        "boundary_hit_count": 38,
+        "boundary_hit_rate": 0.4935064935064935,
+        "boundary_hit_count_by_coordinate": [
+          0,
+          38,
+          0
+        ],
+        "eta_mean_physical_by_coordinate": [
+          0.00035338840606190366,
+          0.0804863917945081,
+          0.0066474354789174146
+        ],
+        "eta_sd_across_examples_by_coordinate": [
+          0.00893023317182933,
+          0.0009088258150243975,
+          0.00013667791608007213
+        ],
+        "eta_mean_scaled_z_by_coordinate": [
+          0.005889806767698405,
+          -0.9805443282196763,
+          0.3294870957834829
+        ],
+        "eta_truth_mismatch_after_prediction_only": {
+          "mae_physical_by_coordinate": [
+            0.006563543519839391,
+            0.0004863917945080926,
+            9.386878382489377e-05
+          ],
+          "rmse_physical_by_coordinate": [
+            0.008879090366269179,
+            0.0010255800943479495,
+            0.00013714256395825323
+          ],
+          "mean_scaled_absolute_error_by_coordinate": [
+            0.10939239199732316,
+            0.019455671780323706,
+            0.018773756764978767
+          ]
+        },
+        "q_error_vs_eta_mismatch_pearson_r_descriptive_only": 0.8490654739937269,
+        "cpu_wallclock_seconds_total": 20.941620200057514,
+        "cpu_wallclock_seconds_mean_per_fit": 0.27196909350724047,
+        "gpu_cuda_event_seconds_total": 20.93825257873534,
+        "gpu_cuda_event_seconds_mean_per_fit": 0.27192535816539415
+      },
+      "inference_cost": {
+        "cpu_wallclock_seconds": 0.36302140000043437,
+        "gpu_cuda_event_seconds": 0.35071630859375
+      },
+      "native_head": {
+        "profile_rmse_transformed_at_fixed_q": 0.017180740931669724,
+        "profile_rmse_reduction_after_shared_eta_fit_same_q": 0.008005977282718376,
+        "eta_bias_physical_by_coordinate_after_prediction_only": [
+          -4.7633169553780856e-05,
+          0.0027723348682576884,
+          -0.00015545706752510369
+        ],
+        "eta_rmse_physical_by_coordinate_after_prediction_only": [
+          0.0054417434355953686,
+          0.002882276186242257,
+          0.00019045925010989091
+        ],
+        "eta_mean_physical_by_coordinate": [
+          -4.7633169553780856e-05,
+          0.08277233486825769,
+          0.006511209599141564
+        ],
+        "eta_mae_scaled_coordinate_after_prediction_only": [
+          0.06930873593313214,
+          0.11089339473030774,
+          0.03334514743515433
+        ],
+        "zero_shift_bias_degree": -4.7633169553780856e-05,
+        "zero_shift_rmse_degree": 0.0054417434355953686,
+        "q_error_vs_eta_mismatch_pearson_r_descriptive_only": 0.640406926535843
+      }
+    },
+    {
+      "condition": "v9",
+      "method": "A",
+      "seed": 20261045,
+      "checkpoint_sha256": "65cbc0b2ac4dcb71615f7a4034af0edebc15a1917f94c5ccd74f7c256fa23c2f",
+      "sample_count": 77,
+      "q_prediction_sha256": "57ae7068054191f9e2abac25c702232150bc1cfb7a0332166cfb19c77f573193",
+      "native_eta_prediction_sha256": null,
+      "q_mae_normalized": {
+        "du": 0.03532894281791402,
+        "dv": 0.029988094441012136,
+        "mean_two_coordinate": 0.03265851862946307
+      },
+      "lattice_mae_angstrom": {
+        "a_angstrom": 0.0013177766387564899,
+        "c_angstrom": 0.0018371387368882944
+      },
+      "shared_fit_profile_rmse_transformed": 0.015706968862021758,
+      "shared_fit": {
+        "solver_knobs_sha256": "2aaad94cd082b2e4ccb01ffb80c2533e65b009bba732282cec12d6e95d564850",
+        "n_profiles": 77,
+        "start_scaled_z": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "nfev_total": 1026,
+        "nfev_mean": 13.324675324675324,
+        "nit_total": 690,
+        "nit_mean": 8.96103896103896,
+        "failure_count": 0,
+        "failure_rate": 0.0,
+        "boundary_hit_count": 3,
+        "boundary_hit_rate": 0.03896103896103896,
+        "boundary_hit_count_by_coordinate": [
+          2,
+          2,
+          0
+        ],
+        "eta_mean_physical_by_coordinate": [
+          -0.004574327689102587,
+          0.11925292151844008,
+          0.006308941227804189
+        ],
+        "eta_sd_across_examples_by_coordinate": [
+          0.024599571691672005,
+          0.005787922659037197,
+          0.0008561884159296274
+        ],
+        "eta_mean_scaled_z_by_coordinate": [
+          -0.07623879481837645,
+          0.570116860737605,
+          0.2617882455608379
+        ],
+        "eta_truth_mismatch_after_prediction_only": {
+          "mae_physical_by_coordinate": [
+            0.01723530726980726,
+            0.0015101124233360627,
+            7.756566261818637e-05
+          ],
+          "rmse_physical_by_coordinate": [
+            0.02149998398938155,
+            0.0022384079316011504,
+            0.00011283918296471751
+          ],
+          "mean_scaled_absolute_error_by_coordinate": [
+            0.28725512116345436,
+            0.06040449693344248,
+            0.015513132523637271
+          ]
+        },
+        "q_error_vs_eta_mismatch_pearson_r_descriptive_only": 0.5131690723612752,
+        "cpu_wallclock_seconds_total": 9.211675000202376,
+        "cpu_wallclock_seconds_mean_per_fit": 0.11963214285977113,
+        "gpu_cuda_event_seconds_total": 9.208942314147949,
+        "gpu_cuda_event_seconds_mean_per_fit": 0.11959665343049285
+      },
+      "inference_cost": {
+        "cpu_wallclock_seconds": 0.050417999969795346,
+        "gpu_cuda_event_seconds": 0.04912857437133789
+      }
+    },
+    {
+      "condition": "v9",
+      "method": "B",
+      "seed": 20261045,
+      "checkpoint_sha256": "596ea89eea1c943e3d8b9fa0fe8fc2ae12097cc5c52732ab306a6c89d923960c",
+      "sample_count": 77,
+      "q_prediction_sha256": "3588ccf7f1d3582e8e3e719df122597ba699e9b0927960dd0db5095e13e10434",
+      "native_eta_prediction_sha256": "19d7b78de1753e07e1d371a5718ca6f74918298bd2f1c08a88e48fd8ec451e0c",
+      "q_mae_normalized": {
+        "du": 0.03230442984827927,
+        "dv": 0.0243894891015121,
+        "mean_two_coordinate": 0.028346959474895683
+      },
+      "lattice_mae_angstrom": {
+        "a_angstrom": 0.001235918864730003,
+        "c_angstrom": 0.001651037051474924
+      },
+      "shared_fit_profile_rmse_transformed": 0.015161883626639974,
+      "shared_fit": {
+        "solver_knobs_sha256": "2aaad94cd082b2e4ccb01ffb80c2533e65b009bba732282cec12d6e95d564850",
+        "n_profiles": 77,
+        "start_scaled_z": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "nfev_total": 980,
+        "nfev_mean": 12.727272727272727,
+        "nit_total": 690,
+        "nit_mean": 8.96103896103896,
+        "failure_count": 0,
+        "failure_rate": 0.0,
+        "boundary_hit_count": 3,
+        "boundary_hit_rate": 0.03896103896103896,
+        "boundary_hit_count_by_coordinate": [
+          2,
+          2,
+          0
+        ],
+        "eta_mean_physical_by_coordinate": [
+          -0.0023179063304651013,
+          0.1186970436152226,
+          0.006304934151029389
+        ],
+        "eta_sd_across_examples_by_coordinate": [
+          0.02331462145846424,
+          0.006016661165250102,
+          0.000864527989162072
+        ],
+        "eta_mean_scaled_z_by_coordinate": [
+          -0.038631772174418384,
+          0.5478817446089028,
+          0.26098683020587776
+        ],
+        "eta_truth_mismatch_after_prediction_only": {
+          "mae_physical_by_coordinate": [
+            0.015690352444442522,
+            0.00122914378030737,
+            6.94031054111498e-05
+          ],
+          "rmse_physical_by_coordinate": [
+            0.019525464407094587,
+            0.0020700043702137454,
+            0.00010581837605606873
+          ],
+          "mean_scaled_absolute_error_by_coordinate": [
+            0.26150587407404197,
+            0.049165751212294814,
+            0.01388062108222996
+          ]
+        },
+        "q_error_vs_eta_mismatch_pearson_r_descriptive_only": 0.49994815474546833,
+        "cpu_wallclock_seconds_total": 9.207773999951314,
+        "cpu_wallclock_seconds_mean_per_fit": 0.11958148051884823,
+        "gpu_cuda_event_seconds_total": 9.205092987060548,
+        "gpu_cuda_event_seconds_mean_per_fit": 0.11954666216961748
+      },
+      "inference_cost": {
+        "cpu_wallclock_seconds": 0.05385939998086542,
+        "gpu_cuda_event_seconds": 0.05322633743286133
+      },
+      "native_head": {
+        "profile_rmse_transformed_at_fixed_q": 0.025711062376117748,
+        "profile_rmse_reduction_after_shared_eta_fit_same_q": 0.010549178749477774,
+        "eta_bias_physical_by_coordinate_after_prediction_only": [
+          0.011142657935189105,
+          0.001638146229257043,
+          -2.5565714609701857e-05
+        ],
+        "eta_rmse_physical_by_coordinate_after_prediction_only": [
+          0.028683889386866415,
+          0.005928319451176046,
+          0.0009017379776447696
+        ],
+        "eta_mean_physical_by_coordinate": [
+          0.006477205471896156,
+          0.12046791661482353,
+          0.006304802082769283
+        ],
+        "eta_mae_scaled_coordinate_after_prediction_only": [
+          0.3956796879019379,
+          0.21192070999886328,
+          0.15330867865925174
+        ],
+        "zero_shift_bias_degree": 0.011142657935189105,
+        "zero_shift_rmse_degree": 0.028683889386866415,
+        "q_error_vs_eta_mismatch_pearson_r_descriptive_only": 0.2738259102222792
+      }
+    },
+    {
+      "condition": "v9",
+      "method": "A",
+      "seed": 20261046,
+      "checkpoint_sha256": "ddbfe98cdc345277e69b9d5fca617c158b27514482c95ae6fb84b90e41b0bdeb",
+      "sample_count": 77,
+      "q_prediction_sha256": "25c6465c428ac47ece9f62501d7e564b340481404e02c4e5e6a4c6d76d85d76d",
+      "native_eta_prediction_sha256": null,
+      "q_mae_normalized": {
+        "du": 0.04777892258489964,
+        "dv": 0.01866866560628662,
+        "mean_two_coordinate": 0.03322379409559313
+      },
+      "lattice_mae_angstrom": {
+        "a_angstrom": 0.0019044714623427368,
+        "c_angstrom": 0.0019901906906974803
+      },
+      "shared_fit_profile_rmse_transformed": 0.016940388563299855,
+      "shared_fit": {
+        "solver_knobs_sha256": "2aaad94cd082b2e4ccb01ffb80c2533e65b009bba732282cec12d6e95d564850",
+        "n_profiles": 77,
+        "start_scaled_z": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "nfev_total": 955,
+        "nfev_mean": 12.402597402597403,
+        "nit_total": 685,
+        "nit_mean": 8.896103896103897,
+        "failure_count": 0,
+        "failure_rate": 0.0,
+        "boundary_hit_count": 11,
+        "boundary_hit_rate": 0.14285714285714285,
+        "boundary_hit_count_by_coordinate": [
+          8,
+          4,
+          0
+        ],
+        "eta_mean_physical_by_coordinate": [
+          0.014324712126316863,
+          0.12016480448746926,
+          0.006303657520945309
+        ],
+        "eta_sd_across_examples_by_coordinate": [
+          0.02875696728534704,
+          0.005809862102399137,
+          0.0008404664923604388
+        ],
+        "eta_mean_scaled_z_by_coordinate": [
+          0.238745202105281,
+          0.606592179498771,
+          0.26073150418906155
+        ],
+        "eta_truth_mismatch_after_prediction_only": {
+          "mae_physical_by_coordinate": [
+            0.023012834282584625,
+            0.001685726952203753,
+            6.179133644378772e-05
+          ],
+          "rmse_physical_by_coordinate": [
+            0.026993179345553255,
+            0.0024523762226825014,
+            7.990411706041392e-05
+          ],
+          "mean_scaled_absolute_error_by_coordinate": [
+            0.38354723804307717,
+            0.06742907808815014,
+            0.012358267288757548
+          ]
+        },
+        "q_error_vs_eta_mismatch_pearson_r_descriptive_only": 0.6834737532837895,
+        "cpu_wallclock_seconds_total": 8.547123999742325,
+        "cpu_wallclock_seconds_mean_per_fit": 0.11100161038626397,
+        "gpu_cuda_event_seconds_total": 8.543808807373043,
+        "gpu_cuda_event_seconds_mean_per_fit": 0.1109585559399097
+      },
+      "inference_cost": {
+        "cpu_wallclock_seconds": 0.04993330000434071,
+        "gpu_cuda_event_seconds": 0.04976569747924805
+      }
+    },
+    {
+      "condition": "v9",
+      "method": "B",
+      "seed": 20261046,
+      "checkpoint_sha256": "fc022d74e1eff40213e9d4295a0831ff6c2c460889a8b66814231d49c57000a3",
+      "sample_count": 77,
+      "q_prediction_sha256": "985149e7d6aef25ff2a81aa008fa201014601437d54d622a525620a6b2df3762",
+      "native_eta_prediction_sha256": "be7d2191c7816dd3828da745a13387113bc57bd66fdc798bc5c21349f4a0c878",
+      "q_mae_normalized": {
+        "du": 0.04018117842663612,
+        "dv": 0.01966969019237471,
+        "mean_two_coordinate": 0.02992543430950541
+      },
+      "lattice_mae_angstrom": {
+        "a_angstrom": 0.0015632685695404639,
+        "c_angstrom": 0.0017601725696179155
+      },
+      "shared_fit_profile_rmse_transformed": 0.015330326387120785,
+      "shared_fit": {
+        "solver_knobs_sha256": "2aaad94cd082b2e4ccb01ffb80c2533e65b009bba732282cec12d6e95d564850",
+        "n_profiles": 77,
+        "start_scaled_z": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "nfev_total": 1052,
+        "nfev_mean": 13.662337662337663,
+        "nit_total": 709,
+        "nit_mean": 9.207792207792208,
+        "failure_count": 1,
+        "failure_rate": 0.012987012987012988,
+        "boundary_hit_count": 3,
+        "boundary_hit_rate": 0.03896103896103896,
+        "boundary_hit_count_by_coordinate": [
+          2,
+          2,
+          0
+        ],
+        "eta_mean_physical_by_coordinate": [
+          -0.012627844279513087,
+          0.11955453291287801,
+          0.006331471176146306
+        ],
+        "eta_sd_across_examples_by_coordinate": [
+          0.025007260035925325,
+          0.005821003762772631,
+          0.000860829370764677
+        ],
+        "eta_mean_scaled_z_by_coordinate": [
+          -0.2104640713252182,
+          0.5821813165151193,
+          0.266294235229261
+        ],
+        "eta_truth_mismatch_after_prediction_only": {
+          "mae_physical_by_coordinate": [
+            0.019786445780620283,
+            0.0013419982366772876,
+            6.715059697282757e-05
+          ],
+          "rmse_physical_by_coordinate": [
+            0.023566668625791157,
+            0.00193238524616633,
+            9.600399482296846e-05
+          ],
+          "mean_scaled_absolute_error_by_coordinate": [
+            0.3297740963436713,
+            0.0536799294670915,
+            0.013430119394565513
+          ]
+        },
+        "q_error_vs_eta_mismatch_pearson_r_descriptive_only": 0.6080715493066854,
+        "cpu_wallclock_seconds_total": 9.223223600187339,
+        "cpu_wallclock_seconds_mean_per_fit": 0.11978212467775765,
+        "gpu_cuda_event_seconds_total": 9.220522438049318,
+        "gpu_cuda_event_seconds_mean_per_fit": 0.11974704464999116
+      },
+      "inference_cost": {
+        "cpu_wallclock_seconds": 0.04747980000684038,
+        "gpu_cuda_event_seconds": 0.0473166389465332
+      },
+      "native_head": {
+        "profile_rmse_transformed_at_fixed_q": 0.02841871033736437,
+        "profile_rmse_reduction_after_shared_eta_fit_same_q": 0.013088383950243584,
+        "eta_bias_physical_by_coordinate_after_prediction_only": [
+          -0.002579483596852329,
+          0.0025744863344810084,
+          5.339734677370343e-05
+        ],
+        "eta_rmse_physical_by_coordinate_after_prediction_only": [
+          0.030525459413398445,
+          0.0061100607651436425,
+          0.0008958116977886654
+        ],
+        "eta_mean_physical_by_coordinate": [
+          -0.00724493606014528,
+          0.1214042567200475,
+          0.006383765144152688
+        ],
+        "eta_mae_scaled_coordinate_after_prediction_only": [
+          0.4246345179300845,
+          0.21576896965608006,
+          0.1543200650473715
+        ],
+        "zero_shift_bias_degree": -0.002579483596852329,
+        "zero_shift_rmse_degree": 0.030525459413398445,
+        "q_error_vs_eta_mismatch_pearson_r_descriptive_only": 0.20659036410800866
+      }
+    },
+    {
+      "condition": "v9",
+      "method": "A",
+      "seed": 20261047,
+      "checkpoint_sha256": "202e18faafcbbef16923b457b1bc316ea748d96b5518ce805e1258b9aa3e3375",
+      "sample_count": 77,
+      "q_prediction_sha256": "7a22dfc9952b394253853e15d149a42213011c445fd0973249596e1b15989874",
+      "native_eta_prediction_sha256": null,
+      "q_mae_normalized": {
+        "du": 0.03861115408891981,
+        "dv": 0.02303572509365229,
+        "mean_two_coordinate": 0.030823439591286042
+      },
+      "lattice_mae_angstrom": {
+        "a_angstrom": 0.0014914578708445506,
+        "c_angstrom": 0.0018083713264444644
+      },
+      "shared_fit_profile_rmse_transformed": 0.015454880930320108,
+      "shared_fit": {
+        "solver_knobs_sha256": "2aaad94cd082b2e4ccb01ffb80c2533e65b009bba732282cec12d6e95d564850",
+        "n_profiles": 77,
+        "start_scaled_z": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "nfev_total": 952,
+        "nfev_mean": 12.363636363636363,
+        "nit_total": 705,
+        "nit_mean": 9.155844155844155,
+        "failure_count": 0,
+        "failure_rate": 0.0,
+        "boundary_hit_count": 1,
+        "boundary_hit_rate": 0.012987012987012988,
+        "boundary_hit_count_by_coordinate": [
+          1,
+          1,
+          0
+        ],
+        "eta_mean_physical_by_coordinate": [
+          0.0014450332818868586,
+          0.11927666466644973,
+          0.006301606258481993
+        ],
+        "eta_sd_across_examples_by_coordinate": [
+          0.025041738183024978,
+          0.005728162240792494,
+          0.0008464364168254189
+        ],
+        "eta_mean_scaled_z_by_coordinate": [
+          0.02408388803144764,
+          0.5710665866579897,
+          0.26032125169639825
+        ],
+        "eta_truth_mismatch_after_prediction_only": {
+          "mae_physical_by_coordinate": [
+            0.019009693838814352,
+            0.0011840672207953456,
+            6.749205934636967e-05
+          ],
+          "rmse_physical_by_coordinate": [
+            0.023971828901250016,
+            0.0018661918626774947,
+            8.798617062270956e-05
+          ],
+          "mean_scaled_absolute_error_by_coordinate": [
+            0.3168282306469059,
+            0.04736268883181385,
+            0.013498411869273934
+          ]
+        },
+        "q_error_vs_eta_mismatch_pearson_r_descriptive_only": 0.7761736694078822,
+        "cpu_wallclock_seconds_total": 8.252485199831426,
+        "cpu_wallclock_seconds_mean_per_fit": 0.1071751324653432,
+        "gpu_cuda_event_seconds_total": 8.24993141937256,
+        "gpu_cuda_event_seconds_mean_per_fit": 0.10714196648535793
+      },
+      "inference_cost": {
+        "cpu_wallclock_seconds": 0.05046960001345724,
+        "gpu_cuda_event_seconds": 0.05029324722290039
+      }
+    },
+    {
+      "condition": "v9",
+      "method": "B",
+      "seed": 20261047,
+      "checkpoint_sha256": "6580cb745cf20be81bda27aaf70ba7cdf1eb6dde7add14319eff5a5c3d26f63f",
+      "sample_count": 77,
+      "q_prediction_sha256": "7fde1db57176ac6e95a678bb5b81290a872a1d4e86cd290f8ef9ceaf4731a0fb",
+      "native_eta_prediction_sha256": "f737991025e02239ce522b0151c7579643c559deda518b934b05507c63bc8371",
+      "q_mae_normalized": {
+        "du": 0.04075161773808204,
+        "dv": 0.02602906021737047,
+        "mean_two_coordinate": 0.033390338977726246
+      },
+      "lattice_mae_angstrom": {
+        "a_angstrom": 0.0015579498771501785,
+        "c_angstrom": 0.001922216858459942
+      },
+      "shared_fit_profile_rmse_transformed": 0.016370578157578367,
+      "shared_fit": {
+        "solver_knobs_sha256": "2aaad94cd082b2e4ccb01ffb80c2533e65b009bba732282cec12d6e95d564850",
+        "n_profiles": 77,
+        "start_scaled_z": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "nfev_total": 1010,
+        "nfev_mean": 13.116883116883116,
+        "nit_total": 678,
+        "nit_mean": 8.805194805194805,
+        "failure_count": 0,
+        "failure_rate": 0.0,
+        "boundary_hit_count": 1,
+        "boundary_hit_rate": 0.012987012987012988,
+        "boundary_hit_count_by_coordinate": [
+          1,
+          1,
+          0
+        ],
+        "eta_mean_physical_by_coordinate": [
+          -0.0046822494525859785,
+          0.1194987274844275,
+          0.00630071867897566
+        ],
+        "eta_sd_across_examples_by_coordinate": [
+          0.01993831176282702,
+          0.005588601877372285,
+          0.000843809200283933
+        ],
+        "eta_mean_scaled_z_by_coordinate": [
+          -0.07803749087643298,
+          0.5799490993771003,
+          0.2601437357951322
+        ],
+        "eta_truth_mismatch_after_prediction_only": {
+          "mae_physical_by_coordinate": [
+            0.02018839066249615,
+            0.0014587305992571284,
+            7.811508494955868e-05
+          ],
+          "rmse_physical_by_coordinate": [
+            0.024691080192615893,
+            0.002078838432382751,
+            0.00010661320450845802
+          ],
+          "mean_scaled_absolute_error_by_coordinate": [
+            0.3364731777082691,
+            0.05834922397028511,
+            0.015623016989911738
+          ]
+        },
+        "q_error_vs_eta_mismatch_pearson_r_descriptive_only": 0.5974451074118335,
+        "cpu_wallclock_seconds_total": 8.789620400057174,
+        "cpu_wallclock_seconds_mean_per_fit": 0.11415091428645681,
+        "gpu_cuda_event_seconds_total": 8.787160453796387,
+        "gpu_cuda_event_seconds_mean_per_fit": 0.11411896693242064
+      },
+      "inference_cost": {
+        "cpu_wallclock_seconds": 0.04563030001008883,
+        "gpu_cuda_event_seconds": 0.04369356918334961
+      },
+      "native_head": {
+        "profile_rmse_transformed_at_fixed_q": 0.027866472493823586,
+        "profile_rmse_reduction_after_shared_eta_fit_same_q": 0.011495894336245219,
+        "eta_bias_physical_by_coordinate_after_prediction_only": [
+          0.007305868088879185,
+          0.0021743085870827806,
+          -1.2911061749070717e-06
+        ],
+        "eta_rmse_physical_by_coordinate_after_prediction_only": [
+          0.037141740723128536,
+          0.006165382694726176,
+          0.0009063187543783605
+        ],
+        "eta_mean_physical_by_coordinate": [
+          0.002640415625586235,
+          0.12100407897264927,
+          0.006329076691204077
+        ],
+        "eta_mae_scaled_coordinate_after_prediction_only": [
+          0.5217809981826411,
+          0.2202367268153369,
+          0.1582607615186503
+        ],
+        "zero_shift_bias_degree": 0.007305868088879185,
+        "zero_shift_rmse_degree": 0.037141740723128536,
+        "q_error_vs_eta_mismatch_pearson_r_descriptive_only": 0.44585656303489857
+      }
+    }
+  ],
+  "aggregate": {
+    "simple": {
+      "A": {
+        "seed_count": 3,
+        "sample_count_per_seed": [
+          77
+        ],
+        "metrics_mean_sd_across_three_seed_level_estimates": {
+          "q_mae_du": {
+            "mean": 0.011953612328688435,
+            "sd_sample": 0.0009734738089810486,
+            "per_seed_values": [
+              0.013071373421940714,
+              0.011497731105267228,
+              0.011291732458857364
+            ]
+          },
+          "q_mae_dv": {
+            "mean": 0.015112256915489961,
+            "sd_sample": 0.0013439871055986494,
+            "per_seed_values": [
+              0.015022482595999122,
+              0.016498880550362076,
+              0.01381540760010869
+            ]
+          },
+          "q_mae_mean_two_coordinate": {
+            "mean": 0.013532934622089198,
+            "sd_sample": 0.0008485029658540172,
+            "per_seed_values": [
+              0.014046928008969917,
+              0.013998305827814653,
+              0.012553570029483027
+            ]
+          },
+          "a_mae_angstrom": {
+            "mean": 0.0004978863801436954,
+            "sd_sample": 6.581050490894757e-05,
+            "per_seed_values": [
+              0.0005542741807756344,
+              0.0005138097611502431,
+              0.0004255751985052085
+            ]
+          },
+          "c_mae_angstrom": {
+            "mean": 0.0006992504434218848,
+            "sd_sample": 2.1644358167790126e-05,
+            "per_seed_values": [
+              0.0007141529073932605,
+              0.0006744234908415865,
+              0.0007091749320308075
+            ]
+          },
+          "shared_fit_profile_rmse_transformed": {
+            "mean": 0.009455714569604597,
+            "sd_sample": 1.5763587696152788e-05,
+            "per_seed_values": [
+              0.009472786452415198,
+              0.0094526470658217,
+              0.009441710190576892
+            ]
+          },
+          "shared_fit_nfev_mean": {
+            "mean": 11.597402597402597,
+            "sd_sample": 0.2090061940185856,
+            "per_seed_values": [
+              11.831168831168831,
+              11.428571428571429,
+              11.532467532467532
+            ]
+          },
+          "shared_fit_nit_mean": {
+            "mean": 8.593073593073592,
+            "sd_sample": 0.10497277621629558,
+            "per_seed_values": [
+              8.688311688311689,
+              8.61038961038961,
+              8.480519480519481
+            ]
+          },
+          "shared_fit_failure_rate": {
+            "mean": 0.0,
+            "sd_sample": 0.0,
+            "per_seed_values": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "shared_fit_boundary_hit_rate": {
+            "mean": 0.4675324675324675,
+            "sd_sample": 0.07230862808870155,
+            "per_seed_values": [
+              0.4025974025974026,
+              0.45454545454545453,
+              0.5454545454545454
+            ]
+          },
+          "shared_fit_cpu_wallclock_seconds_total": {
+            "mean": 8.728578900025846,
+            "sd_sample": 0.42725493398022596,
+            "per_seed_values": [
+              9.214219100249466,
+              8.410512699978426,
+              8.56100489984965
+            ]
+          },
+          "shared_fit_gpu_cuda_event_seconds_total": {
+            "mean": 8.725713516235352,
+            "sd_sample": 0.42724877647277754,
+            "per_seed_values": [
+              9.211347724914555,
+              8.40765627288818,
+              8.558136550903319
+            ]
+          },
+          "inference_cpu_wallclock_seconds": {
+            "mean": 0.13969620000959063,
+            "sd_sample": 0.14377675400244747,
+            "per_seed_values": [
+              0.3057134000118822,
+              0.05600059998687357,
+              0.057374600030016154
+            ]
+          },
+          "inference_gpu_cuda_event_seconds": {
+            "mean": 0.1395310999552409,
+            "sd_sample": 0.1437477883170894,
+            "per_seed_values": [
+              0.30551470947265624,
+              0.0558267822265625,
+              0.05725180816650391
+            ]
+          },
+          "shared_fit_eta_delta_mean_degree": {
+            "mean": 0.00022287651958800294,
+            "sd_sample": 0.0034559586418408113,
+            "per_seed_values": [
+              -0.003449038382634027,
+              0.003412137649569368,
+              0.000705530291828668
+            ]
+          },
+          "shared_fit_eta_fwhm_mean_degree": {
+            "mean": 0.0804975101108647,
+            "sd_sample": 0.0002746398332602498,
+            "per_seed_values": [
+              0.08079021128211142,
+              0.08045685510829152,
+              0.08024546394219116
+            ]
+          },
+          "shared_fit_eta_background_mean_ratio": {
+            "mean": 0.006649871465523674,
+            "sd_sample": 1.1506780393538795e-05,
+            "per_seed_values": [
+              0.0066624080347803824,
+              0.006647415243129722,
+              0.006639791118660919
+            ]
+          },
+          "shared_fit_eta_delta_scaled_z_mean": {
+            "mean": 0.0037146086598000595,
+            "sd_sample": 0.057599310697346875,
+            "per_seed_values": [
+              -0.05748397304390045,
+              0.05686896082615616,
+              0.011758838197144472
+            ]
+          },
+          "shared_fit_eta_fwhm_scaled_z_mean": {
+            "mean": -0.980099595565412,
+            "sd_sample": 0.01098559333041013,
+            "per_seed_values": [
+              -0.9683915487155434,
+              -0.9817257956683384,
+              -0.9901814423123542
+            ]
+          },
+          "shared_fit_eta_background_scaled_z_mean": {
+            "mean": 0.32997429310473475,
+            "sd_sample": 0.0023013560787082062,
+            "per_seed_values": [
+              0.33248160695607665,
+              0.3294830486259449,
+              0.3279582237321828
+            ]
+          },
+          "shared_fit_q_error_eta_mismatch_pearson_r_descriptive_only": {
+            "mean": 0.8414451040757477,
+            "sd_sample": 0.04445810030599001,
+            "per_seed_values": [
+              0.8842926244138679,
+              0.7955348132526066,
+              0.8445078745607686
+            ]
+          }
+        },
+        "per_seed": [
+          {
+            "condition": "simple",
+            "method": "A",
+            "seed": 20261045,
+            "checkpoint_sha256": "9f6fa7814d79a5a968de7f6b47031cb4e162c0d659ad39df7918aed6adf18129",
+            "sample_count": 77,
+            "q_prediction_sha256": "57b2c8d5db96a7c8219e4d075f8fe40168f53051fe0506ce1a60b2103751d0a7",
+            "native_eta_prediction_sha256": null,
+            "q_mae_normalized": {
+              "du": 0.013071373421940714,
+              "dv": 0.015022482595999122,
+              "mean_two_coordinate": 0.014046928008969917
+            },
+            "lattice_mae_angstrom": {
+              "a_angstrom": 0.0005542741807756344,
+              "c_angstrom": 0.0007141529073932605
+            },
+            "shared_fit_profile_rmse_transformed": 0.009472786452415198,
+            "shared_fit": {
+              "solver_knobs_sha256": "2aaad94cd082b2e4ccb01ffb80c2533e65b009bba732282cec12d6e95d564850",
+              "n_profiles": 77,
+              "start_scaled_z": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "nfev_total": 911,
+              "nfev_mean": 11.831168831168831,
+              "nit_total": 669,
+              "nit_mean": 8.688311688311689,
+              "failure_count": 0,
+              "failure_rate": 0.0,
+              "boundary_hit_count": 31,
+              "boundary_hit_rate": 0.4025974025974026,
+              "boundary_hit_count_by_coordinate": [
+                0,
+                31,
+                0
+              ],
+              "eta_mean_physical_by_coordinate": [
+                -0.003449038382634027,
+                0.08079021128211142,
+                0.0066624080347803824
+              ],
+              "eta_sd_across_examples_by_coordinate": [
+                0.009027389168336484,
+                0.0012792847458075257,
+                0.00013799462476079785
+              ],
+              "eta_mean_scaled_z_by_coordinate": [
+                -0.05748397304390045,
+                -0.9683915487155434,
+                0.33248160695607665
+              ],
+              "eta_truth_mismatch_after_prediction_only": {
+                "mae_physical_by_coordinate": [
+                  0.006883229847906383,
+                  0.0007902112821114237,
+                  9.885111700306535e-05
+                ],
+                "rmse_physical_by_coordinate": [
+                  0.009608915677868287,
+                  0.0014965791600813243,
+                  0.0001371617548728782
+                ],
+                "mean_scaled_absolute_error_by_coordinate": [
+                  0.1147204974651063,
+                  0.03160845128445695,
+                  0.019770223400613067
+                ]
+              },
+              "q_error_vs_eta_mismatch_pearson_r_descriptive_only": 0.8842926244138679,
+              "cpu_wallclock_seconds_total": 9.214219100249466,
+              "cpu_wallclock_seconds_mean_per_fit": 0.11966518312012293,
+              "gpu_cuda_event_seconds_total": 9.211347724914555,
+              "gpu_cuda_event_seconds_mean_per_fit": 0.1196278925313578
+            },
+            "inference_cost": {
+              "cpu_wallclock_seconds": 0.3057134000118822,
+              "gpu_cuda_event_seconds": 0.30551470947265624
+            }
+          },
+          {
+            "condition": "simple",
+            "method": "A",
+            "seed": 20261046,
+            "checkpoint_sha256": "64dfbece6d693c5c36551cdef1b30ad6f9d18f1daf2cbe7c0e3ce519c30b7780",
+            "sample_count": 77,
+            "q_prediction_sha256": "b70e38ecb9461c4893618ebd7249a221ca96bedc245bcd93637521dac91c9cbe",
+            "native_eta_prediction_sha256": null,
+            "q_mae_normalized": {
+              "du": 0.011497731105267228,
+              "dv": 0.016498880550362076,
+              "mean_two_coordinate": 0.013998305827814653
+            },
+            "lattice_mae_angstrom": {
+              "a_angstrom": 0.0005138097611502431,
+              "c_angstrom": 0.0006744234908415865
+            },
+            "shared_fit_profile_rmse_transformed": 0.0094526470658217,
+            "shared_fit": {
+              "solver_knobs_sha256": "2aaad94cd082b2e4ccb01ffb80c2533e65b009bba732282cec12d6e95d564850",
+              "n_profiles": 77,
+              "start_scaled_z": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "nfev_total": 880,
+              "nfev_mean": 11.428571428571429,
+              "nit_total": 663,
+              "nit_mean": 8.61038961038961,
+              "failure_count": 0,
+              "failure_rate": 0.0,
+              "boundary_hit_count": 35,
+              "boundary_hit_rate": 0.45454545454545453,
+              "boundary_hit_count_by_coordinate": [
+                0,
+                35,
+                0
+              ],
+              "eta_mean_physical_by_coordinate": [
+                0.003412137649569368,
+                0.08045685510829152,
+                0.006647415243129722
+              ],
+              "eta_sd_across_examples_by_coordinate": [
+                0.007824125508641108,
+                0.0008599955626933705,
+                0.00013919888219538843
+              ],
+              "eta_mean_scaled_z_by_coordinate": [
+                0.05686896082615616,
+                -0.9817257956683384,
+                0.3294830486259449
+              ],
+              "eta_truth_mismatch_after_prediction_only": {
+                "mae_physical_by_coordinate": [
+                  0.006014653115855547,
+                  0.00045685510829153073,
+                  9.808526188948524e-05
+                ],
+                "rmse_physical_by_coordinate": [
+                  0.008489087001562486,
+                  0.0009688673088395333,
+                  0.00013962559034367726
+                ],
+                "mean_scaled_absolute_error_by_coordinate": [
+                  0.10024421859759247,
+                  0.018274204331661232,
+                  0.019617052377897046
+                ]
+              },
+              "q_error_vs_eta_mismatch_pearson_r_descriptive_only": 0.7955348132526066,
+              "cpu_wallclock_seconds_total": 8.410512699978426,
+              "cpu_wallclock_seconds_mean_per_fit": 0.10922743766205747,
+              "gpu_cuda_event_seconds_total": 8.40765627288818,
+              "gpu_cuda_event_seconds_mean_per_fit": 0.10919034120634004
+            },
+            "inference_cost": {
+              "cpu_wallclock_seconds": 0.05600059998687357,
+              "gpu_cuda_event_seconds": 0.0558267822265625
+            }
+          },
+          {
+            "condition": "simple",
+            "method": "A",
+            "seed": 20261047,
+            "checkpoint_sha256": "5843f1b7ad9e47b1e4953348112a2f3998abe07bdd35d65716afcf89ec886111",
+            "sample_count": 77,
+            "q_prediction_sha256": "5b8e4a27a3bd4808d77e12b2d8b16b121c4deb4ff3c3949de0cd8a67e5976978",
+            "native_eta_prediction_sha256": null,
+            "q_mae_normalized": {
+              "du": 0.011291732458857364,
+              "dv": 0.01381540760010869,
+              "mean_two_coordinate": 0.012553570029483027
+            },
+            "lattice_mae_angstrom": {
+              "a_angstrom": 0.0004255751985052085,
+              "c_angstrom": 0.0007091749320308075
+            },
+            "shared_fit_profile_rmse_transformed": 0.009441710190576892,
+            "shared_fit": {
+              "solver_knobs_sha256": "2aaad94cd082b2e4ccb01ffb80c2533e65b009bba732282cec12d6e95d564850",
+              "n_profiles": 77,
+              "start_scaled_z": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "nfev_total": 888,
+              "nfev_mean": 11.532467532467532,
+              "nit_total": 653,
+              "nit_mean": 8.480519480519481,
+              "failure_count": 0,
+              "failure_rate": 0.0,
+              "boundary_hit_count": 42,
+              "boundary_hit_rate": 0.5454545454545454,
+              "boundary_hit_count_by_coordinate": [
+                0,
+                42,
+                0
+              ],
+              "eta_mean_physical_by_coordinate": [
+                0.000705530291828668,
+                0.08024546394219116,
+                0.006639791118660919
+              ],
+              "eta_sd_across_examples_by_coordinate": [
+                0.00932939314403772,
+                0.0004945551234408328,
+                0.00010459746702782576
+              ],
+              "eta_mean_scaled_z_by_coordinate": [
+                0.011758838197144472,
+                -0.9901814423123542,
+                0.3279582237321828
+              ],
+              "eta_truth_mismatch_after_prediction_only": {
+                "mae_physical_by_coordinate": [
+                  0.005966098799434786,
+                  0.00024546394219114657,
+                  7.31317250603318e-05
+                ],
+                "rmse_physical_by_coordinate": [
+                  0.009295428515844395,
+                  0.0005492366443088091,
+                  0.00010733517170033142
+                ],
+                "mean_scaled_absolute_error_by_coordinate": [
+                  0.09943497999057978,
+                  0.009818557687645864,
+                  0.014626345012066359
+                ]
+              },
+              "q_error_vs_eta_mismatch_pearson_r_descriptive_only": 0.8445078745607686,
+              "cpu_wallclock_seconds_total": 8.56100489984965,
+              "cpu_wallclock_seconds_mean_per_fit": 0.11118188181622922,
+              "gpu_cuda_event_seconds_total": 8.558136550903319,
+              "gpu_cuda_event_seconds_mean_per_fit": 0.11114463053121193
+            },
+            "inference_cost": {
+              "cpu_wallclock_seconds": 0.057374600030016154,
+              "gpu_cuda_event_seconds": 0.05725180816650391
+            }
+          }
+        ]
+      },
+      "B": {
+        "seed_count": 3,
+        "sample_count_per_seed": [
+          77
+        ],
+        "metrics_mean_sd_across_three_seed_level_estimates": {
+          "q_mae_du": {
+            "mean": 0.012150674309199512,
+            "sd_sample": 0.0017639204335850138,
+            "per_seed_values": [
+              0.01375850547867064,
+              0.010263903935548753,
+              0.012429613513379139
+            ]
+          },
+          "q_mae_dv": {
+            "mean": 0.015200626184494593,
+            "sd_sample": 0.0023923645703393557,
+            "per_seed_values": [
+              0.017941321308010964,
+              0.014130030048696647,
+              0.013530527196776167
+            ]
+          },
+          "q_mae_mean_two_coordinate": {
+            "mean": 0.013675650246847052,
+            "sd_sample": 0.0019232467059424605,
+            "per_seed_values": [
+              0.015849913393340805,
+              0.012196966992122698,
+              0.012980070355077653
+            ]
+          },
+          "a_mae_angstrom": {
+            "mean": 0.0005250147352875078,
+            "sd_sample": 0.00010986299750974158,
+            "per_seed_values": [
+              0.0006486145692564657,
+              0.0004384723648280797,
+              0.00048795727177797807
+            ]
+          },
+          "c_mae_angstrom": {
+            "mean": 0.0006791229882386977,
+            "sd_sample": 2.762977471847004e-05,
+            "per_seed_values": [
+              0.0006548697076862799,
+              0.0006732986330598437,
+              0.0007092006239699696
+            ]
+          },
+          "shared_fit_profile_rmse_transformed": {
+            "mean": 0.009415092029364509,
+            "sd_sample": 0.0004907249861155899,
+            "per_seed_values": [
+              0.00997965774316674,
+              0.009090854695975436,
+              0.009174763648951348
+            ]
+          },
+          "shared_fit_nfev_mean": {
+            "mean": 11.303030303030303,
+            "sd_sample": 0.5914915544225191,
+            "per_seed_values": [
+              11.909090909090908,
+              11.272727272727273,
+              10.727272727272727
+            ]
+          },
+          "shared_fit_nit_mean": {
+            "mean": 8.467532467532466,
+            "sd_sample": 0.14750411287792947,
+            "per_seed_values": [
+              8.636363636363637,
+              8.363636363636363,
+              8.402597402597403
+            ]
+          },
+          "shared_fit_failure_rate": {
+            "mean": 0.0,
+            "sd_sample": 0.0,
+            "per_seed_values": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "shared_fit_boundary_hit_rate": {
+            "mean": 0.48917748917748916,
+            "sd_sample": 0.058561685101596025,
+            "per_seed_values": [
+              0.42857142857142855,
+              0.5454545454545454,
+              0.4935064935064935
+            ]
+          },
+          "shared_fit_cpu_wallclock_seconds_total": {
+            "mean": 12.816710799796661,
+            "sd_sample": 7.0429698152163125,
+            "per_seed_values": [
+              9.05890219961293,
+              8.449609999719542,
+              20.941620200057514
+            ]
+          },
+          "shared_fit_gpu_cuda_event_seconds_total": {
+            "mean": 12.813724456787108,
+            "sd_sample": 7.042638672006739,
+            "per_seed_values": [
+              9.056077468872074,
+              8.446843322753907,
+              20.93825257873534
+            ]
+          },
+          "inference_cpu_wallclock_seconds": {
+            "mean": 0.15819486669109514,
+            "sd_sample": 0.17739179333266022,
+            "per_seed_values": [
+              0.05422700004419312,
+              0.05733620002865791,
+              0.36302140000043437
+            ]
+          },
+          "inference_gpu_cuda_event_seconds": {
+            "mean": 0.15343395868937174,
+            "sd_sample": 0.17085311014667923,
+            "per_seed_values": [
+              0.05405721664428711,
+              0.05552835083007813,
+              0.35071630859375
+            ]
+          },
+          "shared_fit_eta_delta_mean_degree": {
+            "mean": 0.0001833804077545865,
+            "sd_sample": 0.0019243125049768456,
+            "per_seed_values": [
+              0.0020170482349417215,
+              -0.0018202954177398657,
+              0.00035338840606190366
+            ]
+          },
+          "shared_fit_eta_fwhm_mean_degree": {
+            "mean": 0.0804512224579166,
+            "sd_sample": 0.00024015038979665945,
+            "per_seed_values": [
+              0.08067184893134657,
+              0.08019542664789513,
+              0.0804863917945081
+            ]
+          },
+          "shared_fit_eta_background_mean_ratio": {
+            "mean": 0.00664014228824273,
+            "sd_sample": 7.056498782072514e-06,
+            "per_seed_values": [
+              0.006639642310517748,
+              0.006633349075293028,
+              0.0066474354789174146
+            ]
+          },
+          "shared_fit_eta_delta_scaled_z_mean": {
+            "mean": 0.0030563401292431195,
+            "sd_sample": 0.032071875082947426,
+            "per_seed_values": [
+              0.03361747058236204,
+              -0.030338256962331084,
+              0.005889806767698405
+            ]
+          },
+          "shared_fit_eta_fwhm_scaled_z_mean": {
+            "mean": -0.981951101683336,
+            "sd_sample": 0.009606015591865788,
+            "per_seed_values": [
+              -0.9731260427461375,
+              -0.9921829340841942,
+              -0.9805443282196763
+            ]
+          },
+          "shared_fit_eta_background_scaled_z_mean": {
+            "mean": 0.328028457648546,
+            "sd_sample": 0.001411299756414463,
+            "per_seed_values": [
+              0.3279284621035493,
+              0.3266698150586057,
+              0.3294870957834829
+            ]
+          },
+          "shared_fit_q_error_eta_mismatch_pearson_r_descriptive_only": {
+            "mean": 0.8097484244459555,
+            "sd_sample": 0.03857479950436955,
+            "per_seed_values": [
+              0.8082183956920346,
+              0.7719614036521051,
+              0.8490654739937269
+            ]
+          },
+          "native_profile_rmse_transformed": {
+            "mean": 0.01588539724130511,
+            "sd_sample": 0.0014918855627221333,
+            "per_seed_values": [
+              0.01622123242463514,
+              0.014254218367610462,
+              0.017180740931669724
+            ]
+          },
+          "native_to_profiled_rmse_reduction_same_fixed_q": {
+            "mean": 0.006470305211940602,
+            "sd_sample": 0.0014350439983347725,
+            "per_seed_values": [
+              0.006241574681468402,
+              0.005163363671635026,
+              0.008005977282718376
+            ]
+          },
+          "native_eta_zero_shift_bias_degree": {
+            "mean": -0.00032082634493137244,
+            "sd_sample": 0.0003024711330703361,
+            "per_seed_values": [
+              -0.0006458716074262924,
+              -0.00026897425781404404,
+              -4.7633169553780856e-05
+            ]
+          },
+          "native_eta_zero_shift_rmse_degree": {
+            "mean": 0.0033552225791764873,
+            "sd_sample": 0.0018448443689703417,
+            "per_seed_values": [
+              0.0026838139796815756,
+              0.001940110322252516,
+              0.0054417434355953686
+            ]
+          },
+          "native_eta_delta_scaled_mae": {
+            "mean": 0.04179976977934563,
+            "sd_sample": 0.024022206488292806,
+            "per_seed_values": [
+              0.031128951799143,
+              0.024961621605761736,
+              0.06930873593313214
+            ]
+          },
+          "native_eta_fwhm_scaled_mae": {
+            "mean": 0.10819042085053072,
+            "sd_sample": 0.005757370011065011,
+            "per_seed_values": [
+              0.1015789188347852,
+              0.11209894898649925,
+              0.11089339473030774
+            ]
+          },
+          "native_eta_background_scaled_mae": {
+            "mean": 0.03765491654755072,
+            "sd_sample": 0.006641401485969666,
+            "per_seed_values": [
+              0.034316384011790976,
+              0.04530321819570685,
+              0.03334514743515433
+            ]
+          },
+          "native_q_error_eta_mismatch_pearson_r_descriptive_only": {
+            "mean": 0.27382431054317397,
+            "sd_sample": 0.31748617593342926,
+            "per_seed_values": [
+              0.08731412886014021,
+              0.09375187623353864,
+              0.640406926535843
+            ]
+          },
+          "native_eta_bias_physical_delta_2theta_deg": {
+            "mean": -0.00032082634493137244,
+            "sd_sample": 0.0003024711330703361,
+            "per_seed_values": [
+              -0.0006458716074262924,
+              -0.00026897425781404404,
+              -4.7633169553780856e-05
+            ]
+          },
+          "native_eta_rmse_physical_delta_2theta_deg": {
+            "mean": 0.0033552225791764873,
+            "sd_sample": 0.0018448443689703417,
+            "per_seed_values": [
+              0.0026838139796815756,
+              0.001940110322252516,
+              0.0054417434355953686
+            ]
+          },
+          "native_eta_bias_physical_fwhm_deg": {
+            "mean": 0.0027047605212632644,
+            "sd_sample": 0.00014393425027662367,
+            "per_seed_values": [
+              0.002539472970869628,
+              0.002802473724662476,
+              0.0027723348682576884
+            ]
+          },
+          "native_eta_rmse_physical_fwhm_deg": {
+            "mean": 0.0028029740963314855,
+            "sd_sample": 0.000184244964789263,
+            "per_seed_values": [
+              0.0025923564144201285,
+              0.00293428968833207,
+              0.002882276186242257
+            ]
+          },
+          "native_eta_bias_physical_background_peak_ratio": {
+            "mean": -0.00018451835952086444,
+            "sd_sample": 3.725399043059071e-05,
+            "per_seed_values": [
+              -0.00017158192005895507,
+              -0.00022651609097853456,
+              -0.00015545706752510369
+            ]
+          },
+          "native_eta_rmse_physical_background_peak_ratio": {
+            "mean": 0.00020605029639983216,
+            "sd_sample": 2.8514166163764407e-05,
+            "per_seed_values": [
+              0.00018873113999869973,
+              0.0002389604990909059,
+              0.00019045925010989091
+            ]
+          }
+        },
+        "per_seed": [
+          {
+            "condition": "simple",
+            "method": "B",
+            "seed": 20261045,
+            "checkpoint_sha256": "25d2c8cd8f5f03c06ffc1df987db287c3f04ded8a98e9d97d14f781861a8bbcb",
+            "sample_count": 77,
+            "q_prediction_sha256": "a0fcdbdae1245d47ed865dac7f1b891d715574cc89e527f7ac361f56a8a888f1",
+            "native_eta_prediction_sha256": "53a6efa988510d502247487a95bbc798076f933eb2d02387e91a95e3a87f2e7f",
+            "q_mae_normalized": {
+              "du": 0.01375850547867064,
+              "dv": 0.017941321308010964,
+              "mean_two_coordinate": 0.015849913393340805
+            },
+            "lattice_mae_angstrom": {
+              "a_angstrom": 0.0006486145692564657,
+              "c_angstrom": 0.0006548697076862799
+            },
+            "shared_fit_profile_rmse_transformed": 0.00997965774316674,
+            "shared_fit": {
+              "solver_knobs_sha256": "2aaad94cd082b2e4ccb01ffb80c2533e65b009bba732282cec12d6e95d564850",
+              "n_profiles": 77,
+              "start_scaled_z": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "nfev_total": 917,
+              "nfev_mean": 11.909090909090908,
+              "nit_total": 665,
+              "nit_mean": 8.636363636363637,
+              "failure_count": 0,
+              "failure_rate": 0.0,
+              "boundary_hit_count": 33,
+              "boundary_hit_rate": 0.42857142857142855,
+              "boundary_hit_count_by_coordinate": [
+                0,
+                33,
+                0
+              ],
+              "eta_mean_physical_by_coordinate": [
+                0.0020170482349417215,
+                0.08067184893134657,
+                0.006639642310517748
+              ],
+              "eta_sd_across_examples_by_coordinate": [
+                0.009441657315615977,
+                0.0011020878153260557,
+                0.0001478066459137186
+              ],
+              "eta_mean_scaled_z_by_coordinate": [
+                0.03361747058236204,
+                -0.9731260427461375,
+                0.3279284621035493
+              ],
+              "eta_truth_mismatch_after_prediction_only": {
+                "mae_physical_by_coordinate": [
+                  0.007141447966557904,
+                  0.0006718489313465649,
+                  0.00011528454862164067
+                ],
+                "rmse_physical_by_coordinate": [
+                  0.009594563594360912,
+                  0.001284602874452217,
+                  0.00014930973064998277
+                ],
+                "mean_scaled_absolute_error_by_coordinate": [
+                  0.11902413277596507,
+                  0.026873957253862588,
+                  0.023056909724328133
+                ]
+              },
+              "q_error_vs_eta_mismatch_pearson_r_descriptive_only": 0.8082183956920346,
+              "cpu_wallclock_seconds_total": 9.05890219961293,
+              "cpu_wallclock_seconds_mean_per_fit": 0.11764808051445365,
+              "gpu_cuda_event_seconds_total": 9.056077468872074,
+              "gpu_cuda_event_seconds_mean_per_fit": 0.1176113956996373
+            },
+            "inference_cost": {
+              "cpu_wallclock_seconds": 0.05422700004419312,
+              "gpu_cuda_event_seconds": 0.05405721664428711
+            },
+            "native_head": {
+              "profile_rmse_transformed_at_fixed_q": 0.01622123242463514,
+              "profile_rmse_reduction_after_shared_eta_fit_same_q": 0.006241574681468402,
+              "eta_bias_physical_by_coordinate_after_prediction_only": [
+                -0.0006458716074262924,
+                0.002539472970869628,
+                -0.00017158192005895507
+              ],
+              "eta_rmse_physical_by_coordinate_after_prediction_only": [
+                0.0026838139796815756,
+                0.0025923564144201285,
+                0.00018873113999869973
+              ],
+              "eta_mean_physical_by_coordinate": [
+                -0.0006458716074262924,
+                0.08253947297086964,
+                0.006495084746607712
+              ],
+              "eta_mae_scaled_coordinate_after_prediction_only": [
+                0.031128951799143,
+                0.1015789188347852,
+                0.034316384011790976
+              ],
+              "zero_shift_bias_degree": -0.0006458716074262924,
+              "zero_shift_rmse_degree": 0.0026838139796815756,
+              "q_error_vs_eta_mismatch_pearson_r_descriptive_only": 0.08731412886014021
+            }
+          },
+          {
+            "condition": "simple",
+            "method": "B",
+            "seed": 20261046,
+            "checkpoint_sha256": "4b82abd3098f43a9e1e411fb16b006bc90701f129dfc27cad903a8391bd0df4c",
+            "sample_count": 77,
+            "q_prediction_sha256": "a96d59c645a9ac652bb0db9c9d2644d9337aef6aba3890ebfe88b4b1dcb970e8",
+            "native_eta_prediction_sha256": "060b97e5813b834c7fa0ba1b97e5ccebc2d09127e11bae609fe4350d2721f401",
+            "q_mae_normalized": {
+              "du": 0.010263903935548753,
+              "dv": 0.014130030048696647,
+              "mean_two_coordinate": 0.012196966992122698
+            },
+            "lattice_mae_angstrom": {
+              "a_angstrom": 0.0004384723648280797,
+              "c_angstrom": 0.0006732986330598437
+            },
+            "shared_fit_profile_rmse_transformed": 0.009090854695975436,
+            "shared_fit": {
+              "solver_knobs_sha256": "2aaad94cd082b2e4ccb01ffb80c2533e65b009bba732282cec12d6e95d564850",
+              "n_profiles": 77,
+              "start_scaled_z": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "nfev_total": 868,
+              "nfev_mean": 11.272727272727273,
+              "nit_total": 644,
+              "nit_mean": 8.363636363636363,
+              "failure_count": 0,
+              "failure_rate": 0.0,
+              "boundary_hit_count": 42,
+              "boundary_hit_rate": 0.5454545454545454,
+              "boundary_hit_count_by_coordinate": [
+                0,
+                42,
+                0
+              ],
+              "eta_mean_physical_by_coordinate": [
+                -0.0018202954177398657,
+                0.08019542664789513,
+                0.006633349075293028
+              ],
+              "eta_sd_across_examples_by_coordinate": [
+                0.008475076476552514,
+                0.00039378287610776524,
+                0.00010976180504996549
+              ],
+              "eta_mean_scaled_z_by_coordinate": [
+                -0.030338256962331084,
+                -0.9921829340841942,
+                0.3266698150586057
+              ],
+              "eta_truth_mismatch_after_prediction_only": {
+                "mae_physical_by_coordinate": [
+                  0.00543717946466717,
+                  0.00019542664789513382,
+                  7.208470875518278e-05
+                ],
+                "rmse_physical_by_coordinate": [
+                  0.008614382132906205,
+                  0.00043731304309166575,
+                  0.00011402303585584199
+                ],
+                "mean_scaled_absolute_error_by_coordinate": [
+                  0.09061965774445284,
+                  0.007817065915805353,
+                  0.014416941751036555
+                ]
+              },
+              "q_error_vs_eta_mismatch_pearson_r_descriptive_only": 0.7719614036521051,
+              "cpu_wallclock_seconds_total": 8.449609999719542,
+              "cpu_wallclock_seconds_mean_per_fit": 0.10973519480155249,
+              "gpu_cuda_event_seconds_total": 8.446843322753907,
+              "gpu_cuda_event_seconds_mean_per_fit": 0.10969926393186889
+            },
+            "inference_cost": {
+              "cpu_wallclock_seconds": 0.05733620002865791,
+              "gpu_cuda_event_seconds": 0.05552835083007813
+            },
+            "native_head": {
+              "profile_rmse_transformed_at_fixed_q": 0.014254218367610462,
+              "profile_rmse_reduction_after_shared_eta_fit_same_q": 0.005163363671635026,
+              "eta_bias_physical_by_coordinate_after_prediction_only": [
+                -0.00026897425781404404,
+                0.002802473724662476,
+                -0.00022651609097853456
+              ],
+              "eta_rmse_physical_by_coordinate_after_prediction_only": [
+                0.001940110322252516,
+                0.00293428968833207,
+                0.0002389604990909059
+              ],
+              "eta_mean_physical_by_coordinate": [
+                -0.00026897425781404404,
+                0.08280247372466248,
+                0.006440150575688133
+              ],
+              "eta_mae_scaled_coordinate_after_prediction_only": [
+                0.024961621605761736,
+                0.11209894898649925,
+                0.04530321819570685
+              ],
+              "zero_shift_bias_degree": -0.00026897425781404404,
+              "zero_shift_rmse_degree": 0.001940110322252516,
+              "q_error_vs_eta_mismatch_pearson_r_descriptive_only": 0.09375187623353864
+            }
+          },
+          {
+            "condition": "simple",
+            "method": "B",
+            "seed": 20261047,
+            "checkpoint_sha256": "a6aec5c5d6542640e6b8245f38b5f5909f1e72e5acdbf137bec33007b650937e",
+            "sample_count": 77,
+            "q_prediction_sha256": "f44306da8df9a285e327922a39559788f03bfd2b26f91c85682d93a6d896225b",
+            "native_eta_prediction_sha256": "737e9c060ce50fca2350554f1adcb30cc2bd1557758d644a972e20fd8f130428",
+            "q_mae_normalized": {
+              "du": 0.012429613513379139,
+              "dv": 0.013530527196776167,
+              "mean_two_coordinate": 0.012980070355077653
+            },
+            "lattice_mae_angstrom": {
+              "a_angstrom": 0.00048795727177797807,
+              "c_angstrom": 0.0007092006239699696
+            },
+            "shared_fit_profile_rmse_transformed": 0.009174763648951348,
+            "shared_fit": {
+              "solver_knobs_sha256": "2aaad94cd082b2e4ccb01ffb80c2533e65b009bba732282cec12d6e95d564850",
+              "n_profiles": 77,
+              "start_scaled_z": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "nfev_total": 826,
+              "nfev_mean": 10.727272727272727,
+              "nit_total": 647,
+              "nit_mean": 8.402597402597403,
+              "failure_count": 0,
+              "failure_rate": 0.0,
+              "boundary_hit_count": 38,
+              "boundary_hit_rate": 0.4935064935064935,
+              "boundary_hit_count_by_coordinate": [
+                0,
+                38,
+                0
+              ],
+              "eta_mean_physical_by_coordinate": [
+                0.00035338840606190366,
+                0.0804863917945081,
+                0.0066474354789174146
+              ],
+              "eta_sd_across_examples_by_coordinate": [
+                0.00893023317182933,
+                0.0009088258150243975,
+                0.00013667791608007213
+              ],
+              "eta_mean_scaled_z_by_coordinate": [
+                0.005889806767698405,
+                -0.9805443282196763,
+                0.3294870957834829
+              ],
+              "eta_truth_mismatch_after_prediction_only": {
+                "mae_physical_by_coordinate": [
+                  0.006563543519839391,
+                  0.0004863917945080926,
+                  9.386878382489377e-05
+                ],
+                "rmse_physical_by_coordinate": [
+                  0.008879090366269179,
+                  0.0010255800943479495,
+                  0.00013714256395825323
+                ],
+                "mean_scaled_absolute_error_by_coordinate": [
+                  0.10939239199732316,
+                  0.019455671780323706,
+                  0.018773756764978767
+                ]
+              },
+              "q_error_vs_eta_mismatch_pearson_r_descriptive_only": 0.8490654739937269,
+              "cpu_wallclock_seconds_total": 20.941620200057514,
+              "cpu_wallclock_seconds_mean_per_fit": 0.27196909350724047,
+              "gpu_cuda_event_seconds_total": 20.93825257873534,
+              "gpu_cuda_event_seconds_mean_per_fit": 0.27192535816539415
+            },
+            "inference_cost": {
+              "cpu_wallclock_seconds": 0.36302140000043437,
+              "gpu_cuda_event_seconds": 0.35071630859375
+            },
+            "native_head": {
+              "profile_rmse_transformed_at_fixed_q": 0.017180740931669724,
+              "profile_rmse_reduction_after_shared_eta_fit_same_q": 0.008005977282718376,
+              "eta_bias_physical_by_coordinate_after_prediction_only": [
+                -4.7633169553780856e-05,
+                0.0027723348682576884,
+                -0.00015545706752510369
+              ],
+              "eta_rmse_physical_by_coordinate_after_prediction_only": [
+                0.0054417434355953686,
+                0.002882276186242257,
+                0.00019045925010989091
+              ],
+              "eta_mean_physical_by_coordinate": [
+                -4.7633169553780856e-05,
+                0.08277233486825769,
+                0.006511209599141564
+              ],
+              "eta_mae_scaled_coordinate_after_prediction_only": [
+                0.06930873593313214,
+                0.11089339473030774,
+                0.03334514743515433
+              ],
+              "zero_shift_bias_degree": -4.7633169553780856e-05,
+              "zero_shift_rmse_degree": 0.0054417434355953686,
+              "q_error_vs_eta_mismatch_pearson_r_descriptive_only": 0.640406926535843
+            }
+          }
+        ]
+      },
+      "paired_seed_differences_B_minus_A": {
+        "20261045": {
+          "q_mae_normalized_mean_two_coordinate": 0.0018029853843708876,
+          "shared_fit_profile_rmse_transformed": 0.0005068712907515417
+        },
+        "20261046": {
+          "q_mae_normalized_mean_two_coordinate": -0.0018013388356919544,
+          "shared_fit_profile_rmse_transformed": -0.0003617923698462644
+        },
+        "20261047": {
+          "q_mae_normalized_mean_two_coordinate": 0.0004265003255946257,
+          "shared_fit_profile_rmse_transformed": -0.00026694654162554357
+        }
+      },
+      "paired_difference_mean_sd_across_seeds": {
+        "q_mae_normalized_mean_two_coordinate": {
+          "mean": 0.00014271562475785295,
+          "sd_sample": 0.0018188426507410327,
+          "per_seed_values": [
+            0.0018029853843708876,
+            -0.0018013388356919544,
+            0.0004265003255946257
+          ]
+        },
+        "shared_fit_profile_rmse_transformed": {
+          "mean": -4.0622540240088774e-05,
+          "sd_sample": 0.0004765092381194069,
+          "per_seed_values": [
+            0.0005068712907515417,
+            -0.0003617923698462644,
+            -0.00026694654162554357
+          ]
+        }
+      }
+    },
+    "v9": {
+      "A": {
+        "seed_count": 3,
+        "sample_count_per_seed": [
+          77
+        ],
+        "metrics_mean_sd_across_three_seed_level_estimates": {
+          "q_mae_du": {
+            "mean": 0.04057300649724449,
+            "sd_sample": 0.006452685309514544,
+            "per_seed_values": [
+              0.03532894281791402,
+              0.04777892258489964,
+              0.03861115408891981
+            ]
+          },
+          "q_mae_dv": {
+            "mean": 0.023897495046983682,
+            "sd_sample": 0.005708708512041271,
+            "per_seed_values": [
+              0.029988094441012136,
+              0.01866866560628662,
+              0.02303572509365229
+            ]
+          },
+          "q_mae_mean_two_coordinate": {
+            "mean": 0.03223525077211408,
+            "sd_sample": 0.0012549072459291308,
+            "per_seed_values": [
+              0.03265851862946307,
+              0.03322379409559313,
+              0.030823439591286042
+            ]
+          },
+          "a_mae_angstrom": {
+            "mean": 0.0015712353239812592,
+            "sd_sample": 0.00030137358133628625,
+            "per_seed_values": [
+              0.0013177766387564899,
+              0.0019044714623427368,
+              0.0014914578708445506
+            ]
+          },
+          "c_mae_angstrom": {
+            "mean": 0.00187856691801008,
+            "sd_sample": 9.77332642841592e-05,
+            "per_seed_values": [
+              0.0018371387368882944,
+              0.0019901906906974803,
+              0.0018083713264444644
+            ]
+          },
+          "shared_fit_profile_rmse_transformed": {
+            "mean": 0.016034079451880574,
+            "sd_sample": 0.0007949429133017098,
+            "per_seed_values": [
+              0.015706968862021758,
+              0.016940388563299855,
+              0.015454880930320108
+            ]
+          },
+          "shared_fit_nfev_mean": {
+            "mean": 12.696969696969697,
+            "sd_sample": 0.5439579551116223,
+            "per_seed_values": [
+              13.324675324675324,
+              12.402597402597403,
+              12.363636363636363
+            ]
+          },
+          "shared_fit_nit_mean": {
+            "mean": 9.004329004329003,
+            "sd_sample": 0.13517311684844968,
+            "per_seed_values": [
+              8.96103896103896,
+              8.896103896103897,
+              9.155844155844155
+            ]
+          },
+          "shared_fit_failure_rate": {
+            "mean": 0.0,
+            "sd_sample": 0.0,
+            "per_seed_values": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "shared_fit_boundary_hit_rate": {
+            "mean": 0.06493506493506494,
+            "sd_sample": 0.06872081327440495,
+            "per_seed_values": [
+              0.03896103896103896,
+              0.14285714285714285,
+              0.012987012987012988
+            ]
+          },
+          "shared_fit_cpu_wallclock_seconds_total": {
+            "mean": 8.670428066592043,
+            "sd_sample": 0.4913391781246184,
+            "per_seed_values": [
+              9.211675000202376,
+              8.547123999742325,
+              8.252485199831426
+            ]
+          },
+          "shared_fit_gpu_cuda_event_seconds_total": {
+            "mean": 8.667560846964518,
+            "sd_sample": 0.49133634055681286,
+            "per_seed_values": [
+              9.208942314147949,
+              8.543808807373043,
+              8.24993141937256
+            ]
+          },
+          "inference_cpu_wallclock_seconds": {
+            "mean": 0.050273633329197764,
+            "sd_sample": 0.0002958643610384177,
+            "per_seed_values": [
+              0.050417999969795346,
+              0.04993330000434071,
+              0.05046960001345724
+            ]
+          },
+          "inference_gpu_cuda_event_seconds": {
+            "mean": 0.04972917302449544,
+            "sd_sample": 0.0005831948556339573,
+            "per_seed_values": [
+              0.04912857437133789,
+              0.04976569747924805,
+              0.05029324722290039
+            ]
+          },
+          "shared_fit_eta_delta_mean_degree": {
+            "mean": 0.003731805906367045,
+            "sd_sample": 0.009654813476357604,
+            "per_seed_values": [
+              -0.004574327689102587,
+              0.014324712126316863,
+              0.0014450332818868586
+            ]
+          },
+          "shared_fit_eta_fwhm_mean_degree": {
+            "mean": 0.11956479689078636,
+            "sd_sample": 0.0005197574158463214,
+            "per_seed_values": [
+              0.11925292151844008,
+              0.12016480448746926,
+              0.11927666466644973
+            ]
+          },
+          "shared_fit_eta_background_mean_ratio": {
+            "mean": 0.006304735002410498,
+            "sd_sample": 3.7843319714654666e-06,
+            "per_seed_values": [
+              0.006308941227804189,
+              0.006303657520945309,
+              0.006301606258481993
+            ]
+          },
+          "shared_fit_eta_delta_scaled_z_mean": {
+            "mean": 0.0621967651061174,
+            "sd_sample": 0.16091355793929338,
+            "per_seed_values": [
+              -0.07623879481837645,
+              0.238745202105281,
+              0.02408388803144764
+            ]
+          },
+          "shared_fit_eta_fwhm_scaled_z_mean": {
+            "mean": 0.5825918756314552,
+            "sd_sample": 0.02079029663385255,
+            "per_seed_values": [
+              0.570116860737605,
+              0.606592179498771,
+              0.5710665866579897
+            ]
+          },
+          "shared_fit_eta_background_scaled_z_mean": {
+            "mean": 0.26094700048209923,
+            "sd_sample": 0.0007568663942933649,
+            "per_seed_values": [
+              0.2617882455608379,
+              0.26073150418906155,
+              0.26032125169639825
+            ]
+          },
+          "shared_fit_q_error_eta_mismatch_pearson_r_descriptive_only": {
+            "mean": 0.6576054983509823,
+            "sd_sample": 0.13339688705837016,
+            "per_seed_values": [
+              0.5131690723612752,
+              0.6834737532837895,
+              0.7761736694078822
+            ]
+          }
+        },
+        "per_seed": [
+          {
+            "condition": "v9",
+            "method": "A",
+            "seed": 20261045,
+            "checkpoint_sha256": "65cbc0b2ac4dcb71615f7a4034af0edebc15a1917f94c5ccd74f7c256fa23c2f",
+            "sample_count": 77,
+            "q_prediction_sha256": "57ae7068054191f9e2abac25c702232150bc1cfb7a0332166cfb19c77f573193",
+            "native_eta_prediction_sha256": null,
+            "q_mae_normalized": {
+              "du": 0.03532894281791402,
+              "dv": 0.029988094441012136,
+              "mean_two_coordinate": 0.03265851862946307
+            },
+            "lattice_mae_angstrom": {
+              "a_angstrom": 0.0013177766387564899,
+              "c_angstrom": 0.0018371387368882944
+            },
+            "shared_fit_profile_rmse_transformed": 0.015706968862021758,
+            "shared_fit": {
+              "solver_knobs_sha256": "2aaad94cd082b2e4ccb01ffb80c2533e65b009bba732282cec12d6e95d564850",
+              "n_profiles": 77,
+              "start_scaled_z": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "nfev_total": 1026,
+              "nfev_mean": 13.324675324675324,
+              "nit_total": 690,
+              "nit_mean": 8.96103896103896,
+              "failure_count": 0,
+              "failure_rate": 0.0,
+              "boundary_hit_count": 3,
+              "boundary_hit_rate": 0.03896103896103896,
+              "boundary_hit_count_by_coordinate": [
+                2,
+                2,
+                0
+              ],
+              "eta_mean_physical_by_coordinate": [
+                -0.004574327689102587,
+                0.11925292151844008,
+                0.006308941227804189
+              ],
+              "eta_sd_across_examples_by_coordinate": [
+                0.024599571691672005,
+                0.005787922659037197,
+                0.0008561884159296274
+              ],
+              "eta_mean_scaled_z_by_coordinate": [
+                -0.07623879481837645,
+                0.570116860737605,
+                0.2617882455608379
+              ],
+              "eta_truth_mismatch_after_prediction_only": {
+                "mae_physical_by_coordinate": [
+                  0.01723530726980726,
+                  0.0015101124233360627,
+                  7.756566261818637e-05
+                ],
+                "rmse_physical_by_coordinate": [
+                  0.02149998398938155,
+                  0.0022384079316011504,
+                  0.00011283918296471751
+                ],
+                "mean_scaled_absolute_error_by_coordinate": [
+                  0.28725512116345436,
+                  0.06040449693344248,
+                  0.015513132523637271
+                ]
+              },
+              "q_error_vs_eta_mismatch_pearson_r_descriptive_only": 0.5131690723612752,
+              "cpu_wallclock_seconds_total": 9.211675000202376,
+              "cpu_wallclock_seconds_mean_per_fit": 0.11963214285977113,
+              "gpu_cuda_event_seconds_total": 9.208942314147949,
+              "gpu_cuda_event_seconds_mean_per_fit": 0.11959665343049285
+            },
+            "inference_cost": {
+              "cpu_wallclock_seconds": 0.050417999969795346,
+              "gpu_cuda_event_seconds": 0.04912857437133789
+            }
+          },
+          {
+            "condition": "v9",
+            "method": "A",
+            "seed": 20261046,
+            "checkpoint_sha256": "ddbfe98cdc345277e69b9d5fca617c158b27514482c95ae6fb84b90e41b0bdeb",
+            "sample_count": 77,
+            "q_prediction_sha256": "25c6465c428ac47ece9f62501d7e564b340481404e02c4e5e6a4c6d76d85d76d",
+            "native_eta_prediction_sha256": null,
+            "q_mae_normalized": {
+              "du": 0.04777892258489964,
+              "dv": 0.01866866560628662,
+              "mean_two_coordinate": 0.03322379409559313
+            },
+            "lattice_mae_angstrom": {
+              "a_angstrom": 0.0019044714623427368,
+              "c_angstrom": 0.0019901906906974803
+            },
+            "shared_fit_profile_rmse_transformed": 0.016940388563299855,
+            "shared_fit": {
+              "solver_knobs_sha256": "2aaad94cd082b2e4ccb01ffb80c2533e65b009bba732282cec12d6e95d564850",
+              "n_profiles": 77,
+              "start_scaled_z": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "nfev_total": 955,
+              "nfev_mean": 12.402597402597403,
+              "nit_total": 685,
+              "nit_mean": 8.896103896103897,
+              "failure_count": 0,
+              "failure_rate": 0.0,
+              "boundary_hit_count": 11,
+              "boundary_hit_rate": 0.14285714285714285,
+              "boundary_hit_count_by_coordinate": [
+                8,
+                4,
+                0
+              ],
+              "eta_mean_physical_by_coordinate": [
+                0.014324712126316863,
+                0.12016480448746926,
+                0.006303657520945309
+              ],
+              "eta_sd_across_examples_by_coordinate": [
+                0.02875696728534704,
+                0.005809862102399137,
+                0.0008404664923604388
+              ],
+              "eta_mean_scaled_z_by_coordinate": [
+                0.238745202105281,
+                0.606592179498771,
+                0.26073150418906155
+              ],
+              "eta_truth_mismatch_after_prediction_only": {
+                "mae_physical_by_coordinate": [
+                  0.023012834282584625,
+                  0.001685726952203753,
+                  6.179133644378772e-05
+                ],
+                "rmse_physical_by_coordinate": [
+                  0.026993179345553255,
+                  0.0024523762226825014,
+                  7.990411706041392e-05
+                ],
+                "mean_scaled_absolute_error_by_coordinate": [
+                  0.38354723804307717,
+                  0.06742907808815014,
+                  0.012358267288757548
+                ]
+              },
+              "q_error_vs_eta_mismatch_pearson_r_descriptive_only": 0.6834737532837895,
+              "cpu_wallclock_seconds_total": 8.547123999742325,
+              "cpu_wallclock_seconds_mean_per_fit": 0.11100161038626397,
+              "gpu_cuda_event_seconds_total": 8.543808807373043,
+              "gpu_cuda_event_seconds_mean_per_fit": 0.1109585559399097
+            },
+            "inference_cost": {
+              "cpu_wallclock_seconds": 0.04993330000434071,
+              "gpu_cuda_event_seconds": 0.04976569747924805
+            }
+          },
+          {
+            "condition": "v9",
+            "method": "A",
+            "seed": 20261047,
+            "checkpoint_sha256": "202e18faafcbbef16923b457b1bc316ea748d96b5518ce805e1258b9aa3e3375",
+            "sample_count": 77,
+            "q_prediction_sha256": "7a22dfc9952b394253853e15d149a42213011c445fd0973249596e1b15989874",
+            "native_eta_prediction_sha256": null,
+            "q_mae_normalized": {
+              "du": 0.03861115408891981,
+              "dv": 0.02303572509365229,
+              "mean_two_coordinate": 0.030823439591286042
+            },
+            "lattice_mae_angstrom": {
+              "a_angstrom": 0.0014914578708445506,
+              "c_angstrom": 0.0018083713264444644
+            },
+            "shared_fit_profile_rmse_transformed": 0.015454880930320108,
+            "shared_fit": {
+              "solver_knobs_sha256": "2aaad94cd082b2e4ccb01ffb80c2533e65b009bba732282cec12d6e95d564850",
+              "n_profiles": 77,
+              "start_scaled_z": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "nfev_total": 952,
+              "nfev_mean": 12.363636363636363,
+              "nit_total": 705,
+              "nit_mean": 9.155844155844155,
+              "failure_count": 0,
+              "failure_rate": 0.0,
+              "boundary_hit_count": 1,
+              "boundary_hit_rate": 0.012987012987012988,
+              "boundary_hit_count_by_coordinate": [
+                1,
+                1,
+                0
+              ],
+              "eta_mean_physical_by_coordinate": [
+                0.0014450332818868586,
+                0.11927666466644973,
+                0.006301606258481993
+              ],
+              "eta_sd_across_examples_by_coordinate": [
+                0.025041738183024978,
+                0.005728162240792494,
+                0.0008464364168254189
+              ],
+              "eta_mean_scaled_z_by_coordinate": [
+                0.02408388803144764,
+                0.5710665866579897,
+                0.26032125169639825
+              ],
+              "eta_truth_mismatch_after_prediction_only": {
+                "mae_physical_by_coordinate": [
+                  0.019009693838814352,
+                  0.0011840672207953456,
+                  6.749205934636967e-05
+                ],
+                "rmse_physical_by_coordinate": [
+                  0.023971828901250016,
+                  0.0018661918626774947,
+                  8.798617062270956e-05
+                ],
+                "mean_scaled_absolute_error_by_coordinate": [
+                  0.3168282306469059,
+                  0.04736268883181385,
+                  0.013498411869273934
+                ]
+              },
+              "q_error_vs_eta_mismatch_pearson_r_descriptive_only": 0.7761736694078822,
+              "cpu_wallclock_seconds_total": 8.252485199831426,
+              "cpu_wallclock_seconds_mean_per_fit": 0.1071751324653432,
+              "gpu_cuda_event_seconds_total": 8.24993141937256,
+              "gpu_cuda_event_seconds_mean_per_fit": 0.10714196648535793
+            },
+            "inference_cost": {
+              "cpu_wallclock_seconds": 0.05046960001345724,
+              "gpu_cuda_event_seconds": 0.05029324722290039
+            }
+          }
+        ]
+      },
+      "B": {
+        "seed_count": 3,
+        "sample_count_per_seed": [
+          77
+        ],
+        "metrics_mean_sd_across_three_seed_level_estimates": {
+          "q_mae_du": {
+            "mean": 0.03774574200433248,
+            "sd_sample": 0.004720938332230153,
+            "per_seed_values": [
+              0.03230442984827927,
+              0.04018117842663612,
+              0.04075161773808204
+            ]
+          },
+          "q_mae_dv": {
+            "mean": 0.02336274650375243,
+            "sd_sample": 0.0033016733712231973,
+            "per_seed_values": [
+              0.0243894891015121,
+              0.01966969019237471,
+              0.02602906021737047
+            ]
+          },
+          "q_mae_mean_two_coordinate": {
+            "mean": 0.030554244254042445,
+            "sd_sample": 0.002579819889479567,
+            "per_seed_values": [
+              0.028346959474895683,
+              0.02992543430950541,
+              0.033390338977726246
+            ]
+          },
+          "a_mae_angstrom": {
+            "mean": 0.0014523791038068817,
+            "sd_sample": 0.00018747892801085743,
+            "per_seed_values": [
+              0.001235918864730003,
+              0.0015632685695404639,
+              0.0015579498771501785
+            ]
+          },
+          "c_mae_angstrom": {
+            "mean": 0.0017778088265175938,
+            "sd_sample": 0.00013644742612882623,
+            "per_seed_values": [
+              0.001651037051474924,
+              0.0017601725696179155,
+              0.001922216858459942
+            ]
+          },
+          "shared_fit_profile_rmse_transformed": {
+            "mean": 0.015620929390446375,
+            "sd_sample": 0.0006546550209358251,
+            "per_seed_values": [
+              0.015161883626639974,
+              0.015330326387120785,
+              0.016370578157578367
+            ]
+          },
+          "shared_fit_nfev_mean": {
+            "mean": 13.168831168831169,
+            "sd_sample": 0.46969198233831555,
+            "per_seed_values": [
+              12.727272727272727,
+              13.662337662337663,
+              13.116883116883116
+            ]
+          },
+          "shared_fit_nit_mean": {
+            "mean": 8.991341991341992,
+            "sd_sample": 0.20300214870464686,
+            "per_seed_values": [
+              8.96103896103896,
+              9.207792207792208,
+              8.805194805194805
+            ]
+          },
+          "shared_fit_failure_rate": {
+            "mean": 0.004329004329004329,
+            "sd_sample": 0.007498055444021114,
+            "per_seed_values": [
+              0.0,
+              0.012987012987012988,
+              0.0
+            ]
+          },
+          "shared_fit_boundary_hit_rate": {
+            "mean": 0.030303030303030304,
+            "sd_sample": 0.014996110888042227,
+            "per_seed_values": [
+              0.03896103896103896,
+              0.03896103896103896,
+              0.012987012987012988
+            ]
+          },
+          "shared_fit_cpu_wallclock_seconds_total": {
+            "mean": 9.073539333398609,
+            "sd_sample": 0.24600232330034372,
+            "per_seed_values": [
+              9.207773999951314,
+              9.223223600187339,
+              8.789620400057174
+            ]
+          },
+          "shared_fit_gpu_cuda_event_seconds_total": {
+            "mean": 9.070925292968752,
+            "sd_sample": 0.2458686233587805,
+            "per_seed_values": [
+              9.205092987060548,
+              9.220522438049318,
+              8.787160453796387
+            ]
+          },
+          "inference_cpu_wallclock_seconds": {
+            "mean": 0.04898983333259821,
+            "sd_sample": 0.00431736865068681,
+            "per_seed_values": [
+              0.05385939998086542,
+              0.04747980000684038,
+              0.04563030001008883
+            ]
+          },
+          "inference_gpu_cuda_event_seconds": {
+            "mean": 0.04807884852091471,
+            "sd_sample": 0.0048118749153717435,
+            "per_seed_values": [
+              0.05322633743286133,
+              0.0473166389465332,
+              0.04369356918334961
+            ]
+          },
+          "shared_fit_eta_delta_mean_degree": {
+            "mean": -0.00654266668752139,
+            "sd_sample": 0.005400885977720552,
+            "per_seed_values": [
+              -0.0023179063304651013,
+              -0.012627844279513087,
+              -0.0046822494525859785
+            ]
+          },
+          "shared_fit_eta_fwhm_mean_degree": {
+            "mean": 0.11925010133750936,
+            "sd_sample": 0.000479774107885066,
+            "per_seed_values": [
+              0.1186970436152226,
+              0.11955453291287801,
+              0.1194987274844275
+            ]
+          },
+          "shared_fit_eta_background_mean_ratio": {
+            "mean": 0.006312374668717119,
+            "sd_sample": 1.6671832477376425e-05,
+            "per_seed_values": [
+              0.006304934151029389,
+              0.006331471176146306,
+              0.00630071867897566
+            ]
+          },
+          "shared_fit_eta_delta_scaled_z_mean": {
+            "mean": -0.10904444479202319,
+            "sd_sample": 0.09001476629534257,
+            "per_seed_values": [
+              -0.038631772174418384,
+              -0.2104640713252182,
+              -0.07803749087643298
+            ]
+          },
+          "shared_fit_eta_fwhm_scaled_z_mean": {
+            "mean": 0.5700040535003742,
+            "sd_sample": 0.019190964315402945,
+            "per_seed_values": [
+              0.5478817446089028,
+              0.5821813165151193,
+              0.5799490993771003
+            ]
+          },
+          "shared_fit_eta_background_scaled_z_mean": {
+            "mean": 0.2624749337434236,
+            "sd_sample": 0.0033343664954751185,
+            "per_seed_values": [
+              0.26098683020587776,
+              0.266294235229261,
+              0.2601437357951322
+            ]
+          },
+          "shared_fit_q_error_eta_mismatch_pearson_r_descriptive_only": {
+            "mean": 0.5684882704879958,
+            "sd_sample": 0.05959480611878402,
+            "per_seed_values": [
+              0.49994815474546833,
+              0.6080715493066854,
+              0.5974451074118335
+            ]
+          },
+          "native_profile_rmse_transformed": {
+            "mean": 0.027332081735768565,
+            "sd_sample": 0.0014307408857762152,
+            "per_seed_values": [
+              0.025711062376117748,
+              0.02841871033736437,
+              0.027866472493823586
+            ]
+          },
+          "native_to_profiled_rmse_reduction_same_fixed_q": {
+            "mean": 0.011711152345322192,
+            "sd_sample": 0.0012832157927460488,
+            "per_seed_values": [
+              0.010549178749477774,
+              0.013088383950243584,
+              0.011495894336245219
+            ]
+          },
+          "native_eta_zero_shift_bias_degree": {
+            "mean": 0.005289680809071988,
+            "sd_sample": 0.007079763443561258,
+            "per_seed_values": [
+              0.011142657935189105,
+              -0.002579483596852329,
+              0.007305868088879185
+            ]
+          },
+          "native_eta_zero_shift_rmse_degree": {
+            "mean": 0.032117029841131135,
+            "sd_sample": 0.004447879790012613,
+            "per_seed_values": [
+              0.028683889386866415,
+              0.030525459413398445,
+              0.037141740723128536
+            ]
+          },
+          "native_eta_delta_scaled_mae": {
+            "mean": 0.4473650680048878,
+            "sd_sample": 0.06605220317033265,
+            "per_seed_values": [
+              0.3956796879019379,
+              0.4246345179300845,
+              0.5217809981826411
+            ]
+          },
+          "native_eta_fwhm_scaled_mae": {
+            "mean": 0.21597546882342675,
+            "sd_sample": 0.004161852394373708,
+            "per_seed_values": [
+              0.21192070999886328,
+              0.21576896965608006,
+              0.2202367268153369
+            ]
+          },
+          "native_eta_background_scaled_mae": {
+            "mean": 0.15529650174175783,
+            "sd_sample": 0.002616458030467013,
+            "per_seed_values": [
+              0.15330867865925174,
+              0.1543200650473715,
+              0.1582607615186503
+            ]
+          },
+          "native_q_error_eta_mismatch_pearson_r_descriptive_only": {
+            "mean": 0.30875761245506217,
+            "sd_sample": 0.1233987291380684,
+            "per_seed_values": [
+              0.2738259102222792,
+              0.20659036410800866,
+              0.44585656303489857
+            ]
+          },
+          "native_eta_bias_physical_delta_2theta_deg": {
+            "mean": 0.005289680809071988,
+            "sd_sample": 0.007079763443561258,
+            "per_seed_values": [
+              0.011142657935189105,
+              -0.002579483596852329,
+              0.007305868088879185
+            ]
+          },
+          "native_eta_rmse_physical_delta_2theta_deg": {
+            "mean": 0.032117029841131135,
+            "sd_sample": 0.004447879790012613,
+            "per_seed_values": [
+              0.028683889386866415,
+              0.030525459413398445,
+              0.037141740723128536
+            ]
+          },
+          "native_eta_bias_physical_fwhm_deg": {
+            "mean": 0.0021289803836069443,
+            "sd_sample": 0.00046981292307201033,
+            "per_seed_values": [
+              0.001638146229257043,
+              0.0025744863344810084,
+              0.0021743085870827806
+            ]
+          },
+          "native_eta_rmse_physical_fwhm_deg": {
+            "mean": 0.006067920970348622,
+            "sd_sample": 0.0001240224459106173,
+            "per_seed_values": [
+              0.005928319451176046,
+              0.0061100607651436425,
+              0.006165382694726176
+            ]
+          },
+          "native_eta_bias_physical_background_peak_ratio": {
+            "mean": 8.846841996364834e-06,
+            "sd_sample": 4.044594863026957e-05,
+            "per_seed_values": [
+              -2.5565714609701857e-05,
+              5.339734677370343e-05,
+              -1.2911061749070717e-06
+            ]
+          },
+          "native_eta_rmse_physical_background_peak_ratio": {
+            "mean": 0.0009012894766039318,
+            "sd_sample": 5.267867161621291e-06,
+            "per_seed_values": [
+              0.0009017379776447696,
+              0.0008958116977886654,
+              0.0009063187543783605
+            ]
+          }
+        },
+        "per_seed": [
+          {
+            "condition": "v9",
+            "method": "B",
+            "seed": 20261045,
+            "checkpoint_sha256": "596ea89eea1c943e3d8b9fa0fe8fc2ae12097cc5c52732ab306a6c89d923960c",
+            "sample_count": 77,
+            "q_prediction_sha256": "3588ccf7f1d3582e8e3e719df122597ba699e9b0927960dd0db5095e13e10434",
+            "native_eta_prediction_sha256": "19d7b78de1753e07e1d371a5718ca6f74918298bd2f1c08a88e48fd8ec451e0c",
+            "q_mae_normalized": {
+              "du": 0.03230442984827927,
+              "dv": 0.0243894891015121,
+              "mean_two_coordinate": 0.028346959474895683
+            },
+            "lattice_mae_angstrom": {
+              "a_angstrom": 0.001235918864730003,
+              "c_angstrom": 0.001651037051474924
+            },
+            "shared_fit_profile_rmse_transformed": 0.015161883626639974,
+            "shared_fit": {
+              "solver_knobs_sha256": "2aaad94cd082b2e4ccb01ffb80c2533e65b009bba732282cec12d6e95d564850",
+              "n_profiles": 77,
+              "start_scaled_z": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "nfev_total": 980,
+              "nfev_mean": 12.727272727272727,
+              "nit_total": 690,
+              "nit_mean": 8.96103896103896,
+              "failure_count": 0,
+              "failure_rate": 0.0,
+              "boundary_hit_count": 3,
+              "boundary_hit_rate": 0.03896103896103896,
+              "boundary_hit_count_by_coordinate": [
+                2,
+                2,
+                0
+              ],
+              "eta_mean_physical_by_coordinate": [
+                -0.0023179063304651013,
+                0.1186970436152226,
+                0.006304934151029389
+              ],
+              "eta_sd_across_examples_by_coordinate": [
+                0.02331462145846424,
+                0.006016661165250102,
+                0.000864527989162072
+              ],
+              "eta_mean_scaled_z_by_coordinate": [
+                -0.038631772174418384,
+                0.5478817446089028,
+                0.26098683020587776
+              ],
+              "eta_truth_mismatch_after_prediction_only": {
+                "mae_physical_by_coordinate": [
+                  0.015690352444442522,
+                  0.00122914378030737,
+                  6.94031054111498e-05
+                ],
+                "rmse_physical_by_coordinate": [
+                  0.019525464407094587,
+                  0.0020700043702137454,
+                  0.00010581837605606873
+                ],
+                "mean_scaled_absolute_error_by_coordinate": [
+                  0.26150587407404197,
+                  0.049165751212294814,
+                  0.01388062108222996
+                ]
+              },
+              "q_error_vs_eta_mismatch_pearson_r_descriptive_only": 0.49994815474546833,
+              "cpu_wallclock_seconds_total": 9.207773999951314,
+              "cpu_wallclock_seconds_mean_per_fit": 0.11958148051884823,
+              "gpu_cuda_event_seconds_total": 9.205092987060548,
+              "gpu_cuda_event_seconds_mean_per_fit": 0.11954666216961748
+            },
+            "inference_cost": {
+              "cpu_wallclock_seconds": 0.05385939998086542,
+              "gpu_cuda_event_seconds": 0.05322633743286133
+            },
+            "native_head": {
+              "profile_rmse_transformed_at_fixed_q": 0.025711062376117748,
+              "profile_rmse_reduction_after_shared_eta_fit_same_q": 0.010549178749477774,
+              "eta_bias_physical_by_coordinate_after_prediction_only": [
+                0.011142657935189105,
+                0.001638146229257043,
+                -2.5565714609701857e-05
+              ],
+              "eta_rmse_physical_by_coordinate_after_prediction_only": [
+                0.028683889386866415,
+                0.005928319451176046,
+                0.0009017379776447696
+              ],
+              "eta_mean_physical_by_coordinate": [
+                0.006477205471896156,
+                0.12046791661482353,
+                0.006304802082769283
+              ],
+              "eta_mae_scaled_coordinate_after_prediction_only": [
+                0.3956796879019379,
+                0.21192070999886328,
+                0.15330867865925174
+              ],
+              "zero_shift_bias_degree": 0.011142657935189105,
+              "zero_shift_rmse_degree": 0.028683889386866415,
+              "q_error_vs_eta_mismatch_pearson_r_descriptive_only": 0.2738259102222792
+            }
+          },
+          {
+            "condition": "v9",
+            "method": "B",
+            "seed": 20261046,
+            "checkpoint_sha256": "fc022d74e1eff40213e9d4295a0831ff6c2c460889a8b66814231d49c57000a3",
+            "sample_count": 77,
+            "q_prediction_sha256": "985149e7d6aef25ff2a81aa008fa201014601437d54d622a525620a6b2df3762",
+            "native_eta_prediction_sha256": "be7d2191c7816dd3828da745a13387113bc57bd66fdc798bc5c21349f4a0c878",
+            "q_mae_normalized": {
+              "du": 0.04018117842663612,
+              "dv": 0.01966969019237471,
+              "mean_two_coordinate": 0.02992543430950541
+            },
+            "lattice_mae_angstrom": {
+              "a_angstrom": 0.0015632685695404639,
+              "c_angstrom": 0.0017601725696179155
+            },
+            "shared_fit_profile_rmse_transformed": 0.015330326387120785,
+            "shared_fit": {
+              "solver_knobs_sha256": "2aaad94cd082b2e4ccb01ffb80c2533e65b009bba732282cec12d6e95d564850",
+              "n_profiles": 77,
+              "start_scaled_z": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "nfev_total": 1052,
+              "nfev_mean": 13.662337662337663,
+              "nit_total": 709,
+              "nit_mean": 9.207792207792208,
+              "failure_count": 1,
+              "failure_rate": 0.012987012987012988,
+              "boundary_hit_count": 3,
+              "boundary_hit_rate": 0.03896103896103896,
+              "boundary_hit_count_by_coordinate": [
+                2,
+                2,
+                0
+              ],
+              "eta_mean_physical_by_coordinate": [
+                -0.012627844279513087,
+                0.11955453291287801,
+                0.006331471176146306
+              ],
+              "eta_sd_across_examples_by_coordinate": [
+                0.025007260035925325,
+                0.005821003762772631,
+                0.000860829370764677
+              ],
+              "eta_mean_scaled_z_by_coordinate": [
+                -0.2104640713252182,
+                0.5821813165151193,
+                0.266294235229261
+              ],
+              "eta_truth_mismatch_after_prediction_only": {
+                "mae_physical_by_coordinate": [
+                  0.019786445780620283,
+                  0.0013419982366772876,
+                  6.715059697282757e-05
+                ],
+                "rmse_physical_by_coordinate": [
+                  0.023566668625791157,
+                  0.00193238524616633,
+                  9.600399482296846e-05
+                ],
+                "mean_scaled_absolute_error_by_coordinate": [
+                  0.3297740963436713,
+                  0.0536799294670915,
+                  0.013430119394565513
+                ]
+              },
+              "q_error_vs_eta_mismatch_pearson_r_descriptive_only": 0.6080715493066854,
+              "cpu_wallclock_seconds_total": 9.223223600187339,
+              "cpu_wallclock_seconds_mean_per_fit": 0.11978212467775765,
+              "gpu_cuda_event_seconds_total": 9.220522438049318,
+              "gpu_cuda_event_seconds_mean_per_fit": 0.11974704464999116
+            },
+            "inference_cost": {
+              "cpu_wallclock_seconds": 0.04747980000684038,
+              "gpu_cuda_event_seconds": 0.0473166389465332
+            },
+            "native_head": {
+              "profile_rmse_transformed_at_fixed_q": 0.02841871033736437,
+              "profile_rmse_reduction_after_shared_eta_fit_same_q": 0.013088383950243584,
+              "eta_bias_physical_by_coordinate_after_prediction_only": [
+                -0.002579483596852329,
+                0.0025744863344810084,
+                5.339734677370343e-05
+              ],
+              "eta_rmse_physical_by_coordinate_after_prediction_only": [
+                0.030525459413398445,
+                0.0061100607651436425,
+                0.0008958116977886654
+              ],
+              "eta_mean_physical_by_coordinate": [
+                -0.00724493606014528,
+                0.1214042567200475,
+                0.006383765144152688
+              ],
+              "eta_mae_scaled_coordinate_after_prediction_only": [
+                0.4246345179300845,
+                0.21576896965608006,
+                0.1543200650473715
+              ],
+              "zero_shift_bias_degree": -0.002579483596852329,
+              "zero_shift_rmse_degree": 0.030525459413398445,
+              "q_error_vs_eta_mismatch_pearson_r_descriptive_only": 0.20659036410800866
+            }
+          },
+          {
+            "condition": "v9",
+            "method": "B",
+            "seed": 20261047,
+            "checkpoint_sha256": "6580cb745cf20be81bda27aaf70ba7cdf1eb6dde7add14319eff5a5c3d26f63f",
+            "sample_count": 77,
+            "q_prediction_sha256": "7fde1db57176ac6e95a678bb5b81290a872a1d4e86cd290f8ef9ceaf4731a0fb",
+            "native_eta_prediction_sha256": "f737991025e02239ce522b0151c7579643c559deda518b934b05507c63bc8371",
+            "q_mae_normalized": {
+              "du": 0.04075161773808204,
+              "dv": 0.02602906021737047,
+              "mean_two_coordinate": 0.033390338977726246
+            },
+            "lattice_mae_angstrom": {
+              "a_angstrom": 0.0015579498771501785,
+              "c_angstrom": 0.001922216858459942
+            },
+            "shared_fit_profile_rmse_transformed": 0.016370578157578367,
+            "shared_fit": {
+              "solver_knobs_sha256": "2aaad94cd082b2e4ccb01ffb80c2533e65b009bba732282cec12d6e95d564850",
+              "n_profiles": 77,
+              "start_scaled_z": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "nfev_total": 1010,
+              "nfev_mean": 13.116883116883116,
+              "nit_total": 678,
+              "nit_mean": 8.805194805194805,
+              "failure_count": 0,
+              "failure_rate": 0.0,
+              "boundary_hit_count": 1,
+              "boundary_hit_rate": 0.012987012987012988,
+              "boundary_hit_count_by_coordinate": [
+                1,
+                1,
+                0
+              ],
+              "eta_mean_physical_by_coordinate": [
+                -0.0046822494525859785,
+                0.1194987274844275,
+                0.00630071867897566
+              ],
+              "eta_sd_across_examples_by_coordinate": [
+                0.01993831176282702,
+                0.005588601877372285,
+                0.000843809200283933
+              ],
+              "eta_mean_scaled_z_by_coordinate": [
+                -0.07803749087643298,
+                0.5799490993771003,
+                0.2601437357951322
+              ],
+              "eta_truth_mismatch_after_prediction_only": {
+                "mae_physical_by_coordinate": [
+                  0.02018839066249615,
+                  0.0014587305992571284,
+                  7.811508494955868e-05
+                ],
+                "rmse_physical_by_coordinate": [
+                  0.024691080192615893,
+                  0.002078838432382751,
+                  0.00010661320450845802
+                ],
+                "mean_scaled_absolute_error_by_coordinate": [
+                  0.3364731777082691,
+                  0.05834922397028511,
+                  0.015623016989911738
+                ]
+              },
+              "q_error_vs_eta_mismatch_pearson_r_descriptive_only": 0.5974451074118335,
+              "cpu_wallclock_seconds_total": 8.789620400057174,
+              "cpu_wallclock_seconds_mean_per_fit": 0.11415091428645681,
+              "gpu_cuda_event_seconds_total": 8.787160453796387,
+              "gpu_cuda_event_seconds_mean_per_fit": 0.11411896693242064
+            },
+            "inference_cost": {
+              "cpu_wallclock_seconds": 0.04563030001008883,
+              "gpu_cuda_event_seconds": 0.04369356918334961
+            },
+            "native_head": {
+              "profile_rmse_transformed_at_fixed_q": 0.027866472493823586,
+              "profile_rmse_reduction_after_shared_eta_fit_same_q": 0.011495894336245219,
+              "eta_bias_physical_by_coordinate_after_prediction_only": [
+                0.007305868088879185,
+                0.0021743085870827806,
+                -1.2911061749070717e-06
+              ],
+              "eta_rmse_physical_by_coordinate_after_prediction_only": [
+                0.037141740723128536,
+                0.006165382694726176,
+                0.0009063187543783605
+              ],
+              "eta_mean_physical_by_coordinate": [
+                0.002640415625586235,
+                0.12100407897264927,
+                0.006329076691204077
+              ],
+              "eta_mae_scaled_coordinate_after_prediction_only": [
+                0.5217809981826411,
+                0.2202367268153369,
+                0.1582607615186503
+              ],
+              "zero_shift_bias_degree": 0.007305868088879185,
+              "zero_shift_rmse_degree": 0.037141740723128536,
+              "q_error_vs_eta_mismatch_pearson_r_descriptive_only": 0.44585656303489857
+            }
+          }
+        ]
+      },
+      "paired_seed_differences_B_minus_A": {
+        "20261045": {
+          "q_mae_normalized_mean_two_coordinate": -0.004311559154567386,
+          "shared_fit_profile_rmse_transformed": -0.0005450852353817842
+        },
+        "20261046": {
+          "q_mae_normalized_mean_two_coordinate": -0.00329835978608772,
+          "shared_fit_profile_rmse_transformed": -0.0016100621761790702
+        },
+        "20261047": {
+          "q_mae_normalized_mean_two_coordinate": 0.0025668993864402037,
+          "shared_fit_profile_rmse_transformed": 0.0009156972272582591
+        }
+      },
+      "paired_difference_mean_sd_across_seeds": {
+        "q_mae_normalized_mean_two_coordinate": {
+          "mean": -0.001681006518071634,
+          "sd_sample": 0.0037135120398703167,
+          "per_seed_values": [
+            -0.004311559154567386,
+            -0.00329835978608772,
+            0.0025668993864402037
+          ]
+        },
+        "shared_fit_profile_rmse_transformed": {
+          "mean": -0.0004131500614341984,
+          "sd_sample": 0.0012680379760111517,
+          "per_seed_values": [
+            -0.0005450852353817842,
+            -0.0016100621761790702,
+            0.0009156972272582591
+          ]
+        }
+      }
+    }
+  },
+  "fit_convergence": {
+    "total_shared_fits": 924,
+    "successful_fits": 923,
+    "failed_fits": 1,
+    "failure_rate": 0.0010822510822510823,
+    "failures": [
+      {
+        "condition": "v9",
+        "method": "B",
+        "seed": 20261046,
+        "global_test_index": 435,
+        "status": 2,
+        "message": "ABNORMAL: ",
+        "nfev": 59,
+        "nit": 8
+      }
+    ],
+    "failed_fits_retained_in_aggregate": true,
+    "no_retry_or_tuning": true
+  }
+}
