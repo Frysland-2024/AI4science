@@ -24,7 +24,7 @@ from xrd_inversion.gpu_forward import CachedTetragonalGPUForward
 
 SEEDS = (20261061, 20261062, 20261063)
 OUT = ROOT / "donut_pxrd" / "results" / "study_v1"
-CKPT = Path(r"E:\AI4science_DONUT_checkpoints\donut_pxrd_four_stage_20261019")
+CKPT = Path(r"E:\AI4science\_local\checkpoints\donut\donut_pxrd_four_stage_20261019")
 LOG101 = math.log(101.0)
 
 

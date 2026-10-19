@@ -25,7 +25,7 @@ from xrd_inversion.gpu_forward import CachedTetragonalGPUForward
 
 RUN = ROOT / "donut_pxrd/results/study_v1/exp4"
 DATA_PATH = ROOT / "donut_pxrd/results/study_v1/exp3c/data_arrays.npz"
-WEIGHT_DIR = Path(r"E:\AI4science_DONUT_checkpoints\donut_pxrd_four_stage_20261019")
+WEIGHT_DIR = Path(r"E:\AI4science\_local\checkpoints\donut\donut_pxrd_four_stage_20261019")
 SEEDS = (20261061, 20261062, 20261063)
 LOG101 = math.log(101.0)
 DIRECT_MODELS: dict[tuple[str, int], torch.nn.Module] = {}
@@ -123,14 +123,14 @@ def direct_prediction(method: str, seed: int, obs: np.ndarray, arrays: dict, abc
     model = DIRECT_MODELS.get((method, seed))
     if model is None and method in ("A", "B", "C"):
         rec = next(r for r in abc_records if r["method"] == method and r["seed"] == seed)
-        path = Path(rec["checkpoint"])
+        path = WEIGHT_DIR / Path(rec["checkpoint"]).name
         model = ParameterRegressor(input_length=input_len).cuda() if method == "A" else MeasurementAwareRegressor(input_length=input_len).cuda()
         model.load_state_dict(torch.load(path, map_location="cuda", weights_only=False)["best_model_state"])
         model.eval()
     elif model is None and method == "D":
         rec = next(r for r in donut_records if r["seed"] == seed)
         model = DonutPXRD(("du", "dv", "zero_shift"), output_length=input_len).cuda()
-        model.load_state_dict(torch.load(rec["checkpoint"], map_location="cuda", weights_only=False)["state_dict"])
+        model.load_state_dict(torch.load(WEIGHT_DIR / Path(rec["checkpoint"]).name, map_location="cuda", weights_only=False)["state_dict"])
         model.eval()
     x = torch.as_tensor(obs[None, :], device="cuda", dtype=torch.float32)
     torch.cuda.synchronize(); t0 = time.perf_counter()
@@ -207,11 +207,11 @@ def main() -> None:
             if method in ("A", "B", "C"):
                 rec = next(r for r in abc_records if r["method"] == method and r["seed"] == seed)
                 model = ParameterRegressor(input_length=obs.shape[1]).cuda() if method == "A" else MeasurementAwareRegressor(input_length=obs.shape[1]).cuda()
-                model.load_state_dict(torch.load(rec["checkpoint"], map_location="cuda", weights_only=False)["best_model_state"])
+                model.load_state_dict(torch.load(WEIGHT_DIR / Path(rec["checkpoint"]).name, map_location="cuda", weights_only=False)["best_model_state"])
             else:
                 rec = next(r for r in donut_records if r["seed"] == seed)
                 model = DonutPXRD(("du", "dv", "zero_shift"), output_length=obs.shape[1]).cuda()
-                model.load_state_dict(torch.load(rec["checkpoint"], map_location="cuda", weights_only=False)["state_dict"])
+                model.load_state_dict(torch.load(WEIGHT_DIR / Path(rec["checkpoint"]).name, map_location="cuda", weights_only=False)["state_dict"])
             model.eval()
             DIRECT_MODELS[(method, seed)] = model
     for method in ("A", "B", "C", "D"):

@@ -11,7 +11,7 @@ import torch
 ROOT = Path(__file__).resolve().parents[2]
 sys.path[:0] = [str(ROOT / p) for p in ("donut_pxrd/src", "xrd_inversion/src", "xrd_forward_loss/src")]
 from donut_pxrd.model import DonutPXRD
-CKPT = Path(r"E:\AI4science_DONUT_checkpoints\donut_pxrd_four_stage_20261019")
+CKPT = Path(r"E:\AI4science\_local\checkpoints\donut\donut_pxrd_four_stage_20261019")
 DATA = ROOT / "donut_pxrd/results/study_v1"
 SEEDS = (20261061, 20261062, 20261063)
 
@@ -49,7 +49,8 @@ def main() -> None:
         assert all(r["test_indices"] == test for r in per_seed)
         for rec in per_seed:
             path = Path(rec["checkpoint"])
-            if not path.is_absolute():
+            if not path.is_file():
+                # Preserve immutable historical JSON with its original absolute path.
                 path = CKPT / path.name
             actual_sha = sha(path)
             assert actual_sha == rec["checkpoint_sha256"], (exp, rec["seed"], actual_sha, rec["checkpoint_sha256"])

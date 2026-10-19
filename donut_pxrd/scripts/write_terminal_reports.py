@@ -11,7 +11,7 @@ import numpy as np
 ROOT = Path(__file__).resolve().parents[2]
 BASE = ROOT / "donut_pxrd/results/study_v1"
 REPORTS = ROOT / "donut_pxrd/reports"
-WEIGHT_DIR = Path(r"E:\AI4science_DONUT_checkpoints\donut_pxrd_four_stage_20261019")
+WEIGHT_DIR = Path(r"E:\AI4science\_local\checkpoints\donut\donut_pxrd_four_stage_20261019")
 
 
 def sha(p):

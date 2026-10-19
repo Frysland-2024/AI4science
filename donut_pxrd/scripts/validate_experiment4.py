@@ -17,7 +17,7 @@ from xrd_inversion.gpu_forward import CachedTetragonalGPUForward
 
 DATA = ROOT / "donut_pxrd/results/study_v1/exp3c/data_arrays.npz"
 OUT = ROOT / "donut_pxrd/results/study_v1/exp4"
-WEIGHT_DIR = Path(r"E:\AI4science_DONUT_checkpoints\donut_pxrd_four_stage_20261019")
+WEIGHT_DIR = Path(r"E:\AI4science\_local\checkpoints\donut\donut_pxrd_four_stage_20261019")
 
 
 def sha(path: Path) -> str:
@@ -62,7 +62,7 @@ def main():
             assert checkpoint["method"] == method and checkpoint["seed"] == seed
     donut_runs = json.loads((ROOT / "donut_pxrd/results/study_v1/exp3c/test_per_seed.json").read_text(encoding="utf-8"))
     for rec in donut_runs:
-        p = Path(rec["checkpoint"])
+        p = WEIGHT_DIR / Path(rec["checkpoint"]).name
         assert p.exists() and sha(p) == rec["checkpoint_sha256"]
     for r in direct_rows:
         q = np.asarray(r["q_direct"], dtype=np.float64)
@@ -102,7 +102,7 @@ def main():
     initial = json.loads((ROOT / "donut_pxrd/results/resume_audit.json").read_text(encoding="utf-8"))
     files = []
     for r in initial["runs"]:
-        p = Path(r["checkpoint"])
+        p = WEIGHT_DIR / Path(r["checkpoint"]).name
         assert sha(p) == r["sha256"]
         files.append({"experiment": r["experiment"], "seed": r["seed"], "path": str(p), "sha256": r["sha256"], "bytes": p.stat().st_size})
     for m in "ABC":
