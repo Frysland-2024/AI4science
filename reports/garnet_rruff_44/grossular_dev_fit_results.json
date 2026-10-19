@@ -1,0 +1,1222 @@
+{
+  "schema_version": 1,
+  "project_id": "rruff-grossular-single-a",
+  "cif_sha256": "d6b3d78a1d487de504d4d47db9cbd1a2dc28e51e99c9c43a0565c8e1325cbb1e",
+  "synthetic_gate": {
+    "status": "PASS",
+    "known_a_angstrom": 11.93,
+    "fitted_a_angstrom": 11.92999295815992,
+    "absolute_error_angstrom": 7.0418400799354686e-06,
+    "predeclared_limit_angstrom": 0.01,
+    "rmse": 0.0010271592914749127,
+    "fit": {
+      "candidate_id": "grossular_garnet_cod9001868",
+      "initial_a_angstrom": 11.847,
+      "fitted_a_angstrom": 11.92999295815992,
+      "score_rmse": 0.0010271592914749127,
+      "initial_score_rmse": 0.054131751889882396,
+      "improvement_rmse": 0.05310459259840748,
+      "wavelength_angstrom": 1.540562,
+      "zero_shift_deg_fixed": 0.0,
+      "fwhm_deg_fixed": 0.14,
+      "scale_linear_fit": 0.9797035365917702,
+      "background_linear_fit": 0.02085474414549634,
+      "lower_a_angstrom": 11.550825,
+      "upper_a_angstrom": 12.143174999999998,
+      "success": true,
+      "optimizer": "scipy.optimize.minimize_scalar(method=bounded), one free structural parameter",
+      "evaluations": 15,
+      "elapsed_seconds": 1.6197625999921001,
+      "free_structural_parameters": [
+        "a_angstrom"
+      ]
+    },
+    "seed": 20261019,
+    "synthetic_only": true
+  },
+  "real_development": {
+    "status": "GO_GATE_PASS",
+    "population": "predeclared non-frozen Grossular development IDs only",
+    "candidate_sample_count": 12,
+    "loaded_sample_count": 12,
+    "failed_sample_loads": [],
+    "rmse_improved_count": 12,
+    "rmse_improved_required_count": 10,
+    "peak_alignment_pass_count": 12,
+    "peak_alignment_required_count": 10,
+    "predeclared_gate": {
+      "synthetic_a_recovery_abs_error_angstrom_max": 0.01,
+      "minimum_fraction_of_development_profiles_with_rmse_improvement": 0.8,
+      "predicted_reflections_to_check_per_profile": 8,
+      "measured_peak_match_window_deg": 0.25,
+      "minimum_predicted_reflection_match_fraction": 0.8,
+      "notes": "Engineering stop/go criterion fixed before reading real-profile results; it is not a calibrated accuracy threshold or publication claim."
+    },
+    "samples": [
+      {
+        "sample_id": "R040065-1",
+        "mineral_name": "Grossular",
+        "measured_chemistry": "(Ca_2.90_Fe^2+^_0.05_Mn_0.05_)(Al_1.95_Fe^3+^_0.03_Ti_0.02_)((Si_0.99_Al_0.01_)O_4_)_3_",
+        "description": "Powder",
+        "raw_member_sha256": "06ddc8cc10f01f548e11c34979471f726478e0907d20d930646c184462964d66",
+        "point_count": 8500,
+        "two_theta_range_deg": [
+          5.0,
+          89.99
+        ],
+        "wavelength_used_angstrom": 1.540562,
+        "wavelength_proxy_from_same_id_refinement_output_angstrom": 1.540562,
+        "fit": {
+          "candidate_id": "grossular_garnet_cod9001868",
+          "initial_a_angstrom": 11.847,
+          "fitted_a_angstrom": 11.831350705626068,
+          "score_rmse": 0.019317795315245412,
+          "initial_score_rmse": 0.02379004413717107,
+          "improvement_rmse": 0.004472248821925658,
+          "wavelength_angstrom": 1.540562,
+          "zero_shift_deg_fixed": 0.0,
+          "fwhm_deg_fixed": 0.14,
+          "scale_linear_fit": 0.41963313179652667,
+          "background_linear_fit": 0.008121547376818201,
+          "lower_a_angstrom": 11.550825,
+          "upper_a_angstrom": 12.143174999999998,
+          "success": true,
+          "optimizer": "scipy.optimize.minimize_scalar(method=bounded), one free structural parameter",
+          "evaluations": 14,
+          "elapsed_seconds": 1.5513146999874152,
+          "free_structural_parameters": [
+            "a_angstrom"
+          ]
+        },
+        "peak_alignment": {
+          "predicted_peak_count_checked": 8,
+          "matched_count": 8,
+          "match_fraction": 1.0,
+          "tolerance_deg": 0.25,
+          "peak_offsets": [
+            {
+              "predicted_two_theta_deg": 33.85,
+              "nearest_measured_two_theta_deg": 33.85,
+              "absolute_offset_deg": 0.0,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 58.31,
+              "nearest_measured_two_theta_deg": 58.27,
+              "absolute_offset_deg": 0.03999999999999915,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 56.0,
+              "nearest_measured_two_theta_deg": 55.96,
+              "absolute_offset_deg": 0.03999999999999915,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 89.05,
+              "nearest_measured_two_theta_deg": 88.93,
+              "absolute_offset_deg": 0.11999999999999034,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 73.27,
+              "nearest_measured_two_theta_deg": 73.19,
+              "absolute_offset_deg": 0.0799999999999983,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 30.19,
+              "nearest_measured_two_theta_deg": 30.21,
+              "absolute_offset_deg": 0.019999999999999574,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 47.32,
+              "nearest_measured_two_theta_deg": 47.3,
+              "absolute_offset_deg": 0.020000000000003126,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 53.62,
+              "nearest_measured_two_theta_deg": 53.58,
+              "absolute_offset_deg": 0.03999999999999915,
+              "within_gate": true
+            }
+          ]
+        },
+        "posthoc_reference_a_angstrom": 11.8517,
+        "posthoc_reference_esd_a_angstrom": 0.0002,
+        "posthoc_fit_minus_reference_angstrom": -0.02034929437393096,
+        "posthoc_fit_minus_reference_percent": -0.1716993711782357,
+        "reference_role": "posthoc_RRUFF_refinement_estimate_only"
+      },
+      {
+        "sample_id": "R040066-1",
+        "mineral_name": "Grossular",
+        "measured_chemistry": "(Ca_2.90_Fe^2+^_0.08_Mn_0.02_)(Al_1.87_Fe^3+^_0.13_)(Si_1.00_O_4_)_3_",
+        "description": "Powder",
+        "raw_member_sha256": "bb2ea60ed728a8fd73009a9630fc83fac494e5f36dd19dbb73ea8f035c8d1f37",
+        "point_count": 8500,
+        "two_theta_range_deg": [
+          5.0,
+          89.99
+        ],
+        "wavelength_used_angstrom": 1.540562,
+        "wavelength_proxy_from_same_id_refinement_output_angstrom": 1.540562,
+        "fit": {
+          "candidate_id": "grossular_garnet_cod9001868",
+          "initial_a_angstrom": 11.847,
+          "fitted_a_angstrom": 11.8498048699222,
+          "score_rmse": 0.023105623549696083,
+          "initial_score_rmse": 0.023190303088247696,
+          "improvement_rmse": 8.467953855161373e-05,
+          "wavelength_angstrom": 1.540562,
+          "zero_shift_deg_fixed": 0.0,
+          "fwhm_deg_fixed": 0.14,
+          "scale_linear_fit": 0.45086252150096595,
+          "background_linear_fit": 0.015440038271423468,
+          "lower_a_angstrom": 11.550825,
+          "upper_a_angstrom": 12.143174999999998,
+          "success": true,
+          "optimizer": "scipy.optimize.minimize_scalar(method=bounded), one free structural parameter",
+          "evaluations": 16,
+          "elapsed_seconds": 1.5051106999744661,
+          "free_structural_parameters": [
+            "a_angstrom"
+          ]
+        },
+        "peak_alignment": {
+          "predicted_peak_count_checked": 8,
+          "matched_count": 8,
+          "match_fraction": 1.0,
+          "tolerance_deg": 0.25,
+          "peak_offsets": [
+            {
+              "predicted_two_theta_deg": 33.8,
+              "nearest_measured_two_theta_deg": 33.8,
+              "absolute_offset_deg": 0.0,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 58.21,
+              "nearest_measured_two_theta_deg": 58.18,
+              "absolute_offset_deg": 0.030000000000001137,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 55.91,
+              "nearest_measured_two_theta_deg": 55.89,
+              "absolute_offset_deg": 0.01999999999999602,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 88.87,
+              "nearest_measured_two_theta_deg": 88.77,
+              "absolute_offset_deg": 0.10000000000000853,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 73.13,
+              "nearest_measured_two_theta_deg": 73.09,
+              "absolute_offset_deg": 0.03999999999999204,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 30.14,
+              "nearest_measured_two_theta_deg": 30.14,
+              "absolute_offset_deg": 0.0,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 47.25,
+              "nearest_measured_two_theta_deg": 47.23,
+              "absolute_offset_deg": 0.020000000000003126,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 53.53,
+              "nearest_measured_two_theta_deg": 53.5,
+              "absolute_offset_deg": 0.030000000000001137,
+              "within_gate": true
+            }
+          ]
+        },
+        "posthoc_reference_a_angstrom": 11.8665,
+        "posthoc_reference_esd_a_angstrom": 0.0002,
+        "posthoc_fit_minus_reference_angstrom": -0.016695130077799547,
+        "posthoc_fit_minus_reference_percent": -0.14069127440946821,
+        "reference_role": "posthoc_RRUFF_refinement_estimate_only"
+      },
+      {
+        "sample_id": "R050036-1",
+        "mineral_name": "Grossular",
+        "measured_chemistry": "(Ca_2.95_Mg_0.05_)(Al_1.70_Fe^3+^_0.30_)(Si_1.00_O_4_)_3_ ; trace amounts of P",
+        "description": "Powder",
+        "raw_member_sha256": "b496606b4676ccad80281c7dd2923610c59da3c9206d7335660c316cad776327",
+        "point_count": 8501,
+        "two_theta_range_deg": [
+          5.0,
+          90.0
+        ],
+        "wavelength_used_angstrom": 1.540562,
+        "wavelength_proxy_from_same_id_refinement_output_angstrom": 1.540562,
+        "fit": {
+          "candidate_id": "grossular_garnet_cod9001868",
+          "initial_a_angstrom": 11.847,
+          "fitted_a_angstrom": 11.864752061795109,
+          "score_rmse": 0.018157725007540145,
+          "initial_score_rmse": 0.0217805062442295,
+          "improvement_rmse": 0.003622781236689354,
+          "wavelength_angstrom": 1.540562,
+          "zero_shift_deg_fixed": 0.0,
+          "fwhm_deg_fixed": 0.14,
+          "scale_linear_fit": 0.44324011149683246,
+          "background_linear_fit": 0.018447412951036163,
+          "lower_a_angstrom": 11.550825,
+          "upper_a_angstrom": 12.143174999999998,
+          "success": true,
+          "optimizer": "scipy.optimize.minimize_scalar(method=bounded), one free structural parameter",
+          "evaluations": 14,
+          "elapsed_seconds": 1.3213002000120468,
+          "free_structural_parameters": [
+            "a_angstrom"
+          ]
+        },
+        "peak_alignment": {
+          "predicted_peak_count_checked": 8,
+          "matched_count": 8,
+          "match_fraction": 1.0,
+          "tolerance_deg": 0.25,
+          "peak_offsets": [
+            {
+              "predicted_two_theta_deg": 33.76,
+              "nearest_measured_two_theta_deg": 33.76,
+              "absolute_offset_deg": 0.0,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 58.13,
+              "nearest_measured_two_theta_deg": 58.08,
+              "absolute_offset_deg": 0.05000000000000426,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 55.83,
+              "nearest_measured_two_theta_deg": 55.81,
+              "absolute_offset_deg": 0.01999999999999602,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 88.73,
+              "nearest_measured_two_theta_deg": 88.59,
+              "absolute_offset_deg": 0.14000000000000057,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 73.03,
+              "nearest_measured_two_theta_deg": 73.11,
+              "absolute_offset_deg": 0.0799999999999983,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 30.1,
+              "nearest_measured_two_theta_deg": 30.12,
+              "absolute_offset_deg": 0.019999999999999574,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 47.18,
+              "nearest_measured_two_theta_deg": 47.14,
+              "absolute_offset_deg": 0.03999999999999915,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 53.46,
+              "nearest_measured_two_theta_deg": 53.46,
+              "absolute_offset_deg": 0.0,
+              "within_gate": true
+            }
+          ]
+        },
+        "posthoc_reference_a_angstrom": 11.8851,
+        "posthoc_reference_esd_a_angstrom": 0.00030000000000000003,
+        "posthoc_fit_minus_reference_angstrom": -0.02034793820489078,
+        "posthoc_fit_minus_reference_percent": -0.1712054438321157,
+        "reference_role": "posthoc_RRUFF_refinement_estimate_only"
+      },
+      {
+        "sample_id": "R050081-1",
+        "mineral_name": "Grossular",
+        "measured_chemistry": "(Ca_2.92_Mg_0.07_Mn_0.01_)(Al_1.04_Fe^3+^_0.89_Ti_0.07_)((Si_0.98_Al_0.02_)O_4_)_3_ ; trace amounts of Y",
+        "description": "Powder",
+        "raw_member_sha256": "dca4a702b2ad56ab344d29bfa994b7e9fba5f7f2902f6f987022b688d97f6e2c",
+        "point_count": 8501,
+        "two_theta_range_deg": [
+          5.0,
+          90.0
+        ],
+        "wavelength_used_angstrom": 1.540562,
+        "wavelength_proxy_from_same_id_refinement_output_angstrom": 1.540562,
+        "fit": {
+          "candidate_id": "grossular_garnet_cod9001868",
+          "initial_a_angstrom": 11.847,
+          "fitted_a_angstrom": 11.95933382873312,
+          "score_rmse": 0.03607765712821745,
+          "initial_score_rmse": 0.051938307935907015,
+          "improvement_rmse": 0.015860650807689565,
+          "wavelength_angstrom": 1.540562,
+          "zero_shift_deg_fixed": 0.0,
+          "fwhm_deg_fixed": 0.14,
+          "scale_linear_fit": 0.6734881576426582,
+          "background_linear_fit": 0.11040965823299519,
+          "lower_a_angstrom": 11.550825,
+          "upper_a_angstrom": 12.143174999999998,
+          "success": true,
+          "optimizer": "scipy.optimize.minimize_scalar(method=bounded), one free structural parameter",
+          "evaluations": 12,
+          "elapsed_seconds": 1.1308159999898635,
+          "free_structural_parameters": [
+            "a_angstrom"
+          ]
+        },
+        "peak_alignment": {
+          "predicted_peak_count_checked": 8,
+          "matched_count": 8,
+          "match_fraction": 1.0,
+          "tolerance_deg": 0.25,
+          "peak_offsets": [
+            {
+              "predicted_two_theta_deg": 33.48,
+              "nearest_measured_two_theta_deg": 33.46,
+              "absolute_offset_deg": 0.01999999999999602,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 57.63,
+              "nearest_measured_two_theta_deg": 57.62,
+              "absolute_offset_deg": 0.010000000000005116,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 55.35,
+              "nearest_measured_two_theta_deg": 55.36,
+              "absolute_offset_deg": 0.00999999999999801,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 87.85,
+              "nearest_measured_two_theta_deg": 87.84,
+              "absolute_offset_deg": 0.009999999999990905,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 72.36,
+              "nearest_measured_two_theta_deg": 72.38,
+              "absolute_offset_deg": 0.01999999999999602,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 29.86,
+              "nearest_measured_two_theta_deg": 29.85,
+              "absolute_offset_deg": 0.00999999999999801,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 46.79,
+              "nearest_measured_two_theta_deg": 46.77,
+              "absolute_offset_deg": 0.01999999999999602,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 89.75,
+              "nearest_measured_two_theta_deg": 89.79,
+              "absolute_offset_deg": 0.04000000000000625,
+              "within_gate": true
+            }
+          ]
+        },
+        "posthoc_reference_a_angstrom": 11.974,
+        "posthoc_reference_esd_a_angstrom": 0.0004,
+        "posthoc_fit_minus_reference_angstrom": -0.014666171266879857,
+        "posthoc_fit_minus_reference_percent": -0.12248347475262951,
+        "reference_role": "posthoc_RRUFF_refinement_estimate_only"
+      },
+      {
+        "sample_id": "R050312-1",
+        "mineral_name": "Grossular",
+        "measured_chemistry": "Ca_3.00_(Al_1.75_Fe^3+^_0.23_Ti_0.02_)((Si_0.99_Al_0.01_)O_4_)_3_",
+        "description": "Powder",
+        "raw_member_sha256": "f28a2c46452654fda362823483e54979042c9ac865c6648f4e11bc936fa59b25",
+        "point_count": 8501,
+        "two_theta_range_deg": [
+          5.0,
+          90.0
+        ],
+        "wavelength_used_angstrom": 1.540562,
+        "wavelength_proxy_from_same_id_refinement_output_angstrom": 1.540562,
+        "fit": {
+          "candidate_id": "grossular_garnet_cod9001868",
+          "initial_a_angstrom": 11.847,
+          "fitted_a_angstrom": 11.842132317174695,
+          "score_rmse": 0.021780419118160026,
+          "initial_score_rmse": 0.022035405313064107,
+          "improvement_rmse": 0.00025498619490408117,
+          "wavelength_angstrom": 1.540562,
+          "zero_shift_deg_fixed": 0.0,
+          "fwhm_deg_fixed": 0.14,
+          "scale_linear_fit": 0.4274116074038623,
+          "background_linear_fit": 0.01553901214771378,
+          "lower_a_angstrom": 11.550825,
+          "upper_a_angstrom": 12.143174999999998,
+          "success": true,
+          "optimizer": "scipy.optimize.minimize_scalar(method=bounded), one free structural parameter",
+          "evaluations": 12,
+          "elapsed_seconds": 1.1043682999443263,
+          "free_structural_parameters": [
+            "a_angstrom"
+          ]
+        },
+        "peak_alignment": {
+          "predicted_peak_count_checked": 8,
+          "matched_count": 8,
+          "match_fraction": 1.0,
+          "tolerance_deg": 0.25,
+          "peak_offsets": [
+            {
+              "predicted_two_theta_deg": 33.82,
+              "nearest_measured_two_theta_deg": 33.82,
+              "absolute_offset_deg": 0.0,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 58.26,
+              "nearest_measured_two_theta_deg": 58.19,
+              "absolute_offset_deg": 0.07000000000000028,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 55.95,
+              "nearest_measured_two_theta_deg": 55.89,
+              "absolute_offset_deg": 0.060000000000002274,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 88.94,
+              "nearest_measured_two_theta_deg": 89.03,
+              "absolute_offset_deg": 0.09000000000000341,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 73.19,
+              "nearest_measured_two_theta_deg": 73.29,
+              "absolute_offset_deg": 0.10000000000000853,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 30.16,
+              "nearest_measured_two_theta_deg": 30.16,
+              "absolute_offset_deg": 0.0,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 47.28,
+              "nearest_measured_two_theta_deg": 47.24,
+              "absolute_offset_deg": 0.03999999999999915,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 53.57,
+              "nearest_measured_two_theta_deg": 53.52,
+              "absolute_offset_deg": 0.04999999999999716,
+              "within_gate": true
+            }
+          ]
+        },
+        "posthoc_reference_a_angstrom": 11.8701,
+        "posthoc_reference_esd_a_angstrom": 0.0002,
+        "posthoc_fit_minus_reference_angstrom": -0.02796768282530593,
+        "posthoc_fit_minus_reference_percent": -0.23561455105943443,
+        "reference_role": "posthoc_RRUFF_refinement_estimate_only"
+      },
+      {
+        "sample_id": "R060278-1",
+        "mineral_name": "Grossular",
+        "measured_chemistry": "(Ca_2.93_Mg_0.05_Mn_0.02_)(Al_1.19_Fe^3+^_0.78_Ti_0.03_)((Si_0.99_Al_0.01_)O_4_)_3_",
+        "description": "Powder",
+        "raw_member_sha256": "08da2d96c7b3e136ad1f9ac2c7efcbe66107d727b3220bbb85838bb5c4f2e537",
+        "point_count": 8501,
+        "two_theta_range_deg": [
+          5.0,
+          90.0
+        ],
+        "wavelength_used_angstrom": 1.540562,
+        "wavelength_proxy_from_same_id_refinement_output_angstrom": 1.540562,
+        "fit": {
+          "candidate_id": "grossular_garnet_cod9001868",
+          "initial_a_angstrom": 11.847,
+          "fitted_a_angstrom": 11.91231756272812,
+          "score_rmse": 0.03106888307615763,
+          "initial_score_rmse": 0.04523644851270619,
+          "improvement_rmse": 0.014167565436548558,
+          "wavelength_angstrom": 1.540562,
+          "zero_shift_deg_fixed": 0.0,
+          "fwhm_deg_fixed": 0.14,
+          "scale_linear_fit": 0.6112764631121904,
+          "background_linear_fit": 0.0834743436700965,
+          "lower_a_angstrom": 11.550825,
+          "upper_a_angstrom": 12.143174999999998,
+          "success": true,
+          "optimizer": "scipy.optimize.minimize_scalar(method=bounded), one free structural parameter",
+          "evaluations": 11,
+          "elapsed_seconds": 1.0238311999710277,
+          "free_structural_parameters": [
+            "a_angstrom"
+          ]
+        },
+        "peak_alignment": {
+          "predicted_peak_count_checked": 8,
+          "matched_count": 8,
+          "match_fraction": 1.0,
+          "tolerance_deg": 0.25,
+          "peak_offsets": [
+            {
+              "predicted_two_theta_deg": 33.62,
+              "nearest_measured_two_theta_deg": 33.63,
+              "absolute_offset_deg": 0.010000000000005116,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 57.88,
+              "nearest_measured_two_theta_deg": 57.8,
+              "absolute_offset_deg": 0.0800000000000054,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 55.59,
+              "nearest_measured_two_theta_deg": 55.53,
+              "absolute_offset_deg": 0.060000000000002274,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 88.28,
+              "nearest_measured_two_theta_deg": 88.22,
+              "absolute_offset_deg": 0.060000000000002274,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 72.69,
+              "nearest_measured_two_theta_deg": 72.69,
+              "absolute_offset_deg": 0.0,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 29.98,
+              "nearest_measured_two_theta_deg": 30.02,
+              "absolute_offset_deg": 0.03999999999999915,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 46.98,
+              "nearest_measured_two_theta_deg": 46.96,
+              "absolute_offset_deg": 0.01999999999999602,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 53.23,
+              "nearest_measured_two_theta_deg": 53.24,
+              "absolute_offset_deg": 0.010000000000005116,
+              "within_gate": true
+            }
+          ]
+        },
+        "posthoc_reference_a_angstrom": 11.9451,
+        "posthoc_reference_esd_a_angstrom": 0.0004,
+        "posthoc_fit_minus_reference_angstrom": -0.03278243727188013,
+        "posthoc_fit_minus_reference_percent": -0.27444255194079686,
+        "reference_role": "posthoc_RRUFF_refinement_estimate_only"
+      },
+      {
+        "sample_id": "R060382-1",
+        "mineral_name": "Grossular",
+        "measured_chemistry": "(Ca_2.95_Mg_0.03_Mn_0.02_)Al_2.00_((Si_0.99_Ti_0.01_)O_4_)_3_ ; trace amounts of Fe",
+        "description": "Powder",
+        "raw_member_sha256": "c868c700dc822a93377e0173b9d68cca3736f6eb5e2f0b82e76cc90386b2a164",
+        "point_count": 8501,
+        "two_theta_range_deg": [
+          5.0,
+          90.0
+        ],
+        "wavelength_used_angstrom": 1.540562,
+        "wavelength_proxy_from_same_id_refinement_output_angstrom": 1.540562,
+        "fit": {
+          "candidate_id": "grossular_garnet_cod9001868",
+          "initial_a_angstrom": 11.847,
+          "fitted_a_angstrom": 11.846294274766597,
+          "score_rmse": 0.02173570885321985,
+          "initial_score_rmse": 0.021739835749929874,
+          "improvement_rmse": 4.126896710025807e-06,
+          "wavelength_angstrom": 1.540562,
+          "zero_shift_deg_fixed": 0.0,
+          "fwhm_deg_fixed": 0.14,
+          "scale_linear_fit": 0.4001954354247031,
+          "background_linear_fit": 0.030157056013825678,
+          "lower_a_angstrom": 11.550825,
+          "upper_a_angstrom": 12.143174999999998,
+          "success": true,
+          "optimizer": "scipy.optimize.minimize_scalar(method=bounded), one free structural parameter",
+          "evaluations": 13,
+          "elapsed_seconds": 1.187335099966731,
+          "free_structural_parameters": [
+            "a_angstrom"
+          ]
+        },
+        "peak_alignment": {
+          "predicted_peak_count_checked": 8,
+          "matched_count": 8,
+          "match_fraction": 1.0,
+          "tolerance_deg": 0.25,
+          "peak_offsets": [
+            {
+              "predicted_two_theta_deg": 33.81,
+              "nearest_measured_two_theta_deg": 33.8,
+              "absolute_offset_deg": 0.010000000000005116,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 58.23,
+              "nearest_measured_two_theta_deg": 58.2,
+              "absolute_offset_deg": 0.02999999999999403,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 55.92,
+              "nearest_measured_two_theta_deg": 55.9,
+              "absolute_offset_deg": 0.020000000000003126,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 88.91,
+              "nearest_measured_two_theta_deg": 88.86,
+              "absolute_offset_deg": 0.04999999999999716,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 73.16,
+              "nearest_measured_two_theta_deg": 73.12,
+              "absolute_offset_deg": 0.03999999999999204,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 30.15,
+              "nearest_measured_two_theta_deg": 30.15,
+              "absolute_offset_deg": 0.0,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 47.26,
+              "nearest_measured_two_theta_deg": 47.25,
+              "absolute_offset_deg": 0.00999999999999801,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 53.55,
+              "nearest_measured_two_theta_deg": 53.53,
+              "absolute_offset_deg": 0.01999999999999602,
+              "within_gate": true
+            }
+          ]
+        },
+        "posthoc_reference_a_angstrom": 11.8526,
+        "posthoc_reference_esd_a_angstrom": 0.0001,
+        "posthoc_fit_minus_reference_angstrom": -0.0063057252334033365,
+        "posthoc_fit_minus_reference_percent": -0.05320119833119599,
+        "reference_role": "posthoc_RRUFF_refinement_estimate_only"
+      },
+      {
+        "sample_id": "R060442-1",
+        "mineral_name": "Grossular",
+        "measured_chemistry": "(Ca_2.85_Fe^2+^_0.15_)(Al_1.85_Fe^3+^_0.15_)(Si_1.00_O_4_)_3_ ; trace amounts of Ti, Mg",
+        "description": "Powder",
+        "raw_member_sha256": "7fee9b23e0d42ecfdeeebc59910c32c6920b21aec78916e299c772ef043b655e",
+        "point_count": 8501,
+        "two_theta_range_deg": [
+          5.0,
+          90.0
+        ],
+        "wavelength_used_angstrom": 1.540562,
+        "wavelength_proxy_from_same_id_refinement_output_angstrom": 1.540562,
+        "fit": {
+          "candidate_id": "grossular_garnet_cod9001868",
+          "initial_a_angstrom": 11.847,
+          "fitted_a_angstrom": 11.84290807493614,
+          "score_rmse": 0.019411235716374126,
+          "initial_score_rmse": 0.019965668234293892,
+          "improvement_rmse": 0.0005544325179197666,
+          "wavelength_angstrom": 1.540562,
+          "zero_shift_deg_fixed": 0.0,
+          "fwhm_deg_fixed": 0.14,
+          "scale_linear_fit": 0.4719089434039967,
+          "background_linear_fit": 0.021013499547026464,
+          "lower_a_angstrom": 11.550825,
+          "upper_a_angstrom": 12.143174999999998,
+          "success": true,
+          "optimizer": "scipy.optimize.minimize_scalar(method=bounded), one free structural parameter",
+          "evaluations": 13,
+          "elapsed_seconds": 1.187181499961298,
+          "free_structural_parameters": [
+            "a_angstrom"
+          ]
+        },
+        "peak_alignment": {
+          "predicted_peak_count_checked": 8,
+          "matched_count": 8,
+          "match_fraction": 1.0,
+          "tolerance_deg": 0.25,
+          "peak_offsets": [
+            {
+              "predicted_two_theta_deg": 33.82,
+              "nearest_measured_two_theta_deg": 33.82,
+              "absolute_offset_deg": 0.0,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 58.25,
+              "nearest_measured_two_theta_deg": 58.22,
+              "absolute_offset_deg": 0.030000000000001137,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 55.94,
+              "nearest_measured_two_theta_deg": 55.92,
+              "absolute_offset_deg": 0.01999999999999602,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 88.94,
+              "nearest_measured_two_theta_deg": 88.84,
+              "absolute_offset_deg": 0.09999999999999432,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 73.18,
+              "nearest_measured_two_theta_deg": 73.14,
+              "absolute_offset_deg": 0.04000000000000625,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 30.16,
+              "nearest_measured_two_theta_deg": 30.16,
+              "absolute_offset_deg": 0.0,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 47.27,
+              "nearest_measured_two_theta_deg": 47.28,
+              "absolute_offset_deg": 0.00999999999999801,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 53.57,
+              "nearest_measured_two_theta_deg": 53.54,
+              "absolute_offset_deg": 0.030000000000001137,
+              "within_gate": true
+            }
+          ]
+        },
+        "posthoc_reference_a_angstrom": 11.8553,
+        "posthoc_reference_esd_a_angstrom": 0.0001,
+        "posthoc_fit_minus_reference_angstrom": -0.012391925063859333,
+        "posthoc_fit_minus_reference_percent": -0.10452645706021217,
+        "reference_role": "posthoc_RRUFF_refinement_estimate_only"
+      },
+      {
+        "sample_id": "R060443-1",
+        "mineral_name": "Grossular",
+        "measured_chemistry": "(Ca_2.92_Mn_0.03_Mg_0.03_Fe^2+^_0.02_)(Al_1.86_Fe^3+^_0.14_)(Si_1.00_O_4_)_3_ ; trace amounts of Ti",
+        "description": "Powder",
+        "raw_member_sha256": "d537eeef0b826317c1af0ade4c27d738951884fd9ae769338f627d2205eb3e1f",
+        "point_count": 8501,
+        "two_theta_range_deg": [
+          5.0,
+          90.0
+        ],
+        "wavelength_used_angstrom": 1.540562,
+        "wavelength_proxy_from_same_id_refinement_output_angstrom": 1.540562,
+        "fit": {
+          "candidate_id": "grossular_garnet_cod9001868",
+          "initial_a_angstrom": 11.847,
+          "fitted_a_angstrom": 11.836235136104115,
+          "score_rmse": 0.022776674923512718,
+          "initial_score_rmse": 0.024158890021127186,
+          "improvement_rmse": 0.0013822150976144677,
+          "wavelength_angstrom": 1.540562,
+          "zero_shift_deg_fixed": 0.0,
+          "fwhm_deg_fixed": 0.14,
+          "scale_linear_fit": 0.44387803911889,
+          "background_linear_fit": 0.015913933532639042,
+          "lower_a_angstrom": 11.550825,
+          "upper_a_angstrom": 12.143174999999998,
+          "success": true,
+          "optimizer": "scipy.optimize.minimize_scalar(method=bounded), one free structural parameter",
+          "evaluations": 13,
+          "elapsed_seconds": 1.1978789999848232,
+          "free_structural_parameters": [
+            "a_angstrom"
+          ]
+        },
+        "peak_alignment": {
+          "predicted_peak_count_checked": 8,
+          "matched_count": 8,
+          "match_fraction": 1.0,
+          "tolerance_deg": 0.25,
+          "peak_offsets": [
+            {
+              "predicted_two_theta_deg": 33.84,
+              "nearest_measured_two_theta_deg": 33.85,
+              "absolute_offset_deg": 0.00999999999999801,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 58.29,
+              "nearest_measured_two_theta_deg": 58.22,
+              "absolute_offset_deg": 0.07000000000000028,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 55.98,
+              "nearest_measured_two_theta_deg": 55.92,
+              "absolute_offset_deg": 0.05999999999999517,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 89.0,
+              "nearest_measured_two_theta_deg": 89.09,
+              "absolute_offset_deg": 0.09000000000000341,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 73.23,
+              "nearest_measured_two_theta_deg": 73.33,
+              "absolute_offset_deg": 0.09999999999999432,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 30.18,
+              "nearest_measured_two_theta_deg": 30.19,
+              "absolute_offset_deg": 0.010000000000001563,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 47.3,
+              "nearest_measured_two_theta_deg": 47.27,
+              "absolute_offset_deg": 0.02999999999999403,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 53.6,
+              "nearest_measured_two_theta_deg": 53.55,
+              "absolute_offset_deg": 0.05000000000000426,
+              "within_gate": true
+            }
+          ]
+        },
+        "posthoc_reference_a_angstrom": 11.8636,
+        "posthoc_reference_esd_a_angstrom": 0.0001,
+        "posthoc_fit_minus_reference_angstrom": -0.027364863895884994,
+        "posthoc_fit_minus_reference_percent": -0.23066239502246363,
+        "reference_role": "posthoc_RRUFF_refinement_estimate_only"
+      },
+      {
+        "sample_id": "R060444-1",
+        "mineral_name": "Grossular",
+        "measured_chemistry": "(Ca_2.98_Mn_0.02_)(Al_1.84_Fe^3+^_0.13_Ti_0.03_)((Si_0.99_Al_0.01_)O_4_)_3_",
+        "description": "Powder",
+        "raw_member_sha256": "d8a0b0b0d44ead83a53d3652427de03221e66e68e631e92c992c83996a41a847",
+        "point_count": 8501,
+        "two_theta_range_deg": [
+          5.0,
+          90.0
+        ],
+        "wavelength_used_angstrom": 1.540562,
+        "wavelength_proxy_from_same_id_refinement_output_angstrom": 1.540562,
+        "fit": {
+          "candidate_id": "grossular_garnet_cod9001868",
+          "initial_a_angstrom": 11.847,
+          "fitted_a_angstrom": 11.844088463744168,
+          "score_rmse": 0.021200323160919327,
+          "initial_score_rmse": 0.02144130794762659,
+          "improvement_rmse": 0.00024098478670726495,
+          "wavelength_angstrom": 1.540562,
+          "zero_shift_deg_fixed": 0.0,
+          "fwhm_deg_fixed": 0.14,
+          "scale_linear_fit": 0.5170267741101974,
+          "background_linear_fit": 0.01828847482863099,
+          "lower_a_angstrom": 11.550825,
+          "upper_a_angstrom": 12.143174999999998,
+          "success": true,
+          "optimizer": "scipy.optimize.minimize_scalar(method=bounded), one free structural parameter",
+          "evaluations": 15,
+          "elapsed_seconds": 1.3962423999910243,
+          "free_structural_parameters": [
+            "a_angstrom"
+          ]
+        },
+        "peak_alignment": {
+          "predicted_peak_count_checked": 8,
+          "matched_count": 8,
+          "match_fraction": 1.0,
+          "tolerance_deg": 0.25,
+          "peak_offsets": [
+            {
+              "predicted_two_theta_deg": 33.82,
+              "nearest_measured_two_theta_deg": 33.81,
+              "absolute_offset_deg": 0.00999999999999801,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 58.24,
+              "nearest_measured_two_theta_deg": 58.19,
+              "absolute_offset_deg": 0.05000000000000426,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 55.94,
+              "nearest_measured_two_theta_deg": 55.9,
+              "absolute_offset_deg": 0.03999999999999915,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 88.93,
+              "nearest_measured_two_theta_deg": 88.83,
+              "absolute_offset_deg": 0.10000000000000853,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 73.18,
+              "nearest_measured_two_theta_deg": 73.12,
+              "absolute_offset_deg": 0.060000000000002274,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 30.16,
+              "nearest_measured_two_theta_deg": 30.15,
+              "absolute_offset_deg": 0.010000000000001563,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 47.27,
+              "nearest_measured_two_theta_deg": 47.25,
+              "absolute_offset_deg": 0.020000000000003126,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 53.56,
+              "nearest_measured_two_theta_deg": 53.53,
+              "absolute_offset_deg": 0.030000000000001137,
+              "within_gate": true
+            }
+          ]
+        },
+        "posthoc_reference_a_angstrom": 11.8579,
+        "posthoc_reference_esd_a_angstrom": 0.0002,
+        "posthoc_fit_minus_reference_angstrom": -0.01381153625583309,
+        "posthoc_fit_minus_reference_percent": -0.1164753983068932,
+        "reference_role": "posthoc_RRUFF_refinement_estimate_only"
+      },
+      {
+        "sample_id": "R060499-1",
+        "mineral_name": "Grossular",
+        "measured_chemistry": "(Ca_2.90_Mg_0.10_)(Al_1.78_Fe^3+^_0.19_Ti_0.03_)(Si_1.00_O_4_)_3_",
+        "description": "Powder",
+        "raw_member_sha256": "5e25dcb9e4fc4e7bebb7aad2a846d495bf09ae90743348d879d5bb5d9595645e",
+        "point_count": 8501,
+        "two_theta_range_deg": [
+          5.0,
+          90.0
+        ],
+        "wavelength_used_angstrom": 1.540562,
+        "wavelength_proxy_from_same_id_refinement_output_angstrom": 1.540562,
+        "fit": {
+          "candidate_id": "grossular_garnet_cod9001868",
+          "initial_a_angstrom": 11.847,
+          "fitted_a_angstrom": 11.860374055703222,
+          "score_rmse": 0.023020670371188177,
+          "initial_score_rmse": 0.025042649933455247,
+          "improvement_rmse": 0.00202197956226707,
+          "wavelength_angstrom": 1.540562,
+          "zero_shift_deg_fixed": 0.0,
+          "fwhm_deg_fixed": 0.14,
+          "scale_linear_fit": 0.5347726719350266,
+          "background_linear_fit": 0.019490047834545797,
+          "lower_a_angstrom": 11.550825,
+          "upper_a_angstrom": 12.143174999999998,
+          "success": true,
+          "optimizer": "scipy.optimize.minimize_scalar(method=bounded), one free structural parameter",
+          "evaluations": 13,
+          "elapsed_seconds": 1.2456119999988005,
+          "free_structural_parameters": [
+            "a_angstrom"
+          ]
+        },
+        "peak_alignment": {
+          "predicted_peak_count_checked": 8,
+          "matched_count": 8,
+          "match_fraction": 1.0,
+          "tolerance_deg": 0.25,
+          "peak_offsets": [
+            {
+              "predicted_two_theta_deg": 33.77,
+              "nearest_measured_two_theta_deg": 33.77,
+              "absolute_offset_deg": 0.0,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 58.16,
+              "nearest_measured_two_theta_deg": 58.08,
+              "absolute_offset_deg": 0.0799999999999983,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 55.85,
+              "nearest_measured_two_theta_deg": 55.8,
+              "absolute_offset_deg": 0.05000000000000426,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 88.77,
+              "nearest_measured_two_theta_deg": 88.88,
+              "absolute_offset_deg": 0.10999999999999943,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 73.06,
+              "nearest_measured_two_theta_deg": 73.16,
+              "absolute_offset_deg": 0.09999999999999432,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 30.11,
+              "nearest_measured_two_theta_deg": 30.13,
+              "absolute_offset_deg": 0.019999999999999574,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 47.2,
+              "nearest_measured_two_theta_deg": 47.16,
+              "absolute_offset_deg": 0.04000000000000625,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 53.48,
+              "nearest_measured_two_theta_deg": 53.43,
+              "absolute_offset_deg": 0.04999999999999716,
+              "within_gate": true
+            }
+          ]
+        },
+        "posthoc_reference_a_angstrom": 11.8882,
+        "posthoc_reference_esd_a_angstrom": 0.0002,
+        "posthoc_fit_minus_reference_angstrom": -0.02782594429677765,
+        "posthoc_fit_minus_reference_percent": -0.23406356131943987,
+        "reference_role": "posthoc_RRUFF_refinement_estimate_only"
+      },
+      {
+        "sample_id": "R070551-1",
+        "mineral_name": "Grossular",
+        "measured_chemistry": "(Ca_2.95_Mg_0.04_Mn_0.01_)(Al_1.63_Fe^3+^_0.37_)(Si_1.00_O_4_)_3_",
+        "description": "Powder",
+        "raw_member_sha256": "f9c7f15723689d3102b22734ce26f554954433146579d3644c8afd193aec39cb",
+        "point_count": 8501,
+        "two_theta_range_deg": [
+          5.0,
+          90.0
+        ],
+        "wavelength_used_angstrom": 1.540562,
+        "wavelength_proxy_from_same_id_refinement_output_angstrom": 1.540562,
+        "fit": {
+          "candidate_id": "grossular_garnet_cod9001868",
+          "initial_a_angstrom": 11.847,
+          "fitted_a_angstrom": 11.870875989833252,
+          "score_rmse": 0.020540375586056245,
+          "initial_score_rmse": 0.02499657381315602,
+          "improvement_rmse": 0.0044561982270997745,
+          "wavelength_angstrom": 1.540562,
+          "zero_shift_deg_fixed": 0.0,
+          "fwhm_deg_fixed": 0.14,
+          "scale_linear_fit": 0.45147897646023394,
+          "background_linear_fit": 0.02162309848718046,
+          "lower_a_angstrom": 11.550825,
+          "upper_a_angstrom": 12.143174999999998,
+          "success": true,
+          "optimizer": "scipy.optimize.minimize_scalar(method=bounded), one free structural parameter",
+          "evaluations": 14,
+          "elapsed_seconds": 1.3112428999738768,
+          "free_structural_parameters": [
+            "a_angstrom"
+          ]
+        },
+        "peak_alignment": {
+          "predicted_peak_count_checked": 8,
+          "matched_count": 8,
+          "match_fraction": 1.0,
+          "tolerance_deg": 0.25,
+          "peak_offsets": [
+            {
+              "predicted_two_theta_deg": 33.74,
+              "nearest_measured_two_theta_deg": 33.74,
+              "absolute_offset_deg": 0.0,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 58.1,
+              "nearest_measured_two_theta_deg": 58.06,
+              "absolute_offset_deg": 0.03999999999999915,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 55.8,
+              "nearest_measured_two_theta_deg": 55.76,
+              "absolute_offset_deg": 0.03999999999999915,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 88.67,
+              "nearest_measured_two_theta_deg": 88.56,
+              "absolute_offset_deg": 0.10999999999999943,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 72.98,
+              "nearest_measured_two_theta_deg": 72.91,
+              "absolute_offset_deg": 0.07000000000000739,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 30.09,
+              "nearest_measured_two_theta_deg": 30.1,
+              "absolute_offset_deg": 0.010000000000001563,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 47.16,
+              "nearest_measured_two_theta_deg": 47.14,
+              "absolute_offset_deg": 0.01999999999999602,
+              "within_gate": true
+            },
+            {
+              "predicted_two_theta_deg": 53.43,
+              "nearest_measured_two_theta_deg": 53.4,
+              "absolute_offset_deg": 0.030000000000001137,
+              "within_gate": true
+            }
+          ]
+        },
+        "posthoc_reference_a_angstrom": 11.88854,
+        "posthoc_reference_esd_a_angstrom": 8e-05,
+        "posthoc_fit_minus_reference_angstrom": -0.017664010166749122,
+        "posthoc_fit_minus_reference_percent": -0.1485801466517261,
+        "reference_role": "posthoc_RRUFF_refinement_estimate_only"
+      }
+    ]
+  }
+}

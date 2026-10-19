@@ -344,3 +344,21 @@ The verified local frozen Dynamic-JS checkpoint (`3ee1beb…c2b6b49`) loaded str
 **What does NOT change:** Existing synthetic BaTiO3/MgO/CeO2 demos and the primary supervised crystal-system research stay unchanged. Frozen classifiers, original spectra, refinement data, locked-test split, and other worktrees remain untouched. No raw or derived RRUFF artifact is committed.
 
 **Relevant files / commits:** `pxrd_router_mvp/rruff_local.py`, `pxrd_router_mvp/classifier_adapter.py`, `reports/RRUFF_REAL_DEMO_AUDIT.md`, `reports/MVP_IMPLEMENTATION_STATUS.json`, and the ignored local overlay files under `reports/_local_rruff_overlays/`.
+
+## 25. 2026-10-19 Garnet PXRD AutoLab staged follow-up (LIMITED_GO)
+
+**Date / status:** 2026-10-19 / Stage 1 audit, Stage 2 a-only real-profile pilot, and Stage 3 physical-baseline comparison completed; ResNet/K-shot protocol proposed only; no training run.
+
+**Question / previous assumption:** Could the PR #37 candidate-router MVP be extended to a tightly scoped structure-family parameter fit using RRUFF Garnet data, while avoiding a rebuild of the application and preventing frozen-benchmark leakage?
+
+**Evidence:** An independent parser rechecked 44 exact RRUFF candidate IDs. All 44 have raw powder XY profiles and complete same-ID refined cells; one profile (`R060125-1`) has a two-garnet mixture caveat and one (`R060382-1`) lacks a DIF auxiliary entry. No exact repeated trace or related subnumber group was found in this shortlist. Five IDs overlap prior/frozen roles, leaving 39 database IDs outside those roles. Twelve non-frozen Grossular records were fixed as the development population. All 44 have a name/system/ideal-chemistry compatible AMCSD reference candidate, but no same-specimen identity is established, and only 6/44 selected CIF formulas cover every measured element.
+
+The standalone COD 9001868 reference CIF is pinned by SHA-256. Reusing the MVP renderer, the cubic single-a optimizer passed a seeded synthetic recovery gate. On all 12 new development profiles, the predeclared peak-alignment and RMSE-improvement gates passed. Five-start L-BFGS-B reduced mean normalized full-profile RMSE from 0.02711 to 0.02318 and mean absolute error against the posthoc RRUFF `a` estimate from 0.03622 Å to 0.01985 Å; parameter-reference error improved on 6/12 samples, with 12/12 solver-success flags. The fitted/reference difference remains larger than the listed statistical e.s.d. scale, and raw-profile wavelength is unverified.
+
+**Decision:** Continue only as a limited, development-only physics-fit pilot. Keep the primary project identity and frozen supervised classification evidence unchanged. Do not train ResNet or claim validated domain adaptation until new independent records and instrument metadata support separate adaptation, validation, and test partitions. The next proposed comparison uses the same CIF/forward model, CIF initial value, multistart L-BFGS-B, then (after data readiness and separate authorization) simulated-only and K-shot ResNet initialization with fixed physical refinement.
+
+**What changes now:** Independent RRUFF audit/parser code, a hash-pinned Grossular project profile, single-a physical fit and multistart baseline runners, tests, derived result JSON/CSV, and a staged technical report are added on a branch based on PR #37.
+
+**What does NOT change:** PR #37 itself, BaTiO3/MgO/CeO2 tests/defaults, frozen RRUFF manifests/splits/checkpoints, and primary crystal-system classification results were not edited by this branch. A separate related Draft PR #40 remains independent and reports a stricter multiparameter stability failure; its data/settings are not combined with this one-a study. At final inspection the separate pilot worktree was clean at commit `2397b9f`; this branch did not modify it. No raw profile arrays or source database ZIPs are committed. No GPU training, Qwen agent, multi-user platform, or merge was performed.
+
+**Relevant files / commits:** `pxrd_router_mvp/garnet_audit.py`, `pxrd_router_mvp/grossular_project.py`, `pxrd_router_mvp/projects/grossular/`, `tools/run_grossular_pilot.py`, `tools/run_grossular_baselines.py`, `reports/garnet_rruff_44/`, and `reports/GARNET_PXRD_AUTOLAB_STAGE_REPORT.md`.

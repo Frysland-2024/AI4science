@@ -1,0 +1,170 @@
+{
+  "audit_date": "2026-10-19",
+  "audit_type": "independent row-level reparse from official RRUFF and AMCSD archives",
+  "scope_count": 44,
+  "unique_exact_sample_ids": 44,
+  "raw_members_found": 44,
+  "valid_powder_profiles": 44,
+  "complete_refinement_cells_six": 44,
+  "complete_lattice_parameter_esd_triplets_abc": 44,
+  "symmetry_fixed_90_degree_angles_without_esd": 44,
+  "compatible_name_symmetry_ideal_formula_cif_candidates": 44,
+  "same_specimen_cif_matches_confirmed": 0,
+  "records_with_exact_trace_duplicates": 0,
+  "records_with_related_subnumbered_ids": 0,
+  "frozen_or_prior_benchmark_overlap_by_base_id": 5,
+  "independent_for_new_development": 39,
+  "frozen_boundary_check_status": "complete_by_base_id",
+  "frozen_boundary_sources": {
+    "rruff371_master_manifest": {
+      "filename": "rruff371_master_manifest.csv",
+      "sha256": "ebf6b35abaf78c716498d327cdd02ef3ffc3e53662afc56a5cb009a10b96b142"
+    },
+    "rruff301_adaptation_test_split": {
+      "filename": "rruff301_adaptation_test_split.csv",
+      "sha256": "9fedcb1abdf3f84349dfc8479d233fbd953e6552d7478dac3680737e460bbe35"
+    }
+  },
+  "distinct_mineral_names": [
+    "Almandine",
+    "Andradite",
+    "Grossular",
+    "Pyrope",
+    "Schorlomite",
+    "Spessartine",
+    "Uvarovite"
+  ],
+  "samples_by_mineral": {
+    "Almandine": 6,
+    "Andradite": 8,
+    "Grossular": 15,
+    "Pyrope": 7,
+    "Schorlomite": 1,
+    "Spessartine": 6,
+    "Uvarovite": 1
+  },
+  "cubic_refinement_system_counts": {
+    "CUBIC": 44
+  },
+  "refined_a_range_angstrom": [
+    11.4941,
+    12.1221
+  ],
+  "raw_point_count_distribution": {
+    "8500": 7,
+    "8501": 37
+  },
+  "raw_angle_range_distribution_deg": {
+    "5.0..89.99": 4,
+    "5.0..90.0": 40
+  },
+  "raw_header_contains_cell_values_not_for_model_input": 44,
+  "mixture_or_contamination_ids": [
+    "R060125-1"
+  ],
+  "missing_dif_auxiliary_ids": [
+    "R060382-1"
+  ],
+  "frozen_or_prior_benchmark_ids_and_roles": [
+    {
+      "rruff_sample_id": "R040159-1",
+      "role": "locked_test"
+    },
+    {
+      "rruff_sample_id": "R060446-1",
+      "role": "legacy_rruff70"
+    },
+    {
+      "rruff_sample_id": "R060452-1",
+      "role": "locked_test"
+    },
+    {
+      "rruff_sample_id": "R060453-1",
+      "role": "adaptation_pool"
+    },
+    {
+      "rruff_sample_id": "R061041-1",
+      "role": "locked_test"
+    }
+  ],
+  "independent_grossular_development_ids": [
+    "R040065-1",
+    "R040066-1",
+    "R050036-1",
+    "R050081-1",
+    "R050312-1",
+    "R060278-1",
+    "R060382-1",
+    "R060442-1",
+    "R060443-1",
+    "R060444-1",
+    "R060499-1",
+    "R070551-1"
+  ],
+  "measured_chemistry_element_set_fully_covered_by_selected_cif": 6,
+  "measured_chemistry_element_mismatch_counts": {
+    "0": 6,
+    "1": 5,
+    "2": 8,
+    "3": 14,
+    "4": 8,
+    "5": 3
+  },
+  "refinement_indexed_wavelength_profile_count_by_index": {
+    "2": 44
+  },
+  "refinement_indexed_reflection_row_count_distribution": {
+    "2:11": 4,
+    "2:12": 2,
+    "2:13": 2,
+    "2:14": 6,
+    "2:15": 5,
+    "2:16": 5,
+    "2:17": 9,
+    "2:18": 2,
+    "2:19": 4,
+    "2:20": 3,
+    "2:21": 1,
+    "2:7": 1
+  },
+  "all_issue_codes": [
+    "DIF_MISSING_EXACT_ID",
+    "EXCLUDE_FROM_NEW_DEVELOPMENT_FROZEN_OR_PRIOR_BENCHMARK",
+    "MULTIPHASE_OR_CONTAMINATION_CAVEAT_IN_RAW_DESCRIPTION"
+  ],
+  "archives": {
+    "XY_RAW.zip": {
+      "sha256": "948a133482bb3c99da80194cc2848933aee668129beb209150f7f850cd4b0587",
+      "source_url": "https://www.rruff.net/zipped_data_files/powder/XY_RAW.zip",
+      "bytes": 91779732
+    },
+    "Refinement_Output_Data.zip": {
+      "sha256": "a51e4f7399051889a3d699dadb99c2139476d3d17ea47baf85e3ebf3df4f5c12",
+      "source_url": "https://www.rruff.net/zipped_data_files/powder/Refinement_Output_Data.zip",
+      "bytes": 1447673
+    },
+    "Refinement_Data.zip": {
+      "sha256": "7e075457ebac5ad8c5841e699857e7666e6feae1f8e8dd00945dc6818d60d5f6",
+      "source_url": "https://www.rruff.net/zipped_data_files/powder/Refinement_Data.zip",
+      "bytes": 591440
+    },
+    "DIF.zip": {
+      "sha256": "3b540db61664cacdd22268ffbac6ab586ca6bce389b7399cc3e9baaeb6607b03",
+      "source_url": "https://www.rruff.net/zipped_data_files/powder/DIF.zip",
+      "bytes": 7986964
+    },
+    "cif.zip": {
+      "sha256": "f84e8aa19042182dd1c01c25f4d4aa171356bf709c5b888fac706295999687bc",
+      "source_url": "https://www.rruff.net/AMS/zipped_files/cif.zip",
+      "bytes": 69005638
+    }
+  },
+  "source_semantics": {
+    "raw_xy": "Experimental powder profile source; header cell values are not used as model inputs.",
+    "refinement_output": "Same-ID powder cell refinement estimates with reported wavelength choices and e.s.d.; reference estimates, not error-free truth.",
+    "dif": "Same-ID diffraction record may combine paper structure coordinates with cell parameters refined from the powder pattern; not independent structure ground truth.",
+    "amcsd_cif": "Reference crystal structure/template match only; no identity with the experimental RRUFF specimen is established.",
+    "wavelength": "XY_RAW has no explicit wavelength field; output/DIF wavelengths are recorded separately and do not prove instrument metadata for the raw profile."
+  },
+  "verdict": "PASS_WITH_REPORTED_LIMITATIONS"
+}
