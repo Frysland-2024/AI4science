@@ -62,6 +62,13 @@ Across secondary reliability analyses, ECE/NLL/Brier generally improve as well, 
 
 This is a **controlled application of established ML components to a physically structured supervision problem**. The 1D ResNet implementation draws on the MIT-licensed **ML4pXRDs** codebase; see [third-party notices](THIRD_PARTY_NOTICES.md).
 
+## Next-step inversion research (decision record, 2026-10-19)
+
+A separate two-day investigation of forward-loss inversion, DONUT-PXRD transfer, failed nuisance interventions and real-profile physics checks led to a **proposed** known-phase workflow: neural prediction as an initialization for bounded physical refinement. Its positive results are **single-CIF synthetic only**; superiority over traditional *multi-start* optimization and validity on real XRD are unproven.
+
+- [Oct 18–19: detailed research journey, alternative proposals, negative results and evidence links](docs/PXRD_RESEARCH_JOURNEY_20261018_19.md)
+- [Beginner-friendly explanation and staged next-step bachelor-thesis plan](docs/PXRD_NEURAL_INITIALIZATION_REFINEMENT_NEXTSTEP_20261019.md)
+
 ## Explore the repository
 
 | Track | Status | Purpose |
