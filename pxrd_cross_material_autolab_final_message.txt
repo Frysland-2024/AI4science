@@ -1,0 +1,15 @@
+﻿交付状态：PARTIAL（支持范围全部完成；扩展材料有明确缺口）。
+
+已实现并验证自动管理器：inventory/preflight/dry-run/run --resume/status/verify/report。完成7种材料、21个模型、539个主测试父样本；另完成112个新父样本的探索性独立渲染压力测试。保留5950条方法记录、8330次优化尝试及全部失败/跳过原因。18项主流程CPU检查与3项压力工程检查通过，保存结果的指标重算和哈希校验通过。
+
+主试验中神经初值与P3精度接近，完整推理比P3更快；P0在五种材料已达到相近精度，MgO/ZnO的主测试P0误差较大。压力样本没有显示额外神经参数精度/可靠性收益。不能据此声称普遍AI优越性、跨材料零样本泛化或真实XRD有效性。
+
+来源：12个候选尝试，9个身份核验，7个支持试验；calcite/corundum参数化不支持，错误来源和下载失败均保留。N+B及低噪声条件明确未运行。主试验991.29秒墙钟；CUDA训练/验证20.41秒；至压力测试结束总墙钟1119.11秒。生成谱和权重仅本地忽略保存。一次报告UTF-8解码失败及单次报告修复保留，无科学重跑。
+
+预注册门槛、打开的主测试、模型选择、种子均未修改。历史分类和真实Garnet记录保持独立。报告：pxrd_cross_material_autolab/reports/OVERVIEW.md；复现：模块README.md；完整来源/CIF/源码哈希：runs/pilot_20261019/manifest.json及reports/ARTIFACT_SHA256.json。
+配置SHA256：f74942f5542560bb302bd90d0e64239b6a0ff1999065ee7a56909fc40a27ec35
+预注册SHA256：7e630b7bc4198ec0cef99b6be7056e0b41b6d230cf9e11dd63801db7620508c8
+
+科学结果提交e1ba1dd已推送到codex/pxrd-cross-material-autolab-20261019。
+草稿PR已更新：https://github.com/Frysland-2024/AI4science/pull/43
+未合并；指定分支发布完成。
