@@ -128,5 +128,13 @@
   "frozen_dataset_sha256": "87f3845bf4863ebfa3b35f55512df0730050d56ddcdf394d750bc955872deecf",
   "frozen_data_manifest_sha256": "38d9a647d337c7e02c0949a8f036cc2a899e12b5de46d9d3d21fad3e333d18e5",
   "test_indices_sha256": "12c5fd101e7b5f6aa0003626b7754028bf5fd0dc112b8a2c808a634ea945911f",
-  "pretraining_freeze_amendment_reason": "The first experiment stopped before any optimizer step because the runner named a nonexistent output_conv module; the final decoder convolution is already contained in decoder_blocks. Corrected the parameter group only, before training; no data, split, loss, metric, threshold, seed, or hyperparameter changed."
+  "pretraining_freeze_amendment_reason": "The first experiment stopped before any optimizer step because the runner named a nonexistent output_conv module; the final decoder convolution is already contained in decoder_blocks. Corrected the parameter group only, before training; no data, split, loss, metric, threshold, seed, or hyperparameter changed.",
+  "posttraining_evaluation_recovery": {
+    "recorded_at_utc": "2026-10-19T04:36:56+00:00",
+    "runner_sha256": "65b7d64cd29e32a6962fedc5d8b9df6362ea045ba28fb2573386847cea3854df",
+    "cause": "The held-out texture array is stored in frozen test-index order (77 rows), but evaluation attempted to index it again using global parent ids, producing an IndexError after width, background, and noise training and scoring had completed.",
+    "repair": "Validate texture manifest global_index order against the frozen test index list and evaluate test-order overrides positionally. Added checkpoint-hash-verified reuse for completed phases so result verification can resume without retraining.",
+    "study_config_changed": false,
+    "training_implementation_sha256_unchanged": true
+  }
 }

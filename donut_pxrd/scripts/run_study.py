@@ -659,12 +659,18 @@ def evaluate_donut_condition(
     forward_cfg: dict[str, Any],
     artifact_root: Path,
     profiles_override: np.ndarray | None = None,
+    profiles_override_test_order: bool = False,
     phase_for_mapping: str | None = None,
 ) -> tuple[list[dict[str, Any]], dict[str, Any]]:
     test_ids = np.asarray(arrays["test_indices"], dtype=np.int64)
     input_phase = phase_for_mapping or phase
     profile_all = profiles_override if profiles_override is not None else arrays[f"{phase}_observed"]
-    profiles = np.asarray(profile_all[test_ids], dtype=np.float32)
+    if profiles_override is not None and profiles_override_test_order:
+        if len(profile_all) != len(test_ids):
+            raise ValueError("test-order profile override length does not match the frozen test split")
+        profiles = np.asarray(profile_all, dtype=np.float32)
+    else:
+        profiles = np.asarray(profile_all[test_ids], dtype=np.float32)
     q_truth = np.asarray(arrays["q"][test_ids], dtype=np.float64)
     eta_truth = np.asarray(arrays[f"{phase if profiles_override is None else 'experiment_3_noise'}_eta_truth"][test_ids], dtype=np.float64)
     a_true, c_true = _lattice_values(q_truth, driver, structure, forward_cfg)
@@ -889,24 +895,42 @@ def run_donut_phase(
     phase_record["status"] = "RUNNING"; phase_record["started_at_utc"] = utc_now(); phase_record["conditions"] = phase_record.get("conditions", {})
     write_json(STATUS_PATH, status)
     seeds = list(config["donut_method"]["model_seeds"])
-    training_runs = []
-    for seed in seeds:
-        training = train_donut_one(
-            phase=phase, seed=int(seed), arrays=arrays, forward=forward, config=config,
-            artifact_root=artifact_root, gpu_budget_used=gpu_budget_used,
-        )
-        training_runs.append(training)
-        phase_record.setdefault("training_progress", []).append({key: value for key, value in training.items() if key != "history"})
-        status["measured_gpu_training_seconds"] = gpu_budget_used[0]
-        write_json(STATUS_PATH, status)
-    phase_record["conditions"][phase] = {
-        "status": "TRAINED",
-        "seed_runs": [{key: value for key, value in row.items() if key != "history"} for row in training_runs],
-        "history_path": str((RESULTS / f"experiment_{exp_number}" / f"{phase}_training_histories.json").resolve()),
-    }
+    previous = phase_record.get("conditions", {}).get(phase, {})
+    saved_runs = previous.get("seed_runs", [])
+    reusable = len(saved_runs) == len(seeds)
+    if reusable:
+        for seed, run in zip(seeds, saved_runs):
+            checkpoint_path = _checkpoint_path(artifact_root, phase, int(seed))
+            if (
+                int(run.get("seed", -1)) != int(seed)
+                or not checkpoint_path.is_file()
+                or sha256_file(checkpoint_path) != run.get("checkpoint_sha256")
+            ):
+                reusable = False
+                break
+    if reusable:
+        training_runs = saved_runs
+        log(TRAIN_LOG, "DONUT_CHECKPOINT_REUSE", phase=phase, seeds=seeds, reason="verified checkpoint hashes after interrupted post-training evaluation")
+    else:
+        training_runs = []
+        for seed in seeds:
+            training = train_donut_one(
+                phase=phase, seed=int(seed), arrays=arrays, forward=forward, config=config,
+                artifact_root=artifact_root, gpu_budget_used=gpu_budget_used,
+            )
+            training_runs.append(training)
+            phase_record.setdefault("training_progress", []).append({key: value for key, value in training.items() if key != "history"})
+            status["measured_gpu_training_seconds"] = gpu_budget_used[0]
+            write_json(STATUS_PATH, status)
+        phase_record["conditions"][phase] = {
+            "status": "TRAINED",
+            "seed_runs": [{key: value for key, value in row.items() if key != "history"} for row in training_runs],
+            "history_path": str((RESULTS / f"experiment_{exp_number}" / f"{phase}_training_histories.json").resolve()),
+        }
     result_dir = RESULTS / f"experiment_{exp_number}"
     result_dir.mkdir(parents=True, exist_ok=True)
-    write_json(result_dir / f"{phase}_training_histories.json", {str(row["seed"]): row["history"] for row in training_runs})
+    if not reusable:
+        write_json(result_dir / f"{phase}_training_histories.json", {str(row["seed"]): row["history"] for row in training_runs})
     rows, summary = evaluate_donut_condition(
         phase=phase, seeds=seeds, arrays=arrays, forward=forward, driver=driver, structure=structure,
         forward_cfg=forward_cfg, artifact_root=artifact_root,
@@ -1306,14 +1330,22 @@ def run_all() -> int:
                 "renderer": "xrd_robustness.simulator.simulate_from_peak_table + apply_preferred_orientation",
             }
             write_json(artifact_root / "datasets" / "texture_test_manifest.json", texture_manifest)
+        texture_global_ids = [int(row["global_index"]) for row in texture_manifest["generator_records"]]
+        if texture_global_ids != [int(index) for index in arrays["test_indices"]]:
+            raise RuntimeError("texture OOD profiles do not follow the frozen test index order")
         texture_rows, texture_summary = evaluate_donut_condition(
             phase="experiment_3_noise", seeds=list(config["donut_method"]["model_seeds"]), arrays=arrays,
             forward=forward, driver=driver, structure=structure, forward_cfg=forward_cfg, artifact_root=artifact_root,
-            profiles_override=texture_profiles, phase_for_mapping="experiment_3_texture",
+            profiles_override=texture_profiles, profiles_override_test_order=True, phase_for_mapping="experiment_3_texture",
         )
+        if len(texture_rows) != len(arrays["test_indices"]) * len(config["donut_method"]["model_seeds"]):
+            raise RuntimeError("texture OOD raw test row count mismatch")
+        if texture_summary["failure_rate"] != 0.0:
+            raise RuntimeError("non-finite/out-of-domain prediction occurred in texture OOD stress test")
         for row in texture_rows: row["evaluation_case"] = "texture_OOD_stress"
         write_rows_csv(RESULTS / "experiment_3" / "texture_OOD_raw_predictions.csv", texture_rows)
         write_json(RESULTS / "experiment_3" / "texture_OOD_summary.json", texture_summary)
+        run_pytest("experiment_3_texture_OOD", ["donut_pxrd/tests"])
         exp3_summaries["experiment_3_texture"] = texture_summary
         status["experiments"]["experiment_3"]["texture_manifest_sha256"] = sha256_file(artifact_root / "datasets" / "texture_test_manifest.json")
         status["experiments"]["experiment_3"]["progressive_summaries"] = exp3_summaries
