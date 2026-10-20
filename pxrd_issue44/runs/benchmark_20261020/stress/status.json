@@ -1,0 +1,15 @@
+{
+  "process_observation": {
+    "command_line_inspection": "access_denied",
+    "cpu_seconds_delta": 2.0625,
+    "identity": "unresolved",
+    "pid": 42152,
+    "process_name": "python",
+    "sample_wall_seconds": 2,
+    "sampled_from": "2026-10-20T10:57:24",
+    "sampled_to": "2026-10-20T10:57:26",
+    "started_at": "2026-10-20T10:11:47"
+  },
+  "reason": "An unidentified active Python process is consuming about one CPU core; the no-disruption rule blocks the remaining CPU-heavy stress fits.",
+  "status": "BLOCKED_NOT_RUN"
+}

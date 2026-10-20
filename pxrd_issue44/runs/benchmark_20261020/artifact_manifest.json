@@ -1,0 +1,660 @@
+{
+  "excluded_artifacts": {
+    "bytes_by_reason": {
+      "private_or_cache_directory": 12136923
+    },
+    "directories": [
+      ".pytest_cache",
+      "__pycache__",
+      "private"
+    ],
+    "file_counts_by_reason": {
+      "private_or_cache_directory": 83
+    },
+    "manifest_excludes_its_own_hash": true,
+    "raw_rruff_data_or_locked_classification_test": "not present in this artifact root",
+    "suffixes": [
+      ".ckpt",
+      ".npy",
+      ".npz",
+      ".onnx",
+      ".pt",
+      ".pth",
+      ".pyc",
+      ".pyo",
+      ".safetensors"
+    ]
+  },
+  "files": [
+    {
+      "bytes": 73621,
+      "path": "pxrd_issue44/benchmark.py",
+      "sha256": "b25dd17ebfe0ee83c5f9b7b9a09e0764b46149ec7089b2e6efe47fea6c0f49ac"
+    },
+    {
+      "bytes": 14335,
+      "path": "pxrd_issue44/finalize_after_primary.py",
+      "sha256": "86e11191059cb39505729c51c7a790c91bd93f3fb55ee738ab914aa3d5bbfdaa"
+    },
+    {
+      "bytes": 4686,
+      "path": "pxrd_issue44/frozen_config.json",
+      "sha256": "f0c9674f1bd59fb17f54861d2ff7755017c34d672b8c6c562c45a2f699122b4b"
+    },
+    {
+      "bytes": 4886,
+      "path": "pxrd_issue44/literature_matrix.md",
+      "sha256": "3f640e3b753874cfc6f6823dfd91ef73ca0f306074e4a137a18f5cd38b1295fd"
+    },
+    {
+      "bytes": 3398,
+      "path": "pxrd_issue44/models.py",
+      "sha256": "856413b112b2ea240bfdf4f4cdf1e41c1c575ab97549ba27beca79f4b8ae3b49"
+    },
+    {
+      "bytes": 7032,
+      "path": "pxrd_issue44/PREREGISTRATION.md",
+      "sha256": "16df143ee628bc6c009e170fe37611965e42f197b996b4883832ca486bfb1f61"
+    },
+    {
+      "bytes": 1405,
+      "path": "pxrd_issue44/REAL_RRUFF_GATE.json",
+      "sha256": "57f96a2e5b5b1c220ca2e8a2f52466eb352b05b008807ecb7420ed3125150b14"
+    },
+    {
+      "bytes": 168,
+      "path": "pxrd_issue44/runs/benchmark_20261020/budget.json",
+      "sha256": "0e60fdbef496f9605f54d174bd2372f64c88d5eaa5b3f000f44045db41a38ef8"
+    },
+    {
+      "bytes": 177511,
+      "path": "pxrd_issue44/runs/benchmark_20261020/comparison.json",
+      "sha256": "6fbdd2da21c668696a673f944fde7dfdb968d8e5fe43346755bb46d66e10088f"
+    },
+    {
+      "bytes": 46615,
+      "path": "pxrd_issue44/runs/benchmark_20261020/events.jsonl",
+      "sha256": "047b7b90be4e3aa06c4df24ad2e6412de31533195b2586b9a7b6c231da361f19"
+    },
+    {
+      "bytes": 1625,
+      "path": "pxrd_issue44/runs/benchmark_20261020/failure.json",
+      "sha256": "03fa7567512db1a166243d8b5bbc4ac82eaf8dc6cae167a77342adb361b39f8e"
+    },
+    {
+      "bytes": 25791,
+      "path": "pxrd_issue44/runs/benchmark_20261020/FINAL_REPORT.md",
+      "sha256": "1351f4daf31d2085fe2d56b8093d420e1fc296b05013520b03c306df84e99684"
+    },
+    {
+      "bytes": 15040,
+      "path": "pxrd_issue44/runs/benchmark_20261020/manifest.json",
+      "sha256": "279f6783e166f9cde89fe8824ddee21b012c338322642adf22b57213f9ef1b4a"
+    },
+    {
+      "bytes": 22716,
+      "path": "pxrd_issue44/runs/benchmark_20261020/models/batio3/resnet1d/learning_curves.jsonl",
+      "sha256": "cbf69bc1acc63ab6cdf51b61c5860c66bbba6d131bc3eb2912b621b89a8caa9d"
+    },
+    {
+      "bytes": 425,
+      "path": "pxrd_issue44/runs/benchmark_20261020/models/batio3/resnet1d/selection_2026101911.json",
+      "sha256": "6e47dde0a5a92e219f288f23b7d9b4697307ce724e9e48069a7b832633683db7"
+    },
+    {
+      "bytes": 425,
+      "path": "pxrd_issue44/runs/benchmark_20261020/models/batio3/resnet1d/selection_2026101912.json",
+      "sha256": "26643927bca6f46766fb18a64f9b45b6df79766770e14b64785f3ec710fe1429"
+    },
+    {
+      "bytes": 423,
+      "path": "pxrd_issue44/runs/benchmark_20261020/models/batio3/resnet1d/selection_2026101913.json",
+      "sha256": "735cd38c48ee530c1877085554a79e1df93efc15a44cdf7e5689fbcd26e53567"
+    },
+    {
+      "bytes": 22962,
+      "path": "pxrd_issue44/runs/benchmark_20261020/models/batio3/transformer/learning_curves.jsonl",
+      "sha256": "afe670bed47c1e6b363b79d929b4c8ab8a699fd1c5d79980789b16d4abbbed42"
+    },
+    {
+      "bytes": 425,
+      "path": "pxrd_issue44/runs/benchmark_20261020/models/batio3/transformer/selection_2026101911.json",
+      "sha256": "ae994912d0f4d5868b2f7c141ed9c4c6afb3d64c134f3550945a69111e1a2fef"
+    },
+    {
+      "bytes": 427,
+      "path": "pxrd_issue44/runs/benchmark_20261020/models/batio3/transformer/selection_2026101912.json",
+      "sha256": "b4149fac042bb52eaaeee8264749cb0730041ee66c1a98bf9761ea1ff1bc8bf7"
+    },
+    {
+      "bytes": 428,
+      "path": "pxrd_issue44/runs/benchmark_20261020/models/batio3/transformer/selection_2026101913.json",
+      "sha256": "e596a9d52f6255787768c3d1edd2a8a815827ba8e00dc3cbf9ff15741e6411fd"
+    },
+    {
+      "bytes": 22666,
+      "path": "pxrd_issue44/runs/benchmark_20261020/models/ceo2/resnet1d/learning_curves.jsonl",
+      "sha256": "8bd5bbbc748b7713ba0b88b5ac725f338f45b90194c4469cfdfaf53f44f00e3c"
+    },
+    {
+      "bytes": 422,
+      "path": "pxrd_issue44/runs/benchmark_20261020/models/ceo2/resnet1d/selection_2026101911.json",
+      "sha256": "ea0e453c8cfa935c855d5c0ca6e985fe29fc376c5994ca245e2ebb70f168001b"
+    },
+    {
+      "bytes": 423,
+      "path": "pxrd_issue44/runs/benchmark_20261020/models/ceo2/resnet1d/selection_2026101912.json",
+      "sha256": "e6ab471d342b1596dfd351dd09828e41b290836fe7718aac5418bf2b0e8c92b3"
+    },
+    {
+      "bytes": 422,
+      "path": "pxrd_issue44/runs/benchmark_20261020/models/ceo2/resnet1d/selection_2026101913.json",
+      "sha256": "f7ba8bb05f1f75e25eda32878ca8ff07a59f9880b58fb6e64b804525051b6f0a"
+    },
+    {
+      "bytes": 22834,
+      "path": "pxrd_issue44/runs/benchmark_20261020/models/ceo2/transformer/learning_curves.jsonl",
+      "sha256": "039848aff07e02a437d80ba254aa1f56650a49f108fd81208d046bffa1ce4ae2"
+    },
+    {
+      "bytes": 425,
+      "path": "pxrd_issue44/runs/benchmark_20261020/models/ceo2/transformer/selection_2026101911.json",
+      "sha256": "9b8d5ea4881cdcc7918b3bb79472cbed21284566f1803094565f9d98217ec514"
+    },
+    {
+      "bytes": 426,
+      "path": "pxrd_issue44/runs/benchmark_20261020/models/ceo2/transformer/selection_2026101912.json",
+      "sha256": "31ccb2b6e0c70eedb08ef5107a8f953fd57bfcb6b9c06df6ca537c680a27ea63"
+    },
+    {
+      "bytes": 426,
+      "path": "pxrd_issue44/runs/benchmark_20261020/models/ceo2/transformer/selection_2026101913.json",
+      "sha256": "c15a2b680f200b12fd06ba6071f2162ec9a7fc2a8975f2ac431ab3298372af37"
+    },
+    {
+      "bytes": 22989,
+      "path": "pxrd_issue44/runs/benchmark_20261020/models/grossular/resnet1d/learning_curves.jsonl",
+      "sha256": "ee4469a9600ceafed3bc035863ebf066824fed32321fbf22ec6604c50d9fb400"
+    },
+    {
+      "bytes": 427,
+      "path": "pxrd_issue44/runs/benchmark_20261020/models/grossular/resnet1d/selection_2026101911.json",
+      "sha256": "c2b73e7571e588ad0bb8eb70abd3a7ca7d71780143baad149e5f15fefae96127"
+    },
+    {
+      "bytes": 428,
+      "path": "pxrd_issue44/runs/benchmark_20261020/models/grossular/resnet1d/selection_2026101912.json",
+      "sha256": "48d4687bb70244ca02d2a4fe7c8df3090cde4b5ced77cfbd8fd6d4b2bf8cee9f"
+    },
+    {
+      "bytes": 427,
+      "path": "pxrd_issue44/runs/benchmark_20261020/models/grossular/resnet1d/selection_2026101913.json",
+      "sha256": "2b1b4f35ee681cb661f38446da151c4e05a6707c0075c9b57bf3a522ffef3aab"
+    },
+    {
+      "bytes": 23181,
+      "path": "pxrd_issue44/runs/benchmark_20261020/models/grossular/transformer/learning_curves.jsonl",
+      "sha256": "3dfd771f72eff5508317f558d06ea40d6ebbd5cd01370e86896815cd49e5c033"
+    },
+    {
+      "bytes": 431,
+      "path": "pxrd_issue44/runs/benchmark_20261020/models/grossular/transformer/selection_2026101911.json",
+      "sha256": "29baa4c1c8475f7d5463df822649c5da3d88487be1be20fff9a7104a56f86830"
+    },
+    {
+      "bytes": 431,
+      "path": "pxrd_issue44/runs/benchmark_20261020/models/grossular/transformer/selection_2026101912.json",
+      "sha256": "b6c3f91acdd23ef5641b3564ac535490b0e9772c437af37f72642c49bf262a86"
+    },
+    {
+      "bytes": 429,
+      "path": "pxrd_issue44/runs/benchmark_20261020/models/grossular/transformer/selection_2026101913.json",
+      "sha256": "cf22be75878d4199df1c2e8f754def9a6bd2c460976fd4b3d7faa3c0fecc3146"
+    },
+    {
+      "bytes": 22615,
+      "path": "pxrd_issue44/runs/benchmark_20261020/models/mgo/resnet1d/learning_curves.jsonl",
+      "sha256": "e67fadac787bf58c5045b209adacdfe97ab8aef7cbf4c3fc0c175da70537eadb"
+    },
+    {
+      "bytes": 423,
+      "path": "pxrd_issue44/runs/benchmark_20261020/models/mgo/resnet1d/selection_2026101911.json",
+      "sha256": "6b6cb6c6ab910ec154c132512a930261c40607d33266f5ab762889ecbc4c9d3b"
+    },
+    {
+      "bytes": 422,
+      "path": "pxrd_issue44/runs/benchmark_20261020/models/mgo/resnet1d/selection_2026101912.json",
+      "sha256": "d650855be6e6a63f8a6ae627841954a2c7f62e647a459794534056ec3fe7044b"
+    },
+    {
+      "bytes": 422,
+      "path": "pxrd_issue44/runs/benchmark_20261020/models/mgo/resnet1d/selection_2026101913.json",
+      "sha256": "161bfd53725214ef436f00d745fac072292f08f6590ac0e3db682b7ab426d00c"
+    },
+    {
+      "bytes": 22767,
+      "path": "pxrd_issue44/runs/benchmark_20261020/models/mgo/transformer/learning_curves.jsonl",
+      "sha256": "2c3c73ded5e9f0f6db7f7ec572c403f46b5b479e76625139b7c42937ee20a09b"
+    },
+    {
+      "bytes": 425,
+      "path": "pxrd_issue44/runs/benchmark_20261020/models/mgo/transformer/selection_2026101911.json",
+      "sha256": "9777191c9de354cd6194f9b8a744d2fe5d983898b20648ea4b292831df0fa59f"
+    },
+    {
+      "bytes": 422,
+      "path": "pxrd_issue44/runs/benchmark_20261020/models/mgo/transformer/selection_2026101912.json",
+      "sha256": "13e2079d4718f03d3711485f12eb8dbcf121a4c90da05397cde6e5f06230a0bb"
+    },
+    {
+      "bytes": 425,
+      "path": "pxrd_issue44/runs/benchmark_20261020/models/mgo/transformer/selection_2026101913.json",
+      "sha256": "45d51f0d539df002b3e583c795bf1ee6f61a646449fb2e8fdb2154d097dcbdba"
+    },
+    {
+      "bytes": 22779,
+      "path": "pxrd_issue44/runs/benchmark_20261020/models/rutile/resnet1d/learning_curves.jsonl",
+      "sha256": "40bc9d382dab266780f355d9beb0f57cbe62b16856a951ff069189ae03b990cd"
+    },
+    {
+      "bytes": 426,
+      "path": "pxrd_issue44/runs/benchmark_20261020/models/rutile/resnet1d/selection_2026101911.json",
+      "sha256": "8d62b96f7f94397dee2c4dcb00abbc684bf5aaa248dcd76b474478274b2c0b4c"
+    },
+    {
+      "bytes": 424,
+      "path": "pxrd_issue44/runs/benchmark_20261020/models/rutile/resnet1d/selection_2026101912.json",
+      "sha256": "e05d2037ccd4aa79ac9de8fe0d4ca67a57b4b7c15f58773cbdf0ba809f22b473"
+    },
+    {
+      "bytes": 425,
+      "path": "pxrd_issue44/runs/benchmark_20261020/models/rutile/resnet1d/selection_2026101913.json",
+      "sha256": "fe07dc963394d8579e1027b43d6029548cb114f168118b893182dad0ab27527f"
+    },
+    {
+      "bytes": 22919,
+      "path": "pxrd_issue44/runs/benchmark_20261020/models/rutile/transformer/learning_curves.jsonl",
+      "sha256": "9567ce4bff8a4503d0233c517da8e9874df955bc39310f291b6b9fe6747aa166"
+    },
+    {
+      "bytes": 427,
+      "path": "pxrd_issue44/runs/benchmark_20261020/models/rutile/transformer/selection_2026101911.json",
+      "sha256": "854c432deb9446ed79206228b0d1085bb34cec0e58da606d41c246befeee2f25"
+    },
+    {
+      "bytes": 428,
+      "path": "pxrd_issue44/runs/benchmark_20261020/models/rutile/transformer/selection_2026101912.json",
+      "sha256": "5f6d9018dd2604ed51594720cf3ffa263cf5a4eacff2f9eaa9738943da787522"
+    },
+    {
+      "bytes": 426,
+      "path": "pxrd_issue44/runs/benchmark_20261020/models/rutile/transformer/selection_2026101913.json",
+      "sha256": "8d3a4e704db0b56e1b98da9dde528cc2aedb818e5d5a472dc939a68f3b15c352"
+    },
+    {
+      "bytes": 22818,
+      "path": "pxrd_issue44/runs/benchmark_20261020/models/silicon/resnet1d/learning_curves.jsonl",
+      "sha256": "a7a0388fd1ebb986fc2b4c1f60b7e5214015fd122186c379490014419aca34a7"
+    },
+    {
+      "bytes": 426,
+      "path": "pxrd_issue44/runs/benchmark_20261020/models/silicon/resnet1d/selection_2026101911.json",
+      "sha256": "ade5420db881ed54c3bb218bd92eb9751094949b33637436c08310fac132493f"
+    },
+    {
+      "bytes": 426,
+      "path": "pxrd_issue44/runs/benchmark_20261020/models/silicon/resnet1d/selection_2026101912.json",
+      "sha256": "fa9b7b6b665739e0bf465714d82e3babb00216c46f6f0909f91880f6b5803035"
+    },
+    {
+      "bytes": 425,
+      "path": "pxrd_issue44/runs/benchmark_20261020/models/silicon/resnet1d/selection_2026101913.json",
+      "sha256": "d712f0030b36d4b0e8f0d2b63dfed773fd29d8fb7888baddc5708bde62b63160"
+    },
+    {
+      "bytes": 23011,
+      "path": "pxrd_issue44/runs/benchmark_20261020/models/silicon/transformer/learning_curves.jsonl",
+      "sha256": "ea9e14fd346d2d8aacce5d0016121dc1e9fd3263272afe63e660489156807404"
+    },
+    {
+      "bytes": 429,
+      "path": "pxrd_issue44/runs/benchmark_20261020/models/silicon/transformer/selection_2026101911.json",
+      "sha256": "099cb81a69573ce709defdffb9c318e5aab97286b22b59d7408c874e76a60a94"
+    },
+    {
+      "bytes": 429,
+      "path": "pxrd_issue44/runs/benchmark_20261020/models/silicon/transformer/selection_2026101912.json",
+      "sha256": "ef8d3a7e9d17e93f3ca12e38e4d0f8cc19280109825110a714bd687419be68bd"
+    },
+    {
+      "bytes": 429,
+      "path": "pxrd_issue44/runs/benchmark_20261020/models/silicon/transformer/selection_2026101913.json",
+      "sha256": "0d5e381c166bc59dec103302f9ae68114a30689b11d19818425b8f8413b17f0c"
+    },
+    {
+      "bytes": 22554,
+      "path": "pxrd_issue44/runs/benchmark_20261020/models/zno/resnet1d/learning_curves.jsonl",
+      "sha256": "cd6ce014ab2fb66b29b81c58d94f16b31047baf43ce2488a93fc553939fc2d1a"
+    },
+    {
+      "bytes": 421,
+      "path": "pxrd_issue44/runs/benchmark_20261020/models/zno/resnet1d/selection_2026101911.json",
+      "sha256": "8a3063cbfad26cf0450884f728e761cac877b6699319462e31390e5351679868"
+    },
+    {
+      "bytes": 422,
+      "path": "pxrd_issue44/runs/benchmark_20261020/models/zno/resnet1d/selection_2026101912.json",
+      "sha256": "9e41b026dd70daffd8b441bb3ddc476b0d445968eb56e5685444807c98243a52"
+    },
+    {
+      "bytes": 420,
+      "path": "pxrd_issue44/runs/benchmark_20261020/models/zno/resnet1d/selection_2026101913.json",
+      "sha256": "e7d47f20dc37f6573b7ceb1bebd64a0226d77f266e7c88aa5d5ca4ed673e77fb"
+    },
+    {
+      "bytes": 22715,
+      "path": "pxrd_issue44/runs/benchmark_20261020/models/zno/transformer/learning_curves.jsonl",
+      "sha256": "35cfce6d32b98d986104c43a2f71edfab66d1a69d2cac7aadbdd67260e0726ca"
+    },
+    {
+      "bytes": 425,
+      "path": "pxrd_issue44/runs/benchmark_20261020/models/zno/transformer/selection_2026101911.json",
+      "sha256": "075b3d257ffaa01b2f41b2febe496f885cbb5400874244482826e1acd2c70c0b"
+    },
+    {
+      "bytes": 423,
+      "path": "pxrd_issue44/runs/benchmark_20261020/models/zno/transformer/selection_2026101912.json",
+      "sha256": "ca7626d19d67eca34003a9afc6059a8b0953f3b60ec9041f6307376889f2ece5"
+    },
+    {
+      "bytes": 425,
+      "path": "pxrd_issue44/runs/benchmark_20261020/models/zno/transformer/selection_2026101913.json",
+      "sha256": "069ce5b343d353dc2e36da27909d44840e37f03d80684278c832efe411f2ecb5"
+    },
+    {
+      "bytes": 246,
+      "path": "pxrd_issue44/runs/benchmark_20261020/post_primary_failure.json",
+      "sha256": "0f3c24130c295efc5415819c6a65b988eb7cd1fd287217a71f68a3f8ec5bd0ac"
+    },
+    {
+      "bytes": 24925,
+      "path": "pxrd_issue44/runs/benchmark_20261020/post_primary_recovery.json",
+      "sha256": "479d3b84bfcf4c11143dc62dd6810be85712f95ddb2b4e09c0d42e6ddf957878"
+    },
+    {
+      "bytes": 4055,
+      "path": "pxrd_issue44/runs/benchmark_20261020/posttraining_manager_continuation.json",
+      "sha256": "ba48b1ca9983acea52419bbe01fd5eccbd255594c2d8658b099c54ec9b403bb4"
+    },
+    {
+      "bytes": 15999,
+      "path": "pxrd_issue44/runs/benchmark_20261020/pre_repair_code_fingerprint.json",
+      "sha256": "811569dfcc842818d39af34c5d99e8bafdc2319bc2543f7694cc2aca91236768"
+    },
+    {
+      "bytes": 56060,
+      "path": "pxrd_issue44/runs/benchmark_20261020/preflight.json",
+      "sha256": "c6c621edd2a18905ac0a17b27a5c1e282602a3316c3debd286ffda1261a28405"
+    },
+    {
+      "bytes": 56060,
+      "path": "pxrd_issue44/runs/benchmark_20261020/preflight_before_continuation.json",
+      "sha256": "886fe4b0c3a09d37423f8f8c0a3138536988724cbd8909824a67a0075faf9883"
+    },
+    {
+      "bytes": 10226,
+      "path": "pxrd_issue44/runs/benchmark_20261020/primary/batio3/metrics.json",
+      "sha256": "9da8e64e26b78aa4a5452affdb429f826c1ae5b0664ba62f7a75cad902d4ccca"
+    },
+    {
+      "bytes": 1326763,
+      "path": "pxrd_issue44/runs/benchmark_20261020/primary/batio3/per_sample.jsonl",
+      "sha256": "e3a633e6debe9ad7e94e53e2a26a9c48e93fb752b083d4c7e7b329a4950eac1b"
+    },
+    {
+      "bytes": 9333,
+      "path": "pxrd_issue44/runs/benchmark_20261020/primary/ceo2/metrics.json",
+      "sha256": "9aa42cf349bdf2a672a53c5315ffe2c68b65d016e0668f579c11d6aa023758d7"
+    },
+    {
+      "bytes": 1157740,
+      "path": "pxrd_issue44/runs/benchmark_20261020/primary/ceo2/per_sample.jsonl",
+      "sha256": "8025159557434d4b29cc7af6874acf213292984acf1760de4e557d4db84fab7a"
+    },
+    {
+      "bytes": 7364,
+      "path": "pxrd_issue44/runs/benchmark_20261020/primary/events.jsonl",
+      "sha256": "5de414461ec7dab929d0b532486dbc294bdce6440e7c7d61c271b8699e068df3"
+    },
+    {
+      "bytes": 9394,
+      "path": "pxrd_issue44/runs/benchmark_20261020/primary/grossular/metrics.json",
+      "sha256": "9a16da4b0341064664da2cc25ae06e2c47f44c0534bf0ed884136b418cea3956"
+    },
+    {
+      "bytes": 1160368,
+      "path": "pxrd_issue44/runs/benchmark_20261020/primary/grossular/per_sample.jsonl",
+      "sha256": "016fa851b419869fed2b39e96f60cdd11ba2932eeb44d6956bb6d5cd011e9411"
+    },
+    {
+      "bytes": 68017,
+      "path": "pxrd_issue44/runs/benchmark_20261020/primary/metrics.json",
+      "sha256": "2ac018d4323439e96149d9ddcccb82ac85afda659b7a31dd6f3549504ba90ac2"
+    },
+    {
+      "bytes": 9312,
+      "path": "pxrd_issue44/runs/benchmark_20261020/primary/mgo/metrics.json",
+      "sha256": "082f0f15b614c478f9df9e09aebbaddf08092a2634a7e5101d8b174567297680"
+    },
+    {
+      "bytes": 1155480,
+      "path": "pxrd_issue44/runs/benchmark_20261020/primary/mgo/per_sample.jsonl",
+      "sha256": "f3b5399b3b8405d9e83ae188adfe1c0b38d151d1526a997c99ceb7f6753e81ac"
+    },
+    {
+      "bytes": 13565,
+      "path": "pxrd_issue44/runs/benchmark_20261020/primary/mlp_pr43_primary_reference.json",
+      "sha256": "812f1ac534088b9dad8103d9d12f4844fe7b07182f4689ebffd234071a02c734"
+    },
+    {
+      "bytes": 10220,
+      "path": "pxrd_issue44/runs/benchmark_20261020/primary/rutile/metrics.json",
+      "sha256": "e9ba8d46772a7e84e9f32a5e49cb7cbad64402d92a0f7513b270447662ca0a4b"
+    },
+    {
+      "bytes": 1326966,
+      "path": "pxrd_issue44/runs/benchmark_20261020/primary/rutile/per_sample.jsonl",
+      "sha256": "e3ff5f35dfe7daa3a46298978107a93ab17cb6d0cf06c66db74469ae948758c7"
+    },
+    {
+      "bytes": 9374,
+      "path": "pxrd_issue44/runs/benchmark_20261020/primary/silicon/metrics.json",
+      "sha256": "4e92a77a573422722b038fbcccbfe0382a362972c52ece9d0cfb2e0cad0dcea4"
+    },
+    {
+      "bytes": 1164046,
+      "path": "pxrd_issue44/runs/benchmark_20261020/primary/silicon/per_sample.jsonl",
+      "sha256": "2d629820f37dce16136e6e7f6b58b6b19d724e4310df072a80b9eefdb6b09cde"
+    },
+    {
+      "bytes": 374,
+      "path": "pxrd_issue44/runs/benchmark_20261020/primary/test_reuse_notice.md",
+      "sha256": "6f2414436a4324355ba0892d4f3cf2a958877e0f6e5fd92f0e5340de4076584b"
+    },
+    {
+      "bytes": 10170,
+      "path": "pxrd_issue44/runs/benchmark_20261020/primary/zno/metrics.json",
+      "sha256": "7f22f0807fd4e934735c0ff2a3f0f9909ad17e35b1e71257ccbc615cbe981a2b"
+    },
+    {
+      "bytes": 1322391,
+      "path": "pxrd_issue44/runs/benchmark_20261020/primary/zno/per_sample.jsonl",
+      "sha256": "ef1fa912c95d2b9601da4ea0745c2c7a8bd3d8628d86e1474e48953ec8da300d"
+    },
+    {
+      "bytes": 943,
+      "path": "pxrd_issue44/runs/benchmark_20261020/smoke/models/batio3/resnet1d/learning_curves.jsonl",
+      "sha256": "8774745b3749f424b4d6c5f94dbc60bd4d35685217531670d928727628931e71"
+    },
+    {
+      "bytes": 418,
+      "path": "pxrd_issue44/runs/benchmark_20261020/smoke/models/batio3/resnet1d/selection_2026102020.json",
+      "sha256": "12db44c17f4fbccdd11652589c325d6e53cbe9c592169d2359dd20c4cb010040"
+    },
+    {
+      "bytes": 955,
+      "path": "pxrd_issue44/runs/benchmark_20261020/smoke/models/batio3/transformer/learning_curves.jsonl",
+      "sha256": "af50f3a8277fd13e2f32ae55861b782d3a1baa86fe34bde8165c40e1ad7603d7"
+    },
+    {
+      "bytes": 424,
+      "path": "pxrd_issue44/runs/benchmark_20261020/smoke/models/batio3/transformer/selection_2026102020.json",
+      "sha256": "ff4467d24f3e39e6d8f5e8747616f45ceed6dabe1a5d6e715f2d07fa4ec3c17f"
+    },
+    {
+      "bytes": 937,
+      "path": "pxrd_issue44/runs/benchmark_20261020/smoke/models/mgo/resnet1d/learning_curves.jsonl",
+      "sha256": "e97ff5eb6b2a8712af8e12d18965b573800848ec8bfda607a6f3e6c51c83e803"
+    },
+    {
+      "bytes": 418,
+      "path": "pxrd_issue44/runs/benchmark_20261020/smoke/models/mgo/resnet1d/selection_2026102020.json",
+      "sha256": "17c395253395e85c8bf746b6df8d86962878a1b88a02664bec1d426a59b22381"
+    },
+    {
+      "bytes": 946,
+      "path": "pxrd_issue44/runs/benchmark_20261020/smoke/models/mgo/transformer/learning_curves.jsonl",
+      "sha256": "7e6d5e65c8f79a60873c6cfd620d2f8c34dc69111830f1e3aa1b27cf12514261"
+    },
+    {
+      "bytes": 421,
+      "path": "pxrd_issue44/runs/benchmark_20261020/smoke/models/mgo/transformer/selection_2026102020.json",
+      "sha256": "86b0bbcc772297fa8a8b0864174cc8705de4d19680b2a6a63965e4503d9e36a1"
+    },
+    {
+      "bytes": 931,
+      "path": "pxrd_issue44/runs/benchmark_20261020/smoke/models/zno/resnet1d/learning_curves.jsonl",
+      "sha256": "43d4f99b2706a6bf630cc56b21354babec51654b6cd4f83e52a3b74bdca5bae8"
+    },
+    {
+      "bytes": 416,
+      "path": "pxrd_issue44/runs/benchmark_20261020/smoke/models/zno/resnet1d/selection_2026102020.json",
+      "sha256": "cf19cd98ee6e71d2b196eb9664267e4cba9302bf3f8bfd9f7f4473e9b31c6489"
+    },
+    {
+      "bytes": 945,
+      "path": "pxrd_issue44/runs/benchmark_20261020/smoke/models/zno/transformer/learning_curves.jsonl",
+      "sha256": "9923c6426fe5c99b00baa5218ad278e27eed0c0f76d713b97195f779238c8a9a"
+    },
+    {
+      "bytes": 420,
+      "path": "pxrd_issue44/runs/benchmark_20261020/smoke/models/zno/transformer/selection_2026102020.json",
+      "sha256": "687f63066caa287f58ac82c0838abe4ecba1f5c6772ed287d636de78f49a98a9"
+    },
+    {
+      "bytes": 3102,
+      "path": "pxrd_issue44/runs/benchmark_20261020/smoke/SMOKE.json",
+      "sha256": "72822a39b4d4fc6c1ea0808f099f3eb858bd339875d0c655b5e82efa8554426f"
+    },
+    {
+      "bytes": 731,
+      "path": "pxrd_issue44/runs/benchmark_20261020/status.json",
+      "sha256": "c65de290db5e32852dfcdc7c530cc856ddcb3c6c444f81c953d8db195b52fddb"
+    },
+    {
+      "bytes": 846,
+      "path": "pxrd_issue44/runs/benchmark_20261020/stress/environment_gate.json",
+      "sha256": "85a334cba107be6e50712bb11d0dbf5d135d0a7cd0f029fc7025eb9009e31675"
+    },
+    {
+      "bytes": 2,
+      "path": "pxrd_issue44/runs/benchmark_20261020/stress/metrics.json",
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "bytes": 264,
+      "path": "pxrd_issue44/runs/benchmark_20261020/stress/not_run_notice.md",
+      "sha256": "2157d0ee3c21854639a2c9a25b2b549d8929b65fad9e30ab22c076af4e0a2531"
+    },
+    {
+      "bytes": 531,
+      "path": "pxrd_issue44/runs/benchmark_20261020/stress/status.json",
+      "sha256": "eeb48e07d59d5a2cc698511eba35d80077c6dbdee6d86ca11a6b3c44e44facbe"
+    },
+    {
+      "bytes": 8988,
+      "path": "pxrd_issue44/runs/benchmark_20261020/test_opened.json",
+      "sha256": "2c44000472c138f534e6ea57a633494f697c51a7a08953eeb7a57b27df9af683"
+    },
+    {
+      "bytes": 27502,
+      "path": "pxrd_issue44/runs/benchmark_20261020/training_complete.json",
+      "sha256": "ce4242a5d2ded951edb95723cd342b399b10c37823bb81eb3540bace0c74bf2f"
+    },
+    {
+      "bytes": 55642,
+      "path": "pxrd_issue44/runs/dryrun_20261020/preflight.json",
+      "sha256": "1276ea2e3feb63591d44d2bf38914000647e794046ca4d8ead144a34c1d931e4"
+    },
+    {
+      "bytes": 55914,
+      "path": "pxrd_issue44/runs/preflight_manager_20261020/preflight.json",
+      "sha256": "ca84dac0eb66fd5c083428fc67410ec3b3e5506074d254a9e69bb7f68f330df7"
+    },
+    {
+      "bytes": 3728,
+      "path": "pxrd_issue44/source_audit_addendum_20261020.md",
+      "sha256": "dfc95fdb655d18bb6deb44baa57c087284b65285163cb82999363ad6a1f0c03a"
+    },
+    {
+      "bytes": 9346,
+      "path": "pxrd_issue44/test_benchmark.py",
+      "sha256": "07ae97765f7b6325c9f31197f7960d4fe4a2fa8e300ed9a5d26265811c709beb"
+    },
+    {
+      "bytes": 1275,
+      "path": "pxrd_issue44/test_models.py",
+      "sha256": "700e82603ba356f6b19d32ea07e56d258b7c1ab06b4b811c8317ca99c53f3245"
+    },
+    {
+      "bytes": 4460,
+      "path": "pxrd_issue44/write_artifact_manifest.py",
+      "sha256": "06ef5e6987ab101bc880631a7731b4129c8c65f611c05a10f9536e1abfd574fb"
+    }
+  ],
+  "generated_utc": "2026-10-20T03:08:31+00:00",
+  "included_bytes": 9822457,
+  "included_file_count": 119,
+  "primary_record_audit": {
+    "boundary_hit_optimizer_attempts": 460,
+    "failed_optimizer_attempts": 0,
+    "failed_rows": 0,
+    "optimizer_attempts": 11319,
+    "rows": 8085,
+    "rows_by_method": {
+      "P0": 539,
+      "P3": 539,
+      "P5": 539,
+      "resnet1d+A": 1617,
+      "resnet1d-direct": 1617,
+      "transformer+A": 1617,
+      "transformer-direct": 1617
+    },
+    "rows_with_boundary_hit": 3
+  },
+  "schema_version": 1,
+  "scope": "publishable Issue #44 code, preregistration, machine-readable synthetic run records, and audit reports",
+  "status": {
+    "overall": "PARTIAL",
+    "publication": "PENDING",
+    "real_rruff": "BLOCKED",
+    "stress": "BLOCKED_NOT_RUN",
+    "synthetic_primary": "COMPLETE"
+  },
+  "train_validation_test_parents": {
+    "test": 77,
+    "test_reused_from_pr43": true,
+    "train": 358,
+    "validation": 77
+  }
+}

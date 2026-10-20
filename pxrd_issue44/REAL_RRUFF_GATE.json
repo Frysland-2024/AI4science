@@ -1,0 +1,13 @@
+{
+  "status": "BLOCKED",
+  "date": "2026-10-20",
+  "allowed_real_cases": 0,
+  "evidence": [
+    "PR40 Grossular/COD 9001868 report PHYSICS_MODEL_NOT_READY: five-start lattice spread 0.546-0.846 Angstrom, unstable and intensity-mismatched fits; do not begin real-domain training.",
+    "PR41 independent audit: 0/44 same-specimen CIF matches; raw XY wavelength is absent; 1.540562 Angstrom was a same-ID refined proxy, not verified instrument metadata.",
+    "PR41: only 12 development samples, no independent real split; posthoc cell reference error improved in 6/12 cases, insufficient to clear model readiness.",
+    "Same-sample refined cell cannot select its candidate/template. RRUFF classification locked-test data are not development data. No sample-specific frozen verified instrument wavelength, candidate CIF identity, and independent reference measurement were established for this run."
+  ],
+  "consequence": "No RRUFF spectra or candidate-specific real cases were opened, trained on, or scored. The existing locked classification test remains untouched.",
+  "clearance_requirements": ["verified instrument wavelength and measurement conditions", "independently verified candidate identity/CIF", "separate reference data not used to choose its own candidate", "stable physical fit gate passed before any model training", "independent holdout not drawn from classification locked-test data"]
+}

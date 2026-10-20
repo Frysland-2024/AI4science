@@ -1,0 +1,26 @@
+{
+  "comparison": "comparison.json",
+  "elapsed_seconds": 2309.9923181533813,
+  "finished": 1792465079.2820835,
+  "historical_finalizer_failure": "preserved in failure.json; aggregation recovered from complete saved rows",
+  "materials": [
+    "batio3",
+    "mgo",
+    "ceo2",
+    "rutile",
+    "zno",
+    "silicon",
+    "grossular"
+  ],
+  "model_runs": 42,
+  "primary_rows_including_baselines_and_neural": 8085,
+  "primary_scoring_rerun": false,
+  "publication": "PENDING",
+  "real_rruff": "BLOCKED",
+  "report": "FINAL_REPORT.md",
+  "stage": "SYNTHETIC_PRIMARY_COMPLETE_STRESS_NOT_RUN_REAL_RRUFF_BLOCKED",
+  "status": "PARTIAL",
+  "stress_status": "BLOCKED_NOT_RUN",
+  "stress_summary_rows": 0,
+  "synthetic_status": "COMPLETE"
+}

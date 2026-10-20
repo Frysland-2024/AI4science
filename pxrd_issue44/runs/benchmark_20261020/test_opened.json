@@ -1,0 +1,177 @@
+{
+  "config_sha256": "f0c9674f1bd59fb17f54861d2ff7755017c34d672b8c6c562c45a2f699122b4b",
+  "protocol_sha256": "16df143ee628bc6c009e170fe37611965e42f197b996b4883832ca486bfb1f61",
+  "relationship": "same already-opened PR43 test parents; exploratory only",
+  "selection_files": [
+    {
+      "path": "pxrd_issue44\\runs\\benchmark_20261020\\models\\batio3\\resnet1d\\selection_2026101911.json",
+      "sha256": "6e47dde0a5a92e219f288f23b7d9b4697307ce724e9e48069a7b832633683db7"
+    },
+    {
+      "path": "pxrd_issue44\\runs\\benchmark_20261020\\models\\batio3\\resnet1d\\selection_2026101912.json",
+      "sha256": "26643927bca6f46766fb18a64f9b45b6df79766770e14b64785f3ec710fe1429"
+    },
+    {
+      "path": "pxrd_issue44\\runs\\benchmark_20261020\\models\\batio3\\resnet1d\\selection_2026101913.json",
+      "sha256": "735cd38c48ee530c1877085554a79e1df93efc15a44cdf7e5689fbcd26e53567"
+    },
+    {
+      "path": "pxrd_issue44\\runs\\benchmark_20261020\\models\\batio3\\transformer\\selection_2026101911.json",
+      "sha256": "ae994912d0f4d5868b2f7c141ed9c4c6afb3d64c134f3550945a69111e1a2fef"
+    },
+    {
+      "path": "pxrd_issue44\\runs\\benchmark_20261020\\models\\batio3\\transformer\\selection_2026101912.json",
+      "sha256": "b4149fac042bb52eaaeee8264749cb0730041ee66c1a98bf9761ea1ff1bc8bf7"
+    },
+    {
+      "path": "pxrd_issue44\\runs\\benchmark_20261020\\models\\batio3\\transformer\\selection_2026101913.json",
+      "sha256": "e596a9d52f6255787768c3d1edd2a8a815827ba8e00dc3cbf9ff15741e6411fd"
+    },
+    {
+      "path": "pxrd_issue44\\runs\\benchmark_20261020\\models\\mgo\\resnet1d\\selection_2026101911.json",
+      "sha256": "6b6cb6c6ab910ec154c132512a930261c40607d33266f5ab762889ecbc4c9d3b"
+    },
+    {
+      "path": "pxrd_issue44\\runs\\benchmark_20261020\\models\\mgo\\resnet1d\\selection_2026101912.json",
+      "sha256": "d650855be6e6a63f8a6ae627841954a2c7f62e647a459794534056ec3fe7044b"
+    },
+    {
+      "path": "pxrd_issue44\\runs\\benchmark_20261020\\models\\mgo\\resnet1d\\selection_2026101913.json",
+      "sha256": "161bfd53725214ef436f00d745fac072292f08f6590ac0e3db682b7ab426d00c"
+    },
+    {
+      "path": "pxrd_issue44\\runs\\benchmark_20261020\\models\\mgo\\transformer\\selection_2026101911.json",
+      "sha256": "9777191c9de354cd6194f9b8a744d2fe5d983898b20648ea4b292831df0fa59f"
+    },
+    {
+      "path": "pxrd_issue44\\runs\\benchmark_20261020\\models\\mgo\\transformer\\selection_2026101912.json",
+      "sha256": "13e2079d4718f03d3711485f12eb8dbcf121a4c90da05397cde6e5f06230a0bb"
+    },
+    {
+      "path": "pxrd_issue44\\runs\\benchmark_20261020\\models\\mgo\\transformer\\selection_2026101913.json",
+      "sha256": "45d51f0d539df002b3e583c795bf1ee6f61a646449fb2e8fdb2154d097dcbdba"
+    },
+    {
+      "path": "pxrd_issue44\\runs\\benchmark_20261020\\models\\ceo2\\resnet1d\\selection_2026101911.json",
+      "sha256": "ea0e453c8cfa935c855d5c0ca6e985fe29fc376c5994ca245e2ebb70f168001b"
+    },
+    {
+      "path": "pxrd_issue44\\runs\\benchmark_20261020\\models\\ceo2\\resnet1d\\selection_2026101912.json",
+      "sha256": "e6ab471d342b1596dfd351dd09828e41b290836fe7718aac5418bf2b0e8c92b3"
+    },
+    {
+      "path": "pxrd_issue44\\runs\\benchmark_20261020\\models\\ceo2\\resnet1d\\selection_2026101913.json",
+      "sha256": "f7ba8bb05f1f75e25eda32878ca8ff07a59f9880b58fb6e64b804525051b6f0a"
+    },
+    {
+      "path": "pxrd_issue44\\runs\\benchmark_20261020\\models\\ceo2\\transformer\\selection_2026101911.json",
+      "sha256": "9b8d5ea4881cdcc7918b3bb79472cbed21284566f1803094565f9d98217ec514"
+    },
+    {
+      "path": "pxrd_issue44\\runs\\benchmark_20261020\\models\\ceo2\\transformer\\selection_2026101912.json",
+      "sha256": "31ccb2b6e0c70eedb08ef5107a8f953fd57bfcb6b9c06df6ca537c680a27ea63"
+    },
+    {
+      "path": "pxrd_issue44\\runs\\benchmark_20261020\\models\\ceo2\\transformer\\selection_2026101913.json",
+      "sha256": "c15a2b680f200b12fd06ba6071f2162ec9a7fc2a8975f2ac431ab3298372af37"
+    },
+    {
+      "path": "pxrd_issue44\\runs\\benchmark_20261020\\models\\rutile\\resnet1d\\selection_2026101911.json",
+      "sha256": "8d62b96f7f94397dee2c4dcb00abbc684bf5aaa248dcd76b474478274b2c0b4c"
+    },
+    {
+      "path": "pxrd_issue44\\runs\\benchmark_20261020\\models\\rutile\\resnet1d\\selection_2026101912.json",
+      "sha256": "e05d2037ccd4aa79ac9de8fe0d4ca67a57b4b7c15f58773cbdf0ba809f22b473"
+    },
+    {
+      "path": "pxrd_issue44\\runs\\benchmark_20261020\\models\\rutile\\resnet1d\\selection_2026101913.json",
+      "sha256": "fe07dc963394d8579e1027b43d6029548cb114f168118b893182dad0ab27527f"
+    },
+    {
+      "path": "pxrd_issue44\\runs\\benchmark_20261020\\models\\rutile\\transformer\\selection_2026101911.json",
+      "sha256": "854c432deb9446ed79206228b0d1085bb34cec0e58da606d41c246befeee2f25"
+    },
+    {
+      "path": "pxrd_issue44\\runs\\benchmark_20261020\\models\\rutile\\transformer\\selection_2026101912.json",
+      "sha256": "5f6d9018dd2604ed51594720cf3ffa263cf5a4eacff2f9eaa9738943da787522"
+    },
+    {
+      "path": "pxrd_issue44\\runs\\benchmark_20261020\\models\\rutile\\transformer\\selection_2026101913.json",
+      "sha256": "8d3a4e704db0b56e1b98da9dde528cc2aedb818e5d5a472dc939a68f3b15c352"
+    },
+    {
+      "path": "pxrd_issue44\\runs\\benchmark_20261020\\models\\zno\\resnet1d\\selection_2026101911.json",
+      "sha256": "8a3063cbfad26cf0450884f728e761cac877b6699319462e31390e5351679868"
+    },
+    {
+      "path": "pxrd_issue44\\runs\\benchmark_20261020\\models\\zno\\resnet1d\\selection_2026101912.json",
+      "sha256": "9e41b026dd70daffd8b441bb3ddc476b0d445968eb56e5685444807c98243a52"
+    },
+    {
+      "path": "pxrd_issue44\\runs\\benchmark_20261020\\models\\zno\\resnet1d\\selection_2026101913.json",
+      "sha256": "e7d47f20dc37f6573b7ceb1bebd64a0226d77f266e7c88aa5d5ca4ed673e77fb"
+    },
+    {
+      "path": "pxrd_issue44\\runs\\benchmark_20261020\\models\\zno\\transformer\\selection_2026101911.json",
+      "sha256": "075b3d257ffaa01b2f41b2febe496f885cbb5400874244482826e1acd2c70c0b"
+    },
+    {
+      "path": "pxrd_issue44\\runs\\benchmark_20261020\\models\\zno\\transformer\\selection_2026101912.json",
+      "sha256": "ca7626d19d67eca34003a9afc6059a8b0953f3b60ec9041f6307376889f2ece5"
+    },
+    {
+      "path": "pxrd_issue44\\runs\\benchmark_20261020\\models\\zno\\transformer\\selection_2026101913.json",
+      "sha256": "069ce5b343d353dc2e36da27909d44840e37f03d80684278c832efe411f2ecb5"
+    },
+    {
+      "path": "pxrd_issue44\\runs\\benchmark_20261020\\models\\silicon\\resnet1d\\selection_2026101911.json",
+      "sha256": "ade5420db881ed54c3bb218bd92eb9751094949b33637436c08310fac132493f"
+    },
+    {
+      "path": "pxrd_issue44\\runs\\benchmark_20261020\\models\\silicon\\resnet1d\\selection_2026101912.json",
+      "sha256": "fa9b7b6b665739e0bf465714d82e3babb00216c46f6f0909f91880f6b5803035"
+    },
+    {
+      "path": "pxrd_issue44\\runs\\benchmark_20261020\\models\\silicon\\resnet1d\\selection_2026101913.json",
+      "sha256": "d712f0030b36d4b0e8f0d2b63dfed773fd29d8fb7888baddc5708bde62b63160"
+    },
+    {
+      "path": "pxrd_issue44\\runs\\benchmark_20261020\\models\\silicon\\transformer\\selection_2026101911.json",
+      "sha256": "099cb81a69573ce709defdffb9c318e5aab97286b22b59d7408c874e76a60a94"
+    },
+    {
+      "path": "pxrd_issue44\\runs\\benchmark_20261020\\models\\silicon\\transformer\\selection_2026101912.json",
+      "sha256": "ef8d3a7e9d17e93f3ca12e38e4d0f8cc19280109825110a714bd687419be68bd"
+    },
+    {
+      "path": "pxrd_issue44\\runs\\benchmark_20261020\\models\\silicon\\transformer\\selection_2026101913.json",
+      "sha256": "0d5e381c166bc59dec103302f9ae68114a30689b11d19818425b8f8413b17f0c"
+    },
+    {
+      "path": "pxrd_issue44\\runs\\benchmark_20261020\\models\\grossular\\resnet1d\\selection_2026101911.json",
+      "sha256": "c2b73e7571e588ad0bb8eb70abd3a7ca7d71780143baad149e5f15fefae96127"
+    },
+    {
+      "path": "pxrd_issue44\\runs\\benchmark_20261020\\models\\grossular\\resnet1d\\selection_2026101912.json",
+      "sha256": "48d4687bb70244ca02d2a4fe7c8df3090cde4b5ced77cfbd8fd6d4b2bf8cee9f"
+    },
+    {
+      "path": "pxrd_issue44\\runs\\benchmark_20261020\\models\\grossular\\resnet1d\\selection_2026101913.json",
+      "sha256": "2b1b4f35ee681cb661f38446da151c4e05a6707c0075c9b57bf3a522ffef3aab"
+    },
+    {
+      "path": "pxrd_issue44\\runs\\benchmark_20261020\\models\\grossular\\transformer\\selection_2026101911.json",
+      "sha256": "29baa4c1c8475f7d5463df822649c5da3d88487be1be20fff9a7104a56f86830"
+    },
+    {
+      "path": "pxrd_issue44\\runs\\benchmark_20261020\\models\\grossular\\transformer\\selection_2026101912.json",
+      "sha256": "b6c3f91acdd23ef5641b3564ac535490b0e9772c437af37f72642c49bf262a86"
+    },
+    {
+      "path": "pxrd_issue44\\runs\\benchmark_20261020\\models\\grossular\\transformer\\selection_2026101913.json",
+      "sha256": "cf22be75878d4199df1c2e8f754def9a6bd2c460976fd4b3d7faa3c0fecc3146"
+    }
+  ],
+  "status": "OPENED_ONCE",
+  "time": 1792463285.3401964
+}
