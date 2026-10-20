@@ -192,3 +192,4 @@
 {"event": "test_opened", "time": 1792463285.3441966, "selection_count": 42, "role": "previously opened PR43 parents; exploratory only"}
 {"event": "manager_stopped", "time": 1792464631.4520667, "status": "FAILED", "error": "ValueError('setting an array element with a sequence. The requested array has an inhomogeneous shape after 1 dimensions. The detected shape was (539,) + inhomogeneous part.')"}
 {"event": "post_primary_aggregation_recovered", "time": 1792465079.2820835, "primary_rows_verified": 8085, "primary_scoring_rerun": false, "stress_summary_rows": 0, "stress_status": "BLOCKED_NOT_RUN", "real_rruff": "BLOCKED"}
+{"event":"draft_pr_opened","time":1792465819.989539,"pull_request":"https://github.com/Frysland-2024/AI4science/pull/46","base":"codex/pxrd-cross-material-autolab-20261019","head":"codex/bin-cao-issue44-20261019","head_sha":"d96c342dc826b8a3de8a00de1987d65ad1a00bf6","draft":true,"merged":false}

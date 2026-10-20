@@ -299,3 +299,5 @@ Decision: record the bounded synthetic primary matrix as complete and the overal
 What changes now: add the isolated benchmark implementation, machine-readable runs, recovery/failure evidence, source and license audit, and a Draft PR linked to Issue #44. What does NOT change: PR43 MLP checkpoints/results, already-opened test provenance, the frozen seven-system JS classification project, the real-RRUFF gate, or locked classification test data.
 
 Status: PARTIAL (synthetic primary complete; new architecture stress BLOCKED_NOT_RUN; real RRUFF BLOCKED). Relevant files: [Issue #44 preregistration](../pxrd_issue44/PREREGISTRATION.md), [run report](../pxrd_issue44/runs/benchmark_20261020/FINAL_REPORT.md), [run status](../pxrd_issue44/runs/benchmark_20261020/status.json), [source audit addendum](../pxrd_issue44/source_audit_addendum_20261020.md), [frozen source matrix](../pxrd_issue44/literature_matrix.md).
+
+Publication: Draft [PR #46](https://github.com/Frysland-2024/AI4science/pull/46), stacked on `codex/pxrd-cross-material-autolab-20261019`; it remains unmerged.

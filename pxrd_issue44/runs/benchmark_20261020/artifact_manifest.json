@@ -72,9 +72,9 @@
       "sha256": "6fbdd2da21c668696a673f944fde7dfdb968d8e5fe43346755bb46d66e10088f"
     },
     {
-      "bytes": 46615,
+      "bytes": 46911,
       "path": "pxrd_issue44/runs/benchmark_20261020/events.jsonl",
-      "sha256": "047b7b90be4e3aa06c4df24ad2e6412de31533195b2586b9a7b6c231da361f19"
+      "sha256": "7e31cf28d92a7bacf65d6fe50afb435563354e441e8454595acfbd6ca3fb636e"
     },
     {
       "bytes": 1625,
@@ -557,9 +557,9 @@
       "sha256": "72822a39b4d4fc6c1ea0808f099f3eb858bd339875d0c655b5e82efa8554426f"
     },
     {
-      "bytes": 731,
+      "bytes": 1035,
       "path": "pxrd_issue44/runs/benchmark_20261020/status.json",
-      "sha256": "c65de290db5e32852dfcdc7c530cc856ddcb3c6c444f81c953d8db195b52fddb"
+      "sha256": "a8fa296e3800621a0bdacf680fd760b54253a370d62107a9dc0c06ba2d44f651"
     },
     {
       "bytes": 846,
@@ -622,8 +622,8 @@
       "sha256": "06ef5e6987ab101bc880631a7731b4129c8c65f611c05a10f9536e1abfd574fb"
     }
   ],
-  "generated_utc": "2026-10-20T03:08:31+00:00",
-  "included_bytes": 9822457,
+  "generated_utc": "2026-10-20T03:10:20+00:00",
+  "included_bytes": 9823057,
   "included_file_count": 119,
   "primary_record_audit": {
     "boundary_hit_optimizer_attempts": 460,
@@ -646,7 +646,7 @@
   "scope": "publishable Issue #44 code, preregistration, machine-readable synthetic run records, and audit reports",
   "status": {
     "overall": "PARTIAL",
-    "publication": "PENDING",
+    "publication": "DRAFT_PR_OPEN",
     "real_rruff": "BLOCKED",
     "stress": "BLOCKED_NOT_RUN",
     "synthetic_primary": "COMPLETE"
