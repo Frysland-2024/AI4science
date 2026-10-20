@@ -115,6 +115,13 @@ xrd_inversion/reports/week1_repaired_smoke_results.json
 /pxrd_cross_material_autolab/.pytest_cache/
 /pxrd_cross_material_codex.log
 
+# Issue 44 compact audit logs are tracked; generated profiles and weights remain private.
+!/pxrd_issue44/runs/
+!/pxrd_issue44/runs/**
+/pxrd_issue44/runs/**/private/
+/pxrd_issue44/**/__pycache__/
+/pxrd_issue44/.pytest_cache/
+
 # Publish compact AutoLab run evidence; generated arrays and weights stay private.
 !/pxrd_cross_material_autolab/runs/
 !/pxrd_cross_material_autolab/runs/**

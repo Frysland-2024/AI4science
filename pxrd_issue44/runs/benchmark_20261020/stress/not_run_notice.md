@@ -1,0 +1,1 @@
+New-architecture stress scoring was not run because an unidentified active Python process was using CPU and its command line could not be inspected. Per the no-disruption rule, this stage remains blocked/not run; the PR43 historical stress baseline is unchanged.

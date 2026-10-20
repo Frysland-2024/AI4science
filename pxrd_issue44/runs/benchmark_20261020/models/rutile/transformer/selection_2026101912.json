@@ -1,0 +1,14 @@
+{
+  "architecture": "transformer",
+  "best_epoch": 24,
+  "best_validation_q_mae": 0.11160360276699066,
+  "checkpoint_sha256": "18c69211be514e430eb0a8d130b081527a7d7ce0695a6c27d904b072aa190311",
+  "material": "rutile",
+  "optimizer_steps": 288,
+  "parameter_count": 19810,
+  "seed": 2026101912,
+  "training_device": "cuda",
+  "training_epochs": 24,
+  "training_examples_per_epoch": 358,
+  "training_seconds": 1.8158153000404127
+}

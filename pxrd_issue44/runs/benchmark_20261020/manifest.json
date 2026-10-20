@@ -1,0 +1,250 @@
+{
+  "branch": "codex/bin-cao-issue44-20261019",
+  "config": {
+    "architectures": {
+      "resnet1d": {
+        "blocks": "two residual blocks at width24, then stride2 transition 24->48 and two residual blocks at width48; kernel5, GroupNorm(4), SiLU",
+        "head": "Linear 48->ndim, Tanh",
+        "pool": "adaptive average pool to 1",
+        "stem": "Conv1d 1->24 kernel9 stride4 padding4, GroupNorm(4), SiLU"
+      },
+      "transformer": {
+        "dropout": 0.0,
+        "embedding_dim": 32,
+        "feedforward_dim": 64,
+        "head": "Linear 32->ndim, Tanh",
+        "heads": 4,
+        "layers": 2,
+        "patch_size": 16,
+        "pool": "mean over 64 patch tokens",
+        "position_embedding": "learned, fixed maximum length 64"
+      }
+    },
+    "compute_limits": {
+      "cuda_training_seconds": 14400,
+      "disk_bytes": 10000000000,
+      "never_interrupt_other_jobs": true,
+      "sequential_manager": true,
+      "wall_seconds": 28800
+    },
+    "data": {
+      "grid": {
+        "points": 1024,
+        "two_theta_max_deg": 85.0,
+        "two_theta_min_deg": 15.0
+      },
+      "noise": {
+        "gaussian_sigma": 0.002,
+        "poisson_counts_per_unit": 15000
+      },
+      "nuisance": {
+        "background_offset": [
+          0.02,
+          0.06
+        ],
+        "background_slope": [
+          -0.015,
+          0.015
+        ],
+        "fwhm_deg": [
+          0.24,
+          0.42
+        ],
+        "scale": [
+          0.8,
+          1.2
+        ],
+        "zero_shift_deg": [
+          -0.1,
+          0.1
+        ]
+      },
+      "q_definition": "(lattice/reference_lattice - 1) / 0.02; each cell DOF reported separately",
+      "q_range": [
+        -0.8,
+        0.8
+      ],
+      "standardization": "train-only pointwise mean/std; std floor 0.02",
+      "wavelength_angstrom": 1.5406
+    },
+    "frozen_date": "2026-10-20",
+    "material_cif_dir": "pxrd_cross_material_autolab/materials",
+    "material_source_config": "pxrd_cross_material_autolab/config.json",
+    "materials": [
+      "batio3",
+      "mgo",
+      "ceo2",
+      "rutile",
+      "zno",
+      "silicon",
+      "grossular"
+    ],
+    "physics": {
+      "P0_starts": 1,
+      "P3_starts": [
+        0.0,
+        -0.5,
+        0.5
+      ],
+      "P5_starts": [
+        0.0,
+        -0.5,
+        0.5,
+        -0.85,
+        0.85
+      ],
+      "bounds": "the existing frozen PR43 q and eta bounds",
+      "eta_start": "existing neutral eta",
+      "ftol": 1e-12,
+      "gtol": 1e-07,
+      "implementation": "pxrd_cross_material_autolab.physics.PowderModel.fit",
+      "maxfun_per_start": 1000,
+      "maxiter_per_start": 100,
+      "maxls": 30,
+      "objective": "observed-profile MSE",
+      "optimizer": "L-BFGS-B",
+      "selection": "lowest observed profile RMSE; record every start, including failures"
+    },
+    "predeclared_interpretation": {
+      "accuracy_rule": "all three seeds beat P3 q-MAE by at least 5%; each cell-DOF MAE is no worse than 5%; convergence is no worse; show P5 alongside",
+      "no pooled cross-dof physical error": true,
+      "no statistical significance claim": true,
+      "no_test_based_architecture_or_seed_selection": true,
+      "preserve mixed, adverse, failed, and not-run outcomes": true,
+      "report_per_material_and_per_dof": true,
+      "report_q_error_and_cell_error_angstrom_separately": true,
+      "runtime_rule": "include measured training plus amortized inference plus refinement and compare against the stated physics budget"
+    },
+    "primary": {
+      "noise_seed": 2026101904,
+      "nuisance_seed": 2026101903,
+      "parent_count": 512,
+      "parent_seed": 2026101901,
+      "reused_split": "PR43 runs/pilot_20261019 split_manifest.json, same parent q and same-generator test; already opened in PR43",
+      "split_seed": 2026101902,
+      "test": 77,
+      "test_role": "previously opened exploratory architecture-transfer extension; not independent confirmation",
+      "train": 358,
+      "validation": 77
+    },
+    "protocol_id": "issue44_known_candidate_parameter_inversion_v1",
+    "real_rruff": {
+      "decision_file": "pxrd_issue44/REAL_RRUFF_GATE.json",
+      "status": "BLOCKED"
+    },
+    "scope": "architecture-transfer comparison on seven PR43 supported synthetic materials; not a source-faithful Bin Cao replication",
+    "smoke": {
+      "architectures": [
+        "resnet1d",
+        "transformer"
+      ],
+      "epochs": 3,
+      "materials": [
+        "batio3",
+        "mgo",
+        "zno"
+      ],
+      "role": "operational GPU and checkpoint smoke only; no test profiles or performance inference; excluded from all comparison summaries",
+      "seed": 2026102020,
+      "train_parents": 64,
+      "validation_parents": 32
+    },
+    "stress": {
+      "noise_seed": 2026101953,
+      "nuisance_seed": 2026101952,
+      "parent_seed": 2026101951,
+      "parents_per_material": 16,
+      "renderer": "independent pymatgen XRDCalculator peaks, 0.7 Gaussian + 0.3 Lorentzian peaks and unmodelled quadratic background 0.03*xnorm^2; same PR43 stress observations, already opened for MLP",
+      "role": "previously opened exploratory independent-renderer mismatch extension; not independent confirmation"
+    },
+    "training": {
+      "batch_size": 32,
+      "device": "CUDA RTX 4060 Laptop GPU only; block if unavailable, occupied by confirmed compute, or less than 1 GiB free VRAM",
+      "epochs": 24,
+      "gradient_clip_norm": 5.0,
+      "inference_device": "CPU, one spectrum at a time",
+      "learning_rate": 0.001,
+      "objective": "q MSE",
+      "optimizer": "Adam",
+      "seeds": [
+        2026101911,
+        2026101912,
+        2026101913
+      ],
+      "selection": "lowest validation mean absolute q error; earliest epoch on tie"
+    }
+  },
+  "config_sha256": "f0c9674f1bd59fb17f54861d2ff7755017c34d672b8c6c562c45a2f699122b4b",
+  "hashes": {
+    "pxrd_cross_material_autolab\\PREREGISTRATION.md": "7e630b7bc4198ec0cef99b6be7056e0b41b6d230cf9e11dd63801db7620508c8",
+    "pxrd_cross_material_autolab\\config.json": "1a2dfd026942e526a99dbc51c65be978c1d428ebd169e83e6b6767c7acfe7416",
+    "pxrd_cross_material_autolab\\experiment.py": "fbb7bdc93c851a4f90c9aac898f9f7808f14536acde6027a17c02005744cc357",
+    "pxrd_cross_material_autolab\\manager.py": "261a7e56014289cbd9eea9a967c6def43122eb2eaee45ad5b78f3a16fee7bb0d",
+    "pxrd_cross_material_autolab\\materials\\BaTiO3_COD_9014273_P4mm.cif": "e854c9868f643183904606b8c24463f8f0bacc1cca90f283641b33346db748b4",
+    "pxrd_cross_material_autolab\\materials\\CeO2_COD_9009008.cif": "cfb862ebff35ab342a254a267eff4d94a86a18ae284142289e7b56d8d7b8e099",
+    "pxrd_cross_material_autolab\\materials\\Grossular_COD_9001868.cif": "d6b3d78a1d487de504d4d47db9cbd1a2dc28e51e99c9c43a0565c8e1325cbb1e",
+    "pxrd_cross_material_autolab\\materials\\MgO_COD_9000505.cif": "73e348f73ec4e2e41f2ea08cbe5f393366e7cfeb55285eebbb185ace7ec94923",
+    "pxrd_cross_material_autolab\\materials\\rutile_COD_9004141.cif": "ce9abab142351e802bde3eb40dbb554bb3ccec08e8c6ddc4299c0c532e9794ce",
+    "pxrd_cross_material_autolab\\materials\\silicon_COD_9008565.cif": "46fb44ccdf93d1c3c1ecbe5b04ab0dea28c786bac20467b3a7511199af50e386",
+    "pxrd_cross_material_autolab\\materials\\zno_COD_9008877.cif": "29e747c3b8a40e7e1bf6f26ef00ed895e8dfdd4a110ba34a5ee9c7d587782ace",
+    "pxrd_cross_material_autolab\\physics.py": "2b8def953e025e029ed152ffb1ab876d7724c306adbb91332cfed6157fd78817",
+    "pxrd_cross_material_autolab\\reports\\final_verify.json": "2b39acf254ad82aa782e7f6cd19341f8b0a9f70763c830cfb76da673e21974a8",
+    "pxrd_cross_material_autolab\\runs\\pilot_20261019\\config.json": "f74942f5542560bb302bd90d0e64239b6a0ff1999065ee7a56909fc40a27ec35",
+    "pxrd_cross_material_autolab\\runs\\pilot_20261019\\manifest.json": "27043fdda4926503cd83ecaae0f20b480069087ec7b41a9561b1a18776bb4f63",
+    "pxrd_cross_material_autolab\\runs\\pilot_20261019\\materials\\batio3\\attempt_1792420646692620900\\per_sample.jsonl": "0f5ef9dac5384f3fdeb1d1b624156f409f98df3bd06e477501575ea8c9a0acb9",
+    "pxrd_cross_material_autolab\\runs\\pilot_20261019\\materials\\batio3\\attempt_1792420646692620900\\test_opened.json": "ae10a03f823c4d3fded660fb64b01fccaba9d6028e254e574309a4dcfc0eabd0",
+    "pxrd_cross_material_autolab\\runs\\pilot_20261019\\materials\\batio3\\attempt_1792420646692620900\\training_selection.json": "6f33d36f6cec839296e6373e8455287258064e437bb273293a7ed4759335c1c9",
+    "pxrd_cross_material_autolab\\runs\\pilot_20261019\\materials\\ceo2\\attempt_1792420829072753200\\per_sample.jsonl": "7f81b8ea2962eab0f294b8bc06f24e4283709b8467fdf6e410350cd9d97fd0a7",
+    "pxrd_cross_material_autolab\\runs\\pilot_20261019\\materials\\ceo2\\attempt_1792420829072753200\\test_opened.json": "ca472902568ef1ffe2892bce1af57b9934e6300567d8eeba464ef985e2dc393c",
+    "pxrd_cross_material_autolab\\runs\\pilot_20261019\\materials\\ceo2\\attempt_1792420829072753200\\training_selection.json": "4fa4466a5d8941f572f78ec1553b13aad0322454c13e22a10daacf793104739a",
+    "pxrd_cross_material_autolab\\runs\\pilot_20261019\\materials\\grossular\\attempt_1792421221038356600\\per_sample.jsonl": "378d158e07f76215bc41b37831cff9e1f6df1eb06d69db4a690c85a04d1ce29c",
+    "pxrd_cross_material_autolab\\runs\\pilot_20261019\\materials\\grossular\\attempt_1792421221038356600\\test_opened.json": "c0755327582403086b5d6dd98e97462d50b172314ba1a7f07aaadf65cc31e373",
+    "pxrd_cross_material_autolab\\runs\\pilot_20261019\\materials\\grossular\\attempt_1792421221038356600\\training_selection.json": "cdd5a84b75ad2dca6613c4c4c945a977a2e3c0315e582e6ab887b62c0b8110c4",
+    "pxrd_cross_material_autolab\\runs\\pilot_20261019\\materials\\mgo\\attempt_1792420762723427700\\per_sample.jsonl": "8a21e4d9607334e6f9800c274062c6c9713866223c2a816369bb4eaf41e52a20",
+    "pxrd_cross_material_autolab\\runs\\pilot_20261019\\materials\\mgo\\attempt_1792420762723427700\\test_opened.json": "87fd02984de88709c7ce78e78a71343d4d49c5791a5c7dddd19fbd9491f83051",
+    "pxrd_cross_material_autolab\\runs\\pilot_20261019\\materials\\mgo\\attempt_1792420762723427700\\training_selection.json": "51cd553a592febf6303cd3f0851bc6223b46cb5b8edec1681cf83e0fe1d6d97f",
+    "pxrd_cross_material_autolab\\runs\\pilot_20261019\\materials\\rutile\\attempt_1792420917456186200\\per_sample.jsonl": "391e7684b972e9a49041e6a1deb6fcb0fc8b01b8283e50dc3174d68fb586525f",
+    "pxrd_cross_material_autolab\\runs\\pilot_20261019\\materials\\rutile\\attempt_1792420917456186200\\test_opened.json": "86da1b0da7cf102115b4967cc738caef5465ecf43f8bf3737d997761544e54dd",
+    "pxrd_cross_material_autolab\\runs\\pilot_20261019\\materials\\rutile\\attempt_1792420917456186200\\training_selection.json": "9e63504c6ae6e7c97f536251832eb8e175cf01abc3f855595142978ac0f1a227",
+    "pxrd_cross_material_autolab\\runs\\pilot_20261019\\materials\\silicon\\attempt_1792421136432255200\\per_sample.jsonl": "705097395da345840f8014834d5e78d2cdb25a5feccc71d8cfa7747e8c10ac68",
+    "pxrd_cross_material_autolab\\runs\\pilot_20261019\\materials\\silicon\\attempt_1792421136432255200\\test_opened.json": "1266e0a1d1c70bb2034d50a6f3a9a46e3934fdb043f59f49f8d915350a9f81ac",
+    "pxrd_cross_material_autolab\\runs\\pilot_20261019\\materials\\silicon\\attempt_1792421136432255200\\training_selection.json": "8ca9ae7f7840ae0c9904bf364b4ae476156fb7ec0f54453fa670b8d3fb72a9ed",
+    "pxrd_cross_material_autolab\\runs\\pilot_20261019\\materials\\zno\\attempt_1792421041191186400\\per_sample.jsonl": "43cc850d595cfd4b96e3562ec116b80163663f7e8ee13ae6ed95e11335b71829",
+    "pxrd_cross_material_autolab\\runs\\pilot_20261019\\materials\\zno\\attempt_1792421041191186400\\test_opened.json": "1fc1c0c7795ad7baa05b54db516fac76787d0de1c81950bfd41ef72e9bd37afc",
+    "pxrd_cross_material_autolab\\runs\\pilot_20261019\\materials\\zno\\attempt_1792421041191186400\\training_selection.json": "a3ce60645765589076be8c067fcc417310c6b7d70e2a8fa3fc03e66c1ce245f4",
+    "pxrd_cross_material_autolab\\stress\\config.json": "486463a751264b0ae48b5cb52bea804864a5c12e567676e240a25abbdccf9732",
+    "pxrd_cross_material_autolab\\stress\\results_20261019\\batio3\\per_sample.jsonl": "de12e8af1fb6f95ff740526b96f3bfb5a1470f7deba5bc14b73e8c4bf086d1cc",
+    "pxrd_cross_material_autolab\\stress\\results_20261019\\ceo2\\per_sample.jsonl": "84c5a8a25c2dd7be460b0760892e2d217edbdf6bec5724a6a4c4848b42c13496",
+    "pxrd_cross_material_autolab\\stress\\results_20261019\\grossular\\per_sample.jsonl": "7e7dcd0cbcdeeb25bb0a99a1aacf269bff181f3e3caa1aeef4dac1fcfdb151f5",
+    "pxrd_cross_material_autolab\\stress\\results_20261019\\mgo\\per_sample.jsonl": "bb1bc45ad0f2c924a7f30d8aed2ba1a353cbc8b950fe9e0f47949138a9c3ea12",
+    "pxrd_cross_material_autolab\\stress\\results_20261019\\rutile\\per_sample.jsonl": "588db2789c012f952b5c7582c88bae9655273848c8a3228f4699b4ab42f4a443",
+    "pxrd_cross_material_autolab\\stress\\results_20261019\\silicon\\per_sample.jsonl": "3cf170d0ed47fa5150b8c5c229b4a7b5f4302ff5cdcb1a5ef33b618381794a2e",
+    "pxrd_cross_material_autolab\\stress\\results_20261019\\zno\\per_sample.jsonl": "ec97ad3b6ae7073458d81ff5125f055e62a790b0a08f3bfb7e4d301909a1954c",
+    "pxrd_cross_material_autolab\\stress\\run.py": "3de9a9db83b8e644b29fc77d55cdc631fd5ef29a4e1b94a9dc3314570c877354",
+    "pxrd_issue44\\PREREGISTRATION.md": "16df143ee628bc6c009e170fe37611965e42f197b996b4883832ca486bfb1f61",
+    "pxrd_issue44\\REAL_RRUFF_GATE.json": "57f96a2e5b5b1c220ca2e8a2f52466eb352b05b008807ecb7420ed3125150b14",
+    "pxrd_issue44\\benchmark.py": "576e70f6e56d374b3bd765129d83421cd915640812667e8a056f377b0917a5f8",
+    "pxrd_issue44\\frozen_config.json": "f0c9674f1bd59fb17f54861d2ff7755017c34d672b8c6c562c45a2f699122b4b",
+    "pxrd_issue44\\literature_matrix.md": "3f640e3b753874cfc6f6823dfd91ef73ca0f306074e4a137a18f5cd38b1295fd",
+    "pxrd_issue44\\models.py": "856413b112b2ea240bfdf4f4cdf1e41c1c575ab97549ba27beca79f4b8ae3b49",
+    "pxrd_issue44\\test_benchmark.py": "e47ef67d8445b88075f7bb8815366057dd646ea7fd4b125358ebf1510a139218",
+    "pxrd_issue44\\test_models.py": "700e82603ba356f6b19d32ea07e56d258b7c1ab06b4b811c8317ca99c53f3245"
+  },
+  "head": "02b6810b404be0a1e27e8a61729e2223eaaf6cd7",
+  "post_primary_recovery_sha256": "479d3b84bfcf4c11143dc62dd6810be85712f95ddb2b4e09c0d42e6ddf957878",
+  "posttraining_manager_continuation": {
+    "functions_changed": [
+      "require_completed_smoke",
+      "run"
+    ],
+    "source_sha256_after": "3e88328f19dbd94a8b5b3432b98843e3dc2505a4ec7af11aabc481868e9befa5",
+    "source_sha256_before": "576e70f6e56d374b3bd765129d83421cd915640812667e8a056f377b0917a5f8",
+    "test_opened_before_continuation": false,
+    "training_checkpoints_reverified": 42
+  },
+  "posttraining_manager_continuation_sha256": "ba48b1ca9983acea52419bbe01fd5eccbd255594c2d8658b099c54ec9b403bb4",
+  "pr43_test_relationship": "previously opened exploratory architecture-transfer extension; not independent confirmation",
+  "protocol_sha256": "16df143ee628bc6c009e170fe37611965e42f197b996b4883832ca486bfb1f61",
+  "stage": "SYNTHETIC_PRIMARY_COMPLETE_STRESS_NOT_RUN_REAL_RRUFF_BLOCKED",
+  "started": 1792462769.2897654
+}

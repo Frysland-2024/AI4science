@@ -1,0 +1,49 @@
+{
+  "protocol_id": "issue44_known_candidate_parameter_inversion_v1",
+  "frozen_date": "2026-10-20",
+  "scope": "architecture-transfer comparison on seven PR43 supported synthetic materials; not a source-faithful Bin Cao replication",
+  "materials": ["batio3", "mgo", "ceo2", "rutile", "zno", "silicon", "grossular"],
+  "material_source_config": "pxrd_cross_material_autolab/config.json",
+  "material_cif_dir": "pxrd_cross_material_autolab/materials",
+  "primary": {
+    "parent_count": 512,
+    "train": 358,
+    "validation": 77,
+    "test": 77,
+    "parent_seed": 2026101901,
+    "split_seed": 2026101902,
+    "nuisance_seed": 2026101903,
+    "noise_seed": 2026101904,
+    "reused_split": "PR43 runs/pilot_20261019 split_manifest.json, same parent q and same-generator test; already opened in PR43",
+    "test_role": "previously opened exploratory architecture-transfer extension; not independent confirmation"
+  },
+  "data": {
+    "q_range": [-0.8, 0.8],
+    "q_definition": "(lattice/reference_lattice - 1) / 0.02; each cell DOF reported separately",
+    "wavelength_angstrom": 1.5406,
+    "grid": {"two_theta_min_deg": 15.0, "two_theta_max_deg": 85.0, "points": 1024},
+    "nuisance": {"zero_shift_deg": [-0.1, 0.1], "fwhm_deg": [0.24, 0.42], "scale": [0.8, 1.2], "background_offset": [0.02, 0.06], "background_slope": [-0.015, 0.015]},
+    "noise": {"poisson_counts_per_unit": 15000, "gaussian_sigma": 0.002},
+    "standardization": "train-only pointwise mean/std; std floor 0.02"
+  },
+  "architectures": {
+    "resnet1d": {"stem": "Conv1d 1->24 kernel9 stride4 padding4, GroupNorm(4), SiLU", "blocks": "two residual blocks at width24, then stride2 transition 24->48 and two residual blocks at width48; kernel5, GroupNorm(4), SiLU", "pool": "adaptive average pool to 1", "head": "Linear 48->ndim, Tanh"},
+    "transformer": {"patch_size": 16, "embedding_dim": 32, "layers": 2, "heads": 4, "feedforward_dim": 64, "dropout": 0.0, "pool": "mean over 64 patch tokens", "head": "Linear 32->ndim, Tanh", "position_embedding": "learned, fixed maximum length 64"}
+  },
+  "training": {"seeds": [2026101911, 2026101912, 2026101913], "epochs": 24, "batch_size": 32, "optimizer": "Adam", "learning_rate": 0.001, "objective": "q MSE", "gradient_clip_norm": 5.0, "selection": "lowest validation mean absolute q error; earliest epoch on tie", "device": "CUDA RTX 4060 Laptop GPU only; block if unavailable, occupied by confirmed compute, or less than 1 GiB free VRAM", "inference_device": "CPU, one spectrum at a time"},
+  "smoke": {"materials": ["batio3", "mgo", "zno"], "architectures": ["resnet1d", "transformer"], "seed": 2026102020, "epochs": 3, "train_parents": 64, "validation_parents": 32, "role": "operational GPU and checkpoint smoke only; no test profiles or performance inference; excluded from all comparison summaries"},
+  "physics": {"implementation": "pxrd_cross_material_autolab.physics.PowderModel.fit", "objective": "observed-profile MSE", "optimizer": "L-BFGS-B", "maxiter_per_start": 100, "maxfun_per_start": 1000, "ftol": 1e-12, "gtol": 1e-7, "maxls": 30, "bounds": "the existing frozen PR43 q and eta bounds", "eta_start": "existing neutral eta", "P0_starts": 1, "P3_starts": [0.0, -0.5, 0.5], "P5_starts": [0.0, -0.5, 0.5, -0.85, 0.85], "selection": "lowest observed profile RMSE; record every start, including failures"},
+  "stress": {"parents_per_material": 16, "parent_seed": 2026101951, "nuisance_seed": 2026101952, "noise_seed": 2026101953, "renderer": "independent pymatgen XRDCalculator peaks, 0.7 Gaussian + 0.3 Lorentzian peaks and unmodelled quadratic background 0.03*xnorm^2; same PR43 stress observations, already opened for MLP", "role": "previously opened exploratory independent-renderer mismatch extension; not independent confirmation"},
+  "real_rruff": {"status": "BLOCKED", "decision_file": "pxrd_issue44/REAL_RRUFF_GATE.json"},
+  "compute_limits": {"wall_seconds": 28800, "cuda_training_seconds": 14400, "disk_bytes": 10000000000, "sequential_manager": true, "never_interrupt_other_jobs": true},
+  "predeclared_interpretation": {
+    "no_test_based_architecture_or_seed_selection": true,
+    "report_per_material_and_per_dof": true,
+    "report_q_error_and_cell_error_angstrom_separately": true,
+    "no pooled cross-dof physical error": true,
+    "accuracy_rule": "all three seeds beat P3 q-MAE by at least 5%; each cell-DOF MAE is no worse than 5%; convergence is no worse; show P5 alongside",
+    "runtime_rule": "include measured training plus amortized inference plus refinement and compare against the stated physics budget",
+    "no statistical significance claim": true,
+    "preserve mixed, adverse, failed, and not-run outcomes": true
+  }
+}

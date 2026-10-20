@@ -1,0 +1,377 @@
+[
+  {
+    "boundary_rate": 0.0,
+    "convergence_rate": 1.0,
+    "lattice_mae_angstrom": [
+      5.673235142381735e-05,
+      9.8748788410613e-05
+    ],
+    "material": "batio3",
+    "mean_nfev": 228.15584415584416,
+    "mean_seconds_end_to_end": 0.13092465584420346,
+    "median_seconds": 0.12974909995682538,
+    "method": "P0",
+    "multistart_disagreement_mean": 0.0,
+    "n_failed": 0,
+    "n_success": 77,
+    "n_total": 77,
+    "p95_seconds": 0.16380030000582338,
+    "profile_rmse_successful_only": 0.002928858341031155,
+    "q_mae": 0.0009690167409030485,
+    "q_mae_per_dof": [
+      0.0007116451508252735,
+      0.0012263883309808236
+    ],
+    "seed": 0
+  },
+  {
+    "boundary_rate": 0.0,
+    "convergence_rate": 1.0,
+    "lattice_mae_angstrom": [
+      5.673592133463164e-05,
+      9.87514052952037e-05
+    ],
+    "material": "batio3",
+    "mean_nfev": 729.974025974026,
+    "mean_seconds_end_to_end": 0.40031957662779255,
+    "median_seconds": 0.3947611000039615,
+    "method": "P3",
+    "multistart_disagreement_mean": 0.045896799423908424,
+    "n_failed": 0,
+    "n_success": 77,
+    "n_total": 77,
+    "p95_seconds": 0.5019579600077122,
+    "profile_rmse_successful_only": 0.002928858314505696,
+    "q_mae": 0.0009690553811162899,
+    "q_mae_per_dof": [
+      0.0007116899314427216,
+      0.001226420830789858
+    ],
+    "seed": 0
+  },
+  {
+    "boundary_rate": 0.0,
+    "convergence_rate": 1.0,
+    "lattice_mae_angstrom": [
+      5.673455022706361e-05,
+      9.875225349148748e-05
+    ],
+    "material": "batio3",
+    "mean_nfev": 1311.6883116883116,
+    "mean_seconds_end_to_end": 0.7226915155845851,
+    "median_seconds": 0.7150016999803483,
+    "method": "P5",
+    "multistart_disagreement_mean": 0.11026304381687042,
+    "n_failed": 0,
+    "n_success": 77,
+    "n_total": 77,
+    "p95_seconds": 0.8565298600238749,
+    "profile_rmse_successful_only": 0.0029288583136081263,
+    "q_mae": 0.0009690520485869653,
+    "q_mae_per_dof": [
+      0.0007116727324016077,
+      0.001226431364772323
+    ],
+    "seed": 0
+  },
+  {
+    "boundary_rate": 0.0,
+    "convergence_rate": 1.0,
+    "lattice_mae_angstrom": [
+      5.674747480911467e-05,
+      9.875106076038456e-05
+    ],
+    "material": "batio3",
+    "mean_nfev": 213.8181818181818,
+    "mean_seconds_end_to_end": 0.12378974545780304,
+    "median_seconds": 0.11914359993534163,
+    "method": "resnet1d+A",
+    "multistart_disagreement_mean": 0.0,
+    "n_failed": 0,
+    "n_success": 77,
+    "n_total": 77,
+    "p95_seconds": 0.14697229999583214,
+    "profile_rmse_successful_only": 0.0029288583374106223,
+    "q_mae": 0.0009691257045157732,
+    "q_mae_per_dof": [
+      0.0007118348571145881,
+      0.0012264165519169587
+    ],
+    "seed": 2026101911
+  },
+  {
+    "boundary_rate": 0.0,
+    "convergence_rate": 1.0,
+    "lattice_mae_angstrom": [
+      5.6741737051526715e-05,
+      9.872435106808538e-05
+    ],
+    "material": "batio3",
+    "mean_nfev": 208.93506493506493,
+    "mean_seconds_end_to_end": 0.11977067272641466,
+    "median_seconds": 0.1163430999731645,
+    "method": "resnet1d+A",
+    "multistart_disagreement_mean": 0.0,
+    "n_failed": 0,
+    "n_success": 77,
+    "n_total": 77,
+    "p95_seconds": 0.14827932005282493,
+    "profile_rmse_successful_only": 0.0029288583595340743,
+    "q_mae": 0.0009689238600729313,
+    "q_mae_per_dof": [
+      0.0007117628832353048,
+      0.0012260848369105575
+    ],
+    "seed": 2026101912
+  },
+  {
+    "boundary_rate": 0.0,
+    "convergence_rate": 1.0,
+    "lattice_mae_angstrom": [
+      5.6732629863616706e-05,
+      9.878743501314301e-05
+    ],
+    "material": "batio3",
+    "mean_nfev": 211.84415584415584,
+    "mean_seconds_end_to_end": 0.12205600519679705,
+    "median_seconds": 0.11983969999710098,
+    "method": "resnet1d+A",
+    "multistart_disagreement_mean": 0.0,
+    "n_failed": 0,
+    "n_success": 77,
+    "n_total": 77,
+    "p95_seconds": 0.14575056000612677,
+    "profile_rmse_successful_only": 0.0029288583406167795,
+    "q_mae": 0.0009692584686510205,
+    "q_mae_per_dof": [
+      0.0007116486435473776,
+      0.0012268682937546635
+    ],
+    "seed": 2026101913
+  },
+  {
+    "boundary_rate": 0.0,
+    "convergence_rate": 1.0,
+    "lattice_mae_angstrom": [
+      0.00856224404545263,
+      0.013014580394776078
+    ],
+    "material": "batio3",
+    "mean_nfev": 0.0,
+    "mean_seconds_end_to_end": 0.0015701610419608942,
+    "median_seconds": 0.0015219000051729381,
+    "method": "resnet1d-direct",
+    "multistart_disagreement_mean": 0.0,
+    "n_failed": 0,
+    "n_success": 77,
+    "n_total": 77,
+    "p95_seconds": 0.001692480023484677,
+    "profile_rmse_successful_only": 0.05855215089581007,
+    "q_mae": 0.13451780682925782,
+    "q_mae_per_dof": [
+      0.10740396444371075,
+      0.16163164921480497
+    ],
+    "seed": 2026101911
+  },
+  {
+    "boundary_rate": 0.0,
+    "convergence_rate": 1.0,
+    "lattice_mae_angstrom": [
+      0.008179935370759228,
+      0.011659282242597838
+    ],
+    "material": "batio3",
+    "mean_nfev": 0.0,
+    "mean_seconds_end_to_end": 0.001048325972976284,
+    "median_seconds": 0.0010211000335402787,
+    "method": "resnet1d-direct",
+    "multistart_disagreement_mean": 0.0,
+    "n_failed": 0,
+    "n_success": 77,
+    "n_total": 77,
+    "p95_seconds": 0.0014233600231818855,
+    "profile_rmse_successful_only": 0.05679862818262762,
+    "q_mae": 0.12370407520097002,
+    "q_mae_per_dof": [
+      0.10260832125889682,
+      0.1447998291430432
+    ],
+    "seed": 2026101912
+  },
+  {
+    "boundary_rate": 0.0,
+    "convergence_rate": 1.0,
+    "lattice_mae_angstrom": [
+      0.008321216150942732,
+      0.013123700446876286
+    ],
+    "material": "batio3",
+    "mean_nfev": 0.0,
+    "mean_seconds_end_to_end": 0.001014153248563941,
+    "median_seconds": 0.0009908999782055616,
+    "method": "resnet1d-direct",
+    "multistart_disagreement_mean": 0.0,
+    "n_failed": 0,
+    "n_success": 77,
+    "n_total": 77,
+    "p95_seconds": 0.0014254200155846774,
+    "profile_rmse_successful_only": 0.05943312568737506,
+    "q_mae": 0.13368368743680425,
+    "q_mae_per_dof": [
+      0.1043805337549269,
+      0.16298684111868178
+    ],
+    "seed": 2026101913
+  },
+  {
+    "boundary_rate": 0.0,
+    "convergence_rate": 1.0,
+    "lattice_mae_angstrom": [
+      5.6744211039490703e-05,
+      9.874894066051977e-05
+    ],
+    "material": "batio3",
+    "mean_nfev": 211.32467532467533,
+    "mean_seconds_end_to_end": 0.12210575584548997,
+    "median_seconds": 0.12157349998597056,
+    "method": "transformer+A",
+    "multistart_disagreement_mean": 0.0,
+    "n_failed": 0,
+    "n_success": 77,
+    "n_total": 77,
+    "p95_seconds": 0.14734471999108792,
+    "profile_rmse_successful_only": 0.0029288583533138767,
+    "q_mae": 0.000969092069258654,
+    "q_mae_per_dof": [
+      0.0007117939167024536,
+      0.0012263902218148546
+    ],
+    "seed": 2026101911
+  },
+  {
+    "boundary_rate": 0.0,
+    "convergence_rate": 1.0,
+    "lattice_mae_angstrom": [
+      5.672844971482971e-05,
+      9.875938511304916e-05
+    ],
+    "material": "batio3",
+    "mean_nfev": 211.01298701298703,
+    "mean_seconds_end_to_end": 0.12116584285274269,
+    "median_seconds": 0.11953040002845228,
+    "method": "transformer+A",
+    "multistart_disagreement_mean": 0.0,
+    "n_failed": 0,
+    "n_success": 77,
+    "n_total": 77,
+    "p95_seconds": 0.14047512002289295,
+    "profile_rmse_successful_only": 0.002928858341300986,
+    "q_mae": 0.0009690580712522487,
+    "q_mae_per_dof": [
+      0.0007115962081642924,
+      0.001226519934340205
+    ],
+    "seed": 2026101912
+  },
+  {
+    "boundary_rate": 0.0,
+    "convergence_rate": 1.0,
+    "lattice_mae_angstrom": [
+      5.670500907538003e-05,
+      9.873802880423542e-05
+    ],
+    "material": "batio3",
+    "mean_nfev": 210.7012987012987,
+    "mean_seconds_end_to_end": 0.12055811818534895,
+    "median_seconds": 0.11821169994072989,
+    "method": "transformer+A",
+    "multistart_disagreement_mean": 0.0,
+    "n_failed": 0,
+    "n_success": 77,
+    "n_total": 77,
+    "p95_seconds": 0.14623115999856964,
+    "profile_rmse_successful_only": 0.0029288583521734227,
+    "q_mae": 0.0009687784377578291,
+    "q_mae_per_dof": [
+      0.0007113021710407964,
+      0.0012262547044748617
+    ],
+    "seed": 2026101913
+  },
+  {
+    "boundary_rate": 0.0,
+    "convergence_rate": 1.0,
+    "lattice_mae_angstrom": [
+      0.007683653551312523,
+      0.01430109974546432
+    ],
+    "material": "batio3",
+    "mean_nfev": 0.0,
+    "mean_seconds_end_to_end": 0.0009745025981592571,
+    "median_seconds": 0.0007967000128701329,
+    "method": "transformer-direct",
+    "multistart_disagreement_mean": 0.0,
+    "n_failed": 0,
+    "n_success": 77,
+    "n_total": 77,
+    "p95_seconds": 0.0009801600244827569,
+    "profile_rmse_successful_only": 0.05671913502862491,
+    "q_mae": 0.1369961481912424,
+    "q_mae_per_dof": [
+      0.09638300992614712,
+      0.17760928645633778
+    ],
+    "seed": 2026101911
+  },
+  {
+    "boundary_rate": 0.0,
+    "convergence_rate": 1.0,
+    "lattice_mae_angstrom": [
+      0.01009335165490873,
+      0.014537391684982031
+    ],
+    "material": "batio3",
+    "mean_nfev": 0.0,
+    "mean_seconds_end_to_end": 0.0008067012962570729,
+    "median_seconds": 0.0007951000006869435,
+    "method": "transformer-direct",
+    "multistart_disagreement_mean": 0.0,
+    "n_failed": 0,
+    "n_success": 77,
+    "n_total": 77,
+    "p95_seconds": 0.0010023600072599948,
+    "profile_rmse_successful_only": 0.06399285328917179,
+    "q_mae": 0.15357694588006787,
+    "q_mae_per_dof": [
+      0.12661003079413885,
+      0.1805438609659969
+    ],
+    "seed": 2026101912
+  },
+  {
+    "boundary_rate": 0.0,
+    "convergence_rate": 1.0,
+    "lattice_mae_angstrom": [
+      0.008525775077140033,
+      0.013372049592331636
+    ],
+    "material": "batio3",
+    "mean_nfev": 0.0,
+    "mean_seconds_end_to_end": 0.0007798480521585163,
+    "median_seconds": 0.0007903000223450363,
+    "method": "transformer-direct",
+    "multistart_disagreement_mean": 0.0,
+    "n_failed": 0,
+    "n_success": 77,
+    "n_total": 77,
+    "p95_seconds": 0.0009224799578078092,
+    "profile_rmse_successful_only": 0.05644982470301458,
+    "q_mae": 0.13650882929984073,
+    "q_mae_per_dof": [
+      0.10694650121851466,
+      0.16607115738116687
+    ],
+    "seed": 2026101913
+  }
+]

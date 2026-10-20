@@ -1,0 +1,30 @@
+{
+  "comparison": "comparison.json",
+  "elapsed_seconds": 2309.9923181533813,
+  "finished": 1792465079.2820835,
+  "historical_finalizer_failure": "preserved in failure.json; aggregation recovered from complete saved rows",
+  "materials": [
+    "batio3",
+    "mgo",
+    "ceo2",
+    "rutile",
+    "zno",
+    "silicon",
+    "grossular"
+  ],
+  "model_runs": 42,
+  "primary_rows_including_baselines_and_neural": 8085,
+  "primary_scoring_rerun": false,
+  "publication": "DRAFT_PR_OPEN",
+  "real_rruff": "BLOCKED",
+  "report": "FINAL_REPORT.md",
+  "stage": "SYNTHETIC_PRIMARY_COMPLETE_STRESS_NOT_RUN_REAL_RRUFF_BLOCKED",
+  "status": "PARTIAL",
+  "stress_status": "BLOCKED_NOT_RUN",
+  "stress_summary_rows": 0,
+  "synthetic_status": "COMPLETE",
+  "pull_request": "https://github.com/Frysland-2024/AI4science/pull/46",
+  "pull_request_base": "codex/pxrd-cross-material-autolab-20261019",
+  "pull_request_head": "codex/bin-cao-issue44-20261019",
+  "publication_commit": "d96c342dc826b8a3de8a00de1987d65ad1a00bf6"
+}

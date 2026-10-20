@@ -1,0 +1,1 @@
+Primary rows were scored exactly once before the post-test aggregation error. This continuation summarizes the persisted JSONL only; it does not regenerate observations, rerun fits, or select models. The reused PR43 split is exploratory, not independent confirmation. Historical MLP N+A rows are read-only; MLP-only predictions were unavailable and were not reconstructed.

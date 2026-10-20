@@ -1,0 +1,14 @@
+{
+  "architecture": "resnet1d",
+  "best_epoch": 19,
+  "best_validation_q_mae": 0.08145766705274582,
+  "checkpoint_sha256": "7890f360e1720b184d50187a3919edd369a69deb519777e4e862d75d8d5a39b7",
+  "material": "silicon",
+  "optimizer_steps": 288,
+  "parameter_count": 77209,
+  "seed": 2026101912,
+  "training_device": "cuda",
+  "training_epochs": 24,
+  "training_examples_per_epoch": 358,
+  "training_seconds": 2.1871682001510635
+}
