@@ -1,80 +1,61 @@
-# AI4science | Learning from PXRD simulations
+# Same-parent supervision for PXRD classification
 
 [![XRD tests](https://github.com/Frysland-2024/AI4science/actions/workflows/xrd-tests.yml/badge.svg)](https://github.com/Frysland-2024/AI4science/actions/workflows/xrd-tests.yml)
-[Research guide](docs/REVIEWER_GUIDE.md) · [Results & limitations](xrd_robustness/reports/RESULTS.md) · [Main implementation](xrd_robustness/) · [Research evolution](docs/PROJECT_HISTORY.md)
 
-**Research focus:** supervised machine learning for **seven-crystal-system classification from powder X-ray diffraction (PXRD)**. We investigate whether a simulator can provide more than synthetic patterns and class labels: **it also knows which different measurements come from the same parent crystal.**
+**Simulator-retained identity between measurements of the same crystal supplies physical relation supervision for seven-crystal-system PXRD classification.** This study tests whether that relation adds value beyond crystal-system labels alone.
 
-**中文一句话：** 用同一晶体在不同测量条件下产生的两张 XRD 模拟谱，构造“同源关系监督”，并检验它是否比普通动态数据增强更有利于晶系识别、抗扰动和少量真实谱适配。
+[Supervisor guide](docs/START_HERE_FOR_SUPERVISORS.md) · [Full results and limitations](xrd_robustness/reports/RESULTS.md) · [Code and experiment contract](xrd_robustness/) · [Research history](docs/PROJECT_HISTORY.md)
 
-**Status (October 2026):** the main Dynamic ERM vs Dynamic JS comparison and its simulated/experimental evaluations are completed; manuscript preparation is ongoing. A separate PXRD inversion numerical track exists, while the proposed undergraduate thesis direction is **not a completed result**; the parent-budget learning-curve supplement is **completed**.
+## The method
 
-## The idea, in one figure
+![Method diagram: two measurements from one parent crystal feed a shared classifier; Dynamic ERM and Dynamic JS differ by the consistency term](xrd_robustness/figures/figure_1_method_overview.png)
 
-![Two measurement views from one parent crystal and the matched ERM–JS learning setup](xrd_robustness/figures/figure_1_method_overview.png)
+For a crystal structure <code>s</code>, the online simulator produces two measurements, <code>x₁ = g(s, m₁)</code> and <code>x₂ = g(s, m₂)</code>, under different measurement conditions. The parent identity is retained, so the two patterns provide a relation in addition to their shared seven-class label.
 
-A parent crystal structure has a fixed crystal-system label, but its measured diffraction pattern changes with peak shift, broadening, preferred orientation, background, and noise.
+The controlled comparison uses **two-view Dynamic ERM** and **two-view Dynamic JS**. Both train on the same two views with the same labels. Dynamic JS adds a Jensen–Shannon consistency penalty between the two predicted class distributions (<code>λ<sub>JS</sub> = 60</code>). Both use the same ResNet-18-GN backbone, parent-disjoint split, perturbation protocol, and matched training seeds. The consistency weight of 60 was selected on validation. The contrast is the consistency loss; this work does not claim to invent JS divergence, online simulation, or the backbone.
 
-- **Standard use of a simulator:** generate many labeled PXRD patterns and train a classifier.
-- **This study:** retain the *same-parent* relationship between two independently perturbed observations; use that relationship as an additional consistency signal.
-- **Controlled question:** with **identical parent structures, two-view exposure, perturbation distribution, backbone and training budget**, does explicit same-parent consistency improve generalization beyond Dynamic ERM?
+## Evidence at a glance
 
-For simulated views **x₁ = g(s, m₁)** and **x₂ = g(s, m₂)** from the same structure **s**, the supervised objectives are:
+The primary classification study uses 14,060 unique parent structures (9,842 train / 2,109 validation / 2,109 test) and five matched training seeds.
 
-~~~text
-Dynamic ERM:  L = 0.5 CE(p1, y) + 0.5 CE(p2, y)
-Dynamic JS:   L = 0.5 CE(p1, y) + 0.5 CE(p2, y) + λ · JS(p1, p2)
-~~~
-
-Here **p1** and **p2** are the predicted seven-class distributions; **λ = 60** was selected on validation. Both methods use the same **ResNet-18-GN** backbone. The contribution is **using simulator-retained provenance as relationship supervision**, **not** inventing JS divergence, online simulation, or the ResNet architecture.
-
-## Results at a glance
-
-The primary simulated study uses **14,060 unique parent structures** (9,842 train / 2,109 validation / 2,109 test), separated at the parent level, with **five matched training seeds**.
-
-| Evaluation (Macro-F1 unless noted) | Dynamic ERM | Dynamic JS | JS − ERM |
+| Evaluation | Dynamic ERM Macro-F1 | Dynamic JS Macro-F1 | Paired JS − ERM |
 |---|---:|---:|---:|
-| **Simulated Test:** mean single-factor OOD | 0.6507 | **0.7053** | **+5.46 percentage points**; 5/5 seeds |
-| **RRUFF-301:** 1 real label / class | 0.2847 | **0.3280** | **+4.33 pp** |
-| **RRUFF-301:** 2 real labels / class | 0.3026 | **0.3486** | **+4.60 pp** |
-| **RRUFF-301:** 5 real labels / class | 0.3555 | **0.4099** | **+5.45 pp** |
-| **CNRS-318:** zero-shot external source, seed-level mean | 0.1884 | **0.2071** | **+1.87 pp**; 5/5 seeds |
+| **Simulated Test, mean across six single-factor OOD profiles** | 0.6507 ± 0.0072 | **0.7053 ± 0.0098** | **+0.0546**; 5/5 seeds positive |
+| **RRUFF-301, K=1 real labels per class** | 0.2847 ± 0.0269 | **0.3280 ± 0.0329** | **+0.0433** |
+| **RRUFF-301, K=2 real labels per class** | 0.3026 ± 0.0407 | **0.3486 ± 0.0335** | **+0.0460** |
+| **RRUFF-301, K=5 real labels per class** | 0.3555 ± 0.0302 | **0.4099 ± 0.0271** | **+0.0545** |
+| **CNRS-318, zero-shot external source** | 0.1884 ± 0.0263 | **0.2071 ± 0.0213** | **+0.0187**; 5/5 seeds positive |
 
-![Paired simulated-Test evaluation across the five matched seeds](xrd_robustness/figures/figure_3_simulated_test_paired_ood.png)
+For the main simulated comparison, the error terms are sample SD across five training seeds. RRUFF values summarize 25 paired runs per label budget. CNRS summarizes five training seeds. The CNRS class-stratified paired-parent 95% interval for the Macro-F1 gain crosses zero; absolute performance is weak and accuracy remains below the majority-class baseline. RRUFF measures adaptation on a curated domain, not unseen-mineral generalization.
 
-**How to interpret the three evaluations:**
+![Paired simulated-Test OOD results across the five matched training seeds](xrd_robustness/figures/figure_3_simulated_test_paired_ood.png)
 
-1. **Simulated OOD:** the same-parent consistency objective improves classification under held-out measurement perturbations. The largest profile-specific gains occur for **peak broadening and preferred orientation**; see [perturbation evidence](docs/PXRD_PERTURBATION_EVIDENCE.md) and the [full results](xrd_robustness/reports/RESULTS.md).
-2. **RRUFF-301 few-shot:** the pretrained models are adapted using the **same small real-label budgets**. The comparison concerns **label efficiency on this curated experimental domain**, *not* generalization to unseen minerals.
-3. **CNRS-318 zero-shot:** the frozen simulated-data-trained models are tested on an **independent, naturally imbalanced experimental source**, without CNRS-label tuning. This is a **relative cross-domain comparison**, not a high-accuracy application claim: absolute performance is low; CNRS accuracy remains below its majority-class baseline, and a parent-level bootstrap interval for the Macro-F1 gain crosses zero.
+### Parent-structure data-efficiency supplement
 
-Across secondary reliability analyses, ECE/NLL/Brier generally improve as well, but these are supporting measures rather than the principal contribution. Precise mean ± SD, paired designs, statistical uncertainty, dataset limitations, and per-class behavior are preserved in [RESULTS.md](xrd_robustness/reports/RESULTS.md), [CNRS details](xrd_robustness/reports/CNRS_318_RESULTS.md), and [calibration analysis](xrd_robustness/reports/CALIBRATION_ANALYSIS.md). Machine-readable [validation results](xrd_robustness/reports/validation_results.json), [simulated Test](xrd_robustness/reports/simulated_test_results.json), and [RRUFF few-shot](xrd_robustness/reports/rruff301_fewshot_results.json) summaries are tracked.
+The four-point curve is a core result. It plots **absolute** single-factor simulated OOD Macro-F1 at 10%, 25%, 50%, and 100% of the 9,842 training parents. Each method received 49,280 optimizer steps per model; five matched seeds were completed at every budget (40/40 method runs). Each seed score averages six single-factor OOD profiles over three frozen evaluation seeds; table uncertainty is sample SD across the five training seeds.
 
-## What is actually implemented?
+![Absolute OOD Macro-F1 learning curve for Dynamic ERM and Dynamic JS at four parent budgets; error bars show sample SD across five training seeds](xrd_robustness/figures/figure_5_parent_budget_efficiency.png)
 
-| Research/engineering component | Inspect the evidence or code |
-|---|---|
-| **Physics-motivated PXRD measurement simulation** and online generation of paired views | [Simulator](xrd_robustness/src/xrd_robustness/simulator.py) · [Online views](xrd_robustness/src/xrd_robustness/online_views.py) · [Frozen simulation config](xrd_robustness/configs/simulation.method_transfer.frozen.json) |
-| **Parent-disjoint structure splits** and dataset construction | [Structure-split code](xrd_robustness/src/xrd_robustness/structure_split.py) · [Public experiment contract](xrd_robustness/configs/experiment.public.json) |
-| **Matched two-view ERM / JS training**, shared 1D ResNet backbone | [Training objectives](xrd_robustness/src/xrd_robustness/training/objectives.py) · [Training runner](xrd_robustness/src/xrd_robustness/training/runner.py) · [ResNet](xrd_robustness/src/xrd_robustness/models/ml4pxrd_resnet1d.py) |
-| **Frozen OOD/real-domain evaluation**, reproducibility and leakage checks | [Evaluation scripts](xrd_robustness/scripts/) · [Evidence audit](docs/PXRD_METHOD_DETAIL_EVIDENCE_CLOSURE.md) · [Tests](xrd_robustness/tests/) |
-| **Result interpretation and scientific reporting** | [Results](xrd_robustness/reports/RESULTS.md) · [Manuscript draft](xrd_robustness/MANUSCRIPT.md) · [Figures](xrd_robustness/figures/) |
+| Train parents | Dynamic ERM, mean ± SD | Dynamic JS, mean ± SD | Paired JS − ERM, mean (95% paired CI) |
+|---:|---:|---:|---:|
+| 984 (10%) | 0.4316 ± 0.0044 | **0.4876 ± 0.0039** | +0.0561 [0.0509, 0.0615] |
+| 2,460 (25%) | 0.5193 ± 0.0036 | **0.5710 ± 0.0080** | +0.0517 [0.0458, 0.0573] |
+| 4,921 (50%) | 0.5935 ± 0.0041 | **0.6361 ± 0.0059** | +0.0426 [0.0370, 0.0476] |
+| 9,842 (100%) | 0.6459 ± 0.0065 | **0.6999 ± 0.0050** | +0.0540 [0.0477, 0.0603] |
 
-This is a **controlled application of established ML components to a physically structured supervision problem**. The 1D ResNet implementation draws on the MIT-licensed **ML4pXRDs** codebase; see [third-party notices](THIRD_PARTY_NOTICES.md).
+These are same-budget performance differences, **not demonstrated savings in the number of structures required**. The supplement reused the previously evaluated simulated Test and is post-main evidence, not an untouched confirmatory test. The [full protocol and audit report](xrd_robustness/reports/PARENT_BUDGET_EFFICIENCY.md) links the machine-readable JSON/CSV and [figure-generation script](xrd_robustness/scripts/generate_showcase_parent_budget_figure.py).
 
-## Explore the repository
+## Project status and credit
 
-| Track | Status | Purpose |
-|---|---|---|
-| **[xrd_robustness/](xrd_robustness/)** | **Completed experiments / writing** | Main PXRD classification study: matched ERM–JS, simulated OOD, RRUFF few-shot, CNRS zero-shot |
-| **[xrd_inversion/](xrd_inversion/)** | **Separate numerical research infrastructure** | Known-phase tetragonal PXRD forward/inversion validation; numerical gates have results, **not** a completed ML inversion claim |
-| **[Parent-budget efficiency results](xrd_robustness/reports/PARENT_BUDGET_EFFICIENCY.md)** | **Completed supplementary experiment** | 40 runs; four parent budgets, five seeds, improved same-budget performance but no demonstrated quantitative structure saving |
-| **[docs/FUTURE_UNDERGRAD_THESIS_PLAN.md](docs/FUTURE_UNDERGRAD_THESIS_PLAN.md)** | **Historical 2026-10-08 candidate; not started** | Initial concept: physics-constrained continuous-parameter inversion thesis |
-| **[docs/FERROELECTRIC_PRE_REFINEMENT_12W_PLAN.md](docs/FERROELECTRIC_PRE_REFINEMENT_12W_PLAN.md)** | **Proposed 2026-10-18; not started** | 12-week simulation-trained, calibrated Top-K phase/parameter pre-refinement assistance; coexistence treated as a mandatory single-phase failure stress test |
+- **Completed classification study:** matched Dynamic ERM vs Dynamic JS, simulated OOD, RRUFF few-shot adaptation, and CNRS zero-shot evaluation; manuscript preparation continues.
+- **Ongoing exploratory inversion track:** known-phase, single-phase tetragonal PXRD work. Main-branch numerical infrastructure is separate from the classification study; it is not a completed machine-learning inversion result.
+- **Automation engineering:** research-task and status-delivery tooling supports experiment operations; it is engineering work, not evidence for the classification claim.
 
-For the reasoning behind changes such as **PAMPT → ResNet**, abandonment of the Residual branch, and the shift from generic robustness framing to relationship supervision, see the [project history](docs/PROJECT_HISTORY.md). Negative and archived results are intentionally retained.
+**Research leadership:** Frysland-2024 led the project's scientific direction and study design. **Execution and engineering contributions:** Cuifa01 contributed supporting ideas, data organization, implementation, GPU experiments, and reporting. See the [research-role statement](docs/RESEARCH_ROLES.md) for detail; formal manuscript authorship remains a separate scholarly decision.
 
-## Verify the public code
+## Quick start
+
+Verify the public non-data-bound code and evidence contracts:
 
 ~~~bash
 git clone https://github.com/Frysland-2024/AI4science.git
@@ -83,28 +64,10 @@ python -m pip install -e ".[test]"
 python -m pytest -q -m "not data_bound"
 ~~~
 
-This verifies the **public, non-data-bound code and evidence contracts**, **not** the full historical GPU training. Raw external datasets, trained checkpoints and large intermediate data are not redistributed. See [data and reproducibility levels](docs/DATA_AND_REPRODUCIBILITY.md) and the package [quick-start guide](xrd_robustness/README.md).
+This does not reproduce the historical GPU training. External crystal datasets, raw spectra, trained checkpoints, and generated caches are not redistributed. The package [README](xrd_robustness/README.md) documents the training entry point and code layout; see the [data and reproducibility policy](docs/DATA_AND_REPRODUCIBILITY.md).
 
-## For academic readers
+## Further reading
 
-- **[5-minute research / reviewer guide](docs/REVIEWER_GUIDE.md):** which files answer the scientific and ML questions.
-- **[Current scientific state](docs/CURRENT_STATE.md):** authoritative status and claim boundaries.
-- **[Supervision framing](docs/PXRD_SUPERVISION_FRAMING.md):** why the method is about same-parent relations, not a new divergence.
-- **[Literature lineage](docs/PXRD_NOVELTY_LITERATURE_LINEAGE.md):** precedents and novelty boundaries.
-- **[Research timeline](docs/PROJECT_HISTORY.md):** documented decisions, failed attempts and redirections.
-- **[Manuscript scaffold](xrd_robustness/MANUSCRIPT.md):** paper-oriented narrative, with writing still in progress.
+[Five-minute reviewer guide](docs/REVIEWER_GUIDE.md) · [Current scientific state](docs/CURRENT_STATE.md) · [Supervision framing](docs/PXRD_SUPERVISION_FRAMING.md) · [Novelty and literature lineage](docs/PXRD_NOVELTY_LITERATURE_LINEAGE.md) · [Manuscript scaffold](xrd_robustness/MANUSCRIPT.md) · [Third-party notices](THIRD_PARTY_NOTICES.md) · [MIT license](LICENSE)
 
-**Citation:** a paper citation will be added after the author list and identifier are finalized. Until then, cite the [repository](https://github.com/Frysland-2024/AI4science) with the commit hash; see [CITATION.md](CITATION.md). **License:** [MIT](LICENSE).
-
-
-## Parent-structure budget efficiency supplement (completed 2026-10-14)
-
-This follow-up used four independent training-parent budgets (984 / 2,460 / 4,921 / 9,842), five matched seeds and equal 49,280-step training budgets per model: **40/40 completed runs**. On the previously used simulated Test, paired mean single-factor OOD Macro-F1 improvements from Dynamic JS over ERM were **+0.0561 / +0.0517 / +0.0426 / +0.0540** respectively (5/5 positive seeds at every budget). **This supports improved same-budget performance, not a measured reduction in the number of parent structures needed**. It is a post-main supplementary analysis, not an untouched blind Test. See [report](xrd_robustness/reports/PARENT_BUDGET_EFFICIENCY.md) and [machine-readable results](xrd_robustness/reports/parent_budget_efficiency/).
-
-### Research roles and contributions
-
-**Overall scientific direction, planning, and experimental design — Frysland-2024 (project lead):** The research lead originated, planned, and directed the project's scientific program and was principally responsible for designing its research approaches and experiments throughout its development. This includes the same-parent consistency strategy, simulated OOD protocols, both experimental-domain studies (RRUFF and CNRS), the parent-budget / Data Efficiency study, decisions about changes in the research direction, and interpretation of results.
-
-**Research assistance and execution — Cuifa01 (contributor):** Participated primarily in carrying out the lead-designed research plans; offered supporting ideas and feedback, helped gather and organize data, and contributed code implementation, experiment operations, GPU training, desktop migration, reporting artifacts, and other execution tasks. These are recognized contributions, but they should not be confused with primary authorship of the research design or overall project planning.
-
-**Attribution note:** This division of responsibility reflects the research lead's clarification; Git commit history and individual implementation credits remain unchanged. A future paper's formal authorship and contribution statement should be agreed according to each person's actual scholarly contributions.
+Citation details are recorded in [CITATION.md](CITATION.md).
