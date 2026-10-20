@@ -2,3 +2,5 @@
 pxrd_cross_material_autolab/** -text whitespace=cr-at-eol
 # Retain the executed source's terminal blank line to preserve its frozen hash.
 pxrd_cross_material_autolab/physics.py whitespace=cr-at-eol,-blank-at-eof
+# Preserve frozen heuristic/RRUFF executable and evidence bytes on checkout.
+pxrd_heuristic_rruff_validation/** -text whitespace=cr-at-eol,-blank-at-eof

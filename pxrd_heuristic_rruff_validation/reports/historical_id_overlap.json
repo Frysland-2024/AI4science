@@ -1,0 +1,31 @@
+{
+  "source_sha256": {
+    "E:\\AI4science\\xrd_robustness\\data\\real_xrd\\rruff371\\splits\\rruff301_adaptation_test_split.csv": "9fedcb1abdf3f84349dfc8479d233fbd953e6552d7478dac3680737e460bbe35",
+    "E:\\AI4science\\xrd_robustness\\data\\real_xrd\\rruff371\\manifests\\rruff371_master_manifest.csv": "ebf6b35abaf78c716498d327cdd02ef3ffc3e53662afc56a5cb009a10b96b142"
+  },
+  "records": [
+    {
+      "sample_id": "R050031-1",
+      "base_id": "R050031",
+      "historical_rruff301_role": "locked_test",
+      "in_rruff371": true,
+      "current_role": "physics-only descriptive case; no training or threshold tuning"
+    },
+    {
+      "sample_id": "R050417-1",
+      "base_id": "R050417",
+      "historical_rruff301_role": "locked_test",
+      "in_rruff371": true,
+      "current_role": "physics-only descriptive case; no training or threshold tuning"
+    },
+    {
+      "sample_id": "R060493-1",
+      "base_id": "R060493",
+      "historical_rruff301_role": "NOT_IN_RRUFF301",
+      "in_rruff371": false,
+      "current_role": "physics-only descriptive case; no training or threshold tuning"
+    }
+  ],
+  "untouched_new_classification_holdout_claim": false,
+  "frozen_classification_data_modified": false
+}

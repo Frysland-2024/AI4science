@@ -1,0 +1,36 @@
+{
+  "scientific_source_changes_after_freeze": false,
+  "new_training_seconds": 0,
+  "frozen_prior_data_modified": false,
+  "merge_performed": false,
+  "pre_result_failures_preserved_in": "e1/PREFLIGHT_FAILURES.json and e1/events.jsonl",
+  "root_engineering_failures": [
+    {
+      "stage": "CLI unit-test collection",
+      "error": "NameError: timeout default accidentally self-referenced",
+      "resolution": "Fixed unfrozen CLI default before numerical verification; initial CLI test subsequently passed",
+      "scientific_effect": "None; E1/E2 frozen fitting sources unchanged"
+    }
+  ],
+  "execution_interfaces": [
+    "e1 audit/run/verify/report",
+    "e2 run",
+    "e2_verify independent verification and Chinese report",
+    "unified CLI and delivery report builder"
+  ],
+  "initial_relevant_checks": "5 passed before adding historical-role check; final check recorded separately",
+  "timing_limitations": "Methods rotated, repeated first12 parents; workstation load not controlled; brief independent verification ran concurrently. Small timing differences remain descriptive.",
+  "completion_validation": {
+    "test_command": "pytest pxrd_heuristic_rruff_validation -q -p no:cacheprovider",
+    "tests": "7 passed in 1.79s",
+    "report_recomputation": "PASS; no fitting or training",
+    "e1_raw_row_counts_and_completion_hashes": "PASS",
+    "e2_source_and_result_manifest": "PASS",
+    "report_encoding": "UTF-8; no replacement characters or question-mark placeholders",
+    "new_training_seconds": 0,
+    "merge_performed": false,
+    "test_elapsed_seconds": 1.79,
+    "e1_independent_arithmetic": "PASS; 7476 rows; no refitting",
+    "e1_completion_hashes_and_raw_row_counts": "PASS"
+  }
+}

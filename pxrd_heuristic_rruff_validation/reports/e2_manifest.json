@@ -1,0 +1,66 @@
+{
+  "config_sha256": "b07ecf359c09762d28b07a17e48ba807d7b69305eaf58ee3cdb8f0b59940d872",
+  "template_sha256": "ce9abab142351e802bde3eb40dbb554bb3ccec08e8c6ddc4299c0c532e9794ce",
+  "audit_csv_sha256": "39f93bcd09587e17a9c89fd0131a8bd12d649bcd7eacdb792a4d8eff5da2cf29",
+  "records": [
+    {
+      "sample_id": "R050031-1",
+      "raw_member": "Rutile__R050031-1__Powder__Xray_Data_XY_RAW__e335e82163f871a8c938cb2023d9.txt",
+      "raw_sha256": "d626cca70c2d6d7966ea46b18ec35d7d71bb41c7fd8860efe0702153d9d4c7ba",
+      "refinement_member": "Rutile__R050031-1__Powder__Cell_Refinement_Output_Data__3d6402f3be51d5a4152b7af00805.txt",
+      "refinement_sha256": "c2689d95ed4c11faadbc31655063915018261c0dad5cb7ba89a3de94d1dbb47e",
+      "wavelengths_A": {
+        "1": 1.541838,
+        "2": 1.540562,
+        "3": 1.54439
+      },
+      "wave_rows": [
+        "2"
+      ],
+      "same_specimen_cif_proven": false,
+      "raw_kind": "experimental_powder_candidate",
+      "formula": "TiO_2_"
+    },
+    {
+      "sample_id": "R050417-1",
+      "raw_member": "Rutile__R050417-1__Powder__Xray_Data_XY_RAW__4d9ba44bacd938fd1ee8c8bb8c62.txt",
+      "raw_sha256": "3a81d2181fd5a1f423e0a1084ebd4b4362076bd0a31f7df0a775721f08af4701",
+      "refinement_member": "Rutile__R050417-1__Powder__Cell_Refinement_Output_Data__8ee3791375831354c52f774bb102.txt",
+      "refinement_sha256": "3b4f3cce1444d8312ef9dfcbf287d30daa872b51587e5ff9bcbd659474f94fc4",
+      "wavelengths_A": {
+        "1": 1.541838,
+        "2": 1.540562,
+        "3": 1.54439
+      },
+      "wave_rows": [
+        "2"
+      ],
+      "same_specimen_cif_proven": false,
+      "raw_kind": "experimental_powder_candidate",
+      "formula": "TiO_2_"
+    },
+    {
+      "sample_id": "R060493-1",
+      "raw_member": "Rutile__R060493-1__Powder__Xray_Data_XY_RAW__1fa1fc160568a91f8bc00a1c003c.txt",
+      "raw_sha256": "539faa7c9f294e3cb587f0599e11f3dd8b8d5034acab2e0f582523c0c5a6a543",
+      "refinement_member": "Rutile__R060493-1__Powder__Cell_Refinement_Output_Data__7b9d604b329d4376bced1a9f71a6.txt",
+      "refinement_sha256": "b41fa40e4b6e9f5645161884e5d50a7acb6f025fc4524424dfb603dc3f138808",
+      "wavelengths_A": {
+        "1": 1.541838,
+        "2": 1.540562,
+        "3": 1.54439
+      },
+      "wave_rows": [
+        "2"
+      ],
+      "same_specimen_cif_proven": false,
+      "raw_kind": "experimental_powder_candidate",
+      "formula": "Ti_1.00_O_2_"
+    }
+  ],
+  "source_sha256": "ab28db0ee83d0bd90003f2426d2582fe5a248517db1e6c1f017b18fbb11ef534",
+  "archive_sha256": {
+    "XY_RAW.zip": "948a133482bb3c99da80194cc2848933aee668129beb209150f7f850cd4b0587",
+    "Refinement_Output_Data.zip": "a51e4f7399051889a3d699dadb99c2139476d3d17ea47baf85e3ebf3df4f5c12"
+  }
+}

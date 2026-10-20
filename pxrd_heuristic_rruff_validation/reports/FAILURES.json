@@ -1,0 +1,216 @@
+{
+  "e1_primary_failures_by_budget_and_method": {
+    "equal_eval": {
+      "H1": {
+        "rows": 539,
+        "unsuccessful_best_rows": 0,
+        "boundary_best_rows": 5,
+        "attempts": 539,
+        "unsuccessful_attempts": 0,
+        "max_row_nfev": 480,
+        "rows_over_600_nfev": 0,
+        "wall_overrun_rows": 0,
+        "max_wall_overrun_ms": 0.0,
+        "max_elapsed_ms": 522.3182999761775,
+        "initializer_fallback_rows": 0
+      },
+      "P0": {
+        "rows": 539,
+        "unsuccessful_best_rows": 0,
+        "boundary_best_rows": 3,
+        "attempts": 539,
+        "unsuccessful_attempts": 0,
+        "max_row_nfev": 464,
+        "rows_over_600_nfev": 0,
+        "wall_overrun_rows": 0,
+        "max_wall_overrun_ms": 0.0,
+        "max_elapsed_ms": 644.3032000097446,
+        "initializer_fallback_rows": 0
+      },
+      "P3": {
+        "rows": 539,
+        "unsuccessful_best_rows": 228,
+        "boundary_best_rows": 2,
+        "attempts": 1617,
+        "unsuccessful_attempts": 1044,
+        "max_row_nfev": 656,
+        "rows_over_600_nfev": 251,
+        "wall_overrun_rows": 0,
+        "max_wall_overrun_ms": 0.0,
+        "max_elapsed_ms": 1416.849099972751,
+        "initializer_fallback_rows": 0
+      },
+      "N+A": {
+        "rows": 1617,
+        "unsuccessful_best_rows": 0,
+        "boundary_best_rows": 0,
+        "attempts": 1617,
+        "unsuccessful_attempts": 0,
+        "max_row_nfev": 336,
+        "rows_over_600_nfev": 0,
+        "wall_overrun_rows": 0,
+        "max_wall_overrun_ms": 0.0,
+        "max_elapsed_ms": 564.2653999966569,
+        "initializer_fallback_rows": 0
+      }
+    },
+    "equal_wall": {
+      "H1": {
+        "rows": 539,
+        "unsuccessful_best_rows": 509,
+        "boundary_best_rows": 34,
+        "attempts": 539,
+        "unsuccessful_attempts": 509,
+        "max_row_nfev": 185,
+        "rows_over_600_nfev": 0,
+        "wall_overrun_rows": 510,
+        "max_wall_overrun_ms": 2.644999988842753,
+        "max_elapsed_ms": 52.644999988842756,
+        "initializer_fallback_rows": 0
+      },
+      "P0": {
+        "rows": 539,
+        "unsuccessful_best_rows": 531,
+        "boundary_best_rows": 117,
+        "attempts": 539,
+        "unsuccessful_attempts": 531,
+        "max_row_nfev": 185,
+        "rows_over_600_nfev": 0,
+        "wall_overrun_rows": 531,
+        "max_wall_overrun_ms": 3.1050999998114976,
+        "max_elapsed_ms": 53.1050999998115,
+        "initializer_fallback_rows": 0
+      },
+      "P3": {
+        "rows": 539,
+        "unsuccessful_best_rows": 527,
+        "boundary_best_rows": 112,
+        "attempts": 550,
+        "unsuccessful_attempts": 538,
+        "max_row_nfev": 186,
+        "rows_over_600_nfev": 0,
+        "wall_overrun_rows": 539,
+        "max_wall_overrun_ms": 2.4093999993056032,
+        "max_elapsed_ms": 52.409399999305606,
+        "initializer_fallback_rows": 0
+      },
+      "N+A": {
+        "rows": 1617,
+        "unsuccessful_best_rows": 1511,
+        "boundary_best_rows": 0,
+        "attempts": 1617,
+        "unsuccessful_attempts": 1511,
+        "max_row_nfev": 184,
+        "rows_over_600_nfev": 0,
+        "wall_overrun_rows": 1516,
+        "max_wall_overrun_ms": 2.865599980577824,
+        "max_elapsed_ms": 52.86559998057783,
+        "initializer_fallback_rows": 0
+      }
+    }
+  },
+  "e1_preflight_failure_events": [
+    {
+      "time": 1792425295.6380274,
+      "kind": "failure",
+      "error": "AssertionError()",
+      "traceback": "Traceback (most recent call last):\n  File \"E:\\AI4science\\_local\\worktrees\\pxrd_heuristic_rruff_validation_20261019\\pxrd_heuristic_rruff_validation\\e1.py\", line 174, in <module>\n    try:print(json.dumps(globals()[sys.argv[1] if len(sys.argv)>1 else 'audit'](),ensure_ascii=False))\n                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"E:\\AI4science\\_local\\worktrees\\pxrd_heuristic_rruff_validation_20261019\\pxrd_heuristic_rruff_validation\\e1.py\", line 26, in audit\n    assert sha(OLD/'pxrd_cross_material_autolab/config.json')==manifest['identity']['config_sha256']\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n"
+    },
+    {
+      "time": 1792425310.5833204,
+      "kind": "failure",
+      "error": "AssertionError()",
+      "traceback": "Traceback (most recent call last):\n  File \"E:\\AI4science\\_local\\worktrees\\pxrd_heuristic_rruff_validation_20261019\\pxrd_heuristic_rruff_validation\\e1.py\", line 174, in <module>\n    try:print(json.dumps(globals()[sys.argv[1] if len(sys.argv)>1 else 'audit'](),ensure_ascii=False))\n                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"E:\\AI4science\\_local\\worktrees\\pxrd_heuristic_rruff_validation_20261019\\pxrd_heuristic_rruff_validation\\e1.py\", line 26, in audit\n    assert sha(OLD/'pxrd_cross_material_autolab/config.json')==manifest['identity']['config_sha256']\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n"
+    }
+  ],
+  "e1_material_count": 7,
+  "e1_independent_primary_parents": 539,
+  "e1_total_jsonl_rows_including_timing_rotations": 7476,
+  "e1_timing_rotation_rows": 1008,
+  "e1_wall_q_cell_gate_metrics": {
+    "primary_speed_passes": {
+      "H1": {
+        "passed": 3,
+        "total": 21
+      },
+      "P0": {
+        "passed": 4,
+        "total": 21
+      },
+      "P3": {
+        "passed": 21,
+        "total": 21
+      }
+    },
+    "primary_accuracy_passes": {
+      "H1": {
+        "passed": 21,
+        "total": 21
+      },
+      "P0": {
+        "passed": 21,
+        "total": 21
+      },
+      "P3": {
+        "passed": 21,
+        "total": 21
+      }
+    },
+    "primary_convergence_boundary_passes": {
+      "H1": {
+        "passed": 21,
+        "total": 21
+      },
+      "P0": {
+        "passed": 21,
+        "total": 21
+      },
+      "P3": {
+        "passed": 21,
+        "total": 21
+      }
+    },
+    "primary_full_gate_passes": {
+      "H1": {
+        "passed": 3,
+        "total": 21
+      },
+      "P0": {
+        "passed": 4,
+        "total": 21
+      },
+      "P3": {
+        "passed": 21,
+        "total": 21
+      }
+    },
+    "wall_q_and_cell_passes": {
+      "H1": {
+        "passed": 19,
+        "total": 21
+      },
+      "P0": {
+        "passed": 21,
+        "total": 21
+      },
+      "P3": {
+        "passed": 21,
+        "total": 21
+      }
+    },
+    "wall_q_and_cell_failures": [
+      {
+        "material": "ceo2",
+        "seed": 2026101912,
+        "baseline": "H1"
+      },
+      {
+        "material": "ceo2",
+        "seed": 2026101913,
+        "baseline": "H1"
+      }
+    ]
+  },
+  "e2_boundary_attempts": 7,
+  "e2_failed_physical_cases": 3
+}

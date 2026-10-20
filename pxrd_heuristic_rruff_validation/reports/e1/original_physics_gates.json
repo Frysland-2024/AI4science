@@ -1,0 +1,121 @@
+[
+  {
+    "material": "batio3",
+    "status": "PASS",
+    "sha256": "0bc0a37df8dd5798b20903f83165a7508c0363a35d5eb7195d64afd8bf711b76",
+    "checks": {
+      "distinguishable_profiles": true,
+      "independent_pymatgen_parity": true,
+      "jacobian_condition": true,
+      "multistart_stability": true,
+      "nonoracle_noiseless_recovery": true,
+      "numerical_gradient": true,
+      "positive_nonempty_peaks": true,
+      "site_geometry": true,
+      "symmetric_positive_bounds": true,
+      "symmetry": true
+    }
+  },
+  {
+    "material": "mgo",
+    "status": "PASS",
+    "sha256": "5b9b604ff726850d342ad1d3a5365900730038d7a18a5e2159f42aa68a011506",
+    "checks": {
+      "distinguishable_profiles": true,
+      "independent_pymatgen_parity": true,
+      "jacobian_condition": true,
+      "multistart_stability": true,
+      "nonoracle_noiseless_recovery": true,
+      "numerical_gradient": true,
+      "positive_nonempty_peaks": true,
+      "site_geometry": true,
+      "symmetric_positive_bounds": true,
+      "symmetry": true
+    }
+  },
+  {
+    "material": "ceo2",
+    "status": "PASS",
+    "sha256": "c3a1ce81112a97a06583c65b1d62a16abf7e36372ef726276ae24cc6d6c0d19d",
+    "checks": {
+      "distinguishable_profiles": true,
+      "independent_pymatgen_parity": true,
+      "jacobian_condition": true,
+      "multistart_stability": true,
+      "nonoracle_noiseless_recovery": true,
+      "numerical_gradient": true,
+      "positive_nonempty_peaks": true,
+      "site_geometry": true,
+      "symmetric_positive_bounds": true,
+      "symmetry": true
+    }
+  },
+  {
+    "material": "rutile",
+    "status": "PASS",
+    "sha256": "9f0b1721ec3fa1a7e6f94cb40d4dceb5dcac9eb6325de7a73c20a347ef382e3e",
+    "checks": {
+      "distinguishable_profiles": true,
+      "independent_pymatgen_parity": true,
+      "jacobian_condition": true,
+      "multistart_stability": true,
+      "nonoracle_noiseless_recovery": true,
+      "numerical_gradient": true,
+      "positive_nonempty_peaks": true,
+      "site_geometry": true,
+      "symmetric_positive_bounds": true,
+      "symmetry": true
+    }
+  },
+  {
+    "material": "zno",
+    "status": "PASS",
+    "sha256": "6f4198ba71b966beadde7ecf313ee953046f9c761eb7947ef04fa0d2542a0788",
+    "checks": {
+      "distinguishable_profiles": true,
+      "independent_pymatgen_parity": true,
+      "jacobian_condition": true,
+      "multistart_stability": true,
+      "nonoracle_noiseless_recovery": true,
+      "numerical_gradient": true,
+      "positive_nonempty_peaks": true,
+      "site_geometry": true,
+      "symmetric_positive_bounds": true,
+      "symmetry": true
+    }
+  },
+  {
+    "material": "silicon",
+    "status": "PASS",
+    "sha256": "2dc4066fa509565ae3779ebbe190b30d64606f7141fce46c9863e2247a6a571e",
+    "checks": {
+      "distinguishable_profiles": true,
+      "independent_pymatgen_parity": true,
+      "jacobian_condition": true,
+      "multistart_stability": true,
+      "nonoracle_noiseless_recovery": true,
+      "numerical_gradient": true,
+      "positive_nonempty_peaks": true,
+      "site_geometry": true,
+      "symmetric_positive_bounds": true,
+      "symmetry": true
+    }
+  },
+  {
+    "material": "grossular",
+    "status": "PASS",
+    "sha256": "e9ac4a1f65748f4055218cbf822efe9e11e39642e17a219fec156820b78ad346",
+    "checks": {
+      "distinguishable_profiles": true,
+      "independent_pymatgen_parity": true,
+      "jacobian_condition": true,
+      "multistart_stability": true,
+      "nonoracle_noiseless_recovery": true,
+      "numerical_gradient": true,
+      "positive_nonempty_peaks": true,
+      "site_geometry": true,
+      "symmetric_positive_bounds": true,
+      "symmetry": true
+    }
+  }
+]

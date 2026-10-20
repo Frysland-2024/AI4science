@@ -1,0 +1,425 @@
+{
+  "status": "COMPLETED_WITH_NEGATIVE_AND_NOT_READY_FINDINGS",
+  "E1": {
+    "execution": "COMPLETE",
+    "science": "NEURAL_INCREMENTAL_VALUE_NOT_ESTABLISHED",
+    "verification": {
+      "status": "PASS",
+      "materials": 7,
+      "rows": 7476,
+      "recomputation": true,
+      "source_and_prereg_frozen": true,
+      "independent_arithmetic": {
+        "arithmetic": "PASS",
+        "rows": 7476,
+        "no_refitting": true
+      }
+    },
+    "decisions": [
+      {
+        "material": "batio3",
+        "decision": "NOT_ESTABLISHED",
+        "checks": [
+          {
+            "seed": 2026101911,
+            "baseline": "H1",
+            "passed": true
+          },
+          {
+            "seed": 2026101911,
+            "baseline": "P0",
+            "passed": false
+          },
+          {
+            "seed": 2026101911,
+            "baseline": "P3",
+            "passed": true
+          },
+          {
+            "seed": 2026101912,
+            "baseline": "H1",
+            "passed": true
+          },
+          {
+            "seed": 2026101912,
+            "baseline": "P0",
+            "passed": false
+          },
+          {
+            "seed": 2026101912,
+            "baseline": "P3",
+            "passed": true
+          },
+          {
+            "seed": 2026101913,
+            "baseline": "H1",
+            "passed": true
+          },
+          {
+            "seed": 2026101913,
+            "baseline": "P0",
+            "passed": false
+          },
+          {
+            "seed": 2026101913,
+            "baseline": "P3",
+            "passed": true
+          }
+        ]
+      },
+      {
+        "material": "mgo",
+        "decision": "NOT_ESTABLISHED",
+        "checks": [
+          {
+            "seed": 2026101911,
+            "baseline": "H1",
+            "passed": false
+          },
+          {
+            "seed": 2026101911,
+            "baseline": "P0",
+            "passed": true
+          },
+          {
+            "seed": 2026101911,
+            "baseline": "P3",
+            "passed": true
+          },
+          {
+            "seed": 2026101912,
+            "baseline": "H1",
+            "passed": false
+          },
+          {
+            "seed": 2026101912,
+            "baseline": "P0",
+            "passed": true
+          },
+          {
+            "seed": 2026101912,
+            "baseline": "P3",
+            "passed": true
+          },
+          {
+            "seed": 2026101913,
+            "baseline": "H1",
+            "passed": false
+          },
+          {
+            "seed": 2026101913,
+            "baseline": "P0",
+            "passed": true
+          },
+          {
+            "seed": 2026101913,
+            "baseline": "P3",
+            "passed": true
+          }
+        ]
+      },
+      {
+        "material": "ceo2",
+        "decision": "NOT_ESTABLISHED",
+        "checks": [
+          {
+            "seed": 2026101911,
+            "baseline": "H1",
+            "passed": false
+          },
+          {
+            "seed": 2026101911,
+            "baseline": "P0",
+            "passed": false
+          },
+          {
+            "seed": 2026101911,
+            "baseline": "P3",
+            "passed": true
+          },
+          {
+            "seed": 2026101912,
+            "baseline": "H1",
+            "passed": false
+          },
+          {
+            "seed": 2026101912,
+            "baseline": "P0",
+            "passed": false
+          },
+          {
+            "seed": 2026101912,
+            "baseline": "P3",
+            "passed": true
+          },
+          {
+            "seed": 2026101913,
+            "baseline": "H1",
+            "passed": false
+          },
+          {
+            "seed": 2026101913,
+            "baseline": "P0",
+            "passed": false
+          },
+          {
+            "seed": 2026101913,
+            "baseline": "P3",
+            "passed": true
+          }
+        ]
+      },
+      {
+        "material": "rutile",
+        "decision": "NOT_ESTABLISHED",
+        "checks": [
+          {
+            "seed": 2026101911,
+            "baseline": "H1",
+            "passed": false
+          },
+          {
+            "seed": 2026101911,
+            "baseline": "P0",
+            "passed": false
+          },
+          {
+            "seed": 2026101911,
+            "baseline": "P3",
+            "passed": true
+          },
+          {
+            "seed": 2026101912,
+            "baseline": "H1",
+            "passed": false
+          },
+          {
+            "seed": 2026101912,
+            "baseline": "P0",
+            "passed": false
+          },
+          {
+            "seed": 2026101912,
+            "baseline": "P3",
+            "passed": true
+          },
+          {
+            "seed": 2026101913,
+            "baseline": "H1",
+            "passed": false
+          },
+          {
+            "seed": 2026101913,
+            "baseline": "P0",
+            "passed": false
+          },
+          {
+            "seed": 2026101913,
+            "baseline": "P3",
+            "passed": true
+          }
+        ]
+      },
+      {
+        "material": "zno",
+        "decision": "NOT_ESTABLISHED",
+        "checks": [
+          {
+            "seed": 2026101911,
+            "baseline": "H1",
+            "passed": false
+          },
+          {
+            "seed": 2026101911,
+            "baseline": "P0",
+            "passed": true
+          },
+          {
+            "seed": 2026101911,
+            "baseline": "P3",
+            "passed": true
+          },
+          {
+            "seed": 2026101912,
+            "baseline": "H1",
+            "passed": false
+          },
+          {
+            "seed": 2026101912,
+            "baseline": "P0",
+            "passed": false
+          },
+          {
+            "seed": 2026101912,
+            "baseline": "P3",
+            "passed": true
+          },
+          {
+            "seed": 2026101913,
+            "baseline": "H1",
+            "passed": false
+          },
+          {
+            "seed": 2026101913,
+            "baseline": "P0",
+            "passed": false
+          },
+          {
+            "seed": 2026101913,
+            "baseline": "P3",
+            "passed": true
+          }
+        ]
+      },
+      {
+        "material": "silicon",
+        "decision": "NOT_ESTABLISHED",
+        "checks": [
+          {
+            "seed": 2026101911,
+            "baseline": "H1",
+            "passed": false
+          },
+          {
+            "seed": 2026101911,
+            "baseline": "P0",
+            "passed": false
+          },
+          {
+            "seed": 2026101911,
+            "baseline": "P3",
+            "passed": true
+          },
+          {
+            "seed": 2026101912,
+            "baseline": "H1",
+            "passed": false
+          },
+          {
+            "seed": 2026101912,
+            "baseline": "P0",
+            "passed": false
+          },
+          {
+            "seed": 2026101912,
+            "baseline": "P3",
+            "passed": true
+          },
+          {
+            "seed": 2026101913,
+            "baseline": "H1",
+            "passed": false
+          },
+          {
+            "seed": 2026101913,
+            "baseline": "P0",
+            "passed": false
+          },
+          {
+            "seed": 2026101913,
+            "baseline": "P3",
+            "passed": true
+          }
+        ]
+      },
+      {
+        "material": "grossular",
+        "decision": "NOT_ESTABLISHED",
+        "checks": [
+          {
+            "seed": 2026101911,
+            "baseline": "H1",
+            "passed": false
+          },
+          {
+            "seed": 2026101911,
+            "baseline": "P0",
+            "passed": false
+          },
+          {
+            "seed": 2026101911,
+            "baseline": "P3",
+            "passed": true
+          },
+          {
+            "seed": 2026101912,
+            "baseline": "H1",
+            "passed": false
+          },
+          {
+            "seed": 2026101912,
+            "baseline": "P0",
+            "passed": false
+          },
+          {
+            "seed": 2026101912,
+            "baseline": "P3",
+            "passed": true
+          },
+          {
+            "seed": 2026101913,
+            "baseline": "H1",
+            "passed": false
+          },
+          {
+            "seed": 2026101913,
+            "baseline": "P0",
+            "passed": false
+          },
+          {
+            "seed": 2026101913,
+            "baseline": "P3",
+            "passed": true
+          }
+        ]
+      }
+    ],
+    "independent_parameter_parents": 539,
+    "method_rows_including_timing_rotations": 7476,
+    "wall_seconds": 873.7255213260651,
+    "wall_limit_seconds": 9500,
+    "primary_equal_eval_function_budget": 600,
+    "equal_wall_budget_seconds": 0.05,
+    "historical_training_seconds_reused": 20.414067900099326,
+    "new_training_seconds": 0
+  },
+  "E2": {
+    "execution": "COMPLETE",
+    "science": "PHYSICS_NOT_READY",
+    "samples": 3,
+    "neural_arm": "NOT_RUN",
+    "wall_seconds": 13.222628900024574,
+    "failed_cases": [
+      "R050031-1",
+      "R050417-1",
+      "R060493-1"
+    ]
+  },
+  "recorded_experiment_wall_seconds_total": 886.9481502260896,
+  "global_wall_limit_seconds": 10800,
+  "new_gpu_training_seconds": 0,
+  "no_merge": true,
+  "branch": "codex/pxrd-heuristic-rruff-validation-20261019",
+  "completion_validation": {
+    "test_command": "pytest pxrd_heuristic_rruff_validation -q -p no:cacheprovider",
+    "tests": "7 passed",
+    "report_recomputation": "PASS_FROM_FROZEN_ROWS_NO_REFITTING",
+    "immutable_e1_raw_rows": "PASS_HASHES_AND_ROW_COUNTS",
+    "e2_source_and_result_manifest": "PASS",
+    "new_training_seconds": 0,
+    "merge_performed": false,
+    "test_elapsed_seconds": 1.79,
+    "e1_completion_hashes_and_raw_row_counts": "PASS"
+  },
+  "limitations": [
+    "E1 is one-shot posthoc exploration of previously opened synthetic tests; no tuning or retraining.",
+    "Equal-evaluation function ceilings are nominal; finite-difference nfev may exceed 600 and is retained.",
+    "The equal-wall sensitivity uses a 50 ms shared deadline, function-call granularity, and records overruns/failures.",
+    "E1 timing repetitions and N+A seeds share the same parent identities and are not independent samples.",
+    "E1 multistart_disagreement_mean is a missing-field zero placeholder and is excluded from the corrected summary view.",
+    "E2 fixed doublet ratio is a modeling assumption; exact-ID refinement rows show wavelength #2 only.",
+    "E2 same-ID refined cells are agreement references, not independent ground truth.",
+    "Two E2 base IDs overlap historical RRUFF-301 locked-test roles; this is not a new classification holdout.",
+    "No neural real-data inference occurred after the physics gate failed."
+  ]
+}
