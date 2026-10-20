@@ -1,0 +1,37 @@
+[
+  {
+    "material": "batio3",
+    "historical_training_seconds": 2.2429180000326596,
+    "historical_training_amortized_seconds_per_prediction": 0.009709601731743116
+  },
+  {
+    "material": "mgo",
+    "historical_training_seconds": 2.673255700035952,
+    "historical_training_amortized_seconds_per_prediction": 0.011572535497991135
+  },
+  {
+    "material": "ceo2",
+    "historical_training_seconds": 2.882030999986455,
+    "historical_training_amortized_seconds_per_prediction": 0.012476324675266038
+  },
+  {
+    "material": "rutile",
+    "historical_training_seconds": 2.70759560004808,
+    "historical_training_amortized_seconds_per_prediction": 0.011721193073801213
+  },
+  {
+    "material": "zno",
+    "historical_training_seconds": 3.1817713000345975,
+    "historical_training_amortized_seconds_per_prediction": 0.013773901731751505
+  },
+  {
+    "material": "silicon",
+    "historical_training_seconds": 3.3320183000178076,
+    "historical_training_amortized_seconds_per_prediction": 0.014424321645098733
+  },
+  {
+    "material": "grossular",
+    "historical_training_seconds": 3.394477999943774,
+    "historical_training_amortized_seconds_per_prediction": 0.014694709956466556
+  }
+]

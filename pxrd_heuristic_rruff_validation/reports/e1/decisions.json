@@ -1,0 +1,359 @@
+[
+  {
+    "material": "batio3",
+    "decision": "NOT_ESTABLISHED",
+    "checks": [
+      {
+        "seed": 2026101911,
+        "baseline": "H1",
+        "passed": true
+      },
+      {
+        "seed": 2026101911,
+        "baseline": "P0",
+        "passed": false
+      },
+      {
+        "seed": 2026101911,
+        "baseline": "P3",
+        "passed": true
+      },
+      {
+        "seed": 2026101912,
+        "baseline": "H1",
+        "passed": true
+      },
+      {
+        "seed": 2026101912,
+        "baseline": "P0",
+        "passed": false
+      },
+      {
+        "seed": 2026101912,
+        "baseline": "P3",
+        "passed": true
+      },
+      {
+        "seed": 2026101913,
+        "baseline": "H1",
+        "passed": true
+      },
+      {
+        "seed": 2026101913,
+        "baseline": "P0",
+        "passed": false
+      },
+      {
+        "seed": 2026101913,
+        "baseline": "P3",
+        "passed": true
+      }
+    ]
+  },
+  {
+    "material": "mgo",
+    "decision": "NOT_ESTABLISHED",
+    "checks": [
+      {
+        "seed": 2026101911,
+        "baseline": "H1",
+        "passed": false
+      },
+      {
+        "seed": 2026101911,
+        "baseline": "P0",
+        "passed": true
+      },
+      {
+        "seed": 2026101911,
+        "baseline": "P3",
+        "passed": true
+      },
+      {
+        "seed": 2026101912,
+        "baseline": "H1",
+        "passed": false
+      },
+      {
+        "seed": 2026101912,
+        "baseline": "P0",
+        "passed": true
+      },
+      {
+        "seed": 2026101912,
+        "baseline": "P3",
+        "passed": true
+      },
+      {
+        "seed": 2026101913,
+        "baseline": "H1",
+        "passed": false
+      },
+      {
+        "seed": 2026101913,
+        "baseline": "P0",
+        "passed": true
+      },
+      {
+        "seed": 2026101913,
+        "baseline": "P3",
+        "passed": true
+      }
+    ]
+  },
+  {
+    "material": "ceo2",
+    "decision": "NOT_ESTABLISHED",
+    "checks": [
+      {
+        "seed": 2026101911,
+        "baseline": "H1",
+        "passed": false
+      },
+      {
+        "seed": 2026101911,
+        "baseline": "P0",
+        "passed": false
+      },
+      {
+        "seed": 2026101911,
+        "baseline": "P3",
+        "passed": true
+      },
+      {
+        "seed": 2026101912,
+        "baseline": "H1",
+        "passed": false
+      },
+      {
+        "seed": 2026101912,
+        "baseline": "P0",
+        "passed": false
+      },
+      {
+        "seed": 2026101912,
+        "baseline": "P3",
+        "passed": true
+      },
+      {
+        "seed": 2026101913,
+        "baseline": "H1",
+        "passed": false
+      },
+      {
+        "seed": 2026101913,
+        "baseline": "P0",
+        "passed": false
+      },
+      {
+        "seed": 2026101913,
+        "baseline": "P3",
+        "passed": true
+      }
+    ]
+  },
+  {
+    "material": "rutile",
+    "decision": "NOT_ESTABLISHED",
+    "checks": [
+      {
+        "seed": 2026101911,
+        "baseline": "H1",
+        "passed": false
+      },
+      {
+        "seed": 2026101911,
+        "baseline": "P0",
+        "passed": false
+      },
+      {
+        "seed": 2026101911,
+        "baseline": "P3",
+        "passed": true
+      },
+      {
+        "seed": 2026101912,
+        "baseline": "H1",
+        "passed": false
+      },
+      {
+        "seed": 2026101912,
+        "baseline": "P0",
+        "passed": false
+      },
+      {
+        "seed": 2026101912,
+        "baseline": "P3",
+        "passed": true
+      },
+      {
+        "seed": 2026101913,
+        "baseline": "H1",
+        "passed": false
+      },
+      {
+        "seed": 2026101913,
+        "baseline": "P0",
+        "passed": false
+      },
+      {
+        "seed": 2026101913,
+        "baseline": "P3",
+        "passed": true
+      }
+    ]
+  },
+  {
+    "material": "zno",
+    "decision": "NOT_ESTABLISHED",
+    "checks": [
+      {
+        "seed": 2026101911,
+        "baseline": "H1",
+        "passed": false
+      },
+      {
+        "seed": 2026101911,
+        "baseline": "P0",
+        "passed": true
+      },
+      {
+        "seed": 2026101911,
+        "baseline": "P3",
+        "passed": true
+      },
+      {
+        "seed": 2026101912,
+        "baseline": "H1",
+        "passed": false
+      },
+      {
+        "seed": 2026101912,
+        "baseline": "P0",
+        "passed": false
+      },
+      {
+        "seed": 2026101912,
+        "baseline": "P3",
+        "passed": true
+      },
+      {
+        "seed": 2026101913,
+        "baseline": "H1",
+        "passed": false
+      },
+      {
+        "seed": 2026101913,
+        "baseline": "P0",
+        "passed": false
+      },
+      {
+        "seed": 2026101913,
+        "baseline": "P3",
+        "passed": true
+      }
+    ]
+  },
+  {
+    "material": "silicon",
+    "decision": "NOT_ESTABLISHED",
+    "checks": [
+      {
+        "seed": 2026101911,
+        "baseline": "H1",
+        "passed": false
+      },
+      {
+        "seed": 2026101911,
+        "baseline": "P0",
+        "passed": false
+      },
+      {
+        "seed": 2026101911,
+        "baseline": "P3",
+        "passed": true
+      },
+      {
+        "seed": 2026101912,
+        "baseline": "H1",
+        "passed": false
+      },
+      {
+        "seed": 2026101912,
+        "baseline": "P0",
+        "passed": false
+      },
+      {
+        "seed": 2026101912,
+        "baseline": "P3",
+        "passed": true
+      },
+      {
+        "seed": 2026101913,
+        "baseline": "H1",
+        "passed": false
+      },
+      {
+        "seed": 2026101913,
+        "baseline": "P0",
+        "passed": false
+      },
+      {
+        "seed": 2026101913,
+        "baseline": "P3",
+        "passed": true
+      }
+    ]
+  },
+  {
+    "material": "grossular",
+    "decision": "NOT_ESTABLISHED",
+    "checks": [
+      {
+        "seed": 2026101911,
+        "baseline": "H1",
+        "passed": false
+      },
+      {
+        "seed": 2026101911,
+        "baseline": "P0",
+        "passed": false
+      },
+      {
+        "seed": 2026101911,
+        "baseline": "P3",
+        "passed": true
+      },
+      {
+        "seed": 2026101912,
+        "baseline": "H1",
+        "passed": false
+      },
+      {
+        "seed": 2026101912,
+        "baseline": "P0",
+        "passed": false
+      },
+      {
+        "seed": 2026101912,
+        "baseline": "P3",
+        "passed": true
+      },
+      {
+        "seed": 2026101913,
+        "baseline": "H1",
+        "passed": false
+      },
+      {
+        "seed": 2026101913,
+        "baseline": "P0",
+        "passed": false
+      },
+      {
+        "seed": 2026101913,
+        "baseline": "P3",
+        "passed": true
+      }
+    ]
+  }
+]

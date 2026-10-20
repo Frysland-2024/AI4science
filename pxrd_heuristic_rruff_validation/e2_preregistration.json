@@ -1,0 +1,96 @@
+{
+  "experiment": "E2",
+  "registered_utc": "2026-10-19T15:53:29.445668+00:00",
+  "selection": "All lexically sorted audit strong Rutile, no mixture, measured chemistry TiO_2_ or Ti_1.00_O_2_; no real training or threshold selection",
+  "ids": [
+    "R050031-1",
+    "R050417-1",
+    "R060493-1"
+  ],
+  "template": "pxrd_cross_material_autolab/materials/rutile_COD_9004141.cif",
+  "axis": [
+    15,
+    85,
+    2048
+  ],
+  "q_bounds": [
+    -1,
+    1
+  ],
+  "relative_cell_scale": 0.02,
+  "starts": [
+    [
+      0,
+      0
+    ],
+    [
+      -0.6,
+      -0.6
+    ],
+    [
+      0.6,
+      0.6
+    ],
+    [
+      -0.6,
+      0.6
+    ],
+    [
+      0.6,
+      -0.6
+    ]
+  ],
+  "eta_bounds": [
+    [
+      -0.12,
+      0.12
+    ],
+    [
+      0.04,
+      0.44
+    ],
+    [
+      0.2,
+      2
+    ],
+    [
+      0,
+      0.15
+    ],
+    [
+      -0.1,
+      0.1
+    ]
+  ],
+  "eta_start": [
+    0,
+    0.15,
+    1,
+    0.02,
+    0
+  ],
+  "solver": {
+    "maxiter": 180,
+    "maxfun": 2200,
+    "ftol": 1e-12,
+    "gtol": 1e-07
+  },
+  "profile": "Gaussian Kalpha1/Kalpha2 doublet ratio 2:1 fixed modeling assumption, exact-ID wavelengths #2/#3; no wavelength inferred from lattice",
+  "normalization": "raw intensity divided by maximum in 15-85; no cell-dependent processing",
+  "heuristic": "9x9 q grid (-0.8 to 0.8) template profile MSE at neutral eta, no reference labels",
+  "gates": {
+    "strong_peak_min": 5,
+    "peak_tolerance_deg": 0.15,
+    "predicted_strong_coverage_min": 0.8,
+    "observed_strong_coverage_min": 0.8,
+    "profile_rmse_max": 0.06,
+    "multistart_cell_span_A_max": 0.02,
+    "jacobian_condition_max": 10000000.0,
+    "parity_deg_max": 1e-05,
+    "all_solver_success": true,
+    "no_boundary": true
+  },
+  "NN": "NOT_RUN: compatible real doublet/nuisance model checkpoint unavailable; no new training in this bounded case series. If physics gate fails stop neural arm.",
+  "reference": "same-ID refined cell read only after fits; agreement not accuracy; same specimen CIF not proven",
+  "split": "case series only; NO real training, validation, tuning, or population claim; possible old classification holdout overlap flagged separately"
+}

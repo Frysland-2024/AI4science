@@ -1,0 +1,122 @@
+{
+  "status": "PASS",
+  "materials": [
+    {
+      "material": "batio3",
+      "hashes": {
+        "normalization.npz": "d9c0589e729da1bc047065138e8078c0756e09b3abd33f9d8a02362a3d0f2839",
+        "test.npz": "eaa890ee57ecde8f58b0fbfd6831d026de3d04e4e6460c13a80620e8814c595e",
+        "train_val.npz": "559efc4ce8b15b940792fa1dd55abd1c9c3c22e306b109d7f0efd22d66378103",
+        "best_2026101911.pt": "6100c1555612cdc7013c2c530b0729f9b17a5da90c28ccd3449439fbd9ba3ab3",
+        "best_2026101912.pt": "513d5e8aac3fcbed92c22dc2bc2bcb69a782daf8cc8309f99aea61232d9dd3ba",
+        "best_2026101913.pt": "467b2d4b5304297aca66a40550f938dfd6d1107fe0e0d31db433258ab8268aec"
+      },
+      "cif_sha256": "e854c9868f643183904606b8c24463f8f0bacc1cca90f283641b33346db748b4",
+      "training_seconds": 2.2429180000326596,
+      "normalization": "exact train-only recomputed",
+      "grid": "linspace(15,85,1024)",
+      "q": "(cell/reference-1)/0.02"
+    },
+    {
+      "material": "mgo",
+      "hashes": {
+        "normalization.npz": "d069852a4749bf92cca2bb6acc414c7a623fd7f9e54f564b658db4921f28b2f5",
+        "test.npz": "d064994c69eea9e3594524c20bc771323c155d2d0a67988f3ac58cf90762b6c9",
+        "train_val.npz": "4b51481aab680069851dc06acda94d392ebedd89f50d002dc4ee574e4ed46658",
+        "best_2026101911.pt": "5bdda81fee100893d3b54e8eb5dc7e66c83960c14223cbd55a43bf71a19aa6dc",
+        "best_2026101912.pt": "068744794d5a76a539d44c14163b865b0d4241e538176cdef24fc1c5174cd8d6",
+        "best_2026101913.pt": "3be56c5fc0e42ecd94a7cfd4ee010f6bc6078abd54f72269e06f3667106df82f"
+      },
+      "cif_sha256": "73e348f73ec4e2e41f2ea08cbe5f393366e7cfeb55285eebbb185ace7ec94923",
+      "training_seconds": 2.673255700035952,
+      "normalization": "exact train-only recomputed",
+      "grid": "linspace(15,85,1024)",
+      "q": "(cell/reference-1)/0.02"
+    },
+    {
+      "material": "ceo2",
+      "hashes": {
+        "normalization.npz": "acf598f1e8a2820c95b5d10c8a9677bcb8171f18b5b6357a35f9c551b43f1630",
+        "test.npz": "092e40e50461e0f49d400081a8b7ff3c5fb0db9d0ba71892169bcbc24ff22e1b",
+        "train_val.npz": "5b51b7644feae7b69eae2bf1e61b6e17b45ee020be92c660aeb36828aa2a03c0",
+        "best_2026101911.pt": "a278ad8738407af50a0b032c0752b25db8b4a0f6ed4c9e1030694d59f38cda19",
+        "best_2026101912.pt": "ac2ae8bf8cf6685c8a41dac175b699081e2292c80cdc9fdf35e1e62e577a34aa",
+        "best_2026101913.pt": "52ee53e01f2e4e32f11cc505ea5f22c05a7ee032bb87c68014dcd08543dc690d"
+      },
+      "cif_sha256": "cfb862ebff35ab342a254a267eff4d94a86a18ae284142289e7b56d8d7b8e099",
+      "training_seconds": 2.882030999986455,
+      "normalization": "exact train-only recomputed",
+      "grid": "linspace(15,85,1024)",
+      "q": "(cell/reference-1)/0.02"
+    },
+    {
+      "material": "rutile",
+      "hashes": {
+        "normalization.npz": "d558d3a4c27ea334bd32432f4469ca80c2cd1b90a95764eea8d2d79206b66975",
+        "test.npz": "bf046544350194bf80655d7ff8036a32f5ea4ed8fa450eb6d1bd01549914ee18",
+        "train_val.npz": "8a83a8e39e6bb228454361f4bebc006f6fdb611fa8662375b2dac3a4148e0a5e",
+        "best_2026101911.pt": "e48c100dd2a6e8656dd07028aca6b108abc289ed8c1e045844a9dc157e40ccb9",
+        "best_2026101912.pt": "c21b8e042142647a48b1994e075e59972e4a3a07c5f673eecf20928d26b010b0",
+        "best_2026101913.pt": "707f7044a7d47189a4e7a0caf83513728aeaac53b2a7212c9524f3415f0da785"
+      },
+      "cif_sha256": "ce9abab142351e802bde3eb40dbb554bb3ccec08e8c6ddc4299c0c532e9794ce",
+      "training_seconds": 2.70759560004808,
+      "normalization": "exact train-only recomputed",
+      "grid": "linspace(15,85,1024)",
+      "q": "(cell/reference-1)/0.02"
+    },
+    {
+      "material": "zno",
+      "hashes": {
+        "normalization.npz": "01c94025ceabf5f52dfd033b07e6c7b45927f32db1fd2cdbd789126cbdf8dcf7",
+        "test.npz": "2e7cd4e5938b43d6e13b7420b5b5066c10f7d9d0e112eba69880f9f5a4c3503a",
+        "train_val.npz": "d1a6e430d518e2479e8a55f544a33f61fccedd1781d33eabfba963d94ef649ba",
+        "best_2026101911.pt": "c098c43bc417643a57d554d2dd93a0e2e07a166c679efe28b33565fe7f05407c",
+        "best_2026101912.pt": "044dccb4ba5c042a38aceda777be515dee85b3665b0d56d6b92f18a60b09e040",
+        "best_2026101913.pt": "45708578b6ee7bedcc84ae82230609e620c52db5a125c12187a1896fcc0ab34f"
+      },
+      "cif_sha256": "29e747c3b8a40e7e1bf6f26ef00ed895e8dfdd4a110ba34a5ee9c7d587782ace",
+      "training_seconds": 3.1817713000345975,
+      "normalization": "exact train-only recomputed",
+      "grid": "linspace(15,85,1024)",
+      "q": "(cell/reference-1)/0.02"
+    },
+    {
+      "material": "silicon",
+      "hashes": {
+        "normalization.npz": "7890f9dc84828323bdeffcd81941f6b99b57adcef8e05d7dc5349b6d8769feb2",
+        "test.npz": "8110b9c6e246a8bcc19982c025ffce8e15db93544cf86ad61cd017aa2d3b63ff",
+        "train_val.npz": "7d1f24fc3ee591bd3a8ad1a69f07ed6ca57e22f3fbf37433517bfb6b201900ab",
+        "best_2026101911.pt": "7732a0684a6b13fd4c509d8dc4c343534a81dee291d57e245fc44fd35bcfab2d",
+        "best_2026101912.pt": "9e5b4f7c46041b7e1f0605b669f7a40bc9be9903a294a2b29fe3d6924dbb14d5",
+        "best_2026101913.pt": "27244060728d7759efea5947aa149c96e5f8fd2f649a0966739b6f400f910c53"
+      },
+      "cif_sha256": "46fb44ccdf93d1c3c1ecbe5b04ab0dea28c786bac20467b3a7511199af50e386",
+      "training_seconds": 3.3320183000178076,
+      "normalization": "exact train-only recomputed",
+      "grid": "linspace(15,85,1024)",
+      "q": "(cell/reference-1)/0.02"
+    },
+    {
+      "material": "grossular",
+      "hashes": {
+        "normalization.npz": "dcdee8715aa899395a8b2bc61f879a016046dea9761590893debfd626e07ad83",
+        "test.npz": "73f22fc6a7c278f9591e5ff73500dc12f0907bd37688c725dcba1e06d26d5994",
+        "train_val.npz": "8b59b4b210fd8c6bfa550495092d29f46a2dea565a41761e1392d0fdbb625f66",
+        "best_2026101911.pt": "ab2f96db43b9a18accb07710a9b41e1edd8f6353fb837afae86ceabb5a12aafd",
+        "best_2026101912.pt": "315891bdfbc3553fc379f5addc3300394ba99f5cb7442345ee6aef2508f268c1",
+        "best_2026101913.pt": "d0a8d093aa81df5959bce2e7d41093c7d4c1090dda3f472b36e556b9498e4e81"
+      },
+      "cif_sha256": "d6b3d78a1d487de504d4d47db9cbd1a2dc28e51e99c9c43a0565c8e1325cbb1e",
+      "training_seconds": 3.394477999943774,
+      "normalization": "exact train-only recomputed",
+      "grid": "linspace(15,85,1024)",
+      "q": "(cell/reference-1)/0.02"
+    }
+  ],
+  "source_sha256": {
+    "physics.py": "2b8def953e025e029ed152ffb1ab876d7724c306adbb91332cfed6157fd78817",
+    "experiment.py": "fbb7bdc93c851a4f90c9aac898f9f7808f14536acde6027a17c02005744cc357"
+  },
+  "config_sha256": "f74942f5542560bb302bd90d0e64239b6a0ff1999065ee7a56909fc40a27ec35"
+}

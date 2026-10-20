@@ -1,0 +1,11 @@
+﻿{
+  "stage": "preflight_before_new_comparisons",
+  "failures": [
+    "Default python lacked pymatgen; switched to the original environment recorded in original environment.json without installing anything.",
+    "Top-level original config bytes did not match run manifest. Used the immutable runs/pilot_20261019/config.json whose SHA256 exactly matches original manifest. No historical files altered.",
+    "A write helper initially used Windows GBK default and failed before changing source; fixed explicit UTF-8.",
+    "Expired deadline unit test initially supplied None as model, causing AttributeError before deadline check. Corrected invalid mock only. Three E1 tests passed; frozen scientific runner unchanged. The PowerShell test/run command continued into comparison despite initial mock failure; explicitly disclosed, no scientific method changed afterward."
+  ],
+  "scientific_result_tuning": false,
+  "source_frozen_before_comparisons": true
+}

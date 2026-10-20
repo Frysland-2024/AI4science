@@ -1,0 +1,831 @@
+{
+  "experiment": "E2",
+  "status": "PHYSICS_NOT_READY",
+  "manifest": {
+    "config_sha256": "b07ecf359c09762d28b07a17e48ba807d7b69305eaf58ee3cdb8f0b59940d872",
+    "template_sha256": "ce9abab142351e802bde3eb40dbb554bb3ccec08e8c6ddc4299c0c532e9794ce",
+    "audit_csv_sha256": "39f93bcd09587e17a9c89fd0131a8bd12d649bcd7eacdb792a4d8eff5da2cf29",
+    "records": [
+      {
+        "sample_id": "R050031-1",
+        "raw_member": "Rutile__R050031-1__Powder__Xray_Data_XY_RAW__e335e82163f871a8c938cb2023d9.txt",
+        "raw_sha256": "d626cca70c2d6d7966ea46b18ec35d7d71bb41c7fd8860efe0702153d9d4c7ba",
+        "refinement_member": "Rutile__R050031-1__Powder__Cell_Refinement_Output_Data__3d6402f3be51d5a4152b7af00805.txt",
+        "refinement_sha256": "c2689d95ed4c11faadbc31655063915018261c0dad5cb7ba89a3de94d1dbb47e",
+        "wavelengths_A": {
+          "1": 1.541838,
+          "2": 1.540562,
+          "3": 1.54439
+        },
+        "wave_rows": [
+          "2"
+        ],
+        "same_specimen_cif_proven": false,
+        "raw_kind": "experimental_powder_candidate",
+        "formula": "TiO_2_"
+      },
+      {
+        "sample_id": "R050417-1",
+        "raw_member": "Rutile__R050417-1__Powder__Xray_Data_XY_RAW__4d9ba44bacd938fd1ee8c8bb8c62.txt",
+        "raw_sha256": "3a81d2181fd5a1f423e0a1084ebd4b4362076bd0a31f7df0a775721f08af4701",
+        "refinement_member": "Rutile__R050417-1__Powder__Cell_Refinement_Output_Data__8ee3791375831354c52f774bb102.txt",
+        "refinement_sha256": "3b4f3cce1444d8312ef9dfcbf287d30daa872b51587e5ff9bcbd659474f94fc4",
+        "wavelengths_A": {
+          "1": 1.541838,
+          "2": 1.540562,
+          "3": 1.54439
+        },
+        "wave_rows": [
+          "2"
+        ],
+        "same_specimen_cif_proven": false,
+        "raw_kind": "experimental_powder_candidate",
+        "formula": "TiO_2_"
+      },
+      {
+        "sample_id": "R060493-1",
+        "raw_member": "Rutile__R060493-1__Powder__Xray_Data_XY_RAW__1fa1fc160568a91f8bc00a1c003c.txt",
+        "raw_sha256": "539faa7c9f294e3cb587f0599e11f3dd8b8d5034acab2e0f582523c0c5a6a543",
+        "refinement_member": "Rutile__R060493-1__Powder__Cell_Refinement_Output_Data__7b9d604b329d4376bced1a9f71a6.txt",
+        "refinement_sha256": "b41fa40e4b6e9f5645161884e5d50a7acb6f025fc4524424dfb603dc3f138808",
+        "wavelengths_A": {
+          "1": 1.541838,
+          "2": 1.540562,
+          "3": 1.54439
+        },
+        "wave_rows": [
+          "2"
+        ],
+        "same_specimen_cif_proven": false,
+        "raw_kind": "experimental_powder_candidate",
+        "formula": "Ti_1.00_O_2_"
+      }
+    ],
+    "source_sha256": "ab28db0ee83d0bd90003f2426d2582fe5a248517db1e6c1f017b18fbb11ef534",
+    "archive_sha256": {
+      "XY_RAW.zip": "948a133482bb3c99da80194cc2848933aee668129beb209150f7f850cd4b0587",
+      "Refinement_Output_Data.zip": "a51e4f7399051889a3d699dadb99c2139476d3d17ea47baf85e3ebf3df4f5c12"
+    }
+  },
+  "records": [
+    {
+      "sample_id": "R050031-1",
+      "status": "PHYSICS_NOT_READY",
+      "checks": {
+        "independent_bragg_parity": true,
+        "strong_peak_count": true,
+        "predicted_strong_coverage": true,
+        "observed_strong_coverage": true,
+        "residual": true,
+        "multistart_stability": false,
+        "jacobian": true,
+        "all_converged": true,
+        "no_bounds": false
+      },
+      "methods": {
+        "P0": {
+          "q": [
+            0.012197475287727204,
+            -0.004070605573196337
+          ],
+          "eta": [
+            0.038127308016262455,
+            0.14054178959588262,
+            0.8906204546386958,
+            0.012943571020323516,
+            -0.008093902236741675
+          ],
+          "cell_ac_A": [
+            4.59412046007993,
+            2.9587591015621784
+          ],
+          "rmse": 0.009949996983465745,
+          "success": true,
+          "message": "CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL",
+          "nfev": 312,
+          "nit": 35,
+          "boundary": false,
+          "seconds": 0.4530986999743618,
+          "reference_agreement_ac_A": [
+            -0.0003795399200701155,
+            -0.0006408984378216687
+          ]
+        },
+        "P3": {
+          "q": [
+            0.012197475287727204,
+            -0.004070605573196337
+          ],
+          "eta": [
+            0.038127308016262455,
+            0.14054178959588262,
+            0.8906204546386958,
+            0.012943571020323516,
+            -0.008093902236741675
+          ],
+          "cell_ac_A": [
+            4.59412046007993,
+            2.9587591015621784
+          ],
+          "rmse": 0.009949996983465745,
+          "success": true,
+          "message": "CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL",
+          "nfev": 312,
+          "nit": 35,
+          "boundary": false,
+          "seconds": 1.5815442000166513,
+          "nfev_total": 1064,
+          "reference_agreement_ac_A": [
+            -0.0003795399200701155,
+            -0.0006408984378216687
+          ]
+        },
+        "H1": {
+          "q": [
+            0.012197475287727204,
+            -0.004070605573196337
+          ],
+          "eta": [
+            0.038127308016262455,
+            0.14054178959588262,
+            0.8906204546386958,
+            0.012943571020323516,
+            -0.008093902236741675
+          ],
+          "cell_ac_A": [
+            4.59412046007993,
+            2.9587591015621784
+          ],
+          "rmse": 0.009949996983465745,
+          "success": true,
+          "message": "CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL",
+          "nfev": 312,
+          "nit": 35,
+          "boundary": false,
+          "seconds": 0.6684233999694698,
+          "extraction_seconds": 0.13136679999297485,
+          "reference_agreement_ac_A": [
+            -0.0003795399200701155,
+            -0.0006408984378216687
+          ]
+        }
+      },
+      "five_start_fits": [
+        {
+          "q": [
+            0.012197475287727204,
+            -0.004070605573196337
+          ],
+          "eta": [
+            0.038127308016262455,
+            0.14054178959588262,
+            0.8906204546386958,
+            0.012943571020323516,
+            -0.008093902236741675
+          ],
+          "cell_ac_A": [
+            4.59412046007993,
+            2.9587591015621784
+          ],
+          "rmse": 0.009949996983465745,
+          "success": true,
+          "message": "CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL",
+          "nfev": 312,
+          "nit": 35,
+          "boundary": false,
+          "seconds": 0.4530986999743618
+        },
+        {
+          "q": [
+            -0.4141039639612501,
+            -0.6165884685143733
+          ],
+          "eta": [
+            0.09721916997702941,
+            0.04,
+            0.2,
+            0.018605665280572573,
+            -0.012755647562610597
+          ],
+          "cell_ac_A": [
+            4.55496040987052,
+            2.9225102944333194
+          ],
+          "rmse": 0.04118936179033448,
+          "success": true,
+          "message": "CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL",
+          "nfev": 352,
+          "nit": 31,
+          "boundary": true,
+          "seconds": 0.5227804000023752
+        },
+        {
+          "q": [
+            0.4780181664534972,
+            0.5390395752474084
+          ],
+          "eta": [
+            -0.016971662127264937,
+            0.04,
+            0.2,
+            0.018576809985428763,
+            -0.01269706074154959
+          ],
+          "cell_ac_A": [
+            4.636910748770418,
+            2.990900362063142
+          ],
+          "rmse": 0.04119768032968627,
+          "success": true,
+          "message": "CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL",
+          "nfev": 400,
+          "nit": 40,
+          "boundary": true,
+          "seconds": 0.6056651000399143
+        },
+        {
+          "q": [
+            0.012198298960166404,
+            -0.004069268653438693
+          ],
+          "eta": [
+            0.038127961413614644,
+            0.14054168719948565,
+            0.8906222423987193,
+            0.012943542705835333,
+            -0.008094016269542596
+          ],
+          "cell_ac_A": [
+            4.594120535742481,
+            2.9587591806810893
+          ],
+          "rmse": 0.009949996984035626,
+          "success": true,
+          "message": "CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL",
+          "nfev": 552,
+          "nit": 53,
+          "boundary": false,
+          "seconds": 0.9027896000188775
+        },
+        {
+          "q": [
+            0.01219599317311553,
+            -0.004072472755580382
+          ],
+          "eta": [
+            0.03812620526431142,
+            0.14054204218023528,
+            0.8906230157304887,
+            0.012943514454372548,
+            -0.008094216508005878
+          ],
+          "cell_ac_A": [
+            4.5941203239328825,
+            2.958758991062325
+          ],
+          "rmse": 0.009949996984968276,
+          "success": true,
+          "message": "CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL",
+          "nfev": 728,
+          "nit": 68,
+          "boundary": false,
+          "seconds": 1.2610109000233933
+        }
+      ],
+      "cell_span_A": 0.08195033889989833,
+      "jacobian_condition": 34.99587912404058,
+      "independent_peak_parity_deg": 2.842170943040401e-14,
+      "predicted_strong_peaks": 7,
+      "observed_strong_peaks": 6,
+      "predicted_peak_coverage": 0.8571428571428571,
+      "observed_peak_coverage": 1.0,
+      "nearest_predicted_peak_residual_deg": [
+        0.017889733892339166,
+        0.01071909504526758,
+        0.02268551224680948,
+        0.8053181100407159,
+        0.0067139107027429645,
+        0.005779523579640511,
+        0.004103592911931742
+      ],
+      "reference_ac_A": [
+        4.5945,
+        2.9594
+      ],
+      "axis_raw": [
+        5.0,
+        90.0,
+        8501
+      ],
+      "NN_status": "NOT_RUN",
+      "NN_reason": "No verified checkpoint for real doublet/nuisance protocol; physics gate decision precedes any neural inference."
+    },
+    {
+      "sample_id": "R050417-1",
+      "status": "PHYSICS_NOT_READY",
+      "checks": {
+        "independent_bragg_parity": true,
+        "strong_peak_count": true,
+        "predicted_strong_coverage": false,
+        "observed_strong_coverage": true,
+        "residual": true,
+        "multistart_stability": false,
+        "jacobian": true,
+        "all_converged": true,
+        "no_bounds": false
+      },
+      "methods": {
+        "P0": {
+          "q": [
+            0.035040356994952865,
+            0.021784806840717173
+          ],
+          "eta": [
+            0.08370298550284215,
+            0.11381042476210597,
+            0.9291481542583064,
+            0.012076466743426039,
+            -0.006209363697347109
+          ],
+          "cell_ac_A": [
+            4.596218807193557,
+            2.9602892248688337
+          ],
+          "rmse": 0.010527261565438466,
+          "success": true,
+          "message": "CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL",
+          "nfev": 320,
+          "nit": 35,
+          "boundary": false,
+          "seconds": 0.5294245000113733,
+          "reference_agreement_ac_A": [
+            0.0007288071935569462,
+            0.00059922486883357
+          ]
+        },
+        "P3": {
+          "q": [
+            0.035040356994952865,
+            0.021784806840717173
+          ],
+          "eta": [
+            0.08370298550284215,
+            0.11381042476210597,
+            0.9291481542583064,
+            0.012076466743426039,
+            -0.006209363697347109
+          ],
+          "cell_ac_A": [
+            4.596218807193557,
+            2.9602892248688337
+          ],
+          "rmse": 0.010527261565438466,
+          "success": true,
+          "message": "CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL",
+          "nfev": 320,
+          "nit": 35,
+          "boundary": false,
+          "seconds": 1.8182114000665024,
+          "nfev_total": 1104,
+          "reference_agreement_ac_A": [
+            0.0007288071935569462,
+            0.00059922486883357
+          ]
+        },
+        "H1": {
+          "q": [
+            0.03502504527178578,
+            0.0217887492897856
+          ],
+          "eta": [
+            0.0836936764567789,
+            0.11380984078094221,
+            0.9291639338996419,
+            0.012076305610659957,
+            -0.006211177263684099
+          ],
+          "cell_ac_A": [
+            4.5962174006586665,
+            2.9602894581829697
+          ],
+          "rmse": 0.010527261639668321,
+          "success": true,
+          "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+          "nfev": 240,
+          "nit": 28,
+          "boundary": false,
+          "seconds": 0.5288184999953955,
+          "extraction_seconds": 0.12105469999369234,
+          "reference_agreement_ac_A": [
+            0.0007274006586666104,
+            0.0005994581829695811
+          ]
+        }
+      },
+      "five_start_fits": [
+        {
+          "q": [
+            0.035040356994952865,
+            0.021784806840717173
+          ],
+          "eta": [
+            0.08370298550284215,
+            0.11381042476210597,
+            0.9291481542583064,
+            0.012076466743426039,
+            -0.006209363697347109
+          ],
+          "cell_ac_A": [
+            4.596218807193557,
+            2.9602892248688337
+          ],
+          "rmse": 0.010527261565438466,
+          "success": true,
+          "message": "CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL",
+          "nfev": 320,
+          "nit": 35,
+          "boundary": false,
+          "seconds": 0.5294245000113733
+        },
+        {
+          "q": [
+            -0.41476296558113523,
+            -0.6157758958193904
+          ],
+          "eta": [
+            0.09645550513340352,
+            0.04,
+            0.2,
+            0.01681126861395962,
+            -0.010085760276894395
+          ],
+          "cell_ac_A": [
+            4.554899873981717,
+            2.9225583824854082
+          ],
+          "rmse": 0.03787991117645553,
+          "success": true,
+          "message": "CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL",
+          "nfev": 376,
+          "nit": 41,
+          "boundary": true,
+          "seconds": 0.6264004000113346
+        },
+        {
+          "q": [
+            0.4180996764983122,
+            0.7671813809780418
+          ],
+          "eta": [
+            -0.08499092569491962,
+            0.04,
+            0.2,
+            0.016782086447170254,
+            -0.010023077565624573
+          ],
+          "cell_ac_A": [
+            4.631406636283135,
+            3.004401794126281
+          ],
+          "rmse": 0.03797483749240254,
+          "success": true,
+          "message": "CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL",
+          "nfev": 408,
+          "nit": 35,
+          "boundary": true,
+          "seconds": 0.6623865000437945
+        },
+        {
+          "q": [
+            0.03503921629876633,
+            0.021786065156964213
+          ],
+          "eta": [
+            0.08370233571144566,
+            0.11380945849569458,
+            0.9291592589933119,
+            0.01207645333907488,
+            -0.0062093590965530375
+          ],
+          "cell_ac_A": [
+            4.596218702409205,
+            2.960289299335989
+          ],
+          "rmse": 0.010527261560906144,
+          "success": true,
+          "message": "CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL",
+          "nfev": 584,
+          "nit": 56,
+          "boundary": false,
+          "seconds": 0.9378083000192419
+        },
+        {
+          "q": [
+            0.035040040055599304,
+            0.0217849575746904
+          ],
+          "eta": [
+            0.08370134922598177,
+            0.11380983427093945,
+            0.9291540900786217,
+            0.012076585557356315,
+            -0.006209502555931149
+          ],
+          "cell_ac_A": [
+            4.596218778079508,
+            2.96028923378927
+          ],
+          "rmse": 0.010527261577409828,
+          "success": true,
+          "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+          "nfev": 672,
+          "nit": 60,
+          "boundary": false,
+          "seconds": 1.0766524999635294
+        }
+      ],
+      "cell_span_A": 0.08184341164087261,
+      "jacobian_condition": 40.81144136128427,
+      "independent_peak_parity_deg": 2.842170943040401e-14,
+      "predicted_strong_peaks": 7,
+      "observed_strong_peaks": 5,
+      "predicted_peak_coverage": 0.7142857142857143,
+      "observed_peak_coverage": 1.0,
+      "nearest_predicted_peak_residual_deg": [
+        0.009056272145066657,
+        0.012108634701295529,
+        0.0017851588914794547,
+        13.155302541316523,
+        0.01087174986788142,
+        0.011018584654358676,
+        12.35762178813831
+      ],
+      "reference_ac_A": [
+        4.59549,
+        2.95969
+      ],
+      "axis_raw": [
+        5.0,
+        90.0,
+        8501
+      ],
+      "NN_status": "NOT_RUN",
+      "NN_reason": "No verified checkpoint for real doublet/nuisance protocol; physics gate decision precedes any neural inference."
+    },
+    {
+      "sample_id": "R060493-1",
+      "status": "PHYSICS_NOT_READY",
+      "checks": {
+        "independent_bragg_parity": true,
+        "strong_peak_count": true,
+        "predicted_strong_coverage": true,
+        "observed_strong_coverage": true,
+        "residual": true,
+        "multistart_stability": false,
+        "jacobian": true,
+        "all_converged": true,
+        "no_bounds": false
+      },
+      "methods": {
+        "P0": {
+          "q": [
+            0.03310937726637474,
+            0.020819166681253616
+          ],
+          "eta": [
+            0.07935628227379234,
+            0.08222059412940302,
+            1.2006437723702064,
+            0.010981536584591457,
+            -0.004063868274406428
+          ],
+          "cell_ac_A": [
+            4.596041427395689,
+            2.9602320782841964
+          ],
+          "rmse": 0.009385861523832353,
+          "success": true,
+          "message": "CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL",
+          "nfev": 288,
+          "nit": 33,
+          "boundary": false,
+          "seconds": 0.4594585999730043,
+          "reference_agreement_ac_A": [
+            0.00014142739568878682,
+            -7.792171580378593e-05
+          ]
+        },
+        "P3": {
+          "q": [
+            0.03310937726637474,
+            0.020819166681253616
+          ],
+          "eta": [
+            0.07935628227379234,
+            0.08222059412940302,
+            1.2006437723702064,
+            0.010981536584591457,
+            -0.004063868274406428
+          ],
+          "cell_ac_A": [
+            4.596041427395689,
+            2.9602320782841964
+          ],
+          "rmse": 0.009385861523832353,
+          "success": true,
+          "message": "CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL",
+          "nfev": 288,
+          "nit": 33,
+          "boundary": false,
+          "seconds": 1.780834499921184,
+          "nfev_total": 1080,
+          "reference_agreement_ac_A": [
+            0.00014142739568878682,
+            -7.792171580378593e-05
+          ]
+        },
+        "H1": {
+          "q": [
+            0.03311514623519834,
+            0.020822345182550578
+          ],
+          "eta": [
+            0.07936034140519382,
+            0.08222147990231528,
+            1.2006282617757418,
+            0.010981562537804477,
+            -0.00406394800592234
+          ],
+          "cell_ac_A": [
+            4.596041957333165,
+            2.9602322663879033
+          ],
+          "rmse": 0.009385861563181252,
+          "success": true,
+          "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+          "nfev": 368,
+          "nit": 40,
+          "boundary": false,
+          "seconds": 0.728920699970331,
+          "extraction_seconds": 0.1264653999824077,
+          "reference_agreement_ac_A": [
+            0.00014195733316491044,
+            -7.773361209695295e-05
+          ]
+        }
+      },
+      "five_start_fits": [
+        {
+          "q": [
+            0.03310937726637474,
+            0.020819166681253616
+          ],
+          "eta": [
+            0.07935628227379234,
+            0.08222059412940302,
+            1.2006437723702064,
+            0.010981536584591457,
+            -0.004063868274406428
+          ],
+          "cell_ac_A": [
+            4.596041427395689,
+            2.9602320782841964
+          ],
+          "rmse": 0.009385861523832353,
+          "success": true,
+          "message": "CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL",
+          "nfev": 288,
+          "nit": 33,
+          "boundary": false,
+          "seconds": 0.4594585999730043
+        },
+        {
+          "q": [
+            -0.46284311480736356,
+            -0.5837088854008698
+          ],
+          "eta": [
+            0.07083820071534705,
+            0.04,
+            0.2,
+            0.015376546486299079,
+            -0.0076665703015352344
+          ],
+          "cell_ac_A": [
+            4.5504832314737955,
+            2.924456108161977
+          ],
+          "rmse": 0.03892179433815784,
+          "success": true,
+          "message": "CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL",
+          "nfev": 296,
+          "nit": 34,
+          "boundary": true,
+          "seconds": 0.4889509999775328
+        },
+        {
+          "q": [
+            0.3369349551560436,
+            0.7210798402801932
+          ],
+          "eta": [
+            -0.09585481747928065,
+            0.04,
+            0.2,
+            0.015349141210809738,
+            -0.0076055982310713295
+          ],
+          "cell_ac_A": [
+            4.623950844980634,
+            3.0016735049477816
+          ],
+          "rmse": 0.03899731676589755,
+          "success": true,
+          "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+          "nfev": 496,
+          "nit": 39,
+          "boundary": true,
+          "seconds": 0.832424899970647
+        },
+        {
+          "q": [
+            0.03311092534349981,
+            0.020823981479656285
+          ],
+          "eta": [
+            0.07935755860428659,
+            0.0822218792575476,
+            1.2006249211359172,
+            0.010981622571889576,
+            -0.004063776280512875
+          ],
+          "cell_ac_A": [
+            4.596041569602054,
+            2.960232363223966
+          ],
+          "rmse": 0.00938586155551804,
+          "success": true,
+          "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+          "nfev": 592,
+          "nit": 55,
+          "boundary": false,
+          "seconds": 0.9645030999672599
+        },
+        {
+          "q": [
+            0.6864764588821163,
+            -0.21292319525781195
+          ],
+          "eta": [
+            0.0958100773112036,
+            0.04,
+            0.2,
+            0.015348213649520367,
+            -0.007615503850796965
+          ],
+          "cell_ac_A": [
+            4.656059727512911,
+            2.9463992053046426
+          ],
+          "rmse": 0.038688937226843675,
+          "success": true,
+          "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+          "nfev": 352,
+          "nit": 35,
+          "boundary": true,
+          "seconds": 0.576258199987933
+        }
+      ],
+      "cell_span_A": 0.10557649603911567,
+      "jacobian_condition": 49.130485328774334,
+      "independent_peak_parity_deg": 2.842170943040401e-14,
+      "predicted_strong_peaks": 7,
+      "observed_strong_peaks": 7,
+      "predicted_peak_coverage": 0.8571428571428571,
+      "observed_peak_coverage": 0.8571428571428571,
+      "nearest_predicted_peak_residual_deg": [
+        0.005641606904752905,
+        0.015376402056361371,
+        0.0013520234860706637,
+        0.8078695514157346,
+        0.008424030522071746,
+        0.012985197213055244,
+        0.011096320384609726
+      ],
+      "reference_ac_A": [
+        4.5959,
+        2.96031
+      ],
+      "axis_raw": [
+        5.0,
+        90.0,
+        8501
+      ],
+      "NN_status": "NOT_RUN",
+      "NN_reason": "No verified checkpoint for real doublet/nuisance protocol; physics gate decision precedes any neural inference."
+    }
+  ],
+  "seconds": 13.222628900024574,
+  "NN_status": "NOT_RUN",
+  "interpretation": "Descriptive case series; same-ID reference agreement, not accuracy; no real labels used for training or initializer selection."
+}

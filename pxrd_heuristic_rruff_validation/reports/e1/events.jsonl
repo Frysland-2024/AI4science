@@ -1,0 +1,74 @@
+{"time": 1792425295.6380274, "kind": "failure", "error": "AssertionError()", "traceback": "Traceback (most recent call last):\n  File \"E:\\AI4science\\_local\\worktrees\\pxrd_heuristic_rruff_validation_20261019\\pxrd_heuristic_rruff_validation\\e1.py\", line 174, in <module>\n    try:print(json.dumps(globals()[sys.argv[1] if len(sys.argv)>1 else 'audit'](),ensure_ascii=False))\n                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"E:\\AI4science\\_local\\worktrees\\pxrd_heuristic_rruff_validation_20261019\\pxrd_heuristic_rruff_validation\\e1.py\", line 26, in audit\n    assert sha(OLD/'pxrd_cross_material_autolab/config.json')==manifest['identity']['config_sha256']\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n"}
+{"time": 1792425310.5833204, "kind": "failure", "error": "AssertionError()", "traceback": "Traceback (most recent call last):\n  File \"E:\\AI4science\\_local\\worktrees\\pxrd_heuristic_rruff_validation_20261019\\pxrd_heuristic_rruff_validation\\e1.py\", line 174, in <module>\n    try:print(json.dumps(globals()[sys.argv[1] if len(sys.argv)>1 else 'audit'](),ensure_ascii=False))\n                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"E:\\AI4science\\_local\\worktrees\\pxrd_heuristic_rruff_validation_20261019\\pxrd_heuristic_rruff_validation\\e1.py\", line 26, in audit\n    assert sha(OLD/'pxrd_cross_material_autolab/config.json')==manifest['identity']['config_sha256']\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n"}
+{"time": 1792425340.148121, "kind": "run_started"}
+{"time": 1792425340.1915426, "kind": "material_opened", "material": "batio3"}
+{"time": 1792425342.833718, "kind": "progress", "material": "batio3", "parents": 1}
+{"time": 1792425371.073281, "kind": "progress", "material": "batio3", "parents": 11}
+{"time": 1792425384.2494218, "kind": "progress", "material": "batio3", "parents": 21}
+{"time": 1792425395.599527, "kind": "progress", "material": "batio3", "parents": 31}
+{"time": 1792425407.0328274, "kind": "progress", "material": "batio3", "parents": 41}
+{"time": 1792425418.2997382, "kind": "progress", "material": "batio3", "parents": 51}
+{"time": 1792425429.312195, "kind": "progress", "material": "batio3", "parents": 61}
+{"time": 1792425440.3700695, "kind": "progress", "material": "batio3", "parents": 71}
+{"time": 1792425446.9741771, "kind": "material_completed", "material": "batio3"}
+{"time": 1792425447.0122707, "kind": "material_opened", "material": "mgo"}
+{"time": 1792425448.6820724, "kind": "progress", "material": "mgo", "parents": 1}
+{"time": 1792425464.939494, "kind": "progress", "material": "mgo", "parents": 11}
+{"time": 1792425473.5144777, "kind": "progress", "material": "mgo", "parents": 21}
+{"time": 1792425481.2072146, "kind": "progress", "material": "mgo", "parents": 31}
+{"time": 1792425488.5938637, "kind": "progress", "material": "mgo", "parents": 41}
+{"time": 1792425496.1344554, "kind": "progress", "material": "mgo", "parents": 51}
+{"time": 1792425503.3076565, "kind": "progress", "material": "mgo", "parents": 61}
+{"time": 1792425510.7220078, "kind": "progress", "material": "mgo", "parents": 71}
+{"time": 1792425515.2547486, "kind": "material_completed", "material": "mgo"}
+{"time": 1792425515.2887244, "kind": "material_opened", "material": "ceo2"}
+{"time": 1792425517.68612, "kind": "progress", "material": "ceo2", "parents": 1}
+{"time": 1792425539.8922427, "kind": "progress", "material": "ceo2", "parents": 11}
+{"time": 1792425550.7405424, "kind": "progress", "material": "ceo2", "parents": 21}
+{"time": 1792425560.0006802, "kind": "progress", "material": "ceo2", "parents": 31}
+{"time": 1792425569.4408455, "kind": "progress", "material": "ceo2", "parents": 41}
+{"time": 1792425578.8841333, "kind": "progress", "material": "ceo2", "parents": 51}
+{"time": 1792425588.4768882, "kind": "progress", "material": "ceo2", "parents": 61}
+{"time": 1792425597.780355, "kind": "progress", "material": "ceo2", "parents": 71}
+{"time": 1792425603.5813627, "kind": "material_completed", "material": "ceo2"}
+{"time": 1792425603.5944192, "kind": "material_opened", "material": "rutile"}
+{"time": 1792425606.3509836, "kind": "progress", "material": "rutile", "parents": 1}
+{"time": 1792425635.2179453, "kind": "progress", "material": "rutile", "parents": 11}
+{"time": 1792425648.5866365, "kind": "progress", "material": "rutile", "parents": 21}
+{"time": 1792425660.277479, "kind": "progress", "material": "rutile", "parents": 31}
+{"time": 1792425672.0352101, "kind": "progress", "material": "rutile", "parents": 41}
+{"time": 1792425683.7867837, "kind": "progress", "material": "rutile", "parents": 51}
+{"time": 1792425695.400325, "kind": "progress", "material": "rutile", "parents": 61}
+{"time": 1792425706.855009, "kind": "progress", "material": "rutile", "parents": 71}
+{"time": 1792425713.7052288, "kind": "material_completed", "material": "rutile"}
+{"time": 1792425713.7238994, "kind": "material_opened", "material": "zno"}
+{"time": 1792425715.898461, "kind": "progress", "material": "zno", "parents": 1}
+{"time": 1792425737.5033422, "kind": "progress", "material": "zno", "parents": 11}
+{"time": 1792425748.3554788, "kind": "progress", "material": "zno", "parents": 21}
+{"time": 1792425757.8276956, "kind": "progress", "material": "zno", "parents": 31}
+{"time": 1792425767.2880414, "kind": "progress", "material": "zno", "parents": 41}
+{"time": 1792425776.4902694, "kind": "progress", "material": "zno", "parents": 51}
+{"time": 1792425785.7117767, "kind": "progress", "material": "zno", "parents": 61}
+{"time": 1792425795.043925, "kind": "progress", "material": "zno", "parents": 71}
+{"time": 1792425800.4895613, "kind": "material_completed", "material": "zno"}
+{"time": 1792425800.51184, "kind": "material_opened", "material": "silicon"}
+{"time": 1792425802.4586606, "kind": "progress", "material": "silicon", "parents": 1}
+{"time": 1792425822.5209305, "kind": "progress", "material": "silicon", "parents": 11}
+{"time": 1792425832.6082218, "kind": "progress", "material": "silicon", "parents": 21}
+{"time": 1792425841.380658, "kind": "progress", "material": "silicon", "parents": 31}
+{"time": 1792425850.191782, "kind": "progress", "material": "silicon", "parents": 41}
+{"time": 1792425859.1466954, "kind": "progress", "material": "silicon", "parents": 51}
+{"time": 1792425868.2284088, "kind": "progress", "material": "silicon", "parents": 61}
+{"time": 1792425877.128901, "kind": "progress", "material": "silicon", "parents": 71}
+{"time": 1792425882.4196954, "kind": "material_completed", "material": "silicon"}
+{"time": 1792425882.487982, "kind": "material_opened", "material": "grossular"}
+{"time": 1792425892.2876356, "kind": "progress", "material": "grossular", "parents": 1}
+{"time": 1792425985.630605, "kind": "progress", "material": "grossular", "parents": 11}
+{"time": 1792426026.8894527, "kind": "progress", "material": "grossular", "parents": 21}
+{"time": 1792426060.4072292, "kind": "progress", "material": "grossular", "parents": 31}
+{"time": 1792426094.7848668, "kind": "progress", "material": "grossular", "parents": 41}
+{"time": 1792426126.6976273, "kind": "progress", "material": "grossular", "parents": 51}
+{"time": 1792426160.6143632, "kind": "progress", "material": "grossular", "parents": 61}
+{"time": 1792426193.536326, "kind": "progress", "material": "grossular", "parents": 71}
+{"time": 1792426213.8736424, "kind": "material_completed", "material": "grossular"}
+{"time": 1792461939.241054, "kind": "delivery_audit_completed", "E1": "COMPLETE", "E1_science": "NEURAL_INCREMENTAL_VALUE_NOT_ESTABLISHED", "E2": "PHYSICS_NOT_READY", "E2_neural_arm": "NOT_RUN", "immutable_rows": 7476, "validation_tests": "7 passed", "new_training_seconds": 0, "report_recomputation": "PASS_NO_REFITTING"}

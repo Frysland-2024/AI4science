@@ -120,3 +120,9 @@ xrd_inversion/reports/week1_repaired_smoke_results.json
 !/pxrd_cross_material_autolab/runs/**
 /pxrd_cross_material_autolab/runs/**/private/
 /pxrd_cross_material_autolab/runs/**/__pycache__/
+
+# Private RRUFF/heuristic execution assets
+/pxrd_heuristic_rruff_validation/**/private/
+/pxrd_heuristic_rruff_validation/**/__pycache__/
+/pxrd_heuristic_rruff_validation/.pytest_cache/
+/pxrd_heuristic_rruff_codex.log
