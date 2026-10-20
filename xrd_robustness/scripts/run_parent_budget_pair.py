@@ -23,7 +23,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
 from xrd_robustness.evaluation.metrics import classification_metrics  # noqa: E402
-from xrd_robustness.experiment import file_hash, save_checkpoint  # noqa: E402
+from xrd_robustness.experiment import save_checkpoint  # noqa: E402
 from xrd_robustness.models import ML4PXRDResNet1DConfig  # noqa: E402
 from xrd_robustness.online_views import OnlineViewFactory, TrainingMode  # noqa: E402
 from xrd_robustness.parent_budget_efficiency import (  # noqa: E402
@@ -33,6 +33,7 @@ from xrd_robustness.parent_budget_efficiency import (  # noqa: E402
     expected_exposure,
     identity_hash,
     load_split_rows,
+    normalized_text_file_hash,
     read_ranked_csv,
     sha256_bytes,
     sha256_file,
@@ -167,6 +168,7 @@ def _ensure_eval_cache(
     cache_root: Path,
     split_rows: Sequence[Mapping[str, Any]],
     simulation: Mapping[str, Any],
+    simulation_config_sha256: str,
     eval_seeds: Sequence[int],
     profiles: Sequence[str],
     split: str,
@@ -185,7 +187,7 @@ def _ensure_eval_cache(
             data_root / "manifests" / "split_manifest.json"
         ),
         "material_ids_sha256": identity_hash(material_ids),
-        "simulation_config_sha256": file_hash(PROJECT_ROOT / "configs" / "simulation.method_transfer.frozen.json"),
+        "simulation_config_sha256": simulation_config_sha256,
         "evaluation_seeds": [int(value) for value in eval_seeds],
         "profiles": list(profiles),
         "view_count_per_parent": 1,
@@ -480,7 +482,7 @@ def _run_pair(
         for row in sorted(val_rows, key=lambda item: str(item["material_id"]))
     ]
     simulation = json.loads(simulation_path.read_text(encoding="utf-8"))
-    sim_hash = file_hash(simulation_path)
+    sim_hash = normalized_text_file_hash(simulation_path)
     sampler = PhysicsParameterSampler.from_mapping({**simulation, "run_seed": int(seed)})
     if "train" not in sampler.profiles:
         raise ValueError("frozen simulation config is missing train profile")
@@ -508,6 +510,7 @@ def _run_pair(
         cache_root=cache_root,
         split_rows=full_split_rows,
         simulation=simulation,
+        simulation_config_sha256=sim_hash,
         eval_seeds=[eval_seed],
         profiles=PROFILES[:7],
         split="validation",
@@ -552,10 +555,11 @@ def _run_pair(
         "batch_size_parents": batch_size,
         "expected_exposure_per_method": expected,
         "data_subset_sha256": manifest["budgets"][budget_key]["ordered_parent_ids_sha256"],
-        "parent_subset_manifest_sha256": sha256_file(subset_manifest_path),
-        "ranked_train_file_sha256": sha256_file(ranked_path),
+        "parent_subset_manifest_sha256": normalized_text_file_hash(subset_manifest_path),
+        "ranked_train_file_sha256": normalized_text_file_hash(ranked_path),
         "simulation_config_sha256": sim_hash,
-        "protocol_config_sha256": sha256_file(config_path),
+        "text_config_hash_basis": "UTF-8 file bytes with CRLF/CR normalized to LF before SHA-256",
+        "protocol_config_sha256": normalized_text_file_hash(config_path),
         "source_code_sha256": {
             "runner": sha256_file(Path(__file__)),
             "subset_module": sha256_file(PROJECT_ROOT / "src" / "xrd_robustness" / "parent_budget_efficiency.py"),

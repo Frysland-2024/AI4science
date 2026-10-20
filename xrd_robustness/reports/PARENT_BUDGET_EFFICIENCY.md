@@ -7,7 +7,7 @@
 | Gate | Status | Evidence |
 |---|---|---|
 | A — data, historical provenance, frozen protocol | PASS | Official split and peak-cache hashes verified; local GPU available; historical terminal steps unavailable and a new shared budget was frozen before scores. |
-| B — implementation and fairness smoke | PASS | Deterministic stratified nested subsets, fixed-step paired runner, direct-versus-prefetch bitwise rendering check, tests, and matched-view smoke completed. |
+| B — implementation and fairness smoke | PARTIAL | Deterministic stratified nested subsets, tests, and matched-view smoke passed; the archived 40-run execution does not include per-pair stream hashes. |
 | C — fixed matrix and uniform Test evaluation | PASS | 20/20 seed-by-budget pairs completed (40/40 method runs); incomplete cells are listed below. |
 | D — paired statistics and plots | PASS | Per-seed, profile-level, per-class, and matched-seed metrics are summarized; parent-saving claims require paired uncertainty support. |
 | E — archive | PASS | Independent Markdown, JSON/CSV, figures, frozen configs, and exact subset manifests are prepared for Git. |
@@ -19,6 +19,12 @@ Four nested Train subsets contain 984, 2,460, 4,921, and 9,842 unique parent str
 Each method receives 49,280 optimizer steps, batch size 16, 788,480 parent occurrences, and 1,576,960 generated views. The optimizer is AdamW (learning rate 1e-4, weight decay 1e-4) with no scheduler. Validation runs every 6,160 steps; the selected checkpoint maximizes mean Macro-F1 across six single-factor OOD Validation profiles at evaluation seed 20260721, with in-range Macro-F1 as the tie-break and the earlier step as the final tie-break.
 
 This is a new fixed-budget supplementary protocol. Available historical checkpoints record selected best-checkpoint steps, not each original run's terminal step. The 49,280-step budget is the median selected-checkpoint step across the 10 historical checkpoints and does not claim to reproduce their stopping behavior.
+
+## Paired exposure audit
+
+The runner writes actual exposure counts and the `samples_stream_sha256` and `paired_two_view_stream_sha256` hashes into each local pair's `result.json`. Those per-pair files were excluded from the tracked archive; the committed execution manifest therefore contains no values for the original 20 stream hashes. The archived report can confirm the frozen design and matched-view smoke test, but the original 40-run stream identity is not independently hash-auditable from Git alone.
+
+The updated analyzer includes these counters and hashes in `pairing_exposure_audit` in its results JSON and report whenever the local pair records are available. It records missing or invalid entries explicitly. The original 40-run hashes must not be inferred or fabricated if the local output is unavailable.
 
 ## Data identity and split audit
 
@@ -199,6 +205,6 @@ Observed completed-cell wall time was 12.24 h, plus 0.59 h for the interrupted p
 
 ## Provenance and interpretation limits
 
-Parent subset manifest SHA-256: `8A484426AA1DDEABCD11084FAE8F7CAE4A2B56B6B230D0DCAC466E50F043422D`. Protocol config SHA-256: `F8E531868741DFAABC484B9F73E711196911B82BD8836D2FAE14EE409B2B406C`. Local output root: `CUIFA local ignored output directory (excluded from Git)`.
+Parent subset manifest SHA-256: `8A484426AA1DDEABCD11084FAE8F7CAE4A2B56B6B230D0DCAC466E50F043422D`. Protocol config SHA-256: `F8E531868741DFAABC484B9F73E711196911B82BD8836D2FAE14EE409B2B406C`. Simulator config SHA-256 after line-ending normalization: `1451F111430332CD426244436B5B9263100D1BE7CAA2E0B036BD03CD09814371`; the original execution-copy raw-byte hash was `167CBFFD23C37BF57A5C9BB8974EB28BD17E908BFE3A88218EF96E9CF98CB010`. Local output root: `CUIFA local ignored output directory (excluded from Git)`.
 
 All available cells were retained regardless of outcome. Paired uncertainty is summarized over training seeds; intervals crossing zero are reported as uncertain evidence, not erased or treated as a binary experiment failure. This experiment evaluates simulated parent-structure budget efficiency only; it does not estimate RRUFF real-label efficiency.

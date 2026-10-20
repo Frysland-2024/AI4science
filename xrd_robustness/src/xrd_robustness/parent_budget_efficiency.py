@@ -42,6 +42,23 @@ def sha256_file(path: str | Path) -> str:
     return digest.hexdigest().upper()
 
 
+def normalized_text_file_hash(path: str | Path) -> str:
+    """Hash UTF-8 text after normalizing CRLF and CR line endings to LF."""
+    content = Path(path).read_bytes().replace(b"\r\n", b"\n").replace(b"\r", b"\n")
+    return sha256_bytes(content)
+
+
+def text_file_hash_variants(path: str | Path) -> set[str]:
+    """Return hashes for the same UTF-8 text with LF, CRLF, or existing endings."""
+    raw = Path(path).read_bytes()
+    normalized = raw.replace(b"\r\n", b"\n").replace(b"\r", b"\n")
+    return {
+        sha256_bytes(raw),
+        sha256_bytes(normalized),
+        sha256_bytes(normalized.replace(b"\n", b"\r\n")),
+    }
+
+
 def identity_hash(ids: Iterable[str]) -> str:
     """Hash a set-like identity list independent of filesystem line endings."""
     return sha256_bytes(canonical_json_bytes(sorted(str(value) for value in ids)))

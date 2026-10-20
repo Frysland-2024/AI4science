@@ -24,10 +24,16 @@ from run_parent_budget_pair import (  # noqa: E402
     _configure_training_runtime,
     _ensure_eval_cache,
     _evaluate_model,
+    normalized_text_file_hash,
 )
-from xrd_robustness.experiment import file_hash  # noqa: E402
 from xrd_robustness.models import ML4PXRDResNet1D, ML4PXRDResNet1DConfig  # noqa: E402
-from xrd_robustness.parent_budget_efficiency import BUDGETS, load_split_rows, sha256_file  # noqa: E402
+from xrd_robustness.parent_budget_efficiency import (  # noqa: E402
+    BUDGETS,
+    load_split_rows,
+    normalized_text_file_hash,
+    sha256_file,
+    text_file_hash_variants,
+)
 from xrd_robustness.structure_data import CRYSTAL_SYSTEMS  # noqa: E402
 
 
@@ -36,6 +42,153 @@ EVALUATION_SEEDS = (20260721, 20260722, 20260723)
 BUDGET_ORDER = ("10", "25", "50", "100")
 OOD_PROFILES = PROFILES[:6]
 REPORT_DIR = PROJECT_ROOT / "reports" / "parent_budget_efficiency"
+CANONICAL_REPORT = PROJECT_ROOT / "reports" / "PARENT_BUDGET_EFFICIENCY.md"
+
+
+def _assert_pair_provenance(
+    run_result: Mapping[str, Any],
+    *,
+    seed: int,
+    budget: str,
+    subset_manifest: Mapping[str, Any],
+    input_fingerprint: Mapping[str, str],
+    input_hash_variants: Mapping[str, set[str]],
+) -> None:
+    expected = {
+        "training_seed": int(seed),
+        "budget_percent": int(budget),
+        "unique_parent_count": BUDGETS[budget],
+        "data_subset_sha256": subset_manifest["budgets"][budget]["ordered_parent_ids_sha256"],
+        "protocol_config_sha256": input_fingerprint["protocol_config_sha256"],
+        "parent_subset_manifest_sha256": input_fingerprint["subset_manifest_sha256"],
+        "ranked_train_file_sha256": input_fingerprint["ranked_train_file_sha256"],
+        "simulation_config_sha256": input_fingerprint["simulation_config_sha256"],
+    }
+    mismatched = [
+        key
+        for key, value in expected.items()
+        if (
+            run_result.get(key) not in input_hash_variants[key]
+            if key in input_hash_variants
+            else run_result.get(key) != value
+        )
+    ]
+    if mismatched:
+        raise ValueError(
+            "completed pair has incompatible provenance for "
+            f"seed={seed}, budget={budget}: {', '.join(mismatched)}"
+        )
+
+
+def _pairing_exposure_record(
+    run_result: Mapping[str, Any],
+    *,
+    seed: int,
+    budget: str,
+) -> dict[str, Any]:
+    actual = run_result.get("actual_exposure")
+    actual = actual if isinstance(actual, Mapping) else {}
+    expected = run_result.get("expected_exposure_per_method")
+    expected = expected if isinstance(expected, Mapping) else {}
+    sample_hash = actual.get("samples_stream_sha256")
+    view_hash = actual.get("paired_two_view_stream_sha256")
+    hash_valid = all(
+        isinstance(value, str)
+        and len(value) == 64
+        and all(char in "0123456789abcdefABCDEF" for char in value)
+        for value in (sample_hash, view_hash)
+    )
+    counts_valid = (
+        actual.get("optimizer_steps_per_method") == expected.get("optimizer_steps")
+        and actual.get("parent_occurrences_per_method") == expected.get("parent_occurrences")
+        and actual.get("views_per_method") == expected.get("views")
+        and actual.get("expected") == expected
+    )
+    flags_valid = (
+        actual.get("full_batches_only") is True
+        and actual.get("same_shared_batch_for_erm_and_js") is True
+        and actual.get("rendered_once_for_pair") is True
+    )
+    status = "verified" if hash_valid and counts_valid and flags_valid else (
+        "unavailable" if not actual else "invalid"
+    )
+    return {
+        "training_seed": int(seed),
+        "budget_percent": int(budget),
+        "parent_count": BUDGETS[budget],
+        "status": status,
+        "optimizer_steps_per_method": actual.get("optimizer_steps_per_method"),
+        "parent_occurrences_per_method": actual.get("parent_occurrences_per_method"),
+        "views_per_method": actual.get("views_per_method"),
+        "samples_stream_sha256": sample_hash,
+        "paired_two_view_stream_sha256": view_hash,
+        "same_shared_batch_for_erm_and_js": actual.get("same_shared_batch_for_erm_and_js"),
+        "rendered_once_for_pair": actual.get("rendered_once_for_pair"),
+    }
+
+
+def _summarize_pairing_exposure(records: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
+    verified = sum(record.get("status") == "verified" for record in records)
+    return {
+        "status": "complete" if verified == 20 and len(records) == 20 else (
+            "unavailable" if not records else "incomplete"
+        ),
+        "expected_pairs": 20,
+        "completed_pairs_with_result_records": len(records),
+        "verified_pairs": verified,
+        "records": list(records),
+    }
+
+
+def _analysis_output_paths(
+    output_root: Path,
+    requested_report_dir: Path | None,
+    *,
+    complete_matrix: bool,
+) -> tuple[Path, Path]:
+    if requested_report_dir is not None:
+        report_dir = requested_report_dir.resolve()
+        return report_dir, report_dir / "PARENT_BUDGET_EFFICIENCY.md"
+    if complete_matrix:
+        return REPORT_DIR, CANONICAL_REPORT
+    report_dir = (output_root / "analysis").resolve()
+    return report_dir, report_dir / "PARENT_BUDGET_EFFICIENCY.md"
+
+
+def _guard_completed_archive(
+    results_path: Path,
+    report_path: Path,
+    new_results: Mapping[str, Any],
+    *,
+    complete_matrix: bool,
+) -> None:
+    if not complete_matrix and report_path.resolve() == CANONICAL_REPORT.resolve():
+        raise RuntimeError("partial analysis cannot overwrite the canonical completed report")
+    if not results_path.is_file():
+        return
+    existing = json.loads(results_path.read_text(encoding="utf-8"))
+    if existing.get("status") != "completed":
+        return
+    if not complete_matrix:
+        raise RuntimeError(
+            f"partial analysis cannot replace completed archive: {results_path}"
+        )
+    existing_provenance = existing.get("provenance")
+    new_provenance = new_results.get("provenance")
+    old_fingerprint = (
+        existing_provenance.get("input_fingerprint")
+        if isinstance(existing_provenance, Mapping)
+        else None
+    )
+    new_fingerprint = (
+        new_provenance.get("input_fingerprint")
+        if isinstance(new_provenance, Mapping)
+        else None
+    )
+    if not isinstance(old_fingerprint, Mapping) or old_fingerprint != new_fingerprint:
+        raise RuntimeError(
+            f"refusing to replace completed archive with missing or different input provenance: {results_path}"
+        )
 
 
 def _pair_dir(output_root: Path, seed: int, budget: str) -> Path:
@@ -228,8 +381,10 @@ def _equivalent_parent_estimates(summary: Mapping[str, Any], complete_matrix: bo
             if candidate["mean"]["single_factor_ood_macro_f1"] >= target:
                 crossing = {
                     "target_erm_macro_f1": float(target),
-                    "erm_parent_count": budgets[target_index],
-                    "js_parent_count": budgets[candidate_index],
+                    "erm_budget_percent": int(erm_budget),
+                    "js_budget_percent": int(candidate_budget),
+                    "erm_parent_count": BUDGETS[erm_budget],
+                    "js_parent_count": BUDGETS[candidate_budget],
                     "paired_delta_mean": float(np.mean(differences)) if differences else None,
                     "paired_delta_bootstrap_95_percent_interval": interval,
                     "n_paired_training_seeds": len(differences),
@@ -315,8 +470,13 @@ def _write_report(
     complete_matrix: bool,
     data_savings: Mapping[str, Any],
     provenance: Mapping[str, Any],
+    pairing_audit: Mapping[str, Any],
+    artifact_prefix: str,
 ) -> None:
     total_runs = len(results)
+    artifact_prefix = artifact_prefix.strip("/")
+    def artifact_link(name: str) -> str:
+        return f"{artifact_prefix}/{name}" if artifact_prefix else name
     lines = [
         "# Parent-Structure Sample Efficiency Supplementary Experiment",
         "",
@@ -523,15 +683,31 @@ def _write_report(
     lines.extend(
         [
             "",
+            "## Paired exposure audit",
+            "",
+            f"Stream-hash audit status: **{pairing_audit.get('status', 'unavailable')}**; "
+            f"{pairing_audit.get('verified_pairs', 0)}/{pairing_audit.get('expected_pairs', 20)} pairs have validated "
+            "exposure counters and both stream hashes. Full per-pair evidence is in the linked results JSON.",
+        ]
+    )
+    for item in pairing_audit.get("records", []):
+        if item.get("status") != "verified":
+            lines.append(
+                f"- Seed {item['training_seed']}, {item['parent_count']:,} parents: "
+                f"pair exposure audit {item.get('status', 'unavailable')}."
+            )
+    lines.extend(
+        [
+            "",
             "## Figures and machine-readable results",
             "",
-            "- [Learning curve](parent_budget_efficiency/learning_curve.png)",
+            f"- [Learning curve]({artifact_link('learning_curve.png')})",
             "  Error bars show sample SD across the five training seeds.",
-            "- [Paired differences](parent_budget_efficiency/paired_deltas.png)",
+            f"- [Paired differences]({artifact_link('paired_deltas.png')})",
             "  Error bars show sample SD across the five matched training-seed differences; the dashed line marks zero.",
-            "- [Summary JSON](parent_budget_efficiency/results.json)",
-            "- [Per-seed metrics CSV](parent_budget_efficiency/per_seed_metrics.csv)",
-            "- [Paired-difference CSV](parent_budget_efficiency/paired_deltas.csv)",
+            f"- [Summary JSON]({artifact_link('results.json')})",
+            f"- [Per-seed metrics CSV]({artifact_link('per_seed_metrics.csv')})",
+            f"- [Paired-difference CSV]({artifact_link('paired_deltas.csv')})",
             "- Checkpoints, panel caches, and per-parent predictions are retained in the ignored local output directory, outside Git.",
             "",
             "## Provenance and interpretation limits",
@@ -550,7 +726,7 @@ def main() -> int:
     parser.add_argument("--data-root", type=Path, required=True)
     parser.add_argument("--output-root", type=Path, required=True)
     parser.add_argument("--device", default="auto")
-    parser.add_argument("--report-dir", type=Path, default=REPORT_DIR)
+    parser.add_argument("--report-dir", type=Path, default=None)
     args = parser.parse_args()
     if args.device == "auto":
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -560,7 +736,27 @@ def main() -> int:
         raise RuntimeError("CUDA was requested but is not available")
 
     output_root = args.output_root.resolve()
-    config = json.loads((PROJECT_ROOT / "configs" / "parent_budget_efficiency.v1.json").read_text(encoding="utf-8"))
+    protocol_config_path = PROJECT_ROOT / "configs" / "parent_budget_efficiency.v1.json"
+    subset_manifest_path = PROJECT_ROOT / "manifests" / "parent_budget_efficiency" / "parent_subsets.v1.json"
+    ranked_train_path = PROJECT_ROOT / "manifests" / "parent_budget_efficiency" / "ranked_train_parents.v1.csv"
+    simulation_path = PROJECT_ROOT / "configs" / "simulation.method_transfer.frozen.json"
+    config = json.loads(protocol_config_path.read_text(encoding="utf-8"))
+    subset_manifest = json.loads(subset_manifest_path.read_text(encoding="utf-8"))
+    input_fingerprint = {
+        "official_split_manifest_sha256": normalized_text_file_hash(
+            args.data_root.resolve() / "manifests" / "split_manifest.json"
+        ),
+        "protocol_config_sha256": normalized_text_file_hash(protocol_config_path),
+        "subset_manifest_sha256": normalized_text_file_hash(subset_manifest_path),
+        "ranked_train_file_sha256": normalized_text_file_hash(ranked_train_path),
+        "simulation_config_sha256": normalized_text_file_hash(simulation_path),
+    }
+    input_hash_variants = {
+        "protocol_config_sha256": text_file_hash_variants(protocol_config_path),
+        "parent_subset_manifest_sha256": text_file_hash_variants(subset_manifest_path),
+        "ranked_train_file_sha256": text_file_hash_variants(ranked_train_path),
+        "simulation_config_sha256": text_file_hash_variants(simulation_path),
+    }
     runtime = _configure_training_runtime(config, device)
     runtime_selection_path = output_root / "runtime_selection.json"
     runtime_selection = (
@@ -574,7 +770,6 @@ def main() -> int:
     runtime["prefetch_batches"] = int(
         runtime_selection.get("selected_prefetch_batches", runtime.get("prefetch_batches", 0))
     )
-    simulation_path = PROJECT_ROOT / "configs" / "simulation.method_transfer.frozen.json"
     simulation = json.loads(simulation_path.read_text(encoding="utf-8"))
     split_rows = load_split_rows(args.data_root.resolve())
     test_profiles = config["evaluation"]["test_profiles"]
@@ -583,6 +778,7 @@ def main() -> int:
         cache_root=output_root / "evaluation_cache",
         split_rows=split_rows,
         simulation=simulation,
+        simulation_config_sha256=input_fingerprint["simulation_config_sha256"],
         eval_seeds=EVALUATION_SEEDS,
         profiles=test_profiles,
         split="test",
@@ -592,6 +788,7 @@ def main() -> int:
     test_rows: list[dict[str, Any]] = []
     run_records: list[dict[str, Any]] = []
     completed_pairs: list[str] = []
+    pairing_records: list[dict[str, Any]] = []
     model_config = ML4PXRDResNet1DConfig(model_id="18")
     for seed in SEEDS:
         for budget in BUDGET_ORDER:
@@ -603,7 +800,18 @@ def main() -> int:
             run_result = json.loads(result_path.read_text(encoding="utf-8"))
             if run_result.get("status") != "completed":
                 continue
+            _assert_pair_provenance(
+                run_result,
+                seed=seed,
+                budget=budget,
+                subset_manifest=subset_manifest,
+                input_fingerprint=input_fingerprint,
+                input_hash_variants=input_hash_variants,
+            )
             completed_pairs.append(key)
+            pairing_records.append(
+                _pairing_exposure_record(run_result, seed=seed, budget=budget)
+            )
             test_metrics_path = pair_dir / "test_metrics.json"
             if test_metrics_path.is_file():
                 pair_test = json.loads(test_metrics_path.read_text(encoding="utf-8"))
@@ -725,14 +933,7 @@ def main() -> int:
     summary = _summarize(test_rows)
     complete_matrix = len(completed_pairs) == len(SEEDS) * len(BUDGET_ORDER) and len(test_rows) == 40
     savings = _equivalent_parent_estimates(summary, complete_matrix)
-    report_dir = args.report_dir.resolve()
-    report_dir.mkdir(parents=True, exist_ok=True)
-    _write_csv(report_dir / "per_seed_metrics.csv", test_rows)
-    _write_csv(
-        report_dir / "paired_deltas.csv",
-        summary["paired_deltas"],
-    )
-    _plots(summary, report_dir)
+    pairing_audit = _summarize_pairing_exposure(pairing_records)
     benchmark_path = next(
         (
             path
@@ -769,9 +970,13 @@ def main() -> int:
     provenance = {
         "source_records_count": 14060,
         "peak_tables_verified": 14060,
-        "subset_manifest_sha256": sha256_file(PROJECT_ROOT / "manifests" / "parent_budget_efficiency" / "parent_subsets.v1.json"),
-        "protocol_config_sha256": sha256_file(PROJECT_ROOT / "configs" / "parent_budget_efficiency.v1.json"),
-        "output_root": "CUIFA local ignored output directory (excluded from Git)",
+        "subset_manifest_sha256": input_fingerprint["subset_manifest_sha256"],
+        "protocol_config_sha256": input_fingerprint["protocol_config_sha256"],
+        "ranked_train_file_sha256": input_fingerprint["ranked_train_file_sha256"],
+        "simulation_config_sha256": input_fingerprint["simulation_config_sha256"],
+        "official_split_manifest_sha256": input_fingerprint["official_split_manifest_sha256"],
+        "input_fingerprint": input_fingerprint,
+        "output_root": "local ignored output directory (excluded from Git)",
         "performance_runtime": runtime,
         "benchmark": benchmark,
         "runtime_audit": runtime_audit,
@@ -788,18 +993,41 @@ def main() -> int:
         "primary_metric": "mean Macro-F1 across six simulated single-factor OOD profiles and three evaluation seeds",
         "summary": summary,
         "data_savings_assessment": savings,
+        "pairing_exposure_audit": pairing_audit,
         "provenance": provenance,
         "run_metrics": run_records,
     }
-    (report_dir / "results.json").write_text(json.dumps(results, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    report_dir, report_path = _analysis_output_paths(
+        output_root,
+        args.report_dir,
+        complete_matrix=complete_matrix,
+    )
+    results_path = report_dir / "results.json"
+    _guard_completed_archive(
+        results_path,
+        report_path,
+        results,
+        complete_matrix=complete_matrix,
+    )
+    report_dir.mkdir(parents=True, exist_ok=True)
+    _write_csv(report_dir / "per_seed_metrics.csv", test_rows)
+    _write_csv(report_dir / "paired_deltas.csv", summary["paired_deltas"])
+    _plots(summary, report_dir)
+    results_path.write_text(
+        json.dumps(results, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+    artifact_prefix = "parent_budget_efficiency" if report_path.resolve() == CANONICAL_REPORT.resolve() else ""
     _write_report(
-        PROJECT_ROOT / "reports" / "PARENT_BUDGET_EFFICIENCY.md",
+        report_path,
         summary=summary,
         results=run_records,
         completed_pairs=completed_pairs,
         complete_matrix=complete_matrix,
         data_savings=savings,
         provenance=provenance,
+        pairing_audit=pairing_audit,
+        artifact_prefix=artifact_prefix,
     )
     print(
         json.dumps(
@@ -807,8 +1035,10 @@ def main() -> int:
                 "status": results["status"],
                 "completed_method_runs": len(test_rows),
                 "completed_pairs": len(completed_pairs),
+                "pairing_audit": pairing_audit["status"],
                 "data_savings": savings["status"],
-                "report": str(PROJECT_ROOT / "reports" / "PARENT_BUDGET_EFFICIENCY.md"),
+                "report": str(report_path),
+                "results": str(results_path),
                 "analysis_time_unix": time.time(),
             },
             indent=2,

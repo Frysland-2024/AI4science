@@ -195,19 +195,15 @@ python -m pytest -q
 
 自动化范围是已人工审阅协议下的模拟数据、物理/梯度/拆分 Gate、受控 A/B、指标图表、不可变实验 manifest、报告草稿与人工最终审核。**当前只有规划，没有新代码、后台执行器或自动科研结果。** P0 先从配置和 provenance 机制、CPU smoke、失败停止及报告器着手；需真实接入工作站后才能谈无人值守 GPU。不得自动改协议、测试集或无限寻找正结果。
 
-## 9. 2026-10-13 独立母结构数量效率实验（PROPOSED，尚未运行）
+## 9. 2026-10-13 独立母结构数量效率实验（COMPLETED 2026-10-14；post-main）
 
-从早期暂缓的 sample-efficiency 设想中恢复 **10% / 25% / 50% / 100% 的 Train 母结构预算曲线**，检验在相同独立结构数、相同双视图曝光和优化预算下，利用同源关系的 Dynamic JS 是否比 Dynamic ERM 更充分使用晶体结构数据。
+本补充实验最初拟检验：在相同独立母结构数量、双视图曝光量和优化预算下，利用同源关系的 Dynamic JS 是否优于 Dynamic ERM。该提案已于 2026-10-14 完成，不再处于 PROPOSED 或 NOT_RUN 状态。
 
-- 本实验是现有 `shared parent identity → relationship supervision` 主张的**独立补充机制/效率验证**，不是新模型、不是 RRUFF few-shot 标签效率，也不替代冻结的主实验。
-- 采用原 Train 9,842 母结构的晶系分层嵌套子集；ResNet-18-GN、`lambda_js=60` 不变；配对 seed 和模拟协议固定，训练曝光量/优化步数必须统一。
-- 已识别工程风险：目前公共 `runner.py` 的 epoch 末尾可能有不完整 batch，而且每 epoch 进行验证与保存，不适合直接充当完全公平的预算比较入口。CODEX LUNA 应先完成独立固定步数入口、数据审计、单元测试与 smoke，才能执行大规模 run。
-- 当前模拟 Test 已在正式论文中使用过；本次应标明为 **post-main supplementary follow-up**，不能声称是全新未打开的 confirmatory Test。
-- 状态 **PROPOSED / READY FOR CODEX IMPLEMENTATION / NOT_RUN**；完整任务与结果交付标准见 [PXRD_PARENT_STRUCTURE_EFFICIENCY_PLAN.md](PXRD_PARENT_STRUCTURE_EFFICIENCY_PLAN.md)。原主实验的报告、划分、权重和历史结果均不得修改。
+- 完成矩阵：4 个母结构预算（984 / 2,460 / 4,921 / 9,842）× 5 个训练 seed × 2 种方法，共 40 个模型、20 个配对单元。
+- 在四个相同预算下，Dynamic JS 相对 Dynamic ERM 的模拟 Test OOD Macro-F1 配对均值分别为 +0.05607 / +0.05173 / +0.04261 / +0.05396；每档均为 5/5 个 seed 正向。
+- 该 Test 已用于主研究，因此结果是 post-main 补充分析，不是未触碰的确认性测试；目前没有支持定量“节省母结构数量”的测量结果。
+- 完整报告、冻结协议与归档见 [PARENT_BUDGET_EFFICIENCY.md](../xrd_robustness/reports/PARENT_BUDGET_EFFICIENCY.md)。最初提案保留于 [PXRD_PARENT_STRUCTURE_EFFICIENCY_PLAN.md](PXRD_PARENT_STRUCTURE_EFFICIENCY_PLAN.md)。
 
+### 研究分工记录
 
-## 2026-10-14 completed parent-budget supplement (post-main)
-
-The formerly proposed parent-budget experiment is complete: 4 budgets (984/2460/4921/9842) × 5 seeds × 2 methods = 40 scored models, 20 pairs. At each budget Dynamic JS outperformed matched Dynamic ERM on the simulated Test by +0.05607 / +0.05173 / +0.04261 / +0.05396 Macro-F1 respectively, with 5/5 paired seeds positive at every budget. The already-used Test makes this explicitly post-main supplementary evidence. No measured budget crossing supports a quantitative crystal-structure saving claim. Full frozen protocol, raw aggregates, audit limitations and figures: [PARENT_BUDGET_EFFICIENCY.md](../xrd_robustness/reports/PARENT_BUDGET_EFFICIENCY.md).
-
-Research-role clarification (reported by project lead): Across the project, **Frysland-2024 has been the principal designer and planner of the scientific approach**, responsible for overall research direction, experimental design and changes in project strategy. This includes the main same-parent JS study, simulated OOD validation, the RRUFF and CNRS real-domain experiments, and the parent-budget/Data Efficiency design. **Cuifa01 participated primarily in executing these plans**, giving auxiliary ideas and feedback, helping collect/organize data, and contributing software implementation, GPU experiments, desktop transfer and other operational work. Supporting ideas and execution should not be presented as joint overall project design or leadership. This clarifies roles without changing original Git authorship, executed data, or independently determining formal manuscript authorship.
+Frysland-2024 负责该研究方向的科学问题表述和实验设计，包括 same-parent consistency 比较、模拟 OOD、RRUFF/CNRS 真实域评估及母结构预算效率设计。Cuifa01 参与工程实现、桌面迁移、GPU 执行和实验产物整理。该说明记录研究分工，不改写 Git 提交作者，也不预先裁定论文署名。

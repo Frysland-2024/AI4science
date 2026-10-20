@@ -695,9 +695,25 @@
   },
   "schema_version": "parent-budget-efficiency-execution-manifest-v1",
   "scientific_config_sha256": "F8E531868741DFAABC484B9F73E711196911B82BD8836D2FAE14EE409B2B406C",
-  "simulation_config_sha256": "167CBFFD23C37BF57A5C9BB8974EB28BD17E908BFE3A88218EF96E9CF98CB010",
+  "simulation_config_sha256": "1451F111430332CD426244436B5B9263100D1BE7CAA2E0B036BD03CD09814371",
   "source_branch": "codex/parent-budget-efficiency",
   "source_commit": "0749c635a4d858106066fa8a0e4759039cbd1a3c",
   "status": "completed",
-  "subset_manifest_sha256": "8A484426AA1DDEABCD11084FAE8F7CAE4A2B56B6B230D0DCAC466E50F043422D"
+  "subset_manifest_sha256": "8A484426AA1DDEABCD11084FAE8F7CAE4A2B56B6B230D0DCAC466E50F043422D",
+  "simulation_config_hash_basis": "SHA-256 of simulator config bytes after CRLF/CR-to-LF normalization; matches the tracked UTF-8 config.",
+  "original_execution_copy_raw_sha256": "167CBFFD23C37BF57A5C9BB8974EB28BD17E908BFE3A88218EF96E9CF98CB010",
+  "paired_exposure_audit": {
+    "status": "not_archived_for_original_execution",
+    "expected_seed_budget_pairs": 20,
+    "pairs_with_archived_stream_hashes": 0,
+    "required_fields": [
+      "actual_exposure.optimizer_steps_per_method",
+      "actual_exposure.parent_occurrences_per_method",
+      "actual_exposure.views_per_method",
+      "actual_exposure.samples_stream_sha256",
+      "actual_exposure.paired_two_view_stream_sha256"
+    ],
+    "source": "Per-pair result.json files in the local execution output; excluded from Git.",
+    "note": "The original per-pair stream hashes are absent from tracked artifacts and cannot be reconstructed from this manifest. The updated analyzer archives them when the local pair records are available."
+  }
 }
