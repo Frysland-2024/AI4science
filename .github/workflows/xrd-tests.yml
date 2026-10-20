@@ -2,6 +2,8 @@ name: XRD tests
 
 on:
   push:
+    branches:
+      - main
     paths:
       - "xrd_robustness/**"
       - "README.md"
