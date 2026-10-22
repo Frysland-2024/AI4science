@@ -1,0 +1,16 @@
+{
+  "status": "ARCHITECTURE_THROUGHPUT_BENCHMARK",
+  "checkpoint": "random initialization; this is a shape-matched throughput benchmark, not final trained-model quality or checkpoint timing",
+  "device": "NVIDIA GeForce RTX 4060 Laptop GPU",
+  "test_shape": [
+    77,
+    3501
+  ],
+  "batch_size": 32,
+  "repeats": 25,
+  "nn_seconds_per_77_profiles": 0.021116388000082226,
+  "nn_milliseconds_per_profile": 0.27423880519587307,
+  "nn_plus_forward_seconds_per_77_profiles": 0.029553867999929935,
+  "nn_plus_forward_milliseconds_per_profile": 0.38381646753155757,
+  "peak_memory_allocated_mb": 131.7607421875
+}

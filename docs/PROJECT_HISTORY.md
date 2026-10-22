@@ -208,7 +208,21 @@ After successive expansions to multi-family routing, calibrated single/mixed-pha
 
 **Explicit de-scoping:** no mandatory 3-family routing model, broad phase-probability product, universal multiphase fractions, or feature-complete pre-refinement software in the 12-week core. Earlier discussions and competing approaches remain in their original dated entries for provenance; they are no longer equally weighted present implementation priorities.
 
-**Status:** USER-SELECTED FUTURE RESEARCH PRIORITY, NOT_STARTED / NOT APPROVED / NO RESULTS. Do not overwrite existing V9 results or revive archived NO-GO. See the priority note in [FERROELECTRIC_PRE_REFINEMENT_12W_PLAN.md](FERROELECTRIC_PRE_REFINEMENT_12W_PLAN.md).
+**Status at selection:** USER-SELECTED FUTURE RESEARCH PRIORITY; the family-specific study was not started or approved. A bounded engineering pilot was later authorized and is recorded below. Do not overwrite existing V9 results or revive archived NO-GO. See [FERROELECTRIC_PRE_REFINEMENT_12W_PLAN.md](FERROELECTRIC_PRE_REFINEMENT_12W_PLAN.md).
+
+## 18. 2026-10-18: first supervised-plus-forward-loss pilot completed
+
+**Previous state:** The single-intervention direction was selected as a research priority, but the continuous NN comparison and differentiable-gradient gate had not been run. The prior note treated training-time reconstruction loss as an optional candidate; the user then explicitly authorized a bounded A/B pilot.
+
+**Evidence:** A separate module used the existing tetragonal CUDA float64 forward model on one source-training-fold HfCd parent, with only normalized `du,dv` active. The Jacobian was full rank (condition number `3.36`); finite-difference checks agreed with autograd. Three matched seeds were run after validation-only selection of `lambda=1.0`.
+
+**Decision/result:** Keep Forward Reconstruction Loss as an experimentally tested candidate, not an assumed improvement. It lowered clean transformed-profile RMSE (`0.009008` to `0.008497`) while the mean normalized two-parameter MAE was slightly higher (`0.01495` to `0.01509`). The pilot supports feasibility of the training graph but does not support a claim of better parameter inference.
+
+**What changes now:** The pilot implementation, failure record, metrics, and next-stage handoff are tracked in `xrd_forward_loss/`; the current-state and 12-week documents point to those results. The family-specific study should proceed only after material/CIF, parameter-identifiability, and prototype-split gates.
+
+**What does not change:** Frozen JS-only classification results, the source split, independent renderer holdout, and archived structure–measurement factorization NO-GO remain untouched. The HfCd result is not ferroelectric evidence and does not establish a better Rietveld initialization.
+
+**Status:** PRELIMINARY ENGINEERING PILOT COMPLETE / FAMILY-SPECIFIC RESEARCH FUTURE. See [pilot report](../xrd_forward_loss/FORWARD_LOSS_PILOT_REPORT.md), [feasibility report](../xrd_forward_loss/FORWARD_FEASIBILITY_REPORT.md), and [handoff](../xrd_forward_loss/NEXT_STAGE_HANDOFF.md).
 
 ## 18. 2026-10-18: PXRD AutoLab automation proposal
 

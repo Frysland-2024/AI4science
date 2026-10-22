@@ -1,0 +1,14 @@
+{
+  "A": {
+    "finite_training_loss": true,
+    "finite_validation_mae": true,
+    "updates": 2,
+    "training_seconds": 0.46400909998919815
+  },
+  "B": {
+    "finite_training_loss": true,
+    "finite_validation_mae": true,
+    "updates": 2,
+    "training_seconds": 0.17129689996363595
+  }
+}

@@ -1,0 +1,312 @@
+{
+  "status": "PRELIMINARY_PAIRED_AB_PILOT",
+  "selected_lambda": 0.1,
+  "lambda_candidates": [
+    0.1,
+    1.0,
+    10.0
+  ],
+  "test_metrics": {
+    "A": {
+      "seed_results": [
+        {
+          "seed": 20261021,
+          "parameter_mae_normalized": {
+            "du": 0.7267756550149485,
+            "dv": 0.8306204738146807,
+            "mean_two_parameter": 0.7786980644148146
+          },
+          "lattice_mae_angstrom": {
+            "a": 0.015276836825395367,
+            "c": 0.11797168087286626
+          },
+          "reconstruction_rmse_transformed_clean": 0.09979342653450385,
+          "reconstruction_rmse_transformed_noisy": 0.11579091927159567
+        },
+        {
+          "seed": 20261022,
+          "parameter_mae_normalized": {
+            "du": 0.8732243688269095,
+            "dv": 0.8306204738146807,
+            "mean_two_parameter": 0.8519224213207951
+          },
+          "lattice_mae_angstrom": {
+            "a": 0.034901548227665294,
+            "c": 0.05362095860882968
+          },
+          "reconstruction_rmse_transformed_clean": 0.10319927018714618,
+          "reconstruction_rmse_transformed_noisy": 0.11849596993064061
+        },
+        {
+          "seed": 20261023,
+          "parameter_mae_normalized": {
+            "du": 0.8732243688269095,
+            "dv": 0.8306204738146807,
+            "mean_two_parameter": 0.8519224213207951
+          },
+          "lattice_mae_angstrom": {
+            "a": 0.034901548227665294,
+            "c": 0.05362095860882968
+          },
+          "reconstruction_rmse_transformed_clean": 0.10319927018714618,
+          "reconstruction_rmse_transformed_noisy": 0.11849596993064061
+        }
+      ],
+      "summary": {
+        "q_mae_mean_two_parameter": {
+          "mean": 0.8275143023521349,
+          "sd": 0.04227610217090508,
+          "seed_values": [
+            0.7786980644148146,
+            0.8519224213207951,
+            0.8519224213207951
+          ]
+        },
+        "q_mae_du": {
+          "mean": 0.8244081308895891,
+          "sd": 0.08455220434181014,
+          "seed_values": [
+            0.7267756550149485,
+            0.8732243688269095,
+            0.8732243688269095
+          ]
+        },
+        "q_mae_dv": {
+          "mean": 0.8306204738146808,
+          "sd": 1.3597399555105182e-16,
+          "seed_values": [
+            0.8306204738146807,
+            0.8306204738146807,
+            0.8306204738146807
+          ]
+        },
+        "lattice_a_mae_angstrom": {
+          "mean": 0.028359977760241985,
+          "sd": 0.01133033241086926,
+          "seed_values": [
+            0.015276836825395367,
+            0.034901548227665294,
+            0.034901548227665294
+          ]
+        },
+        "lattice_c_mae_angstrom": {
+          "mean": 0.07507119936350855,
+          "sd": 0.03715290682168836,
+          "seed_values": [
+            0.11797168087286626,
+            0.05362095860882968,
+            0.05362095860882968
+          ]
+        },
+        "clean_spectral_rmse": {
+          "mean": 0.10206398896959874,
+          "sd": 0.00196636474967083,
+          "seed_values": [
+            0.09979342653450385,
+            0.10319927018714618,
+            0.10319927018714618
+          ]
+        },
+        "noisy_spectral_rmse": {
+          "mean": 0.11759428637762563,
+          "sd": 0.0015617617261711732,
+          "seed_values": [
+            0.11579091927159567,
+            0.11849596993064061,
+            0.11849596993064061
+          ]
+        }
+      }
+    },
+    "B": {
+      "seed_results": [
+        {
+          "seed": 20261021,
+          "parameter_mae_normalized": {
+            "du": 0.7267756550149485,
+            "dv": 0.8306204738146807,
+            "mean_two_parameter": 0.7786980644148146
+          },
+          "lattice_mae_angstrom": {
+            "a": 0.015276836825395367,
+            "c": 0.11797168087286626
+          },
+          "reconstruction_rmse_transformed_clean": 0.09979342653450385,
+          "reconstruction_rmse_transformed_noisy": 0.11579091927159567
+        },
+        {
+          "seed": 20261022,
+          "parameter_mae_normalized": {
+            "du": 0.8732243688269095,
+            "dv": 0.8306204738146807,
+            "mean_two_parameter": 0.8519224213207951
+          },
+          "lattice_mae_angstrom": {
+            "a": 0.034901548227665294,
+            "c": 0.05362095860882968
+          },
+          "reconstruction_rmse_transformed_clean": 0.10319927018714618,
+          "reconstruction_rmse_transformed_noisy": 0.11849596993064061
+        },
+        {
+          "seed": 20261023,
+          "parameter_mae_normalized": {
+            "du": 0.8732243688269095,
+            "dv": 0.8306204738146807,
+            "mean_two_parameter": 0.8519224213207951
+          },
+          "lattice_mae_angstrom": {
+            "a": 0.034901548227665294,
+            "c": 0.05362095860882968
+          },
+          "reconstruction_rmse_transformed_clean": 0.10319927018714618,
+          "reconstruction_rmse_transformed_noisy": 0.11849596993064061
+        }
+      ],
+      "summary": {
+        "q_mae_mean_two_parameter": {
+          "mean": 0.8275143023521349,
+          "sd": 0.04227610217090508,
+          "seed_values": [
+            0.7786980644148146,
+            0.8519224213207951,
+            0.8519224213207951
+          ]
+        },
+        "q_mae_du": {
+          "mean": 0.8244081308895891,
+          "sd": 0.08455220434181014,
+          "seed_values": [
+            0.7267756550149485,
+            0.8732243688269095,
+            0.8732243688269095
+          ]
+        },
+        "q_mae_dv": {
+          "mean": 0.8306204738146808,
+          "sd": 1.3597399555105182e-16,
+          "seed_values": [
+            0.8306204738146807,
+            0.8306204738146807,
+            0.8306204738146807
+          ]
+        },
+        "lattice_a_mae_angstrom": {
+          "mean": 0.028359977760241985,
+          "sd": 0.01133033241086926,
+          "seed_values": [
+            0.015276836825395367,
+            0.034901548227665294,
+            0.034901548227665294
+          ]
+        },
+        "lattice_c_mae_angstrom": {
+          "mean": 0.07507119936350855,
+          "sd": 0.03715290682168836,
+          "seed_values": [
+            0.11797168087286626,
+            0.05362095860882968,
+            0.05362095860882968
+          ]
+        },
+        "clean_spectral_rmse": {
+          "mean": 0.10206398896959874,
+          "sd": 0.00196636474967083,
+          "seed_values": [
+            0.09979342653450385,
+            0.10319927018714618,
+            0.10319927018714618
+          ]
+        },
+        "noisy_spectral_rmse": {
+          "mean": 0.11759428637762563,
+          "sd": 0.0015617617261711732,
+          "seed_values": [
+            0.11579091927159567,
+            0.11849596993064061,
+            0.11849596993064061
+          ]
+        }
+      }
+    }
+  },
+  "paired_seed_differences_b_minus_a": [
+    {
+      "seed": 20261021,
+      "b_minus_a_q_mae": 0.0,
+      "b_minus_a_clean_rmse": 0.0
+    },
+    {
+      "seed": 20261022,
+      "b_minus_a_q_mae": 0.0,
+      "b_minus_a_clean_rmse": 0.0
+    },
+    {
+      "seed": 20261023,
+      "b_minus_a_q_mae": 0.0,
+      "b_minus_a_clean_rmse": 0.0
+    }
+  ],
+  "costs": {
+    "A": [
+      {
+        "seed": 20261021,
+        "training_seconds": 12.385746799991466,
+        "training_seconds_per_epoch": 0.5160727833329778,
+        "updates": 288,
+        "peak_memory_allocated_mb": 650.88330078125,
+        "best_epoch": 1,
+        "best_validation_q_mae": 0.8234837055206299
+      },
+      {
+        "seed": 20261022,
+        "training_seconds": 12.407478499982972,
+        "training_seconds_per_epoch": 0.5169782708326238,
+        "updates": 288,
+        "peak_memory_allocated_mb": 649.3544921875,
+        "best_epoch": 1,
+        "best_validation_q_mae": 0.8050350546836853
+      },
+      {
+        "seed": 20261023,
+        "training_seconds": 12.484613900014665,
+        "training_seconds_per_epoch": 0.5201922458339444,
+        "updates": 288,
+        "peak_memory_allocated_mb": 649.92919921875,
+        "best_epoch": 1,
+        "best_validation_q_mae": 0.8050350546836853
+      }
+    ],
+    "B": [
+      {
+        "seed": 20261021,
+        "training_seconds": 14.97775369998999,
+        "training_seconds_per_epoch": 0.6240730708329162,
+        "updates": 288,
+        "peak_memory_allocated_mb": 789.1064453125,
+        "best_epoch": 1,
+        "best_validation_q_mae": 0.8234837055206299
+      },
+      {
+        "seed": 20261022,
+        "training_seconds": 14.855217599950265,
+        "training_seconds_per_epoch": 0.6189673999979277,
+        "updates": 288,
+        "peak_memory_allocated_mb": 790.4970703125,
+        "best_epoch": 1,
+        "best_validation_q_mae": 0.8050350546836853
+      },
+      {
+        "seed": 20261023,
+        "training_seconds": 14.962003600026947,
+        "training_seconds_per_epoch": 0.6234168166677895,
+        "updates": 288,
+        "peak_memory_allocated_mb": 792.0146484375,
+        "best_epoch": 1,
+        "best_validation_q_mae": 0.8050350546836853
+      }
+    ]
+  },
+  "test_case_count_per_seed": 77,
+  "interpretation_boundary": "single fixed HfCd parent, simulated patterns from the same forward renderer with independent Poisson/background measurement perturbation; method engineering only, not ferroelectric or experimental-domain evidence"
+}

@@ -2,9 +2,9 @@
 
 > **权威性说明：** 本文件记录当前科学状态与当前执行口径。历史版本、旧聊天和 `PROJECT_HISTORY.md` 用于解释“为什么改变”，不得覆盖这里的当前结论；AI/Agent 工作规则见 [`../AGENTS.md`](../AGENTS.md) 与 [`RESEARCH_WORKFLOW.md`](RESEARCH_WORKFLOW.md)。
 
-**状态日期：** 2026-09-29
+**状态日期：** 2026-10-18
 
-**阶段：** 模拟结果、RRUFF-301 few-shot 与 CNRS-318 zero-shot 均已完成；当前在做论文图表、方法 framing 与成果封装
+**阶段：** PXRD 分类主线的模拟、RRUFF-301 few-shot 与 CNRS-318 zero-shot 均已完成，当前做论文封装；独立预精修候选已完成一个有限的 Forward Reconstruction Loss 工程 pilot，材料家族专属研究仍待确认。
 
 ## 1. 当前科学设计
 
@@ -180,6 +180,14 @@ python -m pytest -q
 - 本次计划**不复活**旧解耦 Stage-1 NO-GO，也不影响当前 JS-only 论文或 frozen tests。
 
 正式规划与申请用文字见 **[FUTURE_UNDERGRAD_THESIS_PLAN.md](FUTURE_UNDERGRAD_THESIS_PLAN.md)**；未来如实际开题发生变化，须单独记录新决策与证据。
+
+### 2026-10-18：Forward Reconstruction Loss 独立 pilot（PRELIMINARY）
+
+用户授权开展的小范围 A/B 工程试验已在独立 `xrd_forward_loss/` 模块完成。使用原训练折中的单个四方 HfCd 结构，预测 `du,dv` 两个归一化晶格坐标；参数样本按 358/77/77 分为训练/验证/测试，验证集选择 `lambda=1.0`，三组匹配 seed。物理梯度和有限差分 Gate 通过。A 的平均两参数 MAE 为 `0.01495 ± 0.00327`，B 为 `0.01509 ± 0.00120`；B 的干净变换谱 RMSE 从 `0.009008 ± 0.001868` 降为 `0.008497 ± 0.000602`，但平均参数 MAE 略差。
+
+该结果只验证一个已知结构下的模拟参数反演工程链路。它不是铁电陶瓷、实验域、未见结构、精修初值效用或泛化证据。首次训练因回归头饱和退化，失败输出已保留。结果与限制见 [pilot report](../xrd_forward_loss/FORWARD_LOSS_PILOT_REPORT.md)，文献对照和下一步见 [12 周计划](FERROELECTRIC_PRE_REFINEMENT_12W_PLAN.md)。
+
+主分类研究、V9 JS 结果、冻结 split 和 Stage-1 解耦 NO-GO 均未修改；新 pilot 不能用来改写其结论。
 
 ### 2026-10-18：铁电陶瓷预精修辅助的新版 12 周候选规划（PROPOSED / NOT_STARTED）
 

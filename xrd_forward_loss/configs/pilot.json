@@ -1,0 +1,49 @@
+{
+  "schema_version": "pxrd-forward-loss-pilot-v1",
+  "purpose": "single-known-parent lattice-parameter inversion method-engineering pilot",
+  "parent_material_id": "mp-1007758",
+  "parent_formula": "HfCd",
+  "parent_source_split": "train",
+  "parameter_names": ["du_normalized", "dv_normalized"],
+  "parameter_q_bounds": [-0.8, 0.8],
+  "fixed_nuisance_q": [0.0, -1.0],
+  "data": {
+    "sobol_seed": 20261025,
+    "sobol_power": 9,
+    "split_seed": 20261026,
+    "train_fraction": 0.70,
+    "validation_fraction": 0.15,
+    "test_fraction": 0.15,
+    "measurement_seed": 20261027,
+    "poisson_count_scale": 40000.0,
+    "background_counts_min": 100.0,
+    "background_counts_span": 100.0
+  },
+  "model": {
+    "family": "existing ML4PXRDResNet1D ResNet-18-GN, continuous two-value head",
+    "input_length": 3501,
+    "group_norm_groups": 32,
+    "dense_width": 256,
+    "parameter_output_bound": 0.8,
+    "regression_head_init_std": 0.001
+  },
+  "training": {
+    "optimizer": "Adam",
+    "learning_rate": 0.0005,
+    "weight_decay": 0.0,
+    "batch_size": 32,
+    "lambda_candidates": [0.1, 1.0, 10.0],
+    "lambda_selection_epochs": 8,
+    "final_epochs": 24,
+    "seeds": [20261021, 20261022, 20261023],
+    "gradient_clip_norm": 5.0
+  },
+  "forward_model": {
+    "config_path": "xrd_inversion/configs/week1_formal_gate.json",
+    "transform": "log1p(100 * normalized_profile) / log(101)",
+    "compatibility": false,
+    "dtype": "float64",
+    "device": "cuda",
+    "allow_tf32": false
+  }
+}
