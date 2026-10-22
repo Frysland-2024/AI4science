@@ -193,7 +193,11 @@ python -m pytest -q
 
 为支持 10 月 18 日前置科研冲刺及双周真实汇报策略，新增 [**PXRD AutoLab：自动科研执行与可审计证据流水线**](PXRD_AUTOMATED_RESEARCH_PIPELINE_PLAN_20261018.md) 作为**科研工程规划**，不改变已冻结 V9 或新的 Forward Loss 科学任务的证据状态。
 
-自动化范围是已人工审阅协议下的模拟数据、物理/梯度/拆分 Gate、受控 A/B、指标图表、不可变实验 manifest、报告草稿与人工最终审核。**当前只有规划，没有新代码、后台执行器或自动科研结果。** P0 先从配置和 provenance 机制、CPU smoke、失败停止及报告器着手；需真实接入工作站后才能谈无人值守 GPU。不得自动改协议、测试集或无限寻找正结果。
+自动化范围是已人工审阅协议下的模拟数据、物理/梯度/拆分 Gate、受控 A/B、指标图表、不可变实验 manifest、报告草稿与人工最终审核。**AutoLab 实验流水线仍只有规划；目前没有 AutoLab runner 或新的自动科研结果。** 单独实现的 [Research Task Bridge](RESEARCH_TASK_BRIDGE.md) 只传递 GitHub Issue、在受限模式下调用本地 Codex，并记录待审查反馈；它不运行 AutoLab 实验。P0 仍须从配置和 provenance 机制、CPU smoke、失败停止及报告器着手；需真实接入工作站后才能谈无人值守 GPU。不得自动改协议、测试集或无限寻找正结果。
+
+### 2026-10-18：Research Task Bridge（ENGINEERING / IMPLEMENTED）
+
+新增 [Research Task Bridge](RESEARCH_TASK_BRIDGE.md)：ChatGPT 可通过 GitHub Issue 模板提交任务，本地 Codex worker 可轮询、领取低风险只读任务或运行桥接模块自检，并将摘要、日志路径、Git commit、状态与失败原因写回 Issue，状态进入 `rtb:review` 等待科研审查。执行上下文不包含测试、数据、结果报告、manifest 或运行产物；GPU/正式训练、测试集使用、科学协议变更与研究方向调整会被拦截。此工程交接能力不改变任何科学结果、协议或研究结论，也不代表 AutoLab 流水线已经实现。
 
 ## 9. 2026-10-13 独立母结构数量效率实验（PROPOSED，尚未运行）
 

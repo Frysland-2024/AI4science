@@ -184,3 +184,9 @@ A research task is complete at the relevant level when:
 - **communication done:** the artifact is fact-checked against current repository state.
 
 A material scientific result that exists only in a chat is not a durable project decision.
+
+## 9. Research Task Bridge
+
+Use the [Research Task Bridge](RESEARCH_TASK_BRIDGE.md) GitHub Issue form to hand a bounded task from ChatGPT to the local Codex worker. The worker's default read-only action uses a filtered temporary snapshot; its CPU action runs only the bridge's own unit tests. GPU/formal training, test-set use, scientific-protocol edits, and research-direction changes stay out of automatic execution and require user approval.
+
+Bridge feedback is an engineering execution record, not a scientific decision. A task reaches `rtb:review` for a researcher to check the evidence, logs, and claim boundary. Material decisions still follow Sections 6 and 8 and must be written to `CURRENT_STATE.md` and, when appropriate, `PROJECT_HISTORY.md`; the bridge never writes those documents on behalf of an experiment.

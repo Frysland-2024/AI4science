@@ -1,0 +1,55 @@
+name: Research task for local Codex
+description: Queue a bounded research or repository task for the local Research Task Bridge.
+title: "[research-task] "
+labels:
+  - research-task
+  - rtb:ready
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this form for low-risk, bounded work only. Do not include credentials, private sample data, or confidential results.
+        `codex_read_only` runs in a temporary snapshot with read-only sandboxing. `bridge_cpu_smoke` runs only this bridge's unit tests.
+        GPU/formal experiments, test-set use, scientific protocol changes, and research-direction changes are held for user approval.
+  - type: input
+    id: protocol
+    attributes:
+      label: Bridge protocol
+      description: Keep this exact protocol marker so the local worker can validate the task.
+      value: research-task-bridge/v1
+    validations:
+      required: true
+  - type: dropdown
+    id: action
+    attributes:
+      label: Action
+      options:
+        - codex_read_only
+        - bridge_cpu_smoke
+        - requires_user_approval
+    validations:
+      required: true
+  - type: dropdown
+    id: context_scope
+    attributes:
+      label: Context scope
+      description: Read-only Codex receives only this filtered source snapshot; test files and result/data artifacts are excluded.
+      options:
+        - docs
+        - source
+    validations:
+      required: true
+  - type: input
+    id: dedupe_key
+    attributes:
+      label: Dedupe key (optional)
+      description: Leave blank to deduplicate by normalized action, scope, and request. Use a new key only for an intentional rerun.
+  - type: textarea
+    id: request
+    attributes:
+      label: Request
+      description: State one bounded task and acceptance criteria. Do not request changes, GPU work, or held-out test data.
+      placeholder: Summarize the proposed AutoLab architecture and identify which pieces are implemented in this repository.
+      render: markdown
+    validations:
+      required: true
