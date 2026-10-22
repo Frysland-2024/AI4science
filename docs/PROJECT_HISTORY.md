@@ -6,6 +6,8 @@ For current scientific claims, use [CURRENT_STATE.md](CURRENT_STATE.md) and the 
 
 > **新增沟通记录（整理于 2026-09-20）：** [与学长沟通纪要：XRD 项目当前进展与后续计划](PROJECT_HISTORY_NOTE_2026-09-20_SENIOR_MEETING_SUMMARY.md)。依据用户提供的会议摘要截图，记录当前方法与验证进展、定量反演及初步晶体结构预测方向、云算力与协作安排；会议日期未注明。
 
+> **2026-10-22 导师汇报复盘（2026-10-23 整理）：** [方法设计与物理/应用可信度的评价错位](PROJECT_HISTORY_NOTE_2026-10-22_SUPERVISOR_PRESENTATION_REFLECTION.md)。记录谭启导师围绕温度/成分等扰动的物理合法性、柱状图中“原方法”与“原模型”的误读及比较 bias、绝对性能/论文对标/真实数据 trustability 的追问，并保留项目负责人对未能充分沟通方法设计价值的反思。属于沟通经验，不更改冻结结果或将建议冒充已完成任务。
+
 ---
 
 ## 1. From FerroAI to a measurement-centered problem
