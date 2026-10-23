@@ -30,6 +30,14 @@ Related: [RRUFF benchmark plan](RRUFF_REAL_DOMAIN_LITERATURE_BENCHMARK_2026-10-2
 
 **Status:** ACTIVE scope/presentation priority decision, not a new experiment, and not permission to cherry-pick. Primary axes unchanged: RRUFF real-domain running score, ECE, simulated parent-data efficiency.
 
+### 2026-10-23: two prerequisites before scaling up RRUFF runs — simulator and training retuning
+
+**Explicit user direction:** (1) adopt a better and more complete reference-guided *online dynamic PXRD measurement simulator*, using SimXRD/Pysimxrd as primary open reference, while preserving physically valid same-parent paired realizations; (2) for substantially more independent training CIF structures, **re-select training hyperparameters** (including LR, schedule, batch, exposure/step budget and JS λ) under the revised simulator instead of assuming historical `lambda_js=60` and 49,280 steps stay optimal. Treat simulator perturbation distributions and training hyperparameters as distinct sets of choices.
+
+**Planned sequence:** audit source and simulator coverage → selectively implement physically defensible new peak/profile/instrument models in a versioned new path → verify physical behavior and label preservation → paired old-vs-new simulation pilot on the same existing structures → enlarged-parent pilot and validation-only compact hyperparameter search → matched ERM/JS scale-up → RRUFF real-domain leaderboard, ECE and parent-budget curve. Keep old V7/V9 results and frozen configs intact; no RRUFF test-driven selection, no claim that a high-fidelity simulator or large training has already run. CNRS stays optional as second real domain.
+
+**Sources/status:** [detailed execution design](PXRD_SCALEUP_SIMULATOR_AND_TUNING_PLAN_20261023.md), [existing perturbation evidence](PXRD_PERTURBATION_EVIDENCE.md), [scale-up issue](https://github.com/Frysland-2024/AI4science/issues/49). **ACTIVE DESIGN / NOT IMPLEMENTED.**
+
 ## 1. 当前科学设计
 
 当前已经完成的项目首先是一个**监督学习方法研究**：在线 PXRD 模拟器不仅能生成带晶系标签的谱图，还知道哪些谱图来自同一个母体结构。项目要回答的是：能不能把这种 parent provenance 转化为额外的 measurement-equivalence / relationship supervision，使相同晶体结构数据库提供比普通类别标签更多的监督信息，并由此提高七晶系分类、分布外泛化、真实域迁移和少标签适配表现。
