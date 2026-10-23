@@ -22,6 +22,14 @@ The project lead **confirmed three and only three headline evaluation axes** for
 
 Related: [RRUFF benchmark plan](RRUFF_REAL_DOMAIN_LITERATURE_BENCHMARK_2026-10-22.md), [formal results](../xrd_robustness/reports/RESULTS.md), [calibration audit](../xrd_robustness/reports/CALIBRATION_ANALYSIS.md), [parent-efficiency study](../xrd_robustness/reports/PARENT_BUDGET_EFFICIENCY.md), [project history](PROJECT_HISTORY.md), [scaling task](https://github.com/Frysland-2024/AI4science/issues/49).
 
+### 2026-10-23: CNRS downgraded to optional second real domain
+
+**User decision:** CNRS is an **optional second real-domain showcase**; it is not required for any of the three headline metrics or the next-stage RRUFF competition. The primary measured-data result remains RRUFF.
+
+**Presentation policy:** Do not allocate main benchmark leaderboard space or new training budget to CNRS by default. It may appear as a separate supplementary external-domain robustness/generalization case if its independently defined dataset quality, task relevance and full evaluation make that informative. **Do not select reports/models/checkpoints or decide whether to disclose completed experiments solely on whether the scores look good.** In any paper or report making broad cross-domain claims, cite the completed CNRS evaluation with its low absolute Accuracy/Macro-F1 and uncertainty, even if detailed plots are in supplementary materials. Existing fixed CNRS-318 results stay public and immutable (JS zero-shot pooled Accuracy 0.2000 → 0.2101; Macro-F1 0.1912 → 0.2091; ECE 0.6826 → 0.6124). Current results show a modest paired relative gain, not high absolute accuracy.
+
+**Status:** ACTIVE scope/presentation priority decision, not a new experiment, and not permission to cherry-pick. Primary axes unchanged: RRUFF real-domain running score, ECE, simulated parent-data efficiency.
+
 ## 1. 当前科学设计
 
 当前已经完成的项目首先是一个**监督学习方法研究**：在线 PXRD 模拟器不仅能生成带晶系标签的谱图，还知道哪些谱图来自同一个母体结构。项目要回答的是：能不能把这种 parent provenance 转化为额外的 measurement-equivalence / relationship supervision，使相同晶体结构数据库提供比普通类别标签更多的监督信息，并由此提高七晶系分类、分布外泛化、真实域迁移和少标签适配表现。
