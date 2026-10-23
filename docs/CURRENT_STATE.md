@@ -2,9 +2,25 @@
 
 > **权威性说明：** 本文件记录当前科学状态与当前执行口径。历史版本、旧聊天和 `PROJECT_HISTORY.md` 用于解释“为什么改变”，不得覆盖这里的当前结论；AI/Agent 工作规则见 [`../AGENTS.md`](../AGENTS.md) 与 [`RESEARCH_WORKFLOW.md`](RESEARCH_WORKFLOW.md)。
 
-**状态日期：** 2026-09-29
+**状态日期：** 2026-10-23（后续研究优先级已更新；以下历史冻结成果及 2026-09-29 状态细节不变）
 
-**阶段：** 模拟结果、RRUFF-301 few-shot 与 CNRS-318 zero-shot 均已完成；当前在做论文图表、方法 framing 与成果封装
+**阶段：** 既有模拟结果、RRUFF-301 few-shot 与 CNRS-318 zero-shot 均已完成并冻结；2026-10-23 起新增以 RRUFF 真实域表现、ECE、模拟母结构数据效率为核心的后续扩容对标计划。
+
+## 2026-10-23: next-stage three-pillar evaluation priority (ACTIVE PLANNING; no new experimental results)
+
+The project lead **confirmed three and only three headline evaluation axes** for the next stage of seven-crystal-system PXRD classification. These are *evaluation priorities*, not claims that new large-scale experiments have completed:
+
+| Pillar | Primary report | Required qualifications |
+| --- | --- | --- |
+| **1. Real RRUFF leaderboard** | Seven-crystal-system RRUFF **zero-shot Accuracy** (Macro-F1 alongside it); head-to-head inference against reproducible published baselines on **identical real spectra** | No RRUFF labels in zero-shot training/tuning; do not rank incompatible curation, label sets, composition-assisted inputs or few-shot settings together. Preserve historical RRUFF-301 K=1/2/5 few-shot evidence separately. |
+| **2. Confidence calibration** | **ECE ↓** plus reliability diagram on the same stated evaluation domain; supporting NLL/Brier and Accuracy/Macro-F1 | Use a declared ECE definition (historical audit: 15 equal-width confidence bins); keep zero-shot vs fine-tuned calibration separate; ECE improvement alone can reflect confidence shrinkage and does not establish correctness. |
+| **3. Simulated-data efficiency** | **Unique training parent CIF/structures** versus simulated-OOD Macro-F1, comparing matched ERM and JS under fixed steps, generated views, architecture and split protocol | Count *independent structures*, not the number of online-augmented spectra; report training compute, repeated seeds and uncertainty; do not claim measured structure savings when the previous report concluded `no_supported_parent_saving`. |
+
+**Execution order:** audit/scale crystal-structure acquisition (prospective 30k/60k/100k *training-parent targets only when feasible*), maintain ResNet-18-GN Dynamic ERM vs JS paired controls, then perform RRUFF evaluation and ECE on explicitly identified prediction panels and sample IDs. Prior published RRUFF scores (Lee 2023, SimXRD-4M 2025, XQueryer-NoElem 2025) are *reference targets*, not comparable wins until matched data evaluation. The old RRUFF-231 locked test has been evaluated already and cannot be called a fresh untouched confirmation.
+
+**Status and scope:** newly adopted benchmark framing, not a replacement for the frozen 2026-09-29 study. Original held-out splits, historical results, code, negative outcomes, parent-budget curves and CNRS evidence remain immutable. Quantitative lattice-parameter inversion is not an active next-stage evaluation objective. Supporting simulated OOD profiles, mechanism analyses and CNRS stay available but are not additional headline axes.
+
+Related: [RRUFF benchmark plan](RRUFF_REAL_DOMAIN_LITERATURE_BENCHMARK_2026-10-22.md), [formal results](../xrd_robustness/reports/RESULTS.md), [calibration audit](../xrd_robustness/reports/CALIBRATION_ANALYSIS.md), [parent-efficiency study](../xrd_robustness/reports/PARENT_BUDGET_EFFICIENCY.md), [project history](PROJECT_HISTORY.md), [scaling task](https://github.com/Frysland-2024/AI4science/issues/49).
 
 ## 1. 当前科学设计
 
