@@ -1,5 +1,7 @@
 # 2026-10-23 — Large-data PXRD: simulation upgrade and hyperparameter re-selection
 
+**Sole active research task:** machine-learning-based PXRD seven-crystal-system classification. Its only three core evaluation axes are RRUFF zero-shot Accuracy/Macro-F1, confidence calibration (ECE primary), and simulated-data efficiency by independent training-parent count. Parameter inversion, Forward Loss, DONUT-related, and refinement work are Archived / Inactive. All work below is planning only.
+
 **Status:** USER-SELECTED NEXT-STAGE DESIGN / PLANNING. This is not an implemented simulator, hyperparameter search, new download, or improved RRUFF score. Treat the existing five-perturbation V7/V9 results as frozen historical evidence, not as a codebase to overwrite.
 
 **Lead decision:** The next-stage project retains precisely three headline axes (RRUFF real-domain leaderboard; ECE confidence calibration; simulated independent-parent data efficiency), and adds two engineering/scientific prerequisites:
@@ -50,6 +52,10 @@ Pragmatic staged tuning (suggested search candidates, NOT authorized frozen para
 3. **Simulated-parent data efficiency**: unique **training CIF parents** vs Macro-F1 and Accuracy, ERM/JS matched budget, plus compute costs. The current frozen parent-budget report says `no_supported_parent_saving` even though JS beats ERM at every tested parent count; do not backfill a structure-savings claim.
 
 CNRS stays **optional second real-domain evidence** and is not a required tuner or separate headline. Preserve already completed CNRS metrics and uncertainty transparently.
+
+## Part C — Conditional model-architecture comparison (P2)
+
+Keep ResNet-18-GN as the formal historical baseline. Only after the parent corpus and versioned simulator are stable, consider a controlled comparison with **SimXRD CNN11** and, optionally, a **multi-scale 1D CNN**. Preserve paired data/split/training controls and record the trigger for opening this comparison. Do not make a large Transformer or new architecture development a required milestone.
 
 ## Change management and completion
 - Keep one local workspace at `E:\AI4science`; create versioned **subdirectories within it**, not sibling project folders. `formal_14060` and all existing frozen data/results/configs unchanged.

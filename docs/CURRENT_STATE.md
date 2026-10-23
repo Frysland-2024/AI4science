@@ -6,9 +6,9 @@
 
 **阶段：** 既有模拟结果、RRUFF-301 few-shot 与 CNRS-318 zero-shot 均已完成并冻结；2026-10-23 起新增以 RRUFF 真实域表现、ECE、模拟母结构数据效率为核心的后续扩容对标计划。
 
-## 2026-10-23: next-stage three-pillar evaluation priority (ACTIVE PLANNING; no new experimental results)
+## 2026-10-23: only active scientific task and its three evaluation axes (ACTIVE PLANNING; no new experimental results)
 
-The project lead **confirmed three and only three headline evaluation axes** for the next stage of seven-crystal-system PXRD classification. These are *evaluation priorities*, not claims that new large-scale experiments have completed:
+The project lead **formally confirmed that the only active scientific task is machine-learning-based PXRD seven-crystal-system classification**, and set three and only three headline evaluation axes for its next stage. These are *evaluation priorities*, not claims that new experiments have completed:
 
 | Pillar | Primary report | Required qualifications |
 | --- | --- | --- |
@@ -18,7 +18,7 @@ The project lead **confirmed three and only three headline evaluation axes** for
 
 **Execution order:** audit/scale crystal-structure acquisition (prospective 30k/60k/100k *training-parent targets only when feasible*), maintain ResNet-18-GN Dynamic ERM vs JS paired controls, then perform RRUFF evaluation and ECE on explicitly identified prediction panels and sample IDs. Prior published RRUFF scores (Lee 2023, SimXRD-4M 2025, XQueryer-NoElem 2025) are *reference targets*, not comparable wins until matched data evaluation. The old RRUFF-231 locked test has been evaluated already and cannot be called a fresh untouched confirmation.
 
-**Status and scope:** newly adopted benchmark framing, not a replacement for the frozen 2026-09-29 study. Original held-out splits, historical results, code, negative outcomes, parent-budget curves and CNRS evidence remain immutable. Quantitative lattice-parameter inversion is not an active next-stage evaluation objective. Supporting simulated OOD profiles, mechanism analyses and CNRS stay available but are not additional headline axes.
+**Status and scope:** this is the sole active scientific task and newly adopted benchmark framing, not a replacement for the frozen 2026-09-29 study. Original held-out splits, historical results, code, negative outcomes, parent-budget curves and CNRS evidence remain immutable. Quantitative lattice-parameter inversion is not an active next-stage evaluation objective. Supporting simulated OOD profiles, mechanism analyses and CNRS stay available but are not additional headline axes.
 
 Related: [RRUFF benchmark plan](RRUFF_REAL_DOMAIN_LITERATURE_BENCHMARK_2026-10-22.md), [formal results](../xrd_robustness/reports/RESULTS.md), [calibration audit](../xrd_robustness/reports/CALIBRATION_ANALYSIS.md), [parent-efficiency study](../xrd_robustness/reports/PARENT_BUDGET_EFFICIENCY.md), [project history](PROJECT_HISTORY.md), [scaling task](https://github.com/Frysland-2024/AI4science/issues/49).
 
@@ -38,11 +38,18 @@ Related: [RRUFF benchmark plan](RRUFF_REAL_DOMAIN_LITERATURE_BENCHMARK_2026-10-2
 
 **Sources/status:** [detailed execution design](PXRD_SCALEUP_SIMULATOR_AND_TUNING_PLAN_20261023.md), [existing perturbation evidence](PXRD_PERTURBATION_EVIDENCE.md), [scale-up issue](https://github.com/Frysland-2024/AI4science/issues/49). **ACTIVE DESIGN / NOT IMPLEMENTED.**
 
-## 1. 当前科学设计
+### 2026-10-23 之后的技术优先级（仅为未来规划）
+
+- **P1：**审计并扩大独立训练母结构覆盖；同时设计一版有版本号的新在线动态 PXRD 模拟器。目标约 30k / 60k / 100k 个独立训练结构，能否达到以逐晶系获取、去重和拆分审计为准。
+- **P1：**数据与模拟器稳定后，重新选择学习率、Batch Size、Scheduler、训练步数/母结构曝光量和 JS 权重。历史 lambda_js=60 仅是冻结实验设置。
+- **P2：**仅在数据与模拟器稳定后，条件性比较 SimXRD CNN11 或可选多尺度 1D CNN；ResNet-18-GN 保留为正式历史基线。不要求大型 Transformer 或新架构开发。
+- 顺序、物理约束、验收和禁止事项见 [2026-10-23 扩容计划](PXRD_SCALEUP_SIMULATOR_AND_TUNING_PLAN_20261023.md)。本计划不代表已实现模拟器、已下载数据或已启动训练。
+
+## 1. 已完成的科学方法与冻结实验设计
 
 当前已经完成的项目首先是一个**监督学习方法研究**：在线 PXRD 模拟器不仅能生成带晶系标签的谱图，还知道哪些谱图来自同一个母体结构。项目要回答的是：能不能把这种 parent provenance 转化为额外的 measurement-equivalence / relationship supervision，使相同晶体结构数据库提供比普通类别标签更多的监督信息，并由此提高七晶系分类、分布外泛化、真实域迁移和少标签适配表现。
 
-最终确定的设计：
+冻结历史研究的实验设计：
 
 - 任务：七晶系分类；
 - 骨干网络：ResNet-18-GN；
@@ -155,12 +162,12 @@ Related: [RRUFF benchmark plan](RRUFF_REAL_DOMAIN_LITERATURE_BENCHMARK_2026-10-2
 
 方法对比、验证集和模拟测试集的评估都做完了，模拟部分的结果已经确定、不会再改。
 
-两个实验真实域互补，主任务不同：
+既有真实域结果的当前定位：
 
-- **RRUFF-301**：平衡、人工整理的实验真实域（balanced curated experimental domain），主任务是 K=1/2/5 few-shot adaptation。composition audit 已完成并结案：adaptation/test 无相同 RRUFF ID、无相同 spectrum SHA、无 Pearson ≥ 0.95 的跨 split 近重复谱；共享 mineral identity 被保留，因为该 benchmark 不是 unseen-mineral task。
-- **CNRS-318**：自然不平衡、跨数据库的独立实验真实域（naturally imbalanced independent experimental domain），已正式定级为第二实验域，主分析是 frozen-model zero-shot external evaluation，保留自然类别分布 `21 / 87 / 77 / 41 / 33 / 12 / 47`。
+- **RRUFF-301**：平衡、人工整理的实验域。已完成 K=1/2/5 few-shot 历史评测和 split composition audit；共享 mineral identity 被保留，因为该任务并非 unseen-mineral benchmark。下一阶段新增的主要外部评测将是明确协议的 RRUFF zero-shot 结果及可比基准。
+- **CNRS-318**：自然不平衡的独立实验域（类别数 `21 / 87 / 77 / 41 / 33 / 12 / 47`），已完成 frozen-model zero-shot 评测。自 2026-10-23 起仅作为 **Optional Secondary Experimental Domain**，不是必须完成的核心评价轴。
 
-两个真实域均已有结果，但不合并成一个分数：
+既有两个真实域结果均保留，但不合并成一个分数：
 
 - CNRS-318 的权威审计与父样本 manifest 已进入 git（见 [`xrd_robustness/reports/CNRS_318_DATASET_AUDIT.md`](../xrd_robustness/reports/CNRS_318_DATASET_AUDIT.md) 和 [`xrd_robustness/manifests/cnrs_318_parent_manifest_v2.csv`](../xrd_robustness/manifests/cnrs_318_parent_manifest_v2.csv)）；
 - 评测已按冻结协议执行完毕；pre-run 协议文件保持原样，完成状态与纠错记录见结果报告和 run record（[`xrd_robustness/reports/CNRS_318_EVALUATION_PROTOCOL.md`](../xrd_robustness/reports/CNRS_318_EVALUATION_PROTOCOL.md)）；
@@ -169,9 +176,11 @@ Related: [RRUFF benchmark plan](RRUFF_REAL_DOMAIN_LITERATURE_BENCHMARK_2026-10-2
 - CNRS-318 的五个 seed 均 favor JS，平均配对 ΔMacro-F1 为 `+0.018713`；pooled Macro-F1、balanced accuracy、accuracy、ECE、NLL 与 Brier 共同改善。修正后的 class-stratified paired-parent 95% CI 为 `[−0.009339, +0.046107]`，说明自然类别不平衡和低支持类别带来较大的统计不确定性；该区间作为严格审计如实保留，但不单独否决上述多 seed、多指标一致的科学结果；
 - CNRS 的绝对 sim-to-real 表现仍弱、校准仍差；overall accuracy `0.200→0.210` 低于多数类基线 `0.274`，不能包装成已解决的真实域分类。
 
-## 6. 当前卡点
+## 6. 历史汇报与论文封装待办（2026-10-20 快照；不定义当前科学任务）
 
-现在主要是把已有数字和方法思想转化为清楚、可复述的成果：
+以下清单记录 2026-10-20 的论文/展示整理计划，状态可能已变；它们不是新一轮科学实验优先级，当前研究方向只以本文件开头的 2026-10-23 决策和扩容计划为准。
+
+当这些文字或图表需要更新时，仍须以冻结结果为准：
 
 - **最高优先级：**把 `shared parent identity → measurement equivalence → relationship supervision` 做成论文/PPT 的统一方法叙事；
 - 制作核心方法图，明确对照 `simulator = data generator` 与 `simulator = data generator + relationship supervisor`；
@@ -182,7 +191,7 @@ Related: [RRUFF benchmark plan](RRUFF_REAL_DOMAIN_LITERATURE_BENCHMARK_2026-10-2
 
 这里的 framing 工作**不是新实验，也不是算法扩张**。不要重新把项目包装成“JS consistency 用于 XRD”；应把 JS 放在 measurement-equivalence relationship supervision 的下游实现位置。
 
-## 7. 当前项目下一步
+## 7. 历史展示与论文整理提案（2026-10-20 快照；已被 2026-10-23 研究规划取代）
 
 1. 首先打磨并固定方法新颖性 framing：`simulator from data generator to relationship supervisor`。
 2. 把该 framing 做成 PPT / manuscript 的核心方法图，视觉重点放在 `shared parent identity → measurement equivalence → supervision`，而不是把 JS 画成最大创新模块。
@@ -198,47 +207,47 @@ cd xrd_robustness
 python -m pytest -q
 ```
 
-## 8. 独立数值反演与下一阶段毕业研究候选（FUTURE）
+## 8. Archived / Inactive：独立数值反演与旧毕业研究候选
 
-当前完成并正在封装的科学主线仍是 **PXRD 七晶系分类中的 same-parent relationship supervision（JS-only）**。不为了新课题而修改其冻结协议、已完成结果或论文 framing。
+**状态（2026-10-23）：本节所列参数反演、晶格参数预测、Forward Loss 与自动精修均为 Archived / Inactive。** 唯一主动科学任务是本文件前述 PXRD 七晶系分类。此处保留早期计划及其边界，不能作为执行清单或恢复研究路线的依据。
 
 **既有数值反演分支：** `xrd_inversion/` 已有正向模型与数值可恢复性基础设施（见 [README](../xrd_inversion/README.md) 和 [Week-1 报告](../xrd_inversion/reports/WEEK1_FORMAL_REPORT.md)）。早先以结构/测量参数解耦为核心的 Stage-1 方案，在预注册机制 Gate 中获 **NO-GO**，已于 2026-09-07 封存（见 [归档](archive/XRD_FACTORIZATION_STAGE1_ARCHIVED_20260907.md)）；数值基础设施的存在**不等于**该算法假设通过或获得重新开跑许可。
 
-**2026-10-08 新增研究意向：** 如果硕士申请时本科毕业论文尚未正式开始，拟把毕业研究安排在 AI 辅助材料表征领域。候选课题为：从 PXRD 输入谱预测限定材料体系的结构/测量参数，再通过前向物理模型重构理论谱，以重构差异作为**可能的辅助训练约束**；比较常规参数监督与物理辅助方法，研究参数预测准确性、数据利用效率、训练成本及其在真实实验谱上的适用边界。
+**历史提案（2026-10-08；2026-10-23 已归档）：** 如果硕士申请时本科毕业论文尚未正式开始，拟把毕业研究安排在 AI 辅助材料表征领域。候选课题为：从 PXRD 输入谱预测限定材料体系的结构/测量参数，再通过前向物理模型重构理论谱，以重构差异作为**可能的辅助训练约束**；比较常规参数监督与物理辅助方法，研究参数预测准确性、数据利用效率、训练成本及其在真实实验谱上的适用边界。
 
-- 这是 **FUTURE / CANDIDATE**，不是正式毕业论文题目、已经启动的实验或既定成功的方法。
+- 这是当时的 **FUTURE / CANDIDATE** 提案；目前状态为 **ARCHIVED / INACTIVE**，不是正式毕业论文题目、已启动实验或既定成功方法。
 - “预测参数 → 重构理论谱”已有相关研究，不能直接当作原创算法；谱图相似不必然意味着真实参数正确。
 - 初期优先限定单相、已知候选结构、有限连续参数（如四方晶格参数、零点偏移与峰宽），先核验参数可辨识性和正向模型；是否加入参数解耦、传统精修或其他模态，由独立验证结果决定。
 - 本次计划**不复活**旧解耦 Stage-1 NO-GO，也不影响当前 JS-only 论文或 frozen tests。
 
-正式规划与申请用文字见 **[FUTURE_UNDERGRAD_THESIS_PLAN.md](FUTURE_UNDERGRAD_THESIS_PLAN.md)**；未来如实际开题发生变化，须单独记录新决策与证据。
+原提案见 [FUTURE_UNDERGRAD_THESIS_PLAN.md](FUTURE_UNDERGRAD_THESIS_PLAN.md)，仅供历史追溯；若将来改变科学方向，必须先记录新的明确决策。
 
-### 2026-10-18：铁电陶瓷预精修辅助的新版 12 周候选规划（PROPOSED / NOT_STARTED）
+### 2026-10-18：铁电陶瓷预精修 12 周提案（ARCHIVED / INACTIVE；原提案未启动）
 
-在 2026-10-08 连续参数＋可微重构 Loss 候选思路基础上，进一步收敛了面向真实应用的下一阶段方案：**一个待定铁电陶瓷家族、模拟谱主训练、Top-K 单相结构候选及经模拟域检验的概率校准、逐候选参数初值与不确定性、物理正向核验、精修前指导**。学长少量真实谱主要用于外部案例，不作为主训练集。重构 Loss 降为可选消融，不作为项目启动的必需步骤。
+以下为 2026-10-18 的历史研究提案，2026-10-23 起已归档、不再属于当前下一阶段：在当时的连续参数＋可微重构 Loss 候选思路基础上，曾考虑一个面向真实应用的方案：**一个待定铁电陶瓷家族、模拟谱主训练、Top-K 单相结构候选及经模拟域检验的概率校准、逐候选参数初值与不确定性、物理正向核验、精修前指导**。学长少量真实谱主要用于外部案例，不作为主训练集。重构 Loss 降为可选消融，不作为项目启动的必需步骤。
 
 **两相共存不被排除**：12 周主任务暂以候选单相为核心，但必须用物理合理的合成混相作单相假设失配压力测试，允许 `REVIEW_REQUIRED` 拒判；进一步两相模型提示仅为可选，质量分数定量另立后续课题。**单相 Softmax 的 70% R / 30% C 是互斥候选解释概率，不是两相含量。** ECE 是模拟域可靠性评估，不保证真实域概率准确。
 
 本规划**不是已实施工作、已批准开题或对旧 xrd_inversion/JS 主线的改写**。详情与每双周里程碑见 [FERROELECTRIC_PRE_REFINEMENT_12W_PLAN.md](FERROELECTRIC_PRE_REFINEMENT_12W_PLAN.md)。旧 [FUTURE_UNDERGRAD_THESIS_PLAN.md](FUTURE_UNDERGRAD_THESIS_PLAN.md) 原文保留作为 10 月 8 日历史提案。
 
-### 2026-10-18：PXRD AutoLab 自动化执行方案（PROPOSED / NOT IMPLEMENTED）
+### 2026-10-18：PXRD AutoLab 工程支持提案（科学首个用例已归档）
 
-为支持 10 月 18 日前置科研冲刺及双周真实汇报策略，新增 [**PXRD AutoLab：自动科研执行与可审计证据流水线**](PXRD_AUTOMATED_RESEARCH_PIPELINE_PLAN_20261018.md) 作为**科研工程规划**，不改变已冻结 V9 或新的 Forward Loss 科学任务的证据状态。
+[PXRD AutoLab 工程方案](PXRD_AUTOMATED_RESEARCH_PIPELINE_PLAN_20261018.md) 保留为工程自动化设计记录。其历史首个参数反演/Forward Loss 用例已归档；AutoLab 工程代码本身不是第二个科学研究任务，也不授予训练权限。
 
-自动化范围是已人工审阅协议下的模拟数据、物理/梯度/拆分 Gate、受控 A/B、指标图表、不可变实验 manifest、报告草稿与人工最终审核。**当前只有规划，没有新代码、后台执行器或自动科研结果。** P0 先从配置和 provenance 机制、CPU smoke、失败停止及报告器着手；需真实接入工作站后才能谈无人值守 GPU。不得自动改协议、测试集或无限寻找正结果。
+该方案当时规划了人工审阅协议下的 Gate、A/B、报告与人工审核；**它不是当前主动科学路线，也没有代表自动实验或新结果**。任何工程维护仍须服从 2026-10-23 唯一科研任务及本仓库的安全规则。
 
-## 9. 2026-10-13 独立母结构数量效率实验（PROPOSED，尚未运行）
+## 9. 2026-10-13 独立母结构效率实验提案（历史快照；已于 10-14 完成）
 
-从早期暂缓的 sample-efficiency 设想中恢复 **10% / 25% / 50% / 100% 的 Train 母结构预算曲线**，检验在相同独立结构数、相同双视图曝光和优化预算下，利用同源关系的 Dynamic JS 是否比 Dynamic ERM 更充分使用晶体结构数据。
+本段保留 2026-10-13 提案原貌，后来由下方 2026-10-14 完成记录取代。实验比较 **10% / 25% / 50% / 100% 的 Train 母结构预算曲线**，检验相同独立结构数、双视图曝光和优化预算下 Dynamic JS 与 Dynamic ERM。
 
 - 本实验是现有 `shared parent identity → relationship supervision` 主张的**独立补充机制/效率验证**，不是新模型、不是 RRUFF few-shot 标签效率，也不替代冻结的主实验。
 - 采用原 Train 9,842 母结构的晶系分层嵌套子集；ResNet-18-GN、`lambda_js=60` 不变；配对 seed 和模拟协议固定，训练曝光量/优化步数必须统一。
 - 已识别工程风险：目前公共 `runner.py` 的 epoch 末尾可能有不完整 batch，而且每 epoch 进行验证与保存，不适合直接充当完全公平的预算比较入口。CODEX LUNA 应先完成独立固定步数入口、数据审计、单元测试与 smoke，才能执行大规模 run。
 - 当前模拟 Test 已在正式论文中使用过；本次应标明为 **post-main supplementary follow-up**，不能声称是全新未打开的 confirmatory Test。
-- 状态 **PROPOSED / READY FOR CODEX IMPLEMENTATION / NOT_RUN**；完整任务与结果交付标准见 [PXRD_PARENT_STRUCTURE_EFFICIENCY_PLAN.md](PXRD_PARENT_STRUCTURE_EFFICIENCY_PLAN.md)。原主实验的报告、划分、权重和历史结果均不得修改。
+- 提案当时的状态为 **PROPOSED / READY FOR CODEX IMPLEMENTATION / NOT_RUN**；该状态随后被下方完成记录取代。原主实验的报告、划分、权重和历史结果均未修改。
 
 
-## 2026-10-14 completed parent-budget supplement (post-main)
+## 10. 2026-10-14 已完成的母结构预算补充实验（post-main）
 
 The formerly proposed parent-budget experiment is complete: 4 budgets (984/2460/4921/9842) × 5 seeds × 2 methods = 40 scored models, 20 pairs. At each budget Dynamic JS outperformed matched Dynamic ERM on the simulated Test by +0.05607 / +0.05173 / +0.04261 / +0.05396 Macro-F1 respectively, with 5/5 paired seeds positive at every budget. The already-used Test makes this explicitly post-main supplementary evidence. No measured budget crossing supports a quantitative crystal-structure saving claim. Full frozen protocol, raw aggregates, audit limitations and figures: [PARENT_BUDGET_EFFICIENCY.md](../xrd_robustness/reports/PARENT_BUDGET_EFFICIENCY.md).
 

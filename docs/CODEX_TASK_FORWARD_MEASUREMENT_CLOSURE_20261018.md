@@ -1,6 +1,10 @@
 # 科研工单 · 测量一致的 PXRD Forward 闭环纠偏（2026-10-18）
 
-**状态：CODEX APPROVED — PHYSICS-GATE-CONDITIONAL BOUNDED GPU TRAINING / NOT YET EXECUTED。** 用户在讨论 PR #11、#16、#17 后明确质疑重构目标，2026-10-18 选择优先核查 **Forward 重建的目标与测量模型是否一致**，取代原 Issue #18 的“直接迁移 clean-reference loss 再训练”优先级。此任务不声称已证明方法有效或真实谱精修适用。
+> **Current status (2026-10-23): ARCHIVED / INACTIVE.** This document is retained as a historical proposal or task record. It is superseded by the sole active PXRD seven-crystal-system classification direction and the three evaluation axes in [CURRENT_STATE](CURRENT_STATE.md) and [the scale-up plan](PXRD_SCALEUP_SIMULATOR_AND_TUNING_PLAN_20261023.md). Do not execute or reactivate this route based on its earlier wording.
+>
+> The historical 2026-10-18 bounded-training authorization is superseded and inactive. Do not run its gates or training as part of the current task.
+
+**Original ticket status (2026-10-18): CODEX APPROVED — PHYSICS-GATE-CONDITIONAL BOUNDED GPU TRAINING / NOT YET EXECUTED。Current status (2026-10-23): ARCHIVED / INACTIVE; the earlier authorization is superseded.** 用户在讨论 PR #11、#16、#17 后明确质疑重构目标，2026-10-18 选择优先核查 **Forward 重建的目标与测量模型是否一致**，取代原 Issue #18 的“直接迁移 clean-reference loss 再训练”优先级。此任务不声称已证明方法有效或真实谱精修适用。
 
 ## 2026-10-18 用户补充授权：物理 Gate 通过后直接训练（优先级最高）
 

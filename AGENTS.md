@@ -60,19 +60,30 @@ Use exact symbolic or numerical verification when precision materially affects t
 ### Public communication
 Ground figures, reports, manuscripts, and summaries in repository evidence. Presentation convenience must not alter scientific claims.
 
-## 4. Current PXRD framing guardrail
+## 4. Active scientific scope — decision dated 2026-10-23
+
+The **only active scientific task** is machine-learning-based PXRD seven-crystal-system classification. Its method frame is **Shared Parent Identity → Measurement Equivalence → Relationship Supervision**, with the existing Dynamic ERM vs Dynamic JS work as completed evidence.
+
+The next-stage plan has **exactly three core evaluation axes**: (1) RRUFF real-domain zero-shot Accuracy and Macro-F1, (2) confidence calibration with ECE primary and NLL/Brier/reliability diagrams supporting, and (3) simulated-data efficiency versus independent training-parent count under matched ERM/JS budgets. CNRS is optional secondary-domain evidence, not a fourth axis. See [docs/CURRENT_STATE.md](docs/CURRENT_STATE.md).
+
+Quantitative lattice-parameter prediction/inversion, Forward Reconstruction Loss, DONUT-related workflows, automatic refinement, and the ferroelectric pre-refinement proposal are **Archived / Inactive** as of 2026-10-23. They remain available for historical analysis and reproducibility. A historical plan, issue, code directory, or earlier authorization is **not** permission to resume them. Do not infer that an old inversion roadmap is active merely because it is detailed or contains executable commands. Reopen a scientific direction only after an explicit new decision is recorded in [docs/CURRENT_STATE.md](docs/CURRENT_STATE.md) and [docs/PROJECT_HISTORY.md](docs/PROJECT_HISTORY.md).
+
+For the planned classification scale-up, follow the ordered, versioned roadmap in [the 2026-10-23 plan](docs/PXRD_SCALEUP_SIMULATOR_AND_TUNING_PLAN_20261023.md); simulator/data expansion precedes training-parameter retuning, and model architecture comparisons are conditional.
+
+## 5. Current PXRD framing guardrail
 
 The current hierarchy is:
 
 - **Project:** supervised learning / PXRD crystal-system classification.
 - **Method core:** structured / relational supervision from simulator provenance.
 - **Concrete realization:** JS consistency regularization.
-- **Evaluation/result settings:** simulated OOD, CNRS zero-shot, RRUFF few-shot adaptation / label efficiency, calibration.
+- **Completed historical evaluation settings:** simulated OOD, RRUFF few-shot adaptation / label efficiency, and CNRS zero-shot; the latter is optional secondary-domain evidence now.
+- **Current planned evaluation axes:** exactly the three listed in section 4; do not treat older result settings as extra active research tracks.
 - **Broad context:** AI4Science / AI for Characterization.
 
 Do not casually relabel the whole project as robustness research, representation learning, domain adaptation, computer vision, or physics-informed ML. See `docs/PXRD_SUPERVISION_FRAMING.md`.
 
-## 5. Experiment-integrity rules
+## 6. Experiment-integrity rules
 
 - Do not reopen a CLOSED evidence question without a changed scientific claim or new contradictory evidence.
 - Do not alter frozen test data, selected checkpoints, seeds, metrics, or hyperparameters after seeing final results.
@@ -81,7 +92,7 @@ Do not casually relabel the whole project as robustness research, representation
 - Distinguish headline performance, supporting reliability evidence, and strict statistical audit according to `docs/PXRD_RESULT_REPORTING_STANDARD.md`.
 - A local engineering change is not automatically a scientific change.
 
-## 6. Repository write-back rule
+## 7. Repository write-back rule
 
 Important scientific discussion must not remain only in chat.
 
@@ -105,7 +116,7 @@ Write-back destinations:
 
 Minor tutoring, brainstorming, and wording alternatives do not require repository write-back.
 
-## 7. Decision-record format
+## 8. Decision-record format
 
 For a material project decision, preserve:
 
@@ -122,7 +133,7 @@ Relevant files / commits
 
 The purpose is to preserve the real research path, including false starts and corrections, for scientific and retrospective writing.
 
-## 8. Default working loop
+## 9. Default working loop
 
 ```text
 Read current state

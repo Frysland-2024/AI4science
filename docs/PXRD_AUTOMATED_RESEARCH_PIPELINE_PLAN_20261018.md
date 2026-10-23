@@ -1,8 +1,10 @@
 # PXRD AutoLab：自动化科研执行与可审计证据流水线（2026-10-18）
 
+> **Status as of 2026-10-23: HISTORICAL ENGINEERING PROPOSAL; FORMER SCIENTIFIC USE CASE ARCHIVED / INACTIVE.** This document records an older AutoLab design. The former first use case (parameter inversion / Forward Loss) is superseded by the sole active PXRD seven-crystal-system classification task and its three axes in [CURRENT_STATE](CURRENT_STATE.md). It does not claim current implementation, active development, or training authorization. AutoLab may remain engineering support.
+
 **状态：PROPOSED / ARCHITECTURE & DELIVERY CONTRACT / NOT_IMPLEMENTED / NO_AUTOMATED_RUNS。** 本文记录拟建工程，不宣称已完成自动调度、无人值守实验、图表或双周报告；不修改已冻结的 V9 研究。本文的自动化范围必须服从 [AGENTS.md](../AGENTS.md) 的证据优先级与科研诚信要求。
 
-**发起背景与科学目标：** 用户在确定“尽量前置完成科研，双周真实汇报，同时推进课程、硕士申请与 GRE”的时间策略后，提出能否建立自动科研流。要自动化的是**执行与证据整理**，不是让 AI 自由重定义科研问题。首个实际用例是 [铁电陶瓷前向重构 Loss 候选计划](FERROELECTRIC_PRE_REFINEMENT_12W_PLAN.md)：借鉴 PQ-Net 参数回归、DRNets 物理重构思想，比较 **A = supervised PXRD parameter inversion** 和 **B = 相同 NN + differentiable forward reconstruction loss**。在有据可查的已知单相候选与可靠 forward 上做小 pilot；材料家族待合作学长确认。
+**历史发起背景与科学用例：** 用户曾提出建设自动科研流，以人工审阅协议执行实验并整理证据。该工程目标可作为支持能力记录；其当时的首个科学用例——[铁电陶瓷 Forward Loss 提案](FERROELECTRIC_PRE_REFINEMENT_12W_PLAN.md)，即参数反演 A/B——现已 Archived / Inactive，不能触发当前工程实现或训练。
 
 ## 1. 首先区分「实验自动化」与「自主科研」
 

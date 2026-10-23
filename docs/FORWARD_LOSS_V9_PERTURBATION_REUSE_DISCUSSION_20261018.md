@@ -1,6 +1,10 @@
 # 2026-10-18 设计讨论：将 V9 五类 PXRD 扰动复用于 Forward Loss 参数反演
 
-**状态：DISCUSSION / PROPOSED / NOT IMPLEMENTED / NO NEW EXPERIMENTS。** 本文是新的实验设计候选，不批准重开 V9 冻结配置、修改 PR #11 已跑数据，也不证明真实域泛化。科学方向仍为**已知材料体系/候选结构下的连续参数反演**，A：监督回归 vs B：监督回归＋可微 Forward Reconstruction Loss。与旧 JS 分类方法无继承关系，不需要在新任务中加 JS Loss。
+> **Current status (2026-10-23): ARCHIVED / INACTIVE.** This document is retained as a historical proposal or task record. It is superseded by the sole active PXRD seven-crystal-system classification direction and the three evaluation axes in [CURRENT_STATE](CURRENT_STATE.md) and [the scale-up plan](PXRD_SCALEUP_SIMULATOR_AND_TUNING_PLAN_20261023.md). Do not execute or reactivate this route based on its earlier wording.
+>
+> The old V9 Forward Loss proposal and its earlier execution language are not current authorization to train.
+
+**原始状态（2026-10-18）：DISCUSSION / PROPOSED / NOT IMPLEMENTED / NO NEW EXPERIMENTS。当前状态（2026-10-23）：ARCHIVED / INACTIVE。** 本文保留当时的 A/B 候选设计与门槛；它不批准重开 V9、修改旧数据或执行训练，也不证明真实域泛化。
 
 ## 1. 为什么此时提出
 

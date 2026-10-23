@@ -4,6 +4,8 @@
 
 This guide is a navigation layer—not a replacement for the frozen experiment files or result reports. The [README](../README.md) gives the shortest overview; [CURRENT_STATE.md](CURRENT_STATE.md) is authoritative on scientific status.
 
+**Current direction (2026-10-23):** the only active scientific task is PXRD seven-crystal-system classification. The next stage has exactly three evaluation axes: RRUFF zero-shot Accuracy/Macro-F1, confidence calibration led by ECE, and simulated-data efficiency by independent-parent count. CNRS is optional secondary evidence. Quantitative parameter inversion, Forward Loss, DONUT-related routes, and refinement proposals are Archived / Inactive.
+
 ## The 60-second explanation
 
 **Task:** classify the **seven crystal systems** from powder X-ray diffraction patterns.
@@ -51,7 +53,7 @@ The controlled difference is **the loss term**. Both methods use the same parent
 
 For the exact mathematical implementation and fairness checks, use the [method-detail audit](PXRD_METHOD_DETAIL_EVIDENCE_CLOSURE.md). For the physical construction and limits of measurement transformations, see [simulation config](../xrd_robustness/configs/simulation.method_transfer.frozen.json) and [perturbation evidence](PXRD_PERTURBATION_EVIDENCE.md).
 
-## Three evaluations, three different claims
+## Completed evaluation settings (historical evidence, not the active-axis list)
 
 | Domain | Setup | What it does—and does not—show |
 |---|---|---|
@@ -59,7 +61,7 @@ For the exact mathematical implementation and fairness checks, use the [method-d
 | **RRUFF-301** | Experimentally measured, curated real domain; identical **K=1, 2, 5 labels/class** adaptation budgets with locked Test evaluation | Higher observed performance with the same few labels: paired Macro-F1 gains **+4.33 / +4.60 / +5.45 pp**. **Not** an unseen-mineral benchmark; shared mineral identity across support/test is allowed and documented |
 | **CNRS-318** | Second real experimental source; naturally imbalanced and evaluated with **frozen models, zero-shot** | Directional relative advantage: seed-level Macro-F1 **0.1884 → 0.2071** (+1.87 pp; 5/5 seeds). Absolute accuracy is low, lower than the majority-class baseline; source labels were reconstructed from deposited structures, not manually checked spectrum by spectrum; the parent-bootstrap CI on the gain crosses zero |
 
-Do **not** average these three numbers into a universal “real-XRD accuracy.” A secondary [calibration audit](../xrd_robustness/reports/CALIBRATION_ANALYSIS.md) also documents ECE, NLL and Brier improvements, while explicitly noting the remaining overconfidence.
+Do **not** average these three historical result settings into a universal “real-XRD accuracy.” New work uses the three axes specified at the top of this guide. A secondary [calibration audit](../xrd_robustness/reports/CALIBRATION_ANALYSIS.md) also documents ECE, NLL and Brier improvements, while explicitly noting the remaining overconfidence.
 
 ## What counts as original work here?
 
@@ -75,12 +77,12 @@ The **ResNet implementation is adapted from ML4pXRDs** under the [third-party no
 
 **Division of project responsibilities:** Per the project lead's clarified attribution, Frysland-2024 was principally responsible for the overall research idea, scientific planning, method selection, and design of the simulation, RRUFF, CNRS, and parent-budget studies. Cuifa01 participated chiefly in execution, providing auxiliary ideas, collecting/organizing data, coding, GPU training and other engineering/experiment support. This is a distinction between *research design leadership* and *implementation/support*, not a claim that Cuifa01 made no intellectual contribution; see [research-role statement](RESEARCH_ROLES.md).
 
-## Scientific boundaries and incomplete tracks
+## Current scope and historical tracks
 
 - **Main study:** [xrd_robustness](../xrd_robustness/) — completed experimental comparisons, manuscript in progress.
-- **Separate numerical investigation:** [xrd_inversion](../xrd_inversion/) — contains forward-model / recoverability gates; its formal report records **288/288** clean P2-R successes while other nominal-start and nuisance diagnostics fail. **No neural training** was run for those numerical gates, and this is **not** evidence of a completed ML inversion model.
+- **Archived / inactive numerical-inversion research:** [xrd_inversion](../xrd_inversion/) — contains forward-model / recoverability gates; its formal report records **288/288** clean P2-R successes while other nominal-start and nuisance diagnostics fail. **No neural training** was run for those numerical gates, and this is **not** evidence of a validated real-domain ML inversion model.
 - **Completed supplementary study:** [parent-structure efficiency results](../xrd_robustness/reports/PARENT_BUDGET_EFFICIENCY.md) — 40 models across four independent-parent budgets. JS performs better at each matched budget, but no quantitative parent saving is demonstrated; this reuses a previously evaluated Test.
-- **Possible future thesis:** [physics-constrained parameter inversion](FUTURE_UNDERGRAD_THESIS_PLAN.md) — a **candidate plan**, not an approved or executed experiment.
+- **Archived / inactive proposals:** [physics-constrained inversion](FUTURE_UNDERGRAD_THESIS_PLAN.md), [ferroelectric pre-refinement](FERROELECTRIC_PRE_REFINEMENT_12W_PLAN.md), and [Forward Loss design notes](FORWARD_LOSS_V9_PERTURBATION_REUSE_DISCUSSION_20261018.md) remain historical records, not candidate next-stage projects.
 - **Archived directions:** see [project history](PROJECT_HISTORY.md) and [factorization NO-GO archive](archive/XRD_FACTORIZATION_STAGE1_ARCHIVED_20260907.md). Failed routes and changes in interpretation are preserved rather than presented as results.
 
 ## Can an external reader reproduce it?

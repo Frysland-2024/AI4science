@@ -1,8 +1,8 @@
 # PXRD quantitative inversion
 
-Experimental numerical infrastructure for a **known-phase, single-phase tetragonal PXRD inversion** study.
+> **Status as of 2026-10-23: ARCHIVED / INACTIVE.** This directory preserves code, configs, reports, and tests for historical numerical-inversion research. It is not the current thesis direction or an authorized next-stage task. Prior successful numerical gates and incomplete/negative diagnostics remain as recorded; they do not establish a validated real-domain parameter-inversion result. Use [CURRENT_STATE](../docs/CURRENT_STATE.md) and [PROJECT_HISTORY](../docs/PROJECT_HISTORY.md) for current scope and transition history.
 
-This is a secondary research line and is intentionally separated from the completed classification evidence in xrd_robustness.
+Historical numerical-inversion infrastructure for a **known-phase, single-phase tetragonal PXRD** study, intentionally separated from the completed classification evidence in xrd_robustness.
 
 ## Status
 

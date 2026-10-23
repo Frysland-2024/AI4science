@@ -1,6 +1,10 @@
 # 2026-10-18 候选执行策略：XRD 前置冲刺、双周诚实汇报与申请备考并行
 
-**状态：PERSONAL EXECUTION PLAN / PROPOSED / NOT_STARTED。** 此文件是时间与协作安排，不代表合作学长/导师已批准、科研项目已启动或任何实验已产生结果。
+> **Current status (2026-10-23): ARCHIVED / INACTIVE.** This document is retained as a historical proposal or task record. It is superseded by the sole active PXRD seven-crystal-system classification direction and the three evaluation axes in [CURRENT_STATE](CURRENT_STATE.md) and [the scale-up plan](PXRD_SCALEUP_SIMULATOR_AND_TUNING_PLAN_20261023.md). Do not execute or reactivate this route based on its earlier wording.
+>
+> The relative-week schedule below is a dated personal planning snapshot, not a current research task queue.
+
+**Original status (2026-10-18): PERSONAL EXECUTION PLAN / PROPOSED / NOT_STARTED. Current status: ARCHIVED / historical planning snapshot.** 此文件是时间与协作安排，不代表合作学长/导师已批准、科研项目已启动或任何实验已产生结果。
 **参照科学规划：** [FERROELECTRIC_PRE_REFINEMENT_12W_PLAN.md](FERROELECTRIC_PRE_REFINEMENT_12W_PLAN.md) 的 **2026-10-18 当前方法优先级收敛**：PQ-Net 风格的模拟 PXRD 参数回归；公平比较参数监督 NN（A）与参数监督 + Differentiable Forward Reconstruction Loss（B）。最初已知候选单相，材料家族待学长提供；两相与多家族功能降为后续扩展。
 **总策略：** 尽可能前置能独立完成的模拟方法开发，按每两周正式交流的节奏汇报真实进展，把有限时间优先留给课程、目标项目调研/套磁、GRE（先核实目标学校是否需要）。**允许分主题讲解已完成成果；禁止把已完成说成未完成、倒填实验日期或隐瞒会影响合作决策的重要结果。**
 

@@ -1,6 +1,10 @@
 # 2026-10-18 文献纠偏：为何 Forward Model 仍是 AI 辅助 PXRD 预精修的核心
 
-**状态：LITERATURE-GROUNDED DESIGN REVIEW / FUTURE CANDIDATE；无新实验。**
+> **Current status (2026-10-23): ARCHIVED / INACTIVE.** This document is retained as a historical proposal or task record. It is superseded by the sole active PXRD seven-crystal-system classification direction and the three evaluation axes in [CURRENT_STATE](CURRENT_STATE.md) and [the scale-up plan](PXRD_SCALEUP_SIMULATOR_AND_TUNING_PLAN_20261023.md). Do not execute or reactivate this route based on its earlier wording.
+>
+> The literature review below supports a historical proposal only; it is not an active project direction.
+
+**原始状态（2026-10-18）：LITERATURE-GROUNDED DESIGN REVIEW / FUTURE CANDIDATE；无新实验。当前状态（2026-10-23）：ARCHIVED / INACTIVE。**
 **背景：** 现有 [12 周计划](FERROELECTRIC_PRE_REFINEMENT_12W_PLAN.md) 强调“模拟训练→Top-K 候选相＋晶格参数初值＋校准＋Forward 核验”，但如果 Forward 只作为离线数据发生器，研究将退化成普通晶相分类。此处基于查到的原始文献明确方法先例、科学问题和可能的对照，不代表新功能已实现，亦不立即授权大规模训练。
 
 ## 1. 直接先例（原文网页/DOI，逐项核对）

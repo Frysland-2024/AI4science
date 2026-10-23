@@ -312,3 +312,14 @@ The distinction is between **principal research design and planning** versus **s
 **What does not change:** The old frozen V7/V9 scientific evidence, RRUFF-301 70/231 protocol, and the three core evaluation axes remain untouched. This is a design decision, not evidence that implementation or new training has been completed.
 
 **Status:** ACTIVE NEXT-STAGE DESIGN / NOT IMPLEMENTED. [Implementation plan](PXRD_SCALEUP_SIMULATOR_AND_TUNING_PLAN_20261023.md) and [Issue #49](https://github.com/Frysland-2024/AI4science/issues/49).
+
+
+## 2026-10-23: formal return to seven-crystal-system classification
+
+**Project path:** FerroAI and earlier materials-ML work led into PXRD as a scientific measurement problem; the PXRD study then developed into a controlled method investigation of simulator-retained same-parent identity and relationship supervision. A subsequent exploration tested whether PXRD spectra could support quantitative lattice/measurement-parameter prediction through supervised inversion, Forward Reconstruction Loss, DONUT-inspired reasoning, and automated/refinement-assisted workflows. Those proposals and numerical feasibility results did not establish a stable, validated real-domain parameter-inversion study. On 2026-10-23 the project lead formally returned the sole active scientific task to **machine-learning-based PXRD seven-crystal-system classification**.
+
+**Current plan:** Only three evaluation axes are active for planning: (1) RRUFF real-domain zero-shot Accuracy and Macro-F1 with matched-condition comparisons to Lee (2023), SimXRD-4M (2025), and XQueryer-NoElem (2025); (2) confidence calibration, led by ECE with NLL/Brier/reliability diagrams supporting; and (3) simulated-data efficiency by unique training-parent count under matched Dynamic ERM/JS budgets. CNRS remains optional secondary-domain evidence. See [CURRENT_STATE.md](CURRENT_STATE.md) and the [2026-10-23 scale-up plan](PXRD_SCALEUP_SIMULATOR_AND_TUNING_PLAN_20261023.md).
+
+**Technical order:** First audit independent structure availability and develop a versioned online simulator with physically defensible, label-preserving paired views. Then retune training settings against synthetic development evidence. Only after data and simulation stabilize may ResNet-18-GN be compared conditionally with SimXRD CNN11 or an optional multi-scale 1D CNN. These are future plans, not implemented work.
+
+**Archived / Inactive:** Quantitative parameter prediction, lattice-parameter recovery, Forward Reconstruction Loss, DONUT-inspired workflows, automatic refinement, and the ferroelectric pre-refinement candidate. Their code, completed numerical checks, failures, reports, citations, and prior authorizations remain in the repository as historical evidence. No historical issue or detailed proposal can reactivate them.

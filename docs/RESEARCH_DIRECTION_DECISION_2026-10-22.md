@@ -1,5 +1,8 @@
 # Research Direction Decision — 2026-10-22
 
+> **Current-scope addendum (2026-10-23):** The project lead formally confirmed that the only active scientific task is machine-learning-based PXRD seven-crystal-system classification. The next stage has exactly three evaluation axes: RRUFF real-domain zero-shot Accuracy/Macro-F1; confidence calibration (ECE primary, NLL/Brier/reliability diagrams supporting); and simulated-data efficiency by independent training-parent count under matched Dynamic ERM/Dynamic JS budgets. CNRS remains optional secondary evidence. Quantitative parameter prediction/inversion, lattice-parameter recovery, Forward Reconstruction Loss, DONUT-related work, and automated refinement are Archived / Inactive. See [current state](CURRENT_STATE.md), [history](PROJECT_HISTORY.md), and the [scale-up plan](PXRD_SCALEUP_SIMULATOR_AND_TUNING_PLAN_20261023.md).
+
+
 ## Decision (user-stated)
 On 2026-10-22 the project lead explicitly decided to **stop pursuing quantitative PXRD parameter prediction/inversion as the active research direction and continue crystal-system prediction**.
 
@@ -18,7 +21,7 @@ Keep the existing terminology: **shared parent identity → measurement equivale
 ## Recommended immediate scope
 1. Treat crystal-system classification as the only active scientific task; preserve all frozen splits, benchmarks and negative findings.
 2. Finish existing evidence packaging: performance, structure-coupled perturbations, parent-budget/data efficiency and real-domain label efficiency, without changing previously frozen outcomes.
-3. Archive inversion as an exploratory branch and potential future topic; do not delete code, results or chronology.
+3. Archive inversion as historical evidence and preserve its code, results and chronology; no inversion task or next-stage plan is active.
 4. Keep README-facing scientific claims based on auditable evidence. Do not introduce unsupported quantification claims.
 
 ## Evidence already recorded (not newly tested here)
@@ -31,4 +34,4 @@ See: docs/CURRENT_STATE.md; docs/PROJECT_HISTORY.md; xrd_robustness/reports/RESU
 ## Chronology / future application narrative
 This decision represents **scoping after empirical exploration**, not a retroactive erasure of inversion: the team explored whether classification could lead to quantitative inversion; physics-based fitting and data requirements made that expansion much harder to validate with available evidence; the lead chose to return to the already demonstrated scientific problem and deepen its mechanistic and real-domain evaluation.
 
-This note records direction only. It does **not** claim that any previously scheduled inversion job has been technically cancelled, nor that its branch was removed.
+This note records the original 2026-10-22 direction decision. The 2026-10-23 addendum above is the current scope and supersedes any earlier inversion plans or task instructions. This file does not report a technical scheduler state; historical commands or authorizations below must not be treated as permission to execute an inversion task.
