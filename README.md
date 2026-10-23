@@ -86,6 +86,12 @@ The full sequence and acceptance boundaries are in the [2026-10-23 scale-up plan
 - [RRUFF literature benchmark plan](docs/RRUFF_REAL_DOMAIN_LITERATURE_BENCHMARK_2026-10-22.md)
 - [Calibration report](xrd_robustness/reports/CALIBRATION_ANALYSIS.md)
 - [Parent-budget protocol and report](xrd_robustness/reports/PARENT_BUDGET_EFFICIENCY.md)
+- [Current project state](docs/CURRENT_STATE.md) · [Project history](docs/PROJECT_HISTORY.md)
+- [Manuscript](xrd_robustness/MANUSCRIPT.md)
+- [Validation results JSON](xrd_robustness/reports/validation_results.json)
+- [Simulated-test results JSON](xrd_robustness/reports/simulated_test_results.json)
+- [RRUFF-301 few-shot results JSON](xrd_robustness/reports/rruff301_fewshot_results.json)
+- [Citation](CITATION.md) · [License](LICENSE) · [Third-party notices](THIRD_PARTY_NOTICES.md)
 
 Selected evidence figures:
 
