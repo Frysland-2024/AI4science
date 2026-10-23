@@ -265,3 +265,20 @@ The 2026-10-14 parent-budget experiment had completed in Cuifa01's implementatio
 The project lead clarified that the prior research-role descriptions were still too narrow and insufficiently explicit: **the scientific approaches and project-level plans were principally designed and directed by Frysland-2024 throughout the project's evolution**, not merely for isolated later experiments. This includes framing and redirecting the research, choosing and planning evaluation protocols, designing the simulated OOD, RRUFF, CNRS and Data Efficiency/parent-budget studies, and interpreting the results. Cuifa01's primary role was **participation in carrying out those plans**, alongside **auxiliary idea suggestions, feedback, data gathering/organization, code implementation, computing and experiment operations**, including the desktop GPU work.
 
 The distinction is between **principal research design and planning** versus **supporting intellectual input and execution**. It does not erase the collaborator's execution or suggestions, change the historical Git record, or prejudge formal manuscript authorship. The earlier 2026-10-18 entry remains as a historical record of the first attribution clarification; this entry records the later, more complete correction explicitly rather than silently rewriting history.
+
+## 2026-10-23: Converge on three headline metrics for the crystal-system extension
+
+**Previous assumption / question:** After exploratory quantitative PXRD inversion did not mature into a stable real-domain result, the lead prioritized returning to seven-crystal-system classification. The October 22 supervisor discussion underscored the need for credible *absolute* measured-RRUFF performance against published systems, not only internally matched JS-versus-ERM gains. A scale-up task was opened for independent simulated parent structures.
+
+**Decision (explicit, 2026-10-23):** Exactly three next-stage headline evaluation axes:
+1. **RRUFF real-domain leaderboard** — primary zero-shot crystal-system Accuracy, with Macro-F1 and same-test-set published model comparisons.
+2. **Confidence calibration** — ECE and reliability, with NLL/Brier as complementary probability scores.
+3. **Simulated parent-structure data efficiency** — classification performance versus number of distinct simulated training structures, with matched ERM/JS training budget.
+
+**Why these three:** They respectively answer whether a model *performs*, whether its expressed uncertainty is *trustworthy*, and whether parent-relationship supervision improves the *use of structure data*. This response targets both measurement-facing practical value and the lead's original simulator-provenance method idea.
+
+**What changes:** The next-stage presentation, scaling work and external evaluation prioritize these three axes. RRUFF published benchmark numbers are only reference lines unless protocols/sample IDs are matched. The RRUFF zero-shot and prior K=1/2/5 few-shot tracks must never be conflated; probabilistic calibration requires a declared evaluation domain.
+
+**What does not change:** All frozen historical V9, CNRS and RRUFF experiments and negative/uncertain results stay untouched. A completed 984/2460/4921/9842 parent-budget study demonstrated positive same-budget JS gains but explicitly did **not** establish a statistically supported count of saved parent structures. Residual and parameter-inversion branches remain part of the honest chronology, not newly reactivated.
+
+**Status:** ACTIVE RESEARCH PRIORITY / PLANNING, NO NEW GPU OR LITERATURE-ALIGNED RUN CLAIMED. See [current scientific state](CURRENT_STATE.md) and [scaling task](https://github.com/Frysland-2024/AI4science/issues/49).
