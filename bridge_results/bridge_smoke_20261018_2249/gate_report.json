@@ -1,0 +1,68 @@
+{
+  "a_b_authorized": "[REDACTED]",
+  "block_reasons": [
+    "Required measurement-aware scientific gates lack runtime PASS evidence.",
+    "BLOCKED_MISSING_IMPLEMENTATION: no explicitly reviewed executable A/B backend exists."
+  ],
+  "config_sha256": "c023643d0f6ce607cb064c9ecb6e2887fa3dc11569c186c66d37d15a56ad954e",
+  "gates": [
+    {
+      "evidence": null,
+      "id": "structure_and_reference_provenance",
+      "reason": "A real test result with measured evidence and approved-source provenance is required.",
+      "status": "BLOCKED_MISSING_EVIDENCE"
+    },
+    {
+      "evidence": null,
+      "id": "independent_full_spectrum_parity",
+      "reason": "A real test result with measured evidence and approved-source provenance is required.",
+      "status": "BLOCKED_MISSING_EVIDENCE"
+    },
+    {
+      "evidence": null,
+      "id": "measurement_aware_expected_profile",
+      "reason": "A real test result with measured evidence and approved-source provenance is required.",
+      "status": "BLOCKED_MISSING_EVIDENCE"
+    },
+    {
+      "evidence": null,
+      "id": "autograd_vs_finite_difference",
+      "reason": "A real test result with measured evidence and approved-source provenance is required.",
+      "status": "BLOCKED_MISSING_EVIDENCE"
+    },
+    {
+      "evidence": null,
+      "id": "q_eta_identifiability",
+      "reason": "A real test result with measured evidence and approved-source provenance is required.",
+      "status": "BLOCKED_MISSING_EVIDENCE"
+    },
+    {
+      "evidence": null,
+      "id": "non_oracle_nuisance_estimation",
+      "reason": "A real test result with measured evidence and approved-source provenance is required.",
+      "status": "BLOCKED_MISSING_EVIDENCE"
+    },
+    {
+      "evidence": null,
+      "id": "split_and_leakage_audit",
+      "reason": "A real test result with measured evidence and approved-source provenance is required.",
+      "status": "BLOCKED_MISSING_EVIDENCE"
+    }
+  ],
+  "generated_utc": "2026-10-18T14:49:42.385176+00:00",
+  "producer": "pxrd_autolab.physics_gates",
+  "producer_status": "MISSING_REVIEWED_TEST_IMPLEMENTATION",
+  "required_gate_ids": [
+    "structure_and_reference_provenance",
+    "independent_full_spectrum_parity",
+    "measurement_aware_expected_profile",
+    "autograd_vs_finite_difference",
+    "q_eta_identifiability",
+    "non_oracle_nuisance_estimation",
+    "split_and_leakage_audit"
+  ],
+  "schema_version": 1,
+  "source_commit": "cb249843981c344392686d36e7d60f354b89ce93",
+  "status": "BLOCKED_MISSING_EVIDENCE",
+  "summary": "No runtime scientific gate suite with independent measurement-aware evidence is registered."
+}
