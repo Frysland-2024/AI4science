@@ -282,3 +282,19 @@ The distinction is between **principal research design and planning** versus **s
 **What does not change:** All frozen historical V9, CNRS and RRUFF experiments and negative/uncertain results stay untouched. A completed 984/2460/4921/9842 parent-budget study demonstrated positive same-budget JS gains but explicitly did **not** establish a statistically supported count of saved parent structures. Residual and parameter-inversion branches remain part of the honest chronology, not newly reactivated.
 
 **Status:** ACTIVE RESEARCH PRIORITY / PLANNING, NO NEW GPU OR LITERATURE-ALIGNED RUN CLAIMED. See [current scientific state](CURRENT_STATE.md) and [scaling task](https://github.com/Frysland-2024/AI4science/issues/49).
+
+## 2026-10-23: CNRS becomes an optional secondary real-domain result
+
+**Previous assumption:** The 2026-10-23 three-pillar evaluation design already made RRUFF the primary real-domain benchmark, but CNRS remained a possible secondary external-domain figure.
+
+**User decision:** Explicitly deprioritize CNRS. Focus the new scale-up and published-paper comparison on RRUFF; CNRS is optional for the headline slides and is not a required fourth research objective. The user expressed a preference to show CNRS when it looks good and omit it otherwise.
+
+**Research-integrity correction:** A result-dependent decision to hide already-run unfavorable tests could bias the scientific record. The appropriate distinction is between *narrative priority* (RRUFF headlined, CNRS optional or supplementary) and *evidence transparency* (retaining and accurately citing all completed material evaluations, including negative/weak results where relevant to generalization claims).
+
+**Existing evidence:** CNRS-318 zero-shot five-seed paired Macro-F1 improves about +0.0187; pooled Macro-F1 0.1912→0.2091, Accuracy 0.2000→0.2101, ECE 0.6826→0.6124. Absolute task performance remains low, and the paired-parent strict CI spans zero. Preserve that distinction.
+
+**What changes:** New training/acquisition/benchmarking work is not required to include CNRS unless justified. Core evaluation themes remain RRUFF running score, ECE, and simulated parent-data efficiency.
+
+**What does not change:** CNRS artifacts, frozen predictions, original result reports, historical analyses and source disclosures must remain unmodified; future papers must not claim comprehensive real-domain generalization by omitting material counterevidence.
+
+**Status:** ACTIVE SCOPE CHANGE / NO NEW EXPERIMENT. See [current state](CURRENT_STATE.md), [CNRS report](../xrd_robustness/reports/CNRS_318_RESULTS.md).
