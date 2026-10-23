@@ -298,3 +298,17 @@ The distinction is between **principal research design and planning** versus **s
 **What does not change:** CNRS artifacts, frozen predictions, original result reports, historical analyses and source disclosures must remain unmodified; future papers must not claim comprehensive real-domain generalization by omitting material counterevidence.
 
 **Status:** ACTIVE SCOPE CHANGE / NO NEW EXPERIMENT. See [current state](CURRENT_STATE.md), [CNRS report](../xrd_robustness/reports/CNRS_318_RESULTS.md).
+
+## 2026-10-23: Upgrade measurement simulation before reselecting large-data hyperparameters
+
+**Previous assumption:** After prioritizing seven-crystal-system classification, three headline evidence pillars were fixed (RRUFF real-domain scores, ECE, independent-parent simulated-data efficiency). The initial expansion plan concentrated on acquiring many more CIFs and applying the established V7 online perturbation pipeline.
+
+**New reasoning and user decision:** The project lead identified two prerequisites: borrow from a more comprehensive **dynamic physical simulation** framework, then revisit optimizer/training settings once far more independent structures become available. The rationale is that simulator fidelity and data scale both change the learning task; old parameters, especially the chosen JS λ and fixed optimizer-step budget, may no longer be appropriate.
+
+**Source and implementation observation:** Existing V7 already has global 2θ shift, reflection-aware March–Dollase, Gaussian broadening, smooth/GP background and Poisson/electronic noise. SimXRD/Pysimxrd offers additional size-dependent line profiles, thermal and geometry effects; however code/source inspection shows that its default pymatgen path does not pass the public `zero_shift` argument and unconstrained random lattice shear can threaten seven-system label preservation. Thus the plan is **selective, verified reuse**, not wholesale copying. The 2026 Kikkawa et al. industrial-XRD augmentation study supplies a complementary real-measurement perspective.
+
+**What changes now:** Implement a versioned simulation extension, validate it cheaply against the old simulator on equal structure/compute budgets, and choose a limited validation-only search for LR/scheduler/batch/training exposure/λ before the large-scale matrix.
+
+**What does not change:** The old frozen V7/V9 scientific evidence, RRUFF-301 70/231 protocol, and the three core evaluation axes remain untouched. This is a design decision, not evidence that implementation or new training has been completed.
+
+**Status:** ACTIVE NEXT-STAGE DESIGN / NOT IMPLEMENTED. [Implementation plan](PXRD_SCALEUP_SIMULATOR_AND_TUNING_PLAN_20261023.md) and [Issue #49](https://github.com/Frysland-2024/AI4science/issues/49).
