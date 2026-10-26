@@ -6,21 +6,17 @@ This is a machine-learning project on **PXRD seven-crystal-system classification
 
 > **Shared Parent Identity → Measurement Equivalence → Relationship Supervision**
 
-The tested implementation compares Dynamic JS Consistency with matched Dynamic ERM using ResNet-18-GN. It improves simulated OOD Macro-F1 by **5.46 percentage points** over five matched seeds. Existing RRUFF-301 K=1/2/5 results are historical few-shot evidence; they do not answer the next zero-shot benchmark question.
+The tested implementation compares Dynamic JS Consistency with matched Dynamic ERM using ResNet-18-GN. It improves simulated OOD Macro-F1 by **5.46 percentage points** over five matched seeds. Existing RRUFF-301 K=1/2/5 and CNRS-318 results are supporting completed evidence and must be reported with their task and uncertainty limits.
 
-**Only active scientific task:** improve and evaluate seven-system classification. The next stage has exactly three axes:
+**Only current undergraduate thesis line (decision dated 2026-10-26):** complete the write-up and defense of this frozen seven-system classification study. Its research question is whether same-parent measurement-equivalence supervision improves classification over matched Dynamic ERM. **No new experiments are in the current thesis scope.**
 
-1. **RRUFF real-domain performance:** zero-shot Accuracy and Macro-F1, with fair literature comparisons only on matched spectra and protocols.
-2. **Confidence calibration:** ECE primary; NLL, Brier score, and reliability diagrams supporting.
-3. **Simulated-data efficiency:** performance versus unique training-parent count, comparing Dynamic ERM and Dynamic JS under matched budgets.
-
-CNRS remains optional secondary-domain evidence. Quantitative parameter inversion, lattice recovery, Forward Reconstruction Loss, DONUT-inspired routes, and automatic refinement are **Archived / Inactive**.
+The simulated parent-budget study is supplementary post-main evidence and does not support a quantitative structure-saving claim. New RRUFF zero-shot evaluation, calibration runs, simulator upgrades, larger-parent training, retuning, and new architecture comparisons are deferred.
 
 ## Five-minute reading path
 
 | Time | Read | What it establishes |
 |---|---|---|
-| 0–1 min | [Repository README](../README.md) | Active task, completed findings, three axes, future plan |
+| 0–1 min | [Repository README](../README.md) | Current thesis scope, completed findings, and deferred proposals |
 | 1–2 min | [Same-parent method figure](../xrd_robustness/figures/figure_1_method_overview.png) | How simulator-retained parent identity becomes relationship supervision |
 | 2–3 min | [Frozen results](../xrd_robustness/reports/RESULTS.md) | Exact simulated, RRUFF few-shot, and CNRS results and limits |
 | 3–4 min | [Calibration analysis](../xrd_robustness/reports/CALIBRATION_ANALYSIS.md) and [parent-budget analysis](../xrd_robustness/reports/PARENT_BUDGET_EFFICIENCY.md) | Existing reliability and data-efficiency evidence; neither establishes RRUFF calibration or structures saved |
@@ -34,14 +30,15 @@ CNRS remains optional secondary-domain evidence. Quantitative parameter inversio
 - **Parent budget:** the frozen 10/25/50/100% supplement found higher OOD Macro-F1 for JS at each matched budget. It reused the already evaluated simulated Test and does **not** establish a measured structure-count saving.
 - Existing simulated-domain and CNRS calibration analyses are historical. The planned RRUFF ECE evaluation has not been completed.
 
-## Future roadmap (planning only)
+## Parameter-inversion disposition
 
-1. Audit and expand independent training-parent structures toward feasible 30k/60k/100k tiers; report actual per-class availability and deduplication.
-2. Build a versioned dynamic simulator guided by SimXRD/Pysimxrd, preserving physically valid same-parent measurements and crystal-system labels.
-3. Retune learning rate, batch size, scheduler, training steps/parent exposure, and JS weight for the new data and simulator. The historical JS weight 60 is not assumed optimal.
-4. After data and simulation stabilize, conditionally compare SimXRD CNN11 or an optional multi-scale 1D CNN. ResNet-18-GN remains the historical baseline.
+PR #46 is a partial synthetic benchmark retained as historical exploration: 42 models, 8,085 primary rows, **0/42** passing the q-accuracy gate, **41/42** meeting the per-DOF cell-MAE constraint, **42/42** meeting the convergence comparison, and **41/42** meeting the amortized runtime gate. The PR43 held-out parents had already been evaluated; new-architecture stress was not run and real RRUFF validation was blocked/not run.
 
-See the [full scale-up plan](PXRD_SCALEUP_SIMULATOR_AND_TUNING_PLAN_20261023.md). No items above should be described as implemented results.
+Do not claim that PR #46 established method superiority, reliable or general parameter inversion, real-domain validity, or exact reproduction of XQueryer, SimXRD-4M, CPICANN, or PyWPEM. Treat its successful thresholds and saved rows as descriptive exploratory evidence only. Parameter inversion, Forward Loss, DONUT-inspired work, and automatic refinement are **Archived / Inactive**.
+
+## Deferred proposals
+
+The 2026-10-23 scale-up plan is retained for history but is deferred; it is not a thesis checklist or active task. No simulator, data, training, calibration, or RRUFF benchmark work is being started under the current thesis decision.
 
 ## Reproducibility and scope
 
