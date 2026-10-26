@@ -1,13 +1,13 @@
 # 下一阶段研究规划：物理约束下的 PXRD 参数反演与谱图重构
 
-> **Current status (2026-10-23): ARCHIVED / INACTIVE.** This document is retained as a historical proposal or task record. It is superseded by the sole active PXRD seven-crystal-system classification direction and the three evaluation axes in [CURRENT_STATE](CURRENT_STATE.md) and [the scale-up plan](PXRD_SCALEUP_SIMULATOR_AND_TUNING_PLAN_20261023.md). Do not execute or reactivate this route based on its earlier wording.
+> **Current status (2026-10-26): ARCHIVED / INACTIVE.** This document is retained as a historical proposal. It is superseded by the current undergraduate thesis scope: write-up and defense of the completed PXRD seven-crystal-system classification study, with no new experiments in scope. The 2026-10-23 classification scale-up plan is deferred. Do not execute or reactivate the inversion route based on its earlier wording.
 >
 > The original proposal below and the later 12-week ferroelectric pre-refinement proposal are both inactive.
 
 > **历史版本提示（2026-10-18）：** 本文保存 10 月 8 日“连续参数预测＋物理重构辅助 Loss”的原始候选研究思路，并非当前唯一的新课题规划。后续交流提出了更贴近实际的 [**12 周模拟训练 AI 预精修辅助规划**](FERROELECTRIC_PRE_REFINEMENT_12W_PLAN.md)：一个铁电陶瓷家族内 Top-K 单相结构候选、模拟域概率校准、条件参数初值及不确定性、Forward 核验，少量真实谱做案例检验；两相共存先作为单相失配压力测试，定量分数为远期扩展。旧方案和 NO-GO 历史保留以记录思路变迁，新的 12 周方案亦尚未正式启动或获批准。
 
 **提出日期：** 2026-10-08  
-**原提案状态：** FUTURE / CANDIDATE（2026-10-08）；**当前状态：** ARCHIVED / INACTIVE（2026-10-23）  
+**原提案状态：** FUTURE / CANDIDATE（2026-10-08）；**当前状态：** ARCHIVED / INACTIVE（2026-10-26）  
 **用途：** 硕士申请时说明可能的本科毕业研究方向，并记录从现有 XRD 分类项目向 AI for Scientific Measurement 发展的思路。  
 **性质：** 研究意向与执行假设，**不是已完成工作的描述**，也不授予启动训练或更改已有实验协议的权限。
 
@@ -107,7 +107,7 @@ FerroAI 与材料数据驱动研究经历
     ↓
 PXRD 分类：同源关系监督与模拟—实验评估（已完成的主线）
     ↓
-候选毕业研究：受物理正向模型约束的连续参数反演（FUTURE）
+历史候选毕业研究：受物理正向模型约束的连续参数反演（当时 FUTURE；2026-10-26 ARCHIVED）
     ↓
 硕士阶段：更广义的 scientific measurement / characterization
           （重构、逆问题、校准、不确定性、跨模态）
@@ -122,6 +122,6 @@ PXRD 分类：同源关系监督与模拟—实验评估（已完成的主线）
 | 当前 JS-only PXRD 分类工作 | COMPLETED / WRITING | `docs/CURRENT_STATE.md`, `xrd_robustness/reports/RESULTS.md` |
 | 旧 2×2 factorization Stage 1 | ARCHIVED / NO-GO | `docs/archive/XRD_FACTORIZATION_STAGE1_ARCHIVED_20260907.md` |
 | PXRD inversion 数值基础设施 | EXISTING NUMERICAL INFRASTRUCTURE | `xrd_inversion/README.md`, `xrd_inversion/reports/WEEK1_FORMAL_REPORT.md` |
-| 当前本科毕业研究构想 | FUTURE / CANDIDATE | 本文件 |
+| 本文件所载本科毕业研究提案 | ARCHIVED / INACTIVE（2026-10-26） | 本文件；当前范围见 `docs/CURRENT_STATE.md` |
 
 **记录原则：** 未来确定导师、材料体系、参数范围、损失和实验协议后，记录具体日期与变更理由；申请用研究计划可以随实际开题变化，但不能事后重写今天为什么提出这条路线。
