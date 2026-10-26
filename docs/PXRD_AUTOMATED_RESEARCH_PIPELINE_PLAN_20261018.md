@@ -1,6 +1,6 @@
 # PXRD AutoLab：自动化科研执行与可审计证据流水线（2026-10-18）
 
-> **Status as of 2026-10-23: HISTORICAL ENGINEERING PROPOSAL; FORMER SCIENTIFIC USE CASE ARCHIVED / INACTIVE.** This document records an older AutoLab design. The former first use case (parameter inversion / Forward Loss) is superseded by the sole active PXRD seven-crystal-system classification task and its three axes in [CURRENT_STATE](CURRENT_STATE.md). It does not claim current implementation, active development, or training authorization. AutoLab may remain engineering support.
+> **Status as of 2026-10-26: HISTORICAL ENGINEERING PROPOSAL; NOT ACTIVE.** This document records an older AutoLab design. The former parameter-inversion / Forward Loss use case is Archived / Inactive. The current undergraduate thesis is write-up and defense of the completed PXRD seven-crystal-system classification study; no new experiments are in scope. This proposal does not authorize active AutoLab implementation or training. See [CURRENT_STATE](CURRENT_STATE.md).
 
 **状态：PROPOSED / ARCHITECTURE & DELIVERY CONTRACT / NOT_IMPLEMENTED / NO_AUTOMATED_RUNS。** 本文记录拟建工程，不宣称已完成自动调度、无人值守实验、图表或双周报告；不修改已冻结的 V9 研究。本文的自动化范围必须服从 [AGENTS.md](../AGENTS.md) 的证据优先级与科研诚信要求。
 
