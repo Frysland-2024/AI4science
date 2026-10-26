@@ -60,26 +60,27 @@ Use exact symbolic or numerical verification when precision materially affects t
 ### Public communication
 Ground figures, reports, manuscripts, and summaries in repository evidence. Presentation convenience must not alter scientific claims.
 
-## 4. Active scientific scope — decision dated 2026-10-23
+## Current thesis scope — decision dated 2026-10-26
 
-The **only active scientific task** is machine-learning-based PXRD seven-crystal-system classification. Its method frame is **Shared Parent Identity → Measurement Equivalence → Relationship Supervision**, with the existing Dynamic ERM vs Dynamic JS work as completed evidence.
+The sole current undergraduate thesis line is to write up and defend the completed PXRD seven-crystal-system classification study. Its scientific question is whether simulator-known same-parent measurement equivalence, used as relationship supervision, improves classification over matched Dynamic ERM. The controlled ResNet-18-GN Dynamic JS vs Dynamic ERM study is complete and frozen; **no new experiments are in current thesis scope**.
 
-The next-stage plan has **exactly three core evaluation axes**: (1) RRUFF real-domain zero-shot Accuracy and Macro-F1, (2) confidence calibration with ECE primary and NLL/Brier/reliability diagrams supporting, and (3) simulated-data efficiency versus independent training-parent count under matched ERM/JS budgets. CNRS is optional secondary-domain evidence, not a fourth axis. See [docs/CURRENT_STATE.md](docs/CURRENT_STATE.md).
+Report the frozen evidence with its limits: simulated OOD Macro-F1 gain +5.46 percentage points across five matched seeds; RRUFF-301 K=1/2/5 as few-shot evidence; CNRS-318 with its low absolute accuracy and uncertainty; and the parent-budget result as post-main supplementary evidence that does not support a numeric structure-saving claim.
 
-Quantitative lattice-parameter prediction/inversion, Forward Reconstruction Loss, DONUT-related workflows, automatic refinement, and the ferroelectric pre-refinement proposal are **Archived / Inactive** as of 2026-10-23. They remain available for historical analysis and reproducibility. A historical plan, issue, code directory, or earlier authorization is **not** permission to resume them. Do not infer that an old inversion roadmap is active merely because it is detailed or contains executable commands. Reopen a scientific direction only after an explicit new decision is recorded in [docs/CURRENT_STATE.md](docs/CURRENT_STATE.md) and [docs/PROJECT_HISTORY.md](docs/PROJECT_HISTORY.md).
+PR #46 is a **partial, archived synthetic parameter-inversion exploration**, not evidence for the classification method. It scored 42 models and 8,085 records; the q-accuracy gate passed 0/42 and the per-DOF cell-MAE constraint passed 41/42. Its PR43 held-out parents had already been evaluated; new-architecture stress and real RRUFF validation were not run. Do not claim inversion superiority, real-domain validity, independent confirmation, or exact reproduction of XQueryer, SimXRD-4M, CPICANN, or PyWPEM.
 
-For the planned classification scale-up, follow the ordered, versioned roadmap in [the 2026-10-23 plan](docs/PXRD_SCALEUP_SIMULATOR_AND_TUNING_PLAN_20261023.md); simulator/data expansion precedes training-parameter retuning, and model architecture comparisons are conditional.
+Parameter inversion, lattice recovery, Forward Loss, DONUT-related workflows, automatic refinement, and the ferroelectric pre-refinement proposal remain **Archived / Inactive**. The 2026-10-23 classification scale-up plan and Issue #49 are **DEFERRED**, not current tasks or thesis acceptance gates. PR #46 and Issue #44 are closed unmerged/not planned. A historical plan, issue, code directory, or earlier authorization does not reactivate work. Reopen a direction only after a new explicit decision is recorded in [docs/CURRENT_STATE.md](docs/CURRENT_STATE.md) and [docs/PROJECT_HISTORY.md](docs/PROJECT_HISTORY.md).
 
 ## 5. Current PXRD framing guardrail
 
 The current hierarchy is:
 
-- **Project:** supervised learning / PXRD crystal-system classification.
+- **Project and thesis:** supervised learning / PXRD seven-crystal-system classification; thesis work is closure and reporting of the frozen study.
+- **Research question:** whether simulator-retained same-parent identity can provide additional relationship supervision beyond class labels.
 - **Method core:** structured / relational supervision from simulator provenance.
 - **Concrete realization:** JS consistency regularization.
-- **Completed historical evaluation settings:** simulated OOD, RRUFF few-shot adaptation / label efficiency, and CNRS zero-shot; the latter is optional secondary-domain evidence now.
-- **Current planned evaluation axes:** exactly the three listed in section 4; do not treat older result settings as extra active research tracks.
-- **Broad context:** AI4Science / AI for Characterization.
+- **Completed evidence:** simulated OOD, RRUFF few-shot adaptation, CNRS zero-shot, and the supplementary parent-budget study, each described with its task-specific limits.
+- **Archived / inactive:** quantitative parameter inversion, Forward Loss, DONUT-related work, and automatic refinement.
+- **Deferred:** RRUFF zero-shot scale-up, new calibration evaluation, parent-data expansion, simulator upgrade, training retuning, and architecture comparison. These are not active tracks.
 
 Do not casually relabel the whole project as robustness research, representation learning, domain adaptation, computer vision, or physics-informed ML. See `docs/PXRD_SUPERVISION_FRAMING.md`.
 
