@@ -206,7 +206,7 @@ Related: [frozen classification results](../xrd_robustness/reports/RESULTS.md), 
 
 这里的 framing 工作**不是新实验，也不是算法扩张**。不要重新把项目包装成“JS consistency 用于 XRD”；应把 JS 放在 measurement-equivalence relationship supervision 的下游实现位置。
 
-## 7. 历史展示与论文整理提案（2026-10-20 快照；已被 2026-10-23 研究规划取代）
+## 7. 历史展示与论文整理提案（2026-10-20 快照；当前范围以 2026-10-26 决策为准）
 
 1. 首先打磨并固定方法新颖性 framing：`simulator from data generator to relationship supervisor`。
 2. 把该 framing 做成 PPT / manuscript 的核心方法图，视觉重点放在 `shared parent identity → measurement equivalence → supervision`，而不是把 JS 画成最大创新模块。
