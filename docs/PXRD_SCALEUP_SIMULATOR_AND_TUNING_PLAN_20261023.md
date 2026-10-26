@@ -1,10 +1,12 @@
-# 2026-10-23 — Large-data PXRD: simulation upgrade and hyperparameter re-selection
+# Deferred planning record — 2026-10-23 PXRD scale-up proposal
 
-**Sole active research task:** machine-learning-based PXRD seven-crystal-system classification. Its only three core evaluation axes are RRUFF zero-shot Accuracy/Macro-F1, confidence calibration (ECE primary), and simulated-data efficiency by independent training-parent count. Parameter inversion, Forward Loss, DONUT-related, and refinement work are Archived / Inactive. All work below is planning only.
+> **Status as of 2026-10-26: DEFERRED / NOT PART OF THE CURRENT UNDERGRADUATE THESIS.** This file preserves a proposal for possible future continuation. It is not the current task list, a thesis acceptance gate, or authorization to implement, acquire data, train models, or run evaluation.
 
-**Status:** USER-SELECTED NEXT-STAGE DESIGN / PLANNING. This is not an implemented simulator, hyperparameter search, new download, or improved RRUFF score. Treat the existing five-perturbation V7/V9 results as frozen historical evidence, not as a codebase to overwrite.
+**Historical scope (2026-10-23):** machine-learning-based PXRD seven-crystal-system classification, with proposed RRUFF zero-shot Accuracy/Macro-F1, confidence calibration, and simulated-data efficiency axes. Parameter inversion, Forward Loss, DONUT-related, and refinement work were already outside that proposal.
 
-**Lead decision:** The next-stage project retains precisely three headline axes (RRUFF real-domain leaderboard; ECE confidence calibration; simulated independent-parent data efficiency), and adds two engineering/scientific prerequisites:
+**Historical status:** USER-SELECTED NEXT-STAGE DESIGN / PLANNING on 2026-10-23; deferred on 2026-10-26. The proposal had not been implemented: it was not a simulator, hyperparameter search, new download, or improved RRUFF score. Treat the existing five-perturbation V7/V9 results as frozen historical evidence, not as a codebase to overwrite.
+
+**Historical lead decision:** the 2026-10-23 proposal retained three future axes and added two proposed prerequisites:
 1. Study and selectively adopt a more comprehensive physically grounded **dynamic** PXRD measurement simulator (primary open reference: Cao et al. SimXRD / Pysimxrd).
 2. After independent CIF training-data expansion and simulator changes, **re-select training and simulator distribution hyperparameters using development evidence**, instead of blindly keeping values calibrated for 9,842 training structures and an older measurement model.
 
