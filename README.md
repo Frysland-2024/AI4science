@@ -1,8 +1,8 @@
 # AI4Science: PXRD Seven-Crystal-System Classification
 
-**Active scientific task (decision dated 2026-10-23):** machine-learning prediction of the seven crystal systems from powder X-ray diffraction (PXRD) measurements.
+**Current undergraduate thesis scope (decision dated 2026-10-26):** write up and defend the completed PXRD seven-crystal-system classification study, asking whether same-parent measurement-equivalence supervision improves classification over matched Dynamic ERM. Use the frozen evidence and state its limits; no new experiments are in the current thesis scope.
 
-The completed study tests whether **Shared Parent Identity → Measurement Equivalence → Relationship Supervision** improves classification. The next stage will strengthen real-domain performance, confidence calibration, and use of independent simulated structures. Quantitative parameter inversion is archived and inactive.
+Quantitative parameter inversion, including the partial synthetic benchmark in PR #46, is archived as historical exploration and is not evidence of method superiority.
 
 ## Project Overview
 
@@ -10,7 +10,9 @@ This repository contains a completed ResNet-18-GN comparison of **Dynamic ERM** 
 
 **What is complete:** controlled method comparisons, simulated out-of-distribution (OOD) evaluation, historical RRUFF-301 few-shot adaptation, simulated/CNRS calibration audits, and a parent-structure budget study.
 
-**What is next:** three evaluation axes only—RRUFF real-domain performance, confidence calibration, and simulated-data efficiency. The larger-data simulator and training changes are plans, not completed work.
+**Current deliverable:** a bounded thesis account of the completed same-parent Dynamic JS vs Dynamic ERM study, including the simulated OOD result and the separate RRUFF/CNRS/parent-budget evidence with their limitations.
+
+**Deferred:** new RRUFF zero-shot evaluation, RRUFF calibration, larger-parent training, simulator upgrades, hyperparameter retuning, and new architecture comparisons. These are not current thesis requirements.
 
 ## Scientific Motivation & Method
 
@@ -56,26 +58,22 @@ The method contribution is the use of simulator-retained parent identity as rela
 
 Detailed numbers, uncertainty, frozen test caveats, and machine-readable evidence are in [the results report](xrd_robustness/reports/RESULTS.md), [calibration analysis](xrd_robustness/reports/CALIBRATION_ANALYSIS.md), and [parent-budget report](xrd_robustness/reports/PARENT_BUDGET_EFFICIENCY.md).
 
-## Three Core Evaluation Axes
+## Undergraduate Thesis Scope
 
-| Axis | Primary evidence | Current status and guardrail |
+The single thesis question is: **Does using simulator-known identity between measurements of the same parent crystal as relationship supervision improve PXRD seven-crystal-system classification over matched Dynamic ERM?**
+
+The study and its primary controlled comparison are already complete. The thesis will report the frozen evidence and its limits; **no new experiments are in the current thesis scope**.
+
+| Evidence | Role in the thesis | Boundary |
 |---|---|---|
-| **A. RRUFF real-domain benchmark** | Seven-system zero-shot Accuracy and Macro-F1; compare Lee (2023), SimXRD-4M (2025), and XQueryer-NoElem (2025) on the same spectra and evaluation conditions wherever possible. | New aligned benchmark is planned. Literature scores under different curation, labels, or protocols are reference points, not a fair ranking. Keep K=1/2/5 few-shot results separate. |
-| **B. Confidence calibration** | Expected Calibration Error (ECE); NLL, Brier score, and reliability diagrams as supporting evidence. | Existing simulated-domain/CNRS results are historical. The new RRUFF calibration evaluation remains to be done and must identify its prediction panel and calibration protocol. |
-| **C. Simulated-data efficiency** | Classification performance versus the number of **independent training parent structures**, with matched Dynamic ERM and Dynamic JS budgets. | The existing 10/25/50/100% study is supplementary evidence. Expand to larger feasible structure counts; same-budget accuracy gains do not prove a specific data saving. |
+| ResNet-18-GN Dynamic ERM vs Dynamic JS | Core result: simulated OOD Macro-F1 gain of +5.46 percentage points across five matched seeds. | Frozen split and protocol; do not describe it as a new benchmark or universal superiority. |
+| RRUFF-301 K=1/2/5 and CNRS-318 | Supporting completed evidence, reported separately with their task and uncertainty limits. | Few-shot RRUFF is not zero-shot. CNRS absolute accuracy is low and its corrected interval crosses zero. |
+| Simulated parent-budget study | Supplementary post-main evidence. | It reuses an already evaluated Test and does not establish a measured structure saving. |
+| PXRD parameter inversion, including PR #46 | Excluded from the thesis evidence for the classification method; retained as historical exploratory work. | It does not support a superiority, real-domain, or literature-reproduction claim. |
 
-CNRS is an **Optional Secondary Experimental Domain**, not a fourth evaluation axis.
+## Deferred Research Proposals
 
-## Future Research Roadmap
-
-All items below are planned work, not completed experiments.
-
-1. **P1 — Expand independent training structures.** Audit the available structures per crystal system and attempt approximately 30k, 60k, and 100k unique training parents only where acquisition, deduplication, labels, and split audits support them. Start from the historical 14,060-structure dataset; do not count repeated perturbations as new structures.
-2. **P1 — Upgrade the online dynamic PXRD simulator.** Evaluate SimXRD/Pysimxrd as references; consider Caglioti/Scherrer broadening, pseudo-Voigt profiles, Cu Kα doublet, and instrument variation in a versioned implementation. Preserve physically valid same-parent views and the crystal-system label; do not introduce unverified lattice deformation.
-3. **P1 — Retune training for the new data and simulator.** Reassess learning rate, batch size, scheduler, training steps/parent exposure, and JS weight using development evidence. Historical JS weight 60 remains a frozen result, not a required scale-up choice.
-4. **P2 — Compare model architectures conditionally.** Keep ResNet-18-GN as the historical baseline. After the data and simulator stabilize, consider SimXRD CNN11 and optionally a multi-scale 1D CNN. A large Transformer or a new architecture is not required.
-
-The full sequence and acceptance boundaries are in the [2026-10-23 scale-up plan](docs/PXRD_SCALEUP_SIMULATOR_AND_TUNING_PLAN_20261023.md). This task does not authorize training, downloading data, or implementation.
+The 2026-10-23 scale-up proposal (new RRUFF zero-shot evaluation, RRUFF calibration, larger parent budgets, simulator changes, training retuning, and conditional architecture comparisons) is **deferred** as of 2026-10-26. It is not an active task, thesis acceptance gate, or authorization to collect data or run experiments. See the [deferred planning record](docs/PXRD_SCALEUP_SIMULATOR_AND_TUNING_PLAN_20261023.md) for historical detail.
 
 ## Reproducibility & Results
 
@@ -101,10 +99,12 @@ Selected evidence figures:
 
 ![CNRS-318 optional secondary-domain results](docs/showcase/12_cnrs_zero_shot.png)
 
-The source images and prior presentation files are preserved in [docs/showcase](docs/showcase/). The prior [slide 13](docs/showcase/13_next_stage_HISTORICAL_20261023.png), [PDF](docs/showcase/AI4science_showcase_EN_HISTORICAL_20261023.pdf), and [PowerPoint](docs/showcase/AI4science_showcase_EN_HISTORICAL_20261023.pptx) are explicitly marked as historical; see the [archive note](docs/showcase/HISTORICAL_PRESENTATION.md). Use this README and the scale-up plan for the current roadmap.
+The source images and prior presentation files are preserved in [docs/showcase](docs/showcase/). The prior [slide 13](docs/showcase/13_next_stage_HISTORICAL_20261023.png), [PDF](docs/showcase/AI4science_showcase_EN_HISTORICAL_20261023.pdf), and [PowerPoint](docs/showcase/AI4science_showcase_EN_HISTORICAL_20261023.pptx) are explicitly marked as historical; see the [archive note](docs/showcase/HISTORICAL_PRESENTATION.md). Use this README and [CURRENT_STATE](docs/CURRENT_STATE.md) for the current thesis scope; the scale-up plan is deferred.
 
 ## Research History
 
 The project path is preserved in [Project History](docs/PROJECT_HISTORY.md): **FerroAI → PXRD classification → same-parent relationship-supervision method research → quantitative parameter-inversion exploration → return to seven-crystal-system classification**.
+
+The 2026-10-20 [PR #46](https://github.com/Frysland-2024/AI4science/pull/46) recorded a partial synthetic inversion benchmark: 42 models and 8,085 primary rows, with the q-accuracy gate passing **0/42** and the per-DOF cell-MAE constraint passing **41/42**. The PR43 held-out parents had already been evaluated; new-architecture stress was not run and real RRUFF validation was blocked/not run. These are descriptive exploratory results only. They do not establish method superiority, real-domain validity, or an exact reproduction of XQueryer, SimXRD-4M, CPICANN, or PyWPEM.
 
 The inversion, Forward Reconstruction Loss, DONUT-inspired, automatic-refinement, and ferroelectric pre-refinement proposals remain available as historical records and code where applicable. They are **Archived / Inactive**; an old proposal or issue does not reactivate them.
