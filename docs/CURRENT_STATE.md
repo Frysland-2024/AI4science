@@ -2,25 +2,36 @@
 
 > **权威性说明：** 本文件记录当前科学状态与当前执行口径。历史版本、旧聊天和 `PROJECT_HISTORY.md` 用于解释“为什么改变”，不得覆盖这里的当前结论；AI/Agent 工作规则见 [`../AGENTS.md`](../AGENTS.md) 与 [`RESEARCH_WORKFLOW.md`](RESEARCH_WORKFLOW.md)。
 
-**状态日期：** 2026-10-23（后续研究优先级已更新；以下历史冻结成果及 2026-09-29 状态细节不变）
+**状态日期：** 2026-10-26
 
-**阶段：** 既有模拟结果、RRUFF-301 few-shot 与 CNRS-318 zero-shot 均已完成并冻结；2026-10-23 起新增以 RRUFF 真实域表现、ECE、模拟母结构数据效率为核心的后续扩容对标计划。
+**阶段：** PXRD 七晶系分类研究的既有实验均已冻结；当前毕设工作是基于既有证据完成写作与答辩准备，不启动新实验。参数反演结果（含 PR #46）已封存为历史探索。
 
-## 2026-10-23: only active scientific task and its three evaluation axes (ACTIVE PLANNING; no new experimental results)
+## 2026-10-26: current undergraduate-thesis scope (DECISION)
 
-The project lead **formally confirmed that the only active scientific task is machine-learning-based PXRD seven-crystal-system classification**, and set three and only three headline evaluation axes for its next stage. These are *evaluation priorities*, not claims that new experiments have completed:
+**唯一当前毕设主线：** PXRD 七晶系分类中的同母结构关系监督研究。研究问题是：利用在线模拟器已知的同一母结构身份，将不同测量视图之间的关系作为额外监督，能否在匹配设置下改善分类？核心对照是 ResNet-18-GN 上的 Dynamic JS Consistency 与 Dynamic ERM。
 
-| Pillar | Primary report | Required qualifications |
+**当前阶段：** 对已完成并冻结的分类证据进行整理、报告和答辩准备；本次决策不包含新实验，也不包含扩容任务。
+
+| Evidence | Current thesis role | Qualification |
 | --- | --- | --- |
-| **1. Real RRUFF leaderboard** | Seven-crystal-system RRUFF **zero-shot Accuracy** (Macro-F1 alongside it); head-to-head inference against reproducible published baselines on **identical real spectra** | No RRUFF labels in zero-shot training/tuning; do not rank incompatible curation, label sets, composition-assisted inputs or few-shot settings together. Preserve historical RRUFF-301 K=1/2/5 few-shot evidence separately. |
-| **2. Confidence calibration** | **ECE ↓** plus reliability diagram on the same stated evaluation domain; supporting NLL/Brier and Accuracy/Macro-F1 | Use a declared ECE definition (historical audit: 15 equal-width confidence bins); keep zero-shot vs fine-tuned calibration separate; ECE improvement alone can reflect confidence shrinkage and does not establish correctness. |
-| **3. Simulated-data efficiency** | **Unique training parent CIF/structures** versus simulated-OOD Macro-F1, comparing matched ERM and JS under fixed steps, generated views, architecture and split protocol | Count *independent structures*, not the number of online-augmented spectra; report training compute, repeated seeds and uncertainty; do not claim measured structure savings when the previous report concluded `no_supported_parent_saving`. |
+| Simulated OOD, five matched seeds | Core result; Dynamic JS Macro-F1 gain **+5.46 percentage points** over Dynamic ERM. | Frozen study and split; report as a bounded result, not universal superiority. |
+| RRUFF-301 K=1/2/5 and CNRS-318 | Supporting completed evidence, separate from the core comparison. | RRUFF is few-shot, not zero-shot; CNRS absolute accuracy is low and the corrected paired-parent interval crosses zero. |
+| Parent-budget study | Supplementary post-main result. | The simulated Test had already been used; no quantitative structure-saving claim is supported. |
+| PR #46 parameter-inversion benchmark | **Archived / exploratory only; excluded from evidence for the classification method.** | See the archival disposition below. |
 
-**Execution order:** audit/scale crystal-structure acquisition (prospective 30k/60k/100k *training-parent targets only when feasible*), maintain ResNet-18-GN Dynamic ERM vs JS paired controls, then perform RRUFF evaluation and ECE on explicitly identified prediction panels and sample IDs. Prior published RRUFF scores (Lee 2023, SimXRD-4M 2025, XQueryer-NoElem 2025) are *reference targets*, not comparable wins until matched data evaluation. The old RRUFF-231 locked test has been evaluated already and cannot be called a fresh untouched confirmation.
+### PR #46: partial parameter-inversion benchmark archived on 2026-10-26
 
-**Status and scope:** this is the sole active scientific task and newly adopted benchmark framing, not a replacement for the frozen 2026-09-29 study. Original held-out splits, historical results, code, negative outcomes, parent-budget curves and CNRS evidence remain immutable. Quantitative lattice-parameter inversion is not an active next-stage evaluation objective. Supporting simulated OOD profiles, mechanism analyses and CNRS stay available but are not additional headline axes.
+PR #46 completed primary synthetic scoring for 42 models and 8,085 per-parent records, but its overall status was **PARTIAL**. The q-accuracy gate passed **0/42**; the per-DOF cell-MAE constraint passed **41/42**; convergence was no worse in 42/42 and the amortized runtime gate passed 41/42. These are descriptive results from a bounded synthetic setup, not proof that parameter inversion is accurate, robust, or superior.
 
-Related: [RRUFF benchmark plan](RRUFF_REAL_DOMAIN_LITERATURE_BENCHMARK_2026-10-22.md), [formal results](../xrd_robustness/reports/RESULTS.md), [calibration audit](../xrd_robustness/reports/CALIBRATION_ANALYSIS.md), [parent-efficiency study](../xrd_robustness/reports/PARENT_BUDGET_EFFICIENCY.md), [project history](PROJECT_HISTORY.md), [scaling task](https://github.com/Frysland-2024/AI4science/issues/49).
+The held-out parent set had already been evaluated in PR #43, so this was not independent confirmation. New-architecture stress was **BLOCKED_NOT_RUN**; real RRUFF validation was **BLOCKED / NOT RUN**. It was not an exact reproduction of XQueryer, SimXRD-4M, CPICANN, or PyWPEM. The benchmark and all associated parameter-inversion, Forward Loss, DONUT-inspired, and automatic-refinement routes are now **ARCHIVED / INACTIVE**.
+
+**Claim disposition:** withdraw any claim that PR #46 established method superiority, validated real-data inversion, or reproduced those literature methods. Downgrade the completed matrix, cell-MAE/convergence/runtime passes, and 8,085 rows to exploratory engineering evidence with the limitations above. Do not use them as the thesis's scientific result.
+
+### Deferred work
+
+The 2026-10-23 scale-up plan and Issue #49 (new RRUFF zero-shot evaluation, calibration, larger-parent training, simulator upgrade, training retuning, and architecture comparison) are **DEFERRED** as of this decision. They are not current thesis tasks or acceptance gates. No new data acquisition or experiment is being initiated.
+
+Related: [frozen classification results](../xrd_robustness/reports/RESULTS.md), [current supervisor brief](START_HERE_FOR_SUPERVISORS.md), [historical PR #46](https://github.com/Frysland-2024/AI4science/pull/46), [project history](PROJECT_HISTORY.md), [deferred scale-up plan](PXRD_SCALEUP_SIMULATOR_AND_TUNING_PLAN_20261023.md).
 
 ### 2026-10-23: CNRS downgraded to optional second real domain
 
@@ -28,22 +39,26 @@ Related: [RRUFF benchmark plan](RRUFF_REAL_DOMAIN_LITERATURE_BENCHMARK_2026-10-2
 
 **Presentation policy:** Do not allocate main benchmark leaderboard space or new training budget to CNRS by default. It may appear as a separate supplementary external-domain robustness/generalization case if its independently defined dataset quality, task relevance and full evaluation make that informative. **Do not select reports/models/checkpoints or decide whether to disclose completed experiments solely on whether the scores look good.** In any paper or report making broad cross-domain claims, cite the completed CNRS evaluation with its low absolute Accuracy/Macro-F1 and uncertainty, even if detailed plots are in supplementary materials. Existing fixed CNRS-318 results stay public and immutable (JS zero-shot pooled Accuracy 0.2000 → 0.2101; Macro-F1 0.1912 → 0.2091; ECE 0.6826 → 0.6124). Current results show a modest paired relative gain, not high absolute accuracy.
 
-**Status:** ACTIVE scope/presentation priority decision, not a new experiment, and not permission to cherry-pick. Primary axes unchanged: RRUFF real-domain running score, ECE, simulated parent-data efficiency.
+**Status:** historical presentation decision for the completed CNRS evidence, not a current experiment. Under the 2026-10-26 thesis scope, report the existing CNRS result only with its low absolute score and uncertainty; do not start a new CNRS or RRUFF evaluation.
 
-### 2026-10-23: two prerequisites before scaling up RRUFF runs — simulator and training retuning
+### 2026-10-23 scale-up proposal: simulator and training retuning (DEFERRED 2026-10-26)
 
-**Explicit user direction:** (1) adopt a better and more complete reference-guided *online dynamic PXRD measurement simulator*, using SimXRD/Pysimxrd as primary open reference, while preserving physically valid same-parent paired realizations; (2) for substantially more independent training CIF structures, **re-select training hyperparameters** (including LR, schedule, batch, exposure/step budget and JS λ) under the revised simulator instead of assuming historical `lambda_js=60` and 49,280 steps stay optimal. Treat simulator perturbation distributions and training hyperparameters as distinct sets of choices.
+**Historical proposal:** At the time, the proposed prerequisites were a more complete reference-guided online dynamic PXRD simulator and re-selection of training settings after data/simulator changes. This proposal is retained for chronology only; it is not part of current thesis execution.
 
-**Planned sequence:** audit source and simulator coverage → selectively implement physically defensible new peak/profile/instrument models in a versioned new path → verify physical behavior and label preservation → paired old-vs-new simulation pilot on the same existing structures → enlarged-parent pilot and validation-only compact hyperparameter search → matched ERM/JS scale-up → RRUFF real-domain leaderboard, ECE and parent-budget curve. Keep old V7/V9 results and frozen configs intact; no RRUFF test-driven selection, no claim that a high-fidelity simulator or large training has already run. CNRS stays optional as second real domain.
+**Historical sequence:** audit sources and simulator coverage → versioned physics changes → physical/label checks → paired old/new pilot → expanded-parent pilot and validation-only tuning → matched ERM/JS scale-up → RRUFF, ECE and parent-budget evaluation. None of these steps is authorized by the current 2026-10-26 scope.
 
-**Sources/status:** [detailed execution design](PXRD_SCALEUP_SIMULATOR_AND_TUNING_PLAN_20261023.md), [existing perturbation evidence](PXRD_PERTURBATION_EVIDENCE.md), [scale-up issue](https://github.com/Frysland-2024/AI4science/issues/49). **ACTIVE DESIGN / NOT IMPLEMENTED.**
+**Sources/status:** [deferred plan](PXRD_SCALEUP_SIMULATOR_AND_TUNING_PLAN_20261023.md), [existing perturbation evidence](PXRD_PERTURBATION_EVIDENCE.md), [Issue #49, deferred](https://github.com/Frysland-2024/AI4science/issues/49). **DEFERRED / NOT IMPLEMENTED.**
 
-### 2026-10-23 之后的技术优先级（仅为未来规划）
+### Deferred technical options (not current thesis tasks)
 
-- **P1：**审计并扩大独立训练母结构覆盖；同时设计一版有版本号的新在线动态 PXRD 模拟器。目标约 30k / 60k / 100k 个独立训练结构，能否达到以逐晶系获取、去重和拆分审计为准。
-- **P1：**数据与模拟器稳定后，重新选择学习率、Batch Size、Scheduler、训练步数/母结构曝光量和 JS 权重。历史 lambda_js=60 仅是冻结实验设置。
-- **P2：**仅在数据与模拟器稳定后，条件性比较 SimXRD CNN11 或可选多尺度 1D CNN；ResNet-18-GN 保留为正式历史基线。不要求大型 Transformer 或新架构开发。
-- 顺序、物理约束、验收和禁止事项见 [2026-10-23 扩容计划](PXRD_SCALEUP_SIMULATOR_AND_TUNING_PLAN_20261023.md)。本计划不代表已实现模拟器、已下载数据或已启动训练。
+以下均是 2026-10-23 的扩展提案，已于 2026-10-26 推迟；不是当前研究 TODO 或毕设验收门槛。若未来要恢复，需另行确定时间、问题和资源，不能从历史计划直接启动。
+
+- 增加独立训练母结构，并审计各晶系覆盖、去重与拆分。
+- 设计带版本的新在线动态 PXRD 模拟器。
+- 在数据和模拟器改变后重新选择训练设置。
+- 条件性比较其他分类架构。
+
+详情见[历史扩容计划](PXRD_SCALEUP_SIMULATOR_AND_TUNING_PLAN_20261023.md)。当前没有实现、下载或训练这些提案。
 
 ## 1. 已完成的科学方法与冻结实验设计
 
@@ -178,7 +193,7 @@ Related: [RRUFF benchmark plan](RRUFF_REAL_DOMAIN_LITERATURE_BENCHMARK_2026-10-2
 
 ## 6. 历史汇报与论文封装待办（2026-10-20 快照；不定义当前科学任务）
 
-以下清单记录 2026-10-20 的论文/展示整理计划，状态可能已变；它们不是新一轮科学实验优先级，当前研究方向只以本文件开头的 2026-10-23 决策和扩容计划为准。
+以下清单记录 2026-10-20 的论文/展示整理计划，状态可能已变；它们不是新一轮科学实验优先级。当前毕设范围以本文件开头的 2026-10-26 决策为准，扩容计划已延期。
 
 当这些文字或图表需要更新时，仍须以冻结结果为准：
 
