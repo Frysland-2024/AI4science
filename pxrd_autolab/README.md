@@ -1,6 +1,6 @@
 # PXRD AutoLab bridge presets
 
-**Role:** engineering support for auditable research workflows. The repository's only active scientific task is PXRD seven-crystal-system classification. The former parameter-inversion / Forward Loss pilot that motivated these presets is **Archived / Inactive**; this README and the old preset do not authorize it to run.
+**Role:** engineering support for auditable research workflows. The current undergraduate thesis is write-up and defense of the completed PXRD seven-crystal-system classification study; no new experiments are in scope. The former parameter-inversion / Forward Loss pilot that motivated these presets is **Archived / Inactive**; this README and the old preset do not authorize it to run.
 
 This package contains two fixed entrypoints for the local GitHub-to-GPU bridge. The forward_ab path is fail-closed: run.py produces an executable preflight report and exits blocked until its measurement-aware evidence gates and a reviewed training backend exist. It is a historical exploratory inversion preset, not the current research roadmap or a scientific result. The forward_speed_benchmark measures hardware throughput only; it is not scientific training.
 
