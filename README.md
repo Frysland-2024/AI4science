@@ -6,7 +6,7 @@ Quantitative parameter inversion, including the partial synthetic benchmark in P
 
 ## Project Overview
 
-This repository contains a completed ResNet-18-GN comparison of **Dynamic ERM** and **Dynamic JS Consistency**, plus a future plan to improve seven-system classification. The simulator generates two measurement views from the same unchanged parent crystal; Dynamic JS uses that known relationship as additional supervision.
+This repository contains a completed ResNet-18-GN comparison of **Dynamic ERM** and **Dynamic JS Consistency**, plus deferred proposals for possible future classification work. The simulator generates two measurement views from the same unchanged parent crystal; Dynamic JS uses that known relationship as additional supervision.
 
 **What is complete:** controlled method comparisons, simulated out-of-distribution (OOD) evaluation, historical RRUFF-301 few-shot adaptation, simulated/CNRS calibration audits, and a parent-structure budget study.
 
