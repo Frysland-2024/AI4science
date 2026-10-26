@@ -323,3 +323,22 @@ The distinction is between **principal research design and planning** versus **s
 **Technical order:** First audit independent structure availability and develop a versioned online simulator with physically defensible, label-preserving paired views. Then retune training settings against synthetic development evidence. Only after data and simulation stabilize may ResNet-18-GN be compared conditionally with SimXRD CNN11 or an optional multi-scale 1D CNN. These are future plans, not implemented work.
 
 **Archived / Inactive:** Quantitative parameter prediction, lattice-parameter recovery, Forward Reconstruction Loss, DONUT-inspired workflows, automatic refinement, and the ferroelectric pre-refinement candidate. Their code, completed numerical checks, failures, reports, citations, and prior authorizations remain in the repository as historical evidence. No historical issue or detailed proposal can reactivate them.
+
+## 2026-10-26: narrow the undergraduate thesis; archive parameter inversion
+
+**Date:** 2026-10-26
+
+**Question / previous assumption:** The 2026-10-23 decision treated classification scale-up through a new RRUFF zero-shot comparison, calibration, and parent-data efficiency as the active next stage. In parallel, PR #46 recorded a partial multi-architecture synthetic lattice-parameter inversion benchmark.
+
+**Evidence and reasoning:** PR #46 completed primary synthetic scoring for 42 models and 8,085 records, but the q-accuracy gate passed 0/42; the per-DOF cell-MAE constraint passed 41/42. The parent test set had already been opened in PR #43, so the benchmark is exploratory rather than independent confirmation. New-architecture stress was not run, and real RRUFF validation was blocked/not run. The benchmark did not establish consistent neural accuracy gain, real-domain validity, or an exact reproduction of the cited methods. The existing classification study has a bounded, reportable research question and frozen comparative evidence.
+
+**Decision:** The sole current undergraduate thesis line is to write up and defend the completed PXRD seven-crystal-system classification study: test whether same-parent measurement-equivalence supervision improves classification over matched Dynamic ERM. No new experiments are in current thesis scope. Parameter inversion, including PR #46 and its associated routes, is **ARCHIVED / INACTIVE**. The 2026-10-23 classification scale-up plan is **DEFERRED**, not an active task or thesis acceptance gate.
+
+**What changes now:** README, current state, supervisor brief, agent contract, and the scale-up plan status are aligned to the 2026-10-26 thesis scope. PR #46 is closed unmerged; Issue #44 is closed as not planned; Issue #49 is closed as deferred/not planned. Their original text and the PR artifacts remain available as historical records.
+
+**What does not change:** Frozen classification splits, configurations, scores, reports, code, and the negative/uncertain evidence remain unchanged. PR #46's completed metrics remain descriptive exploratory evidence; its incomplete gates are not being rerun, and no new experiment is started.
+
+**Status:** CURRENT THESIS SCOPE / PARAMETER INVERSION ARCHIVED / SCALE-UP DEFERRED.
+
+**Relevant records:** [current state](CURRENT_STATE.md), [README](../README.md), [supervisor brief](START_HERE_FOR_SUPERVISORS.md), [deferred scale-up proposal](PXRD_SCALEUP_SIMULATOR_AND_TUNING_PLAN_20261023.md), [PR #46](https://github.com/Frysland-2024/AI4science/pull/46), [Issue #44](https://github.com/Frysland-2024/AI4science/issues/44), [Issue #49](https://github.com/Frysland-2024/AI4science/issues/49).
+
