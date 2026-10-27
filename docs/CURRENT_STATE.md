@@ -2,9 +2,9 @@
 
 > **权威性说明：** 本文件记录当前科学状态与当前执行口径。历史版本、旧聊天和 `PROJECT_HISTORY.md` 用于解释“为什么改变”，不得覆盖这里的当前结论；AI/Agent 工作规则见 [`../AGENTS.md`](../AGENTS.md) 与 [`RESEARCH_WORKFLOW.md`](RESEARCH_WORKFLOW.md)。
 
-**状态日期：** 2026-10-26
+**状态日期：** 2026-10-27
 
-**阶段：** PXRD 七晶系分类研究的既有实验均已冻结；当前毕设工作是基于既有证据完成写作与答辩准备，不启动新实验。参数反演结果（含 PR #46）已封存为历史探索。
+**阶段：** PXRD 七晶系分类研究的既有实验均已冻结；当前毕设工作是基于既有证据完成写作与答辩准备，不启动新实验。参数反演工作流均已归档/停用；PR #36 保留为已完成的单 CIF 合成条件性结果，PR #43/#45 为有限度探索记录，PR #46 为未通过关键 q 精度门槛的部分基准。这些结果均不改变分类主线。
 
 ## 2026-10-26: current undergraduate-thesis scope (DECISION)
 
@@ -23,9 +23,33 @@
 
 PR #46 completed primary synthetic scoring for 42 models and 8,085 per-parent records, but its overall status was **PARTIAL**. The q-accuracy gate passed **0/42**; the per-DOF cell-MAE constraint passed **41/42**; convergence was no worse in 42/42 and the amortized runtime gate passed 41/42. These are descriptive results from a bounded synthetic setup, not proof that parameter inversion is accurate, robust, or superior.
 
-The held-out parent set had already been evaluated in PR #43, so this was not independent confirmation. New-architecture stress was **BLOCKED_NOT_RUN**; real RRUFF validation was **BLOCKED / NOT RUN**. It was not an exact reproduction of XQueryer, SimXRD-4M, CPICANN, or PyWPEM. The benchmark and all associated parameter-inversion, Forward Loss, DONUT-inspired, and automatic-refinement routes are now **ARCHIVED / INACTIVE**.
+The held-out parent set had already been evaluated in PR #43, so this was not independent confirmation. New-architecture stress was **BLOCKED_NOT_RUN**; real RRUFF validation was **BLOCKED / NOT RUN**. It was not an exact reproduction of XQueryer, SimXRD-4M, CPICANN, or PyWPEM. These parameter-inversion workstreams are **ARCHIVED / INACTIVE** for current thesis execution; that status does not erase PR #36's separate completed conditional result, described below.
 
 **Claim disposition:** withdraw any claim that PR #46 established method superiority, validated real-data inversion, or reproduced those literature methods. Downgrade the completed matrix, cell-MAE/convergence/runtime passes, and 8,085 rows to exploratory engineering evidence with the limitations above. Do not use them as the thesis's scientific result.
+
+### PR #36: 已完成的条件性合成参数反演证据
+
+PR #36 当前为 closed、unmerged draft；分支中的 [最终技术报告](https://github.com/Frysland-2024/AI4science/blob/codex/donut-pxrd-experiment-20261019/donut_pxrd/reports/FINAL_TECHNICAL_REPORT.md) 标注四阶段 COMPLETE。实验只使用一个已知 COD 9014273 BaTiO3 P4mm CIF；512 个参数母样本在扰动前固定分为 358/77/77，使用 3 个模型种子，测试部分为 77 个母样本（231 个样本-种子记录）。这足以保留为一个已完成、条件严格的合成可行性结果。
+
+| PR #36 阶段 | 冻结报告中的 normalized-q MAE | 边界 |
+| --- | ---: | --- |
+| 固定仪器参数 | 0.344228 | 单 CIF 合成任务 |
+| 联合晶格与零点偏移 | 0.398342 | 显示参数耦合；局部灵敏度绝对余弦 0.924875 |
+| 峰宽 / 背景 / 噪声 / 织构压力测试 | 0.457009 / 0.139752 / 0.228037 / 0.291768 | 不同条件，不应横向混为同一主指标 |
+| Exp 4 直接 A/B/C / DONUT-PXRD | 0.033607 / 0.033578 / 0.034282 / 0.228037 | 231 个样本-种子记录；直接模型输出 |
+| 同一预算的 joint q+instrument L-BFGS-B 精修后 A/B/C / DONUT-PXRD | 0.000343 / 0.000350 / 0.000341 / 0.080026 | 231 次拟合；这些是精修后值，不是网络直接预测值 |
+
+同一报告中的中性初值 L-BFGS-B q-MAE 为 0.050608（77 个测试母样本），各项报告的拟合失败率为 0%。精修后 A/B/C 几乎相同，不能据此声称某个神经方法优于其他方法或强传统多起点物理精修。这个结果仅支持：在已知候选结构、单相、单一冻结生成器的合成插值条件下，网络初值与受限物理精修这条流程可运行并恢复该测试集的参数。它不证明真实测量准确度、未见 CIF/成分泛化、多相能力或通用 PXRD 反演；也不能把 DONUT-PXRD 在此协议下的表现外推为原始 2D DONUT 方法在 PXRD 上失败。报告中的 checkpoint 与生成数组为本地文件，仓库可追溯元数据/哈希，但不含完整重训所需工件。
+
+### 相关 PR 与未合并分支的当前证据边界
+
+| 记录 | 当前状态与可保留内容 | 不支持的结论 |
+| --- | --- | --- |
+| PR #42 | Closed/unmerged 的决策与研究旅程文档；它不是新增实验。其 DONUT 摘要数值与 PR #36 最终报告不一致，PR #36 最终技术报告为该实验的数值依据。 | 不应引用 PR #42 摘要替代冻结报告，也不构成额外验证。 |
+| PR #43 | Closed/unmerged；完成七个受支持合成 CIF 模板、覆盖三个晶系的有限子集；报告未发现 N+A 相对 P0/P3 的额外参数精度或可靠性收益。 | 不等于七晶系覆盖、零样本跨材料迁移或真实 XRD 有效性。 |
+| PR #45 E1 | Closed/unmerged；七种合成材料的启发式/物理初值比较完成；没有材料通过对 H1/P0 的预注册增量价值规则。 | 不支持广泛神经初始化优势。 |
+| PR #45 E2 | **PHYSICS_NOT_READY / NN_NOT_RUN**；三条 RRUFF Rutile 谱均未通过预先物理门控。 | 没有真实谱神经推理、真实域参数准确率或泛化结果。 |
+| PR #48 | 2026-10-20 已合并到 main，内容是导师展示与七晶系分类叙事。 | 不构成参数反演证据。 |
 
 ### Deferred work
 
