@@ -2,7 +2,7 @@
 
 **Current undergraduate thesis scope (decision dated 2026-10-26):** write up and defend the completed PXRD seven-crystal-system classification study, asking whether same-parent measurement-equivalence supervision improves classification over matched Dynamic ERM. Use the frozen evidence and state its limits; no new experiments are in the current thesis scope.
 
-PR #36 is a completed but narrowly conditional synthetic result: on one known BaTiO3 CIF, direct A/B/C normalized-q MAE was 0.033607/0.033578/0.034282 (DONUT: 0.228037); after the same bounded joint q+instrument L-BFGS-B refinement, A/B/C were 0.000343/0.000350/0.000341 (DONUT: 0.080026). The refined values are not direct neural predictions. This supports feasibility only under that frozen synthetic setup; it does not establish real-XRD, unseen-material, multiphase, or general method-superiority performance. The report remains on closed, unmerged PR #36; inversion is inactive and outside the current thesis scope.
+PR #36 is a completed but narrowly conditional synthetic result: on one known BaTiO3 CIF, direct A/B/C normalized-q MAE was 0.033607/0.033578/0.034282 (DONUT-PXRD: 0.228037); after the same bounded joint q+instrument L-BFGS-B refinement, A/B/C were 0.000343/0.000350/0.000341 (DONUT-PXRD: 0.080026). The refined values are not direct neural predictions. These DONUT-PXRD values describe a 1D adaptation and do not evaluate or invalidate the original 2D DONUT method. This supports feasibility only under that frozen synthetic setup; it does not establish real-XRD, unseen-material, multiphase, or general method-superiority performance. The report remains on closed, unmerged PR #36; inversion is inactive and outside the current thesis scope.
 
 ## Project Overview
 
@@ -69,7 +69,7 @@ The study and its primary controlled comparison are already complete. The thesis
 | ResNet-18-GN Dynamic ERM vs Dynamic JS | Core result: simulated OOD Macro-F1 gain of +5.46 percentage points across five matched seeds. | Frozen split and protocol; do not describe it as a new benchmark or universal superiority. |
 | RRUFF-301 K=1/2/5 and CNRS-318 | Supporting completed evidence, reported separately with their task and uncertainty limits. | Few-shot RRUFF is not zero-shot. CNRS absolute accuracy is low and its corrected interval crosses zero. |
 | Simulated parent-budget study | Supplementary post-main evidence. | It reuses an already evaluated Test and does not establish a measured structure saving. |
-| PR #36 conditional parameter inversion | Completed four-stage synthetic study, retained as bounded historical side evidence. | One known BaTiO3 CIF and one frozen generator; the ≈0.00034 q-MAE follows physical refinement, not direct neural inference. No real-XRD or unseen-material claim. |
+| PR #36 conditional parameter inversion | Historical context only; excluded from the classification thesis evidence. | One known BaTiO3 CIF and one frozen generator; the ≈0.00034 q-MAE follows physical refinement, not direct neural inference. No real-XRD or unseen-material claim. |
 
 ## Deferred Research Proposals
 
