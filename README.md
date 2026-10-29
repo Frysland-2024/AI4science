@@ -2,7 +2,7 @@
 
 **Current undergraduate thesis scope (decision dated 2026-10-26):** write up and defend the completed PXRD seven-crystal-system classification study, asking whether same-parent measurement-equivalence supervision improves classification over matched Dynamic ERM. Use the frozen evidence and state its limits; no new experiments are in the current thesis scope.
 
-Quantitative parameter inversion, including the partial synthetic benchmark in PR #46, is archived as historical exploration and is not evidence of method superiority.
+PR #36 is a completed but narrowly conditional synthetic result: on one known BaTiO3 CIF, direct A/B/C normalized-q MAE was 0.033607/0.033578/0.034282 (DONUT-PXRD: 0.228037); after the same bounded joint q+instrument L-BFGS-B refinement, A/B/C were 0.000343/0.000350/0.000341 (DONUT-PXRD: 0.080026). The refined values are not direct neural predictions. These DONUT-PXRD values describe a 1D adaptation and do not evaluate or invalidate the original 2D DONUT method. This supports feasibility only under that frozen synthetic setup; it does not establish real-XRD, unseen-material, multiphase, or general method-superiority performance. The report remains on closed, unmerged PR #36; inversion is inactive and outside the current thesis scope.
 
 ## Project Overview
 
@@ -69,7 +69,7 @@ The study and its primary controlled comparison are already complete. The thesis
 | ResNet-18-GN Dynamic ERM vs Dynamic JS | Core result: simulated OOD Macro-F1 gain of +5.46 percentage points across five matched seeds. | Frozen split and protocol; do not describe it as a new benchmark or universal superiority. |
 | RRUFF-301 K=1/2/5 and CNRS-318 | Supporting completed evidence, reported separately with their task and uncertainty limits. | Few-shot RRUFF is not zero-shot. CNRS absolute accuracy is low and its corrected interval crosses zero. |
 | Simulated parent-budget study | Supplementary post-main evidence. | It reuses an already evaluated Test and does not establish a measured structure saving. |
-| PXRD parameter inversion, including PR #46 | Excluded from the thesis evidence for the classification method; retained as historical exploratory work. | It does not support a superiority, real-domain, or literature-reproduction claim. |
+| PR #36 conditional parameter inversion | Historical context only; excluded from the classification thesis evidence. | One known BaTiO3 CIF and one frozen generator; the ≈0.00034 q-MAE follows physical refinement, not direct neural inference. No real-XRD or unseen-material claim. |
 
 ## Deferred Research Proposals
 
@@ -105,6 +105,10 @@ The source images and prior presentation files are preserved in [docs/showcase](
 
 The project path is preserved in [Project History](docs/PROJECT_HISTORY.md): **FerroAI → PXRD classification → same-parent relationship-supervision method research → quantitative parameter-inversion exploration → return to seven-crystal-system classification**.
 
+The four-stage [PR #36](https://github.com/Frysland-2024/AI4science/pull/36) is complete on a single known synthetic BaTiO3 CIF; its [final technical report](https://github.com/Frysland-2024/AI4science/blob/codex/donut-pxrd-experiment-20261019/donut_pxrd/reports/FINAL_TECHNICAL_REPORT.md) is the numerical source for the conditional result above. It is not evidence for real measurements or unseen materials.
+
+Other inversion branches remain separate historical records. [PR #43](https://github.com/Frysland-2024/AI4science/pull/43) completed a supported subset across seven synthetic CIF templates in three crystal systems. In the primary study, N+A q-MAE was essentially tied with the three-start P3 baseline; P0 was already comparable on five materials and had larger errors on MgO and ZnO. A separate post-primary renderer/peak-shape/background stress test, using 16 new parents per material, found no added accuracy or reliability over P0/P3. These bounded synthetic findings do not establish unseen-material transfer or real-XRD validity. [PR #45](https://github.com/Frysland-2024/AI4science/pull/45) E1 found no material meeting its preregistered incremental-value rule against H1/P0; E2 stopped at `PHYSICS_NOT_READY / NN_NOT_RUN`, so it is not neural validation on real XRD. [PR #42](https://github.com/Frysland-2024/AI4science/pull/42) is a closed, unmerged decision record whose DONUT summary conflicts with the PR #36 final report; use the latter for PR #36 metrics. [PR #48](https://github.com/Frysland-2024/AI4science/pull/48) was merged for the classification showcase and adds no parameter-inversion evidence.
+
 The 2026-10-20 [PR #46](https://github.com/Frysland-2024/AI4science/pull/46) recorded a partial synthetic inversion benchmark: 42 models and 8,085 primary rows, with the q-accuracy gate passing **0/42** and the per-DOF cell-MAE constraint passing **41/42**. The PR43 held-out parents had already been evaluated; new-architecture stress was not run and real RRUFF validation was blocked/not run. These are descriptive exploratory results only. They do not establish method superiority, real-domain validity, or an exact reproduction of XQueryer, SimXRD-4M, CPICANN, or PyWPEM.
 
-The inversion, Forward Reconstruction Loss, DONUT-inspired, automatic-refinement, and ferroelectric pre-refinement proposals remain available as historical records and code where applicable. They are **Archived / Inactive**; an old proposal or issue does not reactivate them.
+Quantitative inversion, Forward Reconstruction Loss, DONUT-inspired work, automatic refinement, and ferroelectric pre-refinement remain **Archived / Inactive** as active research lines. That status preserves rather than erases PR #36's completed conditional result; historical artifacts do not reactivate the work or change the current classification thesis scope.
