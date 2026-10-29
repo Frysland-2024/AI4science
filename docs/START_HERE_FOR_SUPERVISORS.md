@@ -32,7 +32,7 @@ The simulated parent-budget study is supplementary post-main evidence and does n
 
 ## Parameter-inversion disposition
 
-The thesis remains the frozen seven-system classification study. Parameter inversion is a historical side line and is **Archived / Inactive** for current thesis work.
+The thesis remains the frozen seven-system classification study. Parameter inversion is a historical side line and is **Archived / Inactive** for current thesis work. The PR #36 result below is historical context only and is excluded from the classification thesis evidence.
 
 **PR #36 is completed conditional synthetic evidence.** Its four-stage report used one known COD 9014273 BaTiO3 P4mm CIF, a frozen 358/77/77 split, three seeds, and 77 test parents per seed. In Exp 4, direct normalized-q MAE was **0.033607/0.033578/0.034282** for A/B/C and **0.228037** for DONUT-PXRD; after the same bounded joint q+instrument L-BFGS-B refinement, the results were **0.000343/0.000350/0.000341** for A/B/C and **0.080026** for DONUT-PXRD. The refined score is not direct neural accuracy, and the A/B/C refined scores are nearly tied. Keep this only as feasibility evidence for the one known-CIF synthetic setup; it says nothing about real-XRD accuracy, unseen-material transfer, multiphase inversion, or broad neural superiority. The [final report](https://github.com/Frysland-2024/AI4science/blob/codex/donut-pxrd-experiment-20261019/donut_pxrd/reports/FINAL_TECHNICAL_REPORT.md) is on closed, unmerged PR #36.
 
