@@ -232,7 +232,7 @@ The first engineering step should be a minimal P0 (manifest, state machine, safe
 
 **Decision at that point (2026-10-18):** The user preferred **A: known-family parameter inversion**. Multiple materials were a candidate way to broaden application breadth, *not a commitment to three fully trained material experts or a universal model*. The plan at that time was to await family information and a bounded protocol; PR #11 remained method-engineering evidence, and frozen V9 remained untouched.
 
-**Status:** SCIENTIFIC INTERPRETATION + FUTURE SCOPE DISCUSSION; NO NEW EXPERIMENTS. Reference: [PR #11](https://github.com/Frysland-2024/AI4science/pull/11), `xrd_forward_loss/FORWARD_LOSS_PILOT_REPORT.md` on its draft branch, and [12-week proposal](FERROELECTRIC_PRE_REFINEMENT_12W_PLAN.md).
+**Status at that time:** SCIENTIFIC INTERPRETATION + FUTURE SCOPE DISCUSSION; NO NEW EXPERIMENTS. This October 18 proposal was superseded as an active research direction by the October 23 return to seven-crystal-system classification and the October 26 classification-only undergraduate-thesis decision recorded below. Reference: [PR #11](https://github.com/Frysland-2024/AI4science/pull/11), `xrd_forward_loss/FORWARD_LOSS_PILOT_REPORT.md` on its draft branch, and [12-week proposal](FERROELECTRIC_PRE_REFINEMENT_12W_PLAN.md).
 
 ## 20. 2026-10-18: user proposes reusing V9 physical measurement perturbations in forward-guided inversion
 
