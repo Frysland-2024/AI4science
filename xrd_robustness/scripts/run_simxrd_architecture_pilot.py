@@ -320,22 +320,26 @@ def _evaluate_one_panel(
     device: torch.device,
     batch_size: int = 256,
 ) -> dict[str, Any]:
+    previous_training = model.training
     model.eval()
-    probabilities = np.empty((len(labels), len(CRYSTAL_SYSTEMS)), dtype=np.float32)
-    for start in range(0, len(labels), batch_size):
-        stop = min(start + batch_size, len(labels))
-        batch = torch.from_numpy(np.array(spectra[start:stop], copy=True))
-        if device.type == "cuda":
-            batch = batch.pin_memory()
-        with torch.inference_mode():
-            logits = model(batch.to(device, non_blocking=device.type == "cuda"))["logits"]
-            probabilities[start:stop] = torch.softmax(logits.float(), dim=-1).cpu().numpy()
-    predictions = probabilities.argmax(axis=1)
-    metrics = classification_metrics(labels, predictions, probabilities=probabilities, num_classes=7)
-    metrics["per_class_f1_by_name"] = {
-        name: float(score) for name, score in zip(CRYSTAL_SYSTEMS, metrics["per_class_f1"], strict=True)
-    }
-    return metrics
+    try:
+        probabilities = np.empty((len(labels), len(CRYSTAL_SYSTEMS)), dtype=np.float32)
+        for start in range(0, len(labels), batch_size):
+            stop = min(start + batch_size, len(labels))
+            batch = torch.from_numpy(np.array(spectra[start:stop], copy=True))
+            if device.type == "cuda":
+                batch = batch.pin_memory()
+            with torch.inference_mode():
+                logits = model(batch.to(device, non_blocking=device.type == "cuda"))["logits"]
+                probabilities[start:stop] = torch.softmax(logits.float(), dim=-1).cpu().numpy()
+        predictions = probabilities.argmax(axis=1)
+        metrics = classification_metrics(labels, predictions, probabilities=probabilities, num_classes=7)
+        metrics["per_class_f1_by_name"] = {
+            name: float(score) for name, score in zip(CRYSTAL_SYSTEMS, metrics["per_class_f1"], strict=True)
+        }
+        return metrics
+    finally:
+        model.train(previous_training)
 
 
 def _select_score(metrics: Mapping[str, Any], seed: int) -> tuple[float, float]:
