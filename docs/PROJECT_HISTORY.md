@@ -384,3 +384,5 @@ PR #50 was merged into `main` on 2026-10-29 (merge commit [`6e4dd70`](https://gi
 
 **Status:** ACTIVE THESIS / SIMULATOR INVESTIGATION FIRST / NO NEW TRAINING RESULT YET.
 
+
+**2026-11-03 execution-order clarification (project lead):** "先抄明白模拟器，再比较架构" — first understand the external simulator code thoroughly, select and validate useful components as a working, versioned simulator; only **afterwards** compare architectures with the same JS objective. Architectural experiments are not to be launched concurrently with the simulator audit. This sharpens, without replacing, the restart decision above.
