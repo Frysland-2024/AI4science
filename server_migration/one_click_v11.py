@@ -238,55 +238,57 @@ def prepare_validation_panels(records, peaks, sim, libs, study_dir, *,
                              native_threads=native_threads,
                              max_cached_peaks=worker_peak_cache) if missing else None)
     panels={}
-    for profile in VALIDATION_OOD_PROFILES:
-        if profile not in sim["profiles"]:
-            raise RuntimeError(f"Missing V11 validation profile: {profile}")
-        names=(profile+".first.npy",profile+".second.npy")
-        paths=[base/name for name in names]
-        entry=index["entries"].get(profile)
-        if entry is not None:
-            for file,expected_hash in zip(paths,entry["sha256"]):
-                if not file.exists() or digest(file)!=expected_hash:
-                    raise RuntimeError(f"Frozen Validation cache corrupted: {file}")
-            event("validation_panel_reused",profile=profile,parents=len(records))
-        else:
-            # Temporary files are never used as scored Validation evidence.
-            temporary=[base/(profile+f".{view}.partial.npy") for view in ("first","second")]
-            for item in temporary:
-                if item.exists():item.unlink()
-            first=np.lib.format.open_memmap(temporary[0],mode="w+",dtype=np.float32,
-                                             shape=(len(records),3501))
-            second=np.lib.format.open_memmap(temporary[1],mode="w+",dtype=np.float32,
-                                              shape=(len(records),3501))
-            for at,(a,b,y) in iter_prefetched_batches(
-                    pool,records,profile=profile,batch_size=64):
-                rows=records[at:at+len(y)]
-                if (a.shape!=(len(rows),3501) or b.shape!=(len(rows),3501)
-                    or not np.isfinite(a).all() or not np.isfinite(b).all()):
-                    raise RuntimeError(f"Nonfinite or invalid Validation panel {profile} at {at}")
-                if not np.array_equal(y,np.asarray([r.label for r in rows])):
-                    raise RuntimeError("Validation label order mismatch")
-                first[at:at+len(rows)]=a
-                second[at:at+len(rows)]=b
-            first.flush(); second.flush()
-            del first,second
-            for temp,dest in zip(temporary,paths):
-                if dest.exists():
-                    raise RuntimeError(f"Unindexed Validation cache exists: {dest}")
-                os.replace(temp,dest)
-            # Record complete caches only after hashes and atomic manifest write.
-            entry={"sha256":[digest(paths[0]),digest(paths[1])],
-                   "n_parents":len(records),"profile":profile}
-            index["entries"][profile]=entry
-            write_json(index_path,index)
-            event("validation_panel_created",profile=profile,parents=len(records))
-        panels[profile]=tuple(np.load(item,mmap_mode="r",allow_pickle=False)
-                              for item in paths)
-        if any(arr.shape!=(len(records),3501) or arr.dtype!=np.float32
-               for arr in panels[profile]):
-            raise RuntimeError(f"Frozen Validation panel shape/dtype mismatch: {profile}")
-    if pool is not None:
-        pool.close()
+    try:
+        for profile in VALIDATION_OOD_PROFILES:
+            if profile not in sim["profiles"]:
+                raise RuntimeError(f"Missing V11 validation profile: {profile}")
+            names=(profile+".first.npy",profile+".second.npy")
+            paths=[base/name for name in names]
+            entry=index["entries"].get(profile)
+            if entry is not None:
+                for file,expected_hash in zip(paths,entry["sha256"]):
+                    if not file.exists() or digest(file)!=expected_hash:
+                        raise RuntimeError(f"Frozen Validation cache corrupted: {file}")
+                event("validation_panel_reused",profile=profile,parents=len(records))
+            else:
+                # Temporary files are never used as scored Validation evidence.
+                temporary=[base/(profile+f".{view}.partial.npy") for view in ("first","second")]
+                for item in temporary:
+                    if item.exists():item.unlink()
+                first=np.lib.format.open_memmap(temporary[0],mode="w+",dtype=np.float32,
+                                                 shape=(len(records),3501))
+                second=np.lib.format.open_memmap(temporary[1],mode="w+",dtype=np.float32,
+                                                  shape=(len(records),3501))
+                for at,(a,b,y) in iter_prefetched_batches(
+                        pool,records,profile=profile,batch_size=64):
+                    rows=records[at:at+len(y)]
+                    if (a.shape!=(len(rows),3501) or b.shape!=(len(rows),3501)
+                        or not np.isfinite(a).all() or not np.isfinite(b).all()):
+                        raise RuntimeError(f"Nonfinite or invalid Validation panel {profile} at {at}")
+                    if not np.array_equal(y,np.asarray([r.label for r in rows])):
+                        raise RuntimeError("Validation label order mismatch")
+                    first[at:at+len(rows)]=a
+                    second[at:at+len(rows)]=b
+                first.flush(); second.flush()
+                del first,second
+                for temp,dest in zip(temporary,paths):
+                    if dest.exists():
+                        raise RuntimeError(f"Unindexed Validation cache exists: {dest}")
+                    os.replace(temp,dest)
+                # Record complete caches only after hashes and atomic manifest write.
+                entry={"sha256":[digest(paths[0]),digest(paths[1])],
+                       "n_parents":len(records),"profile":profile}
+                index["entries"][profile]=entry
+                write_json(index_path,index)
+                event("validation_panel_created",profile=profile,parents=len(records))
+            panels[profile]=tuple(np.load(item,mmap_mode="r",allow_pickle=False)
+                                  for item in paths)
+            if any(arr.shape!=(len(records),3501) or arr.dtype!=np.float32
+                   for arr in panels[profile]):
+                raise RuntimeError(f"Frozen Validation panel shape/dtype mismatch: {profile}")
+    finally:
+        if pool is not None:
+            pool.close()
     return panels,digest(index_path)
 
 def validate(model,records,peaks,val_factory,device,libs,batch_size,profiles,panels=None,*,use_bf16=False):
