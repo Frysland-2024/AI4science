@@ -362,3 +362,25 @@ This note reconciles the current GitHub state of PRs #36, #42, #43, #45, and #48
 ## 2026-10-29: PR #50 documentation sync
 
 PR #50 was merged into `main` on 2026-10-29 (merge commit [`6e4dd70`](https://github.com/Frysland-2024/AI4science/commit/6e4dd70a7134427fc9c8a04b686dce5e20ea6727)). It synchronized `README.md`, `docs/CURRENT_STATE.md`, this history, and `docs/START_HERE_FOR_SUPERVISORS.md` around the existing evidence boundary: PR #36 remains feasibility evidence for one known BaTiO3 CIF under one frozen synthetic setup; its approximately 0.00034 normalized-q MAE values are post-refinement scores, not direct neural outputs; and the 1D DONUT-PXRD adaptation does not test or invalidate the original 2D DONUT method. This was a documentation-only reconciliation: no experiment or result was added, and the 2026-10-26 classification-only undergraduate-thesis scope did not change. See [PR #50](https://github.com/Frysland-2024/AI4science/pull/50).
+
+## 2026-11-03: explicit thesis restart and simulator-first JS performance route
+
+**Question / previous assumption:** On 2026-10-26 the undergraduate-thesis work had been frozen for writing/defense only. The prior October 23 proposal for bigger CIF datasets, more realistic simulators and RRUFF literature benchmarking had been deferred. Recent discussion revisited the supervisor's expressed interest in published-model performance and absolute RRUFF experimental accuracy.
+
+**Evolution of the lead's reasoning (2026-11-03 discussion):**
+1. Reject a blanket **zero-shot** target when a target paper used real RRUFF examples for training or fine-tuning: compare each paper under its own disclosed real-data protocol instead. Full replication of the published network is not required for literature-referenced scoring.
+2. Prefer **Dynamic JS only for the new exploratory performance run**; older ResNet-18-GN ERM vs JS evidence already exists and is preserved.
+3. Ask whether synthetic-data scale should be matched. Clarify that **unique CIF parent count**, not arbitrarily numerous re-rendered spectra, is the meaningful structural dataset axis. Do not pick 30k/60k/100k out of habit or match every paper's total database count mechanically; first audit real training CIF count and availability.
+4. Observe that papers with apparently larger structural datasets do not necessarily report higher RRUFF Accuracy, but note **dataset and evaluation protocols differ**. Thus data size alone is a poor selection rule; examine **both simulator implementation and CNN backbone**.
+5. State the priority explicitly: **a clear improvement in absolute experimental-data Accuracy** is the immediate engineering success criterion, not a large factorial ablation study.
+6. Narrow the immediate action again: **first understand and selectively borrow existing simulators**; after that, run a small same-CIF JS backbone comparison against the old ResNet-18-GN+JS, and only then consider large-scale training.
+7. Request a broader shortlist: GSAS-II, ML4pXRDs, PhaseSmith, DebyeCalculator, PowderLine and xrd_simulator alongside SimXRD/Pysimxrd; prefer modules that can be reused, repair simple verified problems, and reject components that violate seven-system label preservation.
+
+**NEW DECISION:** The lead expressly confirmed that **the undergraduate thesis has restarted**. Simulator source investigation, careful module selection and the subsequent bounded JS-only comparison are therefore an **active forward research direction**. The earlier 2026-10-26 *no new experiments* operational pause is superseded, while old results remain frozen as historical evidence.
+
+**What changes now:** [CURRENT_STATE.md](CURRENT_STATE.md) is updated; [simulator candidate inventory](PXRD_SIMULATOR_CANDIDATES_2026-11-03.md) records priorities, evidence status, and next-source-audit deliverable. Initial effort is research/source review, not a claim of newly executed training or scientific validation.
+
+**What does not change:** Existing ERM/JS comparisons, fixed splits, uncertainty caveats, project contribution history and archived parameter-inversion work. Published RRUFF percentages from unmatched sample selections are literature references rather than fair matched head-to-head results.
+
+**Status:** ACTIVE THESIS / SIMULATOR INVESTIGATION FIRST / NO NEW TRAINING RESULT YET.
+
