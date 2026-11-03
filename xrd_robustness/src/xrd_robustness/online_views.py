@@ -114,7 +114,7 @@ class OnlineViewFactory:
                     else ideal_peak_table(source, self.grid)
                 )
                 resolved = resolve_preferred_orientation(peaks, params)
-                xrd, diagnostics = simulate_from_peak_table(
+                xrd, diagnostics = self.peak_table_simulator(
                     peaks.positions,
                     peaks.intensities,
                     resolved,
@@ -212,7 +212,7 @@ class OnlineViewFactory:
 
         def render(source: PeakTable, params: PhysicsParameters, seed: int):
             resolved = resolve_preferred_orientation(source, params)
-            xrd, diagnostics = simulate_from_peak_table(
+            xrd, diagnostics = self.peak_table_simulator(
                 source.positions,
                 source.intensities,
                 resolved,
@@ -322,7 +322,7 @@ class OnlineViewFactory:
             )
             base_profile = self._quality_reference_profiles.get(row.material_id)
             if base_profile is None:
-                base_profile = simulate_from_peak_table(
+                base_profile = self.peak_table_simulator(
                     peaks.positions,
                     peaks.intensities,
                     base_parameters,
@@ -332,7 +332,7 @@ class OnlineViewFactory:
                 )
                 base_profile.setflags(write=False)
                 self._quality_reference_profiles[row.material_id] = base_profile
-            profile, diagnostics = simulate_from_peak_table(
+            profile, diagnostics = self.peak_table_simulator(
                 peaks.positions,
                 peaks.intensities,
                 parameters,
@@ -377,7 +377,7 @@ class OnlineViewFactory:
                 measurement_state=replay_state.to_dict(),
                 metadata=replay_metadata(parameters),
             )
-        xrd, diagnostics = simulate_from_peak_table(
+        xrd, diagnostics = self.peak_table_simulator(
             peaks.positions,
             peaks.intensities,
             parameters,
