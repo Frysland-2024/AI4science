@@ -10,6 +10,8 @@ import numpy as np
 import torch
 
 from xrd_robustness.structure_data import CRYSTAL_SYSTEMS
+from xrd_robustness.online_views import OnlineViewFactory
+from xrd_robustness.simulation_interfaces import PeakTable
 from xrd_robustness.simulator_v10 import DEFAULT_LINE_PROFILE
 from xrd_robustness.training_prefetch import DynamicBatchPrefetcher
 from xrd_robustness.physics import PhysicsParameterSampler
@@ -108,6 +110,78 @@ def _render_training_batch(data_root: Path, version: str) -> np.ndarray:
         return prefetcher.get(0).first[0].copy()
     finally:
         prefetcher.close()
+
+
+
+class _StaticPeakCache:
+    def __init__(self, peaks: PeakTable) -> None:
+        self.peaks = peaks
+
+    def get_or_compute(self, material_id: str, source: object, grid: object) -> PeakTable:
+        return self.peaks
+
+
+def _versioned_factory(pilot, peaks: PeakTable, version: str, *, use_peak_cache: bool):
+    config = _sim_config()
+    sampler = PhysicsParameterSampler.from_mapping({**config, "run_seed": 73})
+    peak_table_simulator = pilot._make_peak_table_simulator(version, DEFAULT_LINE_PROFILE)
+    kwargs = {} if peak_table_simulator is None else {"peak_table_simulator": peak_table_simulator}
+    return OnlineViewFactory(
+        sampler,
+        peak_cache=_StaticPeakCache(peaks) if use_peak_cache else None,
+        **kwargs,
+    )
+
+
+def test_v10_is_used_for_peak_and_cached_structure_views() -> None:
+    pilot = _load_pilot_module()
+    peaks = PeakTable(
+        positions=np.asarray([23.2, 41.7, 67.4], dtype=np.float64),
+        intensities=np.asarray([1.0, 0.65, 0.30], dtype=np.float64),
+    )
+
+    for use_peak_cache in (False, True):
+        v9_factory = _versioned_factory(
+            pilot, peaks, "v9_gaussian", use_peak_cache=use_peak_cache
+        )
+        v10_factory = _versioned_factory(
+            pilot, peaks, "v10_pseudo_voigt_caglioti", use_peak_cache=use_peak_cache
+        )
+        if use_peak_cache:
+            view_v9 = v9_factory.make_pair(
+                object(),
+                material_id="mp-pilot-test",
+                split="validation",
+                epoch=0,
+                global_step=0,
+                profile="validation",
+            ).first
+            view_v10 = v10_factory.make_pair(
+                object(),
+                material_id="mp-pilot-test",
+                split="validation",
+                epoch=0,
+                global_step=0,
+                profile="validation",
+            ).first
+        else:
+            view_v9 = v9_factory.make_pair_from_peaks(
+                peaks,
+                material_id="mp-pilot-test",
+                split="validation",
+                epoch=0,
+                global_step=0,
+                profile="validation",
+            ).first
+            view_v10 = v10_factory.make_pair_from_peaks(
+                peaks,
+                material_id="mp-pilot-test",
+                split="validation",
+                epoch=0,
+                global_step=0,
+                profile="validation",
+            ).first
+        assert float(np.max(np.abs(view_v9.xrd - view_v10.xrd))) > 1e-4
 
 
 def test_selected_v10_changes_training_prefetch_views(tmp_path: Path) -> None:
