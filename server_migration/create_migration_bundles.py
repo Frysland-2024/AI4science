@@ -55,7 +55,7 @@ def main():
         files[p]="reference_windows_resnet_joint/"+p.name
     for p in sorted((ROOT/"_local"/"resnet_joint_20261103"/"protocols").glob("*.json")):
         files[p]="reference_windows_resnet_joint/protocols/"+p.name
-    for name in ("verify_payload.py","verify_peak_cache.py","one_click_v11.py","start_server.sh","preflight.sh","build_peak_tables.sh","setup_linux.sh","README.md"):
+    for name in ("verify_payload.py","verify_peak_cache.py","one_click_v11.py","v11_prefetch.py","start_server.sh","preflight.sh","build_peak_tables.sh","setup_linux.sh","README.md"):
         p=DEST/name
         files[p]="server_migration/"+name
     for p in sorted((DEST/"tests").glob("test_*.py")):
