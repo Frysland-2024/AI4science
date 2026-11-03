@@ -1,0 +1,69 @@
+{
+  "schema_version": "rruff-js-protocol-v1",
+  "experiment_id_prefix": "RRUFF-SIMXRD",
+  "protocol_name": "SimXRD Protocol",
+  "paper": "Cao et al. 2025, SimXRD-4M",
+  "status": "PARTIAL",
+  "paper_comparable": false,
+  "reference_accuracy": 0.893,
+  "reference_macro_f1": 0.920,
+  "rruff": {
+    "catalog_count_reported": 3002,
+    "retained_pattern_count_for_table_5": "Unknown",
+    "train_samples": 0,
+    "validation_samples": 0,
+    "class_order": ["cubic", "hexagonal", "tetragonal", "orthorhombic", "trigonal", "monoclinic", "triclinic"],
+    "class_coverage": "Seven systems are defined; exact Table 5 RRUFF class counts Unknown",
+    "sample_ids_or_manifest": "No exact Table 5 RRUFF manifest found"
+  },
+  "simulation": {
+    "unique_mp_structures_after_filtering": 119569,
+    "paper_reported_spectra_total": 4065346,
+    "paper_reported_conditions": 33,
+    "repo_documented_train_views": 3587070,
+    "repo_documented_validation_views": 119569,
+    "repo_documented_test_views": 239138,
+    "repo_documented_test_no_target_views": 119569,
+    "repo_view_total_arithmetic": 4065346,
+    "counts_note": "The repository's 30 train + 1 val + 2 test + 1 no-target views per parent sum to the reported total; the paper states 33 conditions and does not explain whether the no-target view is included in that count.",
+    "per_parent": "30 train + 1 validation + 2 test in the in-library split; out-of-library uses 33 conditions on disjoint parent subsets",
+    "perturbations": "grain size, orientation, internal stress/lattice perturbation, inelastic scattering, thermal vibration, instrumental zero shift, noise, and other physical effects"
+  },
+  "paper_training_budget": {
+    "model": "CNN11 reported for 89.3%, not to be reproduced",
+    "batch_size": 128,
+    "learning_rate": 0.00025,
+    "maximum_epochs": 50,
+    "early_stopping_patience": 3,
+    "loss": "cross-entropy",
+    "hardware": "GeForce RTX 3090",
+    "actual_epochs_steps_gpu_hours": "Unknown"
+  },
+  "input": {
+    "two_theta_range_degrees": [10.0, 80.0],
+    "two_theta_step_degrees": 0.02,
+    "points": 3501,
+    "equivalent_d_spacing_range_angstrom": [1.199, 8.853],
+    "intensity_normalization": "maximum to 100",
+    "rruff_specific_preprocessing": "Unknown",
+    "instrument": "SimXRD simulation scenarios; RRUFF sample instrument conditions are not unified"
+  },
+  "our_training": {
+    "method": "Dynamic JS synthetic pretraining; no real RRUFF training",
+    "rruff_real_training_allowed": 0,
+    "synthetic_parent_scale_target": 119569,
+    "status": "Partial; SimXRD database/code are public, but Table 5 split/checkpoint and exact RRUFF panel are unknown"
+  },
+  "sources": [
+    "https://proceedings.iclr.cc/paper_files/paper/2025/file/b04843d76c9f090beca55f335c4ea6bf-Paper-Conference.pdf",
+    "https://github.com/Bin-Cao/SimXRD",
+    "https://huggingface.co/datasets/caobin/CrystDB",
+    "https://huggingface.co/datasets/AI4Spectro/rruff",
+    "https://www.rruff.net/about/download-data/"
+  ],
+  "limitations": [
+    "A Table 5 checkpoint's exact simulated split was not identified.",
+    "The paper reports 3002 RRUFF patterns in the catalog table, not the exact retained Table 5 denominator.",
+    "The publisher article has an appendix; no separate supplementary file was identified."
+  ]
+}

@@ -1,0 +1,143 @@
+{
+  "schema_version": "rruff-js-benchmark-result-v1",
+  "experiment_id": "SMK-20261103-01",
+  "role": "pipeline_smoke_test_only__no_paper_numbers",
+  "protocol_status": "SMOKE_ONLY",
+  "paper_comparable": false,
+  "seed": 20261103,
+  "device": "cuda",
+  "device_name": "NVIDIA GeForce RTX 4060 Laptop GPU",
+  "torch_version": "2.13.0+cu126",
+  "split_manifest_sha256": "5c231ab5ca79ea015be6b0b67b04d08720b262c5b16c6d3023a94b12e68008e1",
+  "split_counts": {
+    "train": 21,
+    "validation": 7,
+    "test": 7
+  },
+  "real_training_unique_samples": 21,
+  "real_training_unique_parent_ids_with_audited_links": 0,
+  "synthetic_dynamic_js": null,
+  "real_finetune": {
+    "loss": "cross_entropy_only; no fabricated real-spectrum JS pairs",
+    "epochs": 1,
+    "optimizer_steps": 11,
+    "real_training_spectrum_views": 21,
+    "elapsed_seconds": 1.7348776999861002,
+    "mean_train_step_samples_per_second": 12.104595463620099,
+    "batch_size": 2,
+    "learning_rate": 1e-05
+  },
+  "initial_checkpoint": {
+    "path": "E:\\AI4science\\xrd_robustness\\outputs\\simulated_test_checkpoints\\checkpoints\\seed_20260711_js_lambda_60\\best.ckpt",
+    "sha256": "3ee1beb8831e46a8d7014352d5c1adfac49b7fe8959894811c1cb559b2cc6b49"
+  },
+  "fine_tuned_checkpoint": {
+    "path": "outputs\\rruff_js_benchmark\\SMK-20261103-01\\finetuned_model.ckpt",
+    "sha256": "b4797c93031fd4fe00c284804b1b4a540547219d4b8c09fec8adf3125af89fee"
+  },
+  "model_parameters": 13008839,
+  "peak_allocated_gpu_bytes": 282638848,
+  "validation_selection": {
+    "metric": "accuracy",
+    "best_accuracy": 0.14285714285714285
+  },
+  "test_metrics_single_evaluation": {
+    "accuracy": 0.14285714285714285,
+    "balanced_accuracy": 0.14285714285714285,
+    "macro_f1": 0.09523809523809523,
+    "per_class_recall": [
+      0.0,
+      0.0,
+      0.0,
+      1.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "per_class_f1": [
+      0.0,
+      0.0,
+      0.0,
+      0.6666666666666666,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "confusion_matrix": [
+      [
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0
+      ],
+      [
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0
+      ]
+    ],
+    "worst_group_f1": 0.0,
+    "ece": 0.5793665817805698
+  },
+  "accuracy_definition": "top-1 correct predictions divided by all test predictions",
+  "macro_f1_definition": "unweighted mean of per-class F1 across the configured seven classes",
+  "ece_definition": "15 equal-width confidence bins",
+  "prediction_file": "test_predictions.csv",
+  "runtime_seconds_total": 1.7802347000106238,
+  "warnings": [
+    "This output is not a paper reproduction unless all protocol-specific data and preprocessing fields are verified.",
+    "Real spectra without audited parent identity use CE fine-tuning only; no real JS pairs are invented."
+  ]
+}

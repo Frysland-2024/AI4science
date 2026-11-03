@@ -1,0 +1,28 @@
+{
+  "schema_version": "rruff-js-parent-scale-curve-v1",
+  "experiment_family": "RRUFF-JS-SCALE",
+  "status": "PLANNED_NOT_RUN",
+  "primary_metric": "RRUFF top-1 Accuracy",
+  "secondary_metrics": ["Macro-F1", "ECE-15-equal-width-bins"],
+  "fixed_controls": {
+    "backbone": "ResNet-18-GN",
+    "method": "Dynamic JS only",
+    "real_data_protocol": "one prospectively frozen RRUFF protocol and split across all scale points",
+    "real_data_train_samples": "fixed by selected paper protocol; no real JS pairing without audited parent identity",
+    "validation_selection": "validation only",
+    "test_evaluations": 1,
+    "required_logs": ["unique_training_parents", "online_generated_js_views", "optimizer_steps", "training_seconds", "peak_GPU_memory_bytes", "GPU_model", "RRUFF_train_count", "Accuracy", "Macro-F1", "ECE"]
+  },
+  "points": [
+    {"target_unique_training_parents": 30000, "status": "PLANNED", "reason": "first expansion milestone in the 2026-10-23 project scale plan"},
+    {"target_unique_training_parents": 60000, "status": "PLANNED", "reason": "intermediate scale point"},
+    {"target_unique_training_parents": 100315, "status": "PLANNED", "reason": "matches the XQueryer reported unique-structure count and is near the SimXRD 119569-parent scale"}
+  ],
+  "near_literature_priority": {
+    "first_point_after_all_gates": 100315,
+    "references": {"XQueryer_unique_parents": 100315, "SimXRD_unique_parents": 119569},
+    "status": "PLANNED_NOT_RUN"
+  },
+  "budget_gate": "Do not start the 30000+ parent scale point until simulator/data readiness, a disjoint external RRUFF panel, and an explicit compute budget are recorded.",
+  "not_a_curve_point": "SMK-20261103-01 is infrastructure smoke only; its test panel and initialization make it ineligible for the RRUFF accuracy-vs-parent-scale curve."
+}

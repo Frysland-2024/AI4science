@@ -1,0 +1,2 @@
+experiment_id,n_test,accuracy,macro_f1,ece,runtime_seconds_total,peak_allocated_gpu_bytes
+SMK-20261103-03,7,0.0,0.0,0.830781306539263,0.9858658000011928,64485376

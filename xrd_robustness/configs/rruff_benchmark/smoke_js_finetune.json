@@ -1,0 +1,27 @@
+{
+  "schema_version": "rruff-js-smoke-v1",
+  "experiment_id": "SMK-20261103-01",
+  "role": "pipeline_smoke_test_only__no_paper_numbers",
+  "protocol_status": "SMOKE_ONLY",
+  "paper_comparable": false,
+  "project_root": "xrd_robustness/data/real_xrd/rruff_pipeline_test",
+  "seed": 20261103,
+  "model_id": "18",
+  "input_length": 3501,
+  "num_classes": 7,
+  "class_order": ["triclinic", "monoclinic", "orthorhombic", "tetragonal", "trigonal", "hexagonal", "cubic"],
+  "initialize_from_checkpoint": "../../../outputs/simulated_test_checkpoints/checkpoints/seed_20260711_js_lambda_60/best.ckpt",
+  "training": {
+    "synthetic_js_manifest": null,
+    "real_loss": "cross_entropy_only",
+    "real_epochs": 1,
+    "real_batch_size": 2,
+    "real_learning_rate": 0.00001,
+    "weight_decay": 0.0001
+  },
+  "limitations": [
+    "The input fixture is explicitly smoke-only; resulting metrics cannot be compared to paper results.",
+    "The starting model is a previously frozen Dynamic JS checkpoint; this run adds no synthetic parents or online JS views.",
+    "No RRUFF same-parent mapping exists for this fixture; real fine-tuning uses CE and does not create JS pairs."
+  ]
+}

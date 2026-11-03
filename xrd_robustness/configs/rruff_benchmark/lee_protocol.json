@@ -1,0 +1,59 @@
+{
+  "schema_version": "rruff-js-protocol-v1",
+  "experiment_id_prefix": "RRUFF-LEE",
+  "protocol_name": "Lee Protocol",
+  "paper": "Lee et al. 2023, A Deep Learning Approach to Powder X-Ray Diffraction Pattern Analysis",
+  "status": "PARTIAL",
+  "paper_comparable": false,
+  "reference_accuracy": 0.7424,
+  "rruff": {
+    "original_patterns_reported": "about 1600",
+    "retained_patterns_after_filter": "Unknown",
+    "filter": "remove the top 40% highest low-angle-background standard deviations (5-8 degrees; shift window if a peak lies there)",
+    "train_samples": 0,
+    "validation_samples": "Unknown",
+    "test_samples": "Unknown",
+    "class_order": ["cubic", "hexagonal", "tetragonal", "orthorhombic", "trigonal", "monoclinic", "triclinic"],
+    "class_coverage": "Unknown per class",
+    "sample_ids_or_manifest": "Not visible in the linked repository; exact Ex_dataset_2 contents not confirmed"
+  },
+  "simulation": {
+    "unique_training_cif_parents": 197131,
+    "generated_spectra": 5913930,
+    "per_parent": {"texture_free_perturbed": 10, "texture_involved_perturbed": 20},
+    "selected_large_fcn_training_view_count_before_split": 3942620,
+    "actual_train_views_after_split": "Unknown",
+    "perturbations": "Caglioti peak formation parameters; peak shift through lattice-parameter variation; texture-involved orientation settings",
+    "source": "ICSD; duplicate/incomplete filtering plus lattice-volume >10000 A^3 and peaks >20000 removed"
+  },
+  "paper_training_budget": {
+    "model": "large FCN, not to be reproduced",
+    "epochs": "Unknown",
+    "optimizer_steps": "Unknown",
+    "compute": "40 GPUs (A100/A10) mentioned; wall time and GPU-hours Unknown"
+  },
+  "input": {
+    "two_theta_range_degrees": [5.0, 86.91],
+    "step_degrees": 0.01,
+    "points": 8192,
+    "intensity": "peak height 0-1",
+    "rruff_preprocessing": "Unknown",
+    "instrument": "RRUFF sample-specific conditions; uniform instrument condition Unknown"
+  },
+  "our_training": {
+    "method": "Dynamic JS on synthetic same-parent views; optional real RRUFF CE fine-tuning only under a separately documented labeled-data budget",
+    "rruff_real_training_allowed": 0,
+    "synthetic_parent_scale_target": 197131,
+    "status": "Blocked from paper-aligned execution pending exact retained RRUFF panel and Lee input adapter"
+  },
+  "sources": [
+    "https://doi.org/10.1002/aisy.202300140",
+    "https://github.com/socoolblue/Advanced_XRD_Analysis",
+    "https://www.rruff.net/about/download-data/"
+  ],
+  "limitations": [
+    "Publisher supplement is listed but could not be fetched in this session.",
+    "Paper gives an approximate source cohort and a 40% filter but not the final retained denominator or a row-level split manifest.",
+    "The repository exposes Ex_dataset_1 and notebooks; availability of the complete Ex_dataset_2 and exact IDs was not confirmed."
+  ]
+}

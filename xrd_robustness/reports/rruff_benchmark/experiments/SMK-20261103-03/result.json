@@ -1,0 +1,152 @@
+{
+  "schema_version": "rruff-js-benchmark-result-v1",
+  "experiment_id": "SMK-20261103-03",
+  "role": "pipeline_smoke_test_only__no_paper_numbers",
+  "protocol_status": "SMOKE_ONLY",
+  "paper_comparable": false,
+  "seed": 20261105,
+  "config_sha256": "2ab7a663f3f2a38c11fea83fd10d06edd2f563b17e72d833f9e77715c718270f",
+  "runner_source_sha256": "a2987a1755e7c689369e3102d1173d046d68f58cb7e29e8408ecceeb42c83a17",
+  "device": "cuda",
+  "device_name": "NVIDIA GeForce RTX 4060 Laptop GPU",
+  "torch_version": "2.13.0+cu126",
+  "split_manifest_sha256": "62acd2f6e5d38ac081dc4f54472d60c562127bff908e8f5483592966bc0bbc98",
+  "split_counts": {
+    "train": 0,
+    "validation": 0,
+    "test": 7
+  },
+  "real_training_unique_samples": 0,
+  "real_training_unique_parent_ids_with_audited_links": 0,
+  "synthetic_dynamic_js": null,
+  "online_generated_js_views": 0,
+  "synthetic_pair_view_exposures": 0,
+  "total_optimizer_steps": 0,
+  "real_finetune": {
+    "loss": "cross_entropy_only when real_epochs > 0; no fabricated real-spectrum JS pairs",
+    "epochs": 0,
+    "optimizer_steps": 0,
+    "real_training_spectrum_views": 0,
+    "elapsed_seconds": 0.25958600000012666,
+    "mean_train_step_samples_per_second": 0.0,
+    "batch_size": 2,
+    "learning_rate": 1e-05
+  },
+  "initial_checkpoint": {
+    "path": "E:\\AI4science\\xrd_robustness\\outputs\\simulated_test_checkpoints\\checkpoints\\seed_20260711_js_lambda_60\\best.ckpt",
+    "sha256": "3ee1beb8831e46a8d7014352d5c1adfac49b7fe8959894811c1cb559b2cc6b49"
+  },
+  "model_parameters": 13008839,
+  "peak_allocated_gpu_bytes": 64485376,
+  "validation_selection": {
+    "method": "fixed_final_state",
+    "metric": null,
+    "best_accuracy": null,
+    "validation_samples": 0
+  },
+  "test_metrics_single_evaluation": {
+    "accuracy": 0.0,
+    "balanced_accuracy": 0.0,
+    "macro_f1": 0.0,
+    "per_class_recall": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "per_class_f1": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "confusion_matrix": [
+      [
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0
+      ]
+    ],
+    "worst_group_f1": 0.0,
+    "ece": 0.830781306539263
+  },
+  "accuracy_definition": "top-1 correct predictions divided by all test predictions",
+  "macro_f1_definition": "unweighted mean of per-class F1 across the configured seven classes",
+  "ece_definition": "15 equal-width confidence bins",
+  "prediction_file": "test_predictions.csv",
+  "runtime_seconds_total": 0.9858658000011928,
+  "warnings": [
+    "This output is not a paper reproduction unless all protocol-specific data and preprocessing fields are verified.",
+    "Real spectra without audited parent identity use CE fine-tuning only; no real JS pairs are invented."
+  ],
+  "final_model_checkpoint": {
+    "path": "outputs\\rruff_js_benchmark\\SMK-20261103-03_run\\finetuned_model.ckpt",
+    "sha256": "910b2be6c2b3fa0579a21badd6fec88d40953439b4cee2abafa46492c297e549",
+    "model_state_role": "initialization_for_evaluation"
+  },
+  "serialization_correction": "Only the checkpoint field name was normalized after the run; original runner output is preserved in result.runner_output_raw.json, and all metrics/logs remain byte-for-byte from the run."
+}

@@ -1,0 +1,34 @@
+{
+  "schema_version": "rruff-js-smoke-v1",
+  "experiment_id": "SMK-20261103-02",
+  "role": "pipeline_smoke_test_only__no_paper_numbers",
+  "protocol_status": "SMOKE_ONLY",
+  "paper_comparable": false,
+  "project_root": "data/real_xrd/rruff_pipeline_test",
+  "seed": 20261104,
+  "model_id": "18",
+  "input_length": 3501,
+  "num_classes": 7,
+  "class_order": ["triclinic", "monoclinic", "orthorhombic", "tetragonal", "trigonal", "hexagonal", "cubic"],
+  "initialize_from_checkpoint": "../../../outputs/simulated_test_checkpoints/checkpoints/seed_20260711_js_lambda_60/best.ckpt",
+  "training": {
+    "synthetic_online_records": "../../../outputs/rruff_js_benchmark/SMK-20261103-02/synthetic_parent_records.jsonl",
+    "synthetic_simulation_config": "../../../configs/simulation.method_transfer.frozen.json",
+    "synthetic_profile": "train",
+    "synthetic_grid": {"two_theta_min": 10.0, "two_theta_max": 80.0, "step": 0.02, "wavelength": "CuKa"},
+    "synthetic_epochs": 1,
+    "synthetic_batch_size": 2,
+    "synthetic_learning_rate": 0.00001,
+    "lambda_js": 60.0,
+    "real_loss": "cross_entropy_only",
+    "real_epochs": 1,
+    "real_batch_size": 2,
+    "real_learning_rate": 0.00001,
+    "weight_decay": 0.0001
+  },
+  "limitations": [
+    "This is a seven-parent interface smoke using the previously frozen training-parent split and the explicitly smoke-only 35-spectrum RRUFF fixture.",
+    "It is not a paper reproduction and is excluded from accuracy-vs-parent-scale analysis.",
+    "No raw RRUFF sample is used to form a JS pair; the real stage uses CE only."
+  ]
+}

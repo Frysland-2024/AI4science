@@ -1,0 +1,12 @@
+{"stage": "real_rruff_ce_finetune", "epoch": 1, "step": 1, "real_samples_in_batch": 2, "real_views_processed_total": 2, "loss": 3.129941463470459, "elapsed_seconds": 1.3518500999780372}
+{"stage": "real_rruff_ce_finetune", "epoch": 1, "step": 2, "real_samples_in_batch": 2, "real_views_processed_total": 4, "loss": 7.52249002456665, "elapsed_seconds": 1.3736747999791987}
+{"stage": "real_rruff_ce_finetune", "epoch": 1, "step": 3, "real_samples_in_batch": 2, "real_views_processed_total": 6, "loss": 0.3698953092098236, "elapsed_seconds": 1.3883088000002317}
+{"stage": "real_rruff_ce_finetune", "epoch": 1, "step": 4, "real_samples_in_batch": 2, "real_views_processed_total": 8, "loss": 8.900461196899414, "elapsed_seconds": 1.4032627000124194}
+{"stage": "real_rruff_ce_finetune", "epoch": 1, "step": 5, "real_samples_in_batch": 2, "real_views_processed_total": 10, "loss": 6.671610355377197, "elapsed_seconds": 1.4194913000101224}
+{"stage": "real_rruff_ce_finetune", "epoch": 1, "step": 6, "real_samples_in_batch": 2, "real_views_processed_total": 12, "loss": 5.581714153289795, "elapsed_seconds": 1.4351285999873653}
+{"stage": "real_rruff_ce_finetune", "epoch": 1, "step": 7, "real_samples_in_batch": 2, "real_views_processed_total": 14, "loss": 3.0664515495300293, "elapsed_seconds": 1.4503710999852046}
+{"stage": "real_rruff_ce_finetune", "epoch": 1, "step": 8, "real_samples_in_batch": 2, "real_views_processed_total": 16, "loss": 1.3506444692611694, "elapsed_seconds": 1.4691965999663807}
+{"stage": "real_rruff_ce_finetune", "epoch": 1, "step": 9, "real_samples_in_batch": 2, "real_views_processed_total": 18, "loss": 5.434924602508545, "elapsed_seconds": 1.482984900008887}
+{"stage": "real_rruff_ce_finetune", "epoch": 1, "step": 10, "real_samples_in_batch": 2, "real_views_processed_total": 20, "loss": 7.308870315551758, "elapsed_seconds": 1.4976939999614842}
+{"stage": "real_rruff_ce_finetune", "epoch": 1, "step": 11, "real_samples_in_batch": 1, "real_views_processed_total": 21, "loss": 4.01832389831543, "elapsed_seconds": 1.568669400003273}
+{"stage": "validation", "epoch": 1, "loss_mean": 4.850484303452752, "accuracy": 0.14285714285714285, "macro_f1": 0.14285714285714285, "ece": 0.6161777206829615, "epoch_elapsed_seconds": 1.6690379999927245}
