@@ -12,6 +12,8 @@
 
 **Decision / owner confirmation:** The project lead explicitly stated that the undergraduate thesis has restarted. The 2026-10-26 decision to *stop new work and write up only* is therefore **superseded for forward execution**. It remains a correct historical snapshot, and all completed reports/configurations/predictions remain frozen. Reopening investigation is **not** permission to overwrite old results.
 
+**Phase 1 delivery upgrade (owner, 2026-11-03):** The expected deliverable is a **runnable, versioned simulator integrated with same-parent JS paired views, accompanied by a working CIF→two-spectra CLI, tests and examples** — **NOT** a literature-only audit report. Source review and module comparisons are internal implementation steps. [Executable Codex implementation issue #54](https://github.com/Frysland-2024/AI4science/issues/54). The issue is a handoff, not proof that Codex has started; the legacy research bridge cannot modify `xrd_robustness/` without a separately approved route.
+
 **Execution gate — explicit 2026-11-03 clarification:** **Understand and selectively implement/validate the simulator FIRST; compare model architectures ONLY AFTER the simulator is understood and has passed standalone correctness/reproducibility/performance checks.** No CNN11 training, no architecture leaderboard, and no large-CIF training before this gate. Investigating simulator source is not itself proof of a working upgrade.
 
 **Current ACTIVE sequence:**
