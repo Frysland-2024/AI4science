@@ -1,0 +1,146 @@
+{
+  "amp_dtype": "bfloat16",
+  "checkpoint_path": "E:\\AI4science\\xrd_robustness\\outputs\\simxrd_architecture_pilot_20261103\\cnn11_v10\\seed_20260711\\best.ckpt",
+  "checkpoint_sha256": "E415DBFD042EADC8595F4B5FD7F78AC1F7160517324308AD71B74AA187CDB08F",
+  "checkpoint_step": 18480,
+  "data_bindings": {
+    "peak_cache_manifest_sha256": "6AE0CFD1B5B29671E2F532D7A094F2FC412CABD64E4CF77D42915937BACC8D18",
+    "source_records_sha256": "05D5D33F200194612A8CDBE29D9443FC7BAD9C245F66D185364B66A75915CC6C",
+    "split_manifest_sha256": "B9D3B72E42EA0FD549DAE34425FF61D2D650D5DD7FE6F337D747CB952CF43293"
+  },
+  "elapsed_seconds": 317.844000000041,
+  "first_nonfinite": null,
+  "lambda_js": 60.0,
+  "last_finite_step": 27000,
+  "learning_rate": 0.0001,
+  "optimizer": "AdamW fused=True",
+  "recent_finite_steps": [
+    {
+      "elapsed_seconds": 297.329000000027,
+      "gradient_l2_norm": 8.366473197937012,
+      "losses": {
+        "classification": 1.105156421661377,
+        "consistency": 0.003909853287041187,
+        "total": 1.339747667312622
+      },
+      "step": 26450
+    },
+    {
+      "elapsed_seconds": 299.14100000000326,
+      "gradient_l2_norm": 7.693621635437012,
+      "losses": {
+        "classification": 1.1807861328125,
+        "consistency": 0.006266935262829065,
+        "total": 1.5568022727966309
+      },
+      "step": 26500
+    },
+    {
+      "elapsed_seconds": 300.969000000041,
+      "gradient_l2_norm": 9.615954399108887,
+      "losses": {
+        "classification": 1.07666015625,
+        "consistency": 0.006473482120782137,
+        "total": 1.465069055557251
+      },
+      "step": 26550
+    },
+    {
+      "elapsed_seconds": 302.86000000004424,
+      "gradient_l2_norm": 5.751537799835205,
+      "losses": {
+        "classification": 1.0584163665771484,
+        "consistency": 0.001963071757927537,
+        "total": 1.1762006282806396
+      },
+      "step": 26600
+    },
+    {
+      "elapsed_seconds": 304.61000000004424,
+      "gradient_l2_norm": 11.232842445373535,
+      "losses": {
+        "classification": 1.0428466796875,
+        "consistency": 0.0057509602047502995,
+        "total": 1.3879042863845825
+      },
+      "step": 26650
+    },
+    {
+      "elapsed_seconds": 306.469000000041,
+      "gradient_l2_norm": 15.442887306213379,
+      "losses": {
+        "classification": 1.346435546875,
+        "consistency": 0.008358266204595566,
+        "total": 1.8479315042495728
+      },
+      "step": 26700
+    },
+    {
+      "elapsed_seconds": 308.23500000004424,
+      "gradient_l2_norm": 8.798444747924805,
+      "losses": {
+        "classification": 1.21771240234375,
+        "consistency": 0.005189097486436367,
+        "total": 1.5290582180023193
+      },
+      "step": 26750
+    },
+    {
+      "elapsed_seconds": 310.079000000027,
+      "gradient_l2_norm": 10.709712982177734,
+      "losses": {
+        "classification": 1.1072089672088623,
+        "consistency": 0.006535908207297325,
+        "total": 1.4993634223937988
+      },
+      "step": 26800
+    },
+    {
+      "elapsed_seconds": 311.89100000000326,
+      "gradient_l2_norm": 4.624052047729492,
+      "losses": {
+        "classification": 1.0053739547729492,
+        "consistency": 0.003807076485827565,
+        "total": 1.2337985038757324
+      },
+      "step": 26850
+    },
+    {
+      "elapsed_seconds": 313.704000000027,
+      "gradient_l2_norm": 9.559310913085938,
+      "losses": {
+        "classification": 1.329833984375,
+        "consistency": 0.004312010481953621,
+        "total": 1.5885546207427979
+      },
+      "step": 26900
+    },
+    {
+      "elapsed_seconds": 315.5,
+      "gradient_l2_norm": 4.87278938293457,
+      "losses": {
+        "classification": 1.02288818359375,
+        "consistency": 0.0034311043564230204,
+        "total": 1.2287544012069702
+      },
+      "step": 26950
+    },
+    {
+      "elapsed_seconds": 317.344000000041,
+      "gradient_l2_norm": 4.120645999908447,
+      "losses": {
+        "classification": 1.015625,
+        "consistency": 0.002416609087958932,
+        "total": 1.1606215238571167
+      },
+      "step": 27000
+    }
+  ],
+  "resume_method": "restored model, AdamW and CPU/CUDA RNG; replayed deterministic cyclic parent sampler from frozen seed",
+  "schema_version": "cnn11-first-nonfinite-resume-diagnostic-v1",
+  "simulator_version": "v10_pseudo_voigt_caglioti",
+  "status": "finite_through_target",
+  "through_step": 27000,
+  "trace_path": "E:\\AI4science\\_local\\worktrees\\cnn11_direct_20261103\\xrd_robustness\\reports\\cnn11_direct_20261103\\baseline_bf16_through_27000_v2.jsonl",
+  "training_seed": 20260711
+}

@@ -1,0 +1,192 @@
+{
+  "amp_dtype": "bfloat16",
+  "checkpoint_path": "E:\\AI4science\\xrd_robustness\\outputs\\simxrd_architecture_pilot_20261103\\cnn11_v10\\seed_20260711\\best.ckpt",
+  "checkpoint_sha256": "E415DBFD042EADC8595F4B5FD7F78AC1F7160517324308AD71B74AA187CDB08F",
+  "checkpoint_step": 18480,
+  "data_bindings": {
+    "peak_cache_manifest_sha256": "6AE0CFD1B5B29671E2F532D7A094F2FC412CABD64E4CF77D42915937BACC8D18",
+    "source_records_sha256": "05D5D33F200194612A8CDBE29D9443FC7BAD9C245F66D185364B66A75915CC6C",
+    "split_manifest_sha256": "B9D3B72E42EA0FD549DAE34425FF61D2D650D5DD7FE6F337D747CB952CF43293"
+  },
+  "elapsed_seconds": 240.7970000000205,
+  "first_nonfinite": null,
+  "lambda_js": 60.0,
+  "last_finite_step": 24640,
+  "learning_rate": 0.0001,
+  "optimizer": "AdamW fused=True",
+  "recent_finite_steps": [
+    {
+      "elapsed_seconds": 219.125,
+      "gradient_l2_norm": 6.997542858123779,
+      "losses": {
+        "classification": 1.1243815422058105,
+        "consistency": 0.0039486950263381,
+        "total": 1.3613032102584839
+      },
+      "step": 24050
+    },
+    {
+      "elapsed_seconds": 220.9220000000205,
+      "gradient_l2_norm": 7.244858264923096,
+      "losses": {
+        "classification": 0.9918653964996338,
+        "consistency": 0.004297694656997919,
+        "total": 1.2497270107269287
+      },
+      "step": 24100
+    },
+    {
+      "elapsed_seconds": 222.46900000004098,
+      "gradient_l2_norm": 11.608927726745605,
+      "losses": {
+        "classification": 0.9693847298622131,
+        "consistency": 0.006096715107560158,
+        "total": 1.3351876735687256
+      },
+      "step": 24150
+    },
+    {
+      "elapsed_seconds": 224.39100000000326,
+      "gradient_l2_norm": 11.249746322631836,
+      "losses": {
+        "classification": 1.169340968132019,
+        "consistency": 0.0052774567157030106,
+        "total": 1.4859883785247803
+      },
+      "step": 24200
+    },
+    {
+      "elapsed_seconds": 225.89100000000326,
+      "gradient_l2_norm": 9.0794677734375,
+      "losses": {
+        "classification": 1.1288726329803467,
+        "consistency": 0.00749523751437664,
+        "total": 1.5785868167877197
+      },
+      "step": 24250
+    },
+    {
+      "elapsed_seconds": 227.36000000004424,
+      "gradient_l2_norm": 6.348994731903076,
+      "losses": {
+        "classification": 0.95013028383255,
+        "consistency": 0.0038407579995691776,
+        "total": 1.1805757284164429
+      },
+      "step": 24300
+    },
+    {
+      "elapsed_seconds": 228.89100000000326,
+      "gradient_l2_norm": 8.335628509521484,
+      "losses": {
+        "classification": 0.9588375091552734,
+        "consistency": 0.006352529861032963,
+        "total": 1.3399893045425415
+      },
+      "step": 24350
+    },
+    {
+      "elapsed_seconds": 230.84400000004098,
+      "gradient_l2_norm": 8.18458366394043,
+      "losses": {
+        "classification": 1.0903520584106445,
+        "consistency": 0.006562022492289543,
+        "total": 1.4840734004974365
+      },
+      "step": 24400
+    },
+    {
+      "elapsed_seconds": 232.65700000000652,
+      "gradient_l2_norm": 8.108901023864746,
+      "losses": {
+        "classification": 1.028921127319336,
+        "consistency": 0.006670726463198662,
+        "total": 1.4291646480560303
+      },
+      "step": 24450
+    },
+    {
+      "elapsed_seconds": 234.2970000000205,
+      "gradient_l2_norm": 18.51768684387207,
+      "losses": {
+        "classification": 0.9466481804847717,
+        "consistency": 0.005318799056112766,
+        "total": 1.2657761573791504
+      },
+      "step": 24500
+    },
+    {
+      "elapsed_seconds": 235.84400000004098,
+      "gradient_l2_norm": 6.192182540893555,
+      "losses": {
+        "classification": 1.2322583198547363,
+        "consistency": 0.005101772025227547,
+        "total": 1.5383646488189697
+      },
+      "step": 24550
+    },
+    {
+      "elapsed_seconds": 237.6720000000205,
+      "gradient_l2_norm": 8.164398193359375,
+      "losses": {
+        "classification": 1.0633301734924316,
+        "consistency": 0.004368983209133148,
+        "total": 1.3254691362380981
+      },
+      "step": 24600
+    }
+  ],
+  "resume_method": "restored model, AdamW and CPU/CUDA RNG; replayed deterministic cyclic parent sampler from frozen seed",
+  "schema_version": "cnn11-first-nonfinite-resume-diagnostic-v1",
+  "simulator_version": "v10_pseudo_voigt_caglioti",
+  "snapshot_path": "E:\\AI4science\\_local\\worktrees\\cnn11_direct_20261103\\xrd_robustness\\outputs\\cnn11_direct_20261103\\stable_fp32_step24640.pt",
+  "snapshot_sha256": "72BFDCE2ABFAB1C620D7D6A1A549419CA5F2424AEA3C1D35E70E81F8DDFE8E92",
+  "status": "finite_through_target",
+  "through_step": 24640,
+  "trace_path": "E:\\AI4science\\_local\\worktrees\\cnn11_direct_20261103\\xrd_robustness\\reports\\cnn11_direct_20261103\\stable_fp32_to_24640.jsonl",
+  "training_seed": 20260711,
+  "validation": {
+    "in_range_macro_f1": 0.6683413909153124,
+    "mean_six_ood_macro_f1": 0.6290908793670866,
+    "panel_index_sha256": "5D71E77AA287252377FC851DEA4053D1C79BE5D9D4442BB9AF10C9422F31457A",
+    "per_profile": {
+      "in_range": {
+        "accuracy": 0.6666666666666666,
+        "ece": 0.26434400333590624,
+        "macro_f1": 0.6683413909153124
+      },
+      "ood_background": {
+        "accuracy": 0.5765765765765766,
+        "ece": 0.2170607915926228,
+        "macro_f1": 0.5905037494605022
+      },
+      "ood_broadening": {
+        "accuracy": 0.6211474632527264,
+        "ece": 0.24402470483973218,
+        "macro_f1": 0.6316283354550858
+      },
+      "ood_noise": {
+        "accuracy": 0.6130867709815079,
+        "ece": 0.24001890051387514,
+        "macro_f1": 0.6208983142328132
+      },
+      "ood_shift_negative": {
+        "accuracy": 0.6552868658131816,
+        "ece": 0.25759118155966215,
+        "macro_f1": 0.657056395138447
+      },
+      "ood_shift_positive": {
+        "accuracy": 0.6623992413466098,
+        "ece": 0.26384975056390503,
+        "macro_f1": 0.664070152235465
+      },
+      "ood_texture": {
+        "accuracy": 0.6130867709815079,
+        "ece": 0.23128317185576466,
+        "macro_f1": 0.6103883296802067
+      }
+    },
+    "seed": 20260721,
+    "selection_rule": "same 6-profile frozen Validation OOD mean, never RRUFF/Test"
+  }
+}

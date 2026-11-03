@@ -1,0 +1,50 @@
+{
+  "schema_version": "cnn11-numerical-gate-v1",
+  "date": "2026-11-03",
+  "decision": "RETAIN_RESNET_STOP_CNN11_EXTRA_TRAINING",
+  "issue": "https://github.com/Frysland-2024/AI4science/issues/55",
+  "original_failure": {
+    "first_logged_nan_step": 20000,
+    "selected_step": 18480,
+    "selected_validation_ood_macro_f1": 0.6817411021488872,
+    "checkpoint_sha256": "E415DBFD042EADC8595F4B5FD7F78AC1F7160517324308AD71B74AA187CDB08F"
+  },
+  "rechecked_original_validation_ood_macro_f1": 0.6817476199730783,
+  "unmodified_bf16_replay": {
+    "start_step": 18480,
+    "end_step": 27000,
+    "status": "finite_through_target",
+    "claim": "not an exact reproduction of original failure"
+  },
+  "stabilized_replay": {
+    "start_step": 18480,
+    "end_step": 24640,
+    "status": "finite_through_target",
+    "validation_ood_macro_f1": 0.6290908793670866,
+    "validation_in_range_macro_f1": 0.6683413909153124,
+    "snapshot_sha256": "72BFDCE2ABFAB1C620D7D6A1A549419CA5F2424AEA3C1D35E70E81F8DDFE8E92"
+  },
+  "resnet_same_seed_step24640": {
+    "validation_ood_macro_f1": 0.696204134174173,
+    "validation_in_range_macro_f1": 0.7268027267592325
+  },
+  "resnet_best_of_three_seeds": {
+    "values": [
+      0.708987681936368,
+      0.7138940065109777,
+      0.706045100238405
+    ],
+    "mean": 0.7096422628952502
+  },
+  "tests": {
+    "passed": 21,
+    "failed": 0
+  },
+  "limitations": [
+    "No locked Test/RRUFF evaluation for choice",
+    "CNN11 partial one-seed replay, not full three-seed trial",
+    "Original NaN trigger not definitively reproduced",
+    "Numerical gradient-risk proven by extreme-logits unit test, causal role in original failure unresolved",
+    "No change to historical frozen artifacts"
+  ]
+}

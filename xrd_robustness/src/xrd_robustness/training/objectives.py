@@ -35,16 +35,16 @@ def _logits(model: nn.Module, values: torch.Tensor) -> torch.Tensor:
 
 
 def js_divergence(first_logits: torch.Tensor, second_logits: torch.Tensor) -> torch.Tensor:
-    """Return the batch-mean Jensen-Shannon divergence between predictions."""
+    """Return stable FP32 batch-mean Jensen-Shannon divergence between predictions."""
 
-    first_log = F.log_softmax(first_logits, dim=-1)
-    second_log = F.log_softmax(second_logits, dim=-1)
-    first = first_log.exp()
-    second = second_log.exp()
-    midpoint_log = (0.5 * (first + second)).clamp_min(1e-12).log()
+    first_log = F.log_softmax(first_logits.float(), dim=-1)
+    second_log = F.log_softmax(second_logits.float(), dim=-1)
+    # logaddexp stays finite for sharply peaked posteriors and avoids
+    # differentiating through a zero-probability KL target (0 * log(0)).
+    midpoint_log = torch.logaddexp(first_log, second_log) - 0.6931471805599453
     return 0.5 * (
-        F.kl_div(midpoint_log, first, reduction="batchmean")
-        + F.kl_div(midpoint_log, second, reduction="batchmean")
+        (first_log.exp() * (first_log - midpoint_log)).sum(dim=-1).mean()
+        + (second_log.exp() * (second_log - midpoint_log)).sum(dim=-1).mean()
     )
 
 
@@ -61,7 +61,7 @@ def dynamic_erm(
     logits1 = _logits(model, x1)
     logits2 = _logits(model, x2)
     classification = 0.5 * (
-        classification_loss(logits1, target) + classification_loss(logits2, target)
+        classification_loss(logits1.float(), target) + classification_loss(logits2.float(), target)
     )
     return {
         "logits_first": logits1,
@@ -88,7 +88,7 @@ def dynamic_js(
     logits1 = _logits(model, x1)
     logits2 = _logits(model, x2)
     classification = 0.5 * (
-        classification_loss(logits1, target) + classification_loss(logits2, target)
+        classification_loss(logits1.float(), target) + classification_loss(logits2.float(), target)
     )
     consistency = js_divergence(logits1, logits2)
     return {
