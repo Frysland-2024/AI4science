@@ -57,3 +57,21 @@ Do **not** equate Accuracy and Macro-F1, or combine results on different RRUFF s
 
 ## Research decision framing
 The realistic immediate objective is **credible head-to-head RRUFF reproducibility and improvement over comparable baselines at matched real-data budgets**. There is presently no evidence that the current model beats literature's 74–93% RRUFF results. The higher numbers show that scaling/physical fidelity/representation and real-label access materially affect the ceiling, but cannot isolate a single cause without controlled tests.
+
+## 2026-11-03 addendum — five-column RRUFF comparison
+
+**Owner-requested comparison format:** simulated crystal-structure count, real RRUFF evaluation count, RRUFF seven-crystal-system Accuracy, and labeled real RRUFF data used for training/adaptation. This is a literature-reference table, not a strict same-test-cohort leaderboard. The original Lee / SimXRD / XQueryer-NoElem acceptance roster remains unchanged; AlphaDiffract is an **additional comparator**, not a replacement or newly assigned grade tier.
+
+| Paper / model | Curated simulated structure records (CIF) | RRUFF classification evaluation count | RRUFF seven-system top-1 Accuracy | Labeled RRUFF training / fine-tuning spectra |
+| --- | ---: | --- | ---: | ---: |
+| Lee et al. 2023, Large FCN | 197,131 ICSD | ~1,600 initially acquired; after 40% background exclusion **Unknown** | 74.24% | 0 |
+| **Andrejevic et al. 2026, AlphaDiffract (10-model ensemble)** | **312,267** ICSD+MP, not cross-source deduplicated | **734 classification profiles** | **81.74 ± 0.78%** | **0 labeled**¹ |
+| Cao et al. 2025, SimXRD-4M CNN11 | 119,569 MP | 3,002 in catalog; exact Table 5 cohort **Unknown** | 89.3% | 0 |
+| Cao et al. 2025, XQueryer-NoElem | 100,315 MP | 1,003 | 91.5% | 0 |
+| Salgado et al. 2023, Large Souping | 171,006 ICSD | 908 original entries; exact held-out test count **Unknown** | 86% | ~452 labeled |
+
+¹ **Important AlphaDiffract protocol nuance:** The source reports *zero labeled RRUFF samples for neural training or fine-tuning*, but **RRUFF measurements were used to characterize Poisson/Gaussian noise for synthetic augmentation** (Methods §5.2) and the authors consulted RRUFF performance in choosing the space-group GEMD weight μ=1 (§2.3). Do **not** describe this as strictly target-domain-blind, or as zero use of RRUFF measurements. The 734 classification entries include 59 powder profiles computed from single-crystal data (Methods §5.1), despite inclusion in the RRUFF benchmark. **312,267 is a curated structure-record count, not a formally proven number of distinct parent structures**: the authors state that duplicates were not removed prior to later curation (Methods §5.1). The 81.74% result is specifically the **10-model ensemble**, not a single released checkpoint; the separate publicly released MP-only single-model implementation reports materially different RRUFF performance and must not be conflated with it.
+
+Primary original source: Andrejevic et al., *AlphaDiffract: Automated Crystallographic Analysis of Powder X-ray Diffraction Data* (arXiv:2603.23367v1), https://arxiv.org/html/2603.23367v1 , §2.3, Table 1, §5.1, §5.2 and §5.6. Other sources for existing rows and caveats appear in this document and `docs/RRUFF_JS_BENCHMARK_PROTOCOL_AUDIT_2026-11-03.md` (local audit file).
+
+**How to read this table:** RRUFF spectra and preprocessing differ across papers. Comparing author-reported percentages as *targets* is useful, but claiming a controlled direct head-to-head comparison requires identical evaluation sample IDs and labels (and the same adaptation budget and input metadata). The final project's official paper-tier roster is not changed by this additional row. Simulated validation performance is not a substitute for final RRUFF Accuracy.
