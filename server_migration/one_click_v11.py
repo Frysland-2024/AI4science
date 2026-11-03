@@ -54,15 +54,19 @@ def contract(args):
         "schema":"v11_154975_resnet_a0_js_optuna_v1",
         "source_manifest_sha256":expected_records,
         "simulator_config_sha256":digest(sim),
-        "source_records":131729, "training_parents":108483,"validation_parents":23246,
-        "held_out_test_parents":23246, "test_and_rruff_access":"prohibited",
+        "source_records":131729,
+        "training_rows":108483, "training_parents":108478,
+        "validation_rows":23246, "validation_parents":23245,
+        "held_out_test_parents":23245, "test_and_rruff_access":"prohibited",
         "architecture":"ML4PXRDResNet1D(model_id=18) A0; stride 4/4/4, kernel 9",
         "train_mode":"dynamic_js_same_parent",
         "batch_size_parents":args.batch_size,
         "hpo_steps":args.hpo_steps,
         "confirmation_steps":args.confirm_steps,
         "eval_interval_steps":args.eval_every,
-        "validation_per_class":args.validation_per_class,
+        "validation_mode":"FULL_PARENT_DISJOINT",
+        "validation_rows":23246,
+        "validation_parents":23245,
         "validation_seed":20260721,
         "search_seed":20261103,
         "hpo_seed":20260711,
@@ -70,8 +74,8 @@ def contract(args):
         "max_new_trials":args.trials,
         "search_space":{"learning_rate":[5e-5,3e-4],"lambda_js":[15.,120.],
                         "weight_decay":[1e-6,1e-3],"scheduler":["cosine_5pct_floor","none"]},
-        "selection":"highest mean 6 frozen simulated OOD Validation Macro-F1; independent-seed confirmation on same frozen subset",
-        "full_validation_final":False,
+        "selection":"mean 6 simulated OOD Macro-F1 evaluated on ALL 23245 unique parent-disjoint Validation groups; fixed render seed, independent-seed confirmation",
+        "full_validation_final":True,
         "max_gpu_hours":args.max_gpu_hours,
         "caveat":"New data/simulator protocol, not directly comparable to 14060 V10 scores; not final RRUFF ranking"
     }
@@ -88,16 +92,80 @@ def ctx_libraries():
     from xrd_robustness.evaluation.metrics import classification_metrics
     return np,torch,F,load_peak_records,load_peak_tables,render_pair_batch,build_online_view_factory,ML4PXRDResNet1D,ML4PXRDResNet1DConfig,PhysicsParameterSampler,classification_metrics
 
-def subset(records,per_class):
-    by_class=defaultdict(list)
-    for rec in records:by_class[rec.label].append(rec)
-    rng=random.Random(20260721)
-    selected=[]
-    for label in range(7):
-        rows=by_class[label]
-        if len(rows)<per_class:raise ValueError(f"Class {label} has too few validation rows")
-        selected.extend(rng.sample(rows,per_class))
-    return sorted(selected,key=lambda row:row.material_id)
+def full_parent_disjoint_records(records_path, records, *, expected_rows=None, expected_parents=None):
+    """Select one deterministic sample per unique train/validation parent, never sample Validation.
+
+    Frozen manifest has 108483 train / 23246 val MP IDs, and 108478 / 23245
+    unique parent fingerprints. Exact split/label/identity contract is audited.
+    """
+    expected_rows=expected_rows or {"train":108483,"validation":23246}
+    expected_parents=expected_parents or {"train":108478,"validation":23245}
+    row_counts={"train":0,"validation":0}
+    selected={"train":{},"validation":{}}
+    by_id={rec.material_id:rec for rec in records}
+    if len(by_id)!=len(records):
+        raise ValueError("Duplicate material_id in training manifest")
+    seen_parent_split={}
+    label_by_parent={}
+    with Path(records_path).open(encoding="utf-8") as source:
+        for raw in source:
+            if not raw.strip():
+                continue
+            row=json.loads(raw)
+            split=row.get("split")
+            if split not in selected:
+                raise ValueError(f"Unexpected non-train/validation row: {split}")
+            mid=str(row.get("material_id",""))
+            parent=str(row.get("parent_structure_id",""))
+            if not parent or not mid or mid not in by_id:
+                raise ValueError("Missing parent or unmatched material ID")
+            rec=by_id.pop(mid)
+            if split!=rec.split or int(row["label"])!=rec.label:
+                raise ValueError(f"Split/label mismatch for {mid}")
+            earlier=seen_parent_split.setdefault(parent,split)
+            if earlier!=split:
+                raise ValueError(f"Cross-split parent leakage: {parent}")
+            earlier_label=label_by_parent.setdefault(parent,rec.label)
+            if earlier_label!=rec.label:
+                raise ValueError(f"Conflicting labels within parent: {parent}")
+            previous=selected[split].get(parent)
+            if previous is None or mid<previous.material_id:
+                selected[split][parent]=rec
+            row_counts[split]+=1
+    if by_id:
+        raise ValueError(f"Unexpected unmatched peak records: {len(by_id)}")
+    if row_counts!=expected_rows:
+        raise ValueError(f"Frozen split row count changed: {row_counts}")
+    parent_counts={split:len(sets) for split,sets in selected.items()}
+    if parent_counts!=expected_parents:
+        raise ValueError(f"Frozen independent parent counts changed: {parent_counts}")
+    canonical={
+        split: sorted(selected[split].values(),key=lambda rec:rec.material_id)
+        for split in ("train","validation")
+    }
+    for split,rows in canonical.items():
+        if {r.label for r in rows}!=set(range(7)):
+            raise ValueError(f"Missing crystal systems in {split}")
+    fingerprints={
+        split:hashlib.sha256(
+            "\n".join(
+                f"{parent}|{record.material_id}|{record.label}"
+                for parent,record in sorted(selected[split].items())
+            ).encode("utf-8")
+        ).hexdigest()
+        for split in ("train","validation")
+    }
+    return canonical["train"],canonical["validation"],{
+        "raw_rows_by_split":row_counts,
+        "independent_parents_by_split":parent_counts,
+        "deduplicated_aliases":{
+            split:row_counts[split]-parent_counts[split]
+            for split in ("train","validation")
+        },
+        "frozen_parent_mapping_sha256":fingerprints,
+        "validation_mode":"FULL_PARENT_DISJOINT",
+    }
+
 
 def factory(sim_config,seed,PhysicsParameterSampler,build_online_view_factory):
     sampler=PhysicsParameterSampler.from_mapping({**sim_config,"run_seed":seed})
@@ -113,16 +181,117 @@ def loss_js(logit1,logit2,targets,weight,torch,F):
     js=0.5*((p.exp()*(p-m)).sum(-1).mean()+(q.exp()*(q-m)).sum(-1).mean())
     return ce+weight*js,ce,js
 
-def validate(model,records,peaks,val_factory,device,libs,batch_size,profiles):
+VALIDATION_OOD_PROFILES=("ood_shift_negative","ood_shift_positive","ood_broadening",
+                         "ood_noise","ood_background","ood_texture")
+
+
+def prepare_validation_panels(records, peaks, sim, libs, study_dir, *,
+                              expected_parents=23245):
+    """Freeze all full-Validation V11 realizations once, memory-mapped across HPO trials.
+
+    This removes repeat CPU rendering of 23245 parents x 2 views x 6 profiles
+    at every checkpoint. Panels stay private; hashes/IDs/seed/profiles frozen.
+    Interrupted partial panels can be rebuilt, never silently overwrite
+    a completed panel with unexpected input hashes.
+    """
+    np,torch,F,_,_,render_pair_batch,build_online_view_factory,*tail=libs
+    PhysicsParameterSampler=tail[-2]
+    if len(records)!=expected_parents:
+        raise ValueError(f"Full Validation expected {expected_parents}, got {len(records)}")
+    parent_ids_hash=hashlib.sha256(
+        "\n".join(rec.material_id for rec in records).encode("utf-8")
+    ).hexdigest()
+    identity={
+        "version":"v11-full-validation-dual-view-cache-v1",
+        "source_manifest_sha256":digest(XRD/"data/merged_154975_v11/training_records.v1.jsonl"),
+        "simulation_config_sha256":digest(XRD/"configs/simulation.v11_tch_pseudo_voigt.json"),
+        "parent_ids_sha256":parent_ids_hash,
+        "parent_count":len(records),
+        "render_epoch":0,"render_step":0,"render_seed":20260721,
+        "profiles":list(VALIDATION_OOD_PROFILES),
+        "data_shape":[len(records),3501],"dtype":"float32",
+        "meaning":"simulated Validation only, no Test or RRUFF"
+    }
+    base=study_dir/"validation_panels_v11"
+    base.mkdir(parents=True,exist_ok=True)
+    index_path=base/"panel_index.json"
+    if index_path.exists():
+        index=json.loads(index_path.read_text(encoding="utf-8"))
+        if index.get("identity")!=identity:
+            raise RuntimeError("Existing Validation cache identity mismatch; refuse overwrite")
+    else:
+        index={"identity":identity,"entries":{}}
+        write_json(index_path,index)
+    fac=factory(sim,20260721,PhysicsParameterSampler,build_online_view_factory)
+    panels={}
+    for profile in VALIDATION_OOD_PROFILES:
+        if profile not in sim["profiles"]:
+            raise RuntimeError(f"Missing V11 validation profile: {profile}")
+        names=(profile+".first.npy",profile+".second.npy")
+        paths=[base/name for name in names]
+        entry=index["entries"].get(profile)
+        if entry is not None:
+            for file,expected_hash in zip(paths,entry["sha256"]):
+                if not file.exists() or digest(file)!=expected_hash:
+                    raise RuntimeError(f"Frozen Validation cache corrupted: {file}")
+            event("validation_panel_reused",profile=profile,parents=len(records))
+        else:
+            # Temporary files are never used as scored Validation evidence.
+            temporary=[base/(profile+f".{view}.partial.npy") for view in ("first","second")]
+            for item in temporary:
+                if item.exists():item.unlink()
+            first=np.lib.format.open_memmap(temporary[0],mode="w+",dtype=np.float32,
+                                             shape=(len(records),3501))
+            second=np.lib.format.open_memmap(temporary[1],mode="w+",dtype=np.float32,
+                                              shape=(len(records),3501))
+            for at in range(0,len(records),64):
+                rows=records[at:at+64]
+                x1,x2,y=render_pair_batch(rows,peaks,fac,epoch=0,global_step=0,profile=profile)
+                a=x1.numpy(); b=x2.numpy()
+                if (a.shape!=(len(rows),3501) or b.shape!=(len(rows),3501)
+                    or not np.isfinite(a).all() or not np.isfinite(b).all()):
+                    raise RuntimeError(f"Nonfinite or invalid Validation panel {profile} at {at}")
+                if not np.array_equal(y.numpy(),np.asarray([r.label for r in rows])):
+                    raise RuntimeError("Validation label order mismatch")
+                first[at:at+len(rows)]=a
+                second[at:at+len(rows)]=b
+            first.flush(); second.flush()
+            del first,second
+            for temp,dest in zip(temporary,paths):
+                if dest.exists():
+                    raise RuntimeError(f"Unindexed Validation cache exists: {dest}")
+                os.replace(temp,dest)
+            # Record complete caches only after hashes and atomic manifest write.
+            entry={"sha256":[digest(paths[0]),digest(paths[1])],
+                   "n_parents":len(records),"profile":profile}
+            index["entries"][profile]=entry
+            write_json(index_path,index)
+            event("validation_panel_created",profile=profile,parents=len(records))
+        panels[profile]=tuple(np.load(item,mmap_mode="r",allow_pickle=False)
+                              for item in paths)
+        if any(arr.shape!=(len(records),3501) or arr.dtype!=np.float32
+               for arr in panels[profile]):
+            raise RuntimeError(f"Frozen Validation panel shape/dtype mismatch: {profile}")
+    return panels,digest(index_path)
+
+def validate(model,records,peaks,val_factory,device,libs,batch_size,profiles,panels=None):
     np,torch,F,_,_,render_pair_batch,*tail=libs
     metrics=tail[-1]
     result={}
     model.eval()
+    if len(records)==0:
+        raise ValueError("Empty Validation set")
     for profile in profiles:
         labels=[];probas=[]
         for at in range(0,len(records),batch_size):
             rows=records[at:at+batch_size]
-            x1,x2,y=render_pair_batch(rows,peaks,val_factory,epoch=0,global_step=0,profile=profile)
+            if panels is not None:
+                left,right=panels[profile]
+                x1=torch.from_numpy(np.array(left[at:at+len(rows)],copy=True))
+                x2=torch.from_numpy(np.array(right[at:at+len(rows)],copy=True))
+                y=torch.tensor([r.label for r in rows],dtype=torch.long)
+            else:
+                x1,x2,y=render_pair_batch(rows,peaks,val_factory,epoch=0,global_step=0,profile=profile)
             with torch.inference_mode():
                 a=model(x1.to(device))["logits"].float()
                 b=model(x2.to(device))["logits"].float()
@@ -131,7 +300,9 @@ def validate(model,records,peaks,val_factory,device,libs,batch_size,profiles):
         probabilities=np.concatenate(probas,axis=0)
         pred=probabilities.argmax(axis=1).tolist()
         row=metrics(labels,pred,probabilities=probabilities,num_classes=7)
-        result[profile]={"macro_f1":float(row["macro_f1"]),"accuracy":float(row["accuracy"]),"ece":float(row["ece"])}
+        result[profile]={"macro_f1":float(row["macro_f1"]),"accuracy":float(row["accuracy"]),"ece":float(row["ece"]),
+                         "evaluation_parents":len(records)}
+    model.train()
     return result
 
 def atomically_save_torch(path,object_to_save,torch):
@@ -140,12 +311,21 @@ def atomically_save_torch(path,object_to_save,torch):
     torch.save(object_to_save,temp)
     os.replace(temp,path)
 
-def trial_run(name,params,seed,max_steps,study_dir,train_records,val_records,peaks,sim,libs,argv):
+def trial_run(name,params,seed,max_steps,study_dir,train_records,val_records,peaks,sim,libs,argv,
+              validation_panels=None,validation_panel_index_sha256=None):
     np,torch,F,_,_,render_pair_batch,build_online_view_factory,ML4PXRDResNet1D,ML4PXRDResNet1DConfig,PhysicsParameterSampler,metrics=libs
     root=study_dir/"trials"/name
     cfg={"params":params,"seed":seed,"max_steps":max_steps,"batch_size":argv.batch_size,
          "eval_every":argv.eval_every,"sim_config_sha256":digest(XRD/"configs/simulation.v11_tch_pseudo_voigt.json"),
-         "validation_subset_ids_sha256":hashlib.sha256("\n".join(r.material_id for r in val_records).encode()).hexdigest()}
+         "validation_mode":"FULL_PARENT_DISJOINT","validation_parent_count":len(val_records),
+         "validation_parent_ids_sha256":hashlib.sha256("\n".join(r.material_id for r in val_records).encode()).hexdigest(),
+         "training_parent_count":len(train_records),
+         "validation_panel_index_sha256":validation_panel_index_sha256}
+    if name != "gpu_micro_smoke":
+        if (len(train_records)!=108478 or len(val_records)!=23245):
+            raise RuntimeError("Formal HPO requires all unique TRAIN/Validation parents")
+        if validation_panels is None or not validation_panel_index_sha256:
+            raise RuntimeError("Formal HPO requires frozen full Validation panel cache")
     if root.joinpath("contract.json").exists():
         if json.loads((root/"contract.json").read_text(encoding="utf-8"))!=cfg:
             raise RuntimeError("Refusing to overwrite modified trial contract")
@@ -181,7 +361,7 @@ def trial_run(name,params,seed,max_steps,study_dir,train_records,val_records,pea
         step=saved["step"];best=saved["best"];best_step=saved["best_step"];history=saved["history"]
         event("resumed",name=name,step=step)
     n=len(train_records)
-    profiles=("ood_shift_negative","ood_shift_positive","ood_broadening","ood_noise","ood_background","ood_texture")
+    profiles=VALIDATION_OOD_PROFILES
     started=time.monotonic()
     while step<max_steps:
         idx=rng.choice(n,size=argv.batch_size,replace=False)
@@ -205,7 +385,8 @@ def trial_run(name,params,seed,max_steps,study_dir,train_records,val_records,pea
         optimizer.step()
         step+=1
         if step%argv.eval_every==0 or step==max_steps:
-            row=validate(model,val_records,peaks,val_fac,device,libs,argv.batch_size,profiles)
+            row=validate(model,val_records,peaks,val_fac,device,libs,argv.batch_size,profiles,
+                         panels=validation_panels)
             score=sum(row[p]["macro_f1"] for p in profiles)/6.0
             if not math.isfinite(score):raise RuntimeError("nonfinite validation macro F1")
             history.append({"step":step,"mean_ood_macro_f1":score,"profiles":row,
@@ -227,7 +408,7 @@ def trial_run(name,params,seed,max_steps,study_dir,train_records,val_records,pea
             "parameters":params,"completed_steps":step,"best_step":best_step,
             "best_validation_ood_macro_f1":best,"best_checkpoint_sha256":digest(root/"best.pt"),
             "last_checkpoint_sha256":digest(root/"last.pt"),
-            "validation_sample_parents":len(val_records),"profiles":list(profiles),
+            "validation_unique_parents":len(val_records),"profiles":list(profiles),
             "gpu_seconds":time.monotonic()-started,
             "scope":"fixed simulated Validation only; no Test/RRUFF"}
     write_json(final,result)
@@ -239,15 +420,12 @@ def main():
     parser.add_argument("--trials",type=int,default=6)
     parser.add_argument("--hpo-steps",type=int,default=6160)
     parser.add_argument("--confirm-steps",type=int,default=12320)
-    parser.add_argument("--eval-every",type=int,default=1540)
+    parser.add_argument("--eval-every",type=int,default=6160)
     parser.add_argument("--batch-size",type=int,default=16)
-    parser.add_argument("--validation-per-class",type=int,default=128)
     parser.add_argument("--max-gpu-hours",type=float,default=12.0)
     args=parser.parse_args()
     if args.trials<2 or args.trials>12 or args.hpo_steps<1 or args.confirm_steps<args.hpo_steps:
         raise ValueError("bounded trials and training steps required")
-    if args.validation_per_class<2 or args.validation_per_class>500:
-        raise ValueError("validation-per-class out of bounded range")
     c=contract(args)
     study_dir=ROOT/"server_runs"/"v11_a0_js_optuna"
     contract_file=study_dir/"contract.json"
@@ -306,9 +484,15 @@ def main():
     train=[r for r in all_records if r.split=="train"]
     val=[r for r in all_records if r.split=="validation"]
     if len(train)!=108483 or len(val)!=23246:
-        raise RuntimeError("Wrong parent-disjoint manifest sizes")
-    val_small=subset(val,args.validation_per_class)
-    peaks=load_peak_tables(train+val_small)
+        raise RuntimeError("Frozen raw train/validation row counts changed")
+    train_unique,val_full,parent_audit=full_parent_disjoint_records(records_path,all_records)
+    event("FULL_PARENT_SPLIT_VERIFIED",audit=parent_audit,
+          validation_parents=len(val_full),train_parents=len(train_unique))
+    peaks=load_peak_tables(train_unique+val_full)
+    validation_panels,panel_index_sha=prepare_validation_panels(
+        val_full,peaks,sim,libs,study_dir)
+    event("FULL_VALIDATION_READY",parents=len(val_full),profiles=len(VALIDATION_OOD_PROFILES),
+          index_sha256=panel_index_sha)
     import optuna
     optuna.logging.set_verbosity(optuna.logging.WARNING)
     storage="sqlite:///"+(study_dir/"optuna.sqlite3").as_posix()
@@ -342,7 +526,9 @@ def main():
                 "scheduler":trial.suggest_categorical("scheduler",["cosine_5pct_floor","none"])}
         name=f"hpo_{number:03d}"
         try:
-            row=trial_run(name,params,20260711,args.hpo_steps,study_dir,train,val_small,peaks,sim,libs,args)
+            row=trial_run(name,params,20260711,args.hpo_steps,study_dir,train_unique,val_full,peaks,sim,libs,args,
+                            validation_panels=validation_panels,
+                            validation_panel_index_sha256=panel_index_sha)
             study.tell(number,row["best_validation_ood_macro_f1"])
         except Exception as err:
             event("TRIAL_FAILED_STOP",trial=name,error=repr(err),
@@ -359,14 +545,17 @@ def main():
             return
         params=dict(best_trial.params)
         name=f"confirm_{seed}"
-        row=trial_run(name,params,seed,args.confirm_steps,study_dir,train,val_small,peaks,sim,libs,args)
+        row=trial_run(name,params,seed,args.confirm_steps,study_dir,train_unique,val_full,peaks,sim,libs,args,
+                            validation_panels=validation_panels,
+                            validation_panel_index_sha256=panel_index_sha)
         confirmation.append({"seed":seed,"score":row["best_validation_ood_macro_f1"],
                              "checkpoint_sha256":row["best_checkpoint_sha256"]})
     result={"status":"hpo_and_confirmation_completed","architecture":"A0 ResNet-18-GN",
-            "simulator":"v11_tch_pseudo_voigt","dataset":"154975 MP ID, 108483 train; Validation subset only",
+            "simulator":"v11_tch_pseudo_voigt","dataset":"154975 MP ID; 108478 unique train parents; ALL 23245 unique Validation parents",
             "best_hpo_trial":best_trial.number,"best_hpo_validation_ood_f1":best_trial.value,
             "recommended_hyperparameters":best_trial.params,"confirmation":confirmation,
-            "selection_warning":"Chosen on same frozen Validation used for TPE; confirmation seeds are not external Test/RRUFF validation.",
+            "validation_parent_audit":parent_audit,
+            "selection_warning":"Chosen on ALL 23245 unique frozen Validation parents; confirmation seeds use same domain, not Test/RRUFF.",
             "hpo_trial_count":len(complete),"contract_sha256":digest(contract_file)}
     write_json(study_dir/"final_recommendation.json",result)
     event("PIPELINE_COMPLETED",summary=str(study_dir/"final_recommendation.json"),best=best_trial.value)

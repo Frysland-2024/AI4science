@@ -58,6 +58,11 @@ def main():
     for name in ("verify_payload.py","verify_peak_cache.py","one_click_v11.py","start_server.sh","preflight.sh","build_peak_tables.sh","setup_linux.sh","README.md"):
         p=DEST/name
         files[p]="server_migration/"+name
+    for p in sorted((DEST/"tests").glob("test_*.py")):
+        files[p]="server_migration/tests/"+p.name
+    portable_doc=ROOT/"_local"/"worktrees"/"server_migration_v11_20261103"/"docs"/"PXRD_SERVER_MIGRATION_V11_ONECLICK_20261103.md"
+    if portable_doc.is_file():
+        files[portable_doc]="docs/PXRD_SERVER_MIGRATION_V11_ONECLICK_20261103.md"
     for name in ("acceptance_rerun_20261103.json","merged_154975_precompute_20261103.json","merged_154975_sample_20261103.json"):
         p=PROJECT/"reports"/"simulator_v11"/name
         if p.is_file():files[p]=p.relative_to(ROOT).as_posix()
@@ -121,14 +126,18 @@ def main():
         "archives":{},
         "large_data_and_checkpoints_excluded_from_source_snapshot":True,
         "server_cuda_compatibility_not_tested":True,
-        "full_154975_peak_caches_not_precomputed":False,
+         "full_154975_peak_caches_not_precomputed":False,
+        "hpo_validation":"ALL 23245 frozen unique Validation parents, no 896-parent subset; profiles SHA-indexed",
         "final_model_training_runner_not_frozen":True
     }
     for label,path in (("source_snapshot.zip",code_path),("structure_shards.zip",archive_path),("peak_cache_bundle.zip",cache_zip),("a0_reference_checkpoint.zip",reference_path)):
         payload["archives"][label]={"size_bytes":path.stat().st_size,"sha256":sha256(path)}
     (DEST/"bundle_manifest.json").write_text(json.dumps(payload,indent=2,ensure_ascii=False)+"\n",encoding="utf-8")
-    (DEST/"SHA256SUMS.txt").write_text("".join(
-        entry["sha256"]+"  "+name+"\n" for name,entry in payload["archives"].items()
-    ),encoding="utf-8")
+    launcher=DEST/"start_server.sh"
+    payload["scripts"]={"start_server.sh":{"sha256":sha256(launcher),"size_bytes":launcher.stat().st_size}}
+    (DEST/"bundle_manifest.json").write_text(json.dumps(payload,indent=2,ensure_ascii=False)+"\n",encoding="utf-8")
+    lines=[entry["sha256"]+"  "+name+"\n" for name,entry in payload["archives"].items()]
+    lines.append(payload["scripts"]["start_server.sh"]["sha256"]+"  start_server.sh\n")
+    (DEST/"SHA256SUMS.txt").write_bytes("".join(lines).encode("ascii"))
     print(json.dumps({"archive_sha256":payload["archives"],"code_files":len(files),"snapshot_campaign":status,"source_dirty":payload["source_is_dirty"]},indent=2))
 if __name__=="__main__":main()

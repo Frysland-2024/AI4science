@@ -29,4 +29,9 @@ fi
 bash server_migration/setup_linux.sh
 "$PYTHON" server_migration/one_click_v11.py --mode smoke
 "$PYTHON" server_migration/one_click_v11.py --mode run "$@"
-echo "ONE-CLICK V11 PIPELINE COMPLETE; results under AI4science/server_runs/v11_a0_js_optuna/"
+RESULT="$DEST/AI4science/server_runs/v11_a0_js_optuna/final_recommendation.json"
+if [ ! -f "$RESULT" ]; then
+  echo "INCOMPLETE: HPO budget stop or pending confirmation. Resume later using the identical command; no complete model is claimed."
+  exit 3
+fi
+echo "HPO + confirmation workflow completed, report: $RESULT (not final 3-seed training or RRUFF benchmark)."
