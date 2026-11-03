@@ -1,0 +1,116 @@
+{
+  "compute": {
+    "amp": "bf16 if supported, otherwise fp32",
+    "full_training_concurrency": 1,
+    "hardware": "local workstation GPU only",
+    "prefetch_batches": 8,
+    "prefetch_workers": 8,
+    "torch_compile": false
+  },
+  "configurations": [
+    {
+      "action": "reuse existing frozen checkpoints; no retraining",
+      "id": "legacy_resnet18gn_v9",
+      "model": "ResNet-18-GN",
+      "training_simulator": "frozen_v9_gaussian"
+    },
+    {
+      "action": "train from scratch",
+      "id": "resnet18gn_v10",
+      "model": "ResNet-18-GN",
+      "training_simulator": "v10_pseudo_voigt_caglioti"
+    },
+    {
+      "action": "train from scratch",
+      "id": "cnn11_v10",
+      "model": "SimXRD CNN11-style 1D",
+      "training_simulator": "v10_pseudo_voigt_caglioti"
+    }
+  ],
+  "data": {
+    "counts": {
+      "test": 2109,
+      "train": 9842,
+      "validation": 2109
+    },
+    "dataset_root": "data/formal_14060",
+    "peak_cache_manifest_hash": "6AE0CFD1B5B29671E2F532D7A094F2FC412CABD64E4CF77D42915937BACC8D18",
+    "source_records_hash": "05D5D33F200194612A8CDBE29D9443FC7BAD9C245F66D185364B66A75915CC6C",
+    "split_hash": "B9D3B72E42EA0FD549DAE34425FF61D2D650D5DD7FE6F337D747CB952CF43293",
+    "split_manifest": "manifests/split_manifest.json",
+    "split_unit": "parent_structure_id"
+  },
+  "date": "2026-11-03",
+  "evaluation": {
+    "authorization": "User request on 2026-11-03 explicitly asks for RRUFF Accuracy and Macro-F1 under the existing protocol and states that the test set must not be used for model selection. Evaluation will occur only after checkpoint hashes are frozen.",
+    "common_panels": [
+      "V9 Gaussian panels for all three configurations",
+      "V10 pseudo-Voigt/Caglioti panels for all three configurations"
+    ],
+    "evaluation_seeds": [
+      20260721,
+      20260722,
+      20260723
+    ],
+    "real_test": "RRUFF Real-PXRD-70 frozen external test, 70 spectra, exactly once after all checkpoint hashes and validation selection are frozen",
+    "real_test_preprocessing": "existing contract: 10-80 degrees 2theta, 0.02 degree step, 3,501 points, linear interpolation, zero fill out of range, max normalization, no baseline/smoothing/manual edits",
+    "selection_use_forbidden": true,
+    "simulated_profiles": [
+      "ood_shift_negative",
+      "ood_shift_positive",
+      "ood_broadening",
+      "ood_noise",
+      "ood_background",
+      "ood_texture"
+    ],
+    "simulated_test_split": "existing 2,109-parent Test split; already used by the frozen main study, therefore supplementary post-main only"
+  },
+  "joint_trial": {
+    "comparison": "all cells one matched seed; full 49,280-step convergence",
+    "kernel_size": 5,
+    "model": "A2",
+    "no_test_rruff_access": true,
+    "notes": "R1 changes LR and scheduler together; not a causal LR-only study",
+    "only_selection_data": "validation",
+    "planned_steps": 49280,
+    "recipe": "R0",
+    "reuses_v10_validation_panels": true,
+    "scheduler_horizon": 49280,
+    "stage_transition_strides": [
+      4,
+      2,
+      4
+    ],
+    "trial_id": "A2_R0"
+  },
+  "schema_version": "simxrd-cnn11-three-config-pilot-v1",
+  "scope": "Post-main exploratory follow-up; separate from the evidence frozen on 2026-10-26. No expansion beyond the existing 14,060-structure dataset and frozen parent split.",
+  "status": "PREREGISTERED joint architecture-conditioned convergence, full 49280 step",
+  "stopping_rule": "After this three-configuration comparison and report, stop. Do not launch 100k CIF expansion, broad hyperparameter tuning, or architecture search.",
+  "training": {
+    "batch_size_parents": 16,
+    "checkpoint_selection": "highest mean single-factor OOD Macro-F1 across the six named Validation profiles; tie-break by higher in-range Macro-F1, then earlier step. RRUFF and Test are not used for selection.",
+    "expected_parent_occurrences_per_new_model": 788480,
+    "expected_views_per_new_model": 1576960,
+    "lambda_js": 60.0,
+    "learning_rate": 0.0001,
+    "objective": "CE + lambda_js * Jensen-Shannon divergence on two independently rendered views of the same parent structure",
+    "optimizer": "AdamW",
+    "optimizer_steps_per_new_model": 49280,
+    "scheduler": "none",
+    "seeds": [
+      20260711
+    ],
+    "validation_evaluation_seed": 20260721,
+    "validation_profiles": [
+      "ood_shift_negative",
+      "ood_shift_positive",
+      "ood_broadening",
+      "ood_noise",
+      "ood_background",
+      "ood_texture",
+      "in_range"
+    ],
+    "weight_decay": 0.0001
+  }
+}
