@@ -70,6 +70,8 @@ def contract(args):
         "pipeline":"V11 deterministic multiprocessing, lazy PeakTable-LRU, BF16, pinned transfers, frozen Validation memmaps",
         "hpo_steps":args.hpo_steps,
         "confirmation_steps":args.confirm_steps,
+        "final_steps":args.final_steps,
+        "final_seeds":[20261106,20261107,20261108],
         "eval_interval_steps":args.eval_every,
         "validation_mode":"FULL_PARENT_DISJOINT",
         "validation_rows":23246,
@@ -493,10 +495,11 @@ def trial_run(name,params,seed,max_steps,study_dir,train_records,val_records,pea
 
 def main():
     parser=argparse.ArgumentParser()
-    parser.add_argument("--mode",choices=["plan","smoke","run"],default="plan")
+    parser.add_argument("--mode",choices=["plan","smoke","run","final"],default="plan")
     parser.add_argument("--trials",type=int,default=6)
     parser.add_argument("--hpo-steps",type=int,default=6160)
     parser.add_argument("--confirm-steps",type=int,default=12320)
+    parser.add_argument("--final-steps",type=int,default=49280)
     parser.add_argument("--eval-every",type=int,default=6160)
     parser.add_argument("--batch-size",type=int,default=16)
     parser.add_argument("--prefetch-workers",type=int,default=4)
@@ -506,7 +509,8 @@ def main():
     parser.add_argument("--validation-bf16",action="store_true",help="Opt-in only after BF16 vs FP32 Validation parity checks")
     parser.add_argument("--max-gpu-hours",type=float,default=12.0)
     args=parser.parse_args()
-    if args.trials<2 or args.trials>12 or args.hpo_steps<1 or args.confirm_steps<args.hpo_steps:
+    if (args.trials<2 or args.trials>12 or args.hpo_steps<1
+        or args.confirm_steps<args.hpo_steps or args.final_steps<args.confirm_steps):
         raise ValueError("bounded trials and training steps required")
     if not (1<=args.prefetch_workers<=16 and 1<=args.prefetch_batches<=8
             and 1<=args.native_threads<=4 and 16<=args.worker_peak_cache<=8192):
@@ -582,6 +586,46 @@ def main():
         native_threads=args.native_threads,worker_peak_cache=args.worker_peak_cache)
     event("FULL_VALIDATION_READY",parents=len(val_full),profiles=len(VALIDATION_OOD_PROFILES),
           index_sha256=panel_index_sha)
+    if args.mode=="final":
+        # Separate explicit final-stage command; it reuses the exact same
+        # prefetch, full frozen Validation and checkpoint/replay engine.
+        rec_path=study_dir/"final_recommendation.json"
+        if not rec_path.is_file():
+            raise RuntimeError("Final training blocked: HPO+confirmation unfinished")
+        recommendation=json.loads(rec_path.read_text(encoding="utf-8"))
+        if recommendation.get("status")!="hpo_and_confirmation_completed":
+            raise RuntimeError("Final training blocked: confirmation incomplete")
+        if recommendation.get("contract_sha256")!=digest(contract_file):
+            raise RuntimeError("Final training contract differs from original HPO")
+        params=recommendation["recommended_hyperparameters"]
+        final_runs=[]
+        for final_seed in c["final_seeds"]:
+            if time.monotonic()-start>args.max_gpu_hours*3600:
+                event("FINAL_BUDGET_STOP",seed=final_seed,status="resume_safe")
+                return
+            item=trial_run(
+                f"final_{final_seed}",params,final_seed,args.final_steps,
+                study_dir,train_unique,val_full,peaks,sim,libs,args,
+                validation_panels=validation_panels,
+                validation_panel_index_sha256=panel_index_sha,
+            )
+            final_runs.append({
+                "seed":final_seed,
+                "validation_ood_macro_f1":item["best_validation_ood_macro_f1"],
+                "best_step":item["best_step"],
+                "checkpoint_sha256":item["best_checkpoint_sha256"],
+            })
+        write_json(study_dir/"final_training_summary.json",{
+            "status":"final_three_seed_training_completed",
+            "model":"ResNet-18-GN A0","simulator":"v11_tch_pseudo_voigt",
+            "training_parent_groups":len(train_unique),
+            "validation_parent_groups":len(val_full),
+            "final_steps":args.final_steps,"runs":final_runs,
+            "selected_hpo_contract_sha256":digest(contract_file),
+            "selection_scope":"simulated frozen Validation only, not Test/RRUFF",
+        })
+        event("FINAL_TRAINING_FINISHED",seeds=len(final_runs))
+        return
     import optuna
     optuna.logging.set_verbosity(optuna.logging.WARNING)
     storage="sqlite:///"+(study_dir/"optuna.sqlite3").as_posix()
