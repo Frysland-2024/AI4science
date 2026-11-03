@@ -2,13 +2,31 @@
 
 > **权威性说明：** 本文件记录当前科学状态与当前执行口径。历史版本、旧聊天和 `PROJECT_HISTORY.md` 用于解释“为什么改变”，不得覆盖这里的当前结论；AI/Agent 工作规则见 [`../AGENTS.md`](../AGENTS.md) 与 [`RESEARCH_WORKFLOW.md`](RESEARCH_WORKFLOW.md)。
 
-**状态日期：** 2026-10-31
+**状态日期：** 2026-11-03
 
-**阶段：** PXRD 七晶系分类研究的既有实验均已冻结；当前毕设工作是基于既有证据完成写作与答辩准备，不启动新实验。参数反演工作流均已归档/停用；PR #36 的已完成单 CIF 合成条件性结果仅作为历史可行性记录保留，不纳入分类毕设科学证据；PR #43/#45 为有限度探索记录，PR #46 为未通过关键 q 精度门槛的部分基准。这些结果均不改变分类主线。
+**阶段：** 2026-11-03 项目负责人明确确认本科毕设**已重新启动**；当前活动主线仍是 **PXRD 七晶系分类与 same-parent Dynamic JS**，优先开展已发表 PXRD 模拟器源码调查与可复用模块筛选，随后规划小规模 JS-only 模拟器/架构比较。历史分类实验及其结论保持冻结；**新模拟器尚未移植、新 GPU 训练尚未完成**。参数反演等路线仍归档。
 
 **最近文档同步（2026-10-29）：** PR #50 已合并到 main，统一了 README、当前状态、项目历史和导师说明中的既有证据边界；没有新增实验或结果，也没有改变 2026-10-26 确定的毕设范围。
 
-## 2026-10-26: current undergraduate-thesis scope (DECISION)
+## 2026-11-03: PXRD thesis research resumed (NEW DECISION; supersedes 2026-10-26 execution pause)
+
+**Decision / owner confirmation:** The project lead explicitly stated that the undergraduate thesis has restarted. The 2026-10-26 decision to *stop new work and write up only* is therefore **superseded for forward execution**. It remains a correct historical snapshot, and all completed reports/configurations/predictions remain frozen. Reopening investigation is **not** permission to overwrite old results.
+
+**Current ACTIVE sequence:**
+1. **Now:** inspect and compare external PXRD simulator implementations, first SimXRD/Pysimxrd, GSAS-II and ML4pXRDs; PhaseSmith as a lightweight candidate, DebyeCalculator/PowderLine/xrd_simulator lower priority. Produce source-level functionality, physical units, path/seed reproducibility, label-preservation, runtime and license assessment. See [2026-11-03 simulator shortlist](PXRD_SIMULATOR_CANDIDATES_2026-11-03.md).
+2. **Next (not yet executed):** selectively reuse/adapt viable simulator components without replacing existing March–Dollase, background/noise or deterministic same-parent view logic unnecessarily. Keep original simulator as a versioned reference.
+3. **Then (not yet executed):** run a bounded, matched-CIF pilot with existing ResNet-18-GN + JS and a candidate published CNN architecture (first SimXRD CNN11) + **the same JS objective**, comparing absolute RRUFF performance and synthetic validation to historical results. No obligation to repeat full ERM sweep in this exploratory performance-oriented phase.
+4. **Later, conditional:** larger unique-CIF parent training, training-budget retuning and literature-specific RRUFF score comparisons. For each paper, match its *real-data access/training/fine-tuning protocol* when feasible rather than imposing zero-shot universally. CIF parent count is the principal synthetic-data size measure; track regenerated views, steps and compute separately. The earlier 30k/60k/100k ladder is not mandatory. RRUFF held-out tests cannot be used to select hyperparameters.
+
+**Goals:** noticeably improve **absolute experimental RRUFF Accuracy**, report Macro-F1 and ECE, and preserve a fair description of differing paper datasets. This is an **engineering/research objective, not an achieved score**. Borrowing simulator/backbone components does **not** prove any gain is uniquely due to JS. The earlier ResNet-18-GN ERM/JS study remains the basis for the previously demonstrated method effect.
+
+**Unchanged:** parameter-inversion/DONUT tracks remain inactive; CNRS is optional; frozen old reports, datasets, configurations and the previous PR/Issue history remain intact. No claim of supervisor-approved graduation criteria or completed new training is made here.
+
+---
+
+## 2026-10-26: undergraduate-thesis scope (HISTORICAL DECISION, SUPERSEDED FOR NEW EXECUTION ON 2026-11-03)
+
+> The 2026-10-26 section below is retained verbatim as the dated scope freeze and evidence boundary, not the current instruction to stop all new work.
 
 **唯一当前毕设主线：** PXRD 七晶系分类中的同母结构关系监督研究。研究问题是：利用在线模拟器已知的同一母结构身份，将不同测量视图之间的关系作为额外监督，能否在匹配设置下改善分类？核心对照是 ResNet-18-GN 上的 Dynamic JS Consistency 与 Dynamic ERM。
 
