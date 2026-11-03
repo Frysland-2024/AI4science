@@ -1,5 +1,27 @@
 # RRUFF real-domain literature benchmark plan (2026-10-22)
 
+## CURRENT ACCEPTANCE SCORECARD — owner decision, 2026-11-03
+
+**Only three top-level research outcomes are assessed: (1) real-RRUFF seven-crystal-system top-1 Accuracy; (2) unique-CIF-parent data-efficiency curve; (3) ECE / probability calibration.** RRUFF Accuracy is the **sole criterion for the 60/80/100 project-performance grade**; data efficiency and ECE remain complementary headline evidence, not substitutes for RRUFF classification performance. Simulated OOD F1 is an internal optimization metric, not a final-grade score. Retain negative historical results and full scientific audit separately.
+
+**Owner-frozen literature tiers (grading numbers are not percentages):**
+
+| Grade tier | Named paper(s) | Reported RRUFF seven-system top-1 Accuracy | Source-model real RRUFF labeled adaptation | Interpretive priority |
+| --- | --- | ---: | --- | --- |
+| **Pass / 60 points** | **Lee et al. 2023** | **74.24%** | **0** | Minimum literature target |
+| **80 points** | **AlphaDiffract 2026 (Andrejevic et al.)** | **81.74 ± 0.78%** | **0 labeled RRUFF spectra**, but RRUFF noise statistics and score informed some design/selection choices | **PRIMARY 80-point comparator**: newer 2026 ten-model ensemble |
+| **80 points, additional reference** | **Salgado et al. 2023 (Large Souping)** | **86%** | **~452 labeled RRUFF spectra** included in training | Distinct real-adaptation setting; show adaptation budget explicitly, not the same zero-shot protocol |
+| **Full / 100 points** | **SimXRD-4M 2025 CNN11** | **89.3%** | **0** | Full-score literature comparator |
+| **Full / 100 points** | **XQueryer-NoElem 2025** | **91.5%** | **0** | Full-score literature comparator; PXRD-only, no element-identity input |
+
+**Mandatory comparison-table columns, always:** Paper/model | **number of simulated independent crystal structures / curated CIF records** (distinguish duplicate records from verified unique parents) | **actual number of real RRUFF spectra in the evaluation** (report source catalog separately if metric denominator unknown) | **RRUFF Accuracy** | **number of labeled real RRUFF spectra used for training/adaptation**. For AlphaDiffract, also note RRUFF statistical-domain information use and ten-model ensemble. For Salgado 86%, the reported ~452 labeled RRUFF training spectra is essential context, not a footnote to omit.
+
+**Acceptance and fairness boundary:** This is a simple owner-defined *literature reference scorecard*, NOT a claim that published results were measured on the same RRUFF IDs / curation / instrument / preprocessing / class distribution. Use these scores to communicate ambitions; record matched-test re-evaluation whenever reproducible, and label unmatched papers as reference thresholds. Never select hyperparameters by repeatedly consulting a locked real-RRUFF test. Never call use of unlabeled target-domain statistics 'strict target-domain blind'.
+
+**Other two headline deliverables:** (2) **data-efficiency curve** uses the count of independent **training CIF parents**, not synthetic spectra produced from the same CIF, with matched simulator/optimization protocol and explicitly named output-domain score (ideally RRUFF Accuracy when sufficient frozen real-domain cohorts exist; otherwise simulated-validation efficiency must be labeled as supportive and cannot silently become the RRUFF grade). (3) **ECE** is an explicitly named domain's calibration metric (ideally RRUFF ECE for the final model), report its bins/calibration protocol and do not treat it as Accuracy.
+
+**Current code-stage dependency is unchanged:** finish bounded architecture+Optuna tuning on synthetic validation, then resume independent CIF data expansion, then execute final RRUFF evaluation after protocol freeze. This grading declaration does not mean RRUFF test is authorized for exploratory tuning, does not auto-start Stage 3, and does not retroactively change frozen earlier experiments.
+
 ## Status and purpose
 **PLANNING ONLY; no new scores, training, model inference, or benchmark creation is claimed by this document.** The project lead specified that the next crystal-system-classification objective is **comparison against published work on real RRUFF PXRD data**, not merely simulated accuracy. Archive quantitative parameter inversion as an inactive exploration.
 
