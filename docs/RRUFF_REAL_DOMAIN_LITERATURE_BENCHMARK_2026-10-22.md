@@ -13,6 +13,7 @@
 
 | Grade tier | Named paper and selected model condition | RRUFF crystal-system Accuracy | Labeled RRUFF training / fine-tuning count | Priority / qualification |
 | --- | --- | ---: | ---: | --- |
+| **Pass / 60** | **Vecsei et al. 2019, Dense/MLP** | **70.0%** | **0** | **Qualifies as PASS**; historical RRUFF classification reference reported in AlphaDiffract 2026 Table 1; paper-specific cohort |
 | **Pass / 60** | **Lee 2023, large FCN** | **74.24%** | **0** | Zero-shot reference |
 | **Pass / 60** | **Salgado 2023, synthetic-only NPCNN** | **about 74%** | **0** | **Use this model result, NOT the 86% adapted result** |
 | **80** | **AlphaDiffract 2026, 10-model ensemble** | **81.74 ± 0.78%** | **0** | **PRIMARY 80-tier**; RRUFF-informed simulation noise statistics and loss selection, not strictly domain-blind |
@@ -22,6 +23,8 @@
 **Explicitly excluded from acceptance tier:** Salgado's **86%** 'Large Souping' result trained on about **452 labeled RRUFF profiles** and evaluates a different held-out split; it remains source evidence in historical protocol audit, but must NOT appear as a graded zero-shot comparator. Paper cohorts and filters differ; these percentages are literature target markers, not a same-test-set leaderboard.
 
 **Owner-added below-pass RRUFF competitor (INCLUDED, not excluded):** **Choudhary 2025, DiffractGPT DGPT-formula — 28.75% RRUFF crystal-system Accuracy**, as **third-party evaluated by AlphaDiffract 2026 Table 1 on its own RRUFF cohort**, NOT an Accuracy claimed in the original Choudhary 2025 paper. Choudhary trained DiffractGPT using JARVIS-DFT simulated structures and PXRD, without reported labeled RRUFF training; its `DGPT-formula` variant additionally receives chemical formula. Both features must be disclosed but do **not** bar inclusion in the actual RRUFF performance comparison. This model is a **below-pass external benchmark**, not a new owner-defined 60/80/100 target. Full details in [model comparison library](RRUFF_ZERO_SHOT_MODEL_COMPARISON_LIBRARY_20261103.md) and [original DiffractGPT paper](https://pmc.ncbi.nlm.nih.gov/articles/PMC11874033/).
+
+**2026-11-03 latest pass-tier clarification:** Vecsei et al. 2019 **Dense (MLP) 70.0% RRUFF Accuracy is an explicit PASS/60 reference**, alongside Lee 74.24% and Salgado synthetic-only ~74%. Vecsei 2019 CNN 56.0% remains a comparison result **below** the pass tier; Choudhary DGPT-formula 28.75% remains included as an external result below pass. This change does not move AlphaDiffract 2026 (80) or SimXRD/XQueryer-NoElem (full), or imply paper cohorts are identical.
 
 **Mandatory comparison-table columns, always:** Paper/model | **number of simulated independent crystal structures / curated CIF records** (distinguish duplicate records from verified unique parents) | **actual number of real RRUFF spectra in the evaluation** (report source catalog separately if metric denominator unknown) | **RRUFF Accuracy** | **number of labeled real RRUFF spectra used for training/adaptation**. For AlphaDiffract, also note RRUFF statistical-domain information use and ten-model ensemble. In grading rows, use ONLY Salgado's synthetic-only ~74% result with 0 RRUFF labels; preserve its 86%/452-real-label result in a separate historically informative, non-grading row.
 
