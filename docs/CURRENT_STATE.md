@@ -6,6 +6,22 @@
 
 **阶段：** 2026-11-03 项目负责人决定启动 RRUFF 七晶系分类新研究阶段；首要目标是提高真实实验谱 Accuracy，并按目标论文各自公开的 RRUFF 协议开展对标。新实验只训练现有 ResNet-18-GN + Dynamic JS；既有 ERM/JS 消融及冻结结果保持不变。文献审查、通用流水线与 GPU smoke 已完成；尚无与论文协议严格匹配的正式 RRUFF 成绩。模拟器升级和 CIF 扩容列为后续准备任务。
 
+## 2026-11-03: RRUFF JS-only benchmark phase (ACTIVE)
+
+**Priority:** Improve absolute Accuracy on real experimental RRUFF spectra. For each literature comparison, follow that paper's disclosed real-data access and evaluation protocol where evidence permits; do not force zero-shot where the paper trained or fine-tuned on real spectra. Report Macro-F1 and ECE alongside Accuracy.
+
+**Training rule:** Train only the existing ResNet-18-GN + Dynamic JS model in this new phase. Keep prior ERM/JS ablations, frozen splits, checkpoints, metrics, and conclusions unchanged. Do not reopen archived inversion or DONUT work.
+
+**Protocol evidence:** The source audit covers Lee et al. 2023, Salgado et al. 2023, SimXRD-4M 2025, and XQueryer-NoElem 2025, including reported RRUFF accuracy and disclosed synthetic-data scale. All four are currently **PARTIAL** because at least one critical cohort, split, or preprocessing detail is unavailable; reported values are literature references, not strict matched comparisons. Unknown values are marked explicitly in the audit.
+
+**Implementation status:** Added independent protocol configurations and a shared loader/trainer/evaluator/exporter. Three CUDA smoke runs validate fine-tuning, online JS plus fine-tuning, and external-test inference. These are pipeline checks only; their fixture metrics are not paper scores and do not define points on the parent-scale curve. No large CIF training began.
+
+**Next:** Establish an auditable row-level RRUFF ID/label/preprocessing manifest, verify permitted data access, and inventory deduplicated CIF parents. Then execute the lowest-cost protocol with the strongest available data match; label approximations explicitly, reserve test data from hyperparameter selection, and log Accuracy, Macro-F1, ECE, JS view count, optimizer steps, throughput, memory, and runtime.
+
+**What does not change:** This is a new research phase, not a reversal of previous results. Existing RRUFF-301/CNRS evidence and every frozen historical experiment remain intact. Simulator and CIF-scale work remain later preparation steps, gated by data provenance and a compute budget.
+
+**Evidence:** [Protocol and scale audit](RRUFF_JS_BENCHMARK_PROTOCOL_AUDIT_2026-11-03.md), [RRUFF availability inventory](RRUFF_DATA_AVAILABILITY_2026-11-03.md), [runner guide and smoke records](../xrd_robustness/reports/rruff_benchmark/README.md).
+
 **最近文档同步（2026-10-29）：** PR #50 已合并到 main，统一了 README、当前状态、项目历史和导师说明中的既有证据边界；没有新增实验或结果，也没有改变 2026-10-26 确定的毕设范围。
 
 ## 2026-11-03: PXRD thesis research resumed (NEW DECISION; supersedes 2026-10-26 execution pause)
