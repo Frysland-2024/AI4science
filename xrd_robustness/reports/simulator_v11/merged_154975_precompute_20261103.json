@@ -1,0 +1,145 @@
+{
+  "schema_version": "merged-154975-v11-peak-precompute-evidence-v1",
+  "date": "2026-11-03",
+  "status": "completed",
+  "source_library": {
+    "path": "D:\\AI4science_external_data\\pxrd_scale_sources_20261103\\processed\\merged_154975_parent_split_20261103",
+    "total_rows": 154975,
+    "split_ratio": "70/15/15",
+    "split_seed": 20260726,
+    "shards": {
+      "train": {
+        "rows": 108483,
+        "sha256": "e6b8b841d7973f83ef73068ed5755ff810a35737e0a54a931207a4e6c6f2ebb6"
+      },
+      "validation": {
+        "rows": 23246,
+        "sha256": "0ccd53e1cc00ac18df816e70ca2e91385ad1017d207775893370b8e9762f5008"
+      },
+      "test": {
+        "rows": 23246,
+        "sha256": "e730a111f5b72032ca217eaf85dbc1004df37e960eecd74fe182954401dab8ef"
+      }
+    }
+  },
+  "peak_precompute": {
+    "cache_root": "xrd_robustness/data/merged_154975_v11",
+    "cache_name": "peak_tables_v7_reflection",
+    "cache_schema": "v7.reflection_cache.1",
+    "payload_semantics": "ideal reflection PeakTables; V11 line-profile rendering remains online",
+    "grid": {
+      "two_theta_min_deg": 10.0,
+      "two_theta_max_deg": 80.0,
+      "step_deg": 0.02,
+      "wavelength": "CuKa"
+    },
+    "runtime": {
+      "execution_host": "local Windows workstation; Tencent Cloud was not used",
+      "logical_processors": 32,
+      "physical_memory_gib": 31.7,
+      "sampled_memory_observation": {
+        "minimum_system_available_gib": 3.6,
+        "main_precompute_process_working_set_gib_observed": 5.52,
+        "helper_process_working_set_gib_approx_each": 0.55,
+        "note": "Snapshot measurements during local execution with other Python workloads active; not a Tencent Cloud sizing recommendation."
+      },
+      "workers": 6,
+      "batch_size": 100,
+      "pymatgen": "2026.5.4",
+      "pymatgen_core": "2026.10.31",
+      "numpy": "2.4.6",
+      "scipy": "1.17.1",
+      "sum_of_split_elapsed_seconds": 2446.5918285,
+      "sum_of_split_elapsed_minutes": 40.776530475
+    },
+    "total_cache_bytes": 1739337682,
+    "splits": {
+      "train": {
+        "rows": 108483,
+        "completed": 108483,
+        "skipped": 0,
+        "elapsed_seconds": 1777.3843236,
+        "bytes": 1213929797,
+        "source_sha256": "e6b8b841d7973f83ef73068ed5755ff810a35737e0a54a931207a4e6c6f2ebb6",
+        "manifest_sha256": "0903dbd19f3f0837aa6e0b78b0c03b3698bf291325e72a884383e2321d69037e",
+        "aggregate_cache_sha256": "46123c2e145a1194df1945edf91762db602dc5ca54f36cdb77c0b7fd485c5bbc"
+      },
+      "validation": {
+        "rows": 23246,
+        "completed": 23246,
+        "skipped": 0,
+        "elapsed_seconds": 334.6828598,
+        "bytes": 260847519,
+        "source_sha256": "0ccd53e1cc00ac18df816e70ca2e91385ad1017d207775893370b8e9762f5008",
+        "manifest_sha256": "0097ad65d7bbdf24d63bc639b2d8e7f1079c6e3d4947440b1859b42f79fb9b10",
+        "aggregate_cache_sha256": "f43cbedf331228cb11294b7f6f1beed6bd82234649d53b57c2ede20ae4014da4"
+      },
+      "test": {
+        "rows": 23246,
+        "completed": 23246,
+        "skipped": 0,
+        "elapsed_seconds": 334.5246451,
+        "bytes": 264560366,
+        "source_sha256": "e730a111f5b72032ca217eaf85dbc1004df37e960eecd74fe182954401dab8ef",
+        "manifest_sha256": "e5c681aaba0eeb89beb5cb6bd3af8ae1ce2e29b9b4aaa303d40880bab5af1dfa",
+        "aggregate_cache_sha256": "e851d5f207054af5f67d081cd3dc56ed3c44fc030c51622e0728d90bf96d3a71"
+      }
+    }
+  },
+  "training_manifest": {
+    "path": "training_records.v1.jsonl",
+    "status": "completed",
+    "rows": 131729,
+    "train_rows": 108483,
+    "validation_rows": 23246,
+    "test_rows": 0,
+    "sha256": "7f169d555de18b4dd811e18a67196acee317733864a1232fa719a861104333dd",
+    "test_included": false,
+    "paths_relative_to_cache_root": true
+  },
+  "integrity_audit": {
+    "status": "passed",
+    "exact_ids": true,
+    "source_fingerprints": true,
+    "file_sizes": true,
+    "per_file_sha256": true,
+    "verified_peak_tables": 154975,
+    "verified_file_hashes": 154975
+  },
+  "v11_cache_to_online_render_smoke": {
+    "status": "passed",
+    "simulator_version": "v11_tch_pseudo_voigt",
+    "examples": [
+      {
+        "material_id": "mp-10",
+        "split": "train",
+        "label": 6,
+        "peak_count": 8,
+        "shape": [3501],
+        "same_parent": true,
+        "distinct_views": true,
+        "deterministic_replay": true
+      },
+      {
+        "material_id": "mp-10004",
+        "split": "validation",
+        "label": 3,
+        "peak_count": 65,
+        "shape": [3501],
+        "same_parent": true,
+        "distinct_views": true,
+        "deterministic_replay": true
+      }
+    ]
+  },
+  "tests": {
+    "command": "pytest xrd_robustness/tests/simulation/test_simulator_v11.py xrd_robustness/tests/simulation/test_peak_cache.py -q",
+    "passed": 10,
+    "failed": 0
+  },
+  "not_done": {
+    "persistent_spectra_generated": false,
+    "model_training_started": false,
+    "tencent_cloud_instance_started": false
+  }
+}
