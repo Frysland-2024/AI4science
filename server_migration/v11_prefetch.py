@@ -229,3 +229,32 @@ def iter_prefetched_batches(
                         global_step=global_step, profile=profile)
             next_submit += batch_size
         yield start, pool.get(start)
+
+def enqueue_train_lookahead(
+    pool: V11PairPrefetchPool, rng: Any, records: Sequence[Any], *,
+    batch_size: int, start_step: int, next_submit: int,
+    max_steps: int, committed_states: dict[int, Any],
+) -> int:
+    """Only the main process samples parents; save RNG state per submitted step.
+
+    The trainer checkpoints committed_states[completed_step], NOT the advanced
+    look-ahead RNG. After a restart, replaying from that state yields precisely
+    the same parents/physics realizations as an uninterrupted run.
+    """
+    import copy
+
+    if batch_size <= 0 or not records:
+        raise ValueError("Invalid train batch sampling parameters")
+    if not (0 <= start_step <= next_submit <= max_steps):
+        raise ValueError("Out-of-order training prefetch step")
+    while next_submit < max_steps and len(pool.pending) < pool.prefetch_batches:
+        selected = rng.choice(len(records), size=batch_size, replace=False)
+        batch = [records[int(index)] for index in selected]
+        pool.submit(
+            next_submit, batch,
+            epoch=next_submit * batch_size // len(records),
+            global_step=next_submit, profile="train",
+        )
+        committed_states[next_submit] = copy.deepcopy(rng.bit_generator.state)
+        next_submit += 1
+    return next_submit
