@@ -4,6 +4,17 @@
 
 **状态日期：** 2026-11-03
 
+## 2026-11-03 LATEST OWNER DECISION — old V10 HPO cancelled; six-cell A0/A1/A2 retained; 154,975-structure cloud HPO next
+
+**Execution decision (this overrides contradictory older sections below, especially old Stage-3 'collection paused' and old Stage-2 sequential Optuna plans):**
+- **Keep the existing six-cell A0/A1/A2 × R0/R1 V10 study running until the last A2_R1 finishes; archive, do not re-run.** At direct local inspection on 2026-11-03 **five of six cells were complete**, `A2_R1` still running and unaffected.
+- **Stop the legacy-data 9,842-train-parent V10 Optuna follow-on.** Verified the Optuna supervisor was only at `waiting_previous` with **zero new adaptive GPU trial launches**; operator terminated only its three processes (**47944, 7024, 15928**) and verified the independent A2_R1 trainer remains live. Cancellation evidence on the laptop: `E:\AI4science\_local\resnet_optuna_20261103\owner_cancelled_20261103.json` and `supervisor_state.json: cancelled_by_owner`. **Do not restart or reconnect this old Optuna job after the six-cell run ends.** An existing monitoring automation was updated to watch/notify the six-cell completion only.
+- **New database is ALREADY collected and split, not a future acquisition job:** **154,975 MP-ID rows**, **154,968 independent parent fingerprints**, **train 108,478 independent parents** (108,483 records), validation 23,245 (23,246 records), test 23,245 (23,246 records), stratified **70/15/15**. Local evidence directly checked at `D:\AI4science_external_data\pxrd_scale_sources_20261103\processed\merged_154975_parent_split_20261103`; `delivery_validation.json` reported `passed`, no malformed structures or cross-split parent leakage, all 14,060 historic IDs retained. See local commit **a181f36** / `docs/STRUCTURE_LIBRARY_154975_SPLIT_EVIDENCE.md` on `feat/issue-53-simulator-v11` (may not yet be on remote main). These are **structure shards**, not a completed simulated PXRD spectrum corpus.
+- **Next priority is cloud execution readiness and REAL full-dataset HPO:** V11 is implemented and passed bounded test on seven CIFs + one real library sample per crystal system, but still needs its structure-schema adapter, corpus-scale peak-table build, audits, and GPU throughput proof. **All real HPO candidate configurations run on the new 108,478-parent TRAIN split and 23,245-parent Validation**; use small subsets only for code/throughput smoke, NOT final HPO selection. Preserve locked Test and RRUFF for final evaluation. Consider a rented Tencent GPU machine after readiness gating; hardware rental is **not yet authorized/executed**.
+- **Bounded new HPO:** use V10 A0/A1/A2 results as backbone/stride/kernel screening information, select on NEW V11 validation, approximately 6–8 full-data single-seed HPO trials + 2 finalists multi-seed and ~3 fixed-seed final models as compute allows, **not automatic five-seed repetitions for every trial**. Plan link: [PXRD 154,975-parent cloud HPO execution plan](PXRD_154975_CLOUD_HPO_EXECUTION_PLAN_20261103.md). Final 3 project outputs unchanged: **RRUFF real zero-shot Accuracy, independent-parent data-efficiency curve, ECE**.
+
+
+
 **阶段（2026-11-03 最新负责人决策）：** 本科毕设已经重启；当前主线为 **PXRD 七晶系分类 + same-parent Dynamic JS**。研究按四阶段推进：**① 模拟器构建（工程阶段已完成）→ ② 模型架构优化（进行中：V10 判断是否换 CNN11，随后 Codex 对选定架构自动调结构和训练超参数）→ ③ 增加经过验证的独立 CIF 数据 → ④ 最终训练和 RRUFF 文献对标跑分**。不再将调参拆出去、放到数据扩容之后；不再开启新的模拟器研究主线。冻结历史结果不改，参数反演仍归档。
 
 ## 2026-11-03 later owner status clarification (execution snapshot; verification pending)
