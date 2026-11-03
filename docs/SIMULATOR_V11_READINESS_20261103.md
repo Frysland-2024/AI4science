@@ -1,5 +1,7 @@
 # V11 simulator readiness check — 2026-11-03
 
+For the compact version inventory and current status, see the [PXRD simulator register](PXRD_SIMULATOR_REGISTER_20261103.md).
+
 ## Decision
 
 **V11 is usable for controlled simulation pilots and online rendering from the full library's validated PeakTables.** All 154,975 ideal-reflection PeakTables and the runner-compatible train/validation manifest are complete and passed a file-level integrity audit. This does not mean a persistent spectrum corpus or a model-training run exists, and it does not establish full-epoch V11 rendering/training throughput. The latest simulator implementation in this checkout is `v11_tch_pseudo_voigt`, introduced by commit `f18c27b`.
