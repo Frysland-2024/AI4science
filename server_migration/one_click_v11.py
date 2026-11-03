@@ -386,47 +386,105 @@ def trial_run(name,params,seed,max_steps,study_dir,train_records,val_records,pea
     n=len(train_records)
     profiles=VALIDATION_OOD_PROFILES
     started=time.monotonic()
-    while step<max_steps:
-        idx=rng.choice(n,size=argv.batch_size,replace=False)
-        rows=[train_records[int(i)] for i in idx]
-        x1,x2,targets=render_pair_batch(rows,peaks,train_fac,
-                epoch=(step*argv.batch_size//n),global_step=step,profile="train")
-        x1=x1.to(device);x2=x2.to(device);targets=targets.to(device)
-        for group in optimizer.param_groups:
-            if params["scheduler"]=="none":group["lr"]=float(params["learning_rate"])
+    # This pool is SHARED in design with full-Validation: the exact same V11
+    # simulator, stable SHA256 worker sharding and bounded CPU workers.
+    # Prefetching starts at the restored optimizer step (never at step zero).
+    pool=V11PairPrefetchPool(
+        sim,run_seed=seed,workers=argv.prefetch_workers,
+        prefetch_batches=argv.prefetch_batches,
+        native_threads=argv.native_threads,
+        max_cached_peaks=argv.worker_peak_cache,
+    )
+    future_rng={}
+    next_submit=step
+    try:
+        while step<max_steps:
+            # CPU prepares upcoming spectra while GPU trains on the first
+            # submitted step. Only the MAIN process advances the sampling RNG.
+            while next_submit<max_steps and len(pool.pending)<argv.prefetch_batches:
+                idx=rng.choice(n,size=argv.batch_size,replace=False)
+                rows=[train_records[int(i)] for i in idx]
+                next_rng_state=copy.deepcopy(rng.bit_generator.state)
+                pool.submit(
+                    next_submit,rows,
+                    epoch=(next_submit*argv.batch_size//n),
+                    global_step=next_submit,profile="train",
+                )
+                future_rng[next_submit]=next_rng_state
+                next_submit+=1
+            batch_first,batch_second,batch_labels=pool.get(step)
+            # DO NOT checkpoint the look-ahead RNG. It includes future batches
+            # whose optimizer steps have not committed; resumed studies would
+            # otherwise skip parents and change scientific sampling trajectories.
+            committed_rng_state=future_rng.pop(step)
+            x1=torch.from_numpy(batch_first)
+            x2=torch.from_numpy(batch_second)
+            targets=torch.from_numpy(batch_labels)
+            if device.type=="cuda":
+                x1=x1.pin_memory().to(device,non_blocking=True)
+                x2=x2.pin_memory().to(device,non_blocking=True)
+                targets=targets.pin_memory().to(device,non_blocking=True)
             else:
-                group["lr"]=float(params["learning_rate"])*(.05+.95*.5*(1+math.cos(math.pi*step/max_steps)))
-        optimizer.zero_grad(set_to_none=True)
-        use_amp=torch.cuda.is_bf16_supported()
-        with torch.autocast("cuda",dtype=torch.bfloat16,enabled=use_amp):
-            a=model(x1)["logits"];b=model(x2)["logits"]
-            loss,ce,js=loss_js(a,b,targets,float(params["lambda_js"]),torch,F)
-        if not bool(torch.isfinite(loss).item()):
-            raise RuntimeError(f"nonfinite loss {name} step {step+1}")
-        loss.backward()
-        norm=torch.nn.utils.clip_grad_norm_(model.parameters(),max_norm=10.0,error_if_nonfinite=True)
-        optimizer.step()
-        step+=1
-        if step%argv.eval_every==0 or step==max_steps:
-            row=validate(model,val_records,peaks,val_fac,device,libs,argv.batch_size,profiles,
-                         panels=validation_panels)
-            score=sum(row[p]["macro_f1"] for p in profiles)/6.0
-            if not math.isfinite(score):raise RuntimeError("nonfinite validation macro F1")
-            history.append({"step":step,"mean_ood_macro_f1":score,"profiles":row,
-                            "train_last_loss":float(loss.detach().cpu()),
-                            "last_ce":float(ce.detach().cpu()),"last_js":float(js.detach().cpu()),
-                            "lr":optimizer.param_groups[0]["lr"]})
-            if score>best:
-                best=score;best_step=step
-                atomically_save_torch(root/"best.pt",{"model":model.state_dict(),"step":step,
-                    "validation_ood_macro_f1":score,"contract":cfg},torch)
-            atomically_save_torch(resume,{"model":model.state_dict(),"optimizer":optimizer.state_dict(),
-                "step":step,"best":best,"best_step":best_step,"numpy_rng":rng.bit_generator.state,
-                "torch_rng":torch.get_rng_state(),"cuda_rngs":torch.cuda.get_rng_state_all(),
-                "history":history,"contract":cfg},torch)
-            write_json(root/"history.json",history)
-            event("trial_validation",name=name,step=step,score=round(score,6),
-                  best=round(best,6),gpu_seconds=round(time.monotonic()-started,1))
+                x1=x1.to(device);x2=x2.to(device);targets=targets.to(device)
+            for group in optimizer.param_groups:
+                if params["scheduler"]=="none":
+                    group["lr"]=float(params["learning_rate"])
+                else:
+                    group["lr"]=float(params["learning_rate"])*(
+                        .05+.95*.5*(1+math.cos(math.pi*step/max_steps))
+                    )
+            optimizer.zero_grad(set_to_none=True)
+            use_amp=torch.cuda.is_bf16_supported()
+            with torch.autocast("cuda",dtype=torch.bfloat16,enabled=use_amp):
+                a=model(x1)["logits"];b=model(x2)["logits"]
+                loss,ce,js=loss_js(a,b,targets,float(params["lambda_js"]),torch,F)
+            if not bool(torch.isfinite(loss).item()):
+                raise RuntimeError(f"nonfinite loss {name} step {step+1}")
+            loss.backward()
+            norm=torch.nn.utils.clip_grad_norm_(
+                model.parameters(),max_norm=10.0,error_if_nonfinite=True,
+            )
+            optimizer.step()
+            step+=1
+            if step%argv.eval_every==0 or step==max_steps:
+                row=validate(
+                    model,val_records,peaks,val_fac,device,libs,argv.batch_size,
+                    profiles,panels=validation_panels,
+                )
+                score=sum(row[p]["macro_f1"] for p in profiles)/6.0
+                if not math.isfinite(score):
+                    raise RuntimeError("nonfinite validation macro F1")
+                history.append({
+                    "step":step,"mean_ood_macro_f1":score,"profiles":row,
+                    "train_last_loss":float(loss.detach().cpu()),
+                    "last_ce":float(ce.detach().cpu()),
+                    "last_js":float(js.detach().cpu()),
+                    "lr":optimizer.param_groups[0]["lr"],
+                    "prefetch_workers":argv.prefetch_workers,
+                    "prefetch_batches":argv.prefetch_batches,
+                })
+                if score>best:
+                    best=score;best_step=step
+                    atomically_save_torch(root/"best.pt",{
+                        "model":model.state_dict(),"step":step,
+                        "validation_ood_macro_f1":score,"contract":cfg,
+                    },torch)
+                atomically_save_torch(resume,{
+                    "model":model.state_dict(),"optimizer":optimizer.state_dict(),
+                    "step":step,"best":best,"best_step":best_step,
+                    "numpy_rng":committed_rng_state,
+                    "torch_rng":torch.get_rng_state(),
+                    "cuda_rngs":torch.cuda.get_rng_state_all(),
+                    "history":history,"contract":cfg,
+                },torch)
+                write_json(root/"history.json",history)
+                event(
+                    "trial_validation",name=name,step=step,
+                    score=round(score,6),best=round(best,6),
+                    gpu_seconds=round(time.monotonic()-started,1),
+                )
+    finally:
+        pool.close()
     result={"status":"completed","name":name,"seed":seed,"architecture":"A0 ResNet-18-GN",
             "parameters":params,"completed_steps":step,"best_step":best_step,
             "best_validation_ood_macro_f1":best,"best_checkpoint_sha256":digest(root/"best.pt"),
