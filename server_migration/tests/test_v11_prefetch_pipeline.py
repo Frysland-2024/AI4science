@@ -100,6 +100,53 @@ class V11PrefetchContractTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             V11PairPrefetchPool({"simulator_version":"v9_gaussian"},run_seed=1)
 
+    def test_spawned_v11_workers_match_exact_serial_pair(self):
+        # Synthetic V7 reflection table: no private CIF or GPU required.
+        import json
+        import tempfile
+        from xrd_robustness.peak_cache import load_peak_table
+        from xrd_robustness.training.runner import build_online_view_factory
+        from xrd_robustness.physics import PhysicsParameterSampler
+        config=json.loads((
+            ROOT.parent/"xrd_robustness"/"configs"/
+            "simulation.v11_tch_pseudo_voigt.json"
+        ).read_text(encoding="utf-8"))
+        with tempfile.TemporaryDirectory() as temp:
+            peak_path=Path(temp)/"synthetic_v7.npz"
+            np.savez_compressed(
+                peak_path,
+                positions=np.array([20.,35.,50.]),
+                intensities=np.array([100.,60.,30.]),
+                hkls=np.array([[1,0,0],[1,1,0],[1,1,1]],dtype=np.int64),
+                multiplicities=np.array([6,12,8],dtype=np.int64),
+                reciprocal_vectors=np.array([
+                    [0.10,0.,0.],[0.12,0.12,0.],[0.15,0.15,0.15],
+                ],dtype=np.float64),
+                reflection_peak_indices=np.array([0,1,2],dtype=np.int64),
+            )
+            record=SimpleNamespace(
+                material_id="synthetic_v11_001",peak_table_path=peak_path,
+                split="train",label=3,
+            )
+            fac,version,_=build_online_view_factory(
+                PhysicsParameterSampler.from_mapping({**config,"run_seed":12345}),
+                config,
+            )
+            self.assertEqual(version,"v11_tch_pseudo_voigt")
+            serial=fac.make_pair_from_peaks(
+                load_peak_table(peak_path),material_id=record.material_id,
+                split="train",epoch=1,global_step=137,profile="train",
+            )
+            with V11PairPrefetchPool(
+                config,run_seed=12345,workers=2,prefetch_batches=2,
+                native_threads=1,max_cached_peaks=16,
+            ) as pool:
+                pool.submit(137,[record],epoch=1,global_step=137,profile="train")
+                first,second,labels=pool.get(137)
+            self.assertTrue(np.array_equal(first[0],serial.first.xrd))
+            self.assertTrue(np.array_equal(second[0],serial.second.xrd))
+            self.assertEqual(labels.tolist(),[3])
+
     def test_fp32_js_preserves_finite_gradients_on_extreme_logits(self):
         import torch
         from torch.nn import functional as F
