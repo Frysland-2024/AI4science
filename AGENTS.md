@@ -70,7 +70,13 @@ Use exact symbolic or numerical verification when precision materially affects t
 ### Public communication
 Ground figures, reports, manuscripts, and summaries in repository evidence. Presentation convenience must not alter scientific claims.
 
-## Current thesis scope — decision dated 2026-10-26
+## 2026-11-03 ACTIVE THESIS RESTART — replaces 2026-10-26 execution freeze
+
+**The project lead explicitly restarted the undergraduate thesis.** This newer decision supersedes the 2026-10-26 *no new research* execution instruction below, which remains historical evidence only. Active project: PXRD seven-system classification, retained same-parent Dynamic JS consistency, improving absolute RRUFF experimental classification performance. **Phase 1 deliverable is a runnable versioned new simulator integrated and tested in `xrd_robustness/`, not a literature-only report** (implementation task [Issue #53](https://github.com/Frysland-2024/AI4science/issues/53)). Inspect/reuse SimXRD/Pysimxrd, GSAS-II, ML4pXRDs and selected equivalents; do not copy broken or label-changing operators. Retain old simulator, frozen configs, datasets and old outputs. **Only after simulator implementation passes tests, compare architectures** (ResNet-18-GN+JS vs CNN11+JS). No architecture training as part of Phase 1. The separate `research_bridge` code lane still has an old protected-path allowlist and cannot autonomously modify `xrd_robustness/`; do not misrepresent a GitHub Issue as executed code. For current truth read [CURRENT_STATE](docs/CURRENT_STATE.md) and [simulator candidates](docs/PXRD_SIMULATOR_CANDIDATES_2026-11-03.md).
+
+---
+
+## Historic thesis scope — decision dated 2026-10-26 (superseded for execution on 2026-11-03)
 
 The sole current undergraduate thesis line is to write up and defend the completed PXRD seven-crystal-system classification study. Its scientific question is whether simulator-known same-parent measurement equivalence, used as relationship supervision, improves classification over matched Dynamic ERM. The controlled ResNet-18-GN Dynamic JS vs Dynamic ERM study is complete and frozen; **no new experiments are in current thesis scope**.
 
