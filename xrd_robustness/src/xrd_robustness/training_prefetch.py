@@ -237,6 +237,8 @@ def _worker_main(
     quality_gate: bool,
     quality_gate_config: Mapping[str, Any],
     simulation_config_hash: str,
+    simulator_version: str,
+    line_profile_config: Mapping[str, Any],
     profile: str,
     worker_native_threads: int,
 ) -> None:
@@ -254,11 +256,31 @@ def _worker_main(
 
     sampler = PhysicsParameterSampler.from_mapping(sampler_config)
     strategy = IndependentDynamicStrategy(sampler, config_hash=simulation_config_hash)
+    if simulator_version == "v9_gaussian":
+        peak_table_simulator = None
+    elif simulator_version == "v10_pseudo_voigt_caglioti":
+        from functools import partial
+
+        from .simulator_v10 import simulate_from_peak_table_v10
+
+        peak_table_simulator = partial(
+            simulate_from_peak_table_v10, line_profile=dict(line_profile_config)
+        )
+    elif simulator_version == "v11_tch_pseudo_voigt":
+        from .simulator_v11 import make_peak_table_simulator
+
+        peak_table_simulator = make_peak_table_simulator(
+            simulator_version,
+            line_profile_config,
+        )
+    else:
+        raise ValueError(f"unsupported simulator_version={simulator_version!r}")
     factory = OnlineViewFactory(
         sampler,
         quality_gate=quality_gate,
         quality_gate_config=quality_gate_config,
         strategy=strategy,
+        **({} if peak_table_simulator is None else {"peak_table_simulator": peak_table_simulator}),
     )
     peak_root = Path(data_root) / "mp_processed" / peak_cache_name
     peak_cache: dict[str, Any] = {}
@@ -312,6 +334,8 @@ class DynamicBatchPrefetcher:
         quality_gate: bool,
         quality_gate_config: Mapping[str, Any],
         simulation_config_hash: str,
+        simulator_version: str = "v9_gaussian",
+        line_profile_config: Mapping[str, Any] | None = None,
         profile: str,
     ) -> None:
         if worker_count <= 0:
@@ -345,6 +369,8 @@ class DynamicBatchPrefetcher:
             "quality_gate": bool(quality_gate),
             "quality_gate_config": dict(quality_gate_config),
             "simulation_config_hash": str(simulation_config_hash),
+            "simulator_version": str(simulator_version),
+            "line_profile_config": dict(line_profile_config or {}),
             "profile": str(profile),
             "worker_native_threads": self.worker_native_threads,
         }

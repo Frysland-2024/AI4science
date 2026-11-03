@@ -61,6 +61,7 @@ class OnlineViewFactory:
         quality_gate_splits: tuple[str, ...] = ("train",),
         quality_gate_config: Mapping[str, Any] | None = None,
         strategy: PerturbationStrategy | None = None,
+        peak_table_simulator: Callable[..., Any] = simulate_from_peak_table,
     ):
         self.sampler = sampler
         self.grid = grid
@@ -70,9 +71,11 @@ class OnlineViewFactory:
         self.quality_gate_splits = frozenset(quality_gate_splits)
         self.quality_gate_config = dict(quality_gate_config or {})
         self.strategy = strategy or IndependentDynamicStrategy(sampler)
+        self.peak_table_simulator = peak_table_simulator
         self.quality_gate_checked_count = 0
         self.quality_gate_rejected_count = 0
         self._quality_reference_profiles: dict[str, np.ndarray] = {}
+        self._local_peak_tables: dict[str, PeakTable] = {}
 
     @staticmethod
     def effective_epoch(split: str, epoch: int) -> int:
@@ -104,15 +107,19 @@ class OnlineViewFactory:
 
         def render(source: Any, params: PhysicsParameters, seed: int):
             if self.simulator is simulate_structure and (
-                self.peak_cache is not None or params.preferred_orientation_active
+                self.peak_cache is not None
+                or params.preferred_orientation_active
+                or self.peak_table_simulator is not simulate_from_peak_table
             ):
-                peaks = (
-                    self.peak_cache.get_or_compute(material_id, source, self.grid)
-                    if self.peak_cache is not None
-                    else ideal_peak_table(source, self.grid)
-                )
+                if self.peak_cache is not None:
+                    peaks = self.peak_cache.get_or_compute(material_id, source, self.grid)
+                else:
+                    peaks = self._local_peak_tables.get(material_id)
+                    if peaks is None:
+                        peaks = ideal_peak_table(source, self.grid)
+                        self._local_peak_tables[material_id] = peaks
                 resolved = resolve_preferred_orientation(peaks, params)
-                xrd, diagnostics = simulate_from_peak_table(
+                xrd, diagnostics = self.peak_table_simulator(
                     peaks.positions,
                     peaks.intensities,
                     resolved,
@@ -210,7 +217,7 @@ class OnlineViewFactory:
 
         def render(source: PeakTable, params: PhysicsParameters, seed: int):
             resolved = resolve_preferred_orientation(source, params)
-            xrd, diagnostics = simulate_from_peak_table(
+            xrd, diagnostics = self.peak_table_simulator(
                 source.positions,
                 source.intensities,
                 resolved,
@@ -320,7 +327,7 @@ class OnlineViewFactory:
             )
             base_profile = self._quality_reference_profiles.get(row.material_id)
             if base_profile is None:
-                base_profile = simulate_from_peak_table(
+                base_profile = self.peak_table_simulator(
                     peaks.positions,
                     peaks.intensities,
                     base_parameters,
@@ -330,7 +337,7 @@ class OnlineViewFactory:
                 )
                 base_profile.setflags(write=False)
                 self._quality_reference_profiles[row.material_id] = base_profile
-            profile, diagnostics = simulate_from_peak_table(
+            profile, diagnostics = self.peak_table_simulator(
                 peaks.positions,
                 peaks.intensities,
                 parameters,
@@ -375,7 +382,7 @@ class OnlineViewFactory:
                 measurement_state=replay_state.to_dict(),
                 metadata=replay_metadata(parameters),
             )
-        xrd, diagnostics = simulate_from_peak_table(
+        xrd, diagnostics = self.peak_table_simulator(
             peaks.positions,
             peaks.intensities,
             parameters,

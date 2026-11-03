@@ -4,6 +4,9 @@
 
 **状态日期：** 2026-11-03
 
+**2026-11-03 直接执行的 CNN11 数值诊断（最新覆盖决定）：** 原始 V10 CNN11 在 20k 附近出现 NaN，但从 18480 checkpoint 以原 BF16 路径恢复至 27000 仍全程有限；极端 logits 回归揭示现有 JS 梯度数值风险，采用 FP32 CE/JS + 稳定 logaddexp 后 21 项测试通过。修复 CNN11 在 step 24640 的 Validation OOD Macro-F1 为 0.6291，低于同 seed/step ResNet 的 0.6962。**选型决定为保留 ResNet，终止 CNN11 的额外 GPU 训练**；这是预算约束下的工程筛选，不是 CNN11 普遍劣势的论文证明。后续仍执行 Issue #55 ResNet 有限调参，然后 #61 CIF 扩容，再做 RRUFF 文献对标。见 [CNN11 数值诊断与取舍](PXRD_CNN11_V10_NUMERICAL_DECISION_20261103.md)。下文此前“架构选择 OPEN”保留为旧时点历史快照。
+
+
 **阶段（2026-11-03 最新负责人决策）：** 本科毕设已经重启；当前主线为 **PXRD 七晶系分类 + same-parent Dynamic JS**。研究按四阶段推进：**① 模拟器构建（工程阶段已完成）→ ② 模型架构优化（进行中：V10 判断是否换 CNN11，随后 Codex 对选定架构自动调结构和训练超参数）→ ③ 增加经过验证的独立 CIF 数据 → ④ 最终训练和 RRUFF 文献对标跑分**。不再将调参拆出去、放到数据扩容之后；不再开启新的模拟器研究主线。冻结历史结果不改，参数反演仍归档。
 
 ## 2026-11-03 latest correction — the authoritative active sequence

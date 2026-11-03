@@ -1,0 +1,14 @@
+{
+  "in_range_macro_f1": 0.7111298826825598,
+  "mean_ood_macro_f1": 0.6817476199730783,
+  "metrics": {
+    "in_range": 0.7111298826825598,
+    "ood_background": 0.657433658290014,
+    "ood_broadening": 0.6691786207228564,
+    "ood_noise": 0.683986848367641,
+    "ood_shift_negative": 0.7119930295906263,
+    "ood_shift_positive": 0.7060649747092472,
+    "ood_texture": 0.6618285881580851
+  },
+  "source_checkpoint": "original-cnn11-step18480"
+}

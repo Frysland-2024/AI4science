@@ -422,3 +422,11 @@ PR #50 was merged into `main` on 2026-10-29 (merge commit [`6e4dd70`](https://gi
 **Execution evidence and safeguards:** The direct local A1 job was still running (at 6,160-step Validation OOD Macro-F1 0.589445; matched historical A0 0.575300). A2 source `E:\AI4science\_local\run_resnet_guided_a2_20261103.py` passed syntax and 7-logit model-shape tests. A new **running** supervisor `E:\AI4science\_local\supervise_resnet_a1_a2_20261103.py`, initial session PID 30608, checks A1's completed training JSON and hashed checkpoint, then starts only one A2 GPU job, verifies A2 evidence, generates A0/A1/A2 summary and report, and uses locally authenticated `gh` to create a GitHub experiment branch plus PR without modifying the dirty root checkout. Separate hourly automation `A1训练完成与Git归档` serves as notification/fallback and was updated to follow both trials. The code preserves failed runs and refuses overwrites or concurrent duplicate jobs. [GitHub Issue #55 execution handoff](https://github.com/Frysland-2024/AI4science/issues/55).
 
 **Status when recorded:** A1 underway, supervisor running; A2 had **not yet begun**, GitHub results PR and final performance conclusions **not yet available**. All final claims must depend on verified completion artifacts and PR links, not a task's existence. If no improvement emerges, that negative result is retained rather than running unbounded searches.
+
+## 2026-11-03 — CNN11 数值故障诊断落地：保留 ResNet，停止追加 CNN11
+
+**问题与思路：** V10 原本决定是否换掉 ResNet。但 CNN11 在约 20,000 step 出现 NaN，不能直接将训练失效等同于架构差。Codex 无额度后，项目负责人明确授权不依赖 Codex 直接执行诊断、实验、判断并上传 Git。
+
+**实际路径：** 保留原 checkpoint 和历史日志，在隔离工作区恢复原 BF16 模式到 27,000 step，未重现原故障；用极端 BF16 logits 验证 FP32 上转仍可触发零概率 KL target 的非有限梯度，进一步用 logaddexp 表达等价 JS 解决；21 项相关测试通过。修复后从同一 checkpoint 续跑至 24,640 step，得到 Validation OOD Macro-F1 0.6291，同 seed/step ResNet 0.6962。
+
+**决策：** 选择保留已验证且三 seed 成功的 ResNet + Dynamic JS；不为 CNN11 继续投入完整三 seed。不能称其本质不如 ResNet，也不能声称历史 NaN 根因完全查清。所有原始失败与不利结果保留。下一阶段为 ResNet 定向调参→独立 CIF 扩容→最终 RRUFF 对标。证据详见 docs/PXRD_CNN11_V10_NUMERICAL_DECISION_20261103.md。
