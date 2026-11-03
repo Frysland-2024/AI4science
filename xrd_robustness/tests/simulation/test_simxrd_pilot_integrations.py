@@ -9,7 +9,7 @@ from pathlib import Path
 import numpy as np
 import torch
 
-from xrd_robustness.models import CRYSTAL_SYSTEMS
+from xrd_robustness.structure_data import CRYSTAL_SYSTEMS
 from xrd_robustness.simulator_v10 import DEFAULT_LINE_PROFILE
 from xrd_robustness.training_prefetch import DynamicBatchPrefetcher
 from xrd_robustness.physics import PhysicsParameterSampler
