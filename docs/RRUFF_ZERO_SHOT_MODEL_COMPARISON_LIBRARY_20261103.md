@@ -50,6 +50,10 @@ Cao et al., **SimXRD-4M**, ICLR 2025 **Table 5**, trained/validated on SimXRD an
 
 **Source:** https://proceedings.iclr.cc/paper_files/paper/2025/file/b04843d76c9f090beca55f335c4ea6bf-Paper-Conference.pdf (Table 5). All entries above are **model variations in ONE research paper**, **not 11 independent new papers**, and not newly designated grading targets. This within-paper architecture table is a useful reference for our own CNN11-vs-ResNet development; its absolute accuracy still should not be conflated with the differently filtered AlphaDiffract or XQueryer cohorts.
 
+### Same-paper model variants from Salgado et al. 2023
+
+The paper's **large synthetic dataset** experiment (before adding real RRUFF labels) also reports **SCNN 40%**, **MLP 67%**, and **NPCNN 74%** seven-way Accuracy on its RRUFF cohort. This is particularly useful evidence of architecture/pooling effects at a fixed source paper and dataset; their later 86% after 'souping' is NOT included in the zero-shot rows. Source: https://www.nature.com/articles/s41524-023-01164-8 (Results, "Using mix and large datasets for training"). These are **additional model variants, not new independent papers or grading tiers**.
+
 ## D. Other contextual comparisons, excluded from the strict zero-labeled-RRUFF/PXRD-only list
 
 | Model / paper | Reported RRUFF Accuracy | Why separate |
