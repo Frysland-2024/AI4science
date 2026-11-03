@@ -1,17 +1,20 @@
 #!/usr/bin/env python3
 """Prepare private reproducible Linux migration archives; never mutate experiment inputs."""
 from pathlib import Path
+import argparse
 import hashlib
 import json
+import shutil
 import subprocess
 import time
 import zipfile
+from payload_contract import (
+    PAYLOAD_CONTRACT_VERSION,PAYLOAD_MANIFEST_MEMBER,PAYLOAD_REQUIRED_FILES,
+)
 
-ROOT=Path(r"E:\AI4science")
-DEST=ROOT/"_local"/"server_migration_20261103"
-PROJECT=ROOT/"xrd_robustness"
-SOURCE=Path(r"D:\AI4science_external_data\pxrd_scale_sources_20261103\processed\merged_154975_parent_split_20261103")
-PREPROCESSED=SOURCE.parent
+ROOT=Path(__file__).resolve().parents[1]
+DEFAULT_DEST=ROOT/"_local"/"server_migration_20261103"
+DEFAULT_SOURCE=Path(r"D:\AI4science_external_data\pxrd_scale_sources_20261103\processed\merged_154975_parent_split_20261103")
 EXCLUDE={"__pycache__", ".pytest_cache", ".git", ".venvs", ".mypy_cache", "data", "outputs"}
 NO_EXT={".ckpt",".npz",".npy",".db",".sqlite",".pt",".pth",".pkl",".zip",".tar",".gz",".csv"}
 EXPECTED={"train":108483,"validation":23246,"test":23246}
@@ -28,6 +31,20 @@ def included(root):
         if p.suffix.lower() in NO_EXT or p.stat().st_size>12*1024*1024:continue
         yield p
 def main():
+    parser=argparse.ArgumentParser(description="Build private migration bundles from this worktree only")
+    parser.add_argument("--destination",type=Path,default=DEFAULT_DEST)
+    parser.add_argument("--source-splits",type=Path,default=DEFAULT_SOURCE)
+    args=parser.parse_args()
+    DEST=args.destination.resolve()
+    SOURCE=args.source_splits.resolve()
+    try:
+        relative_destination=DEST.relative_to(ROOT.resolve())
+    except ValueError as error:
+        raise RuntimeError("Bundle destination must stay inside the current Git worktree") from error
+    if not relative_destination.parts:
+        raise RuntimeError("Refusing to use the Git worktree root as the bundle destination")
+    PROJECT=ROOT/"xrd_robustness"
+    PREPROCESSED=SOURCE.parent
     DEST.mkdir(parents=True,exist_ok=True)
     data=json.loads((SOURCE/"delivery_validation.json").read_text(encoding="utf-8"))
     assert data["status"]=="passed"
@@ -55,12 +72,13 @@ def main():
         files[p]="reference_windows_resnet_joint/"+p.name
     for p in sorted((ROOT/"_local"/"resnet_joint_20261103"/"protocols").glob("*.json")):
         files[p]="reference_windows_resnet_joint/protocols/"+p.name
-    for name in ("verify_payload.py","verify_peak_cache.py","one_click_v11.py","v11_prefetch.py","smoke_prefetch.py","start_server.sh","preflight.sh","build_peak_tables.sh","setup_linux.sh","README.md"):
-        p=DEST/name
-        files[p]="server_migration/"+name
-    for p in sorted((DEST/"tests").glob("test_*.py")):
-        files[p]="server_migration/tests/"+p.name
-    portable_doc=ROOT/"_local"/"worktrees"/"server_migration_v11_20261103"/"docs"/"PXRD_SERVER_MIGRATION_V11_ONECLICK_20261103.md"
+    for name in ("verify_payload.py","verify_peak_cache.py","one_click_v11.py","v11_prefetch.py","smoke_prefetch.py","start_server.sh","preflight.sh","build_peak_tables.sh","setup_linux.sh","README.md","payload_contract.py","verify_source_snapshot.py","create_migration_bundles.py"):
+        p=ROOT/"server_migration"/name
+        if not p.is_file():raise RuntimeError(f"Missing current-worktree migration source: {p}")
+        files[p]=p.relative_to(ROOT).as_posix()
+    for p in sorted((ROOT/"server_migration"/"tests").glob("test_*.py")):
+        files[p]=p.relative_to(ROOT).as_posix()
+    portable_doc=ROOT/"docs"/"PXRD_SERVER_MIGRATION_V11_ONECLICK_20261103.md"
     if portable_doc.is_file():
         files[portable_doc]="docs/PXRD_SERVER_MIGRATION_V11_ONECLICK_20261103.md"
     for name in ("acceptance_rerun_20261103.json","merged_154975_precompute_20261103.json","merged_154975_sample_20261103.json"):
@@ -70,9 +88,21 @@ def main():
         p=ROOT/"_local"/"resnet_joint_20261103"/name
         if p.is_file():files[p]="reference_windows_resnet_joint/"+name
     code_path=DEST/"source_snapshot.zip"
+    manifest_files={
+        "AI4science/"+rel:sha256(file)
+        for file,rel in sorted(files.items(),key=lambda item:item[1])
+    }
+    source_manifest={
+        "schema":"pxrd-v11-source-snapshot-v1",
+        "contract_version":PAYLOAD_CONTRACT_VERSION,
+        "required_files":list(PAYLOAD_REQUIRED_FILES),
+        "files":manifest_files,
+        "source_git_commit":git("rev-parse","HEAD"),
+    }
     with zipfile.ZipFile(code_path,"w",compression=zipfile.ZIP_DEFLATED,compresslevel=6,allowZip64=True) as zf:
         for file,rel in sorted(files.items(),key=lambda item:item[1]):
             zf.write(file,"AI4science/"+rel)
+        zf.writestr(PAYLOAD_MANIFEST_MEMBER,json.dumps(source_manifest,sort_keys=True,indent=2)+"\n")
     data_files=sorted(SOURCE.glob("*"))
     audit_file=PREPROCESSED/"screening_report.md"
     if audit_file.is_file():data_files.append(audit_file)
@@ -111,7 +141,7 @@ def main():
     status=json.loads((ROOT/"_local"/"resnet_joint_20261103"/"campaign_state.json").read_text(encoding="utf-8"))
     payload={
         "schema_version":"pxrd-server-migration-audit-v1",
-        "source_root":"E:/AI4science",
+        "source_root":str(ROOT),
         "created_local_time":time.strftime("%Y-%m-%dT%H:%M:%S%z"),
         "source_git_branch":git("branch","--show-current"),
         "source_git_commit":git("rev-parse","HEAD"),
@@ -134,10 +164,21 @@ def main():
         payload["archives"][label]={"size_bytes":path.stat().st_size,"sha256":sha256(path)}
     (DEST/"bundle_manifest.json").write_text(json.dumps(payload,indent=2,ensure_ascii=False)+"\n",encoding="utf-8")
     launcher=DEST/"start_server.sh"
-    payload["scripts"]={"start_server.sh":{"sha256":sha256(launcher),"size_bytes":launcher.stat().st_size}}
+    verifier=DEST/"verify_source_snapshot.py"
+    payload_contract=DEST/"payload_contract.py"
+    shutil.copy2(ROOT/"server_migration"/"start_server.sh",launcher)
+    shutil.copy2(ROOT/"server_migration"/"verify_source_snapshot.py",verifier)
+    shutil.copy2(ROOT/"server_migration"/"payload_contract.py",payload_contract)
+    payload["scripts"]={
+        "start_server.sh":{"sha256":sha256(launcher),"size_bytes":launcher.stat().st_size},
+        "verify_source_snapshot.py":{"sha256":sha256(verifier),"size_bytes":verifier.stat().st_size},
+        "payload_contract.py":{"sha256":sha256(payload_contract),"size_bytes":payload_contract.stat().st_size},
+    }
     (DEST/"bundle_manifest.json").write_text(json.dumps(payload,indent=2,ensure_ascii=False)+"\n",encoding="utf-8")
     lines=[entry["sha256"]+"  "+name+"\n" for name,entry in payload["archives"].items()]
     lines.append(payload["scripts"]["start_server.sh"]["sha256"]+"  start_server.sh\n")
+    lines.append(payload["scripts"]["verify_source_snapshot.py"]["sha256"]+"  verify_source_snapshot.py\n")
+    lines.append(payload["scripts"]["payload_contract.py"]["sha256"]+"  payload_contract.py\n")
     (DEST/"SHA256SUMS.txt").write_bytes("".join(lines).encode("ascii"))
     print(json.dumps({"archive_sha256":payload["archives"],"code_files":len(files),"snapshot_campaign":status,"source_dirty":payload["source_is_dirty"]},indent=2))
 if __name__=="__main__":main()

@@ -7,12 +7,14 @@ CURRENT STATE: 154,975 MP-ID structures split 108,483 train / 23,246 Validation 
 - structure_shards.zip: all 154,975 source parent structures and provenance.
 - peak_cache_bundle.zip: all 154,975 precomputed ideal PeakTables plus 131,729 train/validation runner records.
 - a0_reference_checkpoint.zip: historical V10 single-seed A0_R1 checkpoint and run evidence. REFERENCE ONLY, not a ready V11 model.
-- bundle_manifest.json / SHA256SUMS.txt: archive SHA256s. start_server.sh: one-command entrypoint.
+- `source_snapshot.zip` includes a versioned member manifest with SHA256 for every source file. `start_server.sh` rejects missing, stale, altered, or incomplete snapshots and verifies an extracted staging tree before copying it into `~/research/AI4science`.
+- bundle_manifest.json / SHA256SUMS.txt: archive and launcher SHA256s. Transfer `start_server.sh`, `verify_source_snapshot.py`, and `payload_contract.py` beside the four ZIPs and SHA256SUMS.txt.
+- `create_migration_bundles.py` resolves project files from its own Git worktree and restricts the bundle destination to that worktree; it does not source code from the main checkout or a separately staged project tree.
 
 Keep private source data/checkpoints OFF public GitHub. Obey Materials Project and XQueryer terms.
 
 ## On rented Linux GPU server
-Choose a GPU-enabled Linux image with Python 3.11 and CUDA-compatible PyTorch. Transfer all four ZIPs, SHA256SUMS.txt and start_server.sh together by private SCP/SFTP. From the transfer directory run:
+Choose a GPU-enabled Linux image with Python 3.11 and CUDA-compatible PyTorch. Transfer all four ZIPs, SHA256SUMS.txt, start_server.sh, verify_source_snapshot.py, and payload_contract.py together by private SCP/SFTP. From the transfer directory run:
 
     bash start_server.sh --plan
 
@@ -76,10 +78,10 @@ only Validation:
   (default 49,280 optimizer steps each) with the **same optimized pipeline**.
   It saves `final_training_summary.json` but does not evaluate RRUFF/Test.
   The final stage is NOT automatically started before confirmation.
-- Do **not** transfer or run the older four-ZIP kit unchanged. The private
-  `source_snapshot.zip` must be regenerated from PR #67 after the laptop
-  reconnects, including `v11_prefetch.py`, then SHA256SUMS updated.
-  The existing `start_server.sh` detects and rejects stale source ZIPs.
+- Do **not** transfer or run an older four-ZIP kit unchanged. Regenerate the
+  private snapshot from the reviewed worktree so its versioned manifest and
+  all member hashes match the current `payload_contract.py`; update
+  `SHA256SUMS.txt` with the launcher and verifier files too.
 
 **Validation level:** integration code and regression tests are committed
 to GitHub, but the authorized laptop is offline. The new pipeline has NOT yet

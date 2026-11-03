@@ -12,15 +12,28 @@ cd "$KIT"
 for f in source_snapshot.zip structure_shards.zip peak_cache_bundle.zip a0_reference_checkpoint.zip; do
   test -s "$f" || { echo "BLOCKED: missing $f"; exit 3; }
 done
+# Pre-extraction verifier is a Python module with an adjacent frozen contract.
+for f in verify_source_snapshot.py payload_contract.py; do
+  test -s "$f" || { echo "BLOCKED: missing pre-extraction source verification dependency $f"; exit 3; }
+done
 sha256sum -c SHA256SUMS.txt
-# Always refresh versioned code; never silently run a stale extraction.
-unzip -oq source_snapshot.zip -d "$DEST"
-test -f "$DEST/AI4science/server_migration/v11_prefetch.py" || { echo "BLOCKED: source_snapshot.zip predates V11 worker pipeline; rebuild the private ZIP"; exit 4; }
+# Verify the complete versioned source archive before changing the extraction.
+PYTHON=python3
+"$PYTHON" "$KIT/verify_source_snapshot.py" --archive "$KIT/source_snapshot.zip"
+SOURCE_STAGE="$(mktemp -d "$DEST/.v11-source.XXXXXX")"
+trap 'rm -rf "$SOURCE_STAGE"' EXIT
+unzip -oq "$KIT/source_snapshot.zip" -d "$SOURCE_STAGE"
+"$PYTHON" "$SOURCE_STAGE/AI4science/server_migration/verify_source_snapshot.py" \
+  --archive "$KIT/source_snapshot.zip" --extracted-root "$SOURCE_STAGE/AI4science"
+# Only a fully verified tree is copied into the active project extraction.
+mkdir -p "$DEST/AI4science"
+cp -a "$SOURCE_STAGE/AI4science/." "$DEST/AI4science/"
+rm -rf "$SOURCE_STAGE"
+trap - EXIT
 test -f "$DEST/AI4science/structure_library/merged_154975_parent_split_20261103/delivery_validation.json" || unzip -q structure_shards.zip -d "$DEST"
 test -f "$DEST/AI4science/xrd_robustness/data/merged_154975_v11/training_records.v1.jsonl" || unzip -q peak_cache_bundle.zip -d "$DEST"
 test -f "$DEST/AI4science/reference_a0_r1_v10/best.ckpt" || unzip -q a0_reference_checkpoint.zip -d "$DEST"
 cd "$DEST/AI4science"
-PYTHON=python3
 "$PYTHON" server_migration/verify_payload.py --root . --check-records
 "$PYTHON" server_migration/verify_peak_cache.py --root . --fast
 if [ "$MODE" = "--plan" ]; then

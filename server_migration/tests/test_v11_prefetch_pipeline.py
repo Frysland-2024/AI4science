@@ -105,7 +105,7 @@ class V11PrefetchContractTests(unittest.TestCase):
         import json
         import tempfile
         from xrd_robustness.peak_cache import load_peak_table
-        from xrd_robustness.training.runner import build_online_view_factory
+        from xrd_robustness.training.runner import build_online_view_factory,render_pair_batch
         from xrd_robustness.physics import PhysicsParameterSampler
         config=json.loads((
             ROOT.parent/"xrd_robustness"/"configs"/
@@ -133,9 +133,10 @@ class V11PrefetchContractTests(unittest.TestCase):
                 config,
             )
             self.assertEqual(version,"v11_tch_pseudo_voigt")
-            serial=fac.make_pair_from_peaks(
-                load_peak_table(peak_path),material_id=record.material_id,
-                split="train",epoch=1,global_step=137,profile="train",
+            peak=load_peak_table(peak_path)
+            serial_first,serial_second,serial_labels=render_pair_batch(
+                [record],{record.material_id:peak},fac,
+                epoch=1,global_step=137,profile="train",
             )
             with V11PairPrefetchPool(
                 config,run_seed=12345,workers=2,prefetch_batches=2,
@@ -143,9 +144,41 @@ class V11PrefetchContractTests(unittest.TestCase):
             ) as pool:
                 pool.submit(137,[record],epoch=1,global_step=137,profile="train")
                 first,second,labels=pool.get(137)
-            self.assertTrue(np.array_equal(first[0],serial.first.xrd))
-            self.assertTrue(np.array_equal(second[0],serial.second.xrd))
+            self.assertTrue(np.array_equal(first[0],serial_first.numpy()[0]))
+            self.assertTrue(np.array_equal(second[0],serial_second.numpy()[0]))
+            self.assertTrue(np.array_equal(labels,serial_labels.numpy()))
             self.assertEqual(labels.tolist(),[3])
+
+    def test_worker_startup_failure_is_reported_and_children_are_joined(self):
+        import json
+        import multiprocessing as mp
+        config=json.loads((
+            ROOT.parent/"xrd_robustness"/"configs"/
+            "simulation.v11_tch_pseudo_voigt.json"
+        ).read_text(encoding="utf-8"))
+        config["profiles"]={}
+        with self.assertRaisesRegex(RuntimeError,"failed during startup"):
+            V11PairPrefetchPool(config,run_seed=19,workers=2,worker_start_timeout_seconds=20)
+        leftovers=[child.name for child in mp.active_children()
+                   if child.name.startswith("v11-pair-worker-")]
+        self.assertEqual(leftovers,[])
+
+    def test_worker_task_error_is_returned_to_parent(self):
+        import json
+        import tempfile
+        with tempfile.TemporaryDirectory() as temp:
+            config=json.loads((
+                ROOT.parent/"xrd_robustness"/"configs"/
+                "simulation.v11_tch_pseudo_voigt.json"
+            ).read_text(encoding="utf-8"))
+            record=SimpleNamespace(
+                material_id="synthetic_missing_peak",peak_table_path=Path(temp)/"absent.npz",
+                split="train",label=2,
+            )
+            with V11PairPrefetchPool(config,run_seed=7,workers=2,prefetch_batches=1) as pool:
+                pool.submit(0,[record],epoch=0,global_step=0,profile="train")
+                with self.assertRaisesRegex(RuntimeError,"FileNotFoundError"):
+                    pool.get(0)
 
     def test_fp32_js_preserves_finite_gradients_on_extreme_logits(self):
         import torch

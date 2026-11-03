@@ -12,6 +12,7 @@ import multiprocessing as mp
 import os
 from pathlib import Path
 import queue
+import time
 import traceback
 from typing import Any, Sequence
 
@@ -23,19 +24,25 @@ def _worker(
     simulation_config: dict[str, Any],
     run_seed: int,
     max_cached_peaks: int,
+    startup_queue: Any,
 ) -> None:
-    # The parent sets OMP/MKL/BLAS env limits BEFORE spawn. Imports follow.
-    import numpy as np
-    from xrd_robustness.physics import PhysicsParameterSampler
-    from xrd_robustness.training.runner import build_online_view_factory
-    from xrd_robustness.peak_cache import load_peak_table
+    try:
+        # The parent sets OMP/MKL/BLAS env limits BEFORE spawn. Imports follow.
+        import numpy as np
+        from xrd_robustness.physics import PhysicsParameterSampler
+        from xrd_robustness.training.runner import build_online_view_factory
+        from xrd_robustness.peak_cache import load_peak_table
 
-    config = {**simulation_config, "run_seed": int(run_seed)}
-    sampler = PhysicsParameterSampler.from_mapping(config)
-    factory, version, _ = build_online_view_factory(sampler, config)
-    if version != "v11_tch_pseudo_voigt":
-        raise ValueError("V11 prefetch worker requires V11 renderer")
-    cache: OrderedDict[str, Any] = OrderedDict()
+        config = {**simulation_config, "run_seed": int(run_seed)}
+        sampler = PhysicsParameterSampler.from_mapping(config)
+        factory, version, _ = build_online_view_factory(sampler, config)
+        if version != "v11_tch_pseudo_voigt":
+            raise ValueError("V11 prefetch worker requires V11 renderer")
+        cache: OrderedDict[str, Any] = OrderedDict()
+        startup_queue.put((worker_id, True, None))
+    except BaseException:
+        startup_queue.put((worker_id, False, traceback.format_exc()))
+        return
 
     def load(material_id: str, file_path: str) -> Any:
         cached = cache.get(material_id)
@@ -85,20 +92,26 @@ class V11PairPrefetchPool:
         self, simulation_config: dict[str, Any], *, run_seed: int,
         workers: int = 4, prefetch_batches: int = 3,
         native_threads: int = 1, max_cached_peaks: int = 512,
+        worker_timeout_seconds: float = 1800.0,
+        worker_start_timeout_seconds: float = 120.0,
     ) -> None:
         if min(workers, prefetch_batches, native_threads, max_cached_peaks) < 1:
             raise ValueError("All V11 prefetch resource parameters must be positive")
+        if worker_timeout_seconds <= 0 or worker_start_timeout_seconds <= 0:
+            raise ValueError("V11 worker timeouts must be positive")
         if simulation_config.get("simulator_version") != "v11_tch_pseudo_voigt":
             raise ValueError("V11 prefetch received an incompatible simulator config")
         self.workers = workers
         self.prefetch_batches = prefetch_batches
+        self.worker_timeout_seconds = float(worker_timeout_seconds)
         self.pending: dict[int, tuple[str, ...]] = {}
         self.received: dict[int, dict[int, Any]] = {}
         self.closed = False
+        from xrd_robustness.training_prefetch import PREFETCH_NATIVE_THREAD_ENV_VARS
         ctx = mp.get_context("spawn")
         self.output = ctx.Queue()
+        self.startup_output = ctx.Queue()
         self.inputs = [ctx.Queue(maxsize=prefetch_batches) for _ in range(workers)]
-        from xrd_robustness.training_prefetch import PREFETCH_NATIVE_THREAD_ENV_VARS
         previous = {name: os.environ.get(name) for name in PREFETCH_NATIVE_THREAD_ENV_VARS}
         self.processes = []
         try:
@@ -108,18 +121,82 @@ class V11PairPrefetchPool:
                 proc = ctx.Process(
                     target=_worker, args=(
                         index, self.inputs[index], self.output, dict(simulation_config),
-                        int(run_seed), int(max_cached_peaks),
+                        int(run_seed), int(max_cached_peaks), self.startup_output,
                     ), name=f"v11-pair-worker-{index}",
                 )
-                proc.start()
                 self.processes.append(proc)
+                proc.start()
+            ready: set[int] = set()
+            deadline = time.monotonic() + float(worker_start_timeout_seconds)
+            while len(ready) < workers:
+                remaining = deadline - time.monotonic()
+                if remaining <= 0:
+                    raise RuntimeError(
+                        f"Timed out starting V11 workers after "
+                        f"{worker_start_timeout_seconds:g}s; ready={sorted(ready)}"
+                    )
+                try:
+                    worker_id, ok, detail = self.startup_output.get(
+                        timeout=min(1.0, remaining)
+                    )
+                except queue.Empty:
+                    dead = [f"{p.name}:{p.exitcode}" for p in self.processes
+                            if p.pid is not None and not p.is_alive()]
+                    if dead:
+                        raise RuntimeError(f"V11 worker exited during startup: {dead}")
+                    continue
+                if worker_id in ready or worker_id not in range(workers):
+                    raise RuntimeError(f"Invalid V11 worker startup reply: {worker_id}")
+                if not ok:
+                    raise RuntimeError(
+                        f"V11 worker {worker_id} failed during startup:\n{detail}"
+                    )
+                ready.add(worker_id)
+        except BaseException:
+            self._abort_startup()
+            raise
         finally:
             for name, value in previous.items():
                 if value is None:
                     os.environ.pop(name, None)
                 else:
                     os.environ[name] = value
+        if len(self.processes) != workers or len(ready) != workers:
+            self._abort_startup()
+            raise RuntimeError("V11 worker startup did not complete")
+        try:
+            self.startup_output.close()
+            self.startup_output.join_thread()
+        except (AttributeError, OSError, ValueError):
+            pass
         atexit.register(self.close)
+
+    def _close_queues(self) -> None:
+        for q in [*self.inputs, self.output, self.startup_output]:
+            try:
+                q.cancel_join_thread()
+            except (AttributeError, OSError, ValueError):
+                pass
+            try:
+                q.close()
+            except (AttributeError, OSError, ValueError):
+                pass
+
+    def _abort_startup(self) -> None:
+        self.closed = True
+        for proc in self.processes:
+            if proc.pid is not None and proc.is_alive():
+                try:
+                    proc.terminate()
+                except (OSError, ValueError):
+                    pass
+        for proc in self.processes:
+            if proc.pid is not None:
+                try:
+                    proc.join(timeout=3.0)
+                except (AssertionError, OSError, ValueError):
+                    pass
+        self._close_queues()
 
     def submit(
         self, key: int, records: Sequence[Any], *,
@@ -152,15 +229,28 @@ class V11PairPrefetchPool:
         import numpy as np
         if key not in self.pending:
             raise KeyError(f"Missing prefetch key: {key}")
+        deadline = time.monotonic() + self.worker_timeout_seconds
         while len(self.received.get(key, {})) < self.workers:
+            if time.monotonic() >= deadline:
+                alive = [p.name for p in self.processes if p.is_alive()]
+                raise RuntimeError(
+                    f"Timed out waiting for V11 batch {key} after "
+                    f"{self.worker_timeout_seconds:g}s; alive workers={alive}"
+                )
             try:
-                batch_key, worker_id, ok, value = self.output.get(timeout=1.0)
+                batch_key, worker_id, ok, value = self.output.get(
+                    timeout=min(1.0, max(0.01, deadline - time.monotonic()))
+                )
             except queue.Empty:
                 dead = [f"{p.name}:{p.exitcode}" for p in self.processes
                         if not p.is_alive()]
                 if dead:
                     raise RuntimeError(f"V11 worker died: {dead}")
                 continue
+            if batch_key not in self.pending:
+                raise RuntimeError(f"Unexpected V11 worker reply for batch {batch_key}")
+            if worker_id not in range(self.workers):
+                raise RuntimeError(f"Invalid V11 worker id in reply: {worker_id}")
             slot = self.received.setdefault(int(batch_key), {})
             if worker_id in slot:
                 raise RuntimeError(f"Duplicate worker reply for {batch_key}/{worker_id}")
@@ -190,6 +280,7 @@ class V11PairPrefetchPool:
         if self.closed:
             return
         self.closed = True
+        atexit.unregister(self.close)
         for input_queue, proc in zip(self.inputs, self.processes):
             if proc.is_alive():
                 try:
@@ -201,11 +292,7 @@ class V11PairPrefetchPool:
             if proc.is_alive():
                 proc.terminate()
                 proc.join(timeout=3.0)
-        for q in [*self.inputs, self.output]:
-            try:
-                q.close()
-            except (ValueError, OSError):
-                pass
+        self._close_queues()
 
     def __enter__(self):
         return self
