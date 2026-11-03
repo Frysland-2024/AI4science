@@ -57,9 +57,13 @@ The new library should not be assumed superior merely because it contains more o
 
 Specific previously recorded caution for Pysimxrd: its default `generator.parser` route may omit forwarding `zero_shift` to `matgen_pxrdsim`; verify against the checked version instead of assuming the optional WPEM path behaves the same. Do not automatically replace our March–Dollase texture with independent peak intensity scaling.
 
-## Requested next deliverable
+## Phase 1 final deliverable — WORKING SOFTWARE (owner clarification, 2026-11-03)
 
-Produce a **source-to-feature comparison** for SimXRD/Pysimxrd, GSAS-II, ML4pXRDs, with PhaseSmith as optional lightweight candidate. Mark each module `KEEP_EXISTING`, `REUSE`, `ADAPT`, `REJECT` or `UNKNOWN`; include code reference, formula/units, seven-system label compatibility, runtime, reproducibility and license. Make a shortlist of *physical effects worth integrating*. Then prepare a small, versioned JS-only simulator/backbone pilot; **do not interpret the pilot as already executed**.
+**No report-only completion.** Source tracing is an implementation prerequisite, not the product. Build an opt-in, versioned PXRD simulator within `xrd_robustness/`, preserving existing cached ideal reflections, same-parent deterministic dual views, original frozen simulation path, and seven-system labels. Implement tested angle-dependent instrumental widths, meaningful size/microstrain broadening, normalized pseudo-Voigt/Voigt-like profile, and optional radiation doublet if independently verified. Provide an actual CIF→two-view CLI, CSV/provenance output, working test suite and a recorded real smoke command. Stop **before** comparing CNN architectures or large CIF training. [Exact implementation/acceptance task — Issue #54](https://github.com/Frysland-2024/AI4science/issues/54).
+
+## Source investigation checklist (internal work, not the final product)
+
+Use a **source-to-feature comparison** internally for SimXRD/Pysimxrd, GSAS-II, ML4pXRDs, with PhaseSmith as optional lightweight candidate. Mark each module `KEEP_EXISTING`, `REUSE`, `ADAPT`, `REJECT` or `UNKNOWN`; include code reference, formula/units, seven-system label compatibility, runtime, reproducibility and license. Make a shortlist of *physical effects worth integrating*. Use findings to implement and validate the simulator as executable software. Architecture comparison is explicitly later and must not start in Phase 1.
 
 **Integrity constraints:** old splits, checkpoints, test sets and frozen results stay unchanged. Do not select model hyperparameters against the old RRUFF locked test. The 2026-10-26 thesis closure remains a valid historical decision, but the **new 2026-11-03 restart supersedes its "no new research" execution status**.
 
