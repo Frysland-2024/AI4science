@@ -12,6 +12,8 @@
 
 **Decision / owner confirmation:** The project lead explicitly stated that the undergraduate thesis has restarted. The 2026-10-26 decision to *stop new work and write up only* is therefore **superseded for forward execution**. It remains a correct historical snapshot, and all completed reports/configurations/predictions remain frozen. Reopening investigation is **not** permission to overwrite old results.
 
+**Execution gate — explicit 2026-11-03 clarification:** **Understand and selectively implement/validate the simulator FIRST; compare model architectures ONLY AFTER the simulator is understood and has passed standalone correctness/reproducibility/performance checks.** No CNN11 training, no architecture leaderboard, and no large-CIF training before this gate. Investigating simulator source is not itself proof of a working upgrade.
+
 **Current ACTIVE sequence:**
 1. **Now:** inspect and compare external PXRD simulator implementations, first SimXRD/Pysimxrd, GSAS-II and ML4pXRDs; PhaseSmith as a lightweight candidate, DebyeCalculator/PowderLine/xrd_simulator lower priority. Produce source-level functionality, physical units, path/seed reproducibility, label-preservation, runtime and license assessment. See [2026-11-03 simulator shortlist](PXRD_SIMULATOR_CANDIDATES_2026-11-03.md).
 2. **Next (not yet executed):** selectively reuse/adapt viable simulator components without replacing existing March–Dollase, background/noise or deterministic same-parent view logic unnecessarily. Keep original simulator as a versioned reference.
