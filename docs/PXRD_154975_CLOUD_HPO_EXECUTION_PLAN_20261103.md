@@ -1,0 +1,64 @@
+# PXRD 154,975-structure cloud-GPU training / hyperparameter optimization plan
+
+**Decision date:** 2026-11-03  
+**Owner-approved status:** stop legacy-data Optuna HPO; **allow the already-running six-cell V10 A0/A1/A2 × R0/R1 campaign to finish naturally and archive**, then transfer **final hyperparameter selection** to the new ≈100k training-parent library and validated V11 simulation. **Planning document only: no cloud server purchased, no cloud training launched.**
+
+## 1. What is stopped vs retained
+
+| Activity | State and instruction | Reason |
+| --- | --- | --- |
+| Legacy six-cell V10 A0/A1/A2 × R0/R1 on 9,842 historical training parents | **Keep running until A2_R1 finishes**; preserve all 6 configs, validation curves, failures, logs, checkpoints, hashes, selection notes | Low-cost architecture/downsampling/JS stability pilot already sunk; not final full-scale HPO |
+| Old `_local/resnet_optuna_20261103/supervise_optuna.py`: up to ten full 49,280-step V10 Optuna trials + 2 finalist models ×2 more seeds | **CANCELLED. DO NOT RESTART**. Its supervisor python process tree was terminated without touching the six-cell trainer; it had remained `waiting_previous`, not begun adaptive GPU trials | Old V10 simulator, artificially class-balanced 9,842-parent subset, training horizon and learning-rate schedule not representative of the final 108,478-parent V11 task |
+| New parent-library acquisition | **Completed and integrity-checked**; do **not** repeat collection | D-drive external source already exists |
+| New V11 peak-table preprocessing / full-scale cloud HPO | **PLANNED**, gated on data-adapter and full-scale integrity smoke, then a rented GPU machine | Genuine downstream training target |
+
+**Local stop record:** `E:\AI4science\_local\resnet_optuna_20261103\owner_cancelled_20261103.json` and `supervisor_state.json: cancelled_by_owner`. The existing six-cell process is independent. **The hourly progress automation was repurposed to notify on the six-cell archival completion only**, never to resume the cancelled Optuna supervisor.
+
+## 2. Frozen data provenance: count parents, not rendered spectra
+
+**Path** `D:\AI4science_external_data\pxrd_scale_sources_20261103\processed\merged_154975_parent_split_20261103`.
+
+- **154,975** unique MP-ID rows; **154,968 canonical parent-structure fingerprint groups**, 7 same-parent MP-ID aliases (handled within one split).
+- **70/15/15**: train **108,483 rows / 108,478 parents**; validation **23,246 rows / 23,245 parents**; synthetic Test **23,246 rows / 23,245 parents**.
+- All historical 14,060 entries preserved, 140,915 additional MP-only IDs included. Dataset validation file has `status: passed`, `parent_split_leakage: false`, `empty_or_malformed_structure_rows: 0`. Original external manifest + SHA256 are authoritative. See local Git commit **a181f36** `docs/STRUCTURE_LIBRARY_154975_SPLIT_EVIDENCE.md`, which might not yet be merged into `main`. Do NOT confuse 154,975 row count with 154,968 independent parents, nor 108,483 training rows with 108,478 independent training parents.
+- The new library is **structure-only** (compressed JSONL shards); **no precomputed full-scale diffraction peak tables or spectra exist yet**. Validation and test shards must remain parent-disjoint and protected from training. RRUFF is a **separate real zero-shot test**, never an Optuna oracle.
+- Substantial class imbalance in the new train parents: cubic **14,288**, hexagonal **7,493**, tetragonal **12,147**, trigonal **9,118**, monoclinic **25,593**, orthorhombic **22,814**, triclinic **17,025**. Do not assume the 7-way-balanced 9,842-parent legacy optimum transfers.
+
+## 3. Cloud execution gates before the first HPO GPU trial
+
+1. **Freeze inputs:** selected A0/A1/A2 backbone and historic six-cell results; simulator V11 source commit/config; external data delivery SHA256; 70/15/15 parent split; RRUFF lockout. Preserve raw source shards and historic frozen checkpoints. Do not move the historical dataset to a new root or alter `legacy_split` provenance.
+2. **Make the V11 data interface real:** the currently implemented training runner expects a JSONL manifest of **precomputed .npz PeakTables**; external library entries use `structure`, while the old precompute reads `standardized_structure`. Implement a verified `structure` → normalized/validated structure → peak-record/PeakTable adapter, a deterministic queue/batch generator and versioned per-parent cache. Prefer **precompute ideal peaks once and generate nuisance-perturbed paired spectra online**, not millions of fixed synthetic .npy waveforms.
+3. **Integrity and speed gate:** log success/failure for every train and validation parent, checks against declared seven-system labels, duplicate-cache keys, input length **3,501 (10–80° in 0.02° steps)**, V11 determinism/finite outputs, peak cache validity, CPU extraction and disk throughput. Existing V11 evidence checks only 7+7 small examples; it **does not establish whole-corpus readiness**. Resolve dataset adapter failures *before* expensive HPO. Protect test and RRUFF from selection/preprocessing-stat leakage.
+4. **Cloud reproducibility:** create a locked Linux/CUDA/PyTorch environment, export only necessary source, small compressed structural shards, manifests and hashes; transfer via authenticated encrypted channel. GPU instance with **at least 24 GB VRAM** as candidate, **40–48 GB** if measured batch/prefetch requires it, ample CPU/RAM (ideally ≥16 vCPU and ≥64 GiB RAM) plus SSD capacity calculated after cache profiling. Benchmark *one A10 24GB vs one A100 40GB-class* if both actually rentable; choose **currency cost per finished valid training-parent exposure or per useful HPO trial**, not marketing age of accelerator. No purchase or cloud deployment authorized by this doc.
+5. **One end-to-end dry run** on the *new* training/validation parents: CPU peak generation sample, GPU forward/backprop for paired views, worker throughput, BF16/FP32 finite CE/JS gradients, checkpoint resume, memory and deterministic reproducibility; **this smoke is not hyperparameter selection**. Run a representative small batch plus a bounded throughput benchmark to estimate per-epoch cost.
+
+Tencent official compute instance catalogue (availability/prices vary by region/date): [A10 24GB PNV4, A100 40GB GT4](https://cloud.tencent.com/document/product/560/19700); GPU specs are candidate classes, not purchased resources.
+
+## 4. The actual ≈100k-parent HPO (new V11, all trials see the real new TRAIN split)
+
+**No more 'final Optuna on 9,842 balanced parents'.** Each genuine HPO candidate uses **all 108,478 training parents** and the **same fixed 23,245 validation parents**; 10k–30k subsets may be used solely for adapter/performance smoke checks, **not to rank or claim final hyperparameters**. The synthetic 23,245-parent Test and real RRUFF are excluded from all HPO/model-selection.
+
+**Suggested bounded optimization sequence:**
+
+1. **Choose an architecture using the completed six-cell V10 report** (A0, A1, A2); transfer the candidate topology, not its precise V10 optimum. Keep a single reasonable baseline and, only if the six-cell comparison is inconclusive, one alternative topology. Avoid a broad new backbone tournament.
+2. **Freeze equal, meaningful training exposure budget based on independent parents/epochs**, not the old magic constant of `49,280` optimizer steps. At batch=16 parents, one pass through 108,478 parents is roughly **6,780 optimizer steps**; 49,280 steps would be about **7.3 parent-equivalent epochs** (versus ~80 for 9,842 old parents). Recompute step count after profiling a stable effective parent batch and choose validation checkpoints by meaningful progress through the training parents. Count views separately (two independently generated views per parent for CE+JS). Avoid naive fixed-steps across different batch sizes.
+3. **Budget**: 1 stable V11/full-data baseline, then **~6–8 bounded single-seed HPO candidates**. Search only plausible ranges: learning rate / scheduler, JS coefficient `lambda_js`, weight decay, and only a *small* batch/gradient-accumulation option if hardware profiling justifies it. Stride/kernel candidates are informed by A0/A1/A2; no unlimited architecture search. Use validation Macro-F1 as the primary choice, monitor validation Accuracy, per-system recall, CE/JS gradient norms, NaNs, and ECE as diagnostics. Use safe early termination for divergent/clearly weak trials but do not compare short runs to full-horizon scores as if equivalent. An optional multicriterion record may include ECE, but it does not replace Macro-F1 selection.
+4. **Class distribution change**: record both *natural-frequency* and a narrowly justified balanced sampling / CE reweighting variant only if per-class recall shows substantial deficiencies. If changing sampling, compare on the same untouched natural validation distribution; label it a separate data-sampling choice, not a free hyperparameter. Do not blindly copy the old balanced-parent probability or set class weights without inspecting effects on RRUFF-relevant error and ECE.
+5. **Finalists**: freeze top **2** full-data configurations from single-seed pilot, confirm each with **2 independent seeds** (or reuse a seed plus 2 additional) if budget permits; choose on aggregated **validation** only. Freeze the winning recipe, simulator and dataset signatures before formal final runs.
+6. **Final model**: **3 independent seeds** of the fixed winner on the full 108,478-parent train library. Keep all three results and report mean ± SD; **5 seeds only if observed variance or a borderline grading threshold would make extra replication materially informative**. No repeated RRUFF evaluation for hyperparameter or best-seed selection.
+
+**HPO record fields:** model backbone, stride/kernel, V11 hash, structure/split hash, unique parent counts, random seed, optimizer and learning rate schedule, batch parents / effective batch / two-view exposure, epochs/steps, selected validation checkpoint, validation Macro-F1/Accuracy/ECE per class, wall time/GPU-hours, peak-table cache hits, GPU util/VRAM, checkpoint and log SHA, stopped/failed trial reason. Publish metadata in GitHub; large checkpoints and structure caches remain in external storage with hashes and retrieval instructions. Never silently upload the whole database, credentials or giant binary checkpoints to Git.
+
+## 5. Publication-focused outputs after freezing full-data model
+
+1. **RRUFF real-domain seven-crystal-system zero-shot Accuracy** on a predeclared eligible cohort, with Macro-F1, confusion matrix, 3-seed mean/SD if possible. **Zero labeled RRUFF training/fine-tuning**; frozen RRUFF test is not used to select hyperparameters/checkpoints, nor to discard cases based on predictions. Comparison table retains pass Vecsei Dense 70%, Salgado NPCNN ~74%, Lee 74.24%; 80 AlphaDiffract 81.74%; full SimXRD CNN11 89.3% and XQueryer-NoElem 91.5%, plus others (e.g. DiffractGPT) in full literature library. Different literature RRUFF cohorts are transparently noted.
+2. **Independent-parent data efficiency curve**: nested, prespecified fraction of available **108,478 training parents** (illustratively 10%, 25%, 50%, 100% ~10,848 / 27,120 / 54,239 / 108,478), parent-separated from unchanged validation/test, and same locked recipe / training-budget comparability statement. Keep supplementary points lean; do not create a second broad HPO search for every fraction.
+3. **ECE** on the explicitly named simulated validation and final real RRUFF test domains. Same final checkpoint rules and fixed bins for all compared methods. No temperature fitting on locked real RRUFF.
+
+## 6. Deliverable / stopping conditions (next session on authorized cloud)
+
+**Readiness gate:** new library hash verified and split validated; V11 all-corpus peak-table converter verified; parent identity and label checks passed; small GPU performance and preemption/resume test passed; cloud GPU/rental price/throughput selected against budget. **Then** launch no more than the predefined bounded HPO work queue.
+
+**Completion gate:** full-data single-seed HPO + finalist 2–3 seed confirmation + frozen 3-seed final model, source-backed logs/checkpoint hashes and reproducible environment. Thereafter produce RRUFF leaderboard, independent-parent learning curve, and ECE; no unbounded new search without a fresh owner decision.
+
+**Explicitly not done now:** starting any new V10 Optuna trial, restarting suspended supervisors, cloud instance provisioning, buying GPUs, or running HPO on the not-yet-precomputed V11 full corpus. This plan is the latest owner-scoped authority above older GitHub Issue #55/#61 text proposing sequential old-data HPO before collecting CIFs.
