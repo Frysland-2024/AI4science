@@ -1,11 +1,13 @@
 import importlib.util
 import json
+import sys
 import tempfile
 import unittest
 from pathlib import Path
 from types import SimpleNamespace
 
 script=Path(__file__).resolve().parents[1]/"one_click_v11.py"
+sys.path.insert(0,str(script.parent))
 spec=importlib.util.spec_from_file_location("v11full",script)
 mod=importlib.util.module_from_spec(spec)
 spec.loader.exec_module(mod)
