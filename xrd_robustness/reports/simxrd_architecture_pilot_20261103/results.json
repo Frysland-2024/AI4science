@@ -28321,8 +28321,10 @@
     "regression_tests_added": [
       "test_selected_v10_changes_training_prefetch_views",
       "test_selected_v10_changes_validation_panel_views",
-      "test_validation_restores_the_incoming_training_mode"
+      "test_validation_restores_the_incoming_training_mode",
+      "test_v10_is_used_for_peak_and_cached_structure_views"
     ],
-    "rerun_performed": false
+    "rerun_performed": false,
+    "regression_tests_execution": "not_run"
   }
 }
