@@ -1,5 +1,7 @@
 # SimXRD / CNN11 pilot — 2026-11-03
 
+> **Integrity hold (2026-11-03):** V10-labelled training and validation views in the initial pilot used the V9 Gaussian renderer, and CNN11 dropout stayed disabled after its first validation. This PR fixes the integration paths and adds regression tests, but the reported V10 and CNN11 outputs were produced before the fixes. Do not interpret those metrics as a valid V10/CNN11 comparison until the panels and runs are regenerated. No rerun has been performed. The standalone renderer smoke checks did not verify the full generation paths.
+
 ## Summary
 
 This post-main pilot used the existing 14,060-CIF, parent-disjoint split. It compared frozen V9 Gaussian + historical ResNet-18-GN checkpoints, V10 pseudo-Voigt/Caglioti + ResNet-18-GN, and V10 + a published no-pooling CNN11-style model. The 2026-10-26 thesis evidence and historical results remain unchanged. No 100k CIF expansion, broad tuning, or additional architecture search was run.
