@@ -7,7 +7,7 @@ from dataclasses import asdict, dataclass
 import json
 from pathlib import Path
 import random
-from typing import Any, Sequence
+from typing import Any, Mapping, Sequence
 
 import numpy as np
 import torch
@@ -20,6 +20,7 @@ from ..peak_cache import load_peak_table
 from ..physics import PhysicsParameterSampler
 from ..simulation_interfaces import PeakTable
 from ..structure_data import CRYSTAL_SYSTEMS
+from ..simulator_v11 import make_peak_table_simulator
 from .objectives import TrainingStepConfig, run_training_step
 
 
@@ -265,6 +266,24 @@ def build_model(config: ML4PXRDResNet1DConfig) -> torch.nn.Module:
     return ML4PXRDResNet1D(config)
 
 
+def build_online_view_factory(
+    sampler: PhysicsParameterSampler,
+    simulation_config: Mapping[str, Any],
+) -> tuple[OnlineViewFactory, str, dict[str, Any]]:
+    """Build the Dynamic ERM/JS renderer selected by the simulation config."""
+    simulator_version = str(simulation_config.get("simulator_version", "v9_gaussian"))
+    line_profile_config = dict(simulation_config.get("line_profile", {}))
+    peak_table_simulator = make_peak_table_simulator(
+        simulator_version,
+        line_profile_config,
+    )
+    return (
+        OnlineViewFactory(sampler, peak_table_simulator=peak_table_simulator),
+        simulator_version,
+        line_profile_config,
+    )
+
+
 def run(args: argparse.Namespace) -> dict[str, Any]:
     if args.epochs <= 0 or args.batch_size <= 0 or args.learning_rate <= 0:
         raise ValueError("epochs, batch_size, and learning_rate must be positive")
@@ -284,6 +303,10 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     sampler = PhysicsParameterSampler.from_mapping(simulation)
     if args.profile not in sampler.profiles:
         raise ValueError(f"profile is absent from simulation config: {args.profile}")
+    factory, simulator_version, line_profile_config = build_online_view_factory(
+        sampler,
+        simulation,
+    )
 
     random.seed(args.seed)
     np.random.seed(args.seed)
@@ -300,7 +323,6 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     )
     mode = TrainingMode(args.mode)
     step_config = TrainingStepConfig(mode=mode, lambda_js=args.lambda_js)
-    factory = OnlineViewFactory(sampler)
     train_records = [record for record in records if record.split == "train"]
     validation_records = [record for record in records if record.split == "validation"]
     resolved = {
@@ -314,6 +336,8 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         "learning_rate": float(args.learning_rate),
         "weight_decay": float(args.weight_decay),
         "profile": args.profile,
+        "simulator_version": simulator_version,
+        "line_profile_config": line_profile_config,
         "records_path": str(records_path),
         "records_sha256": file_hash(records_path),
         "simulation_config_path": str(simulation_path),
