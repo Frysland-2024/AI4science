@@ -2,6 +2,8 @@
 
 **Scope:** Owner asked whether we can screen/curate RRUFF fairly, and requested verification of the actual RRUFF dataset used by **Lee 2023, Salgado 2023, AlphaDiffract 2026, SimXRD-4M 2025, and XQueryer-NoElem 2025**. This is a **document/source and pre-existing-file inspection**, not an executed new RRUFF model evaluation, and does not authorize accessing the frozen held-out panel for tuning. Do not overwrite existing RRUFF-301/70/350/371 assets.
 
+**Current project acceptance selection (owner 2026-11-03):** **zero labeled RRUFF adaptation only**. In the RRUFF grade table, Salgado 2023 contributes its **synthetic-only NPCNN ~74% Accuracy (pass/60)**, **NOT** its **86% Large Souping** result that used **452 labeled RRUFF train spectra**. The ~86% row below is deliberately retained **for provenance/protocol comparison only, ineligible for grading**. Final performance tiers: pass Lee 74.24% + Salgado ~74%; 80 AlphaDiffract 81.74±0.78% (newer PRIMARY; zero labeled adaptation but RRUFF-informed design); full SimXRD CNN11 89.3% + XQueryer-NoElem 91.5%. Other two outcomes remain independent-parent data efficiency and ECE. Do not use held-out RRUFF to tune or filter post hoc.
+
 ## One-table audit
 
 | Paper, model; paper's reported RRUFF CS Accuracy | Original source RRUFF pool | Screening / partition / transform, source-confirmed | Final real-RRUFF classification test size | Labeled RRUFF used for training or fine-tuning | Evidence and unresolved uncertainty |
