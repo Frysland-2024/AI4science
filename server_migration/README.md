@@ -45,3 +45,43 @@ Recommend inspecting 32+ GiB RAM, 16+ GiB GPU memory, and at least 20 GiB spare 
 Changing HPO budget/search parameters after starting a study triggers an immutable-contract error. Use a separately named new study rather than silently overwriting old trials.
 
 **Scope verified (2026-11-03):** The actual 131,729-record train/validation manifest was checked row-by-row: train 108,478 unique parents, Validation 23,245 unique parents, all 7 systems, alias exclusions 5/1, no overlap. Four automated regression tests pass; direct V11 simulated-vs-cached scores matched exactly on a seven-parent six-profile smoke fixture. This does NOT mean full validation GPU scoring or Linux cloud HPO has run.
+
+
+## Unified prefetch and GPU training path (draft update, PR #67)
+
+The same deterministic pipeline is now selected for **all V11 GPU stages**, not
+only Validation:
+
+- TRAIN: a bounded set of 4 `spawn` CPU workers (defaults: `--prefetch-workers 4
+  --prefetch-batches 3 --native-threads 1 --worker-peak-cache 512`) lazily
+  load ideal-peak NPZ into per-worker LRU caches and render same-parent dynamic
+  pairs concurrently with the GPU forward/backward pass. SHA256 material-ID
+  worker sharding and native thread policy are reused from the earlier
+  `training_prefetch.py`.
+- GPU: pinned CPU input buffers, asynchronous H2D transfers, BF16 forward
+  when supported, stable FP32 CE + JS arithmetic, finite-gradient assertion,
+  and periodic last/best checkpoints.
+- VALIDATION: the same V11 prefetch workers render all **23,245 parent-disjoint
+  groups** over six fixed OOD profiles exactly once. The paired float32 spectra
+  are SHA-indexed and memory-mapped for repeated batched GPU evaluation.
+  FP32 inference is the default for consistent HPO ranking. Optional
+  `--validation-bf16` requires separate parity verification.
+- RESUME: CPU can schedule ahead, but the checkpoint saves the RNG state
+  *after the last completed optimizer step*, never the later prefetched RNG
+  state; resumed experiments can reproduce parent selection.
+- OPTUNA: `bash start_server.sh --run` uses this shared loop for six trial
+  configurations plus two-seed confirmation.
+- FINAL: after a completed HPO study, a separate explicit
+  `bash start_server.sh --final` runs three predetermined independent seeds
+  (default 49,280 optimizer steps each) with the **same optimized pipeline**.
+  It saves `final_training_summary.json` but does not evaluate RRUFF/Test.
+  The final stage is NOT automatically started before confirmation.
+- Do **not** transfer or run the older four-ZIP kit unchanged. The private
+  `source_snapshot.zip` must be regenerated from PR #67 after the laptop
+  reconnects, including `v11_prefetch.py`, then SHA256SUMS updated.
+  The existing `start_server.sh` detects and rejects stale source ZIPs.
+
+**Validation level:** integration code and regression tests are committed
+to GitHub, but the authorized laptop is offline. The new pipeline has NOT yet
+been executed through the full GPU parity/throughput/resume tests or the rented
+Linux server. Do not claim it is a fully tested production runner.
