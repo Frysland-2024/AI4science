@@ -7,17 +7,19 @@
 
 **Only three top-level research outcomes are assessed: (1) real-RRUFF seven-crystal-system top-1 Accuracy; (2) unique-CIF-parent data-efficiency curve; (3) ECE / probability calibration.** RRUFF Accuracy is the **sole criterion for the 60/80/100 project-performance grade**; data efficiency and ECE remain complementary headline evidence, not substitutes for RRUFF classification performance. Simulated OOD F1 is an internal optimization metric, not a final-grade score. Retain negative historical results and full scientific audit separately.
 
-**Owner-frozen literature tiers (grading numbers are not percentages):**
+**Owner-frozen literature tiers — 2026-11-03 latest correction: ZERO-SHOT RESULTS ONLY.** Here zero-shot means **no labeled RRUFF spectra were used for training/fine-tuning**. The final project must also freeze the model without searching the locked RRUFF test. Some source papers consulted RRUFF for design decisions, so *zero labeled adaptation* must not be misrepresented as *fully target-domain blind*.
 
-| Grade tier | Named paper(s) | Reported RRUFF seven-system top-1 Accuracy | Source-model real RRUFF labeled adaptation | Interpretive priority |
-| --- | --- | ---: | --- | --- |
-| **Pass / 60 points** | **Lee et al. 2023** | **74.24%** | **0** | Minimum literature target |
-| **80 points** | **AlphaDiffract 2026 (Andrejevic et al.)** | **81.74 ± 0.78%** | **0 labeled RRUFF spectra**, but RRUFF noise statistics and score informed some design/selection choices | **PRIMARY 80-point comparator**: newer 2026 ten-model ensemble |
-| **80 points, additional reference** | **Salgado et al. 2023 (Large Souping)** | **86%** | **~452 labeled RRUFF spectra** included in training | Distinct real-adaptation setting; show adaptation budget explicitly, not the same zero-shot protocol |
-| **Full / 100 points** | **SimXRD-4M 2025 CNN11** | **89.3%** | **0** | Full-score literature comparator |
-| **Full / 100 points** | **XQueryer-NoElem 2025** | **91.5%** | **0** | Full-score literature comparator; PXRD-only, no element-identity input |
+| Grade tier | Named paper and selected model condition | RRUFF crystal-system Accuracy | Labeled RRUFF training / fine-tuning count | Priority / qualification |
+| --- | --- | ---: | ---: | --- |
+| **Pass / 60** | **Lee 2023, large FCN** | **74.24%** | **0** | Zero-shot reference |
+| **Pass / 60** | **Salgado 2023, synthetic-only NPCNN** | **about 74%** | **0** | **Use this model result, NOT the 86% adapted result** |
+| **80** | **AlphaDiffract 2026, 10-model ensemble** | **81.74 ± 0.78%** | **0** | **PRIMARY 80-tier**; RRUFF-informed simulation noise statistics and loss selection, not strictly domain-blind |
+| **Full / 100** | **SimXRD-4M 2025, CNN11** | **89.3%** | **0** | Zero-shot RRUFF |
+| **Full / 100** | **XQueryer-NoElem 2025** | **91.5%** | **0** | Zero-shot RRUFF; PXRD-only |
 
-**Mandatory comparison-table columns, always:** Paper/model | **number of simulated independent crystal structures / curated CIF records** (distinguish duplicate records from verified unique parents) | **actual number of real RRUFF spectra in the evaluation** (report source catalog separately if metric denominator unknown) | **RRUFF Accuracy** | **number of labeled real RRUFF spectra used for training/adaptation**. For AlphaDiffract, also note RRUFF statistical-domain information use and ten-model ensemble. For Salgado 86%, the reported ~452 labeled RRUFF training spectra is essential context, not a footnote to omit.
+**Explicitly excluded from acceptance tier:** Salgado's **86%** 'Large Souping' result trained on about **452 labeled RRUFF profiles** and evaluates a different held-out split; it remains source evidence in historical protocol audit, but must NOT appear as a graded zero-shot comparator. Paper cohorts and filters differ; these percentages are literature target markers, not a same-test-set leaderboard.
+
+**Mandatory comparison-table columns, always:** Paper/model | **number of simulated independent crystal structures / curated CIF records** (distinguish duplicate records from verified unique parents) | **actual number of real RRUFF spectra in the evaluation** (report source catalog separately if metric denominator unknown) | **RRUFF Accuracy** | **number of labeled real RRUFF spectra used for training/adaptation**. For AlphaDiffract, also note RRUFF statistical-domain information use and ten-model ensemble. In grading rows, use ONLY Salgado's synthetic-only ~74% result with 0 RRUFF labels; preserve its 86%/452-real-label result in a separate historically informative, non-grading row.
 
 **Acceptance and fairness boundary:** This is a simple owner-defined *literature reference scorecard*, NOT a claim that published results were measured on the same RRUFF IDs / curation / instrument / preprocessing / class distribution. Use these scores to communicate ambitions; record matched-test re-evaluation whenever reproducible, and label unmatched papers as reference thresholds. Never select hyperparameters by repeatedly consulting a locked real-RRUFF test. Never call use of unlabeled target-domain statistics 'strict target-domain blind'.
 
