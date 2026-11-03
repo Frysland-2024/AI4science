@@ -1,5 +1,8 @@
 # RRUFF real-domain literature benchmark plan (2026-10-22)
 
+
+**2026-11-03 source audit of FIVE papers' actual RRUFF screening cohorts:** [RRUFF_FIVE_PAPER_COHORT_SOURCE_AUDIT_20261103.md](RRUFF_FIVE_PAPER_COHORT_SOURCE_AUDIT_20261103.md). This distinguishes Lee's top-40% low-angle-background rejection, Salgado's 452-real-spectrum souping, AlphaDiffract's exact 734 chain, XQueryer's 2,088→1,003 data-adequacy filtering and 849 separate MP matches, and the still-unknown SimXRD Table-5 test denominator. **Publication targets do not authorize score-conditioned filtering of a locked test.**
+
 ## CURRENT ACCEPTANCE SCORECARD — owner decision, 2026-11-03
 
 **Only three top-level research outcomes are assessed: (1) real-RRUFF seven-crystal-system top-1 Accuracy; (2) unique-CIF-parent data-efficiency curve; (3) ECE / probability calibration.** RRUFF Accuracy is the **sole criterion for the 60/80/100 project-performance grade**; data efficiency and ECE remain complementary headline evidence, not substitutes for RRUFF classification performance. Simulated OOD F1 is an internal optimization metric, not a final-grade score. Retain negative historical results and full scientific audit separately.
