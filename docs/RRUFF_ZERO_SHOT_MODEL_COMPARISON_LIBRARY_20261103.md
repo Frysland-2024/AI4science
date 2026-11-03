@@ -12,18 +12,23 @@ The figure is a **readable SVG recreation of the user's screenshot**, not the so
 
 **Owner 2026-11-03 correction:** Vecsei et al. 2019 **Dense/MLP at 70.0% is PASS/60**, not a below-pass reference. Its 56.0% CNN variant remains in the broader comparison. The pass tier is a set of literature anchors, not a demand that all different RRUFF cohorts were identical.
 
-## A. Owner-approved grading references — *zero labeled RRUFF adaptation*
+## A. Owner-approved grading — presentation-ready five-column table
 
-| Grade tier | Paper / model variant | RRUFF crystal-system Accuracy | Labeled RRUFF used to fit model | RRUFF cohort caveat / extra information |
-| --- | --- | ---: | ---: | --- |
-| **Pass/60** | **Vecsei et al., 2019 — Dense network / MLP** | **70.0%** | **0** | **Owner-confirmed pass-tier benchmark**; source number in AlphaDiffract 2026 Table 1 citing Vecsei; different RRUFF cohort |
-| **Pass/60** | **Lee et al., 2023 — Large FCN** | **74.24%** | **0** | ~1,600 collected; highest-background 40% removed; retained IDs / denominator Unknown |
-| **Pass/60** | **Salgado et al., 2023 — Large NPCNN synthetic-only** | **~74%** | **0** | Different from the ~452 real-training 'Large Souping' 86% result; RRUFF cohort lacked trigonal |
-| **80 (primary)** | **Andrejevic et al., 2026 — AlphaDiffract Cls.+Regr. Ensemble** | **81.74 ± 0.78%** | **0** | 734 curated RRUFF classification patterns incl. 59 calculated from single-crystal observations; RRUFF noise statistics and evaluation informed development; 10-model ensemble |
-| **Full/100** | **Cao et al., 2025 — SimXRD-4M CNN11** | **89.3%** | **0** | exact Table 5 RRUFF test denominator/IDs Unknown |
-| **Full/100** | **Cao et al., 2025 — XQueryer-NoElem** | **91.5 ± 1.5%** | **0** | 1,003 selected RRUFF profiles; elemental metadata input disabled |
+**Approved slide format:** Grade | Paper / model | **Simulated training source structures (CIF parents / curated records)** | **Real RRUFF evaluation spectra** | **RRUFF seven-system top-1 Accuracy**. Values are grounded in original-paper statistics; estimates and unknowns are explicitly marked, not substituted with archive catalog size.
 
-**Definition:** 'Zero-shot' here means no labeled RRUFF training or fine-tuning, **not necessarily** 'RRUFF measurements never informed augmentation, hyperparameter choice, or other upstream decisions'; AlphaDiffract is explicitly RRUFF-informed. Do not optimize our own final checkpoints using held-out RRUFF. Original sources and screening audits: [literature benchmark](RRUFF_REAL_DOMAIN_LITERATURE_BENCHMARK_2026-10-22.md) and [five-paper cohort audit](RRUFF_FIVE_PAPER_COHORT_SOURCE_AUDIT_20261103.md).
+| Grade | Paper / model | Simulated training structures | Real RRUFF test spectra | RRUFF Accuracy |
+| --- | --- | ---: | ---: | ---: |
+| **Pass / 60** | **Vecsei et al. 2019 — Dense/MLP** | **114,404 actual training** (128,404 deduplicated total) | **~800** | **70.0%** |
+| **Pass / 60** | **Salgado et al. 2023 — synthetic-only Large NPCNN** | **171,006 curated ICSD parents*** | **~908 source entries** (precise zero-shot evaluated N unverified) | **~74%** |
+| **Pass / 60** | **Lee et al. 2023 — Large FCN** | **197,131 curated ICSD parents*** | **~960 inferred** (about 1,600 source spectra, highest-background 40% removed; precise evaluated N unverified) | **74.24%** |
+| **80 / PRIMARY** | **AlphaDiffract 2026 — 10-model ensemble** | **312,267 curated ICSD + MP records*** | **734** | **81.74 ± 0.78%** |
+| **Full / 100** | **SimXRD-4M 2025 — CNN11** | **119,569 unique MP parents** | **Unknown** (**3,002 is archive/catalog count, NOT confirmed score denominator**) | **89.3%** |
+| **Full / 100** | **XQueryer-NoElem 2025** | **100,315 MP structures*** | **1,003** | **91.5 ± 1.5%** |
+
+* **Training-structure interpretation:** An asterisk denotes **curated structure corpus/structure records**, which should not silently be labeled the exact **post-split training** parent count. For Vecsei, the **original paper explicitly states 128,404 deduplicated input patterns, divided into 7,000 simulated test, 7,000 simulated validation and 114,404 training**. For Salgado, Lee, XQueryer, the listed figures are paper corpus sizes and actual training subsets may be smaller. For AlphaDiffract, 312,267 retained ICSD/MP records are not formally proven independent-parent deduplicated across databases. SimXRD's 119,569 structures participate in all environment-view splits of the in-library training scenario; its out-of-library scenario uses different nonoverlapping parents. All source-versus-training distinctions matter for a future data-efficiency comparison.
+* **RRUFF test N interpretation:** Vecsei's source evaluates about **800** real RRUFF records. Salgado's **~74% synthetic-only** result is on its reported **908-record RRUFF dataset**, but its exact evaluated count/IDs for that condition are not independently recovered. Lee's **~960 is arithmetic only** (0.6 × approximately 1,600); the exact postfilter number is unpublished. SimXRD's **3,002 is a catalog reference**, NOT a confirmed 89.3% evaluation size. AlphaDiffract's **734 classification** count includes 59 calculated powder profiles derived from single-crystal measurements. XQueryer's **1,003 classification** count is distinct from 849 MP-matched structure identification records.
+* **Zero-shot comparison rule:** **All six owner-assigned grading entries use 0 labeled RRUFF training/fine-tuning samples**, not 0 potential use of unlabeled target-domain information. AlphaDiffract is RRUFF-informed in its augmentation/noise and some hyperparameter decisions. Salgado's **86% using ~452 real RRUFF training spectra** is separate and **not eligible** for grading. Different published RRUFF curation choices mean this is a literature TARGET scoreboard, not matched-sample head-to-head benchmarking. Keep the RRUFF locked test outside model selection.
+* **Primary sources:** [Vecsei 2019 original PDF, Section IV, Table I](https://arxiv.org/pdf/1812.05625) (114,404 training; ~800 RRUFF); [Salgado 2023](https://www.nature.com/articles/s41524-023-01164-8); [Lee 2023](https://doi.org/10.1002/aisy.202300140); [AlphaDiffract 2026](https://arxiv.org/html/2603.23367v1); [SimXRD-4M 2025](https://proceedings.iclr.cc/paper_files/paper/2025/file/b04843d76c9f090beca55f335c4ea6bf-Paper-Conference.pdf); [XQueryer-NoElem 2025](https://academic.oup.com/nsr/article/12/12/nwaf421/8268901). Detailed row-specific cohort sourcing: [five-paper cohort audit](RRUFF_FIVE_PAPER_COHORT_SOURCE_AUDIT_20261103.md).
 
 ## B. Additional published model variants INCLUDED in the RRUFF comparison (without creating new 60/80/full thresholds)
 
