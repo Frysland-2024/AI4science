@@ -150,6 +150,27 @@ def test_resnet18_output_contract() -> None:
     assert output["main_tokens"].shape == (2, 14, 512)
     assert output["prior_tokens"] is None
     assert model.final_length == 14
+    assert model.stages[1][0].conv1.stride == 4
+    assert model.stages[1][0].conv1.kernel_size == 9
+    assert model.embedding.weight.shape == (256, 512 * 14)
+
+
+def test_resnet18_versioned_stride_kernel_and_head_options() -> None:
+    config = ML4PXRDResNet1DConfig(
+        model_id="18",
+        input_length=3501,
+        stage_downsample_stride=2,
+        residual_kernel_size=3,
+        head_mode="global_avg_dense",
+    )
+    model = ML4PXRDResNet1D(config)
+    output = model(torch.zeros(1, 3501))
+    assert model.final_length == 110
+    assert model.stages[1][0].conv1.stride == 2
+    assert model.stages[1][0].conv1.kernel_size == 3
+    assert model.embedding.weight.shape == (256, 512)
+    assert output["logits"].shape == (1, 7)
+    assert output["main_tokens"].shape == (1, 110, 512)
 
 
 def test_resnet18_initialization_is_seed_deterministic() -> None:

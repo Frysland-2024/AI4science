@@ -51,6 +51,21 @@ class ML4PXRDResNet1DConfig:
     add_additional_dense_layer: bool = True
     dense_width: int = 256
     embed_dim: int = 256
+    stage_downsample_stride: int | None = None
+    residual_kernel_size: int | None = None
+    head_mode: str = "flatten_dense"
+
+    @property
+    def resolved_stage_downsample_stride(self) -> int:
+        if self.stage_downsample_stride is not None:
+            return int(self.stage_downsample_stride)
+        return 4 if self.square_kernel_size_and_stride else 2
+
+    @property
+    def resolved_residual_kernel_size(self) -> int:
+        if self.residual_kernel_size is not None:
+            return int(self.residual_kernel_size)
+        return 9 if self.square_kernel_size_and_stride else 3
 
     def validate(self) -> None:
         if self.model_id not in _RESNET_SPECS:
@@ -61,6 +76,12 @@ class ML4PXRDResNet1DConfig:
             raise ValueError("GroupNorm settings must be positive")
         if self.dense_width <= 0 or self.embed_dim != self.dense_width:
             raise ValueError("embed_dim must equal the source dense_width")
+        if self.resolved_stage_downsample_stride <= 0:
+            raise ValueError("stage_downsample_stride must be positive")
+        if self.resolved_residual_kernel_size <= 0 or self.resolved_residual_kernel_size % 2 == 0:
+            raise ValueError("residual_kernel_size must be a positive odd integer")
+        if self.head_mode not in {"flatten_dense", "global_avg_dense"}:
+            raise ValueError("head_mode must be flatten_dense or global_avg_dense")
         for channels, _ in _RESNET_SPECS[self.model_id]:
             groups = min(self.group_norm_groups, channels)
             if channels % groups != 0:
@@ -149,7 +170,7 @@ class _BasicResidualBlock1D(nn.Module):
         use_projection: bool,
     ) -> None:
         super().__init__()
-        kernel = 9 if config.square_kernel_size_and_stride else 3
+        kernel = config.resolved_residual_kernel_size
         self.projection = None
         self.projection_norm = None
         if use_projection:
@@ -204,7 +225,7 @@ class ML4PXRDResNet1D(nn.Module):
 
         groups: list[nn.Module] = []
         in_channels = 64
-        stage_stride = 4 if config.square_kernel_size_and_stride else 2
+        stage_stride = config.resolved_stage_downsample_stride
         for stage_index, (out_channels, repeats) in enumerate(_RESNET_SPECS[config.model_id]):
             stride = 1 if stage_index == 0 else stage_stride
             blocks: list[nn.Module] = [
@@ -233,7 +254,11 @@ class ML4PXRDResNet1D(nn.Module):
         final_length = self._feature_length(config.input_length)
         self.final_channels = in_channels
         self.final_length = final_length
-        flattened = self.final_channels * self.final_length
+        flattened = (
+            self.final_channels
+            if config.head_mode == "global_avg_dense"
+            else self.final_channels * self.final_length
+        )
         if config.add_additional_dense_layer:
             self.embedding = nn.Linear(flattened, config.dense_width)
             self.head = nn.Linear(config.dense_width, config.num_classes)
@@ -245,7 +270,7 @@ class ML4PXRDResNet1D(nn.Module):
     def _feature_length(self, length: int) -> int:
         length = math.ceil(length / 2)
         length = math.ceil(length / 2)
-        stride = 4 if self.config.square_kernel_size_and_stride else 2
+        stride = self.config.resolved_stage_downsample_stride
         for stage_index in range(len(_RESNET_SPECS[self.config.model_id])):
             if stage_index > 0:
                 length = math.ceil(length / stride)
@@ -289,9 +314,14 @@ class ML4PXRDResNet1D(nn.Module):
         features = self.stem_pool(self.stem_activation(self.stem_norm(self.stem(x))))
         for stage in self.stages:
             features = stage(features)
-        flat = torch.flatten(features, 1)
+        token_features = features
+        if self.config.head_mode == "global_avg_dense":
+            head_features = features.mean(dim=-1, keepdim=True)
+        else:
+            head_features = features
+        flat = torch.flatten(head_features, 1)
         embedding = self.embedding(flat)
-        return embedding, features
+        return embedding, token_features
 
     def forward(self, x: torch.Tensor) -> BackboneOutput:
         embedding, features = self.encode(x)

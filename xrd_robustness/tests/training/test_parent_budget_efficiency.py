@@ -37,7 +37,10 @@ def test_frozen_parent_manifest_has_exact_nested_stratified_budgets() -> None:
     ranked_path = MANIFEST_DIR / "ranked_train_parents.v1.csv"
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     assert manifest["status"] == "frozen_before_training"
-    assert manifest["ranked_train_file"]["sha256"] == _sha256(ranked_path.read_bytes())
+    # Git checks out this frozen text manifest with CRLF on Windows; hash its
+    # canonical LF content without rewriting the frozen file.
+    ranked_bytes = ranked_path.read_bytes().replace(b"\r\n", b"\n")
+    assert manifest["ranked_train_file"]["sha256"] == _sha256(ranked_bytes)
     with ranked_path.open("r", newline="", encoding="utf-8") as handle:
         ranked = list(csv.DictReader(handle))
     assert len(ranked) == BUDGETS["100"]

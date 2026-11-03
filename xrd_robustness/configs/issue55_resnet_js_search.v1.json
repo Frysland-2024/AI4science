@@ -1,0 +1,122 @@
+{
+  "schema_version": "issue55-resnet-dynamic-js-search-v1",
+  "status": "active_bounded_validation_only_search",
+  "issue": 55,
+  "objective": "Dynamic JS only; validation-selected ResNet-18-GN under the V11 online simulator",
+  "data_contract": {
+    "dataset_root": "data/formal_14060",
+    "split_manifest": "manifests/split_manifest.json",
+    "split_manifest_sha256": "B9D3B72E42EA0FD549DAE34425FF61D2D650D5DD7FE6F337D747CB952CF43293",
+    "source_records": "mp_processed/structure_records.jsonl",
+    "source_records_sha256": "05D5D33F200194612A8CDBE29D9443FC7BAD9C245F66D185364B66A75915CC6C",
+    "peak_cache_manifest": "manifests/peak_cache_manifest.v7.reflection.csv",
+    "peak_cache_manifest_sha256": "6AE0CFD1B5B29671E2F532D7A094F2FC412CABD64E4CF77D42915937BACC8D18",
+    "expected_counts": {
+      "train": 9842,
+      "validation": 2109,
+      "test": 2109
+    },
+    "training_access": ["train"],
+    "selection_access": ["validation"],
+    "test_access": "forbidden; split manifest is read only to validate membership/counts"
+  },
+  "simulation": {
+    "version": "v11_tch_pseudo_voigt",
+    "config": "simulation.v11_tch_pseudo_voigt.json",
+    "training_profile": "train",
+    "validation_profiles": [
+      "ood_shift_negative",
+      "ood_shift_positive",
+      "ood_broadening",
+      "ood_noise",
+      "ood_background",
+      "ood_texture"
+    ],
+    "tie_break_profile": "in_range",
+    "validation_seed": 20260721,
+    "validation_view_policy": "one deterministic view per parent/profile, shared across every candidate"
+  },
+  "training": {
+    "mode": "dynamic_js",
+    "optimizer": "AdamW",
+    "batch_size_parents": 16,
+    "weight_decay": 0.0001,
+    "exploration_learning_rate": 0.0001,
+    "exploration_lambda_js": 60.0,
+    "exploration_scheduler": "none",
+    "exploration_seed": 20261103,
+    "validation_interval_steps": 6160,
+    "exploration_steps_per_candidate": 12320,
+    "learning_rate_candidates": [0.00005, 0.0002],
+    "scheduler_candidates": ["none", "cosine_5pct_floor"],
+    "lambda_js_candidates": [30.0, 60.0, 120.0],
+    "final_seeds": [20261104, 20261105],
+    "final_optimizer_steps_per_seed": 49280,
+    "final_validation_interval_steps": 6160,
+    "parent_sampling": "seeded shuffled cycles without replacement within each cycle; complete batches may cross cycle boundaries",
+    "gradient_diagnostic_batches": 32
+  },
+  "architecture_search": {
+    "selection_order": [
+      "baseline_source_faithful",
+      "stage_stride_2",
+      "residual_kernel_3",
+      "global_average_head"
+    ],
+    "candidates": {
+      "baseline_source_faithful": {
+        "stage_downsample_stride": 4,
+        "residual_kernel_size": 9,
+        "head_mode": "flatten_dense"
+      },
+      "stage_stride_2": {
+        "stage_downsample_stride": 2,
+        "residual_kernel_size": 9,
+        "head_mode": "flatten_dense"
+      },
+      "residual_kernel_3": {
+        "stage_downsample_stride": 4,
+        "residual_kernel_size": 3,
+        "head_mode": "flatten_dense"
+      },
+      "global_average_head": {
+        "stage_downsample_stride": 4,
+        "residual_kernel_size": 9,
+        "head_mode": "global_avg_dense"
+      }
+    }
+  },
+  "selection": {
+    "primary": "mean Macro-F1 across the six validation OOD profiles",
+    "tie_breakers": [
+      "higher validation in-range Macro-F1",
+      "earlier optimizer step",
+      "candidate order in the frozen protocol"
+    ],
+    "selection_data": "synthetic validation only",
+    "locked_rruff_test": "not loaded or evaluated by this search"
+  },
+  "runtime": {
+    "prefetch_worker_count": 8,
+    "prefetch_batches": 8,
+    "worker_native_threads": 1,
+    "multiprocessing_start_method": "spawn",
+    "main_cpu_threads": 2,
+    "main_cpu_interop_threads": 1,
+    "amp": "bf16 when supported, otherwise fp32",
+    "tf32": true,
+    "cudnn_deterministic": true,
+    "cudnn_benchmark": false,
+    "max_trials_including_final": 11,
+    "max_optimizer_steps_including_gradient_diagnostic": 209472,
+    "max_parent_occurrences_including_gradient_diagnostic": 3351552,
+    "max_generated_views_including_gradient_diagnostic": 6703104,
+    "stop_on_gpu_oom": false
+  },
+  "output_policy": {
+    "root": "outputs/issue55_resnet_js_v11_20261103",
+    "raw_logs": "append-only JSONL per trial",
+    "checkpoints": "best and last per trial; ignored local outputs, never overwrite existing files",
+    "selection_artifacts": "validation metrics, resolved configs, hashes and checkpoint SHA-256"
+  }
+}
