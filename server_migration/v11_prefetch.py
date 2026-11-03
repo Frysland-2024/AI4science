@@ -212,3 +212,20 @@ class V11PairPrefetchPool:
 
     def __exit__(self, exc_type, exc, tb):
         self.close()
+
+def iter_prefetched_batches(
+    pool: V11PairPrefetchPool, records: Sequence[Any], *,
+    profile: str, epoch: int = 0, global_step: int = 0, batch_size: int = 64,
+):
+    """CPU render upcoming batches while the consumer writes/scorers use prior ones."""
+    if batch_size < 1:
+        raise ValueError("batch_size must be positive")
+    next_submit = 0
+    for start in range(0, len(records), batch_size):
+        while (next_submit < len(records)
+               and len(pool.pending) < pool.prefetch_batches):
+            rows = records[next_submit:next_submit + batch_size]
+            pool.submit(next_submit, rows, epoch=epoch,
+                        global_step=global_step, profile=profile)
+            next_submit += batch_size
+        yield start, pool.get(start)
