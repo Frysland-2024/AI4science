@@ -1,5 +1,7 @@
 # PXRD SimXRD / CNN11 Pilot — 2026-11-03
 
+> **Integrity hold (2026-11-03):** The initial pilot routed V10-labelled training and validation views through the V9 Gaussian renderer, and the evaluation helper left CNN11 in `eval()` after its first validation. The integration fixes and regression tests are now on this PR, but the recorded V10 ResNet and CNN11 outputs below were produced before those fixes. Treat those metrics as invalid for the intended V10/CNN11 comparison until affected panels and runs are regenerated. No rerun has been performed. Standalone renderer smoke checks did not exercise these integration paths.
+
 ## Decision record
 
 **Date:** 2026-11-03  
