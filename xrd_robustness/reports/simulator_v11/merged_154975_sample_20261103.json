@@ -1,0 +1,116 @@
+{
+  "pair_context": {
+    "epoch": 4,
+    "global_step": 123,
+    "profile": "train"
+  },
+  "pymatgen_version": "2026.5.4",
+  "results": {
+    "cubic": {
+      "checks": {
+        "finite": true,
+        "label_matches_at_symprec_0p1": true,
+        "output_shape_3501": true,
+        "replay_exact": true,
+        "same_parent": true,
+        "views_distinct": true
+      },
+      "material_id": "mp-1006256",
+      "peak_count": 14,
+      "pymatgen_label_symprec_0p1": "cubic",
+      "stored_label": "cubic"
+    },
+    "hexagonal": {
+      "checks": {
+        "finite": true,
+        "label_matches_at_symprec_0p1": true,
+        "output_shape_3501": true,
+        "replay_exact": true,
+        "same_parent": true,
+        "views_distinct": true
+      },
+      "material_id": "mp-1001835",
+      "peak_count": 34,
+      "pymatgen_label_symprec_0p1": "hexagonal",
+      "stored_label": "hexagonal"
+    },
+    "monoclinic": {
+      "checks": {
+        "finite": true,
+        "label_matches_at_symprec_0p1": true,
+        "output_shape_3501": true,
+        "replay_exact": true,
+        "same_parent": true,
+        "views_distinct": true
+      },
+      "material_id": "mp-1004528",
+      "peak_count": 216,
+      "pymatgen_label_symprec_0p1": "monoclinic",
+      "stored_label": "monoclinic"
+    },
+    "orthorhombic": {
+      "checks": {
+        "finite": true,
+        "label_matches_at_symprec_0p1": true,
+        "output_shape_3501": true,
+        "replay_exact": true,
+        "same_parent": true,
+        "views_distinct": true
+      },
+      "material_id": "mp-1001614",
+      "peak_count": 22,
+      "pymatgen_label_symprec_0p1": "orthorhombic",
+      "stored_label": "orthorhombic"
+    },
+    "tetragonal": {
+      "checks": {
+        "finite": true,
+        "label_matches_at_symprec_0p1": true,
+        "output_shape_3501": true,
+        "replay_exact": true,
+        "same_parent": true,
+        "views_distinct": true
+      },
+      "material_id": "mp-1001836",
+      "peak_count": 12,
+      "pymatgen_label_symprec_0p1": "tetragonal",
+      "stored_label": "tetragonal"
+    },
+    "triclinic": {
+      "checks": {
+        "finite": true,
+        "label_matches_at_symprec_0p1": true,
+        "output_shape_3501": true,
+        "replay_exact": true,
+        "same_parent": true,
+        "views_distinct": true
+      },
+      "material_id": "mp-1002571",
+      "peak_count": 104,
+      "pymatgen_label_symprec_0p1": "triclinic",
+      "stored_label": "triclinic"
+    },
+    "trigonal": {
+      "checks": {
+        "finite": true,
+        "label_matches_at_symprec_0p1": true,
+        "output_shape_3501": true,
+        "replay_exact": true,
+        "same_parent": true,
+        "views_distinct": true
+      },
+      "material_id": "mp-1001604",
+      "peak_count": 42,
+      "pymatgen_label_symprec_0p1": "trigonal",
+      "stored_label": "trigonal"
+    }
+  },
+  "sample_count": 7,
+  "sampling": "first encountered record per crystal_system from the train shard",
+  "simulation_config_sha256": "367aeb8a28c88106ab6df13b4d6b10cf088534318b9d78dd94b6d2f41bc79860",
+  "simulator_version": "v11_tch_pseudo_voigt",
+  "source_shard": "D:\\AI4science_external_data\\pxrd_scale_sources_20261103\\processed\\merged_154975_parent_split_20261103\\train_structures.jsonl.gz",
+  "source_shard_sha256": "e6b8b841d7973f83ef73068ed5755ff810a35737e0a54a931207a4e6c6f2ebb6",
+  "source_split": "train",
+  "status": "PASS"
+}
