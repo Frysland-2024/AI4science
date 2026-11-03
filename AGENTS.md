@@ -5,6 +5,16 @@
 
 This file defines how an agent should obtain project truth, change the codebase, and preserve scientific provenance. It is an operating contract, not a scientific-results document.
 
+## 2026-11-03 ACTIVE RESTART — SIMULATOR IMPLEMENTATION FIRST (supersedes October 26 no-new-work rule)
+
+The project owner explicitly restarted the PXRD seven-crystal-system undergraduate thesis. **The 2026-10-26 instruction to write up only, and the old blanket prohibition on new simulator work, are historical, not the current execution rule.** Treat the dated October 26 sections below as retained evidence boundaries, not blockers for this newly authorized research. [Current state](docs/CURRENT_STATE.md) and [simulator candidates](docs/PXRD_SIMULATOR_CANDIDATES_2026-11-03.md) give the active plan.
+
+**Immediate executable goal:** deliver a **working, versioned, physically credible online PXRD simulator** by reading and selectively reusing mature upstream implementations (SimXRD/Pysimxrd, GSAS-II and ML4pXRDs; PhaseSmith if useful). Source investigation is a means, **not the final deliverable**. Submit functional code, configuration, tests, a runnable CIF→two seeded views smoke command and verification output, with minimal usage instructions. Keep frozen experiments and their defaults unchanged. It is now permissible to change `xrd_robustness/` on a new feature branch to build the versioned simulator, provided historical code paths and evidence are not overwritten.
+
+**Hard ordering:** source study → selective simulator implementation → simulator validation → only then a JS-only ResNet-18-GN versus CNN11 architecture pilot. **No architecture comparison or 100k-CIF/GPU training in this phase.** Do not use the RRUFF-231 locked test for simulator tuning. Preserve labels and parent identity; do not introduce arbitrary lattice deformation that breaks seven-system labels. Cite code origins and honor upstream licenses. Never call source code inspection, a created Issue, or a proposed PR a completed simulator.
+
+**Execution note:** the existing `research_bridge` coding lane still protects `xrd_robustness/` and does not auto-authorize this task; it must not be bypassed merely because the broader research direction is active. Use a separately authorized Codex coding session/PR or explicitly reviewed bridge policy changes.
+
 ## 1. Source-of-truth hierarchy
 
 When sources disagree, use the following order unless a new scientific decision explicitly supersedes it:
