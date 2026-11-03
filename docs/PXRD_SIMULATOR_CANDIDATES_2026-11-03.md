@@ -38,6 +38,14 @@ Current implementation in `xrd_robustness/src/xrd_robustness/` includes:
 
 The new library should not be assumed superior merely because it contains more options. Preserve existing frozen versioned configurations and results.
 
+## Mandatory phase gate — simulator before backbone (owner decision)
+
+**Phase S1: source understanding.** Trace SimXRD/Pysimxrd, GSAS-II, ML4pXRDs (PhaseSmith optional), including concrete code paths, formulas and units, parameter distributions, seed control, labels, licensing and runtime. Record exactly what is implemented vs assumed; choose modules to reuse, adapt or reject.
+
+**Phase S2: simulator construction and standalone acceptance.** Integrate only selected components into a new, versioned simulator while preserving cached ideal peaks, same-parent paired views and frozen old code. Validate physics, label preservation, deterministic replay, peak area/shape, noise and throughput on a small fixed CIF set. Compare generated profiles against original and reference implementations. Produce a runnable simulator and evidence-backed acceptance report.
+
+**Gate:** Architecture comparison remains **BLOCKED** until Phase S1/S2 are complete and the simulator is demonstrated to work, with documented exceptions/limitations. Passing this gate authorizes planning a controlled **JS-only ResNet-18-GN vs CNN11** pilot on shared CIF and evaluation conditions, not automatic large-scale GPU jobs. Keep RRUFF locked test out of tuning.
+
 ## First audit questions, before any code adaptation
 
 1. **Exact path from CIF to 1D intensity:** underlying structural data, space-group/symmetry treatment, ideal structure factors and `hkl`, peak positions and normalization.
