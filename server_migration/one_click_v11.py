@@ -6,7 +6,6 @@ Use plan/smoke locally, and --mode run only on a CUDA Linux machine.
 """
 from __future__ import annotations
 import argparse
-import copy
 import hashlib
 import json
 import math
@@ -17,7 +16,7 @@ import sys
 import time
 from collections import defaultdict
 from dataclasses import asdict
-from v11_prefetch import V11PairPrefetchPool, iter_prefetched_batches
+from v11_prefetch import V11PairPrefetchPool, iter_prefetched_batches, enqueue_train_lookahead
 
 ROOT=Path(os.environ.get("AI4SCIENCE_ROOT", str(Path(__file__).resolve().parents[1]))).resolve()
 XRD=ROOT/"xrd_robustness"
@@ -401,17 +400,11 @@ def trial_run(name,params,seed,max_steps,study_dir,train_records,val_records,pea
         while step<max_steps:
             # CPU prepares upcoming spectra while GPU trains on the first
             # submitted step. Only the MAIN process advances the sampling RNG.
-            while next_submit<max_steps and len(pool.pending)<argv.prefetch_batches:
-                idx=rng.choice(n,size=argv.batch_size,replace=False)
-                rows=[train_records[int(i)] for i in idx]
-                next_rng_state=copy.deepcopy(rng.bit_generator.state)
-                pool.submit(
-                    next_submit,rows,
-                    epoch=(next_submit*argv.batch_size//n),
-                    global_step=next_submit,profile="train",
-                )
-                future_rng[next_submit]=next_rng_state
-                next_submit+=1
+            next_submit=enqueue_train_lookahead(
+                pool,rng,train_records,batch_size=argv.batch_size,
+                start_step=step,next_submit=next_submit,max_steps=max_steps,
+                committed_states=future_rng,
+            )
             batch_first,batch_second,batch_labels=pool.get(step)
             # DO NOT checkpoint the look-ahead RNG. It includes future batches
             # whose optimizer steps have not committed; resumed studies would
