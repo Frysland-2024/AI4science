@@ -87,3 +87,23 @@ only Validation:
 to GitHub, but the authorized laptop is offline. The new pipeline has NOT yet
 been executed through the full GPU parity/throughput/resume tests or the rented
 Linux server. Do not claim it is a fully tested production runner.
+
+
+### Optional portable precomputed full Validation panels (2026-11-03)
+
+On the local RTX 4060 laptop, all 23,245 independent Validation parents under
+all six V11 OOD profiles were rendered and SHA-indexed successfully. A separate
+GPU FP32 engineering scoring pass evaluated all six profiles with UNTRAINED
+model weights; these are NOT scientific model performance results. The data
+contains 3,906,277,296 bytes in 12 paired-view .npy arrays.
+
+The package_validation_panels.py script can generate optional integrity-checked
+validation_panel_bundle.zip. If this fifth ZIP is present and SHA256SUMS.txt
+includes its checksum, start_server.sh --run automatically extracts it into
+~/research/AI4science/server_runs/v11_a0_js_optuna/validation_panels_v11 once.
+The HPO runner rechecks exact renderer/source/parent identity and every array
+SHA before reuse. Without the optional ZIP, the original four-ZIP one-click
+workflow still works and regenerates frozen Validation panels on the server.
+Never treat the simulated Validation data as held-out Test or RRUFF evidence.
+
+This optional cache remains private; do not upload it to public GitHub.

@@ -12,6 +12,14 @@ cd "$KIT"
 for f in source_snapshot.zip structure_shards.zip peak_cache_bundle.zip a0_reference_checkpoint.zip; do
   test -s "$f" || { echo "BLOCKED: missing $f"; exit 3; }
 done
+# Optional precomputed, fully SHA-checked Validation spectra. Never trust an
+# unlisted extra ZIP: only checksum-covered kit payloads enter the study.
+if [ -f "$KIT/validation_panel_bundle.zip" ]; then
+  grep -q '  validation_panel_bundle.zip$' SHA256SUMS.txt || {
+    echo "BLOCKED: optional validation panel ZIP is absent from SHA256SUMS.txt"
+    exit 3
+  }
+fi
 # Pre-extraction verifier is a Python module with an adjacent frozen contract.
 for f in verify_source_snapshot.py payload_contract.py; do
   test -s "$f" || { echo "BLOCKED: missing pre-extraction source verification dependency $f"; exit 3; }
@@ -33,6 +41,14 @@ trap - EXIT
 test -f "$DEST/AI4science/structure_library/merged_154975_parent_split_20261103/delivery_validation.json" || unzip -q structure_shards.zip -d "$DEST"
 test -f "$DEST/AI4science/xrd_robustness/data/merged_154975_v11/training_records.v1.jsonl" || unzip -q peak_cache_bundle.zip -d "$DEST"
 test -f "$DEST/AI4science/reference_a0_r1_v10/best.ckpt" || unzip -q a0_reference_checkpoint.zip -d "$DEST"
+# Reuse full-Validation CPU work if the optional verified ZIP ships.
+# Do not overwrite indexed panels; the runner checks exact identity and hashes.
+if [ "$MODE" != "--plan" ] && [ -f "$KIT/validation_panel_bundle.zip" ]; then
+  PANEL_INDEX="$DEST/AI4science/server_runs/v11_a0_js_optuna/validation_panels_v11/panel_index.json"
+  if [ ! -f "$PANEL_INDEX" ]; then
+    unzip -oq "$KIT/validation_panel_bundle.zip" -d "$DEST"
+  fi
+fi
 cd "$DEST/AI4science"
 "$PYTHON" server_migration/verify_payload.py --root . --check-records
 "$PYTHON" server_migration/verify_peak_cache.py --root . --fast
