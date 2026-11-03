@@ -356,6 +356,7 @@ def simulate_from_peak_table_v11(
         return_diagnostics=return_diagnostics,
         reflection_table=reflection_table,
         peak_renderer=renderer,
+        reference_scale_mode="renderer_peak",
     )
     if not return_diagnostics:
         return result

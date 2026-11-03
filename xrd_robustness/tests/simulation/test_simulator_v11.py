@@ -226,6 +226,49 @@ def test_seeded_line_profile_parameters_and_spectra_replay() -> None:
     assert np.array_equal(spectrum_a, spectrum_b)
 
 
+def test_v11_peak_reference_scale_preserves_unit_peak_for_area_normalized_renderer() -> None:
+    peaks = _peak_table()
+    _, diagnostics = simulate_from_peak_table_v11(
+        peaks.positions,
+        peaks.intensities,
+        _quiet_parameters(),
+        rng_seed=73,
+        normalize=False,
+        return_diagnostics=True,
+        reflection_table=peaks,
+    )
+    np.testing.assert_allclose(diagnostics["preclip_max"], 1.0, rtol=1e-7, atol=1e-7)
+
+
+def test_legacy_gaussian_reference_scale_remains_default_and_validated() -> None:
+    peaks = _peak_table()
+    params = _quiet_parameters()
+    implicit = simulate_from_peak_table(
+        peaks.positions, peaks.intensities, params, rng_seed=18, normalize=False
+    )
+    explicit = simulate_from_peak_table(
+        peaks.positions,
+        peaks.intensities,
+        params,
+        rng_seed=18,
+        normalize=False,
+        reference_scale_mode="legacy_gaussian",
+    )
+    assert np.array_equal(implicit, explicit)
+    try:
+        simulate_from_peak_table(
+            peaks.positions,
+            peaks.intensities,
+            params,
+            rng_seed=18,
+            reference_scale_mode="unknown",
+        )
+    except ValueError as exc:
+        assert "reference_scale_mode" in str(exc)
+    else:
+        raise AssertionError("unsupported reference scale mode must be rejected")
+
+
 def test_online_factory_generates_same_parent_dynamic_v11_views() -> None:
     config = {
         **LINE_PROFILE,

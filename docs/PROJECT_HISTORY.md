@@ -392,3 +392,17 @@ PR #50 was merged into `main` on 2026-10-29 (merge commit [`6e4dd70`](https://gi
 **2026-11-03 implementation-deliverable clarification:** The project lead rejected a research report as Phase 1 output and explicitly requested a *finished, runnable simulator*, built by selecting useful upstream components and validating their integration with current same-parent JS. Implementation task [Issue #53](https://github.com/Frysland-2024/AI4science/issues/53) specifies acceptance tests. No execution is claimed while local Codex machine is disconnected and the legacy bridge code lane forbids core simulator writes.
 
 **2026-11-03 ResNet hyperparameter clarification (owner):** The lead explicitly noted that because the existing ResNet-18-GN was itself borrowed from ML4pXRDs, its *architecture hyperparameters* should not be treated as fixed or optimal for the updated simulator. New sequence: **finish simulator → retune existing ResNet+Dynamic JS architecture (especially heavy downsampling/kernel size) and optimization (LR/scheduler, JS lambda, exposure budget, regularization) → compare fairly with CNN11+JS → consider larger CIF scale and real RRUFF benchmarks**. The old backbone and its frozen experiments remain valid historical references; the new comparison has not been run. Models should receive comparable bounded tuning opportunities, with held-out RRUFF tests reserved for evaluation rather than hyperparameter selection.
+
+## 2026-11-03: V11 simulator delivered for review; Issue #55 tuning begins after phase-1 gate
+
+**Question / previous assumption:** The early 2026-11-03 status recorded the V11 simulator as not yet implemented because the authorized local editing route was unavailable. That status became stale once the independent Issue #53 worktree and runnable implementation were completed.
+
+**Evidence:** [PR #58](https://github.com/Frysland-2024/AI4science/pull/58) contains the V11 TCH pseudo-Voigt renderer, online same-parent view integration, config selection, CIF-to-paired-view path, and acceptance tests. Review identified that the legacy Gaussian reference scale understated the V11 unit-area profile peak, making background/noise ratios inconsistent. The integration now calibrates the V11 spectrum by the actual rendered peak maximum while retaining legacy V9 scaling as the default; 23 focused simulator tests and 46 simulation plus training-objective regressions passed after this correction.
+
+**Decision:** Treat Phase 1 as implemented and test-verified, pending PR review/merge. Proceed to Issue #55's bounded ResNet+Dynamic JS hyperparameter tuning using the V11 simulator and frozen train/validation split. The new tuning result is not yet available in this record.
+
+**What changes now:** The authoritative project status moves from simulator source review to the ordered Issue #55 search. The V11 adjustment affects only the new simulator path.
+
+**What does not change:** V9 default rendering, frozen splits/results/configurations/checkpoints, locked RRUFF test isolation, and the prohibition on CNN11 training or CIF expansion during Issue #55.
+
+**Status:** PHASE 1 IMPLEMENTED / PR REVIEW PENDING / ISSUE #55 SEARCH ACTIVE.
