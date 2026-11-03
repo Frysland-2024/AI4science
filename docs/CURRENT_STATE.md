@@ -6,6 +6,14 @@
 
 **阶段（2026-11-03 最新负责人决策）：** 本科毕设已经重启；当前主线为 **PXRD 七晶系分类 + same-parent Dynamic JS**。研究按四阶段推进：**① 模拟器构建（工程阶段已完成）→ ② 模型架构优化（进行中：V10 判断是否换 CNN11，随后 Codex 对选定架构自动调结构和训练超参数）→ ③ 增加经过验证的独立 CIF 数据 → ④ 最终训练和 RRUFF 文献对标跑分**。不再将调参拆出去、放到数据扩容之后；不再开启新的模拟器研究主线。冻结历史结果不改，参数反演仍归档。
 
+## 2026-11-03 — FINAL owner-defined RRUFF acceptance scorecard (current)
+
+**Project performance grade uses ONLY real RRUFF seven-crystal-system top-1 Accuracy**, compared as literature reference targets to the originally chosen research works. **Pass (60): Lee 2023, 74.24%; 80 points: AlphaDiffract 2026, 81.74 ± 0.78% (PRIMARY, newer), plus Salgado 2023, 86% (secondary comparison with ~452 labeled RRUFF samples used in training); full (100): SimXRD-4M CNN11 2025, 89.3%, and XQueryer-NoElem 2025, 91.5%.** These grading labels are project performance tiers, not 60%/80%/100% accuracy requirements. The 80-tier papers explicitly have *different target-domain training assumptions*; never hide that. Published test cohorts and data curation also differ and are not a claim of direct matched-test superiority.
+
+**Exactly THREE headline research outcomes:** (1) **real RRUFF Accuracy leaderboard and the above grading**; (2) **independent-CIF-parent data-efficiency curve**; (3) **ECE confidence calibration**, always with the measured domain declared. RRUFF accuracy alone assigns a grade, while the other two are supplementary research outputs. Internal synthetic validation OOD F1 may guide model selection but never substitutes for final RRUFF classification performance.
+
+**Five-column literature table:** paper/model | curated/unique simulated CIF-parent count | real RRUFF evaluation count | real RRUFF top-1 Accuracy | count of labeled real RRUFF adaptation samples. The source-checked current table, data-use nuance and unresolved denominator issues are in [RRUFF_REAL_DOMAIN_LITERATURE_BENCHMARK_2026-10-22.md](RRUFF_REAL_DOMAIN_LITERATURE_BENCHMARK_2026-10-22.md). Preserve lockout of RRUFF Test from HPO; Stage 3 CIF expansion remains gated on Stage 2 and does not start merely because the target scoreboard is defined.
+
 ## 2026-11-03 latest correction — the authoritative active sequence
 
 **Owner logic:** Every step must answer a useful, distinct question. **Simulator construction is already done as an engineering deliverable** (V11 has working code and tested acceptance; PR merge/integration housekeeping is separate from a new research stage). The goal is improved absolute real-domain classification performance, not an endless menu of experiments.
