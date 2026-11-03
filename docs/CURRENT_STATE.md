@@ -4,7 +4,18 @@
 
 **状态日期：** 2026-11-03
 
-**阶段：** 2026-11-03 项目负责人明确确认本科毕设**已重新启动**；当前活动主线仍是 **PXRD 七晶系分类与 same-parent Dynamic JS**，优先开展已发表 PXRD 模拟器源码调查与可复用模块筛选，随后规划小规模 JS-only 模拟器/架构比较。历史分类实验及其结论保持冻结；**新模拟器尚未移植、新 GPU 训练尚未完成**。参数反演等路线仍归档。
+**阶段（2026-11-03 最新负责人决策）：** 本科毕设已经重启；当前主线为 **PXRD 七晶系分类 + same-parent Dynamic JS**。研究按四阶段推进：**① 模拟器构建（工程阶段已完成）→ ② 模型架构优化（进行中：V10 判断是否换 CNN11，随后 Codex 对选定架构自动调结构和训练超参数）→ ③ 增加经过验证的独立 CIF 数据 → ④ 最终训练和 RRUFF 文献对标跑分**。不再将调参拆出去、放到数据扩容之后；不再开启新的模拟器研究主线。冻结历史结果不改，参数反演仍归档。
+
+## 2026-11-03 latest correction — the authoritative active sequence
+
+**Owner logic:** Every step must answer a useful, distinct question. **Simulator construction is already done as an engineering deliverable** (V11 has working code and tested acceptance; PR merge/integration housekeeping is separate from a new research stage). The goal is improved absolute real-domain classification performance, not an endless menu of experiments.
+
+1. **Stage 1 COMPLETED — Simulator:** Build a usable, source-informed physical PXRD simulator with same-parent paired views and regression tests. The remaining PR #58 status should be handled as merge/integration housekeeping, not a prerequisite to invent another simulator.
+2. **Stage 2 ACTIVE — Architecture optimization INCLUDING hyperparameter tuning:** The existing V10 same-simulator pilot determines whether the current ResNet-18-GN should be retained or replaced with CNN11. First diagnose CNN11 first-seed NaN in local training and finish valid comparable runs **[Issue #60](https://github.com/Frysland-2024/AI4science/issues/60)**; this is not proof that CNN11 is worse. Then use Codex to conduct a **bounded optimization of the selected architecture** **[Issue #55](https://github.com/Frysland-2024/AI4science/issues/55)**: stride/kernel size/depth/width where appropriate, learning rate/schedule, JS lambda, weight decay, batch and exposure/step budget. Architecture screening **and tuning** form one stage. No repeat broad architecture sweeps, and no GPU overlap with existing jobs.
+3. **Stage 3 — CIF data expansion [Issue #61](https://github.com/Frysland-2024/AI4science/issues/61):** Add more unique, valid crystal parents with source, labels, fingerprint dedup, parent-disjoint split, class coverage and cached peak validation. Data scale is unique CIF parents, not regenerated spectra; target counts follow audit feasibility rather than a mandated 100k.
+4. **Stage 4 — RRUFF benchmarking:** Train the selected optimized model on the expanded data and report real RRUFF Accuracy, Macro-F1, ECE under explicitly described and literature-comparable real-data usage/splits. Locked real test is not used for selecting hyperparameters.
+
+**As-of check:** local three V10 ResNet seeds complete; CNN11 seed-1 reached nonfinite CE/JS loss around step 20k, so the backbone decision is **OPEN**. There is no completed stage-2 tuning, expanded dataset or final RRUFF benchmark claim. Historical 2026-11-03 text below is retained as dated planning snapshots and is **superseded where it conflicts with this sequence**.
 
 **最近文档同步（2026-10-29）：** PR #50 已合并到 main，统一了 README、当前状态、项目历史和导师说明中的既有证据边界；没有新增实验或结果，也没有改变 2026-10-26 确定的毕设范围。
 
@@ -22,11 +33,7 @@
 
 **Execution gate — explicit 2026-11-03 clarification:** **Understand and selectively implement/validate the simulator FIRST; compare model architectures ONLY AFTER the simulator is understood and has passed standalone correctness/reproducibility/performance checks.** No CNN11 training, no architecture leaderboard, and no large-CIF training before this gate. Investigating simulator source is not itself proof of a working upgrade.
 
-**Current ACTIVE sequence:**
-1. **Now:** inspect and compare external PXRD simulator implementations, first SimXRD/Pysimxrd, GSAS-II and ML4pXRDs; PhaseSmith as a lightweight candidate, DebyeCalculator/PowderLine/xrd_simulator lower priority. Produce source-level functionality, physical units, path/seed reproducibility, label-preservation, runtime and license assessment. See [2026-11-03 simulator shortlist](PXRD_SIMULATOR_CANDIDATES_2026-11-03.md).
-2. **Next (not yet executed):** selectively reuse/adapt viable simulator components without replacing existing March–Dollase, background/noise or deterministic same-parent view logic unnecessarily. Keep original simulator as a versioned reference.
-3. **Then (not yet executed):** run a bounded, matched-CIF pilot with existing ResNet-18-GN + JS and a candidate published CNN architecture (first SimXRD CNN11) + **the same JS objective**, comparing absolute RRUFF performance and synthetic validation to historical results. No obligation to repeat full ERM sweep in this exploratory performance-oriented phase.
-4. **Later, conditional:** larger unique-CIF parent training, training-budget retuning and literature-specific RRUFF score comparisons. For each paper, match its *real-data access/training/fine-tuning protocol* when feasible rather than imposing zero-shot universally. CIF parent count is the principal synthetic-data size measure; track regenerated views, steps and compute separately. The earlier 30k/60k/100k ladder is not mandatory. RRUFF held-out tests cannot be used to select hyperparameters.
+**2026-11-03 historical active sequence (SUPERSEDED):** Prior source-audit → simulator → CNN11 pilot → data expansion proposal is replaced by the **four-stage owner sequence stated at top**, where architecture optimization explicitly includes bounded hyperparameter tuning before dataset expansion. No further simulator development is the current science priority.
 
 **Goals:** noticeably improve **absolute experimental RRUFF Accuracy**, report Macro-F1 and ECE, and preserve a fair description of differing paper datasets. This is an **engineering/research objective, not an achieved score**. Borrowing simulator/backbone components does **not** prove any gain is uniquely due to JS. The earlier ResNet-18-GN ERM/JS study remains the basis for the previously demonstrated method effect.
 
