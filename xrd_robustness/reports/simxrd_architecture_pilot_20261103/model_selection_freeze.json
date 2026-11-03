@@ -1,0 +1,221 @@
+{
+  "checkpoint_sets": {
+    "cnn11_v10": {
+      "20260711": {
+        "checkpoint_model_state_finite": true,
+        "checkpoint_sha256": "E415DBFD042EADC8595F4B5FD7F78AC1F7160517324308AD71B74AA187CDB08F",
+        "full_training_elapsed_seconds": 556.405999999959,
+        "model_config": {
+          "conv_channels": 80,
+          "dense_widths": [
+            2300,
+            1150
+          ],
+          "dropout_conv": 0.3,
+          "dropout_dense": 0.5,
+          "input_length": 3501,
+          "num_classes": 7
+        },
+        "model_id": "cnn11",
+        "optimizer_steps_per_second": null,
+        "origin": "new",
+        "peak_cuda_allocated_bytes": null,
+        "selected_step": 18480,
+        "training_status": "failed_nonfinite",
+        "validation_in_range_macro_f1": 0.7111298826825598,
+        "validation_ood_macro_f1": 0.6817411021488872
+      }
+    },
+    "legacy_resnet18gn_v9": {
+      "20260711": {
+        "checkpoint_model_state_finite": true,
+        "checkpoint_sha256": "3EE1BEB8831E46A8D7014352D5C1ADFAC49B7FE8959894811C1CB559B2CC6B49",
+        "model_config": {
+          "add_additional_dense_layer": true,
+          "dense_width": 256,
+          "embed_dim": 256,
+          "group_norm_eps": 0.001,
+          "group_norm_groups": 32,
+          "input_length": 3501,
+          "model_id": "18",
+          "num_classes": 7,
+          "square_kernel_size_and_stride": true
+        },
+        "model_id": "resnet18gn",
+        "origin": "historical",
+        "selected_step": 24640
+      },
+      "20260712": {
+        "checkpoint_model_state_finite": true,
+        "checkpoint_sha256": "AF06D30712879BDFE02D9C82E6C713BE6A66F1BD50937B2954EC66EE7A11171C",
+        "model_config": {
+          "add_additional_dense_layer": true,
+          "dense_width": 256,
+          "embed_dim": 256,
+          "group_norm_eps": 0.001,
+          "group_norm_groups": 32,
+          "input_length": 3501,
+          "model_id": "18",
+          "num_classes": 7,
+          "square_kernel_size_and_stride": true
+        },
+        "model_id": "resnet18gn",
+        "origin": "historical",
+        "selected_step": 49280
+      },
+      "20260713": {
+        "checkpoint_model_state_finite": true,
+        "checkpoint_sha256": "2FCF8698E07D47D15B78C6B61A0986DC3976F8960AAB26F633306F27E1E5638A",
+        "model_config": {
+          "add_additional_dense_layer": true,
+          "dense_width": 256,
+          "embed_dim": 256,
+          "group_norm_eps": 0.001,
+          "group_norm_groups": 32,
+          "input_length": 3501,
+          "model_id": "18",
+          "num_classes": 7,
+          "square_kernel_size_and_stride": true
+        },
+        "model_id": "resnet18gn",
+        "origin": "historical",
+        "selected_step": 49280
+      }
+    },
+    "resnet18gn_v10": {
+      "20260711": {
+        "checkpoint_model_state_finite": true,
+        "checkpoint_sha256": "8B8B926EF77D8362A33547E8E7080567C1DB1058EA3A629401FAE8132D88F017",
+        "full_training_elapsed_seconds": 1392.8279999999795,
+        "model_config": {
+          "add_additional_dense_layer": true,
+          "dense_width": 256,
+          "embed_dim": 256,
+          "group_norm_eps": 0.001,
+          "group_norm_groups": 32,
+          "input_length": 3501,
+          "model_id": "18",
+          "num_classes": 7,
+          "square_kernel_size_and_stride": true
+        },
+        "model_id": "resnet18gn",
+        "optimizer_steps_per_second": 35.38125310519369,
+        "origin": "new",
+        "peak_cuda_allocated_bytes": 4752220672,
+        "selected_step": 30800,
+        "training_status": "completed",
+        "validation_in_range_macro_f1": 0.7410479996906265,
+        "validation_ood_macro_f1": 0.708987681936368
+      },
+      "20260712": {
+        "checkpoint_model_state_finite": true,
+        "checkpoint_sha256": "FF3EA2DCECC5CE3E1C3DF2A13F07A6ACABEAE6C31E0789CFDB738929285CA595",
+        "full_training_elapsed_seconds": 1390.405999999959,
+        "model_config": {
+          "add_additional_dense_layer": true,
+          "dense_width": 256,
+          "embed_dim": 256,
+          "group_norm_eps": 0.001,
+          "group_norm_groups": 32,
+          "input_length": 3501,
+          "model_id": "18",
+          "num_classes": 7,
+          "square_kernel_size_and_stride": true
+        },
+        "model_id": "resnet18gn",
+        "optimizer_steps_per_second": 35.44288502782745,
+        "origin": "new",
+        "peak_cuda_allocated_bytes": 634471936,
+        "selected_step": 24640,
+        "training_status": "completed",
+        "validation_in_range_macro_f1": 0.7364964489834466,
+        "validation_ood_macro_f1": 0.7138940065109777
+      },
+      "20260713": {
+        "checkpoint_model_state_finite": true,
+        "checkpoint_sha256": "15F84B7293103F28FB6B6FD3BAC722FE136054B46F78325B8A7BA522219EB060",
+        "full_training_elapsed_seconds": 1394.015000000014,
+        "model_config": {
+          "add_additional_dense_layer": true,
+          "dense_width": 256,
+          "embed_dim": 256,
+          "group_norm_eps": 0.001,
+          "group_norm_groups": 32,
+          "input_length": 3501,
+          "model_id": "18",
+          "num_classes": 7,
+          "square_kernel_size_and_stride": true
+        },
+        "model_id": "resnet18gn",
+        "optimizer_steps_per_second": 35.35112606392292,
+        "origin": "new",
+        "peak_cuda_allocated_bytes": 636616192,
+        "selected_step": 24640,
+        "training_status": "completed",
+        "validation_in_range_macro_f1": 0.7308816153196316,
+        "validation_ood_macro_f1": 0.706045100238405
+      }
+    }
+  },
+  "data_bindings": {
+    "peak_cache_manifest_sha256": "6AE0CFD1B5B29671E2F532D7A094F2FC412CABD64E4CF77D42915937BACC8D18",
+    "source_records_sha256": "05D5D33F200194612A8CDBE29D9443FC7BAD9C245F66D185364B66A75915CC6C",
+    "split_manifest_sha256": "B9D3B72E42EA0FD549DAE34425FF61D2D650D5DD7FE6F337D747CB952CF43293"
+  },
+  "frozen_at_unix_time": 1793677032.9904442,
+  "historical_frozen_test_role": "already-used-test-parent-split; supplementary post-main evaluation only",
+  "protocol_config_sha256": "F11901449BBE39044F26BCF52650C31581CFDBA12EA52E9269092E8C146B31EB",
+  "rruff_execution_authorization": "explicit_user_request_2026-11-03_to_report_accuracy_and_macro_f1_under_existing_protocol_after_checkpoint_freeze",
+  "rruff_manifest_sha256": "17236DA1654E43370034DB6F7391C5882583FFAF62147856B8A85D79BC1174C5",
+  "rruff_preprocessing_contract_sha256": "90DCBDC89F641A876DA2E8A927499A3E7225934AE38E820D70AD26640113C9CC",
+  "rruff_test_selection_use_forbidden": true,
+  "schema_version": "simxrd-pilot-model-selection-freeze-v1",
+  "status": "models_selected_by_validation_and_frozen_before_test_access",
+  "training_status_by_configuration": {
+    "cnn11_v10": {
+      "expected_training_seeds": [
+        20260711,
+        20260712,
+        20260713
+      ],
+      "observed_checkpoint_seeds": [
+        20260711
+      ],
+      "run_statuses": [
+        "failed_nonfinite"
+      ]
+    },
+    "legacy_resnet18gn_v9": {
+      "expected_training_seeds": [
+        20260711,
+        20260712,
+        20260713
+      ],
+      "observed_checkpoint_seeds": [
+        20260711,
+        20260712,
+        20260713
+      ],
+      "run_statuses": [
+        "historical_frozen"
+      ]
+    },
+    "resnet18gn_v10": {
+      "expected_training_seeds": [
+        20260711,
+        20260712,
+        20260713
+      ],
+      "observed_checkpoint_seeds": [
+        20260711,
+        20260712,
+        20260713
+      ],
+      "run_statuses": [
+        "completed"
+      ]
+    }
+  },
+  "v10_simulation_config_sha256": "62851FDF068E9C718C43EB497C6D7A6971E6F03C16ADED42C50C800B1B6EBF70",
+  "v9_simulation_config_sha256": "1451F111430332CD426244436B5B9263100D1BE7CAA2E0B036BD03CD09814371"
+}

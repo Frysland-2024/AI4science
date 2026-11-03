@@ -1,0 +1,32 @@
+{
+  "configuration_id": "cnn11_v10",
+  "expected_seeds": [
+    20260711,
+    20260712,
+    20260713
+  ],
+  "runs": [
+    {
+      "schema_version": "simxrd-cnn11-pilot-run-v1",
+      "configuration_id": "cnn11_v10",
+      "model_id": "cnn11",
+      "simulator_version": "v10_pseudo_voigt_caglioti",
+      "status": "failed_nonfinite",
+      "training_seed": 20260711,
+      "elapsed_seconds": 556.405999999959,
+      "selected_step": 18480,
+      "selected_validation_ood_macro_f1": 0.6817411021488872,
+      "selected_validation_in_range_macro_f1": 0.7111298826825598,
+      "checkpoint_sha256": "E415DBFD042EADC8595F4B5FD7F78AC1F7160517324308AD71B74AA187CDB08F",
+      "validation_history_path": "validation/cnn11_v10_seed_20260711.json",
+      "raw_log_path": "logs/cnn11_v10/seed_20260711.jsonl",
+      "first_logged_nonfinite_step": 20000,
+      "last_logged_step_before_manual_stop": 26000,
+      "optimizer_steps_per_second": null,
+      "peak_cuda_allocated_bytes": null,
+      "failure_record": "cnn11_v10_training_failure.json"
+    }
+  ],
+  "status": "partial_failed_nonfinite",
+  "failure_record": "cnn11_v10_training_failure.json"
+}
