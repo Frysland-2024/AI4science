@@ -6,6 +6,7 @@ Use plan/smoke locally, and --mode run only on a CUDA Linux machine.
 """
 from __future__ import annotations
 import argparse
+import copy
 import hashlib
 import json
 import math
@@ -16,6 +17,7 @@ import sys
 import time
 from collections import defaultdict
 from dataclasses import asdict
+from v11_prefetch import V11PairPrefetchPool, iter_prefetched_batches
 
 ROOT=Path(os.environ.get("AI4SCIENCE_ROOT", str(Path(__file__).resolve().parents[1]))).resolve()
 XRD=ROOT/"xrd_robustness"
@@ -61,6 +63,11 @@ def contract(args):
         "architecture":"ML4PXRDResNet1D(model_id=18) A0; stride 4/4/4, kernel 9",
         "train_mode":"dynamic_js_same_parent",
         "batch_size_parents":args.batch_size,
+        "prefetch_workers":args.prefetch_workers,
+        "prefetch_batches":args.prefetch_batches,
+        "native_threads":args.native_threads,
+        "worker_peak_cache":args.worker_peak_cache,
+        "pipeline":"V11 deterministic multiprocessing, lazy PeakTable-LRU, BF16, pinned transfers, frozen Validation memmaps",
         "hpo_steps":args.hpo_steps,
         "confirmation_steps":args.confirm_steps,
         "eval_interval_steps":args.eval_every,
@@ -186,7 +193,8 @@ VALIDATION_OOD_PROFILES=("ood_shift_negative","ood_shift_positive","ood_broadeni
 
 
 def prepare_validation_panels(records, peaks, sim, libs, study_dir, *,
-                              expected_parents=23245):
+                              expected_parents=23245, workers=4, prefetch_batches=3,
+                              native_threads=1, worker_peak_cache=512):
     """Freeze all full-Validation V11 realizations once, memory-mapped across HPO trials.
 
     This removes repeat CPU rendering of 23245 parents x 2 views x 6 profiles
@@ -222,7 +230,13 @@ def prepare_validation_panels(records, peaks, sim, libs, study_dir, *,
     else:
         index={"identity":identity,"entries":{}}
         write_json(index_path,index)
-    fac=factory(sim,20260721,PhysicsParameterSampler,build_online_view_factory)
+    # The same V11 renderer is used for both training and frozen Validation.
+    # Start the worker pool only when one or more fixed panels are missing.
+    missing=[p for p in VALIDATION_OOD_PROFILES if p not in index["entries"]]
+    pool=(V11PairPrefetchPool(sim,run_seed=20260721,workers=workers,
+                             prefetch_batches=prefetch_batches,
+                             native_threads=native_threads,
+                             max_cached_peaks=worker_peak_cache) if missing else None)
     panels={}
     for profile in VALIDATION_OOD_PROFILES:
         if profile not in sim["profiles"]:
@@ -244,14 +258,13 @@ def prepare_validation_panels(records, peaks, sim, libs, study_dir, *,
                                              shape=(len(records),3501))
             second=np.lib.format.open_memmap(temporary[1],mode="w+",dtype=np.float32,
                                               shape=(len(records),3501))
-            for at in range(0,len(records),64):
-                rows=records[at:at+64]
-                x1,x2,y=render_pair_batch(rows,peaks,fac,epoch=0,global_step=0,profile=profile)
-                a=x1.numpy(); b=x2.numpy()
+            for at,(a,b,y) in iter_prefetched_batches(
+                    pool,records,profile=profile,batch_size=64):
+                rows=records[at:at+len(y)]
                 if (a.shape!=(len(rows),3501) or b.shape!=(len(rows),3501)
                     or not np.isfinite(a).all() or not np.isfinite(b).all()):
                     raise RuntimeError(f"Nonfinite or invalid Validation panel {profile} at {at}")
-                if not np.array_equal(y.numpy(),np.asarray([r.label for r in rows])):
+                if not np.array_equal(y,np.asarray([r.label for r in rows])):
                     raise RuntimeError("Validation label order mismatch")
                 first[at:at+len(rows)]=a
                 second[at:at+len(rows)]=b
@@ -272,6 +285,8 @@ def prepare_validation_panels(records, peaks, sim, libs, study_dir, *,
         if any(arr.shape!=(len(records),3501) or arr.dtype!=np.float32
                for arr in panels[profile]):
             raise RuntimeError(f"Frozen Validation panel shape/dtype mismatch: {profile}")
+    if pool is not None:
+        pool.close()
     return panels,digest(index_path)
 
 def validate(model,records,peaks,val_factory,device,libs,batch_size,profiles,panels=None):
@@ -292,9 +307,17 @@ def validate(model,records,peaks,val_factory,device,libs,batch_size,profiles,pan
                 y=torch.tensor([r.label for r in rows],dtype=torch.long)
             else:
                 x1,x2,y=render_pair_batch(rows,peaks,val_factory,epoch=0,global_step=0,profile=profile)
+            if device.type=="cuda":
+                x1=x1.pin_memory().to(device,non_blocking=True)
+                x2=x2.pin_memory().to(device,non_blocking=True)
+            else:
+                x1=x1.to(device);x2=x2.to(device)
             with torch.inference_mode():
-                a=model(x1.to(device))["logits"].float()
-                b=model(x2.to(device))["logits"].float()
+                with torch.autocast("cuda",dtype=torch.bfloat16,
+                                    enabled=device.type=="cuda" and torch.cuda.is_bf16_supported()):
+                    a=model(x1)["logits"]
+                    b=model(x2)["logits"]
+                a=a.float();b=b.float()
                 p=0.5*(torch.softmax(a,-1)+torch.softmax(b,-1))
             probas.append(p.cpu().numpy());labels.extend(y.tolist())
         probabilities=np.concatenate(probas,axis=0)
@@ -422,10 +445,17 @@ def main():
     parser.add_argument("--confirm-steps",type=int,default=12320)
     parser.add_argument("--eval-every",type=int,default=6160)
     parser.add_argument("--batch-size",type=int,default=16)
+    parser.add_argument("--prefetch-workers",type=int,default=4)
+    parser.add_argument("--prefetch-batches",type=int,default=3)
+    parser.add_argument("--native-threads",type=int,default=1)
+    parser.add_argument("--worker-peak-cache",type=int,default=512)
     parser.add_argument("--max-gpu-hours",type=float,default=12.0)
     args=parser.parse_args()
     if args.trials<2 or args.trials>12 or args.hpo_steps<1 or args.confirm_steps<args.hpo_steps:
         raise ValueError("bounded trials and training steps required")
+    if not (1<=args.prefetch_workers<=16 and 1<=args.prefetch_batches<=8
+            and 1<=args.native_threads<=4 and 16<=args.worker_peak_cache<=8192):
+        raise ValueError("Unbounded or invalid V11 prefetch resources")
     c=contract(args)
     study_dir=ROOT/"server_runs"/"v11_a0_js_optuna"
     contract_file=study_dir/"contract.json"
@@ -488,9 +518,13 @@ def main():
     train_unique,val_full,parent_audit=full_parent_disjoint_records(records_path,all_records)
     event("FULL_PARENT_SPLIT_VERIFIED",audit=parent_audit,
           validation_parents=len(val_full),train_parents=len(train_unique))
-    peaks=load_peak_tables(train_unique+val_full)
+    # Workers load PeakTables on demand and cap per-worker RAM via LRU.
+    # No eager 131k-file NPZ extraction in the HPO main process.
+    peaks={}
     validation_panels,panel_index_sha=prepare_validation_panels(
-        val_full,peaks,sim,libs,study_dir)
+        val_full,peaks,sim,libs,study_dir,
+        workers=args.prefetch_workers,prefetch_batches=args.prefetch_batches,
+        native_threads=args.native_threads,worker_peak_cache=args.worker_peak_cache)
     event("FULL_VALIDATION_READY",parents=len(val_full),profiles=len(VALIDATION_OOD_PROFILES),
           index_sha256=panel_index_sha)
     import optuna
