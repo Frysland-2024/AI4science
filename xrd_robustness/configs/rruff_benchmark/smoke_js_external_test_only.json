@@ -1,0 +1,22 @@
+{
+  "schema_version": "rruff-js-smoke-v1",
+  "experiment_id": "SMK-20261103-03",
+  "role": "pipeline_smoke_test_only__no_paper_numbers",
+  "protocol_status": "SMOKE_ONLY",
+  "paper_comparable": false,
+  "project_root": "data/real_xrd/rruff_pipeline_test",
+  "seed": 20261105,
+  "model_id": "18",
+  "input_length": 3501,
+  "num_classes": 7,
+  "class_order": ["triclinic", "monoclinic", "orthorhombic", "tetragonal", "trigonal", "hexagonal", "cubic"],
+  "initialize_from_checkpoint": "../../../outputs/simulated_test_checkpoints/checkpoints/seed_20260711_js_lambda_60/best.ckpt",
+  "checkpoint_selection": "fixed_final_state",
+  "training": {
+    "real_epochs": 0
+  },
+  "limitations": [
+    "Inference-only path check with a previously trained Dynamic JS checkpoint and a test-only split of the explicitly smoke-only 35-spectrum fixture.",
+    "No RRUFF samples are used for training or validation; this is not a paper result or an eligible scale-curve point."
+  ]
+}

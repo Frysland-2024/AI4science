@@ -1,0 +1,158 @@
+{
+  "schema_version": "rruff-js-benchmark-result-v1",
+  "experiment_id": "SMK-20261103-02",
+  "role": "pipeline_smoke_test_only__no_paper_numbers",
+  "protocol_status": "SMOKE_ONLY",
+  "paper_comparable": false,
+  "seed": 20261104,
+  "device": "cuda",
+  "device_name": "NVIDIA GeForce RTX 4060 Laptop GPU",
+  "torch_version": "2.13.0+cu126",
+  "split_manifest_sha256": "24a3640783e2b29616cc6ab50f9aadacca8a8750cf8843e0b8c6c92d01d1a189",
+  "split_counts": {
+    "train": 21,
+    "validation": 7,
+    "test": 7
+  },
+  "real_training_unique_samples": 21,
+  "real_training_unique_parent_ids_with_audited_links": 0,
+  "synthetic_dynamic_js": {
+    "unique_parent_rows": 7,
+    "unique_parent_ids_sha256": "1e053b5207c0564d965bade538ea47df05f3e8f8673a543203da2be475b1b9bc",
+    "records_sha256": "fc692e174bd1d210595a11d5fd6a344052644a356b6d130fd7790d687a0e6533",
+    "simulation_config_sha256": "1451f111430332cd426244436b5b9263100d1be7caa2e0b036bd03cd09814371",
+    "epochs": 1,
+    "optimizer_steps": 4,
+    "online_generated_views": 14,
+    "synthetic_pair_view_exposures": 14,
+    "view_source": "OnlineViewFactory_from_frozen_peak_tables",
+    "lambda_js": 60.0,
+    "elapsed_seconds": 0.653599800018128
+  },
+  "online_generated_js_views": 14,
+  "synthetic_pair_view_exposures": 14,
+  "total_optimizer_steps": 15,
+  "real_finetune": {
+    "loss": "cross_entropy_only; no fabricated real-spectrum JS pairs",
+    "epochs": 1,
+    "optimizer_steps": 11,
+    "real_training_spectrum_views": 21,
+    "elapsed_seconds": 0.2786147999577224,
+    "mean_train_step_samples_per_second": 75.37274515397975,
+    "batch_size": 2,
+    "learning_rate": 1e-05
+  },
+  "initial_checkpoint": {
+    "path": "E:\\AI4science\\xrd_robustness\\outputs\\simulated_test_checkpoints\\checkpoints\\seed_20260711_js_lambda_60\\best.ckpt",
+    "sha256": "3ee1beb8831e46a8d7014352d5c1adfac49b7fe8959894811c1cb559b2cc6b49"
+  },
+  "fine_tuned_checkpoint": {
+    "path": "outputs\\rruff_js_benchmark\\SMK-20261103-02_run\\finetuned_model.ckpt",
+    "sha256": "7f1505d651f7e1570dc585ba11704588dc03ffca7b61517f935b5a7d3928308b"
+  },
+  "model_parameters": 13008839,
+  "peak_allocated_gpu_bytes": 280803840,
+  "validation_selection": {
+    "metric": "accuracy",
+    "best_accuracy": 0.14285714285714285
+  },
+  "test_metrics_single_evaluation": {
+    "accuracy": 0.42857142857142855,
+    "balanced_accuracy": 0.42857142857142855,
+    "macro_f1": 0.3333333333333333,
+    "per_class_recall": [
+      1.0,
+      0.0,
+      1.0,
+      1.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "per_class_f1": [
+      0.6666666666666666,
+      0.0,
+      0.6666666666666666,
+      1.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "confusion_matrix": [
+      [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0
+      ]
+    ],
+    "worst_group_f1": 0.0,
+    "ece": 0.3703267957483019
+  },
+  "accuracy_definition": "top-1 correct predictions divided by all test predictions",
+  "macro_f1_definition": "unweighted mean of per-class F1 across the configured seven classes",
+  "ece_definition": "15 equal-width confidence bins",
+  "prediction_file": "test_predictions.csv",
+  "runtime_seconds_total": 0.3233628000016324,
+  "warnings": [
+    "This output is not a paper reproduction unless all protocol-specific data and preprocessing fields are verified.",
+    "Real spectra without audited parent identity use CE fine-tuning only; no real JS pairs are invented."
+  ]
+}

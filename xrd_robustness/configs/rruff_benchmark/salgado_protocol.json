@@ -1,0 +1,67 @@
+{
+  "schema_version": "rruff-js-protocol-v1",
+  "experiment_id_prefix": "RRUFF-SALGADO",
+  "protocol_name": "Salgado Protocol",
+  "paper": "Salgado et al. 2023, Automated classification of big X-ray diffraction data using deep learning models",
+  "status": "PARTIAL",
+  "paper_comparable": false,
+  "reference_accuracy": 0.86,
+  "reference_macro_f1": 0.859,
+  "rruff": {
+    "original_patterns_reported": 908,
+    "final_post_curation_count": "Unknown; paper reports 908 RRUFF entries, then explicitly uses 452 in training",
+    "train_samples_reported": 452,
+    "test_samples_reported": "remaining 50%; exact count Unknown (908 total vs 452 train not reconciled)",
+    "validation_samples": "Unknown",
+    "class_order": ["cubic", "hexagonal", "tetragonal", "orthorhombic", "monoclinic", "triclinic", "trigonal"],
+    "class_coverage": "Six systems represented; no trigonal samples reported",
+    "sample_ids_or_split_manifest": "No row-level ID split manifest exposed by article or public loader"
+  },
+  "simulation": {
+    "unique_training_cif_parents": 171006,
+    "source_cif_count_before_filtering": 204654,
+    "generated_spectra_reported": "about 1200000 (Large set)",
+    "nominal_spectra_from_design": 1197042,
+    "actual_successful_generation_count": "Unknown",
+    "actual_synthetic_training_view_count": "Unknown exact; the paper reports about 1.2 million synthetic spectra in the Large souping setting",
+    "per_parent_nominal_variants": 7,
+    "perturbations": "four Caglioti peak-shape sets; three additional intensity-noise variants (reported 0.2-2% random amplification)",
+    "source": "ICSD; incomplete and duplicate CIFs removed"
+  },
+  "paper_training_budget": {
+    "model": "NPCNN, not to be reproduced",
+    "reported_optimizer": "Adam",
+    "reported_batch_size": 256,
+    "reported_real_rruff_training_spectra": 452,
+    "reported_loss": "softmax cross-entropy",
+    "epochs": "Unknown",
+    "optimizer_steps": "Unknown",
+    "hardware_and_compute": "Unknown",
+    "public_repo_default_train_steps": 500000,
+    "public_repo_default_is_verified_paper_run": false
+  },
+  "input": {
+    "two_theta_range_degrees": [5.0, 90.0],
+    "step_degrees": 0.01,
+    "wavelength_angstrom": 1.54,
+    "normalization": "maximum intensity to 1000",
+    "rruff_raw_instrument_conditions": "Not harmonized across samples in paper"
+  },
+  "our_training": {
+    "method": "Dynamic JS on synthetic same-parent views; up to 452 RRUFF real spectra may be used for CE fine-tuning once a disjoint test split is reconstructed",
+    "rruff_real_training_allowed": 452,
+    "synthetic_parent_scale_target": 171006,
+    "status": "Partial; public code/data exists but paper's random split cannot be joined to verified RRUFF IDs"
+  },
+  "sources": [
+    "https://doi.org/10.1038/s41524-023-01164-8",
+    "https://github.com/AGI-init/XRDs",
+    "https://github.com/AGI-init/XRDs/blob/main/Hyperparams/base.yaml",
+    "https://www.rruff.net/about/download-data/"
+  ],
+  "limitations": [
+    "Supplementary material was read locally; it did not provide the missing cohort/split manifest.",
+    "The public repository's 500000 training-step default is recorded separately and is not treated as proof of the reported run budget.",
+    "The RRUFF total of 908 and the explicit training count of 452 leave the exact test denominator unreconciled."
+  ]
+}

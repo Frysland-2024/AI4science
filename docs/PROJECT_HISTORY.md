@@ -392,3 +392,22 @@ PR #50 was merged into `main` on 2026-10-29 (merge commit [`6e4dd70`](https://gi
 **2026-11-03 implementation-deliverable clarification:** The project lead rejected a research report as Phase 1 output and explicitly requested a *finished, runnable simulator*, built by selecting useful upstream components and validating their integration with current same-parent JS. Implementation task [Issue #53](https://github.com/Frysland-2024/AI4science/issues/53) specifies acceptance tests. No execution is claimed while local Codex machine is disconnected and the legacy bridge code lane forbids core simulator writes.
 
 **2026-11-03 ResNet hyperparameter clarification (owner):** The lead explicitly noted that because the existing ResNet-18-GN was itself borrowed from ML4pXRDs, its *architecture hyperparameters* should not be treated as fixed or optimal for the updated simulator. New sequence: **finish simulator → retune existing ResNet+Dynamic JS architecture (especially heavy downsampling/kernel size) and optimization (LR/scheduler, JS lambda, exposure budget, regularization) → compare fairly with CNN11+JS → consider larger CIF scale and real RRUFF benchmarks**. The old backbone and its frozen experiments remain valid historical references; the new comparison has not been run. Models should receive comparable bounded tuning opportunities, with held-out RRUFF tests reserved for evaluation rather than hyperparameter selection.
+
+
+## 2026-11-03: JS-only RRUFF protocol and synthetic-scale benchmark
+
+**Date:** 2026-11-03
+
+**Question / previous assumption:** The 2026-10-22 literature plan and 2026-10-23 simulator-scale plan had emphasized zero-shot RRUFF evaluation and deferred scale work. The project lead has now restarted a new performance-focused phase with real-RRUFF Accuracy as the first metric.
+
+**New evidence or reasoning:** Original papers, supplements, public repositories, and dataset descriptions were checked for Lee et al. 2023 (reported RRUFF Accuracy 74.24%), Salgado et al. 2023 (86%), SimXRD-4M 2025 (89.3%), and XQueryer-NoElem 2025 (91.5%). The audit also tracks unique CIF parents, generated spectra, per-parent views and perturbations, disclosed training volume/epochs/compute, and real-RRUFF use. Missing evidence is marked **Unknown**. All four protocols are **PARTIAL** because exact sample cohorts, splits, or preprocessing details needed for a strict comparison are incomplete.
+
+**Decision:** Compare each paper under its own documented RRUFF training/evaluation setting where possible; do not impose zero-shot or prohibit real-data fine-tuning when the paper used it. Train only ResNet-18-GN + Dynamic JS for new benchmark experiments. Accuracy is primary; Macro-F1 and ECE are secondary. The simulator-first execution order recorded earlier on 2026-11-03 is superseded for the immediate benchmark phase; simulator upgrades and CIF expansion remain later preparation work after protocol feasibility and resource checks.
+
+**What changes now:** Added the protocol/scale audit and RRUFF data inventory, four isolated paper configurations, three pipeline-smoke configurations, a shared JS-only benchmark runner, a 30k → 60k → 100,315 parent-scale plan, and machine-readable smoke metrics, predictions, and step logs. Smoke results verify code paths only; they are not literature scores or eligible scale–Accuracy results. No large training run or formal paper-aligned RRUFF experiment is claimed.
+
+**What does not change:** Historical ERM/JS ablations, frozen tests/configurations/checkpoints/metrics, previous RRUFF-301 and CNRS evidence, and archived inversion/DONUT work. The new phase does not overturn prior scientific conclusions.
+
+**Status:** ACTIVE / literature protocol audit and end-to-end smoke checks complete / formal paper-aligned experiments and parent-scale–Accuracy curve NOT RUN.
+
+**Relevant files:** [CURRENT_STATE.md](CURRENT_STATE.md), [protocol audit](RRUFF_JS_BENCHMARK_PROTOCOL_AUDIT_2026-11-03.md), [data inventory](RRUFF_DATA_AVAILABILITY_2026-11-03.md), [benchmark runner guide](../xrd_robustness/reports/rruff_benchmark/README.md).

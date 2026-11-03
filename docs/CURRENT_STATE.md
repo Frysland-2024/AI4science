@@ -4,7 +4,7 @@
 
 **状态日期：** 2026-11-03
 
-**阶段：** 2026-11-03 项目负责人明确确认本科毕设**已重新启动**；当前活动主线仍是 **PXRD 七晶系分类与 same-parent Dynamic JS**，优先开展已发表 PXRD 模拟器源码调查与可复用模块筛选，随后规划小规模 JS-only 模拟器/架构比较。历史分类实验及其结论保持冻结；**新模拟器尚未移植、新 GPU 训练尚未完成**。参数反演等路线仍归档。
+**阶段：** 2026-11-03 项目负责人决定启动 RRUFF 七晶系分类新研究阶段；首要目标是提高真实实验谱 Accuracy，并按目标论文各自公开的 RRUFF 协议开展对标。新实验只训练现有 ResNet-18-GN + Dynamic JS；既有 ERM/JS 消融及冻结结果保持不变。文献审查、通用流水线与 GPU smoke 已完成；尚无与论文协议严格匹配的正式 RRUFF 成绩。模拟器升级和 CIF 扩容列为后续准备任务。
 
 **最近文档同步（2026-10-29）：** PR #50 已合并到 main，统一了 README、当前状态、项目历史和导师说明中的既有证据边界；没有新增实验或结果，也没有改变 2026-10-26 确定的毕设范围。
 
@@ -20,7 +20,7 @@
 
 **Execution gate — explicit 2026-11-03 clarification:** **Understand and selectively implement/validate the simulator FIRST; compare model architectures ONLY AFTER the simulator is understood and has passed standalone correctness/reproducibility/performance checks.** No CNN11 training, no architecture leaderboard, and no large-CIF training before this gate. Investigating simulator source is not itself proof of a working upgrade.
 
-**Current ACTIVE sequence:**
+**Earlier simulator-first sequence (superseded for the current RRUFF benchmark phase):**
 1. **Now:** inspect and compare external PXRD simulator implementations, first SimXRD/Pysimxrd, GSAS-II and ML4pXRDs; PhaseSmith as a lightweight candidate, DebyeCalculator/PowderLine/xrd_simulator lower priority. Produce source-level functionality, physical units, path/seed reproducibility, label-preservation, runtime and license assessment. See [2026-11-03 simulator shortlist](PXRD_SIMULATOR_CANDIDATES_2026-11-03.md).
 2. **Next (not yet executed):** selectively reuse/adapt viable simulator components without replacing existing March–Dollase, background/noise or deterministic same-parent view logic unnecessarily. Keep original simulator as a versioned reference.
 3. **Then (not yet executed):** run a bounded, matched-CIF pilot with existing ResNet-18-GN + JS and a candidate published CNN architecture (first SimXRD CNN11) + **the same JS objective**, comparing absolute RRUFF performance and synthetic validation to historical results. No obligation to repeat full ERM sweep in this exploratory performance-oriented phase.

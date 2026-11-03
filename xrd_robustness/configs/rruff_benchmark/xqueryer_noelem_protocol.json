@@ -1,0 +1,68 @@
+{
+  "schema_version": "rruff-js-protocol-v1",
+  "experiment_id_prefix": "RRUFF-XQUERYER-NOELEM",
+  "protocol_name": "XQueryer-NoElem Protocol",
+  "paper": "Cao et al. 2025, XQueryer (NoElem ablation)",
+  "status": "PARTIAL",
+  "paper_comparable": false,
+  "reference_accuracy": 0.915,
+  "reference_accuracy_sd": 0.015,
+  "reference_macro_f1": 0.905,
+  "reference_macro_f1_sd": 0.020,
+  "rruff": {
+    "catalog_count_reported": 3002,
+    "matched_raw_xy_dif_pairs_secondary_source": 2088,
+    "retained_crystal_system_samples_reported": 1003,
+    "structure_match_subset": 849,
+    "train_samples": 0,
+    "validation_samples": 0,
+    "class_order": ["cubic", "hexagonal", "tetragonal", "orthorhombic", "trigonal", "monoclinic", "triclinic"],
+    "class_coverage": "Per-class counts Unknown",
+    "sample_ids_or_manifest": "Official matching files do not verify the full 1003-row crystal-system test manifest"
+  },
+  "simulation": {
+    "unique_mp_structures": 100315,
+    "nominal_generated_spectra_from_design": 2307245,
+    "actual_successful_generated_spectra": "Unknown",
+    "actual_synthetic_training_view_count": "Unknown; 21:2 and 21-fold descriptions do not identify the exact NoElem training rows",
+    "per_parent": 23,
+    "split": "21:2 synthetic train:test with 21-fold cross-validation reported for synthetic evaluation; not a RRUFF split",
+    "perturbations": "multiple simulated conditions; exact per-condition mapping requires unavailable supplement"
+  },
+  "paper_training_budget": {
+    "model": "XQueryer-NoElem ablation, not to be reproduced",
+    "batch_size": 128,
+    "learning_rate": 0.00025,
+    "maximum_epochs": 100,
+    "early_stopping_patience": 5,
+    "loss": "cross-entropy",
+    "hardware": "GeForce RTX 3090",
+    "actual_epochs_steps_gpu_hours": "Unknown"
+  },
+  "input": {
+    "paper_two_theta_range_degrees": [10.0, 80.0],
+    "paper_points": 3500,
+    "official_matching_code_points": 3500,
+    "other_benchmark_loader_points": 3501,
+    "preprocessing": "official matching path linearly interpolates and max-normalizes to 100; same transform for all 1003 classification samples unverified",
+    "instrument": "RRUFF samples; a common single instrument condition is not reported"
+  },
+  "our_training": {
+    "method": "Dynamic JS synthetic pretraining; no real RRUFF training",
+    "rruff_real_training_allowed": 0,
+    "synthetic_parent_scale_target": 100315,
+    "status": "Partial; official repo and some ID matches are public, but full crystal-system cohort and supplement are unavailable"
+  },
+  "sources": [
+    "https://doi.org/10.1093/nsr/nwaf421",
+    "https://github.com/Bin-Cao/XQueryer",
+    "https://github.com/WPEM/XqueryerBench",
+    "https://raw.githubusercontent.com/Bin-Cao/XQueryer/main/match/main.py",
+    "https://www.rruff.net/about/download-data/"
+  ],
+  "limitations": [
+    "The formal supplement could not be retrieved in this session.",
+    "The 2088-to-1003 cleaning details are available in a thesis reprint; 2088-to-849 is the structure-matching subset and must not be confused with the 1003-classification panel.",
+    "The reported RRUFF standard deviations do not reveal the exact test split or repetition count in the accessible main paper."
+  ]
+}
