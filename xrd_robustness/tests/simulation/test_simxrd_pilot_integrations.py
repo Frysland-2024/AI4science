@@ -164,10 +164,11 @@ def test_selected_v10_changes_validation_panel_views(tmp_path: Path) -> None:
 class _TinyClassifier(torch.nn.Module):
     def __init__(self) -> None:
         super().__init__()
+        self.dropout = torch.nn.Dropout(p=0.5)
         self.projection = torch.nn.Linear(3501, 7)
 
     def forward(self, spectra: torch.Tensor) -> dict[str, torch.Tensor]:
-        return {"logits": self.projection(spectra)}
+        return {"logits": self.projection(self.dropout(spectra))}
 
 
 def test_validation_restores_the_incoming_training_mode() -> None:
@@ -181,9 +182,11 @@ def test_validation_restores_the_incoming_training_mode() -> None:
         model, spectra, labels, device=torch.device("cpu"), batch_size=1
     )
     assert model.training
+    assert model.dropout.training
 
     model.eval()
     pilot._evaluate_one_panel(
         model, spectra, labels, device=torch.device("cpu"), batch_size=1
     )
     assert not model.training
+    assert not model.dropout.training
