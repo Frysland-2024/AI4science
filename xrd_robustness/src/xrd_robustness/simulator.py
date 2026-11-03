@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 import math
-from typing import Any, Sequence
+from typing import Any, Callable, Sequence
 
 import numpy as np
 
@@ -172,6 +172,7 @@ def simulate_from_peak_table(
     normalize: bool = True,
     return_diagnostics: bool = False,
     reflection_table: PeakTable | None = None,
+    peak_renderer: Callable[..., np.ndarray] = render_gaussian_peaks,
 ) -> np.ndarray | tuple[np.ndarray, dict[str, Any]]:
     """Generate one in-memory view and return no persistent intermediate data."""
     params.validate()
@@ -199,7 +200,7 @@ def simulate_from_peak_table(
     # Instrument zero offset: one scalar moves the complete 2theta axis.
     # Independent random jitter of individual Bragg positions is not physical.
     shifted = np.asarray(positions, dtype=np.float64) + params.delta_2theta_deg
-    raw_signal = render_gaussian_peaks(
+    raw_signal = peak_renderer(
         shifted, working_intensities, axis, params.fwhm_deg, normalize=False
     ).astype(np.float64)
     intensities_array = working_intensities
