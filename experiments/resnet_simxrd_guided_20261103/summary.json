@@ -1,0 +1,101 @@
+{
+  "schema_version": "resnet-paper-guided-A0-A1-A2-v1",
+  "created_utc": "2026-11-03T04:50:19.637465+00:00",
+  "status": "completed_two_bounded_12k_screening_trials",
+  "scientific_scope": "same-seed matched-step Validation OOD Macro-F1, not full multi-seed RRUFF or Test",
+  "common_data_protocol": {
+    "official_split_manifest_sha256": "B9D3B72E42EA0FD549DAE34425FF61D2D650D5DD7FE6F337D747CB952CF43293",
+    "train_parent_ids_sha256": "BD8F816DB64B5FF22412AAC11C101B13ACE7BD4776EE1F9A72C9BDAA947E72C7",
+    "evaluation_panel_index_sha256": "5D71E77AA287252377FC851DEA4053D1C79BE5D9D4442BB9AF10C9422F31457A",
+    "simulator_config_sha256": "62851FDF068E9C718C43EB497C6D7A6971E6F03C16ADED42C50C800B1B6EBF70",
+    "source_records_sha256": "05D5D33F200194612A8CDBE29D9443FC7BAD9C245F66D185364B66A75915CC6C",
+    "peak_cache_manifest_sha256": "6AE0CFD1B5B29671E2F532D7A094F2FC412CABD64E4CF77D42915937BACC8D18",
+    "lambda_js": 60.0,
+    "learning_rate": 0.0001,
+    "batch_size_parents": 16
+  },
+  "architecture": {
+    "A0": {
+      "stage_transition_strides": [
+        4,
+        4,
+        4
+      ],
+      "residual_kernel": 9
+    },
+    "A1": {
+      "stage_transition_strides": [
+        4,
+        2,
+        4
+      ],
+      "residual_kernel": 9
+    },
+    "A2": {
+      "stage_transition_strides": [
+        4,
+        2,
+        4
+      ],
+      "residual_kernel": 5
+    }
+  },
+  "seed": 20260711,
+  "screens_steps": [
+    6160,
+    12320
+  ],
+  "experiments": {
+    "A0": {
+      "steps": {
+        "6160": 0.5752998555132964,
+        "12320": 0.6722823058527334
+      },
+      "parameter_count": 13008839,
+      "training_elapsed_seconds": 1392.8279999999795,
+      "peak_cuda_allocated_bytes": 4752220672,
+      "checkpoint_sha256": "8B8B926EF77D8362A33547E8E7080567C1DB1058EA3A629401FAE8132D88F017",
+      "validation_history_sha256": "9BBAA920742F6C73B9AC91CB43BF16213A37756FB17FCC68C0C4A41CA15C6E49",
+      "completed_optimizer_steps": 49280,
+      "training_status": "completed",
+      "simulator_version": "v10_pseudo_voigt_caglioti"
+    },
+    "A1": {
+      "steps": {
+        "6160": 0.5894450119889622,
+        "12320": 0.6370167414665564
+      },
+      "parameter_count": 14843847,
+      "training_elapsed_seconds": 828.2660000000033,
+      "peak_cuda_allocated_bytes": 666178048,
+      "checkpoint_sha256": "33DDE8F186BF47086B5F9249781CDC30FCC8FC9CE894F4A1E3A96A88B076FA14",
+      "validation_history_sha256": "F838D865C87AE9F602B16B5BB0BD3B52434BDB910FA9FC725DBDEAB994B315B4",
+      "completed_optimizer_steps": 12320,
+      "training_status": "diagnostic_partial",
+      "simulator_version": "v10_pseudo_voigt_caglioti",
+      "delta_to_A0_12320": -0.035265564386177006
+    },
+    "A2": {
+      "steps": {
+        "6160": 0.5584451008310658,
+        "12320": 0.6445322807916604
+      },
+      "parameter_count": 9961415,
+      "training_elapsed_seconds": 786.3910000000033,
+      "peak_cuda_allocated_bytes": 3705070080,
+      "checkpoint_sha256": "7F116195615C04DEC5BA5B98827BC38DA4C2409FDB66B22B4CF70CD03B610768",
+      "validation_history_sha256": "FB77618A971F3F0F0BF586381E936E38CBADEECE86B553315121997DAFB1BB87",
+      "completed_optimizer_steps": 12320,
+      "training_status": "diagnostic_partial",
+      "simulator_version": "v10_pseudo_voigt_caglioti",
+      "delta_to_A1_12320": 0.007515539325103959
+    }
+  },
+  "disclosure": [
+    "A1/A2 have only 12320 steps each vs A0 full 49280 steps; compare only matched step checkpoints",
+    "A2 kernel change also changes parameter count and receptive field; isolate as combination, not causal physical proof",
+    "A1/A2 use one seed, cannot support significance/stability",
+    "Do not use already-seen RRUFF-70 or Test for model selection",
+    "This is local Python pilot code snapshotted into a separate GitHub experimental branch; no historical files overwritten."
+  ]
+}
