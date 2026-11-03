@@ -66,6 +66,7 @@ def contract(args):
         "prefetch_batches":args.prefetch_batches,
         "native_threads":args.native_threads,
         "worker_peak_cache":args.worker_peak_cache,
+        "validation_precision":"bf16" if args.validation_bf16 else "fp32",
         "pipeline":"V11 deterministic multiprocessing, lazy PeakTable-LRU, BF16, pinned transfers, frozen Validation memmaps",
         "hpo_steps":args.hpo_steps,
         "confirmation_steps":args.confirm_steps,
@@ -288,7 +289,7 @@ def prepare_validation_panels(records, peaks, sim, libs, study_dir, *,
         pool.close()
     return panels,digest(index_path)
 
-def validate(model,records,peaks,val_factory,device,libs,batch_size,profiles,panels=None):
+def validate(model,records,peaks,val_factory,device,libs,batch_size,profiles,panels=None,*,use_bf16=False):
     np,torch,F,_,_,render_pair_batch,*tail=libs
     metrics=tail[-1]
     result={}
@@ -313,7 +314,7 @@ def validate(model,records,peaks,val_factory,device,libs,batch_size,profiles,pan
                 x1=x1.to(device);x2=x2.to(device)
             with torch.inference_mode():
                 with torch.autocast("cuda",dtype=torch.bfloat16,
-                                    enabled=device.type=="cuda" and torch.cuda.is_bf16_supported()):
+                                    enabled=(use_bf16 and device.type=="cuda" and torch.cuda.is_bf16_supported())):
                     a=model(x1)["logits"]
                     b=model(x2)["logits"]
                 a=a.float();b=b.float()
@@ -442,7 +443,7 @@ def trial_run(name,params,seed,max_steps,study_dir,train_records,val_records,pea
             if step%argv.eval_every==0 or step==max_steps:
                 row=validate(
                     model,val_records,peaks,val_fac,device,libs,argv.batch_size,
-                    profiles,panels=validation_panels,
+                    profiles,panels=validation_panels,use_bf16=argv.validation_bf16,
                 )
                 score=sum(row[p]["macro_f1"] for p in profiles)/6.0
                 if not math.isfinite(score):
@@ -500,6 +501,7 @@ def main():
     parser.add_argument("--prefetch-batches",type=int,default=3)
     parser.add_argument("--native-threads",type=int,default=1)
     parser.add_argument("--worker-peak-cache",type=int,default=512)
+    parser.add_argument("--validation-bf16",action="store_true",help="Opt-in only after BF16 vs FP32 Validation parity checks")
     parser.add_argument("--max-gpu-hours",type=float,default=12.0)
     args=parser.parse_args()
     if args.trials<2 or args.trials>12 or args.hpo_steps<1 or args.confirm_steps<args.hpo_steps:
