@@ -38,6 +38,10 @@ Current implementation in `xrd_robustness/src/xrd_robustness/` includes:
 
 The new library should not be assumed superior merely because it contains more options. Preserve existing frozen versioned configurations and results.
 
+## Implementation-first owner instruction (2026-11-03)
+
+The owner does **not** want a standalone investigation report as the Phase 1 deliverable; they want a **working new simulator**. Review physics/code paths, choose components, implement, connect into the online JS view-generation workflow, then run real physics and regression tests. Documentation serves as provenance only. The required acceptance and coding deliverables are specified in [Issue #53](https://github.com/Frysland-2024/AI4science/issues/53). That issue has been created but Codex has **not** executed it as of this update: remote device offline and legacy bridge code allowlist protects `xrd_robustness/`.
+
 ## Mandatory phase gate — simulator before backbone (owner decision)
 
 **Phase S1: source understanding.** Trace SimXRD/Pysimxrd, GSAS-II, ML4pXRDs (PhaseSmith optional), including concrete code paths, formulas and units, parameter distributions, seed control, labels, licensing and runtime. Record exactly what is implemented vs assumed; choose modules to reuse, adapt or reject.
