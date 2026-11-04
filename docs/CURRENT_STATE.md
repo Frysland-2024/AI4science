@@ -4,12 +4,13 @@
 
 **状态日期：** 2026-11-03
 
-## 2026-11-04 CURRENT OWNER DECISION — RRUFF real-domain protocol replacement (overrides older RRUFF sections)
+## 2026-11-04 LATEST OWNER DECISION — RRUFF-1030 primary + 19 challenge cases
 
-- **Retired as future formal benchmarks:** RRUFF-70 / RRUFF-301 / RRUFF-350 / RRUFF-371. Preserve all old data, reported results, and project history as historical evidence; do not delete. These tracks are NOT the current main Test, nor HPO/model-selection inputs.
-- The initial 910-prospective RRUFF cohort was too strict about space-group string parsing. Review recovered 139 alternate SG notations -> 1049 candidates. Applying the explicitly documented Bin Cao XQueryer preprocessing fields yields **1045 / 1049** passing paired RAW–DIF ID, diffraction 2theta width >=30 degrees, valid six lattice parameters, and basic source/spectrum checks. Four fail width, not lattice fields.
-- **1045 remains PROSPECTIVE / NOT-FROZEN REAL TEST**, not author-identical 1003 samples. The current source is newer than Bin Cao's March 2024 snapshot; 137 SG alias labels and 15 potential mixed-phase warnings remain flagged. Before final evaluation, review provenance, labels and transforms, freeze exact dataset manifest; **no RRUFF/Test predictions during V11 HPO or model selection**. See [RRUFF_1045_BIN_CAO_PROTOCOL_AUDIT_20261104.md](RRUFF_1045_BIN_CAO_PROTOCOL_AUDIT_20261104.md).
-- Historical sections below refer to retired protocols and remain in place as an audit trail. This notice takes precedence for current execution.
+- **Single primary prospective real-domain Test:** **RRUFF-1030**, all seven crystal systems, with same-variant RAW/DIF pairing, no explicit calculated-pattern description, valid six cell parameters, RAW 2theta width >=30 degrees and **no explicitly declared extra phase/impurity**. Primary result will report Macro-F1, Accuracy, ECE and per-class statistics, only after HPO/checkpoint choice is frozen.
+- **Separate prespecified challenge cases (19), never pooled into the 1030 primary denominator:** **15 explicit mixed/contaminated patterns** + **4 samples with original 2theta width <30 degrees**. Evaluate all cases with the same frozen checkpoint for qualitative failure/uncertainty analysis (not multi-phase decomposition). Do not select favorable examples post hoc.
+- This supersedes earlier candidate-only recommendations for 910, 1049 or 1045 as the **primary** test definition. The 1045 comprises the 1030 primary and 15 explicit mixed-phase cases; the four shorter-range cases remain separate. **All are currently pre-registered candidate roles, not yet final scientific freeze**, pending label, provenance, measurement wavelength and resampling audit.
+- By owner decision, RRUFF-70, RRUFF-301, RRUFF-350 and RRUFF-371 are retired from **future formal comparisons**; preserve historical work, files and figures as research evidence but do not use their scores for headline conclusions.
+- Source-of-truth protocol: [RRUFF_1030_MAIN_19_CHALLENGE_EVAL_PROTOCOL_20261104.md](RRUFF_1030_MAIN_19_CHALLENGE_EVAL_PROTOCOL_20261104.md). The actual row/ID lists and SHA stay in private local `E:\\AI4science\\_local\\rruff_benchmark_prospective_20261104`; no Test/RRUFF model inference during tuning.
 
 ## 2026-11-03 LATEST OWNER DECISION — old V10 HPO cancelled; six-cell A0/A1/A2 retained; 154,975-structure cloud HPO next
 
