@@ -15,6 +15,30 @@ Sets are disjoint: **1030 + 15 + 4 = 1049** original metadata-candidate RRUFF va
 
 Historical RRUFF-70/301/350/371 protocols are **retired from future formal evaluation** by owner instruction; historical experimental results and data remain in place for scientific traceability. Early RRUFF-910 and RRUFF-1045 were *candidate milestones* in this protocol's design, not current benchmark definitions.
 
+## 2026-11-04 owner amendment: screen the 15 mixed-pattern cases using Lee (2023)
+
+**Decision rule from Lee et al., *Advanced Intelligent Systems* (2023), DOI 10.1002/aisy.202300140:**
+
+```text
+impurity_peak_ratio = max(baseline-corrected, attributed impurity-phase reflection)
+                    / max(baseline-corrected, attributed main-phase reflection)
+Exclude from relatively-pure evaluation only if ratio > 0.10.
+```
+
+The strict **greater-than** threshold, not >= 0.10, is from Lee's discussion of **Ex_dataset_1 (52 self-measured commercial powder specimens)**. Lee's **RRUFF Ex_dataset_2** instead used a different noise/background cutoff (remove top 40% by low-angle 5–8 degree intensity standard deviation). **Do not incorrectly cite Lee as having applied the impurity 10% rule to its RRUFF dataset.** Our use on 15 RRUFF samples is an explicitly **adapted** policy.
+
+Implementation/pre-registered decision before any model predictions:
+
+1. For each of the 15 pre-identified RRUFF variants, identify observed XRD main-phase diagnostic peaks and second-phase diagnostic peaks (from the actual measured RAW profile, using full DIF/reference structures, instrumental wavelength/axis alignment, and background correction). Quantify each phase's observed highest attributable peak height on a consistent intensity scale.
+2. **Lee-pass:** verified ratio <=0.10: flag as `minor_impurity_lee_acceptable` and eligible for *source-based review* as a relatively-pure sample. It is **not automatically added to the frozen 1030** without a clearly versioned, pre-inference cohort amendment.
+3. **Lee-fail:** verified ratio >0.10: flag as `substantial_secondary_lee_rejected`; keep as a prespecified difficult mixed-phase challenge example, never use for headline single-phase metrics.
+4. **Unknown:** if secondary phase is unidentified, no suitable reference exists, or peak overlap prevents unique attribution: keep in separately flagged challenge/uncertain sample pool, do NOT force a pass/fail classification or infer the ratio from a composition weight fraction.
+5. The four separately selected limited-2theta challenge cases remain unchanged. Do not use *model prediction outcomes* to choose Lee-pass/fail labels. Report all 15 original case IDs and their triage disposition to avoid hidden post hoc exclusion.
+
+**Current measured status (2026-11-04):** Local RAW/DIF for all 15 exist, source descriptions and available secondary reference files have been inventoried. A reproducible worksheet is stored privately as `E:\\AI4science\\_local\\rruff_benchmark_prospective_20261104\\RRUFF_15_LEE_PEAK_RATIO_SCREENING_WORKSHEET.csv`, SHA256 `2efac36c663d4a1ecf547394f47bd0a05ad2bb8cd7e17b7723e48c0686c2e507`. **No phase-specific peak-height ratio has yet been reliably established for the 15**: therefore at this stage `LEE_PASS=0 VERIFIED, LEE_FAIL=0 VERIFIED, UNKNOWN=15`. The numbers are verification statuses, NOT evidence that all 15 have the same composition or quality. The 1030 primary cohort stays prospective and unchanged until that review is complete.
+
+Do NOT substitute 4%, 13%, 14 wt% phase mass fractions for peak-height ratios, since scattering factors, texture, structure factors and overlapping reflections change intensity.
+
 ## Exactly what the challenge cases can establish
 
 After the trained model and preprocessing are frozen, run **the same unmodified model once** on all 19 predefined cases. Report each case's sample ID, known target label and any ambiguity, seven-class probabilities, predicted label, confidence, original measured range/phase description, and plotted spectrum. Include **all 19** in the supplementary diagnostic table; if selecting a smaller number for figures, preselect them by material/measurement characteristics, not by favorable predictions.
