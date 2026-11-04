@@ -4,6 +4,13 @@
 
 **状态日期：** 2026-11-03
 
+## 2026-11-04 CURRENT OWNER DECISION — RRUFF real-domain protocol replacement (overrides older RRUFF sections)
+
+- **Retired as future formal benchmarks:** RRUFF-70 / RRUFF-301 / RRUFF-350 / RRUFF-371. Preserve all old data, reported results, and project history as historical evidence; do not delete. These tracks are NOT the current main Test, nor HPO/model-selection inputs.
+- The initial 910-prospective RRUFF cohort was too strict about space-group string parsing. Review recovered 139 alternate SG notations -> 1049 candidates. Applying the explicitly documented Bin Cao XQueryer preprocessing fields yields **1045 / 1049** passing paired RAW–DIF ID, diffraction 2theta width >=30 degrees, valid six lattice parameters, and basic source/spectrum checks. Four fail width, not lattice fields.
+- **1045 remains PROSPECTIVE / NOT-FROZEN REAL TEST**, not author-identical 1003 samples. The current source is newer than Bin Cao's March 2024 snapshot; 137 SG alias labels and 15 potential mixed-phase warnings remain flagged. Before final evaluation, review provenance, labels and transforms, freeze exact dataset manifest; **no RRUFF/Test predictions during V11 HPO or model selection**. See [RRUFF_1045_BIN_CAO_PROTOCOL_AUDIT_20261104.md](RRUFF_1045_BIN_CAO_PROTOCOL_AUDIT_20261104.md).
+- Historical sections below refer to retired protocols and remain in place as an audit trail. This notice takes precedence for current execution.
+
 ## 2026-11-03 LATEST OWNER DECISION — old V10 HPO cancelled; six-cell A0/A1/A2 retained; 154,975-structure cloud HPO next
 
 **Execution decision (this overrides contradictory older sections below, especially old Stage-3 'collection paused' and old Stage-2 sequential Optuna plans):**
