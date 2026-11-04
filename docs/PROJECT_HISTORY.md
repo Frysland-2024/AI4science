@@ -12,6 +12,10 @@ For current scientific claims, use [CURRENT_STATE.md](CURRENT_STATE.md) and the 
 
 ---
 
+## 2026-11-04 · RRUFF benchmark redesign: 1030 headline / 19 hard cases
+
+The owner retired the historic RRUFF-70/301/350/371 comparison sets as future benchmarks but preserved their results as evidence. A prospective full RAW/DIF inventory produced an initial 910; correcting software-only space-group parsing exclusions recovered 139 to 1049; a Bin Cao-inspired >=30-degree measured angular-range check removed four to 1045. The owner then independently assigned **15 explicitly multi-phase/contaminated RRUFF records to a challenge-case series**, producing **1030 primary single-phase-oriented real-domain samples**, plus four truncated-range challenge cases. The 19 do not contribute to the main score; all must be reported regardless of model success, with the same frozen checkpoint. This preserves hard real-measurement cases as **limitations and applicability evidence** rather than treating their removal as data laundering. Source/label provenance and preprocessing review still block final Test freeze. See [RRUFF-1030/19 protocol](RRUFF_1030_MAIN_19_CHALLENGE_EVAL_PROTOCOL_20261104.md).
+
 ## 1. From FerroAI to a measurement-centered problem
 
 The project grew out of earlier materials-ML work that emphasized an end-to-end evidence chain: literature and data curation, model training, metric checks, failure analysis, and materials interpretation.
