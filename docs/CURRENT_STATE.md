@@ -4,6 +4,13 @@
 
 **状态日期：** 2026-11-03
 
+## 2026-11-04 LATEST RRUFF SOURCE VERIFICATION — remaining 13 have NO new certified admissions
+
+- After the source-validated two-case expansion to **proposed RRUFF-1032**, all **13 remaining explicitly mixed RRUFF variants** were individually rechecked using original RAW, multiple main/impurity DIF references, peak-overlap inspection, 3 background/smoothing settings, exploratory 2-phase NNLS template-sensitivity analysis, and 13 diagnostic plots.
+- Result: **7** with clear source-supported impurity diagnostic peaks exceeding 10% of the observed whole-spectrum maximum (conservative Lee-rejection evidence); **2** with strong *probable* extra-phase contributions (Kutnohorite/unspecified carbonate; Rossmanite/quartz) but no strictly separated Lee ratio; **4** remain Unknown for mild unresolved hematite, chlorite polytype ambiguity, unnamed second phase, or nearly coincident garnet reflections.
+- **Zero additional Lee-qualified cases** emerged. All 13 remain outside the proposed 1032 primary cohort; all prior source manifests and the 4 limited-2theta case series remain unchanged. The 7/2/4 breakdown does NOT assert that all 13 have been proved to violate Lee's strict peak-height ratio.
+- Full source evidence: [RRUFF_13_MIXED_SOURCE_AUDIT_20261104.md](RRUFF_13_MIXED_SOURCE_AUDIT_20261104.md). Private per-record source hashes and 13 plots under E:\AI4science\_local\rruff_benchmark_prospective_20261104. No trained-model RRUFF/Test inference or HPO selection based on these records; 1032 remains prospective pending full label/provenance/wavelength/preprocessing audit.
+
 ## 2026-11-04 NEWER RRUFF OWNER REQUEST + SOURCE VERIFICATION — PROPOSED RRUFF-1032 (supersedes 1030 as planned main)
 
 - The owner proposed revisiting two mild-impurity RRUFF examples and requested additional independent source verification **before** accepting them into the current RRUFF benchmark.
