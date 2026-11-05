@@ -1,0 +1,722 @@
+{
+  "apply_probability_semantics": "per-operator probability that an online PXRD perturbation is applied to a rendered view",
+  "line_profile": {
+    "caglioti_u_deg2": 0.0012,
+    "caglioti_v_deg2": 0.0004,
+    "crystallite_size_nm": {
+      "distribution": "uniform",
+      "max_value": 200.0,
+      "min_value": 50.0
+    },
+    "kind": "tch_pseudo_voigt_v1",
+    "microstrain": {
+      "distribution": "uniform",
+      "max_value": 0.0002,
+      "min_value": 1e-05
+    },
+    "scherrer_shape_factor": 0.9,
+    "truncate_fwhm": 50.0,
+    "use_microstrain": true,
+    "use_scherrer": true,
+    "wavelength_angstrom": 1.54184
+  },
+  "normalization": "preferred orientation modifies reflection integrated intensities before peak rendering; smooth non-negative background is added to the expected intensity, Poisson photon counts and optional count-space electronic readout noise are sampled before clipping, and the model input is then max-normalized",
+  "profiles": {
+    "in_range": {
+      "background_floor_fraction": 0.15,
+      "background_order": 3,
+      "background_to_peak_ratio": {
+        "apply_probability": 0.5,
+        "distribution": "uniform",
+        "max_value": 0.02,
+        "min_value": 0.0
+      },
+      "background_type": "polynomial",
+      "background_variation": {
+        "apply_probability": 1.0,
+        "distribution": "uniform",
+        "max_value": 0.45,
+        "min_value": 0.15
+      },
+      "delta_2theta_deg": {
+        "apply_probability": 0.5,
+        "distribution": "uniform",
+        "max_value": 0.2,
+        "min_value": -0.2
+      },
+      "electronic_noise_std_counts": {
+        "apply_probability": 1.0,
+        "distribution": "uniform",
+        "max_value": 2.0,
+        "min_value": 0.0
+      },
+      "electronic_noise_std_ratio": 0.0,
+      "fwhm_deg": {
+        "apply_probability": 1.0,
+        "distribution": "uniform",
+        "max_value": 0.2,
+        "min_value": 0.08
+      },
+      "noise_model": "poisson_gaussian",
+      "noise_stage": "before_normalization",
+      "noise_std_ratio": {
+        "apply_probability": 1.0,
+        "distribution": "fixed",
+        "max_value": 0.0,
+        "min_value": 0.0
+      },
+      "poisson_count_scale": {
+        "apply_probability": 1.0,
+        "distribution": "log_uniform",
+        "max_value": 40000.0,
+        "min_value": 2500.0
+      },
+      "preferred_orientation": {
+        "apply_probability": 0.7,
+        "candidate_low_index_count": 16,
+        "distribution": "uniform",
+        "enabled": true,
+        "max_value": 1.0,
+        "min_value": 0.8,
+        "model": "march_dollase",
+        "preferred_axis_policy": "low_index_reflection"
+      },
+      "severity_level": 1
+    },
+    "level0": {
+      "background_floor_fraction": 0.0,
+      "background_order": 0,
+      "background_to_peak_ratio": {
+        "apply_probability": 0.0,
+        "distribution": "fixed",
+        "max_value": 0.0,
+        "min_value": 0.0
+      },
+      "background_type": "flat",
+      "background_variation": 0.0,
+      "delta_2theta_deg": {
+        "apply_probability": 1.0,
+        "distribution": "fixed",
+        "max_value": 0.0,
+        "min_value": 0.0
+      },
+      "electronic_noise_std_counts": 0.0,
+      "electronic_noise_std_ratio": 0.0,
+      "fwhm_deg": {
+        "apply_probability": 1.0,
+        "distribution": "fixed",
+        "max_value": 0.08,
+        "min_value": 0.08
+      },
+      "noise_model": "poisson",
+      "noise_stage": "before_normalization",
+      "noise_std_ratio": {
+        "apply_probability": 0.0,
+        "distribution": "fixed",
+        "max_value": 0.0,
+        "min_value": 0.0
+      },
+      "poisson_count_scale": 40000.0,
+      "preferred_orientation": {
+        "apply_probability": 0.0,
+        "candidate_low_index_count": 16,
+        "distribution": "fixed",
+        "enabled": false,
+        "max_value": 1.0,
+        "min_value": 1.0,
+        "model": "march_dollase",
+        "preferred_axis_policy": "low_index_reflection"
+      },
+      "severity_level": 0
+    },
+    "ood_all": {
+      "background_anchor_count": 33,
+      "background_floor_fraction": 0.2,
+      "background_gp_length_scale": 0.12,
+      "background_order": 2,
+      "background_to_peak_ratio": {
+        "apply_probability": 1.0,
+        "distribution": "uniform",
+        "max_value": 0.05,
+        "min_value": 0.02
+      },
+      "background_type": "gaussian_process",
+      "background_variation": {
+        "apply_probability": 1.0,
+        "distribution": "uniform",
+        "max_value": 0.9,
+        "min_value": 0.35
+      },
+      "delta_2theta_deg": {
+        "apply_probability": 1.0,
+        "distribution": "uniform",
+        "max_value": 0.5,
+        "min_value": -0.5
+      },
+      "electronic_noise_std_counts": {
+        "apply_probability": 1.0,
+        "distribution": "uniform",
+        "max_value": 5.0,
+        "min_value": 0.0
+      },
+      "electronic_noise_std_ratio": 0.0,
+      "fwhm_deg": {
+        "apply_probability": 1.0,
+        "distribution": "uniform",
+        "max_value": 0.35,
+        "min_value": 0.2
+      },
+      "noise_model": "poisson_gaussian",
+      "noise_stage": "before_normalization",
+      "noise_std_ratio": {
+        "apply_probability": 1.0,
+        "distribution": "fixed",
+        "max_value": 0.0,
+        "min_value": 0.0
+      },
+      "poisson_count_scale": {
+        "apply_probability": 1.0,
+        "distribution": "log_uniform",
+        "max_value": 2500.0,
+        "min_value": 100.0
+      },
+      "preferred_orientation": {
+        "apply_probability": 1.0,
+        "candidate_low_index_count": 16,
+        "distribution": "uniform",
+        "enabled": true,
+        "max_value": 0.8,
+        "min_value": 0.5,
+        "model": "march_dollase",
+        "preferred_axis_policy": "low_index_reflection"
+      },
+      "severity_level": 4
+    },
+    "ood_background": {
+      "background_anchor_count": 33,
+      "background_floor_fraction": 0.2,
+      "background_gp_length_scale": 0.12,
+      "background_order": 2,
+      "background_to_peak_ratio": {
+        "apply_probability": 1.0,
+        "distribution": "uniform",
+        "max_value": 0.05,
+        "min_value": 0.02
+      },
+      "background_type": "gaussian_process",
+      "background_variation": {
+        "apply_probability": 1.0,
+        "distribution": "uniform",
+        "max_value": 0.9,
+        "min_value": 0.35
+      },
+      "delta_2theta_deg": {
+        "apply_probability": 1.0,
+        "distribution": "fixed",
+        "max_value": 0.0,
+        "min_value": 0.0
+      },
+      "electronic_noise_std_counts": 0.0,
+      "electronic_noise_std_ratio": 0.0,
+      "fwhm_deg": {
+        "apply_probability": 1.0,
+        "distribution": "fixed",
+        "max_value": 0.08,
+        "min_value": 0.08
+      },
+      "noise_model": "poisson",
+      "noise_stage": "before_normalization",
+      "noise_std_ratio": {
+        "apply_probability": 0.0,
+        "distribution": "fixed",
+        "max_value": 0.0,
+        "min_value": 0.0
+      },
+      "poisson_count_scale": 40000.0,
+      "preferred_orientation": {
+        "apply_probability": 0.0,
+        "distribution": "fixed",
+        "enabled": false,
+        "max_value": 1.0,
+        "min_value": 1.0,
+        "model": "march_dollase"
+      },
+      "severity_level": 3
+    },
+    "ood_broadening": {
+      "background_floor_fraction": 0.0,
+      "background_order": 2,
+      "background_to_peak_ratio": {
+        "apply_probability": 0.0,
+        "distribution": "fixed",
+        "max_value": 0.0,
+        "min_value": 0.0
+      },
+      "background_type": "polynomial",
+      "background_variation": 0.0,
+      "delta_2theta_deg": {
+        "apply_probability": 1.0,
+        "distribution": "fixed",
+        "max_value": 0.0,
+        "min_value": 0.0
+      },
+      "electronic_noise_std_counts": 0.0,
+      "electronic_noise_std_ratio": 0.0,
+      "fwhm_deg": {
+        "apply_probability": 1.0,
+        "distribution": "uniform",
+        "max_value": 0.35,
+        "min_value": 0.2
+      },
+      "noise_model": "poisson",
+      "noise_stage": "before_normalization",
+      "noise_std_ratio": {
+        "apply_probability": 0.0,
+        "distribution": "fixed",
+        "max_value": 0.0,
+        "min_value": 0.0
+      },
+      "poisson_count_scale": 40000.0,
+      "preferred_orientation": {
+        "apply_probability": 0.0,
+        "distribution": "fixed",
+        "enabled": false,
+        "max_value": 1.0,
+        "min_value": 1.0,
+        "model": "march_dollase"
+      },
+      "severity_level": 3
+    },
+    "ood_combo_background_noise": {
+      "background_anchor_count": 33,
+      "background_floor_fraction": 0.2,
+      "background_gp_length_scale": 0.12,
+      "background_order": 2,
+      "background_to_peak_ratio": {
+        "apply_probability": 1.0,
+        "distribution": "uniform",
+        "max_value": 0.05,
+        "min_value": 0.02
+      },
+      "background_type": "gaussian_process",
+      "background_variation": {
+        "apply_probability": 1.0,
+        "distribution": "uniform",
+        "max_value": 0.9,
+        "min_value": 0.35
+      },
+      "delta_2theta_deg": {
+        "apply_probability": 1.0,
+        "distribution": "fixed",
+        "max_value": 0.0,
+        "min_value": 0.0
+      },
+      "electronic_noise_std_counts": {
+        "apply_probability": 1.0,
+        "distribution": "uniform",
+        "max_value": 5.0,
+        "min_value": 0.0
+      },
+      "electronic_noise_std_ratio": 0.0,
+      "fwhm_deg": {
+        "apply_probability": 1.0,
+        "distribution": "fixed",
+        "max_value": 0.08,
+        "min_value": 0.08
+      },
+      "noise_model": "poisson_gaussian",
+      "noise_stage": "before_normalization",
+      "noise_std_ratio": {
+        "apply_probability": 1.0,
+        "distribution": "fixed",
+        "max_value": 0.0,
+        "min_value": 0.0
+      },
+      "poisson_count_scale": {
+        "apply_probability": 1.0,
+        "distribution": "log_uniform",
+        "max_value": 2500.0,
+        "min_value": 100.0
+      },
+      "preferred_orientation": {
+        "apply_probability": 0.0,
+        "distribution": "fixed",
+        "enabled": false,
+        "max_value": 1.0,
+        "min_value": 1.0,
+        "model": "march_dollase"
+      },
+      "severity_level": 4
+    },
+    "ood_combo_shift_broadening": {
+      "background_floor_fraction": 0.0,
+      "background_order": 2,
+      "background_to_peak_ratio": {
+        "apply_probability": 0.0,
+        "distribution": "fixed",
+        "max_value": 0.0,
+        "min_value": 0.0
+      },
+      "background_type": "polynomial",
+      "background_variation": 0.0,
+      "delta_2theta_deg": {
+        "apply_probability": 1.0,
+        "distribution": "uniform",
+        "max_value": 0.5,
+        "min_value": 0.2
+      },
+      "electronic_noise_std_counts": 0.0,
+      "electronic_noise_std_ratio": 0.0,
+      "fwhm_deg": {
+        "apply_probability": 1.0,
+        "distribution": "uniform",
+        "max_value": 0.35,
+        "min_value": 0.2
+      },
+      "noise_model": "poisson",
+      "noise_stage": "before_normalization",
+      "noise_std_ratio": {
+        "apply_probability": 0.0,
+        "distribution": "fixed",
+        "max_value": 0.0,
+        "min_value": 0.0
+      },
+      "poisson_count_scale": 40000.0,
+      "preferred_orientation": {
+        "apply_probability": 0.0,
+        "distribution": "fixed",
+        "enabled": false,
+        "max_value": 1.0,
+        "min_value": 1.0,
+        "model": "march_dollase"
+      },
+      "severity_level": 4
+    },
+    "ood_combo_texture_shift": {
+      "background_floor_fraction": 0.0,
+      "background_order": 2,
+      "background_to_peak_ratio": {
+        "apply_probability": 0.0,
+        "distribution": "fixed",
+        "max_value": 0.0,
+        "min_value": 0.0
+      },
+      "background_type": "polynomial",
+      "background_variation": 0.0,
+      "delta_2theta_deg": {
+        "apply_probability": 1.0,
+        "distribution": "uniform",
+        "max_value": -0.2,
+        "min_value": -0.5
+      },
+      "electronic_noise_std_counts": 0.0,
+      "electronic_noise_std_ratio": 0.0,
+      "fwhm_deg": {
+        "apply_probability": 1.0,
+        "distribution": "fixed",
+        "max_value": 0.08,
+        "min_value": 0.08
+      },
+      "noise_model": "poisson",
+      "noise_stage": "before_normalization",
+      "noise_std_ratio": {
+        "apply_probability": 0.0,
+        "distribution": "fixed",
+        "max_value": 0.0,
+        "min_value": 0.0
+      },
+      "poisson_count_scale": 40000.0,
+      "preferred_orientation": {
+        "apply_probability": 1.0,
+        "candidate_low_index_count": 16,
+        "distribution": "uniform",
+        "enabled": true,
+        "max_value": 0.8,
+        "min_value": 0.5,
+        "model": "march_dollase",
+        "preferred_axis_policy": "low_index_reflection"
+      },
+      "severity_level": 4
+    },
+    "ood_noise": {
+      "background_floor_fraction": 0.0,
+      "background_order": 2,
+      "background_to_peak_ratio": {
+        "apply_probability": 0.0,
+        "distribution": "fixed",
+        "max_value": 0.0,
+        "min_value": 0.0
+      },
+      "background_type": "polynomial",
+      "background_variation": 0.0,
+      "delta_2theta_deg": {
+        "apply_probability": 1.0,
+        "distribution": "fixed",
+        "max_value": 0.0,
+        "min_value": 0.0
+      },
+      "electronic_noise_std_counts": {
+        "apply_probability": 1.0,
+        "distribution": "uniform",
+        "max_value": 5.0,
+        "min_value": 0.0
+      },
+      "electronic_noise_std_ratio": 0.0,
+      "fwhm_deg": {
+        "apply_probability": 1.0,
+        "distribution": "fixed",
+        "max_value": 0.08,
+        "min_value": 0.08
+      },
+      "noise_model": "poisson_gaussian",
+      "noise_stage": "before_normalization",
+      "noise_std_ratio": {
+        "apply_probability": 1.0,
+        "distribution": "fixed",
+        "max_value": 0.0,
+        "min_value": 0.0
+      },
+      "poisson_count_scale": {
+        "apply_probability": 1.0,
+        "distribution": "log_uniform",
+        "max_value": 2500.0,
+        "min_value": 100.0
+      },
+      "preferred_orientation": {
+        "apply_probability": 0.0,
+        "distribution": "fixed",
+        "enabled": false,
+        "max_value": 1.0,
+        "min_value": 1.0,
+        "model": "march_dollase"
+      },
+      "severity_level": 3
+    },
+    "ood_shift_negative": {
+      "background_floor_fraction": 0.0,
+      "background_order": 2,
+      "background_to_peak_ratio": {
+        "apply_probability": 0.0,
+        "distribution": "fixed",
+        "max_value": 0.0,
+        "min_value": 0.0
+      },
+      "background_type": "polynomial",
+      "background_variation": 0.0,
+      "delta_2theta_deg": {
+        "apply_probability": 1.0,
+        "distribution": "uniform",
+        "max_value": -0.2,
+        "min_value": -0.5
+      },
+      "electronic_noise_std_counts": 0.0,
+      "electronic_noise_std_ratio": 0.0,
+      "fwhm_deg": {
+        "apply_probability": 1.0,
+        "distribution": "fixed",
+        "max_value": 0.08,
+        "min_value": 0.08
+      },
+      "noise_model": "poisson",
+      "noise_stage": "before_normalization",
+      "noise_std_ratio": {
+        "apply_probability": 0.0,
+        "distribution": "fixed",
+        "max_value": 0.0,
+        "min_value": 0.0
+      },
+      "poisson_count_scale": 40000.0,
+      "preferred_orientation": {
+        "apply_probability": 0.0,
+        "distribution": "fixed",
+        "enabled": false,
+        "max_value": 1.0,
+        "min_value": 1.0,
+        "model": "march_dollase"
+      },
+      "severity_level": 3
+    },
+    "ood_shift_positive": {
+      "background_floor_fraction": 0.0,
+      "background_order": 2,
+      "background_to_peak_ratio": {
+        "apply_probability": 0.0,
+        "distribution": "fixed",
+        "max_value": 0.0,
+        "min_value": 0.0
+      },
+      "background_type": "polynomial",
+      "background_variation": 0.0,
+      "delta_2theta_deg": {
+        "apply_probability": 1.0,
+        "distribution": "uniform",
+        "max_value": 0.5,
+        "min_value": 0.2
+      },
+      "electronic_noise_std_counts": 0.0,
+      "electronic_noise_std_ratio": 0.0,
+      "fwhm_deg": {
+        "apply_probability": 1.0,
+        "distribution": "fixed",
+        "max_value": 0.08,
+        "min_value": 0.08
+      },
+      "noise_model": "poisson",
+      "noise_stage": "before_normalization",
+      "noise_std_ratio": {
+        "apply_probability": 0.0,
+        "distribution": "fixed",
+        "max_value": 0.0,
+        "min_value": 0.0
+      },
+      "poisson_count_scale": 40000.0,
+      "preferred_orientation": {
+        "apply_probability": 0.0,
+        "distribution": "fixed",
+        "enabled": false,
+        "max_value": 1.0,
+        "min_value": 1.0,
+        "model": "march_dollase"
+      },
+      "severity_level": 3
+    },
+    "ood_texture": {
+      "background_floor_fraction": 0.15,
+      "background_order": 3,
+      "background_to_peak_ratio": {
+        "apply_probability": 0.5,
+        "distribution": "uniform",
+        "max_value": 0.02,
+        "min_value": 0.0
+      },
+      "background_type": "polynomial",
+      "background_variation": {
+        "apply_probability": 1.0,
+        "distribution": "uniform",
+        "max_value": 0.45,
+        "min_value": 0.15
+      },
+      "delta_2theta_deg": {
+        "apply_probability": 0.5,
+        "distribution": "uniform",
+        "max_value": 0.2,
+        "min_value": -0.2
+      },
+      "electronic_noise_std_counts": {
+        "apply_probability": 1.0,
+        "distribution": "uniform",
+        "max_value": 2.0,
+        "min_value": 0.0
+      },
+      "electronic_noise_std_ratio": 0.0,
+      "fwhm_deg": {
+        "apply_probability": 1.0,
+        "distribution": "uniform",
+        "max_value": 0.2,
+        "min_value": 0.08
+      },
+      "noise_model": "poisson_gaussian",
+      "noise_stage": "before_normalization",
+      "noise_std_ratio": {
+        "apply_probability": 1.0,
+        "distribution": "fixed",
+        "max_value": 0.0,
+        "min_value": 0.0
+      },
+      "poisson_count_scale": {
+        "apply_probability": 1.0,
+        "distribution": "log_uniform",
+        "max_value": 40000.0,
+        "min_value": 2500.0
+      },
+      "preferred_orientation": {
+        "apply_probability": 1.0,
+        "candidate_low_index_count": 16,
+        "distribution": "uniform",
+        "enabled": true,
+        "max_value": 0.8,
+        "min_value": 0.5,
+        "model": "march_dollase",
+        "preferred_axis_policy": "low_index_reflection"
+      },
+      "severity_level": 3
+    },
+    "train": {
+      "background_floor_fraction": 0.15,
+      "background_order": 3,
+      "background_to_peak_ratio": {
+        "apply_probability": 0.5,
+        "distribution": "uniform",
+        "max_value": 0.02,
+        "min_value": 0.0
+      },
+      "background_type": "polynomial",
+      "background_variation": {
+        "apply_probability": 1.0,
+        "distribution": "uniform",
+        "max_value": 0.45,
+        "min_value": 0.15
+      },
+      "delta_2theta_deg": {
+        "apply_probability": 0.5,
+        "distribution": "uniform",
+        "max_value": 0.2,
+        "min_value": -0.2
+      },
+      "electronic_noise_std_counts": {
+        "apply_probability": 1.0,
+        "distribution": "uniform",
+        "max_value": 2.0,
+        "min_value": 0.0
+      },
+      "electronic_noise_std_ratio": 0.0,
+      "fwhm_deg": {
+        "apply_probability": 1.0,
+        "distribution": "uniform",
+        "max_value": 0.2,
+        "min_value": 0.08
+      },
+      "noise_model": "poisson_gaussian",
+      "noise_stage": "before_normalization",
+      "noise_std_ratio": {
+        "apply_probability": 1.0,
+        "distribution": "fixed",
+        "max_value": 0.0,
+        "min_value": 0.0
+      },
+      "poisson_count_scale": {
+        "apply_probability": 1.0,
+        "distribution": "log_uniform",
+        "max_value": 40000.0,
+        "min_value": 2500.0
+      },
+      "preferred_orientation": {
+        "apply_probability": 0.7,
+        "candidate_low_index_count": 16,
+        "distribution": "uniform",
+        "enabled": true,
+        "max_value": 1.0,
+        "min_value": 0.8,
+        "model": "march_dollase",
+        "preferred_axis_policy": "low_index_reflection"
+      },
+      "severity_level": 1
+    }
+  },
+  "purpose": "Opt-in V11 physical line-profile simulator for Dynamic ERM and Dynamic JS; inherits the established online nuisance profiles.",
+  "quality_gates": {
+    "clipped_fraction_max": 0.55,
+    "reject_negative_intensity": true,
+    "reject_non_finite": true,
+    "retained_integrated_intensity_min": 0.95,
+    "top20_peak_recall_min": 0.8,
+    "window": [
+      10.0,
+      80.0
+    ]
+  },
+  "run_seed": 20260714,
+  "schema_version": "v11-tch-pseudo-voigt-simulation-v1",
+  "simulator_version": "v11_tch_pseudo_voigt",
+  "status": "development_opt_in"
+}

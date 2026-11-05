@@ -1,0 +1,45 @@
+{
+  "cif_path": "E:\\AI4science\\milly_ceramics_xrd_20261023\\reference-CIF\\Na0.5Eu0.5TiO3_R-3c_start.cif",
+  "cif_sha256": "874ea399470f9bc6922fe8d4b178059fd275b4c7b41ab882f7bda195c88ea76a",
+  "crystal_system": "trigonal",
+  "label_pair": [
+    "trigonal",
+    "trigonal"
+  ],
+  "material_id": "Na0.5Eu0.5TiO3_R-3c",
+  "peak_count": 25,
+  "shape": [
+    3501
+  ],
+  "simulator_version": "v11_tch_pseudo_voigt",
+  "view_1_line_profile": {
+    "caglioti_u_deg2": 0.0012,
+    "caglioti_v_deg2": 0.0004,
+    "caglioti_w_deg2_source": "sampled_physics_fwhm_deg_squared",
+    "crystallite_size_nm": 172.2295756937923,
+    "microstrain_delta_d_over_d": 9.819966657315496e-05,
+    "peak_profile": "area_normalized_tch_pseudo_voigt_v1",
+    "scherrer_shape_factor": 0.9,
+    "simulator_version": "v11_tch_pseudo_voigt",
+    "truncate_fwhm": 50.0,
+    "wavelength_angstrom": 1.54184
+  },
+  "view_2_line_profile": {
+    "caglioti_u_deg2": 0.0012,
+    "caglioti_v_deg2": 0.0004,
+    "caglioti_w_deg2_source": "sampled_physics_fwhm_deg_squared",
+    "crystallite_size_nm": 147.6058377555728,
+    "microstrain_delta_d_over_d": 0.0001581578285356036,
+    "peak_profile": "area_normalized_tch_pseudo_voigt_v1",
+    "scherrer_shape_factor": 0.9,
+    "simulator_version": "v11_tch_pseudo_voigt",
+    "truncate_fwhm": 50.0,
+    "wavelength_angstrom": 1.54184
+  },
+  "view_seeds": [
+    12944253974895839918,
+    12851529409113262895
+  ],
+  "views_distinct": true,
+  "views_replayable": true
+}

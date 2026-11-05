@@ -2,7 +2,9 @@
 
 > **权威性说明：** 本文件记录当前科学状态与当前执行口径。历史版本、旧聊天和 `PROJECT_HISTORY.md` 用于解释“为什么改变”，不得覆盖这里的当前结论；AI/Agent 工作规则见 [`../AGENTS.md`](../AGENTS.md) 与 [`RESEARCH_WORKFLOW.md`](RESEARCH_WORKFLOW.md)。
 
-**状态日期：** 2026-11-03
+**状态日期：** 2026-11-03（PR #58 交付边界于 2026-11-05 核对）
+
+**PR #58 交付与训练边界（2026-11-05）：** V11 的实现、独立模拟器验收和 paired-view 工程验证已在 PR 分支完成；截至本次核对，PR 仍 open、未合并，不能将分支交付写成 main 已集成。`VALIDATION_20261103.md` 的 50 项测试和七晶系验收不是模型训练；本 PR 未运行 V11 模型训练、HPO 或最终 RRUFF 评测，也未提供 V11 相对 V9/V10 的分类性能提升证据。下文 V10 训练快照属于独立实验，不能归为 V11 训练结果。
 
 ## 2026-11-03 LATEST OWNER DECISION — old V10 HPO cancelled; six-cell A0/A1/A2 retained; 154,975-structure cloud HPO next
 
@@ -17,7 +19,7 @@
 
 **阶段（2026-11-03 最新负责人决策）：** 本科毕设已经重启；当前主线为 **PXRD 七晶系分类 + same-parent Dynamic JS**。研究按四阶段推进：**① 模拟器构建（工程阶段已完成）→ ② 模型架构优化（进行中：V10 判断是否换 CNN11，随后 Codex 对选定架构自动调结构和训练超参数）→ ③ 增加经过验证的独立 CIF 数据 → ④ 最终训练和 RRUFF 文献对标跑分**。不再将调参拆出去、放到数据扩容之后；不再开启新的模拟器研究主线。冻结历史结果不改，参数反演仍归档。
 
-## 2026-11-03 later owner status clarification (execution snapshot; verification pending)
+## 2026-11-03 earlier owner status snapshot (historical; superseded by LATEST OWNER DECISION above)
 
 **Owner explicitly states in the latest conversation:** (1) the new physically grounded simulator has been constructed, (2) the new structure database has **already been collected**, and (3) **hyperparameter optimization is underway**. **Do not present Stage-3 data collection as work still needing to be started solely because the older Issue #61 text says PAUSED.** However, this is a user-reported dataset-completion claim: the source manifests, unique-CIF counts, dedup audit and integration in final training were **not reverified in this status update**, so do not assert a validated or training-integrated dataset or invent its size. The local acquisition working directory cannot itself establish the collected-data count.
 
@@ -37,7 +39,7 @@
 
 **2026-11-03 latest user-approved SLIDE five-column scorecard:** **Grade | Paper / model | Simulated training structure count (distinguish actual post-split train CIFs from curated corpus) | Real RRUFF evaluated spectrum count | RRUFF top-1 Accuracy.** All graded literature comparators have **0 labeled RRUFF training/adaptation**, so label-adaptation and non-PXRD metadata are explanatory footnotes, not columns cluttering the headline. Full completed six-row table and original source links: [RRUFF_ZERO_SHOT_MODEL_COMPARISON_LIBRARY_20261103.md](RRUFF_ZERO_SHOT_MODEL_COMPARISON_LIBRARY_20261103.md). Key verified details: Vecsei 2019 **114,404 actual training** structures out of 128,404 deduplicated corpus, RRUFF ~800; Salgado **171,006 curated** / ~908 RRUFF entries; Lee **197,131 curated** / estimated ~960 retained (actual unknown); AlphaDiffract **312,267 curated records** / 734 RRUFF; SimXRD **119,569 unique** / RRUFF **≈1,003 HIGH-CONFIDENCE INFERENCE from Bin Cao's own doctoral thesis Chapter 3 (3,002 catalog → only 1,003 usable), although exact Table-5 scored denominator/IDs remain unconfirmed**; XQueryer-NoElem **100,315 structures** / 1,003 RRUFF. This is literature benchmarking with differing test cohorts, not same-test matched experimental evidence. Preserve lockout of RRUFF Test from HPO; Stage 3 CIF expansion remains gated on Stage 2 and does not start merely because the target scoreboard is defined.
 
-## 2026-11-03 latest correction — the authoritative active sequence
+## 2026-11-03 earlier four-stage sequence (historical; superseded by LATEST OWNER DECISION above)
 
 **Owner logic:** Every step must answer a useful, distinct question. **Simulator construction is already done as an engineering deliverable** (V11 has working code and tested acceptance; PR merge/integration housekeeping is separate from a new research stage). The goal is improved absolute real-domain classification performance, not an endless menu of experiments.
 
@@ -50,13 +52,21 @@
 
 **最近文档同步（2026-10-29）：** PR #50 已合并到 main，统一了 README、当前状态、项目历史和导师说明中的既有证据边界；没有新增实验或结果，也没有改变 2026-10-26 确定的毕设范围。
 
+## 2026-11-03 PR #58 — V11 reference-scale correction and evidence boundary
+
+V11’s area-normalized TCH peaks cannot use the legacy V9 Gaussian reference scale: in the Gaussian limit, an isolated 0.08° peak would be scaled to about 0.399, unintentionally changing the relative background and count-space Poisson-noise settings. PR #58 calibrates the reused pipeline at the V11 integration boundary using the actual rendered V11 peak maximum (`reference_scale_mode="renderer_peak"`). The standalone renderer keeps its area normalization, and V9 retains its legacy default scale.
+
+**Verification (checked 2026-11-05):** Commit `c486be7` passed [GitHub Actions run 41659169247](https://github.com/Frysland-2024/AI4science/actions/runs/41659169247): 134 non-data-bound tests in 19.71s. The completed Codex review covers the earlier `b43e28d`, not the latest head. Focused tests assert that V11’s preclip maximum is 1.0 and that the V9 default matches the legacy Gaussian mode. The recorded V11 acceptance run also checks fixed-seed replay, all seven crystal-system labels, V9 regression, broadening trends, and integrated peak area. The validation record reports no model training.
+
+**Evidence boundary:** These checks support simulator and paired-view engineering behavior. They do not establish a V11 model-training or HPO result. Follow-on model work is governed by the current sequence and readiness gates above.
+
 ## 2026-11-03: PXRD thesis research resumed (NEW DECISION; supersedes 2026-10-26 execution pause)
 
 **Decision / owner confirmation:** The project lead explicitly stated that the undergraduate thesis has restarted. The 2026-10-26 decision to *stop new work and write up only* is therefore **superseded for forward execution**. It remains a correct historical snapshot, and all completed reports/configurations/predictions remain frozen. Reopening investigation is **not** permission to overwrite old results.
 
 **Phase 1 delivery upgrade (owner, 2026-11-03):** The expected deliverable is a **runnable, versioned simulator integrated with same-parent JS paired views, accompanied by a working CIF→two-spectra CLI, tests and examples** — **NOT** a literature-only audit report. Source review and module comparisons are internal implementation steps. [Executable Codex implementation issue #54](https://github.com/Frysland-2024/AI4science/issues/54). The issue is a handoff, not proof that Codex has started; the legacy research bridge cannot modify `xrd_robustness/` without a separately approved route.
 
-**Delivery clarification, 2026-11-03: Phase 1 is an implementation task, not a report.** The owner explicitly requests **finished, runnable, test-verified simulator code** adapted from useful upstream implementations, not an audit report. The audit of upstream paths/formulas/units/licensing is part of coding work. See [implementation Issue #53](https://github.com/Frysland-2024/AI4science/issues/53). **Execution is pending**: the authorized local Desktop Commander machine is offline, and the repo's legacy `research_bridge` lane has an explicit `xrd_robustness/` write prohibition. Creating the Issue does not mean Codex or tests ran. Do not claim completion until a PR and run evidence exist.
+**Earlier delivery snapshot (2026-11-03, superseded by PR #58): Phase 1 is an implementation task, not a report.** The owner requested finished, runnable, test-verified simulator code adapted from useful upstream implementations. At that point, execution was pending because the authorized local Desktop Commander machine was offline and the legacy `research_bridge` lane prohibited `xrd_robustness/` writes. That restriction and the instruction not to claim completion before PR/run evidence describe the earlier snapshot; PR #58 and its validation record now provide the implementation and run evidence. This history does not claim model training.
 
 **2026-11-03 updated research decision (V10 / automatic ResNet tuning):** The project lead clarified that the **ongoing V10 three-configuration trial is sufficient to decide whether a CNN11 Backbone replacement is necessary**; its principal purpose is a *ResNet-vs-CNN11 decision on a fixed V10 simulation setup*, not to establish V10 vs V11 simulator superiority. No additional architecture search or second CNN11 campaign is planned. Actual local inspection on 2026-11-03 shows all **three ResNet-18-GN + JS V10 seeds complete**, with CNN11 + JS V10 training started and active; final architecture verdict and real-domain scores are **NOT YET AVAILABLE**. After V10 fully completes and its evidence is frozen, the next Codex action is **bounded, autonomous tuning of the existing ResNet + JS** (stage downsampling/kernel size, LR/schedule, λ_JS, weight decay and training exposures), using a separately accepted validated simulator, in an isolated worktree and without touching the locked RRUFF test for selection. [Queued implementation task #55](https://github.com/Frysland-2024/AI4science/issues/55). This supersedes the prior proposal to require a new architecture comparison after ResNet retuning; the already-running V10 comparison provides the architecture-screening evidence. No new tuning GPU job has been initiated by this decision record.
 
