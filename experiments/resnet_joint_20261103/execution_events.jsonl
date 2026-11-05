@@ -1,0 +1,30 @@
+{"event": "campaign_started", "time_utc": "2026-11-03T06:10:15Z", "trials": ["A0_R1", "A1_R0", "A1_R1", "A2_R0", "A2_R1"], "steps": 49280, "seed": 20260711, "a0_baseline": "reuse historical completed full 49,280-step seed-20260711", "new_gpu_runs": 5, "concurrency": 1}
+{"event": "trial_started", "time_utc": "2026-11-03T06:10:15Z", "trial": "A0_R1", "ordinal": 1, "total": 5}
+{"event": "trial_completed", "time_utc": "2026-11-03T07:01:53Z", "trial": "A0_R1", "score": 0.7318297094121915, "selected_step": 43120}
+{"event": "trial_started", "time_utc": "2026-11-03T07:01:53Z", "trial": "A1_R0", "ordinal": 2, "total": 5}
+{"event": "trial_completed", "time_utc": "2026-11-03T07:55:52Z", "trial": "A1_R0", "score": 0.7080539527501792, "selected_step": 43120}
+{"event": "trial_started", "time_utc": "2026-11-03T07:55:52Z", "trial": "A1_R1", "ordinal": 3, "total": 5}
+{"event": "trial_completed", "time_utc": "2026-11-03T08:50:53Z", "trial": "A1_R1", "score": 0.7219153328258945, "selected_step": 49280}
+{"event": "trial_started", "time_utc": "2026-11-03T08:50:53Z", "trial": "A2_R0", "ordinal": 4, "total": 5}
+{"event": "trial_completed", "time_utc": "2026-11-03T09:57:18Z", "trial": "A2_R0", "score": 0.6951497892230482, "selected_step": 36960}
+{"event": "trial_started", "time_utc": "2026-11-03T09:57:18Z", "trial": "A2_R1", "ordinal": 5, "total": 5}
+{"event": "trial_completed", "time_utc": "2026-11-03T10:43:31Z", "trial": "A2_R1", "score": 0.7099421169249333, "selected_step": 43120}
+{"event": "final_report_built", "time_utc": "2026-11-03T10:43:31Z", "winner": "A0_R1", "gain": 0.022842}
+{"event": "github_branch_created", "time_utc": "2026-11-03T10:43:33Z", "branch": "experiments/resnet-joint-a0-a1-a2-20261103"}
+{"event": "github_file_uploaded", "time_utc": "2026-11-03T10:43:35Z", "name": "README.md", "content_sha": "72339d82af384b31a07434f87425a2b03ae2ca1c"}
+{"event": "github_file_uploaded", "time_utc": "2026-11-03T10:43:37Z", "name": "summary.json", "content_sha": "79c4276a7ed7b54792097c080449f0a50499154c"}
+{"event": "github_file_uploaded", "time_utc": "2026-11-03T10:43:40Z", "name": "code/run_joint_campaign.py", "content_sha": "678ea1af1e354039b6855966d7bbc33a5b5da613"}
+{"event": "github_file_uploaded", "time_utc": "2026-11-03T10:43:41Z", "name": "code/run_joint_trial.py", "content_sha": "5385a2343b0da942e9f34fd77c64b13faeeda74e"}
+{"event": "github_file_uploaded", "time_utc": "2026-11-03T10:43:43Z", "name": "code/prepare_resnet_joint_20261103.py", "content_sha": "41faaaf78a8fcd4a6deb73213919f7f0abeef2fc"}
+{"event": "github_file_uploaded", "time_utc": "2026-11-03T10:43:45Z", "name": "code/run_resnet_guided_a1_20261103.py", "content_sha": "9a6762d62c89991bcd0c6efdee26591542a3c701"}
+{"event": "github_file_uploaded", "time_utc": "2026-11-03T10:43:47Z", "name": "code/run_resnet_guided_a2_20261103.py", "content_sha": "2dc9e4eff2675e3953dbdcf8fa59d5e23b1a456c"}
+{"event": "github_file_uploaded", "time_utc": "2026-11-03T10:43:50Z", "name": "code/joint_v10_runner.py", "content_sha": "484642b9793b72dfdd053d013478434747e33d53"}
+{"event": "github_file_uploaded", "time_utc": "2026-11-03T10:43:52Z", "name": "source_snapshot/original_run_simxrd_architecture_pilot.py", "content_sha": "9bfe7a072b5ad04e8460d41fd62b51835da32b4a"}
+{"event": "github_file_uploaded", "time_utc": "2026-11-03T10:43:54Z", "name": "source_snapshot/simulator_v10.py", "content_sha": "54d11fc0e3f4d549823665b49ffe4b7cbcc0b50c"}
+{"event": "github_file_uploaded", "time_utc": "2026-11-03T10:43:56Z", "name": "source_snapshot/ml4pxrd_resnet1d.py", "content_sha": "689276e410d2f1b4b3a3d0f66df7dcf18a838623"}
+{"event": "github_file_uploaded", "time_utc": "2026-11-03T10:43:58Z", "name": "source_snapshot/training_prefetch.py", "content_sha": "393631eb43e37bf93f361dbb22b6f77a2ea53784"}
+{"event": "github_file_uploaded", "time_utc": "2026-11-03T10:44:00Z", "name": "source_snapshot/training_objectives.py", "content_sha": "8374708940030249570a391afb8f5fb7ae873fa2"}
+{"event": "github_file_uploaded", "time_utc": "2026-11-03T10:44:02Z", "name": "config/V10_renderer.json", "content_sha": "2c85c21db317ffa3c836754a4af037ce618ca96f"}
+{"event": "github_file_uploaded", "time_utc": "2026-11-03T10:44:04Z", "name": "config/original_pilot_protocol.json", "content_sha": "3607915744d032a0096362933489771e11d5eca0"}
+{"event": "github_file_uploaded", "time_utc": "2026-11-03T10:44:06Z", "name": "reference/A0_R0_full_training_results.json", "content_sha": "3157c43a4e17ea02b786d59b9c27c67b82e55f96"}
+{"event": "github_file_uploaded", "time_utc": "2026-11-03T10:44:08Z", "name": "reference/A0_R0_validation_history.json", "content_sha": "8d0ab8325143db0be080024699da6d67547054e4"}
