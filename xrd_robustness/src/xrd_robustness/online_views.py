@@ -75,6 +75,7 @@ class OnlineViewFactory:
         self.quality_gate_checked_count = 0
         self.quality_gate_rejected_count = 0
         self._quality_reference_profiles: dict[str, np.ndarray] = {}
+        self._local_peak_tables: dict[str, PeakTable] = {}
 
     @staticmethod
     def effective_epoch(split: str, epoch: int) -> int:
@@ -106,13 +107,17 @@ class OnlineViewFactory:
 
         def render(source: Any, params: PhysicsParameters, seed: int):
             if self.simulator is simulate_structure and (
-                self.peak_cache is not None or params.preferred_orientation_active
+                self.peak_cache is not None
+                or params.preferred_orientation_active
+                or self.peak_table_simulator is not simulate_from_peak_table
             ):
-                peaks = (
-                    self.peak_cache.get_or_compute(material_id, source, self.grid)
-                    if self.peak_cache is not None
-                    else ideal_peak_table(source, self.grid)
-                )
+                if self.peak_cache is not None:
+                    peaks = self.peak_cache.get_or_compute(material_id, source, self.grid)
+                else:
+                    peaks = self._local_peak_tables.get(material_id)
+                    if peaks is None:
+                        peaks = ideal_peak_table(source, self.grid)
+                        self._local_peak_tables[material_id] = peaks
                 resolved = resolve_preferred_orientation(peaks, params)
                 xrd, diagnostics = self.peak_table_simulator(
                     peaks.positions,

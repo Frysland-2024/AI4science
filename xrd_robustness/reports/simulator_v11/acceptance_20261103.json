@@ -1,0 +1,307 @@
+{
+  "actual_cif_materials": [
+    {
+      "cif_bytes": 1032,
+      "cif_sha256": "64b37ff07b9709aea207a7e372700b23644410fbe9e980a8ccdc755505378309",
+      "crystal_system_label": "triclinic",
+      "material_id": "mp-1002571",
+      "pair_same_parent_same_label": true,
+      "pair_seed_replay_exact": true,
+      "pair_view_seeds": [
+        8893389747315672602,
+        15253034435421809633
+      ],
+      "pair_views_distinct": true,
+      "peak_count": 104,
+      "source_record_label": "triclinic",
+      "v11_line_profile": {
+        "caglioti_u_deg2": 0.0012,
+        "caglioti_v_deg2": 0.0004,
+        "caglioti_w_deg2_source": "sampled_physics_fwhm_deg_squared",
+        "crystallite_size_nm": 129.69890329599323,
+        "microstrain_delta_d_over_d": 0.00014829667266091025,
+        "peak_profile": "area_normalized_tch_pseudo_voigt_v1",
+        "scherrer_shape_factor": 0.9,
+        "simulator_version": "v11_tch_pseudo_voigt",
+        "truncate_fwhm": 50.0,
+        "wavelength_angstrom": 1.54184
+      },
+      "v11_mean": 0.007398660760372877,
+      "v11_spectrum_finite": true,
+      "v9_legacy_spectrum_finite": true,
+      "v9_mean": 0.003930443432182074,
+      "v9_noise_model": "additive_gaussian"
+    },
+    {
+      "cif_bytes": 1287,
+      "cif_sha256": "0a875253c6d218ecb02eeba8b54bfaff011785fc073bd0e0bed6bd185d2c5464",
+      "crystal_system_label": "monoclinic",
+      "material_id": "mp-1001",
+      "pair_same_parent_same_label": true,
+      "pair_seed_replay_exact": true,
+      "pair_view_seeds": [
+        18284618149848376964,
+        3897685123435548550
+      ],
+      "pair_views_distinct": true,
+      "peak_count": 71,
+      "source_record_label": "monoclinic",
+      "v11_line_profile": {
+        "caglioti_u_deg2": 0.0012,
+        "caglioti_v_deg2": 0.0004,
+        "caglioti_w_deg2_source": "sampled_physics_fwhm_deg_squared",
+        "crystallite_size_nm": 129.69890329599323,
+        "microstrain_delta_d_over_d": 0.00014829667266091025,
+        "peak_profile": "area_normalized_tch_pseudo_voigt_v1",
+        "scherrer_shape_factor": 0.9,
+        "simulator_version": "v11_tch_pseudo_voigt",
+        "truncate_fwhm": 50.0,
+        "wavelength_angstrom": 1.54184
+      },
+      "v11_mean": 0.016165971755981445,
+      "v11_spectrum_finite": true,
+      "v9_legacy_spectrum_finite": true,
+      "v9_mean": 0.008293663151562214,
+      "v9_noise_model": "additive_gaussian"
+    },
+    {
+      "cif_bytes": 1083,
+      "cif_sha256": "336aea66cf3425668cbb02815ad5df73ff40bb1548d0bb6f98974ca8454536ac",
+      "crystal_system_label": "orthorhombic",
+      "material_id": "mp-1001603",
+      "pair_same_parent_same_label": true,
+      "pair_seed_replay_exact": true,
+      "pair_view_seeds": [
+        12469040017437893858,
+        6994522239844598981
+      ],
+      "pair_views_distinct": true,
+      "peak_count": 22,
+      "source_record_label": "orthorhombic",
+      "v11_line_profile": {
+        "caglioti_u_deg2": 0.0012,
+        "caglioti_v_deg2": 0.0004,
+        "caglioti_w_deg2_source": "sampled_physics_fwhm_deg_squared",
+        "crystallite_size_nm": 129.69890329599323,
+        "microstrain_delta_d_over_d": 0.00014829667266091025,
+        "peak_profile": "area_normalized_tch_pseudo_voigt_v1",
+        "scherrer_shape_factor": 0.9,
+        "simulator_version": "v11_tch_pseudo_voigt",
+        "truncate_fwhm": 50.0,
+        "wavelength_angstrom": 1.54184
+      },
+      "v11_mean": 0.008765745908021927,
+      "v11_spectrum_finite": true,
+      "v9_legacy_spectrum_finite": true,
+      "v9_mean": 0.004313040524721146,
+      "v9_noise_model": "additive_gaussian"
+    },
+    {
+      "cif_bytes": 2387,
+      "cif_sha256": "cd776762245c25da1d62d43f6231937508d88a026aa8de4cd19559fa63a754ae",
+      "crystal_system_label": "tetragonal",
+      "material_id": "mp-10004",
+      "pair_same_parent_same_label": true,
+      "pair_seed_replay_exact": true,
+      "pair_view_seeds": [
+        10328698085643113669,
+        11353397009928862783
+      ],
+      "pair_views_distinct": true,
+      "peak_count": 50,
+      "source_record_label": "tetragonal",
+      "v11_line_profile": {
+        "caglioti_u_deg2": 0.0012,
+        "caglioti_v_deg2": 0.0004,
+        "caglioti_w_deg2_source": "sampled_physics_fwhm_deg_squared",
+        "crystallite_size_nm": 129.69890329599323,
+        "microstrain_delta_d_over_d": 0.00014829667266091025,
+        "peak_profile": "area_normalized_tch_pseudo_voigt_v1",
+        "scherrer_shape_factor": 0.9,
+        "simulator_version": "v11_tch_pseudo_voigt",
+        "truncate_fwhm": 50.0,
+        "wavelength_angstrom": 1.54184
+      },
+      "v11_mean": 0.015869272872805595,
+      "v11_spectrum_finite": true,
+      "v9_legacy_spectrum_finite": true,
+      "v9_mean": 0.007759117987006903,
+      "v9_noise_model": "additive_gaussian"
+    },
+    {
+      "cif_bytes": 1300,
+      "cif_sha256": "481a5b259a07eda2c10283ed65bd3679037f45b6ebaf681756473a3b65f4af17",
+      "crystal_system_label": "trigonal",
+      "material_id": "mp-1001604",
+      "pair_same_parent_same_label": true,
+      "pair_seed_replay_exact": true,
+      "pair_view_seeds": [
+        16798551441235593399,
+        11753523567507368660
+      ],
+      "pair_views_distinct": true,
+      "peak_count": 36,
+      "source_record_label": "trigonal",
+      "v11_line_profile": {
+        "caglioti_u_deg2": 0.0012,
+        "caglioti_v_deg2": 0.0004,
+        "caglioti_w_deg2_source": "sampled_physics_fwhm_deg_squared",
+        "crystallite_size_nm": 129.69890329599323,
+        "microstrain_delta_d_over_d": 0.00014829667266091025,
+        "peak_profile": "area_normalized_tch_pseudo_voigt_v1",
+        "scherrer_shape_factor": 0.9,
+        "simulator_version": "v11_tch_pseudo_voigt",
+        "truncate_fwhm": 50.0,
+        "wavelength_angstrom": 1.54184
+      },
+      "v11_mean": 0.01056339219212532,
+      "v11_spectrum_finite": true,
+      "v9_legacy_spectrum_finite": true,
+      "v9_mean": 0.005296509247273207,
+      "v9_noise_model": "additive_gaussian"
+    },
+    {
+      "cif_bytes": 862,
+      "cif_sha256": "0cfdf72372e42597a40f3cc901cb4e9f3729264e660c1fedd426637612d986a3",
+      "crystal_system_label": "hexagonal",
+      "material_id": "mp-1001835",
+      "pair_same_parent_same_label": true,
+      "pair_seed_replay_exact": true,
+      "pair_view_seeds": [
+        9111895632094956623,
+        6999264951195239391
+      ],
+      "pair_views_distinct": true,
+      "peak_count": 10,
+      "source_record_label": "hexagonal",
+      "v11_line_profile": {
+        "caglioti_u_deg2": 0.0012,
+        "caglioti_v_deg2": 0.0004,
+        "caglioti_w_deg2_source": "sampled_physics_fwhm_deg_squared",
+        "crystallite_size_nm": 129.69890329599323,
+        "microstrain_delta_d_over_d": 0.00014829667266091025,
+        "peak_profile": "area_normalized_tch_pseudo_voigt_v1",
+        "scherrer_shape_factor": 0.9,
+        "simulator_version": "v11_tch_pseudo_voigt",
+        "truncate_fwhm": 50.0,
+        "wavelength_angstrom": 1.54184
+      },
+      "v11_mean": 0.006421771366149187,
+      "v11_spectrum_finite": true,
+      "v9_legacy_spectrum_finite": true,
+      "v9_mean": 0.0033104822505265474,
+      "v9_noise_model": "additive_gaussian"
+    },
+    {
+      "cif_bytes": 755,
+      "cif_sha256": "0895cf447d45cd9d5080c2142359c3067a02b70c066665890565a68571b4273c",
+      "crystal_system_label": "cubic",
+      "material_id": "mp-1002109",
+      "pair_same_parent_same_label": true,
+      "pair_seed_replay_exact": true,
+      "pair_view_seeds": [
+        70750224606550413,
+        1345293266256146817
+      ],
+      "pair_views_distinct": true,
+      "peak_count": 5,
+      "source_record_label": "cubic",
+      "v11_line_profile": {
+        "caglioti_u_deg2": 0.0012,
+        "caglioti_v_deg2": 0.0004,
+        "caglioti_w_deg2_source": "sampled_physics_fwhm_deg_squared",
+        "crystallite_size_nm": 129.69890329599323,
+        "microstrain_delta_d_over_d": 0.00014829667266091025,
+        "peak_profile": "area_normalized_tch_pseudo_voigt_v1",
+        "scherrer_shape_factor": 0.9,
+        "simulator_version": "v11_tch_pseudo_voigt",
+        "truncate_fwhm": 50.0,
+        "wavelength_angstrom": 1.54184
+      },
+      "v11_mean": 0.0030123256146907806,
+      "v11_spectrum_finite": true,
+      "v9_legacy_spectrum_finite": true,
+      "v9_mean": 0.0014263585908338428,
+      "v9_noise_model": "additive_gaussian"
+    }
+  ],
+  "all_seven_crystal_system_labels_preserved": true,
+  "config_sha256": "367aeb8a28c88106ab6df13b4d6b10cf088534318b9d78dd94b6d2f41bc79860",
+  "grid": {
+    "point_count": 3501,
+    "step_deg": 0.02,
+    "two_theta_max_deg": 80.0,
+    "two_theta_min_deg": 10.0
+  },
+  "integration": {
+    "model_input_shape": [
+      3501
+    ],
+    "online_views_pair_path": "OnlineViewFactory.make_pair_from_peaks",
+    "same_cached_peak_table_used_for_both_views": true,
+    "training_runner_config_switch": "simulator_version=v11_tch_pseudo_voigt"
+  },
+  "legacy_v9_renderer_unchanged": true,
+  "materials_count": 7,
+  "output_arrays_bytes_per_pair_float32": 42012,
+  "physical_checks": {
+    "angle_trend_20_to_70deg": {
+      "fwhm_20_deg": 0.13490426860692278,
+      "fwhm_70_deg": 0.16049294998155988
+    },
+    "microstrain_trend_50_to_200ppm": {
+      "fwhm_200ppm_deg": 0.016683166633473,
+      "fwhm_50ppm_deg": 0.00417079165836825
+    },
+    "scherrer_size_trend_50_to_200nm": {
+      "fwhm_200nm_deg": 0.04230470180212256,
+      "fwhm_50nm_deg": 0.16921880720849025
+    },
+    "single_peak_integrated_area": 2.499999998435325,
+    "single_peak_position_deg": 40.0,
+    "single_peak_width_expected_deg": 0.08188136107457322,
+    "single_peak_width_observed_deg": 0.09999999999999787
+  },
+  "schema_version": "simulator-v11-acceptance-v1",
+  "simulator_version": "v11_tch_pseudo_voigt",
+  "source_records_sha256": "05d5d33f200194612a8cdbe29d9443fc7bad9c245f66d185364b66a75915cc6c",
+  "speed": {
+    "mean_pair_seconds_across_seven_systems": {
+      "v11_tch_pseudo_voigt": 0.005146852381239157,
+      "v9_gaussian": 0.0020286476217387687
+    },
+    "per_crystal_system_mean_pair_seconds": {
+      "cubic": {
+        "v11_tch_pseudo_voigt": 0.0039646999988084035,
+        "v9_gaussian": 0.0020673333395582936
+      },
+      "hexagonal": {
+        "v11_tch_pseudo_voigt": 0.0023612999745334187,
+        "v9_gaussian": 0.0014058666808220248
+      },
+      "monoclinic": {
+        "v11_tch_pseudo_voigt": 0.007187566681144138,
+        "v9_gaussian": 0.0024804333418918154
+      },
+      "orthorhombic": {
+        "v11_tch_pseudo_voigt": 0.0032274333255675933,
+        "v9_gaussian": 0.0015926333338332672
+      },
+      "tetragonal": {
+        "v11_tch_pseudo_voigt": 0.005297533333456765,
+        "v9_gaussian": 0.0018632666712316375
+      },
+      "triclinic": {
+        "v11_tch_pseudo_voigt": 0.009791133362644663,
+        "v9_gaussian": 0.003112233321492871
+      },
+      "trigonal": {
+        "v11_tch_pseudo_voigt": 0.004198299992519121,
+        "v9_gaussian": 0.0016787666633414726
+      }
+    },
+    "repeats": 3,
+    "scope": "seven cached CIF-derived PeakTables, train profile, two views per pair",
+    "v11_over_v9_runtime_ratio": 2.537085458354641
+  }
+}
