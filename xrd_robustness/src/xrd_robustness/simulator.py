@@ -175,7 +175,7 @@ def simulate_from_peak_table(
     peak_renderer: Callable[..., np.ndarray] = render_gaussian_peaks,
     reference_scale_mode: str = "legacy_gaussian",
 ) -> np.ndarray | tuple[np.ndarray, dict[str, Any]]:
-    """Generate one in-memory view and return no persistent intermediate data."""
+    """Generate an in-memory view with the selected renderer and reference scale."""
     params.validate()
     if reference_scale_mode not in {"legacy_gaussian", "renderer_peak"}:
         raise ValueError(f"unsupported reference_scale_mode={reference_scale_mode!r}")
