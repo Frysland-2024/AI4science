@@ -4,7 +4,7 @@
 
 **状态日期：** 2026-11-05
 
-**V11交付与训练边界（2026-11-05）：** PR #58 已合并至 `main`（merge commit `940942d5a9c30307295eb7b7a68c08e47687f955`），V11 模拟器、CIF→paired-view 路径、测试和验收记录已集成。验收记录报告 50 项测试通过、七个 CIF 保持晶系标签；最新 head 的 `XRD tests` CI run [#41951627433](https://github.com/Frysland-2024/AI4science/actions/runs/41951627433) 通过。这些是模拟器工程验证，不是模型训练证据：没有运行 V11 模型训练、HPO 或最终 RRUFF 评测，也没有证明相对 V9/V10 的分类性能提升。154,975-parent 全量 HPO 仍须先完成 structure-schema adapter、corpus-scale PeakTable 构建、审计与 GPU 吞吐准备（见 Issue #55）。
+**V11交付与训练边界（2026-11-05）：** PR #58 已合并至 `main`（merge commit `940942d5a9c30307295eb7b7a68c08e47687f955`），V11 模拟器、CIF→paired-view 路径、测试和验收记录已集成。验收记录报告 50 项测试通过、七个 CIF 保持晶系标签；合并提交的 main `XRD tests` CI run [#41965621220](https://github.com/Frysland-2024/AI4science/actions/runs/41965621220) 通过。这些是模拟器工程验证，不是模型训练证据：没有运行 V11 模型训练、HPO 或最终 RRUFF 评测，也没有证明相对 V9/V10 的分类性能提升。154,975-parent 全量 HPO 仍须先完成 structure-schema adapter、corpus-scale PeakTable 构建、审计与 GPU 吞吐准备（见 Issue #55）。
 
 ## 2026-11-03 LATEST OWNER DECISION — old V10 HPO cancelled; six-cell A0/A1/A2 retained; 154,975-structure cloud HPO next
 
