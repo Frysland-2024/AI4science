@@ -234,6 +234,8 @@ def _worker_main(
     data_root: str,
     peak_cache_name: str,
     sampler_config: Mapping[str, Any],
+    simulator_version: str,
+    line_profile_config: Mapping[str, Any],
     quality_gate: bool,
     quality_gate_config: Mapping[str, Any],
     simulation_config_hash: str,
@@ -254,8 +256,13 @@ def _worker_main(
 
     sampler = PhysicsParameterSampler.from_mapping(sampler_config)
     strategy = IndependentDynamicStrategy(sampler, config_hash=simulation_config_hash)
+    from .simulator_v11 import make_peak_table_simulator
+
     factory = OnlineViewFactory(
         sampler,
+        peak_table_simulator=make_peak_table_simulator(
+            simulator_version, line_profile_config
+        ),
         quality_gate=quality_gate,
         quality_gate_config=quality_gate_config,
         strategy=strategy,
@@ -313,6 +320,8 @@ class DynamicBatchPrefetcher:
         quality_gate_config: Mapping[str, Any],
         simulation_config_hash: str,
         profile: str,
+        simulator_version: str = "v9_gaussian",
+        line_profile_config: Mapping[str, Any] | None = None,
     ) -> None:
         if worker_count <= 0:
             raise ValueError("worker_count must be positive")
@@ -342,6 +351,8 @@ class DynamicBatchPrefetcher:
             "data_root": str(Path(data_root).resolve()),
             "peak_cache_name": str(peak_cache_name),
             "sampler_config": dict(sampler_config),
+            "simulator_version": str(simulator_version),
+            "line_profile_config": dict(line_profile_config or {}),
             "quality_gate": bool(quality_gate),
             "quality_gate_config": dict(quality_gate_config),
             "simulation_config_hash": str(simulation_config_hash),
