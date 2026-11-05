@@ -2,7 +2,9 @@
 
 > **权威性说明：** 本文件记录当前科学状态与当前执行口径。历史版本、旧聊天和 `PROJECT_HISTORY.md` 用于解释“为什么改变”，不得覆盖这里的当前结论；AI/Agent 工作规则见 [`../AGENTS.md`](../AGENTS.md) 与 [`RESEARCH_WORKFLOW.md`](RESEARCH_WORKFLOW.md)。
 
-**状态日期：** 2026-11-03
+**状态日期：** 2026-11-03（PR #58 交付边界于 2026-11-05 核对）
+
+**PR #58 交付与训练边界（2026-11-05）：** V11 的实现、独立模拟器验收和 paired-view 工程验证已在 PR 分支完成；截至本次核对，PR 仍 open、未合并，不能将分支交付写成 main 已集成。`VALIDATION_20261103.md` 的 50 项测试和七晶系验收不是模型训练；本 PR 未运行 V11 模型训练、HPO 或最终 RRUFF 评测，也未提供 V11 相对 V9/V10 的分类性能提升证据。下文 V10 训练快照属于独立实验，不能归为 V11 训练结果。
 
 ## 2026-11-03 LATEST OWNER DECISION — old V10 HPO cancelled; six-cell A0/A1/A2 retained; 154,975-structure cloud HPO next
 
@@ -17,7 +19,7 @@
 
 **阶段（2026-11-03 最新负责人决策）：** 本科毕设已经重启；当前主线为 **PXRD 七晶系分类 + same-parent Dynamic JS**。研究按四阶段推进：**① 模拟器构建（工程阶段已完成）→ ② 模型架构优化（进行中：V10 判断是否换 CNN11，随后 Codex 对选定架构自动调结构和训练超参数）→ ③ 增加经过验证的独立 CIF 数据 → ④ 最终训练和 RRUFF 文献对标跑分**。不再将调参拆出去、放到数据扩容之后；不再开启新的模拟器研究主线。冻结历史结果不改，参数反演仍归档。
 
-## 2026-11-03 later owner status clarification (execution snapshot; verification pending)
+## 2026-11-03 earlier owner status snapshot (historical; superseded by LATEST OWNER DECISION above)
 
 **Owner explicitly states in the latest conversation:** (1) the new physically grounded simulator has been constructed, (2) the new structure database has **already been collected**, and (3) **hyperparameter optimization is underway**. **Do not present Stage-3 data collection as work still needing to be started solely because the older Issue #61 text says PAUSED.** However, this is a user-reported dataset-completion claim: the source manifests, unique-CIF counts, dedup audit and integration in final training were **not reverified in this status update**, so do not assert a validated or training-integrated dataset or invent its size. The local acquisition working directory cannot itself establish the collected-data count.
 
@@ -37,7 +39,7 @@
 
 **2026-11-03 latest user-approved SLIDE five-column scorecard:** **Grade | Paper / model | Simulated training structure count (distinguish actual post-split train CIFs from curated corpus) | Real RRUFF evaluated spectrum count | RRUFF top-1 Accuracy.** All graded literature comparators have **0 labeled RRUFF training/adaptation**, so label-adaptation and non-PXRD metadata are explanatory footnotes, not columns cluttering the headline. Full completed six-row table and original source links: [RRUFF_ZERO_SHOT_MODEL_COMPARISON_LIBRARY_20261103.md](RRUFF_ZERO_SHOT_MODEL_COMPARISON_LIBRARY_20261103.md). Key verified details: Vecsei 2019 **114,404 actual training** structures out of 128,404 deduplicated corpus, RRUFF ~800; Salgado **171,006 curated** / ~908 RRUFF entries; Lee **197,131 curated** / estimated ~960 retained (actual unknown); AlphaDiffract **312,267 curated records** / 734 RRUFF; SimXRD **119,569 unique** / RRUFF **≈1,003 HIGH-CONFIDENCE INFERENCE from Bin Cao's own doctoral thesis Chapter 3 (3,002 catalog → only 1,003 usable), although exact Table-5 scored denominator/IDs remain unconfirmed**; XQueryer-NoElem **100,315 structures** / 1,003 RRUFF. This is literature benchmarking with differing test cohorts, not same-test matched experimental evidence. Preserve lockout of RRUFF Test from HPO; Stage 3 CIF expansion remains gated on Stage 2 and does not start merely because the target scoreboard is defined.
 
-## 2026-11-03 latest correction — the authoritative active sequence
+## 2026-11-03 earlier four-stage sequence (historical; superseded by LATEST OWNER DECISION above)
 
 **Owner logic:** Every step must answer a useful, distinct question. **Simulator construction is already done as an engineering deliverable** (V11 has working code and tested acceptance; PR merge/integration housekeeping is separate from a new research stage). The goal is improved absolute real-domain classification performance, not an endless menu of experiments.
 
@@ -54,7 +56,7 @@
 
 V11’s area-normalized TCH peaks cannot use the legacy V9 Gaussian reference scale: in the Gaussian limit, an isolated 0.08° peak would be scaled to about 0.399, unintentionally changing the relative background and count-space Poisson-noise settings. PR #58 calibrates the reused pipeline at the V11 integration boundary using the actual rendered V11 peak maximum (`reference_scale_mode="renderer_peak"`). The standalone renderer keeps its area normalization, and V9 retains its legacy default scale.
 
-**Verification:** The PR head `b43e28d` has a passing GitHub Actions run with 134 non-data-bound tests. Focused tests assert that V11’s preclip maximum is 1.0 and that the V9 default matches the legacy Gaussian mode. The recorded V11 acceptance run also checks fixed-seed replay, all seven crystal-system labels, V9 regression, broadening trends, and integrated peak area. The validation record reports no model training.
+**Verification (checked 2026-11-05):** Commit `c486be7` passed [GitHub Actions run 41659169247](https://github.com/Frysland-2024/AI4science/actions/runs/41659169247): 134 non-data-bound tests in 19.71s. The completed Codex review covers the earlier `b43e28d`, not the latest head. Focused tests assert that V11’s preclip maximum is 1.0 and that the V9 default matches the legacy Gaussian mode. The recorded V11 acceptance run also checks fixed-seed replay, all seven crystal-system labels, V9 regression, broadening trends, and integrated peak area. The validation record reports no model training.
 
 **Evidence boundary:** These checks support simulator and paired-view engineering behavior. They do not establish a V11 model-training or HPO result. Follow-on model work is governed by the current sequence and readiness gates above.
 
