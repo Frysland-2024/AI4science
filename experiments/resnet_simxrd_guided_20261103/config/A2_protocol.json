@@ -1,0 +1,112 @@
+{
+  "schema_version": "simxrd-cnn11-three-config-pilot-v1",
+  "status": "frozen_before_training",
+  "date": "2026-11-03",
+  "scope": "Post-main exploratory follow-up; separate from the evidence frozen on 2026-10-26. No expansion beyond the existing 14,060-structure dataset and frozen parent split.",
+  "data": {
+    "dataset_root": "data/formal_14060",
+    "split_manifest": "manifests/split_manifest.json",
+    "counts": {
+      "train": 9842,
+      "validation": 2109,
+      "test": 2109
+    },
+    "split_unit": "parent_structure_id",
+    "split_hash": "B9D3B72E42EA0FD549DAE34425FF61D2D650D5DD7FE6F337D747CB952CF43293",
+    "source_records_hash": "05D5D33F200194612A8CDBE29D9443FC7BAD9C245F66D185364B66A75915CC6C",
+    "peak_cache_manifest_hash": "6AE0CFD1B5B29671E2F532D7A094F2FC412CABD64E4CF77D42915937BACC8D18"
+  },
+  "configurations": [
+    {
+      "id": "legacy_resnet18gn_v9",
+      "model": "ResNet-18-GN",
+      "training_simulator": "frozen_v9_gaussian",
+      "action": "reuse existing frozen checkpoints; no retraining"
+    },
+    {
+      "id": "resnet18gn_v10",
+      "model": "ResNet-18-GN",
+      "training_simulator": "v10_pseudo_voigt_caglioti",
+      "action": "train from scratch"
+    },
+    {
+      "id": "cnn11_v10",
+      "model": "SimXRD CNN11-style 1D",
+      "training_simulator": "v10_pseudo_voigt_caglioti",
+      "action": "train from scratch"
+    }
+  ],
+  "training": {
+    "objective": "CE + lambda_js * Jensen-Shannon divergence on two independently rendered views of the same parent structure",
+    "lambda_js": 60.0,
+    "optimizer": "AdamW",
+    "learning_rate": 0.0001,
+    "weight_decay": 0.0001,
+    "scheduler": "none",
+    "batch_size_parents": 16,
+    "optimizer_steps_per_new_model": 49280,
+    "expected_parent_occurrences_per_new_model": 788480,
+    "expected_views_per_new_model": 1576960,
+    "seeds": [
+      20260711,
+      20260712,
+      20260713
+    ],
+    "validation_evaluation_seed": 20260721,
+    "validation_profiles": [
+      "ood_shift_negative",
+      "ood_shift_positive",
+      "ood_broadening",
+      "ood_noise",
+      "ood_background",
+      "ood_texture",
+      "in_range"
+    ],
+    "checkpoint_selection": "highest mean single-factor OOD Macro-F1 across the six named Validation profiles; tie-break by higher in-range Macro-F1, then earlier step. RRUFF and Test are not used for selection."
+  },
+  "evaluation": {
+    "simulated_test_split": "existing 2,109-parent Test split; already used by the frozen main study, therefore supplementary post-main only",
+    "simulated_profiles": [
+      "ood_shift_negative",
+      "ood_shift_positive",
+      "ood_broadening",
+      "ood_noise",
+      "ood_background",
+      "ood_texture"
+    ],
+    "evaluation_seeds": [
+      20260721,
+      20260722,
+      20260723
+    ],
+    "common_panels": [
+      "V9 Gaussian panels for all three configurations",
+      "V10 pseudo-Voigt/Caglioti panels for all three configurations"
+    ],
+    "real_test": "RRUFF Real-PXRD-70 frozen external test, 70 spectra, exactly once after all checkpoint hashes and validation selection are frozen",
+    "real_test_preprocessing": "existing contract: 10-80 degrees 2theta, 0.02 degree step, 3,501 points, linear interpolation, zero fill out of range, max normalization, no baseline/smoothing/manual edits",
+    "selection_use_forbidden": true,
+    "authorization": "User request on 2026-11-03 explicitly asks for RRUFF Accuracy and Macro-F1 under the existing protocol and states that the test set must not be used for model selection. Evaluation will occur only after checkpoint hashes are frozen."
+  },
+  "compute": {
+    "hardware": "local workstation GPU only",
+    "full_training_concurrency": 1,
+    "torch_compile": false,
+    "amp": "bf16 if supported, otherwise fp32",
+    "prefetch_workers": 8,
+    "prefetch_batches": 8
+  },
+  "stopping_rule": "After this three-configuration comparison and report, stop. Do not launch 100k CIF expansion, broad hyperparameter tuning, or architecture search.",
+  "direct_launch_note": {
+    "experiment": "SimXRD-guided ResNet A2 kernel-size ablation",
+    "hypothesis": "With stage transitions 4/2/4 fixed, kernel 5 vs 9 alters XRD peak receptive field",
+    "changes_from_A1": "Only residual kernels 9 to 5; preserve stride 4/2/4",
+    "training_seed": 20260711,
+    "selected_steps": 12320,
+    "evaluation": "Validation OOD only; NEVER RRUFF/Test selection",
+    "source_runner_sha256": "54A52D41B5F7079287C4C3D721563819ECAED1EC33D93D2798B4CFE3EC07A5A3",
+    "source_a1_sha256": "05DFA70C75B2BB7F959A0EE52105DB2C68715B7234A017A59157BC0492F9C54E",
+    "source_a2_sha256": "12694C1C1C58A1C2A1D78A25BD5A194AE2E71F5DE2646D8A084926D66C83B9FC",
+    "source_resnet_sha256": "2D048344865BBE5667BB235D8D3C851A9D6EEA60FC1835F722BF0B10114CE276"
+  }
+}
