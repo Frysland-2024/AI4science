@@ -54,7 +54,6 @@ from xrd_robustness.view_manifest import build_offline_view_manifest, build_para
 PROTOCOL_PATH = PROJECT_ROOT / "configs" / "simxrd_cnn11_pilot.20261103.json"
 V9_SIM_PATH = PROJECT_ROOT / "configs" / "simulation.method_transfer.frozen.json"
 V10_SIM_PATH = PROJECT_ROOT / "configs" / "simulation.simxrd_v10_pilot.20261103.json"
-REPORT_ROOT = PROJECT_ROOT / "reports" / "simxrd_architecture_pilot_20261103"
 DEFAULT_DATA_ROOT = PROJECT_ROOT / "data" / "formal_14060"
 DEFAULT_OUTPUT_ROOT = PROJECT_ROOT / "outputs" / "simxrd_architecture_pilot_20261103"
 TRAIN_PROFILES = (
@@ -538,7 +537,7 @@ def run_smoke(data_root: Path, output_root: Path, device: torch.device) -> dict[
             raise ValueError(f"missing training parent for crystal system {name}")
         selected_per_class[name] = candidates[0]
 
-    smoke_log_path = REPORT_ROOT / "smoke.log.jsonl"
+    smoke_log_path = output_root / "reports" / "smoke.log.jsonl"
     smoke_log_path.parent.mkdir(parents=True, exist_ok=True)
     physical: dict[str, Any] = {}
     line_config = sim_v10["line_profile"]
@@ -702,7 +701,7 @@ def run_smoke(data_root: Path, output_root: Path, device: torch.device) -> dict[
                 "raw_log": smoke_log_path.name,
                 "conclusion": "All requested physical profile, label-preservation, deterministic same-parent pairing, finite-loss/gradient, GPU memory, and throughput smoke checks passed. Full training may proceed under the preregistered fixed budget.",
             }
-            _write_json(REPORT_ROOT / "smoke.json", output)
+            _write_json(output_root / "reports" / "smoke.json", output)
             _log(log_handle, "smoke_passed", output_path="smoke.json")
     return output
 
@@ -748,6 +747,7 @@ def train_model(
     steps = int(expected["optimizer_steps_per_new_model"])
     batch_size = int(expected["batch_size_parents"])
     validation_interval = steps // 8
+    report_root = output_root / "reports"
     output_dir = output_root / config_id
     output_dir.mkdir(parents=True, exist_ok=True)
     all_results = []
@@ -757,7 +757,7 @@ def train_model(
         if run_dir.exists() and any(run_dir.iterdir()):
             raise FileExistsError(f"run output already exists; refusing implicit rerun: {run_dir}")
         run_dir.mkdir(parents=True, exist_ok=True)
-        log_path = REPORT_ROOT / "logs" / config_id / f"seed_{seed}.jsonl"
+        log_path = report_root / "logs" / config_id / f"seed_{seed}.jsonl"
         log_path.parent.mkdir(parents=True, exist_ok=True)
         with log_path.open("w", encoding="utf-8") as log_handle:
             runtime = _configure_runtime(device)
@@ -989,7 +989,7 @@ def train_model(
                 "selected_validation_in_range_macro_f1": best_score[1],
                 "checkpoint_sha256": _sha256(checkpoint_path),
                 "validation_history_path": "validation_history.json",
-                "raw_log_path": str(log_path.relative_to(REPORT_ROOT)).replace("\\", "/"),
+                "raw_log_path": str(log_path.relative_to(report_root)).replace("\\", "/"),
             }
             _write_json(run_dir / "result.json", result_payload)
             _log(log_handle, "training_complete", **result_payload)
@@ -1104,7 +1104,7 @@ def freeze_model_selection(
             "run_statuses": sorted(config_statuses) if origin == "new" else ["historical_frozen"],
         }
 
-    freeze_path = REPORT_ROOT / "model_selection_freeze.json"
+    freeze_path = output_root / "reports" / "model_selection_freeze.json"
     if freeze_path.exists():
         raise FileExistsError(f"model-selection freeze already exists: {freeze_path}")
     _write_json(freeze_path, config_freeze)
@@ -1219,7 +1219,7 @@ def evaluate_all(
     device: torch.device,
 ) -> dict[str, Any]:
     protocol, sim_v9, sim_v10 = _load_config()
-    freeze_path = REPORT_ROOT / "model_selection_freeze.json"
+    freeze_path = output_root / "reports" / "model_selection_freeze.json"
     if not freeze_path.is_file():
         raise FileNotFoundError("model-selection freeze must be created before test evaluation")
     freeze = _read_json(freeze_path)
@@ -1464,7 +1464,7 @@ def evaluate_all(
         "legacy_v9_js_mean_single_factor_ood_macro_f1": historical["methods"]["js_consistency"]["mean_single_factor_ood_macro_f1"],
         "legacy_v9_js_mean_single_factor_ood_accuracy": historical["methods"]["js_consistency"]["mean_single_factor_ood_accuracy"],
     }
-    _write_json(REPORT_ROOT / "results.json", results)
+    _write_json(output_root / "reports" / "results.json", results)
     return results
 
 
@@ -1496,15 +1496,17 @@ def main(argv: Sequence[str] | None = None) -> int:
     data_root = args.data_root.resolve()
     output_root = args.output_root.resolve()
     device = _device(args.device)
-    output_root.mkdir(parents=True, exist_ok=True)
-    REPORT_ROOT.mkdir(parents=True, exist_ok=True)
+    report_root = output_root / "reports"
+    if args.phase == "smoke" and output_root.exists() and any(output_root.iterdir()):
+        raise FileExistsError(f"smoke requires a fresh pilot output directory: {output_root}")
+    report_root.mkdir(parents=True, exist_ok=True)
     protocol, _, sim_v10 = _load_config()
     if args.phase == "smoke":
         result = run_smoke(data_root, output_root, device)
     elif args.phase in {"train_resnet", "train_cnn11"}:
-        if not (REPORT_ROOT / "smoke.json").is_file():
+        if not (report_root / "smoke.json").is_file():
             raise RuntimeError("run and pass the explicit smoke phase before full training")
-        smoke = _read_json(REPORT_ROOT / "smoke.json")
+        smoke = _read_json(report_root / "smoke.json")
         if smoke.get("status") != "passed":
             raise RuntimeError("full training is blocked because the smoke phase did not pass")
         if args.phase == "train_resnet":
@@ -1522,7 +1524,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             output_root=output_root,
             device=device,
         )
-        _write_json(REPORT_ROOT / f"{config_id}_training_results.json", result)
+        _write_json(report_root / f"{config_id}_training_results.json", result)
     elif args.phase == "freeze":
         result = freeze_model_selection(
             data_root=data_root,
