@@ -2,6 +2,7 @@
 source manifest, model grid, labels, subgroup disjointness.
 No ML inference or benchmark model scoring.
 """
+import ast
 from pathlib import Path
 import csv,json,hashlib,collections
 import numpy as np
@@ -27,10 +28,15 @@ assert observed.shape==inputs.shape and bool(observed.all())
 assert bool(np.isfinite(inputs).all()) and float(inputs.min())>=0
 assert bool(np.allclose(inputs.max(axis=1),1,atol=1e-6,rtol=0))
 EXPECTED_ORDER=("triclinic","monoclinic","orthorhombic","tetragonal","trigonal","hexagonal","cubic")
-from importlib.machinery import SourceFileLoader
-# Read exact label order from the current model source, not a remembered value.
-text=(ROOT/"xrd_robustness/src/xrd_robustness/structure_data.py").read_text(encoding="utf8")
-assert all(f'"{x}"' in text for x in EXPECTED_ORDER)
+# Verify the declaration without importing the training environment.
+model_source = ROOT / "xrd_robustness/src/xrd_robustness/structure_data.py"
+model_class_order = next(
+    ast.literal_eval(node.value)
+    for node in ast.parse(model_source.read_text(encoding="utf8")).body
+    if isinstance(node, ast.Assign)
+    and any(isinstance(target, ast.Name) and target.id == "CRYSTAL_SYSTEMS" for target in node.targets)
+)
+assert model_class_order == EXPECTED_ORDER
 assert len(labels)==len(ids)
 for j,sid in enumerate(ids):
     assert labels[j]==by_m[sid]["final_candidate_system"]

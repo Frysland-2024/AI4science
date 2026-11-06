@@ -47,6 +47,22 @@ The earlier **19-case qualitative list** (15 declared mixed/contaminated plus fo
 - **Preprocessing:** Confirm that the scoring loader reproduces the ordered, SHA-verified 1011 × 3501 input contract, including full measured 10–80° coverage, logged angle repairs, interpolation without padding, negative clipping, retained background and post-grid max normalization. The source-only replay already reproduced the manifest and array hashes.
 - **Model and metrics:** Complete synthetic-validation-only HPO and lock model configuration, checkpoint hash(es), preprocessing/evaluation code and metric definitions before accessing scores. Confirm that no labeled RRUFF data or holdout feedback was used for training, adaptation or selection. Formal scores are still sealed.
 
+Use the repository's seven-class `classification_metrics` for top-1 Accuracy and macro-F1. Compute ECE from softmax probabilities with the existing 15 equal-width confidence bins. Fix these settings before inference and keep diagnostic cohorts out of the primary metric inputs. Record the evaluation commit, the validation-only selection record and each selected checkpoint SHA-256 in the final scoring receipt.
+
+### CPU input preflight (no checkpoint required)
+
+Run from the repository root with NumPy installed:
+
+```bash
+PYTHONPATH=xrd_robustness/src python -m xrd_robustness.evaluation.rruff_cu1011 \
+  --manifest /path/to/RRUFF_1011_CUKA_MAIN_SOURCE_PRELOCK_20261104.csv \
+  --inputs /path/to/RRUFF_1011_CU_FULL_10_80_DENSE_V11_SOURCE_PREPROC_NOT_FROZEN_20261104.npz
+```
+
+The loader checks the two frozen SHA-256 values, row order, class counts and model class indices, all 3501 observed-bin flags per spectrum, and finite nonnegative float32 inputs with unit row maxima. Its pass receipt covers input integrity. The raw-source audit separately establishes how the coverage flags and resampling were produced. The eventual scoring entry point should call `load_frozen_inputs` directly.
+
+The loader was exercised with synthetic fixtures. The frozen private CSV/NPZ and per-record source evidence were unavailable in the execution environment, so this run cannot sign off the actual input bundle or the wavelength and label exceptions.
+
 ## Additional AlphaDiffract-inspired cell cross-validation performed across ALL 1011
 
 Following AlphaDiffract Methods 5.1, we cross-checked each original experimental RAW cell header against its source-matched DIF reference's six lattice parameters, preserving individual failure details:
