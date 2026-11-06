@@ -1,6 +1,6 @@
 # PXRD SimXRD / CNN11 Pilot — 2026-11-03
 
-> **Integrity hold (2026-11-03):** The initial pilot routed V10-labelled training and validation views through the V9 Gaussian renderer, and the evaluation helper left CNN11 in `eval()` after its first validation. The integration fixes and regression tests are now on this PR, but the recorded V10 ResNet and CNN11 outputs below were produced before those fixes. Treat those metrics as invalid for the intended V10/CNN11 comparison until affected panels and runs are regenerated. No rerun has been performed. Standalone renderer smoke checks did not exercise these integration paths.
+> **Integrity hold (2026-11-03):** The initial pilot routed V10-labelled training and validation views through the V9 Gaussian renderer, and the evaluation helper left CNN11 in `eval()` after its first validation. The integration fixes and regression tests are now on this PR, but the recorded V10 ResNet and CNN11 outputs below were produced before those fixes. The archived outputs cannot support a V10 or CNN11 comparison. No rerun has been performed. Standalone renderer smoke checks did not exercise these integration paths.
 
 ## Decision record
 
@@ -13,15 +13,15 @@
 
 This explicit three-configuration request uses ResNet-18-GN as the fixed reference and does not execute the broader ResNet architecture/optimizer retuning step recorded in the earlier 2026-11-03 project sequence. That retuning/search is outside this bounded pilot; the pilot stops after this comparison.
 
-**What changes now:** Add V10 as an opt-in renderer and a new CNN11-style model; keep the legacy Gaussian renderer and ResNet-18-GN available. New run artifacts are written under the dated pilot outputs and reports. The existing RRUFF-70 evaluation was run once after all available checkpoint hashes were frozen, using the user's explicit 2026-11-03 authorization for one-time reporting of Accuracy and Macro-F1. Test and RRUFF scores are excluded from checkpoint/model selection.
+**Original execution:** The initial attempt used the dated pilot output and report directories. RRUFF-70 was evaluated once after the historical checkpoint freeze under the 2026-11-03 authorization.
 
 **What does NOT change:** The 2026-10-26 frozen thesis evidence, its configurations, selected checkpoints, splits, and reported results remain untouched. Existing V9 simulator behavior is the default for old call sites. The original Test split is already-used evidence and this work is labeled post-main supplementary evaluation. The historical RRUFF execution lock is not edited; its evaluation-disabled flag remains as provenance, with the current user authorization recorded in the separate pilot freeze manifest.
 
-**Status:** COMPLETE WITH PARTIAL CNN11 TRAINING FAILURE; smoke, ResNet V10 training, checkpoint freeze, Test evaluation, and one-time RRUFF-70 evaluation completed. CNN11 training stopped after non-finite loss; its sole finite pre-failure checkpoint is reported descriptively and is not an equal-budget comparison.
+**Status (2026-11-06):** Integration fixes and regression coverage are in PR #62. The corrected pilot is pending. Archived outputs document the failed pre-fix attempt.
 
 **Relevant files / commits:** `docs/PXRD_SCALEUP_SIMULATOR_AND_TUNING_PLAN_20261023.md`; `xrd_robustness/configs/simulation.simxrd_v10_pilot.20261103.json`; `xrd_robustness/configs/simxrd_cnn11_pilot.20261103.json`; `xrd_robustness/src/xrd_robustness/simulator_v10.py`; `xrd_robustness/src/xrd_robustness/models/simxrd_cnn11.py`; `xrd_robustness/scripts/run_simxrd_architecture_pilot.py`; final evidence in `xrd_robustness/reports/simxrd_architecture_pilot_20261103/`.
 
-## Frozen protocol
+## Frozen protocol for the original attempt
 
 - Data and split: existing `formal_14060`, with 9,842 Train / 2,109 Validation / 2,109 Test parent structures. No additional CIF records.
 - New-model budget: 49,280 optimizer steps, 16 parent structures per step, AdamW at `1e-4`, weight decay `1e-4`, dynamic JS `lambda=60`; 3 fixed training seeds: `20260711`, `20260712`, `20260713`.
@@ -41,42 +41,44 @@ The CNN11-style implementation uses three no-pooling Conv1D layers (80 channels;
 - SimXRD/Pysimxrd peak rendering: [`WPEMsim.py`](https://github.com/Bin-Cao/SimXRD/blob/main/src/Pysimxrd/utils/WPEMsim.py) and [`funs.py`](https://github.com/Bin-Cao/SimXRD/blob/main/src/Pysimxrd/utils/funs.py).
 - Salgado et al. (2023), *Automated classification of big X-ray diffraction data using deep learning models*, [npj Computational Materials](https://www.nature.com/articles/s41524-023-01164-8), with the authors' [XRDs code](https://github.com/AGI-init/XRDs).
 
-## Completion record
+## Corrected rerun checklist — pending execution
 
-## Results and interpretation
+The V10 callable is used by training prefetch and the shared Validation/Test panel builder. The panel evaluator restores the incoming model mode in `finally`. The [XRD tests run for 5e5777d](https://github.com/Frysland-2024/AI4science/actions/runs/41984524129) passed, including the non-data-bound integration tests for peak views, cached structures, prefetch, Validation panels, and mode/Dropout restoration. The completed Codex review applies to the pre-fix commit `8f7890b`.
 
-The full machine-readable record is [results.json](../xrd_robustness/reports/simxrd_architecture_pilot_20261103/results.json); the pre-Test freeze is [model_selection_freeze.json](../xrd_robustness/reports/simxrd_architecture_pilot_20261103/model_selection_freeze.json). The historical V9 ResNet row reuses its three frozen checkpoints. ResNet+V10 completed all three new 49,280-step runs. CNN11+V10 produced one finite checkpoint selected at step 18,480. Its CE, JS, and total loss were first logged as NaN at step 20,000; subsequent logged losses remained NaN, and validation OOD Macro-F1 collapsed to 0.0356 at step 24,640. Training was stopped after the 26,000-step log. The remaining CNN11 seeds were not run; this failure is preserved in [cnn11_v10_training_failure.json](../xrd_robustness/reports/simxrd_architecture_pilot_20261103/cnn11_v10_training_failure.json).
+From the repository root with the test dependencies installed and the original dataset available, use a fresh output directory. The runner writes reports under that same directory. Reuse the same directory for each phase of a single attempt.
 
-### Simulated OOD Test
+```bash
+set -euo pipefail
+git rev-parse HEAD
+test -z "$(git status --porcelain --untracked-files=no)"
+(cd xrd_robustness && python -m pytest -q tests/simulation/test_simxrd_pilot_integrations.py)
 
-Values are the mean of each training-seed checkpoint's mean over 3 fixed evaluation seeds × 6 single-factor OOD profiles, shown as mean ± sample SD across training seeds. Both V9 and V10 renderers were evaluated on the same existing Test parents. The directly matched generator settings are V9-trained/V9-evaluated for the historical baseline and V10-trained/V10-evaluated for the two new models.
+pilot=xrd_robustness/scripts/run_simxrd_architecture_pilot.py
+mkdir -p xrd_robustness/outputs
+out=$(mktemp -d "$PWD/xrd_robustness/outputs/pr62-rerun.XXXXXX")
+args=(--data-root "$PWD/xrd_robustness/data/formal_14060" --output-root "$out" --device cuda)
+python "$pilot" --phase smoke "${args[@]}"
+git rev-parse HEAD > "$out/reports/source_commit.txt"
+python "$pilot" --phase train_resnet "${args[@]}"
+python "$pilot" --phase train_cnn11 "${args[@]}"
+```
 
-| Configuration | Training seeds | V9 Test renderer | V10 Test renderer |
-|---|---:|---:|---:|
-| Historical ResNet-18-GN + V9 Gaussian | 3 frozen | 0.7060 ± 0.0115 | 0.6905 ± 0.0107 |
-| ResNet-18-GN + V10 pseudo-Voigt/Caglioti | 3 complete | 0.7084 ± 0.0038 | 0.7059 ± 0.0007 |
-| CNN11-style + V10 | 1 pre-failure checkpoint | 0.6930 (n=1) | 0.6844 (n=1) |
+These phases use one local GPU job at a time. The runner checks the frozen split, structure records and reflection-cache manifest hashes. Reuse the renderer-independent ideal reflection cache and the three original V9 ResNet checkpoints. Start both V10 models from scratch for seeds `20260711`–`20260713` at 49,280 steps each, batch 16, AdamW with learning rate and weight decay `1e-4`, same-parent two-view CE + JS with lambda 60, and the frozen runtime policy. Selection uses only Validation seed `20260721`, mean Macro-F1 across six OOD profiles, in-range Macro-F1, and then earlier step.
 
-In the matched generator settings, the V10 ResNet point estimate is effectively unchanged from the V9 baseline (0.7059 vs 0.7060). On V9-rendered Test panels, the V10-trained ResNet is also similar (0.7084 ± 0.0038, see the full JSON aggregation). This pilot does not establish a simulated OOD gain from the new line profile. The CNN11 single-checkpoint scores are exploratory only: its training run was incomplete and has no seed replication.
+### Evidence required before merging this PR as a comparison
 
-### RRUFF-70
+1. Record the corrected source commit, green CI, fresh smoke, runtime/precision, renderer/config hashes and data hashes. Check that real V10 training and Validation views differ from V9 under fixed inputs. Capture fresh training logs, validation histories, run status and checkpoint hashes for all six runs. If CNN11 has a nonfinite or incomplete run, preserve the failure and actual budget and keep architecture selection open.
+2. Check that both V10 models completed the same three seeds and budgets before freezing. The script accepts partial checkpoints for descriptive evaluation, so check the per-seed run records explicitly. Once the repeat RRUFF-70 evaluation is separately authorized, run the following with the same `args`. The original one-time RRUFF-70 authorization was already used, and the runner's `evaluate` phase evaluates both simulated Test and RRUFF. Keep the historical execution lock intact.
 
-The panel contains 70 measured spectra, balanced at 10 per crystal system. It was evaluated once after the checkpoint freeze; it was not used for model selection or tuning.
+   ```bash
+   rruff="$PWD/xrd_robustness/data/real_xrd/rruff70"
+   python "$pilot" --phase freeze "${args[@]}" --rruff-root "$rruff"
+   python "$pilot" --phase evaluate "${args[@]}" --rruff-root "$rruff"
+   ```
 
-| Configuration | Training seeds | Accuracy | Macro-F1 |
-|---|---:|---:|---:|
-| Historical ResNet-18-GN + V9 Gaussian | 3 frozen | 0.2095 ± 0.0360 | 0.1621 ± 0.0366 |
-| ResNet-18-GN + V10 pseudo-Voigt/Caglioti | 3 complete | 0.2524 ± 0.0218 | 0.2067 ± 0.0155 |
-| CNN11-style + V10 | 1 pre-failure checkpoint | 0.1571 (n=1) | 0.1032 (n=1) |
+3. Bind the new freeze and evaluations to the corrected run and verify checkpoint/panel hashes. Build fresh common V9 and V10 Test panels for seeds `20260721`–`20260723` and six OOD profiles on the same Test parents, and evaluate all three configurations on both panel sets. Test is previously used supplementary evidence. Any authorized RRUFF-70 repeat is supplementary reuse of the same panel. Keep Test and RRUFF outside checkpoint selection and tuning. The V10 architecture comparison holds the renderer fixed, while the historical V9 reference provides context.
+4. Publish the corrected report, update the PR summary and current state from the new records, and obtain review of the corrected head. Keep Issue #60 and the architecture decision open until valid evidence is available. Scope stays at the frozen 14,060-parent pilot.
 
-The V10 ResNet has descriptive point-estimate increases of 4.3 percentage points in Accuracy and 4.5 points in Macro-F1 versus the reused V9 checkpoints. With three seeds and this small panel, these are not significance or generalization claims. The unreplicated CNN11 checkpoint is lower and was trained for an incomplete, numerically unstable run.
+### Artifacts to supersede
 
-### Training cost and smoke
-
-On the NVIDIA RTX 4060 Laptop GPU, each V10 ResNet seed completed 49,280 steps in 1,390–1,394 seconds (mean 1,392 seconds; about 35.4 steps/s); the maximum recorded allocated CUDA memory was 4.75 GB. ResNet has 13,008,839 parameters. The CNN11 run reached the 26,000-step log in 556 seconds (about 46.7 logged steps/s) before stopping, with 12,712,747 parameters; a full-budget runtime and training peak memory are unavailable. Smoke-only CNN11 allocated 0.291 GB. Historical V9 wall time was not measured on this machine and is not compared.
-
-Smoke checks passed for finite nonnegative views, preserved peak center, integrated line-area conservation, angle-dependent width, deterministic and distinct same-parent paired views across all seven labels, CE+JS gradients, and device memory/throughput. At 20° the measured V10 FWHM was 0.08067°; at 80° it was 0.08707°. This validates implementation consistency and a physically plausible trend, not calibration to a real instrument.
-
-### Boundaries
-
-The 2026-10-26 thesis evidence and historical V9 configurations, checkpoints, splits, and reports are unchanged. This Test split was already used in the thesis, so these metrics are post-main supplementary evidence. No 100k CIF expansion, broad tuning, or architecture search followed. The bounded pilot uses ResNet-18-GN as a fixed reference and does not include the broader ResNet retuning step described in the earlier 2026-11-03 project sequence. See the preserved [raw training logs](../xrd_robustness/reports/simxrd_architecture_pilot_20261103/logs/), [validation histories](../xrd_robustness/reports/simxrd_architecture_pilot_20261103/validation/), and [smoke record](../xrd_robustness/reports/simxrd_architecture_pilot_20261103/smoke.json).
+Publish new smoke records, V10 Validation panels, common Test panels and panel indexes, V10 checkpoints, per-seed run records/logs/validation histories, both `*_training_results.json` summaries, `model_selection_freeze.json` and `results.json`. Record any new failure separately. The [original report directory](../xrd_robustness/reports/simxrd_architecture_pilot_20261103/) is archival. Preserve the original failure record, implementation manifest and preflight logs there. Every V10-trained checkpoint and its derived metrics, including on V9 Test or measured RRUFF, needs fresh evaluation. Historical V9 checkpoint files remain eligible for reuse, but regenerate their scores for the corrected comparison.
