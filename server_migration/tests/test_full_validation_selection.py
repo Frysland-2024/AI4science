@@ -2,6 +2,7 @@ import importlib.util
 import json
 import tempfile
 import unittest
+import numpy as np
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -11,6 +12,18 @@ mod=importlib.util.module_from_spec(spec)
 spec.loader.exec_module(mod)
 
 class ValidationSelection(unittest.TestCase):
+    def test_training_batches_cover_each_parent_once_before_cycle_repeats(self):
+        rng=np.random.default_rng(31)
+        order=None
+        cursor=0
+        observed=[]
+        for _ in range(5):
+            batch,order,cursor=mod.next_parent_batch(rng,19,4,order,cursor)
+            observed.extend(batch.tolist())
+        self.assertEqual(len(set(observed[:19])),19)
+        self.assertEqual(len(observed),20)
+        self.assertEqual(len(set(observed)),19)
+
     def fixture(self,root):
         rows=[];recs=[]
         for i in range(7):

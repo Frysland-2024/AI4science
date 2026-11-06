@@ -16,6 +16,7 @@ import sys
 import time
 from collections import defaultdict
 from dataclasses import asdict
+import numpy as np
 
 ROOT=Path(os.environ.get("AI4SCIENCE_ROOT", str(Path(__file__).resolve().parents[1]))).resolve()
 XRD=ROOT/"xrd_robustness"
@@ -35,6 +36,20 @@ def write_json(path,data):
 
 def event(kind,**kwargs):
     print(json.dumps({"event":kind,"utc":time.strftime("%Y-%m-%dT%H:%M:%SZ",time.gmtime()),**kwargs},ensure_ascii=False),flush=True)
+
+def next_parent_batch(rng, n, batch_size, order, cursor):
+    """Draw without replacement within each epoch, including across batch edges."""
+    pieces=[]
+    remaining=batch_size
+    while remaining:
+        if order is None or cursor == n:
+            order=rng.permutation(n)
+            cursor=0
+        take=min(remaining,n-cursor)
+        pieces.append(order[cursor:cursor+take])
+        cursor+=take
+        remaining-=take
+    return np.concatenate(pieces),order,cursor
 
 def contract(args):
     records=XRD/"data/merged_154975_v11/training_records.v1.jsonl"
@@ -348,7 +363,7 @@ def trial_run(name,params,seed,max_steps,study_dir,train_records,val_records,pea
     train_fac=factory(sim,seed,PhysicsParameterSampler,build_online_view_factory)
     val_fac=factory(sim,20260721,PhysicsParameterSampler,build_online_view_factory)
     rng=np.random.default_rng(seed)
-    step=0;best=-1.;best_step=0;history=[]
+    step=0;best=-1.;best_step=0;history=[];parent_order=None;parent_cursor=0
     resume=root/"last.pt"
     if resume.is_file():
         saved=torch.load(resume,map_location=device,weights_only=False)
@@ -356,6 +371,8 @@ def trial_run(name,params,seed,max_steps,study_dir,train_records,val_records,pea
         model.load_state_dict(saved["model"])
         optimizer.load_state_dict(saved["optimizer"])
         rng.bit_generator.state=saved["numpy_rng"]
+        parent_order=saved["parent_order"]
+        parent_cursor=saved["parent_cursor"]
         torch.set_rng_state(saved["torch_rng"].cpu())
         torch.cuda.set_rng_state_all([x.cpu() for x in saved["cuda_rngs"]])
         step=saved["step"];best=saved["best"];best_step=saved["best_step"];history=saved["history"]
@@ -364,7 +381,9 @@ def trial_run(name,params,seed,max_steps,study_dir,train_records,val_records,pea
     profiles=VALIDATION_OOD_PROFILES
     started=time.monotonic()
     while step<max_steps:
-        idx=rng.choice(n,size=argv.batch_size,replace=False)
+        idx,parent_order,parent_cursor=next_parent_batch(
+            rng,n,argv.batch_size,parent_order,parent_cursor
+        )
         rows=[train_records[int(i)] for i in idx]
         x1,x2,targets=render_pair_batch(rows,peaks,train_fac,
                 epoch=(step*argv.batch_size//n),global_step=step,profile="train")
@@ -399,6 +418,7 @@ def trial_run(name,params,seed,max_steps,study_dir,train_records,val_records,pea
                     "validation_ood_macro_f1":score,"contract":cfg},torch)
             atomically_save_torch(resume,{"model":model.state_dict(),"optimizer":optimizer.state_dict(),
                 "step":step,"best":best,"best_step":best_step,"numpy_rng":rng.bit_generator.state,
+                "parent_order":parent_order,"parent_cursor":parent_cursor,
                 "torch_rng":torch.get_rng_state(),"cuda_rngs":torch.cuda.get_rng_state_all(),
                 "history":history,"contract":cfg},torch)
             write_json(root/"history.json",history)
@@ -418,7 +438,7 @@ def main():
     parser=argparse.ArgumentParser()
     parser.add_argument("--mode",choices=["plan","smoke","run"],default="plan")
     parser.add_argument("--trials",type=int,default=6)
-    parser.add_argument("--hpo-steps",type=int,default=6160)
+    parser.add_argument("--hpo-steps",type=int,default=6780)
     parser.add_argument("--confirm-steps",type=int,default=12320)
     parser.add_argument("--eval-every",type=int,default=6160)
     parser.add_argument("--batch-size",type=int,default=16)
