@@ -34,6 +34,19 @@ Each of the 1011 retained has original RRUFF ID, original XY_RAW member, paired 
 
 Primary seven-class counts: triclinic 97, monoclinic 334, orthorhombic 211, tetragonal 45, trigonal 129, hexagonal 76, cubic 119. Preserve RRUFF raw hexagonal-axes notes for trigonal SGs. Four owner-selected weakly mixed examples retained with quality flags, including Rutile/Hematite R040049-1 and Actinolite/Chlorite R040064-1 whose *strict* Lee >10% impurity peak status was NOT proven. Do not claim 1011 certified absolutely single-phase.
 
+## Reporting cohorts
+
+Headline zero-shot seven-system top-1 Accuracy uses the complete frozen **RRUFF-Cu1011 (n=1011)**. Primary Macro-F1 and ECE use those same IDs. Report separate diagnostics or sensitivity analyses under their own cohort names and denominators.
+
+The earlier **19-case qualitative list** (15 declared mixed/contaminated plus four short-range candidates) belongs to the superseded [RRUFF-1030 protocol](RRUFF_1030_MAIN_19_CHALLENGE_EVAL_PROTOCOL_20261104.md). The 19 explicit-Mo records in the later 1034-source audit are a distinct group. The old case list is preserved separately. If reused for case studies, reconcile its IDs against Cu1011 and use the same frozen checkpoint with a prespecified input protocol. A frozen primary ID is counted once in Cu1011, and no diagnostic result is pooled with primary metrics. RRUFF-70/301/350/371 remain historical evidence.
+
+## Gates before formal model scoring
+
+- **Wavelength and provenance:** Review original measurement metadata and document direct versus inferred Cu compatibility. Resolve or explicitly sign off on remaining evidence tiers before scoring. Calculated Cu DIF wavelength alone cannot override an explicit Mo RAW description.
+- **Labels:** Sign off on the seven-system labels and checkpoint class-index order. Review the 134 noncanonical space-group flags, the 34 RAW–DIF cell discrepancies and the retained mixture flags. Record evidence limits and any unresolved cases before inference.
+- **Preprocessing:** Confirm that the scoring loader reproduces the ordered, SHA-verified 1011 × 3501 input contract, including full measured 10–80° coverage, logged angle repairs, interpolation without padding, negative clipping, retained background and post-grid max normalization. The source-only replay already reproduced the manifest and array hashes.
+- **Model and metrics:** Complete synthetic-validation-only HPO and lock model configuration, checkpoint hash(es), preprocessing/evaluation code and metric definitions before accessing scores. Confirm that no labeled RRUFF data or holdout feedback was used for training, adaptation or selection. Formal scores are still sealed.
+
 ## Additional AlphaDiffract-inspired cell cross-validation performed across ALL 1011
 
 Following AlphaDiffract Methods 5.1, we cross-checked each original experimental RAW cell header against its source-matched DIF reference's six lattice parameters, preserving individual failure details:

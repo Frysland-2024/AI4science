@@ -1,6 +1,8 @@
 # RRUFF real-domain evaluation: 1030 primary + 19 challenge cases
 
-**Owner decision date:** 2026-11-04  
+> **Superseded protocol.** The 1030 primary proposal and its 19-case list are historical. The [RRUFF-Cu1011 freeze](RRUFF_CU1011_PRIMARY_BENCHMARK_FREEZE_ALPHA_2026_RATIONALE.md) governs formal scoring. The historical 19 are distinct from the 19 explicit-Mo records in the later source audit.
+
+**Owner decision date:** 2026-11-04
 **Status:** Evaluation cohort membership selected by source metadata; FINAL TEST FREEZE PENDING label/provenance/wavelength/axis audit. No model predictions have been run.
 
 ## Final intended roles

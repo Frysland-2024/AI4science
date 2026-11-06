@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 import math
-from typing import Any, Sequence
+from typing import Any, Callable, Sequence
 
 import numpy as np
 
@@ -172,9 +172,13 @@ def simulate_from_peak_table(
     normalize: bool = True,
     return_diagnostics: bool = False,
     reflection_table: PeakTable | None = None,
+    peak_renderer: Callable[..., np.ndarray] = render_gaussian_peaks,
+    reference_scale_mode: str = "legacy_gaussian",
 ) -> np.ndarray | tuple[np.ndarray, dict[str, Any]]:
     """Generate one in-memory view and return no persistent intermediate data."""
     params.validate()
+    if reference_scale_mode not in {"legacy_gaussian", "renderer_peak"}:
+        raise ValueError(f"unsupported reference_scale_mode={reference_scale_mode!r}")
     axis = grid.values
     working_intensities = np.asarray(intensities, dtype=np.float64)
     orientation_diagnostics: dict[str, Any]
@@ -199,12 +203,23 @@ def simulate_from_peak_table(
     # Instrument zero offset: one scalar moves the complete 2theta axis.
     # Independent random jitter of individual Bragg positions is not physical.
     shifted = np.asarray(positions, dtype=np.float64) + params.delta_2theta_deg
-    raw_signal = render_gaussian_peaks(
+    raw_signal = peak_renderer(
         shifted, working_intensities, axis, params.fwhm_deg, normalize=False
     ).astype(np.float64)
     intensities_array = working_intensities
-    reference_sigma = 0.08 / (2.0 * math.sqrt(2.0 * math.log(2.0)))
-    reference_scale = float(np.max(intensities_array)) / reference_sigma if intensities_array.size else 0.0
+    if reference_scale_mode == "renderer_peak":
+        # Area-normalized renderers have a peak height determined by their
+        # complete angle-dependent profile. Calibrate at the integration
+        # boundary so background/noise ratios are relative to unit peak height.
+        reference_scale = float(np.max(raw_signal)) if raw_signal.size else 0.0
+    else:
+        # Keep the historical V9 normalization byte-for-byte compatible.
+        reference_sigma = 0.08 / (2.0 * math.sqrt(2.0 * math.log(2.0)))
+        reference_scale = (
+            float(np.max(intensities_array)) / reference_sigma
+            if intensities_array.size
+            else 0.0
+        )
     signal = raw_signal / reference_scale if reference_scale > 0 else raw_signal
     rng = np.random.default_rng(rng_seed)
     background_amplitude = params.background_to_peak_ratio if params.background_active else 0.0
