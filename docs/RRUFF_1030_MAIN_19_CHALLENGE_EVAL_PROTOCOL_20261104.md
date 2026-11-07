@@ -1,11 +1,11 @@
-# Historical proposal archive: RRUFF-1030 + 19 case studies
+# Superseded historical archive: RRUFF-1030 + 19 case studies
 
 > **ARCHIVE ONLY — NOT AN EXECUTABLE EVALUATION PROTOCOL.** The 1030 primary proposal and its 19-case list were superseded by the owner’s final RRUFF-Cu1011 decision. Current formal scoring, cohort membership and scoring gates are defined only in [the RRUFF-Cu1011 freeze](RRUFF_CU1011_PRIMARY_BENCHMARK_FREEZE_ALPHA_2026_RATIONALE.md) and [`CURRENT_STATE.md`](CURRENT_STATE.md). The historical 19 case IDs are distinct from the 19 explicit-Mo records in the later source audit; neither group enters Cu1011 primary metrics unless an ID is already in the frozen primary set.
 
-**Owner decision date:** 2026-11-04
-**Historical status at proposal time:** This statement is retained for chronology only. It is superseded by the final source-membership freeze of RRUFF-Cu1011; remaining formal scoring gates are listed in the current freeze rationale.
+**Owner decision date:** 2026-11-04  
+**Historical status:** Retained for chronology only; superseded by the final RRUFF-Cu1011 source-membership freeze. This file contains no current evaluation authorization or active scoring gates. The only current cohort definition and pre-score gates are in [the RRUFF-Cu1011 freeze rationale](RRUFF_CU1011_PRIMARY_BENCHMARK_FREEZE_ALPHA_2026_RATIONALE.md).
 
-## Final intended roles
+## Archived proposal roles (not current)
 
 | Track | Count | Selection based on original files | Interpretation |
 | --- | ---: | --- | --- |
@@ -60,11 +60,13 @@ Local folder: `E:\AI4science\_local\rruff_benchmark_prospective_20261104`
 
 Primary crystal-system counts: cubic 120, hexagonal 82, tetragonal 46, orthorhombic 217, triclinic 97, monoclinic 338, trigonal 130 (sum 1030).
 
-## Freeze gates and post-HPO use
+## Historical proposal gates (retired; do not execute)
 
-1. Audit original RAW measurement provenance, label quality (including recovered noncanonical space-group aliases), physical radiation/wavelength and 2theta resampling; document any missing values without selecting on model scores.
-2. Confirm no parent duplication/label conflict and finalize inclusion, preprocessing and source hashes. If critical source failures arise, record a prospective protocol amendment **before any predictions** rather than quietly changing the 1030 denominator.
-3. **Do not inspect RRUFF model results during V11 HPO, architecture selection, or training-seed tuning.** Freeze model checkpoint/hyperparameters first, then evaluate primary 1030 and all 19 challenge cases according to this prespecified split.
+The following checklist described the proposal-time 1030 plan and is retained only as history; it is **not** the present scoring gate or authorization. Do not execute the 1030/19 split as a formal benchmark. Current formal scoring remains blocked by the four gates in the Cu1011 freeze rationale above.
+
+1. Historical proposal: audit original RAW provenance, labels, radiation/wavelength and resampling.
+2. Historical proposal: finalize the 1030 membership and preprocessing before inference.
+3. Historical proposal: freeze the checkpoint before evaluating 1030 plus the 19 proposed cases.
 4. Report results honestly even if challenge samples fail. XQueryer/Bin Cao 1003 is a different source snapshot/cohort: literature comparison is **not same-exact-test-set ranking** unless author IDs are independently reproduced.
 
 **Research-history significance:** Initial 910 was over-restrictive due to software space-group string compatibility. 139 recovered aliases -> 1049; applying Cao's published 30-degree minimum -> 1045; owner chose 15 explicit mixtures to join the 4 insufficient-window spectra as distinct **challenge demonstrations**, leaving 1030 primary. This is a role assignment based on experimental metadata, not cherry-picking model outcomes.
