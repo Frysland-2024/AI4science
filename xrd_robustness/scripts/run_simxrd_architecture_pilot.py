@@ -249,9 +249,11 @@ def _optimizer_step_if_finite(
 
 
 def _trapezoid(y: np.ndarray, x: np.ndarray) -> float:
-    # NumPy 1.24–1.26 support np.trapz; np.trapezoid was added in NumPy 2.0.
-    integrate = getattr(np, "trapezoid", np.trapz)
-    return float(integrate(y, x))
+    # NumPy 1.x provides np.trapz; newer releases may remove that alias too.
+    integrate = getattr(np, "trapezoid", None) or getattr(np, "trapz", None)
+    if integrate is not None:
+        return float(integrate(y, x))
+    return float(np.sum((y[:-1] + y[1:]) * np.diff(x) * 0.5))
 
 
 def _panel_cache_path(output_root: Path, split: str, version: str, seed: int) -> Path:
