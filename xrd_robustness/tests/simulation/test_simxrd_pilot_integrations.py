@@ -264,3 +264,73 @@ def test_validation_restores_the_incoming_training_mode() -> None:
     )
     assert not model.training
     assert not model.dropout.training
+
+
+def test_nonfinite_losses_and_gradients_are_detected_before_optimizer_update() -> None:
+    pilot = _load_pilot_module()
+    model = torch.nn.Linear(2, 1, bias=False)
+    optimizer = torch.optim.SGD(model.parameters(), lr=1.0)
+    initial = model.weight.detach().clone()
+
+    bad_loss = torch.tensor(float("nan"), requires_grad=True)
+    assert pilot._optimizer_step_if_finite({"total": bad_loss}, model, optimizer) == "nonfinite_loss"
+    assert torch.equal(model.weight.detach(), initial)
+
+    optimizer.zero_grad(set_to_none=True)
+    hook = model.weight.register_hook(
+        lambda gradient: torch.full_like(gradient, float("inf"))
+    )
+    finite_loss = model(torch.ones((1, 2))).sum()
+    assert pilot._optimizer_step_if_finite({"total": finite_loss}, model, optimizer) == "nonfinite_gradient"
+    assert torch.equal(model.weight.detach(), initial)
+
+    hook.remove()
+    optimizer.zero_grad(set_to_none=True)
+    finite_loss = model(torch.ones((1, 2))).sum()
+    assert pilot._optimizer_step_if_finite({"total": finite_loss}, model, optimizer) is None
+    assert not torch.equal(model.weight.detach(), initial)
+
+
+def test_smoke_integrator_falls_back_to_numpy_1x_trapz(monkeypatch) -> None:
+    pilot = _load_pilot_module()
+    monkeypatch.delattr(np, "trapezoid", raising=False)
+
+    assert pilot._trapezoid(np.asarray([0.0, 1.0, 2.0]), np.asarray([0.0, 1.0, 2.0])) == 2.0
+
+
+def test_evaluation_rejects_changed_frozen_simulator_or_preprocessing_hashes(
+    tmp_path: Path, monkeypatch
+) -> None:
+    pilot = _load_pilot_module()
+    v9_path = tmp_path / "v9.json"
+    v10_path = tmp_path / "v10.json"
+    preprocessing_path = tmp_path / "preprocessing.json"
+    for path in (v9_path, v10_path, preprocessing_path):
+        path.write_text("frozen", encoding="utf-8")
+    monkeypatch.setattr(pilot, "V9_SIM_PATH", v9_path)
+    monkeypatch.setattr(pilot, "V10_SIM_PATH", v10_path)
+    rruff_root = tmp_path / "rruff"
+    (rruff_root / "contracts").mkdir(parents=True)
+    preprocessing_path.rename(rruff_root / "contracts" / "preprocessing_contract.json")
+    preprocessing_path = rruff_root / "contracts" / "preprocessing_contract.json"
+
+    freeze = {
+        "v9_simulation_config_sha256": pilot._sha256(v9_path),
+        "v10_simulation_config_sha256": pilot._sha256(v10_path),
+        "rruff_preprocessing_contract_sha256": pilot._sha256(preprocessing_path),
+    }
+    pilot._verify_frozen_evaluation_hashes(freeze, rruff_root)
+
+    for key, changed_path in (
+        ("v9_simulation_config_sha256", v9_path),
+        ("v10_simulation_config_sha256", v10_path),
+        ("rruff_preprocessing_contract_sha256", preprocessing_path),
+    ):
+        changed_path.write_text("changed", encoding="utf-8")
+        try:
+            pilot._verify_frozen_evaluation_hashes(freeze, rruff_root)
+        except ValueError as error:
+            assert key in str(error)
+        else:
+            raise AssertionError(f"changed frozen hash was accepted: {key}")
+        changed_path.write_text("frozen", encoding="utf-8")
