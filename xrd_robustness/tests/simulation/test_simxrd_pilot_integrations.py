@@ -268,26 +268,38 @@ def test_validation_restores_the_incoming_training_mode() -> None:
 
 def test_nonfinite_losses_and_gradients_are_detected_before_optimizer_update() -> None:
     pilot = _load_pilot_module()
-    model = torch.nn.Linear(2, 1, bias=False)
+    model = torch.nn.Linear(2, 7, bias=False)
     optimizer = torch.optim.SGD(model.parameters(), lr=1.0)
     initial = model.weight.detach().clone()
+    first = torch.ones((2, 2))
+    second = torch.zeros((2, 2))
+    target = torch.tensor([0, 1], dtype=torch.long)
 
-    bad_loss = torch.tensor(float("nan"), requires_grad=True)
-    assert pilot._optimizer_step_if_finite({"total": bad_loss}, model, optimizer) == "nonfinite_loss"
+    def training_result():
+        return pilot.run_training_step(
+            pilot.TrainingStepConfig(pilot.TrainingMode.DYNAMIC_JS, lambda_js=60.0),
+            model,
+            x1=first,
+            x2=second,
+            target=target,
+        )
+
+    result = training_result()
+    assert result["logits_first"].shape == result["logits_second"].shape == (2, 7)
+    bad_loss = dict(result)
+    bad_loss["total"] = result["total"] * torch.tensor(float("nan"))
+    assert pilot._optimizer_step_if_finite(bad_loss, model, optimizer) == "nonfinite_loss"
     assert torch.equal(model.weight.detach(), initial)
 
-    optimizer.zero_grad(set_to_none=True)
     hook = model.weight.register_hook(
         lambda gradient: torch.full_like(gradient, float("inf"))
     )
-    finite_loss = model(torch.ones((1, 2))).sum()
-    assert pilot._optimizer_step_if_finite({"total": finite_loss}, model, optimizer) == "nonfinite_gradient"
+    assert pilot._optimizer_step_if_finite(training_result(), model, optimizer) == "nonfinite_gradient"
     assert torch.equal(model.weight.detach(), initial)
 
     hook.remove()
     optimizer.zero_grad(set_to_none=True)
-    finite_loss = model(torch.ones((1, 2))).sum()
-    assert pilot._optimizer_step_if_finite({"total": finite_loss}, model, optimizer) is None
+    assert pilot._optimizer_step_if_finite(training_result(), model, optimizer) is None
     assert not torch.equal(model.weight.detach(), initial)
 
 
