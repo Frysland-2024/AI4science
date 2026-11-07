@@ -1,0 +1,139 @@
+{
+  "schema_version": "pxrd-pilot-implementation-manifest-v1",
+  "created_utc": "2026-11-03T03:50:58+00:00",
+  "run_scope": "Bounded 2026-11-03 three-configuration pilot; no 100k expansion, tuning, or architecture search.",
+  "run_source_worktree_commit": "f18c27b612fe1a4b48f72eb609a89e6caad9a7ac",
+  "data": {
+    "dataset": "formal_14060",
+    "structures": 14060,
+    "split_unit": "parent_structure_id",
+    "split_sha256": "B9D3B72E42EA0FD549DAE34425FF61D2D650D5DD7FE6F337D747CB952CF43293"
+  },
+  "source_and_protocol_files": {
+    "xrd_robustness/reports/simxrd_architecture_pilot_20261103/cnn11_v10_training_failure.json": {
+      "bytes": 1868,
+      "sha256": "cb05e8cf7f73b1127b573116f701254a57357d3eea81ecd582e984efbb762ca6"
+    },
+    "xrd_robustness/reports/simxrd_architecture_pilot_20261103/cnn11_v10_training_results.json": {
+      "bytes": 1176,
+      "sha256": "f88e16cb68d7675d4ed7fa6eaf0cbe152c0664088ffa24c9737eaf7d1dcf850e"
+    },
+    "xrd_robustness/reports/simxrd_architecture_pilot_20261103/logs/cnn11_v10/seed_20260711.jsonl": {
+      "bytes": 10648,
+      "sha256": "84db6446be526fb982bcfb2a40a479e40c6c6e78def2c2e1afa6dfa8eddca231"
+    },
+    "xrd_robustness/reports/simxrd_architecture_pilot_20261103/logs/resnet18gn_v10/seed_20260711.jsonl": {
+      "bytes": 21630,
+      "sha256": "576887e6cd75a479745582664225bde9abe84ced53241d718b01eb2ca733e0ef"
+    },
+    "xrd_robustness/reports/simxrd_architecture_pilot_20261103/logs/resnet18gn_v10/seed_20260712.jsonl": {
+      "bytes": 21658,
+      "sha256": "3b9662f628c7a900d87a52f878da1f4b12b924e186d47065f854616029d7a3d2"
+    },
+    "xrd_robustness/reports/simxrd_architecture_pilot_20261103/logs/resnet18gn_v10/seed_20260713.jsonl": {
+      "bytes": 21653,
+      "sha256": "e527c2866a479fd1240bade3e7bb797102891e1afd5a91cf88c9fb84a99e0f1a"
+    },
+    "xrd_robustness/reports/simxrd_architecture_pilot_20261103/model_selection_freeze.json": {
+      "bytes": 7987,
+      "sha256": "d93f68b1c666c439bd80a9c39d9d9d4145afd65b548fe5ab8dfdb65729dd5f77"
+    },
+    "xrd_robustness/reports/simxrd_architecture_pilot_20261103/preflight_failures.jsonl": {
+      "bytes": 850,
+      "sha256": "7f3426509c4b25f39a21fc6eb78b963bc9c794f693ebb11507f21b1ac395b2a2"
+    },
+    "xrd_robustness/reports/simxrd_architecture_pilot_20261103/README.md": {
+      "bytes": 4942,
+      "sha256": "9bd7e95ef77f20e5a96e9bc9cc3cd155593521a24f310296f1cb353be313fc2b"
+    },
+    "xrd_robustness/reports/simxrd_architecture_pilot_20261103/resnet18gn_v10_training_results.json": {
+      "bytes": 10559,
+      "sha256": "6e8f76f9c505afe325a8e6993cb6d415e8936c4750bf7048db3ec7648843700d"
+    },
+    "xrd_robustness/reports/simxrd_architecture_pilot_20261103/results.json": {
+      "bytes": 271531,
+      "sha256": "54f4a7f15a666824c0c5527079c5ab63b1a1d3c7007cc4fe0fe5a6eb13541664"
+    },
+    "xrd_robustness/reports/simxrd_architecture_pilot_20261103/runs/cnn11_v10_seed_20260711.json": {
+      "bytes": 866,
+      "sha256": "440b67ff6d94919df1f0124d823a56e5011fa64cdacadc10dd615100df65c03d"
+    },
+    "xrd_robustness/reports/simxrd_architecture_pilot_20261103/runs/resnet18gn_v10_seed_20260711.json": {
+      "bytes": 3197,
+      "sha256": "b8f170acecabd3eed5548ba0202d93d1343a17a2a0962d8a6e8f30829627b8da"
+    },
+    "xrd_robustness/reports/simxrd_architecture_pilot_20261103/runs/resnet18gn_v10_seed_20260712.json": {
+      "bytes": 3198,
+      "sha256": "07d56c103b1d1c66db196f21af45d80cc1769ba2b45337a5422704910ed352e0"
+    },
+    "xrd_robustness/reports/simxrd_architecture_pilot_20261103/runs/resnet18gn_v10_seed_20260713.json": {
+      "bytes": 3197,
+      "sha256": "4a1b444462e055bf0b17ad6d4f7cc01da28e2d46bbf6b1bcdb677582043467fb"
+    },
+    "xrd_robustness/reports/simxrd_architecture_pilot_20261103/smoke.json": {
+      "bytes": 8470,
+      "sha256": "4f39eaf403abb134ee03c91e24a7f176df7cb6ad13393d1184a895ee154270ef"
+    },
+    "xrd_robustness/reports/simxrd_architecture_pilot_20261103/smoke.log.jsonl": {
+      "bytes": 6766,
+      "sha256": "d2db1adaefa066d61ea010fe4a99145930bb2c74fb7d8ba491baa2b5dd62b09a"
+    },
+    "xrd_robustness/reports/simxrd_architecture_pilot_20261103/validation/cnn11_v10_seed_20260711.json": {
+      "bytes": 59183,
+      "sha256": "722de63ef103b2c505128c1c5db47a156ea68c8a18bdec7a80d4f0f0a69d8f1e"
+    },
+    "xrd_robustness/reports/simxrd_architecture_pilot_20261103/validation/resnet18gn_v10_seed_20260711.json": {
+      "bytes": 122633,
+      "sha256": "9bbaa920742f6c73b9ac91cb43bf16213a37756fb17fcc68c0c4a41ca15c6e49"
+    },
+    "xrd_robustness/reports/simxrd_architecture_pilot_20261103/validation/resnet18gn_v10_seed_20260712.json": {
+      "bytes": 122492,
+      "sha256": "d096212c46b5558dadf967b16b8f90c3e4a3ba5fe4d5022f5ebd9beb026daed2"
+    },
+    "xrd_robustness/reports/simxrd_architecture_pilot_20261103/validation/resnet18gn_v10_seed_20260713.json": {
+      "bytes": 122634,
+      "sha256": "f953d6b070303c83293b6ed8cf8e33ed427e1d5e60a22d6d7dfed208b0866b75"
+    },
+    "docs/PXRD_SIMXRD_CNN11_PILOT_20261103.md": {
+      "bytes": 11115,
+      "sha256": "b55e705c57083a70daa0aa80aeeb2ebc1ec2a824cca606b434521475856cff69"
+    },
+    "xrd_robustness/configs/simulation.simxrd_v10_pilot.20261103.json": {
+      "bytes": 22152,
+      "sha256": "62851fdf068e9c718c43eb497c6d7a6971e6f03c16aded42c50c800b1b6ebf70"
+    },
+    "xrd_robustness/configs/simxrd_cnn11_pilot.20261103.json": {
+      "bytes": 4098,
+      "sha256": "f11901449bbe39044f26bcf52650c31581cfdba12ea52e9269092e8c146b31eb"
+    },
+    "xrd_robustness/src/xrd_robustness/simulator_v10.py": {
+      "bytes": 5083,
+      "sha256": "75b89695c4c3212d754f91083cf9c42d1b77aeb08f3d3baf4c2b560b000cd9ba"
+    },
+    "xrd_robustness/src/xrd_robustness/simulator.py": {
+      "bytes": 13498,
+      "sha256": "f975ec5b1eefc5384af8fc78acadfe0dc26d1d8dc9f836e30cc22ec9e3ed011e"
+    },
+    "xrd_robustness/src/xrd_robustness/online_views.py": {
+      "bytes": 14412,
+      "sha256": "8487f2f155f443e5f51c0be75865aa8964fe16c8ecb09dcc502d85e4643d9657"
+    },
+    "xrd_robustness/src/xrd_robustness/training_prefetch.py": {
+      "bytes": 19387,
+      "sha256": "3b0777ebe62391ed7ea5147af3586f0fbf6990af3e04beeb06e11287c57dbd4c"
+    },
+    "xrd_robustness/src/xrd_robustness/models/__init__.py": {
+      "bytes": 319,
+      "sha256": "687dfe9e1aeebac58f7b2ca039a62a4a237270a227a51dd8a4b2903bb474eca7"
+    },
+    "xrd_robustness/src/xrd_robustness/models/simxrd_cnn11.py": {
+      "bytes": 3355,
+      "sha256": "a11801732c065e96dffd0e97db594f3602be581e5d5b0f33c7d15cc0bc1d8e9a"
+    },
+    "xrd_robustness/scripts/run_simxrd_architecture_pilot.py": {
+      "bytes": 72464,
+      "sha256": "e4dba1082abf542b196f4aabda7844e7c3909b9bbe220375d9409cb2dcbbb4d5"
+    }
+  },
+  "public_artifact_policy": "No model weights or RRUFF spectra included. Per-run checkpoint SHA-256 values are recorded in results/freeze manifests."
+}

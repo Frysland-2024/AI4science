@@ -1,0 +1,230 @@
+{
+  "conclusion": "All requested physical profile, label-preservation, deterministic same-parent pairing, finite-loss/gradient, GPU memory, and throughput smoke checks passed. Full training may proceed under the preregistered fixed budget.",
+  "data_bindings": {
+    "peak_cache_manifest_sha256": "6AE0CFD1B5B29671E2F532D7A094F2FC412CABD64E4CF77D42915937BACC8D18",
+    "source_records_sha256": "05D5D33F200194612A8CDBE29D9443FC7BAD9C245F66D185364B66A75915CC6C",
+    "split_manifest_sha256": "B9D3B72E42EA0FD549DAE34425FF61D2D650D5DD7FE6F337D747CB952CF43293"
+  },
+  "data_counts": {
+    "test": 2109,
+    "train": 9842,
+    "validation": 2109
+  },
+  "date": "2026-11-03",
+  "physical_profile_checks": {
+    "area_conservation_passed": true,
+    "area_relative_difference": 8.449836162769536e-07,
+    "instrument_angle_width_increase_passed": true,
+    "integrated_area_broad": 2.486689510478638,
+    "integrated_area_narrow": 2.486691611692309,
+    "line_profile_config": {
+      "caglioti_u_deg2": 0.0012,
+      "caglioti_v_deg2": 0.0004,
+      "interpretation": "Generic, instrument-agnostic pilot coefficients; not fitted or calibrated to any diffractometer. Pseudo-Voigt is the area-normalized approximation to a mixed Gaussian/Lorentzian profile. The same-parent view sampler, peak positions, reflection intensities, zero-shift, background, noise, and orientation stages are retained.",
+      "kind": "pseudo_voigt_caglioti_v1",
+      "lorentz_fraction": 0.5,
+      "truncate_fwhm": 20.0,
+      "w_term": "base_fwhm_deg_squared"
+    },
+    "measured_fwhm_at_2theta_20_deg": 0.0806744667124093,
+    "measured_fwhm_at_2theta_80_deg": 0.08706968196618448,
+    "peak_center_preservation_passed": true,
+    "profile_nonnegative_finite": true,
+    "unshifted_peak_center_deg": 30.0
+  },
+  "raw_log": "smoke.log.jsonl",
+  "runtime": {
+    "amp_dtype": "bfloat16",
+    "cudnn_benchmark": true,
+    "cudnn_deterministic": true,
+    "device": "cuda",
+    "fused_adamw": true,
+    "gpu_name": "NVIDIA GeForce RTX 4060 Laptop GPU",
+    "gpu_total_memory_bytes": 8585216000,
+    "tf32_matmul": true,
+    "torch_threads": 2
+  },
+  "same_parent_pair_checks": {
+    "cubic": {
+      "cached_peak_table_immutable": true,
+      "label_index": 6,
+      "material_id_sha256_prefix": "c5af2478f172",
+      "same_parent_pair_replay_exact": true,
+      "valid_normalized_spectra": true,
+      "view_seeds_distinct": true,
+      "views_are_distinct": true
+    },
+    "hexagonal": {
+      "cached_peak_table_immutable": true,
+      "label_index": 5,
+      "material_id_sha256_prefix": "cd1e755f74d8",
+      "same_parent_pair_replay_exact": true,
+      "valid_normalized_spectra": true,
+      "view_seeds_distinct": true,
+      "views_are_distinct": true
+    },
+    "monoclinic": {
+      "cached_peak_table_immutable": true,
+      "label_index": 1,
+      "material_id_sha256_prefix": "30e7351d700e",
+      "same_parent_pair_replay_exact": true,
+      "valid_normalized_spectra": true,
+      "view_seeds_distinct": true,
+      "views_are_distinct": true
+    },
+    "orthorhombic": {
+      "cached_peak_table_immutable": true,
+      "label_index": 2,
+      "material_id_sha256_prefix": "63db91d8c0a5",
+      "same_parent_pair_replay_exact": true,
+      "valid_normalized_spectra": true,
+      "view_seeds_distinct": true,
+      "views_are_distinct": true
+    },
+    "tetragonal": {
+      "cached_peak_table_immutable": true,
+      "label_index": 3,
+      "material_id_sha256_prefix": "a603c4fcc6d3",
+      "same_parent_pair_replay_exact": true,
+      "valid_normalized_spectra": true,
+      "view_seeds_distinct": true,
+      "views_are_distinct": true
+    },
+    "triclinic": {
+      "cached_peak_table_immutable": true,
+      "label_index": 0,
+      "material_id_sha256_prefix": "9bad5355a334",
+      "same_parent_pair_replay_exact": true,
+      "valid_normalized_spectra": true,
+      "view_seeds_distinct": true,
+      "views_are_distinct": true
+    },
+    "trigonal": {
+      "cached_peak_table_immutable": true,
+      "label_index": 4,
+      "material_id_sha256_prefix": "7c7728bcb05d",
+      "same_parent_pair_replay_exact": true,
+      "valid_normalized_spectra": true,
+      "view_seeds_distinct": true,
+      "views_are_distinct": true
+    }
+  },
+  "schema_version": "simxrd-cnn11-pilot-smoke-v1",
+  "status": "passed",
+  "training_path_smoke": [
+    {
+      "all_losses_finite": true,
+      "all_steps_per_second": 1.580278128941276,
+      "batch_size_parents": 16,
+      "configuration": "legacy_resnet18gn_v9",
+      "elapsed_seconds_including_worker_startup": 6.328000000037719,
+      "final_step_losses_and_gradient_norm": {
+        "classification": 6.799986839294434,
+        "consistency": 0.011534091085195541,
+        "gradient_l1_norm_sum": 680.9554752707481,
+        "total": 7.492032051086426
+      },
+      "model_class": "ML4PXRDResNet1D",
+      "model_config": {
+        "add_additional_dense_layer": true,
+        "dense_width": 256,
+        "embed_dim": 256,
+        "group_norm_eps": 0.001,
+        "group_norm_groups": 32,
+        "input_length": 3501,
+        "model_id": "18",
+        "num_classes": 7,
+        "square_kernel_size_and_stride": true
+      },
+      "objective": "CE + lambda_js * JS, lambda_js=60",
+      "optimizer": "AdamW",
+      "parameter_count": 13008839,
+      "parent_occurrences": 160,
+      "peak_cuda_allocated_bytes": 448169472,
+      "prefetch_wait_seconds": 2.641000000119675,
+      "rendered_views": 320,
+      "simulator_version": "v9_gaussian",
+      "steady_steps_per_second_excluding_first_two_steps": 1.5802781289412757,
+      "steps": 10
+    },
+    {
+      "all_losses_finite": true,
+      "all_steps_per_second": 3.092145949291923,
+      "batch_size_parents": 16,
+      "configuration": "resnet18gn_v10",
+      "elapsed_seconds_including_worker_startup": 3.2339999999967404,
+      "final_step_losses_and_gradient_norm": {
+        "classification": 6.350189208984375,
+        "consistency": 0.02909829467535019,
+        "gradient_l1_norm_sum": 798.6297625005245,
+        "total": 8.096086502075195
+      },
+      "model_class": "ML4PXRDResNet1D",
+      "model_config": {
+        "add_additional_dense_layer": true,
+        "dense_width": 256,
+        "embed_dim": 256,
+        "group_norm_eps": 0.001,
+        "group_norm_groups": 32,
+        "input_length": 3501,
+        "model_id": "18",
+        "num_classes": 7,
+        "square_kernel_size_and_stride": true
+      },
+      "objective": "CE + lambda_js * JS, lambda_js=60",
+      "optimizer": "AdamW",
+      "parameter_count": 13008839,
+      "parent_occurrences": 160,
+      "peak_cuda_allocated_bytes": 450373120,
+      "prefetch_wait_seconds": 2.3589999999385327,
+      "rendered_views": 320,
+      "simulator_version": "v10_pseudo_voigt_caglioti",
+      "steady_steps_per_second_excluding_first_two_steps": 3.0921459492919228,
+      "steps": 10
+    },
+    {
+      "all_losses_finite": true,
+      "all_steps_per_second": 2.8441410693944054,
+      "batch_size_parents": 16,
+      "configuration": "cnn11_v10",
+      "elapsed_seconds_including_worker_startup": 3.5160000000032596,
+      "final_step_losses_and_gradient_norm": {
+        "classification": 1.942138671875,
+        "consistency": 1.794286072254181e-05,
+        "gradient_l1_norm_sum": 0.7588726803660393,
+        "total": 1.943215250968933
+      },
+      "model_class": "SimXRDCNN11",
+      "model_config": {
+        "conv_channels": 80,
+        "dense_widths": [
+          2300,
+          1150
+        ],
+        "dropout_conv": 0.3,
+        "dropout_dense": 0.5,
+        "input_length": 3501,
+        "num_classes": 7
+      },
+      "objective": "CE + lambda_js * JS, lambda_js=60",
+      "optimizer": "AdamW",
+      "parameter_count": 12712747,
+      "parent_occurrences": 160,
+      "peak_cuda_allocated_bytes": 290710016,
+      "prefetch_wait_seconds": 2.6239999999525025,
+      "rendered_views": 320,
+      "simulator_version": "v10_pseudo_voigt_caglioti",
+      "steady_steps_per_second_excluding_first_two_steps": 2.8441410693944054,
+      "steps": 10
+    }
+  ],
+  "training_rows_per_crystal_system": {
+    "cubic": 1409,
+    "hexagonal": 1406,
+    "monoclinic": 1409,
+    "orthorhombic": 1411,
+    "tetragonal": 1406,
+    "triclinic": 1400,
+    "trigonal": 1401
+  }
+}

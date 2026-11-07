@@ -57,21 +57,21 @@ class OnlineViewFactory:
         grid: SimulationGrid = SimulationGrid(),
         simulator: Callable[..., np.ndarray] = simulate_structure,
         peak_cache: PeakTableCache | None = None,
+        peak_table_simulator: Callable[..., Any] = simulate_from_peak_table,
         quality_gate: bool = False,
         quality_gate_splits: tuple[str, ...] = ("train",),
         quality_gate_config: Mapping[str, Any] | None = None,
         strategy: PerturbationStrategy | None = None,
-        peak_table_simulator: Callable[..., Any] = simulate_from_peak_table,
     ):
         self.sampler = sampler
         self.grid = grid
         self.simulator = simulator
         self.peak_cache = peak_cache
+        self.peak_table_simulator = peak_table_simulator
         self.quality_gate = bool(quality_gate)
         self.quality_gate_splits = frozenset(quality_gate_splits)
         self.quality_gate_config = dict(quality_gate_config or {})
         self.strategy = strategy or IndependentDynamicStrategy(sampler)
-        self.peak_table_simulator = peak_table_simulator
         self.quality_gate_checked_count = 0
         self.quality_gate_rejected_count = 0
         self._quality_reference_profiles: dict[str, np.ndarray] = {}

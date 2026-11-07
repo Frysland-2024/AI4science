@@ -1,0 +1,31 @@
+{
+  "schema_version": "simxrd-pilot-training-failure-v1",
+  "configuration_id": "cnn11_v10",
+  "model_id": "cnn11",
+  "simulator_version": "v10_pseudo_voigt_caglioti",
+  "status": "failed_nonfinite_after_selected_checkpoint",
+  "training_seed": 20260711,
+  "expected_training_seed_count": 3,
+  "observed_training_seed_count": 1,
+  "first_logged_nonfinite_step": 20000,
+  "first_logged_nonfinite_fields": [
+    "classification_loss",
+    "js_consistency",
+    "total_loss"
+  ],
+  "validation_collapse_step": 24640,
+  "validation_collapse_ood_macro_f1": 0.03558085749866572,
+  "last_logged_step_before_manual_stop": 26000,
+  "elapsed_seconds_at_last_log": 556.405999999959,
+  "last_validation_selected_checkpoint_step": 18480,
+  "selected_checkpoint_sha256": "E415DBFD042EADC8595F4B5FD7F78AC1F7160517324308AD71B74AA187CDB08F",
+  "selected_checkpoint_tensor_state_finite": true,
+  "selected_validation_ood_macro_f1": 0.6817411021488872,
+  "selected_validation_in_range_macro_f1": 0.7111298826825598,
+  "selected_checkpoint_path": "xrd_robustness/outputs/simxrd_architecture_pilot_20261103/cnn11_v10/seed_20260711/best.ckpt",
+  "training_log_path": "xrd_robustness/reports/simxrd_architecture_pilot_20261103/logs/cnn11_v10/seed_20260711.jsonl",
+  "validation_history_path": "xrd_robustness/reports/simxrd_architecture_pilot_20261103/validation/cnn11_v10_seed_20260711.json",
+  "runner_script_sha256_before_failure_handling_extension": "1F60C27BE3CC5070184CCCF003ADACAD7170749E14518B4C7ED3B52B7B7C306F",
+  "selection_note": "Checkpoint selected by the predeclared Validation-only rule before the first logged NaN. Test and RRUFF remain unopened at this point.",
+  "interpretation": "One-seed exploratory candidate only; training was incomplete, later validation collapsed, and this must not be treated as an equal-budget CNN11 comparison."
+}
