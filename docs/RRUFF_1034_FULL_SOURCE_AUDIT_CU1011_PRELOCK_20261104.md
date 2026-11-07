@@ -1,5 +1,7 @@
 # RRUFF-1034 source audit → RRUFF-Cu-1011 prelocked primary, 2026-11-04
 
+> **Status clarification:** This document records the source audit and engineering prelock. The owner’s final decision in [the Cu1011 freeze rationale](RRUFF_CU1011_PRIMARY_BENCHMARK_FREEZE_ALPHA_2026_RATIONALE.md) makes RRUFF-Cu1011 the sole formal primary benchmark. Phrases such as “proposed,” “recommended,” and “prelocked” below describe the audit chronology; they do not leave cohort membership pending. Formal scoring remains blocked only by the gates in the freeze rationale.
+
 **Audit completion state:** Original RRUFF source and V11 input ENGINEERING CHECK COMPLETED and independently rerun with identical file SHA. **Primary source/engineering cohort PRELOCKED at 1011; no trained model inference on RRUFF or Test, no scientific performance measured.** The project owner proposed RRUFF-1032 and asked to fully audit 1032/possibly 1034. This audit discovered physically meaningful differences that require splitting the prospective 1034 rather than treating all 1034 as identical Cu-laboratory powder XRD profiles.
 
 ## Main result: every original candidate accounted for
