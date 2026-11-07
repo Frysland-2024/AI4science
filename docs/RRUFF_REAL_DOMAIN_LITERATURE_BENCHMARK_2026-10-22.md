@@ -1,5 +1,7 @@
 # RRUFF real-domain literature benchmark plan (2026-10-22)
 
+> **Protocol update (2026-11-06).** The [RRUFF-Cu1011 freeze](RRUFF_CU1011_PRIMARY_BENCHMARK_FREEZE_ALPHA_2026_RATIONALE.md) supersedes the proposed RRUFF-301/231 formal scoring tracks below. The dated literature scorecard remains contextual; completed few-shot evidence retains its original cohort.
+
 
 **2026-11-03 source audit of FIVE papers' actual RRUFF screening cohorts:** [RRUFF_FIVE_PAPER_COHORT_SOURCE_AUDIT_20261103.md](RRUFF_FIVE_PAPER_COHORT_SOURCE_AUDIT_20261103.md). This distinguishes Lee's top-40% low-angle-background rejection, Salgado's 452-real-spectrum souping, AlphaDiffract's exact 734 chain, XQueryer's 2,088→1,003 data-adequacy filtering and 849 separate MP matches, and the still-unknown SimXRD Table-5 test denominator. **Publication targets do not authorize score-conditioned filtering of a locked test.**
 
