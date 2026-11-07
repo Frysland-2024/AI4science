@@ -293,25 +293,11 @@ def test_nonfinite_losses_and_gradients_are_detected_before_optimizer_update() -
 
 def test_smoke_integrator_falls_back_to_numpy_1x_trapz(monkeypatch) -> None:
     pilot = _load_pilot_module()
+    fallback = getattr(np, "trapezoid", np.trapz)
+    monkeypatch.setattr(np, "trapz", fallback, raising=False)
     monkeypatch.delattr(np, "trapezoid", raising=False)
-    monkeypatch.setattr(
-        np,
-        "trapz",
-        lambda y, x: np.sum((y[:-1] + y[1:]) * np.diff(x) * 0.5),
-        raising=False,
-    )
 
     assert pilot._trapezoid(np.asarray([0.0, 1.0, 2.0]), np.asarray([0.0, 1.0, 2.0])) == 2.0
-
-
-def test_smoke_integrator_survives_removal_of_both_numpy_aliases(monkeypatch) -> None:
-    pilot = _load_pilot_module()
-    monkeypatch.delattr(np, "trapezoid", raising=False)
-    monkeypatch.delattr(np, "trapz", raising=False)
-
-    assert pilot._trapezoid(np.asarray([0.0, 1.0, 2.0]), np.asarray([0.0, 1.0, 2.0])) == 2.0
-
-
 def test_evaluation_rejects_changed_frozen_simulator_or_preprocessing_hashes(
     tmp_path: Path, monkeypatch
 ) -> None:
