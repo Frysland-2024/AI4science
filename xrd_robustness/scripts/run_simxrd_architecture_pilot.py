@@ -1067,7 +1067,7 @@ def train_model(
                 "raw_log_path": str(log_path.relative_to(report_root)).replace("\\", "/"),
             }
             _write_json(run_dir / "result.json", result_payload)
-            _log(log_handle, "training_complete", **result_payload)
+            _log(log_handle, "training_complete" if training_status == "completed" else "training_failed_nonfinite", **result_payload)
             all_results.append(result_payload)
             del model, optimizer
             if device.type == "cuda":
@@ -1636,8 +1636,12 @@ def main(argv: Sequence[str] | None = None) -> int:
             rruff_root=args.rruff_root.resolve(),
             device=device,
         )
-    print(json.dumps({"phase": args.phase, "status": "completed", "result_keys": list(result)}, indent=2))
-    return 0
+    failed_nonfinite = args.phase in {"train_resnet", "train_cnn11"} and any(
+        row.get("status") == "failed_nonfinite" for row in result.get("runs", [])
+    )
+    phase_status = "failed_nonfinite" if failed_nonfinite else "completed"
+    print(json.dumps({"phase": args.phase, "status": phase_status, "result_keys": list(result)}, indent=2))
+    return 1 if failed_nonfinite else 0
 
 
 if __name__ == "__main__":
