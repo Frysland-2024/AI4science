@@ -1,9 +1,9 @@
-# RRUFF real-domain evaluation: 1030 primary + 19 challenge cases
+# Historical proposal archive: RRUFF-1030 + 19 case studies
 
-> **Superseded protocol.** The 1030 primary proposal and its 19-case list are historical. The [RRUFF-Cu1011 freeze](RRUFF_CU1011_PRIMARY_BENCHMARK_FREEZE_ALPHA_2026_RATIONALE.md) governs formal scoring. The historical 19 are distinct from the 19 explicit-Mo records in the later source audit.
+> **ARCHIVE ONLY — NOT AN EXECUTABLE EVALUATION PROTOCOL.** The 1030 primary proposal and its 19-case list were superseded by the owner’s final RRUFF-Cu1011 decision. Current formal scoring, cohort membership and scoring gates are defined only in [the RRUFF-Cu1011 freeze](RRUFF_CU1011_PRIMARY_BENCHMARK_FREEZE_ALPHA_2026_RATIONALE.md) and [`CURRENT_STATE.md`](CURRENT_STATE.md). The historical 19 case IDs are distinct from the 19 explicit-Mo records in the later source audit; neither group enters Cu1011 primary metrics unless an ID is already in the frozen primary set.
 
 **Owner decision date:** 2026-11-04
-**Status:** Evaluation cohort membership selected by source metadata; FINAL TEST FREEZE PENDING label/provenance/wavelength/axis audit. No model predictions have been run.
+**Historical status at proposal time:** This statement is retained for chronology only. It is superseded by the final source-membership freeze of RRUFF-Cu1011; remaining formal scoring gates are listed in the current freeze rationale.
 
 ## Final intended roles
 
