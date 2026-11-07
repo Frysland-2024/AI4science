@@ -217,8 +217,9 @@ def _autocast(device: torch.device, runtime: Mapping[str, Any]):
 
 
 def _finite_scalar_losses(losses: Mapping[str, Any]) -> bool:
-    """Return whether every scalar training loss is finite."""
-    for value in losses.values():
+    """Return whether each scalar objective component is finite."""
+    for name in ("classification", "consistency", "total"):
+        value = losses.get(name)
         if not torch.is_tensor(value) or value.numel() != 1:
             return False
         if not bool(torch.isfinite(value.detach()).all()):
