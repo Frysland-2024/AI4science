@@ -25,7 +25,11 @@ class PRHygieneTests(unittest.TestCase):
         # -z prevents core.quotePath from changing Unicode paths and ensures
         # tabs inside filenames cannot be mistaken for numstat separators.
         names = "A\0资料/新.md\0M\0src/a.py\0A\0docs/with\ttab.md\0"
-        stats = "10\t0\t资料/新.md\00\t3\tsrc/a.py\02\t0\tdocs/with\ttab.md\0"
+        stats = (
+            "10\t0\t资料/新.md\0"
+            "0\t3\tsrc/a.py\0"
+            "2\t0\tdocs/with\ttab.md\0"
+        )
         with patch.object(guard, "git", side_effect=[names, stats]):
             actual = guard.changes_from_git("old", "new")
         self.assertEqual(actual, [
