@@ -1,0 +1,29 @@
+name: Archive and retire legacy research branches (2026-11-09)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'docs/BRANCH_RETIREMENT_20261109.json'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: branch-retirement-20261109
+  cancel-in-progress: false
+
+jobs:
+  retire-branches:
+    if: github.repository == 'Frysland-2024/AI4science'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out current main
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Safely archive commit refs and retire unchanged legacy branches
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python3 scripts/retire_branches_20261109.py
