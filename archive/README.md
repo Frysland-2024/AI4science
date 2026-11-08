@@ -16,6 +16,17 @@ This index preserves scientific provenance without turning the public README int
 
 Parameter inversion, DONUT-inspired PXRD, forward reconstruction and AutoLab are retained as historical research evidence, including negative outcomes. See closed PRs #36, #42, #43, #45 and #46 and their linked reports. Their existence does **not** authorize new experiments.
 
+## Retired GitHub Actions (2026-11-09)
+
+These two historical CI workflows were already removed from the active `main` tree before this inventory. They executed **CPU-only validation**, not production GPU experiments. The owner requested archiving their metadata before deleting the four GitHub Actions **run records** so that old workflow names no longer clutter the Actions sidebar. Their original YAML remains recoverable in Git history; deleting an Actions run removes its hosted log/artifacts and does not change scientific data or the Git commits.
+
+| Historical workflow (Git source) | Purpose | Historical Git revision | Recorded runs (UTC, status) |
+| --- | --- | --- | --- |
+| `PXRD AutoLab P0` ([YAML at revision](https://github.com/Frysland-2024/AI4science/blob/e92066b2dab61b39aa8838674af789ccf4d8c52c/.github/workflows/pxrd-autolab-p0.yml)) | Install `pxrd_autolab[test]`, run failure/report tests and a CPU fixture smoke; **not** an actual research training result | `e92066b2dab61b39aa8838674af789ccf4d8c52c` | `39119567577` (2026-10-18 10:31:06, push, success), `39119583230` (2026-10-18 10:31:20, PR, success) |
+| `Research Task Bridge tests` ([YAML at revision](https://github.com/Frysland-2024/AI4science/blob/0bbd3528baab92a49b0567f55368033b3b348959/.github/workflows/research-task-bridge.yml)) | Python unit tests for historical task bridge, with no GPU or scientific data | `0bbd3528baab92a49b0567f55368033b3b348959` | `39121396653` (2026-10-18 10:59:13, push, success), `39121412176` (2026-10-18 10:59:27, PR, success) |
+
+All four runs were checked as `completed/success` before clean-up. The identifiers above are preserved for provenance even if the corresponding Actions log URLs are removed. **Current CI remains**: XRD tests, Docs Consistency (including PR Hygiene), V11 server pipeline checks, and merged-PR branch cleanup; none of those is to be deleted by this retirement.
+
 ## Retention policy
 
 Keep original results, immutable configs, data provenance, negative results, and relevant commits. Do not move or delete evidence files solely to simplify navigation. Summarize only major direction changes; routine ideas and abandoned brainstorming do not require new permanent documents. Active tasks live in [Issue #61](https://github.com/Frysland-2024/AI4science/issues/61) and [Issue #55](https://github.com/Frysland-2024/AI4science/issues/55).
