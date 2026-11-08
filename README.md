@@ -37,6 +37,7 @@ The project has resumed development toward a larger-scale seven-system classific
 - [Full research results](xrd_robustness/reports/RESULTS.md)
 - [Current project state](docs/CURRENT_STATE.md)
 - [V11/cloud HPO execution plan](docs/PXRD_154975_CLOUD_HPO_EXECUTION_PLAN_20261103.md)
+- [Integrated V11 Linux migration and deterministic prefetch pipeline](server_migration/README.md) — code and offline CI validated; cloud GPU run still pending
 - [Project history and archived directions](docs/PROJECT_HISTORY.md) · [Archive guide](archive/README.md)
 
 Experimental files and local datasets may not all be distributed in this repository; consult the data policy and evidence manifests before attempting reproduction.
