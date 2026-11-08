@@ -2,16 +2,6 @@ name: Docs Consistency
 
 on:
   pull_request:
-    paths:
-      - "README.md"
-      - "AGENTS.md"
-      - "docs/CURRENT_STATE.md"
-      - "docs/README.md"
-      - "docs/START_HERE_FOR_SUPERVISORS.md"
-      - "docs/REVIEWER_GUIDE.md"
-      - "scripts/check_docs_consistency.py"
-      - "tests/test_docs_consistency.py"
-      - ".github/workflows/docs-consistency.yml"
   push:
     branches: [main]
     paths:
@@ -23,6 +13,7 @@ on:
       - "docs/REVIEWER_GUIDE.md"
       - "scripts/check_docs_consistency.py"
       - "tests/test_docs_consistency.py"
+      - "docs/RESEARCH_WORKFLOW.md"
       - ".github/workflows/docs-consistency.yml"
   workflow_dispatch:
 
@@ -42,3 +33,24 @@ jobs:
         run: python -m unittest discover -s tests -p "test_docs_consistency.py" -v
       - name: Check authoritative current context and local links
         run: python scripts/check_docs_consistency.py --root .
+
+  pr-hygiene:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Test anti-sprawl rules
+        run: python -m unittest discover -s tests -p "test_pr_hygiene.py" -v
+      - name: Inspect PR changes and justification
+        env:
+          PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: python scripts/check_pr_hygiene.py --base "$PR_BASE_SHA" --head HEAD
