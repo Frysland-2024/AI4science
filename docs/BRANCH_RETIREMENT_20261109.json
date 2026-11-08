@@ -73,6 +73,7 @@
     "integrate/parent-budget-results-roles-20261018": "1ce212ec01a6caa505d2db55a82c7f87c5ba94f3",
     "issue53-simulator-v11": "6c162635ca34bc170e3b2c3488e9fd38aa995363",
     "public-cleanup-20261002": "5f5a34e18763962dde52722d60764ac8349bbf81",
-    "tools/local-training-monitor": "5802060702f1a7f48e17c790c8573ebf01f8a8a4"
+    "tools/local-training-monitor": "5802060702f1a7f48e17c790c8573ebf01f8a8a4",
+    "maintenance/archive-branches-20261109": "6bb8efb71d177828fb19ed1c2194f225fb996127"
   }
 }
