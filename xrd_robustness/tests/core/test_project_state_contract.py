@@ -156,17 +156,15 @@ def test_current_pxrd_reporting_policy_has_four_tiers() -> None:
 
 
 def test_public_document_links_resolve() -> None:
+    # Keep the public landing page concise. The package README must still link
+    # to the manuscript and raw result JSONs, and RESULTS.md to its sources.
     expected_links = {
         REPOSITORY_ROOT / "README.md": {
             "docs/CURRENT_STATE.md",
             "docs/DATA_AND_REPRODUCIBILITY.md",
             "docs/PROJECT_HISTORY.md",
             "xrd_robustness/README.md",
-            "xrd_robustness/MANUSCRIPT.md",
             "xrd_robustness/reports/RESULTS.md",
-            "xrd_robustness/reports/validation_results.json",
-            "xrd_robustness/reports/simulated_test_results.json",
-            "xrd_robustness/reports/rruff301_fewshot_results.json",
             "CITATION.md",
             "LICENSE",
             "THIRD_PARTY_NOTICES.md",
