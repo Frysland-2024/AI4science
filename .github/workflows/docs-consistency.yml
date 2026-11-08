@@ -33,6 +33,8 @@ jobs:
           python-version: "3.11"
       - name: Check guardrail unit tests
         run: python -m unittest discover -s tests -p "test_docs_consistency.py" -v
+      - name: Test existing PR hygiene parser and safeguards
+        run: python -m unittest discover -s tests -p "test_pr_hygiene.py" -v
       - name: Check authoritative current context and local links
         run: python scripts/check_docs_consistency.py --root .
 
