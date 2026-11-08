@@ -4,7 +4,7 @@
 
 This guide is a navigation layer—not a replacement for the frozen experiment files or result reports. The [README](../README.md) gives the shortest overview; [CURRENT_STATE.md](CURRENT_STATE.md) is authoritative on scientific status.
 
-**Current undergraduate thesis scope (2026-10-26):** write up and defend the completed PXRD seven-crystal-system classification study of same-parent relationship supervision versus matched Dynamic ERM. No new experiments are in scope. Quantitative parameter inversion, including PR #46, is Archived / Inactive; the 2026-10-23 scale-up axes are deferred.
+**Current project status (2026-11-09):** completed same-parent JS versus ERM evidence remains frozen. The active PXRD seven-crystal-system project is preparing V11 full-data training: the 154,975-record structure library is collected, while full training readiness remains under [Issue #61](https://github.com/Frysland-2024/AI4science/issues/61), followed (only after approval) by bounded HPO under [Issue #55](https://github.com/Frysland-2024/AI4science/issues/55). The official prospective real-domain primary benchmark is **RRUFF-Cu1011** (1,011 spectra); scoring has not run. Quantitative parameter inversion and DONUT/AutoLab remain archived.
 
 ## The 60-second explanation
 
@@ -61,7 +61,7 @@ For the exact mathematical implementation and fairness checks, use the [method-d
 | **RRUFF-301** | Experimentally measured, curated real domain; identical **K=1, 2, 5 labels/class** adaptation budgets with locked Test evaluation | Higher observed performance with the same few labels: paired Macro-F1 gains **+4.33 / +4.60 / +5.45 pp**. **Not** an unseen-mineral benchmark; shared mineral identity across support/test is allowed and documented |
 | **CNRS-318** | Second real experimental source; naturally imbalanced and evaluated with **frozen models, zero-shot** | Directional relative advantage: seed-level Macro-F1 **0.1884 → 0.2071** (+1.87 pp; 5/5 seeds). Absolute accuracy is low, lower than the majority-class baseline; source labels were reconstructed from deposited structures, not manually checked spectrum by spectrum; the parent-bootstrap CI on the gain crosses zero |
 
-Do **not** average these three historical result settings into a universal “real-XRD accuracy.” Under the current thesis scope, no new evaluation is planned; summarize these frozen settings separately and retain their limits. The [calibration audit](../xrd_robustness/reports/CALIBRATION_ANALYSIS.md) documents historical ECE, NLL and Brier results, including remaining overconfidence.
+Do **not** average these three historical result settings into a universal “real-XRD accuracy.” These are frozen historical evaluations, separate from the planned V11 and RRUFF-Cu1011 work; do not mix their denominators or claim a new benchmark result. The [calibration audit](../xrd_robustness/reports/CALIBRATION_ANALYSIS.md) documents historical ECE, NLL and Brier results, including remaining overconfidence.
 
 ## What counts as original work here?
 
@@ -79,7 +79,7 @@ The **ResNet implementation is adapted from ML4pXRDs** under the [third-party no
 
 ## Current scope and historical tracks
 
-- **Main study:** [xrd_robustness](../xrd_robustness/) — completed, frozen classification comparisons; current thesis work is reporting and writing.
+- **Active main project:** [xrd_robustness](../xrd_robustness/) — preserve completed, frozen classification comparisons while preparing V11 dataset readiness and a separately authorized new model evaluation. For active status, use [CURRENT_STATE](CURRENT_STATE.md).
 - **Archived / inactive numerical-inversion research:** [xrd_inversion](../xrd_inversion/) contains forward-model / recoverability gates; its formal report records **288/288** clean P2-R successes while other nominal-start and nuisance diagnostics fail. **No neural training** was run for those numerical gates, and this is **not** evidence of a validated real-domain ML inversion model.
 - **PR #46 inversion benchmark:** partial synthetic exploration: 42 models, 8,085 primary rows, q-accuracy gate **0/42**, per-DOF cell-MAE constraint **41/42**. PR43 test parents were already opened; new-architecture stress and real RRUFF validation were not run. It does not establish method superiority.
 - **Completed supplementary study:** [parent-structure efficiency results](../xrd_robustness/reports/PARENT_BUDGET_EFFICIENCY.md) — 40 models across four independent-parent budgets. JS performs better at each matched budget, but no quantitative parent saving is demonstrated; this reuses a previously evaluated Test.
