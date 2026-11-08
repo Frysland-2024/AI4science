@@ -1,0 +1,27 @@
+name: PR Hygiene Gate
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  documentation-and-delivery:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      PR_TITLE: ${{ github.event.pull_request.title }}
+      PR_BODY: ${{ github.event.pull_request.body }}
+      BASE_REF: ${{ github.base_ref }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Verify gate unit tests
+        run: python -m unittest discover -s tests -p "test_pr_hygiene_gate.py" -v
+      - name: Audit PR documentation and delivery
+        run: python scripts/pr_hygiene_gate.py --base "origin/${BASE_REF}" --head HEAD --root .
