@@ -26,6 +26,17 @@
 - **Implementation must be real:** a `feat:`/implementation PR must contain source/config/test changes, not merely plans, Issues, summaries or prose. Do not claim training/benchmark completion without execution evidence. Docs-only changes should have a docs-oriented PR title.
 - **Review, do not autonomously consolidate:** PR Hygiene + Docs Consistency produce deterministic errors/warnings; potential near-duplicates and research semantics need human review. Never automatically delete history or rewrite scientific claims to make the checks green.
 
+## Documentation budget and PR hygiene (ACTIVE)
+
+**Default deliverable: working code, tests, reproducible experimental outputs, and the PR description.** Do not create a new Markdown plan, implementation diary, handoff, task recap, or progress report for routine coding/refactoring. Git commits and the PR description carry ordinary execution history. Do not spawn another supervisor or documentation agent.
+
+1. **One authoritative home:** current scientific/execution status → docs/CURRENT_STATE.md; agent rules → AGENTS.md; public overview → README.md; major scientific turning points → docs/PROJECT_HISTORY.md; protocols, positive/negative results, run logs and machine evidence → appropriate existing reports/evidence folders. Reference these sources, never maintain competing active-state copies.
+2. **Edit before adding.** Each new general-purpose Markdown document needs a substantive "Document rationale:" in the PR description naming the file and explaining why an existing canonical document cannot accommodate it. Three or more general-purpose new Markdown documents in one PR fail the gate; consolidate or split.
+3. **Research evidence remains protected.** Genuine, distinct experiment reports, protocols, negative results and reproducible machine evidence belong in the reports/evidence lane. Describe new research reports under "Evidence rationale:" with the underlying run/protocol/source evidence. Do not disguise ordinary task summaries as experimental reports.
+4. **State and history updates are event-driven.** Change docs/CURRENT_STATE.md only for material scientific/execution changes. Add to docs/PROJECT_HISTORY.md only when the scientific direction, methodology, or interpretation genuinely changes, including the FerroAI → PXRD evolution and instructive failed research branches. Daily iterations stay in commits, Issues, and machine evidence.
+5. **Claim what was delivered.** A plan, Issue, unrun training script or narrative report is not a completed experiment. An "implemented" PR should carry working product code, tests or executed-result artifacts and disclose actual validation. Pure documentation corrections are legitimate when described as documentation-only.
+6. **PR Hygiene Gate:** deterministic PR review of documentation growth, duplicate current-state narration, missing rationale, and unsupported implementation claims. Warnings are prompts for human judgment; the gate cannot establish semantic duplication, scientific truth or permission to destroy project history. Do not evade rules by renaming ordinary notes as experiment reports.
+
 ## Historical full agent policy
 
 The following is retained for provenance and technical safeguards. **Any superseded historical execution instruction is non-operative.** The current section above and newly authorized work take precedence.
