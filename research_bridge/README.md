@@ -1,3 +1,7 @@
+> **RETIRED — 2026-11-09.** This legacy GitHub Issue → local Codex / GPU task bridge is no longer an active AI4science execution path. Do not register or run the worker, supervisor, or their scheduled tasks, and do not approve new `bridge-*` work. This directory is retained as historical implementation evidence only; the V11 research workflow is managed separately under `server_migration/` and the current project issues. The retired GitHub Actions CI configuration was removed in commit `be0fbdd`.
+>
+> **Local offboarding still pending verification:** the registered Windows machine was offline when the retirement was requested. When accessible, inspect and disable/unregister only the named scheduled tasks `AI4science-Codex-Bridge` and `AI4science-Research-Supervisor` (if present), and inspect bridge-owned processes before stopping them. Preserve local journals and outputs; do not terminate unrelated Codex/GPU experiments or remove Desktop Commander. Repository changes alone do **not** stop Windows scheduled tasks.
+
 # Research Task Bridge · Read-only + approved coding (2026-10-18)
 
 **Status:** GitHub Issues → locally authenticated Codex CLI → GitHub review has completed a real read-only test (#15). The coding lane is new and must still pass a separately approved live test. The GPU bridge lane now supports approved presets and automatic result branches; scientific A/B remains blocked until its real gates and reviewed backend exist.
