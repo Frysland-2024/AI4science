@@ -96,6 +96,57 @@ def _log(handle: Any, event: str, **payload: Any) -> None:
     print(encoded, flush=True)
 
 
+class _SmokeSteadyStateTimer:
+    """Measure completed training steps after the two startup steps."""
+
+    def __init__(
+        self,
+        device: torch.device,
+        *,
+        total_steps: int,
+        warmup_steps: int = 2,
+    ) -> None:
+        if total_steps <= warmup_steps:
+            raise ValueError("total_steps must exceed warmup_steps")
+        self.device = device
+        self.total_steps = int(total_steps)
+        self.warmup_steps = int(warmup_steps)
+        self.completed_steps = 0
+        self.started_at: float | None = None
+        self.finished_at: float | None = None
+
+    def step_completed(self, completed_steps: int) -> None:
+        expected = self.completed_steps + 1
+        if completed_steps != expected:
+            raise ValueError(f"expected completed step {expected}, got {completed_steps}")
+        if completed_steps > self.total_steps:
+            raise ValueError("completed step exceeds total_steps")
+        self.completed_steps = completed_steps
+
+        if completed_steps not in {self.warmup_steps, self.total_steps}:
+            return
+        if completed_steps == self.total_steps and self.started_at is None:
+            raise RuntimeError("steady-state timer was not started after warmup")
+        if self.device.type == "cuda":
+            torch.cuda.synchronize(self.device)
+        timestamp = time.monotonic()
+        if completed_steps == self.warmup_steps:
+            self.started_at = timestamp
+        else:
+            self.finished_at = timestamp
+
+    def summary(self) -> dict[str, float | int]:
+        if self.completed_steps != self.total_steps or self.started_at is None or self.finished_at is None:
+            raise RuntimeError("steady-state timing boundaries are incomplete")
+        elapsed = max(self.finished_at - self.started_at, 0.0)
+        measured_steps = self.total_steps - self.warmup_steps
+        return {
+            "steady_state_measured_steps": measured_steps,
+            "steady_state_elapsed_seconds": elapsed,
+            "steady_steps_per_second_excluding_first_two_steps": measured_steps / max(elapsed, 1e-9),
+        }
+
+
 def _read_json(path: Path) -> dict[str, Any]:
     return json.loads(path.read_text(encoding="utf-8"))
 
@@ -469,6 +520,9 @@ def _smoke_training_path(
     window = 2
     losses: list[dict[str, float]] = []
     prefetch_wait = 0.0
+    steady_state_timer = _SmokeSteadyStateTimer(
+        device, total_steps=steps, warmup_steps=window
+    )
     start = time.monotonic()
     if device.type == "cuda":
         torch.cuda.reset_peak_memory_stats(device)
@@ -535,6 +589,7 @@ def _smoke_training_path(
                     "gradient_l1_norm_sum": grad_norm,
                 }
             )
+            steady_state_timer.step_completed(step + 1)
     finally:
         prefetcher.close()
     if device.type == "cuda":
@@ -543,6 +598,7 @@ def _smoke_training_path(
     else:
         peak_memory = None
     elapsed = time.monotonic() - start
+    steady_state_timing = steady_state_timer.summary()
     result = {
         "configuration": config_id,
         "model_class": model.__class__.__name__,
@@ -556,9 +612,7 @@ def _smoke_training_path(
         "parent_occurrences": steps * 16,
         "rendered_views": steps * 16 * 2,
         "elapsed_seconds_including_worker_startup": elapsed,
-        "steady_steps_per_second_excluding_first_two_steps": 8.0 / max(
-            elapsed - (elapsed / steps * 2.0), 1e-9
-        ),
+        **steady_state_timing,
         "all_steps_per_second": steps / max(elapsed, 1e-9),
         "prefetch_wait_seconds": prefetch_wait,
         "peak_cuda_allocated_bytes": peak_memory,
@@ -1089,6 +1143,27 @@ def train_model(
     return {"configuration_id": config_id, "runs": all_results}
 
 
+def _verify_training_result_config_hashes(
+    run_result: Mapping[str, Any],
+    *,
+    config_id: str,
+    expected_simulator_config_sha256: str,
+    expected_protocol_config_sha256: str,
+) -> None:
+    """Reject training records produced under settings other than the freeze."""
+    checks = {
+        "simulator_config_sha256": expected_simulator_config_sha256,
+        "protocol_config_sha256": expected_protocol_config_sha256,
+    }
+    for field, expected in checks.items():
+        actual = run_result.get(field)
+        if not isinstance(actual, str) or actual.upper() != expected.upper():
+            raise ValueError(
+                f"{field} mismatch for {config_id}: "
+                f"training_record={actual!r}, frozen_config={expected!r}"
+            )
+
+
 def freeze_model_selection(
     *,
     data_root: Path,
@@ -1121,11 +1196,11 @@ def freeze_model_selection(
         "historical_frozen_test_role": "already-used-test-parent-split; supplementary post-main evaluation only",
     }
     model_entries = (
-        ("legacy_resnet18gn_v9", "resnet18gn", "historical"),
-        ("resnet18gn_v10", "resnet18gn", "new"),
-        ("cnn11_v10", "cnn11", "new"),
+        ("legacy_resnet18gn_v9", "resnet18gn", "historical", "v9_simulation_config_sha256"),
+        ("resnet18gn_v10", "resnet18gn", "new", "v10_simulation_config_sha256"),
+        ("cnn11_v10", "cnn11", "new", "v10_simulation_config_sha256"),
     )
-    for config_id, model_id, origin in model_entries:
+    for config_id, model_id, origin, simulator_hash_key in model_entries:
         entries: dict[str, Any] = {}
         if origin == "historical":
             available_seeds = TRAINING_SEEDS
@@ -1174,6 +1249,12 @@ def freeze_model_selection(
             if origin == "new":
                 run_result_path = seed_dir / "result.json"
                 run_result = _read_json(run_result_path)
+                _verify_training_result_config_hashes(
+                    run_result,
+                    config_id=config_id,
+                    expected_simulator_config_sha256=config_freeze[simulator_hash_key],
+                    expected_protocol_config_sha256=config_freeze["protocol_config_sha256"],
+                )
                 if run_result.get("status") not in {"completed", "failed_nonfinite"}:
                     raise ValueError(f"new training status is not evaluable for {config_id}/{seed}")
                 if run_result.get("checkpoint_sha256") != entry["checkpoint_sha256"]:

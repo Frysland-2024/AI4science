@@ -328,6 +328,66 @@ def test_smoke_integrator_falls_back_when_numpy_has_no_trapezoid_aliases(monkeyp
     assert pilot._trapezoid(np.asarray([0.0, 1.0, 2.0]), np.asarray([0.0, 1.0, 2.0])) == 2.0
 
 
+def test_smoke_steady_state_timer_measures_steps_after_two_step_warmup(monkeypatch) -> None:
+    pilot = _load_pilot_module()
+    timestamps = iter((100.0, 104.0))
+    monkeypatch.setattr(pilot.time, "monotonic", lambda: next(timestamps))
+    synchronization_points: list[str] = []
+    monkeypatch.setattr(
+        pilot.torch.cuda,
+        "synchronize",
+        lambda device: synchronization_points.append(str(device)),
+    )
+
+    timer = pilot._SmokeSteadyStateTimer(
+        torch.device("cuda:0"), total_steps=10, warmup_steps=2
+    )
+    timer.step_completed(1)
+    assert synchronization_points == []
+    timer.step_completed(2)
+    assert synchronization_points == ["cuda:0"]
+    for completed_steps in range(3, 10):
+        timer.step_completed(completed_steps)
+    assert synchronization_points == ["cuda:0"]
+    timer.step_completed(10)
+    assert synchronization_points == ["cuda:0", "cuda:0"]
+
+    assert timer.summary() == {
+        "steady_state_measured_steps": 8,
+        "steady_state_elapsed_seconds": 4.0,
+        "steady_steps_per_second_excluding_first_two_steps": 2.0,
+    }
+
+
+def test_freeze_rejects_training_results_with_mismatched_config_hashes() -> None:
+    pilot = _load_pilot_module()
+    result = {
+        "simulator_config_sha256": "A" * 64,
+        "protocol_config_sha256": "B" * 64,
+    }
+    pilot._verify_training_result_config_hashes(
+        result,
+        config_id="resnet18gn_v10",
+        expected_simulator_config_sha256="A" * 64,
+        expected_protocol_config_sha256="B" * 64,
+    )
+
+    for field in ("simulator_config_sha256", "protocol_config_sha256"):
+        mismatched = dict(result)
+        mismatched[field] = "C" * 64
+        try:
+            pilot._verify_training_result_config_hashes(
+                mismatched,
+                config_id="resnet18gn_v10",
+                expected_simulator_config_sha256="A" * 64,
+                expected_protocol_config_sha256="B" * 64,
+            )
+        except ValueError as error:
+            assert field in str(error)
+        else:
+            raise AssertionError(f"freeze accepted mismatched {field}")
+
+
 def test_evaluation_rejects_changed_frozen_simulator_or_preprocessing_hashes(
     tmp_path: Path, monkeypatch
 ) -> None:
