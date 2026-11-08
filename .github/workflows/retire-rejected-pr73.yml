@@ -1,0 +1,57 @@
+name: Retire rejected duplicate PR gate (one-shot)
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/retire-rejected-pr73.yml"
+permissions:
+  contents: write
+  pull-requests: read
+jobs:
+  archive-rejected-branch:
+    if: github.repository == 'Frysland-2024/AI4science'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Archive fixed SHA then delete only the rejected unmerged head
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const {owner, repo} = context.repo;
+            const branch = "ci/pr-hygiene-gate-20261109";
+            const expectedSha = "b7eeb7804ddda09ef27dbef30edb40896e4b6908";
+            const tag = "branch-archive/2026-11-09/ci/pr-hygiene-gate-20261109";
+            const {data: pr} = await github.rest.pulls.get({owner, repo, pull_number: 73});
+            if (pr.state !== "closed" || pr.merged_at !== null ||
+                pr.head.ref !== branch || pr.head.sha !== expectedSha) {
+              throw new Error("PR #73 no longer matches the rejected branch snapshot");
+            }
+            const opens = await github.paginate(github.rest.pulls.list, {
+              owner, repo, state: "open", per_page: 100
+            });
+            if (opens.some(p => p.base.ref === branch ||
+                (p.head.repo?.full_name === context.payload.repository.full_name &&
+                 p.head.ref === branch))) {
+              throw new Error("Rejected branch is still used by an open PR");
+            }
+            let ref;
+            try {
+              ref = (await github.rest.git.getRef({owner, repo, ref: "heads/" + branch})).data;
+            } catch (err) {
+              if (err.status !== 404) throw err;
+              core.info("Branch already absent.");
+            }
+            if (!ref) return;
+            if (ref.object.sha !== expectedSha) throw new Error("Branch SHA changed; retain branch");
+            try {
+              const t = (await github.rest.git.getRef({owner, repo, ref: "tags/" + tag})).data;
+              if (t.object.sha !== expectedSha) throw new Error("Archive tag conflict");
+            } catch (err) {
+              if (err.status !== 404) throw err;
+              await github.rest.git.createRef({owner, repo, ref: "refs/tags/" + tag, sha: expectedSha});
+            }
+            const verified = (await github.rest.git.getRef({owner, repo, ref: "tags/" + tag})).data;
+            if (verified.object.sha !== expectedSha) throw new Error("Archive verification failure");
+            const again = (await github.rest.git.getRef({owner, repo, ref: "heads/" + branch})).data;
+            if (again.object.sha !== expectedSha) throw new Error("Head moved since snapshot");
+            await github.rest.git.deleteRef({owner, repo, ref: "heads/" + branch});
+            core.info("Archived and removed rejected PR #73 branch; main remains untouched.");

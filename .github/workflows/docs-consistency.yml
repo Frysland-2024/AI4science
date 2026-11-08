@@ -13,6 +13,8 @@ on:
       - "docs/REVIEWER_GUIDE.md"
       - "scripts/check_docs_consistency.py"
       - "tests/test_docs_consistency.py"
+      - "scripts/check_pr_hygiene.py"
+      - "tests/test_pr_hygiene.py"
       - "docs/RESEARCH_WORKFLOW.md"
       - ".github/workflows/docs-consistency.yml"
   workflow_dispatch:

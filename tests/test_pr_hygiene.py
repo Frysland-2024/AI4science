@@ -19,6 +19,34 @@ class PRHygieneTests(unittest.TestCase):
     def check(self, files, title="docs: review", body="", existing=None):
         return guard.inspect(files, title, body, existing)
 
+    def test_git_numstat_unicode_zero_and_tabs(self):
+        from unittest.mock import patch
+
+        # -z prevents core.quotePath from changing Unicode paths and ensures
+        # tabs inside filenames cannot be mistaken for numstat separators.
+        names = "A\0资料/新.md\0M\0src/a.py\0A\0docs/with\ttab.md\0"
+        stats = "10\t0\t资料/新.md\00\t3\tsrc/a.py\02\t0\tdocs/with\ttab.md\0"
+        with patch.object(guard, "git", side_effect=[names, stats]):
+            actual = guard.changes_from_git("old", "new")
+        self.assertEqual(actual, [
+            change("资料/新.md", 10, "A"),
+            {"path": "src/a.py", "status": "M", "added": 0, "removed": 3},
+            change("docs/with\ttab.md", 2, "A"),
+        ])
+
+    def test_git_numstat_binary_file(self):
+        from unittest.mock import patch
+
+        with patch.object(guard, "git", side_effect=[
+            "M\0reports/weights.npz\0",
+            "-\t-\treports/weights.npz\0",
+        ]):
+            actual = guard.changes_from_git("old", "new")
+        self.assertEqual(actual, [{
+            "path": "reports/weights.npz", "status": "M",
+            "added": 0, "removed": 0,
+        }])
+
     def test_code_only_passes(self):
         errors, _, report = self.check([change("xrd_robustness/src/model.py", 70)],
                                         title="feat: train adapter")

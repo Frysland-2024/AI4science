@@ -36,24 +36,36 @@ def git(*args: str) -> str:
 
 
 def changes_from_git(base: str, head: str) -> list[dict]:
-    """Read non-renamed changes, preserving additions versus modifications."""
-    range_spec = f"{base}...{head}"
-    statuses = {}
-    for line in git("diff", "--no-renames", "--name-status", range_spec).splitlines():
-        if "\t" in line:
-            status, path = line.split("\t", 1)
-            statuses[path] = status[0]
-    changes = []
-    for line in git("diff", "--no-renames", "--numstat", range_spec).splitlines():
-        parts = line.split("\t", 2)
-        if len(parts) != 3:
-            continue
-        added, removed, path = parts
-        changes.append({"path": path, "status": statuses.get(path, "M"),
-                        "added": int(added) if added.isdigit() else 0,
-                        "removed": int(removed) if removed.isdigit() else 0})
-    return changes
+    """Read NUL-delimited Git diff records without mangling Unicode or tabs.
 
+    --no-renames preserves the original add/modify classification used by the
+    documentation budget; binary files' '-' numstat values count as zero.
+    """
+    range_spec = f"{base}...{head}"
+    name_fields = git("diff", "--no-renames", "--name-status", "-z", range_spec).split("\0")
+    if name_fields[-1] != "":
+        raise ValueError("Incomplete NUL-delimited git name-status output")
+    if len(name_fields[:-1]) % 2:
+        raise ValueError("Invalid NUL-delimited git name-status pairs")
+    statuses = {
+        name_fields[index + 1]: name_fields[index][0]
+        for index in range(0, len(name_fields) - 1, 2)
+    }
+
+    changes = []
+    for record in git("diff", "--no-renames", "--numstat", "-z", range_spec).split("\0"):
+        if not record:
+            continue
+        parts = record.split("\t", 2)
+        if len(parts) != 3:
+            raise ValueError(f"Invalid git numstat record: {record!r}")
+        added, removed, path = parts
+        changes.append({
+            "path": path, "status": statuses.get(path, "M"),
+            "added": int(added) if added.isdigit() else 0,
+            "removed": int(removed) if removed.isdigit() else 0,
+        })
+    return changes
 
 def is_narrative(path: str) -> bool:
     if not path.lower().endswith(".md"):
