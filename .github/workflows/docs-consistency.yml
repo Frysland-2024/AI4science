@@ -1,0 +1,44 @@
+name: Docs Consistency
+
+on:
+  pull_request:
+    paths:
+      - "README.md"
+      - "AGENTS.md"
+      - "docs/CURRENT_STATE.md"
+      - "docs/README.md"
+      - "docs/START_HERE_FOR_SUPERVISORS.md"
+      - "docs/REVIEWER_GUIDE.md"
+      - "scripts/check_docs_consistency.py"
+      - "tests/test_docs_consistency.py"
+      - ".github/workflows/docs-consistency.yml"
+  push:
+    branches: [main]
+    paths:
+      - "README.md"
+      - "AGENTS.md"
+      - "docs/CURRENT_STATE.md"
+      - "docs/README.md"
+      - "docs/START_HERE_FOR_SUPERVISORS.md"
+      - "docs/REVIEWER_GUIDE.md"
+      - "scripts/check_docs_consistency.py"
+      - "tests/test_docs_consistency.py"
+      - ".github/workflows/docs-consistency.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Check guardrail unit tests
+        run: python -m unittest discover -s tests -p "test_docs_consistency.py" -v
+      - name: Check authoritative current context and local links
+        run: python scripts/check_docs_consistency.py --root .
