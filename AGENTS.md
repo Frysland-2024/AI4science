@@ -26,6 +26,13 @@
 - **Implementation must be real:** a `feat:`/implementation PR must contain source/config/test changes, not merely plans, Issues, summaries or prose. Do not claim training/benchmark completion without execution evidence. Docs-only changes should have a docs-oriented PR title.
 - **Review, do not autonomously consolidate:** PR Hygiene + Docs Consistency produce deterministic errors/warnings; potential near-duplicates and research semantics need human review. Never automatically delete history or rewrite scientific claims to make the checks green.
 
+## Change delivery policy (ACTIVE)
+
+- **Default for small, explicitly authorized maintenance:** edit `main` directly and verify the narrow change. This covers routine CI/config tidying, documentation corrections, minor tests, housekeeping and other low-risk repairs. Do not create a new branch, PR, handoff issue or narrative document merely to carry out these tasks. Record the change with a concise Git commit.
+- **Reserve PRs for material risk or review:** substantial research/model code changes, new or changed experimental protocols, dataset/split or benchmark contracts, changes to frozen artifacts, security-sensitive changes, or any modification that requires independent review. A PR is not a substitute for scientific evidence or owner approval.
+- **Verification and transparency:** read the latest repository authority before changing anything; make only the requested diff, run applicable automated checks, verify the resulting commit and report any test/permission limits honestly. Do not claim an Action or local task was stopped without checking its actual runtime state.
+- **Preserve history without clutter:** Git commits and existing issues/PRs provide the engineering audit trail. Keep genuine scientific changes and negative findings in existing canonical evidence; do not generate a new PR or Markdown history record for mundane maintenance.
+
 ## Historical full agent policy
 
 The following is retained for provenance and technical safeguards. **Any superseded historical execution instruction is non-operative.** The current section above and newly authorized work take precedence.
