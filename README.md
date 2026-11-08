@@ -28,7 +28,7 @@ The project has resumed development toward a larger-scale seven-system classific
 - **Simulator:** the versioned simulator integration was merged in [PR #58](https://github.com/Frysland-2024/AI4science/pull/58). Integration tests are not evidence of completed large-scale model training.
 - **Data:** a structure-only library of **154,975 MP-ID records / 154,968 parent groups** has been reported as collected and split (108,478 train / 23,245 validation / 23,245 synthetic test parent groups). V11 loader, PeakTable/cache and corpus-level readiness are still pending; see [#61](https://github.com/Frysland-2024/AI4science/issues/61).
 - **Next:** after data readiness and explicit GPU provisioning, bounded model tuning on the full new training parent set; see [#55](https://github.com/Frysland-2024/AI4science/issues/55).
-- **Target evaluation:** zero-shot real RRUFF classification, independent-parent data-efficiency curve, and calibration (ECE). **No final new-data or RRUFF benchmark score is claimed yet.**
+- **Target evaluation:** the frozen **RRUFF-Cu1011** real-domain primary benchmark (1,011 spectra), independent-parent data-efficiency curve, and calibration (ECE). The benchmark protocol and sample membership are documented in [PR #68](https://github.com/Frysland-2024/AI4science/pull/68) and are not yet merged into main. **No final new-data or RRUFF-Cu1011 model score is claimed yet.**
 
 ## Code and reproducibility
 
