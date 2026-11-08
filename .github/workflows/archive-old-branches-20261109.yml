@@ -1,0 +1,98 @@
+name: Archive and clean old AI4science branches
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: "Choose preview first; archive-and-delete moves branch tips into tags before deleting remote branches."
+        type: choice
+        required: true
+        default: preview
+        options:
+          - preview
+          - archive-and-delete
+      confirmation:
+        description: "For archive-and-delete, enter ARCHIVE_OLD_BRANCHES_20261109"
+        required: false
+        default: ""
+permissions:
+  contents: write
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Review and optionally archive old branch tips, then remove exact old refs
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CLEANUP_ACTION: ${{ inputs.action }}
+          CLEANUP_CONFIRMATION: ${{ inputs.confirmation }}
+        run: |
+          python3 - <<'PY'
+          import json, os, subprocess, sys, urllib.request
+          from pathlib import Path
+          
+          snapshot = json.loads(r'''{"archive/consolidated-branch-history-20261109":"417394132c8c7d27a82603b32829bf6684dd8619","integrate/v11-server-pipeline-20261109":"a34f94b5da6581416315922ea35b78bff4864b83","issue55-resnet-js-search":"14873c44ab8e7bfc12744495b99721210b95ac56","maintenance/archive-branches-20261109":"6bb8efb71d177828fb19ed1c2194f225fb996127","public-cleanup-20261002":"5f5a34e18763962dde52722d60764ac8349bbf81","tools/local-training-monitor":"5802060702f1a7f48e17c790c8573ebf01f8a8a4"}''')
+          protected = set(["main","integrate/v11-server-pipeline-20261109","issue55-resnet-js-search","feat/v11-prefetch-train-validation-20261103"])
+          action = os.environ["CLEANUP_ACTION"]
+          confirmation = os.environ.get("CLEANUP_CONFIRMATION", "")
+          if action == "archive-and-delete" and confirmation != "ARCHIVE_OLD_BRANCHES_20261109":
+              sys.exit("Refusing deletion: confirmation phrase mismatch.")
+          token = os.environ["GH_TOKEN"]
+          url = "https://api.github.com/repos/Frysland-2024/AI4science/pulls?state=open&per_page=100"
+          request = urllib.request.Request(url, headers={"Authorization": "Bearer " + token, "Accept": "application/vnd.github+json"})
+          with urllib.request.urlopen(request) as resp:
+              open_prs = json.load(resp)
+          open_heads = {p["head"]["ref"] for p in open_prs if p["head"]["repo"] and p["head"]["repo"]["full_name"] == "Frysland-2024/AI4science"}
+          
+          def cmd(*args,check=True):
+              p = subprocess.run(args, capture_output=True, text=True)
+              if check and p.returncode:
+                  raise RuntimeError(" ".join(args)+": "+p.stderr.strip()[:500])
+              return p
+          
+          def read_refs(prefix):
+              result = cmd("git","ls-remote",prefix,"refs/heads/*")
+              return {line.split("\trefs/heads/",1)[1]:line.split("\t",1)[0] for line in result.stdout.splitlines() if "\trefs/heads/" in line}
+          
+          cmd("git","config","user.name","AI4science branch archivist")
+          cmd("git","config","user.email","41898282+github-actions[bot]@users.noreply.github.com")
+          live = read_refs("origin")
+          success, skipped, errors = [], [], []
+          for branch, sha in sorted(snapshot.items()):
+              if branch in protected or branch in open_heads:
+                  skipped.append((branch,"protected or open PR"))
+                  continue
+              if live.get(branch) != sha:
+                  skipped.append((branch,"deleted or updated since snapshot; not touched"))
+                  continue
+              tag = "archive/branch-cleanup-20261109/" + branch
+              if action == "preview":
+                  print("WOULD ARCHIVE+DELETE",branch,sha, "as",tag)
+                  success.append(branch)
+                  continue
+              try:
+                  cmd("git","fetch","--no-tags","origin","refs/heads/"+branch)
+                  existing = cmd("git","ls-remote","--tags","origin","refs/tags/"+tag).stdout.strip()
+                  if existing:
+                      if existing.split()[0] != sha:
+                          raise RuntimeError("Archive tag exists at different SHA")
+                  else:
+                      cmd("git","tag",tag,sha)
+                      cmd("git","push","origin","refs/tags/"+tag)
+                  confirmed = cmd("git","ls-remote","--tags","origin","refs/tags/"+tag).stdout.strip()
+                  if not confirmed or confirmed.split()[0]!=sha:
+                      raise RuntimeError("Archive tag not verified on origin")
+                  cmd("git","push","--force-with-lease=refs/heads/"+branch+":"+sha,"origin",":refs/heads/"+branch)
+                  print("ARCHIVED AND DELETED",branch,"at",sha)
+                  success.append(branch)
+              except Exception as e:
+                  errors.append((branch,str(e)))
+                  print("KEPT",branch,str(e))
+          summary = f"# Branch cleanup ({action})\\n\\nSnapshot: {len(snapshot)} branches; eligible: {len(success)}; skipped: {len(skipped)}; errors: {len(errors)}.\\n\\n"
+          summary += "Protected or changed: "+"; ".join(f"{b} ({why})" for b,why in skipped)+"\\n\\n"
+          summary += "Errors: "+"; ".join(f"{b} ({why})" for b,why in errors)+"\\n"
+          with open(os.environ["GITHUB_STEP_SUMMARY"],"a",encoding="utf-8") as f: f.write(summary.replace("\\n","\n"))
+          if errors: sys.exit("Some branches were kept safely due to errors; inspect the step summary.")
+          PY
