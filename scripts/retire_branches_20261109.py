@@ -48,7 +48,9 @@ def get_ref(kind, name):
 def main():
     m = json.loads(MANIFEST.read_text(encoding="utf-8"))
     keep = set(m["keep"])
-    assert {"main", "integrate/v11-server-pipeline-20261109", "issue55-resnet-js-search"} <= keep
+    # The owner has explicitly retired the two formerly active dev branches.
+    # Only the default branch remains protected by this one-shot manifest.
+    assert "main" in keep
     to_retire = m["retire"]
     assert len(to_retire) == len(set(to_retire))
     assert not (keep & set(to_retire))
