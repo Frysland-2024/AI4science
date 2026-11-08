@@ -16,6 +16,16 @@
 4. Update `docs/CURRENT_STATE.md` only for **material** scientific or execution changes. Add a concise decision entry to `docs/PROJECT_HISTORY.md` only for genuine direction changes, not routine brainstorming.
 5. Keep public README focused on present method, verified results and reproducibility. Preserve detailed historical evidence in reports, archived documents and Git history.
 
+## Code-first PR and documentation budget (ACTIVE)
+
+- **Default deliverable:** changed executable code/configuration, scoped tests, and a concise PR description. Routine work does **not** create a Markdown plan, status recap, technical memoir, agent handoff or experiment diary.
+- **Reuse canonical homes:** current scientific/execution truth → `docs/CURRENT_STATE.md`; agent instructions → `AGENTS.md`; public overview → root `README.md`; **genuine** research pivots, rejected hypotheses or material interpretation corrections → `docs/PROJECT_HISTORY.md`; reproducible scientific evidence → existing experiment reports, manifests and logs. Do not repeat one status across several files; link to the authority.
+- **History is not a task log.** Preserve meaningful FerroAI → PXRD → V11 reasoning, failed experiments and uncertainty, but leave routine engineering chronology in commits and PRs. Do not append a new `PROJECT_HISTORY.md` entry for each attempt, fix or conversation. A history edit requires a brief `Research decision:` explanation in the PR body.
+- **New narrative docs are exceptional:** first consider an existing file; a PR adding a new narrative Markdown needs `Docs rationale:` explaining why existing homes are insufficient. Multiple new documents or unusually large prose additions require `Docs exception:` justification. These strings are PR-review contracts, not a request to produce another report.
+- **Never hide evidence to meet a budget:** scientific result JSON/CSV, frozen protocols, final experiment reports and archived negative evidence remain available and may be added when necessary; do not rewrite or delete them to satisfy document-count thresholds.
+- **Implementation must be real:** a `feat:`/implementation PR must contain source/config/test changes, not merely plans, Issues, summaries or prose. Do not claim training/benchmark completion without execution evidence. Docs-only changes should have a docs-oriented PR title.
+- **Review, do not autonomously consolidate:** PR Hygiene + Docs Consistency produce deterministic errors/warnings; potential near-duplicates and research semantics need human review. Never automatically delete history or rewrite scientific claims to make the checks green.
+
 ## Historical full agent policy
 
 The following is retained for provenance and technical safeguards. **Any superseded historical execution instruction is non-operative.** The current section above and newly authorized work take precedence.
