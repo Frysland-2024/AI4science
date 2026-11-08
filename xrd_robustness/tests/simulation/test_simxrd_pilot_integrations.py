@@ -291,6 +291,12 @@ def test_nonfinite_losses_and_gradients_are_detected_before_optimizer_update() -
     assert pilot._optimizer_step_if_finite(bad_loss, model, optimizer) == "nonfinite_loss"
     assert torch.equal(model.weight.detach(), initial)
 
+    bad_logits = dict(result)
+    bad_logits["logits_first"] = result["logits_first"].clone()
+    bad_logits["logits_first"][0, 0] = float("inf")
+    assert pilot._optimizer_step_if_finite(bad_logits, model, optimizer) == "nonfinite_logits"
+    assert torch.equal(model.weight.detach(), initial)
+
     hook = model.weight.register_hook(
         lambda gradient: torch.full_like(gradient, float("inf"))
     )

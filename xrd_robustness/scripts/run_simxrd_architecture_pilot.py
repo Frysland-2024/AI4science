@@ -227,6 +227,17 @@ def _finite_scalar_losses(losses: Mapping[str, Any]) -> bool:
     return True
 
 
+def _finite_logits(losses: Mapping[str, Any]) -> bool:
+    """Validate full logits tensors without imposing scalar-loss shape rules."""
+    for name in ("logits_first", "logits_second"):
+        value = losses.get(name)
+        if not torch.is_tensor(value) or value.ndim < 1:
+            return False
+        if not bool(torch.isfinite(value.detach()).all()):
+            return False
+    return True
+
+
 def _finite_gradients(model: torch.nn.Module) -> bool:
     return all(
         bool(torch.isfinite(parameter.grad).all())
@@ -241,6 +252,8 @@ def _optimizer_step_if_finite(
     """Apply one update only when losses and gradients are finite."""
     if not _finite_scalar_losses(losses):
         return "nonfinite_loss"
+    if not _finite_logits(losses):
+        return "nonfinite_logits"
     losses["total"].backward()
     if not _finite_gradients(model):
         optimizer.zero_grad(set_to_none=True)
@@ -930,7 +943,7 @@ def train_model(
                             target=target,
                         )
                     failure_reason = _optimizer_step_if_finite(result, model, optimizer)
-                    if failure_reason == "nonfinite_loss":
+                    if failure_reason in {"nonfinite_loss", "nonfinite_logits"}:
                         failed_step = step + 1
                         _log(
                             log_handle,
