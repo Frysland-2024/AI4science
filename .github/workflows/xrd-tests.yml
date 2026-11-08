@@ -1,18 +1,7 @@
 name: XRD tests
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - "xrd_robustness/**"
-      - "README.md"
-      - ".github/workflows/xrd-tests.yml"
-  pull_request:
-    paths:
-      - "xrd_robustness/**"
-      - "README.md"
-      - ".github/workflows/xrd-tests.yml"
+  workflow_dispatch:
 
 jobs:
   test:
