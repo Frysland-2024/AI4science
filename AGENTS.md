@@ -1,19 +1,26 @@
-# AGENTS.md — AI4science Research Agent Contract
+# AGENTS.md — Research Agent Operating Rules
 
-**Effective date:** 2026-10-02  
-**Scope:** AI assistants, coding agents, research agents, and collaborators working in this repository.
+## Current research direction (2026-11-09)
 
-This file defines how an agent should obtain project truth, change the codebase, and preserve scientific provenance. It is an operating contract, not a scientific-results document.
+**Active:** PXRD seven-crystal-system classification with same-parent Dynamic JS consistency. Simulator integration PR #58 is merged. The 154,975-record structure library is collected but not yet fully integrated into V11 training. **First complete [Issue #61](https://github.com/Frysland-2024/AI4science/issues/61) (schema/PeakTable/integrity/readiness); only then consider [Issue #55](https://github.com/Frysland-2024/AI4science/issues/55) (bounded GPU tuning on 108,478 training parents).** GPU rental/training requires explicit authorization.
 
-## 2026-11-03 ACTIVE RESTART — SIMULATOR IMPLEMENTATION FIRST (supersedes October 26 no-new-work rule)
+**Do not:** recollect the existing structure library, restart owner-cancelled legacy 9,842-parent Optuna, optimize against held-out synthetic test or real RRUFF, reopen archived parameter inversion/DONUT/AutoLab tasks, or treat planning as executed experiments.
 
-The project owner explicitly restarted the PXRD seven-crystal-system undergraduate thesis. **The 2026-10-26 instruction to write up only, and the old blanket prohibition on new simulator work, are historical, not the current execution rule.** Treat the dated October 26 sections below as retained evidence boundaries, not blockers for this newly authorized research. [Current state](docs/CURRENT_STATE.md) and [simulator candidates](docs/PXRD_SIMULATOR_CANDIDATES_2026-11-03.md) give the active plan.
+**Historical:** the October 26 write-up-only freeze and the November 3 simulator-first phase are superseded as execution instructions. Preserve their evidence and rationale in Git history, not as current commands.
 
-**Immediate executable goal:** deliver a **working, versioned, physically credible online PXRD simulator** by reading and selectively reusing mature upstream implementations (SimXRD/Pysimxrd, GSAS-II and ML4pXRDs; PhaseSmith if useful). Source investigation is a means, **not the final deliverable**. Submit functional code, configuration, tests, a runnable CIF→two seeded views smoke command and verification output, with minimal usage instructions. Keep frozen experiments and their defaults unchanged. It is now permissible to change `xrd_robustness/` on a new feature branch to build the versioned simulator, provided historical code paths and evidence are not overwritten.
+## Minimal operating protocol
 
-**Hard ordering:** source study → selective simulator implementation → simulator validation → only then a JS-only ResNet-18-GN versus CNN11 architecture pilot. **No architecture comparison or 100k-CIF/GPU training in this phase.** Do not use the RRUFF-231 locked test for simulator tuning. Preserve labels and parent identity; do not introduce arbitrary lattice deformation that breaks seven-system labels. Cite code origins and honor upstream licenses. Never call source code inspection, a created Issue, or a proposed PR a completed simulator.
+1. Read `docs/CURRENT_STATE.md`, current issues #61/#55, relevant code, and machine-readable evidence; check for newer conflicting execution decisions.
+2. Execute only the specifically authorized, smallest necessary change. Protect frozen results, dataset splits, checkpoints and local worktrees.
+3. Verify tests/logs before claiming completion. Distinguish code merged, data collected, data ready, model trained and benchmark validated.
+4. Update `docs/CURRENT_STATE.md` only for **material** scientific or execution changes. Add a concise decision entry to `docs/PROJECT_HISTORY.md` only for genuine direction changes, not routine brainstorming.
+5. Keep public README focused on present method, verified results and reproducibility. Preserve detailed historical evidence in reports, archived documents and Git history.
 
-**Execution note:** the existing `research_bridge` coding lane still protects `xrd_robustness/` and does not auto-authorize this task; it must not be bypassed merely because the broader research direction is active. Use a separately authorized Codex coding session/PR or explicitly reviewed bridge policy changes.
+## Historical full agent policy
+
+The following is retained for provenance and technical safeguards. **Any superseded historical execution instruction is non-operative.** The current section above and newly authorized work take precedence.
+
+---
 
 ## 1. Source-of-truth hierarchy
 
