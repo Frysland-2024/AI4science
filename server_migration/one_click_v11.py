@@ -993,8 +993,11 @@ def trial_run(name,params,seed,max_steps,study_dir,train_records,val_records,pea
             else:
                 x1=x1.to(device);x2=x2.to(device);targets=targets.to(device)
             for group in optimizer.param_groups:
+                # Same 100-parent-epoch cosine horizon in HPO and final:
+                # a 50-epoch pilot must not decay to floor twice as fast.
+                fixed_lr_horizon=100*steps_per_parent_epoch
                 group["lr"]=resolved["learning_rate"]*(
-                    .05+.95*.5*(1+math.cos(math.pi*step/max_steps))
+                    .05+.95*.5*(1+math.cos(math.pi*step/fixed_lr_horizon))
                 )
             use_amp=torch.cuda.is_bf16_supported()
             loss,ce,js,norm=paired_optimizer_step(
@@ -1032,7 +1035,8 @@ def trial_run(name,params,seed,max_steps,study_dir,train_records,val_records,pea
                     "microbatch_size":argv.microbatch_size,
                     "last_parent_batch_count":int(targets.shape[0]),
                 })
-                if score>best:
+                # Never rank a 10/20/30/40-epoch transient as an HPO winner.
+                if step>=min_training_steps and score>best:
                     best=score;best_step=step
                     atomically_save_torch(root/"best.pt",{
                         "model":model.state_dict(),"step":step,
@@ -1075,7 +1079,7 @@ def validate_completed_trial_artifacts(
     if not contract_path.is_file() or not result_path.is_file():
         raise RuntimeError(f"Completed trial artifacts missing: {name}")
     cfg=json.loads(contract_path.read_text(encoding="utf-8"))
-    resolve_v11_trial_params(params)  # Reject legacy four-dimensional studies.
+    resolve_v11_trial_params(params)  # Reject legacy Optuna dimensions.
     row=json.loads(result_path.read_text(encoding="utf-8"))
     expected={
         "params":params,"seed":seed,"max_steps":max_steps,
@@ -1127,11 +1131,21 @@ def validate_final_recommendation(study_dir,args,contract_file,contract_obj,*,pr
     if not contract_file.is_file() or not rec_path.is_file():
         raise RuntimeError("Final training blocked: HPO+confirmation artifacts are missing")
     contract_sha=digest(contract_file)
+    gate_file=Path(study_dir)/"gradient_gate.json"
+    if not gate_file.is_file():
+        raise RuntimeError("Final training blocked: TRAIN-only gradient gate missing")
+    gate_sha=digest(gate_file)
+    gate=json.loads(gate_file.read_text(encoding="utf-8"))
+    if (gate.get("status")!="TRAIN_ONLY_GRADIENT_GATE_PASS"
+        or gate.get("contract_sha256")!=canonical_digest(contract_obj)):
+        raise RuntimeError("Final training blocked: gradient prior contract invalid")
     if json.loads(contract_file.read_text(encoding="utf-8"))!=contract_obj:
         raise RuntimeError("Final training contract differs from original HPO")
     recommendation=json.loads(rec_path.read_text(encoding="utf-8"))
     if (recommendation.get("status")!="hpo_and_confirmation_completed"
         or recommendation.get("contract_sha256")!=contract_sha
+        or recommendation.get("gradient_gate_sha256")!=gate_sha
+        or recommendation.get("lambda_window")!=gate.get("lambda_window")
         or recommendation.get("hpo_trial_count")!=args.trials):
         raise RuntimeError("Final training blocked: recommendation contract/status/count mismatch")
     panel_index=Path(study_dir)/"validation_panels_v11"/"panel_index.json"
@@ -1158,7 +1172,9 @@ def validate_final_recommendation(study_dir,args,contract_file,contract_obj,*,pr
     if len(trials)!=args.trials or any(t.state!=TrialState.COMPLETE for t in trials):
         raise RuntimeError("Final training blocked: every requested Optuna trial must be COMPLETE")
     for trial in trials:
-        resolve_v11_trial_params(dict(trial.params))
+        assert_gradient_lambda(dict(trial.params),gate)
+    if getattr(study,"user_attrs",{}).get("gradient_gate_sha256")!=gate_sha:
+        raise RuntimeError("Final training blocked: Optuna gradient gate changed")
     ordered=sorted(trials,key=lambda trial:(-float(trial.value),trial.number))
     best=ordered[0]
     params=dict(best.params)
@@ -1436,7 +1452,7 @@ def run_pipeline(args):
                     key=lambda t:(-float(t.value),t.number))
     if not complete:raise RuntimeError("No valid completed HPO trial")
     best_trial=complete[0]
-    resolve_v11_trial_params(dict(best_trial.params))
+    assert_gradient_lambda(dict(best_trial.params),gate)
     confirmation=[]
     for seed in c["confirmation_seeds"]:
         if time.monotonic()-start>args.max_gpu_hours*3600:
