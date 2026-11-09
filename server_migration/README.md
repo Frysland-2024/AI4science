@@ -1,6 +1,10 @@
 # AI4science 2026-11-03 — Linux GPU migration + bounded one-command V11 Optuna
 
-CURRENT STATE: 154,975 MP-ID structures split 108,483 train / 23,246 Validation / 23,246 Test, with complete ideal PeakTables. ResNet-18-GN A0_R1 won the previous V10/14,060 single-seed architecture study, but it is NOT a V11/154,975 checkpoint.
+> **CURRENT EXECUTION STATUS (2026-11-09): BLOCKED — do not launch.** [Issue #61](https://github.com/Frysland-2024/AI4science/issues/61) records the latest preflight blockers: the current-main schema adapter and Train+Validation manifest-builder path are not yet accepted, the documented PeakTable `--records-path` interface is missing, and the private source/cache package has not been rebound and hash-verified against current `main`. Earlier laptop cache/CUDA checks and passing PR #70 CI are historical or scoped evidence, **not** target Linux GPU acceptance. GPU smoke is **BLOCKED / NOT_RUN** pending separate authorization; [Issue #55](https://github.com/Frysland-2024/AI4science/issues/55) HPO remains blocked by #61. **Do not execute the `--run` / HPO / final-training launch commands below as current instructions.**
+
+> **Historical implementation reference below:** commands and local receipts describe the 2026-11-03 migration proposal, not current execution approval. Verify readiness against Issue #61 before any server action.
+
+2026-11-03 HISTORICAL LOCAL STATE: 154,975 MP-ID structures split 108,483 train / 23,246 Validation / 23,246 Test, with complete ideal PeakTables. ResNet-18-GN A0_R1 won the previous V10/14,060 single-seed architecture study, but it is NOT a V11/154,975 checkpoint.
 
 ## Private files
 - source_snapshot.zip: V11 source/config/tests + ResNet code + new one_click_v11.py.
