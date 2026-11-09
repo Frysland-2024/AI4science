@@ -1,13 +1,14 @@
 # Native Windows V11 HPO: keep scientific training in one_click_v11.py.
 # Usage: powershell -ExecutionPolicy Bypass -File server_migration/start_windows.ps1 -Mode plan|smoke|benchmark|hpo|export
-# Auto CPU tuning only for verified Ryzen 9 7945HX + >=30GiB RAM.
-# Unknown CPUs (including cuifa until measured) retain conservative defaults.
+# Conservative Windows default: laptop-verified 12 workers / 4 queues /
+# 64 cached PeakTables, independent of RAM size and CPU model.
+# Optional aggressive16 is unverified on cuifa.
 param(
     [ValidateSet("plan", "smoke", "benchmark", "hpo", "export")]
     [string]$Mode = "plan",
     [string]$Python = "python",
     [string]$Output = "",
-    [ValidateSet("auto", "conservative", "ryzen7945hx")]
+    [ValidateSet("auto", "conservative", "ryzen7945hx", "performance12", "aggressive16")]
     [string]$CpuProfile = "auto",
     [Parameter(ValueFromRemainingArguments = $true)]
     [string[]]$RunnerArgs
@@ -49,23 +50,14 @@ try {
     # contract, so a resume on the same host uses identical options.
     $resolvedProfile = $CpuProfile
     if ($CpuProfile -eq "auto") {
+        # No machine-size / CPU-model branching. Keep the same tested
+        # 12-worker default on both Windows hosts.
         $resolvedProfile = "conservative"
-        try {
-            $cpuName = [string](Get-CimInstance Win32_Processor |
-                Select-Object -First 1 -ExpandProperty Name)
-            $ramBytes = [double](Get-CimInstance Win32_ComputerSystem |
-                Select-Object -First 1 -ExpandProperty TotalPhysicalMemory)
-            if ($cpuName -match "7945HX" -and $ramBytes -ge 30GB) {
-                $resolvedProfile = "ryzen7945hx"
-            }
-        }
-        catch {
-            Write-Warning "CPU auto-detection unavailable; using conservative resources."
-        }
     }
-    if ($resolvedProfile -eq "ryzen7945hx") {
-        # 2026-11-09 full-pipeline Windows comparison: 12 workers ~= 168
-        # parent/s; 4 workers ~= 82 parent/s, equal paired-spectrum SHA.
+    if ($resolvedProfile -in @("conservative", "ryzen7945hx", "performance12")) {
+        # Actual 7945HX Windows GPU+CPU benchmark: 12 workers ~= 168
+        # parent/s vs 4 workers ~= 82; paired-spectrum SHA unchanged.
+        # performance12 on cuifa is PROVISIONAL, not an observed speed.
         $runtimeDefaults = [ordered]@{
             "--prefetch-workers" = "12"
             "--prefetch-batches" = "4"
@@ -73,11 +65,13 @@ try {
             "--native-threads" = "1"
         }
     }
-    else {
+    elseif ($resolvedProfile -eq "aggressive16") {
+        # Higher CPU concurrency is explicitly opt-in. Limit worker PeakTable
+        # caches on 32GiB RAM; cannot claim this is faster until tested.
         $runtimeDefaults = [ordered]@{
-            "--prefetch-workers" = "2"
-            "--prefetch-batches" = "2"
-            "--worker-peak-cache" = "256"
+            "--prefetch-workers" = "16"
+            "--prefetch-batches" = "4"
+            "--worker-peak-cache" = "32"
             "--native-threads" = "1"
         }
     }
@@ -91,19 +85,29 @@ try {
     }
     $selectedWorkerIndex = [Array]::IndexOf([string[]]$RunnerArgs, "--prefetch-workers")
     $selectedWorkers = [string]$RunnerArgs[$selectedWorkerIndex + 1]
-    if ($resolvedProfile -eq "ryzen7945hx") {
-        # 12-worker full six-profile Validation reached 5.8GiB free on this
-        # 32GiB host. Warn rather than silently changing a frozen HPO contract.
+    if ($resolvedProfile -in @("conservative", "ryzen7945hx", "performance12", "aggressive16")) {
+        # Laptop's 12-worker + full Validation run bottomed at 5.8GiB free.
+        # A 16-worker Cuifa configuration is untested; fail closed for
+        # HPO if it starts with insufficient RAM. NEVER change settings
+        # silently after Optuna state has frozen a study contract.
         try {
             $freeKiB = [double](Get-CimInstance Win32_OperatingSystem |
                 Select-Object -First 1 -ExpandProperty FreePhysicalMemory)
             $availableGiB = [math]::Round(($freeKiB * 1KB) / 1GB, 1)
-            if ($availableGiB -lt 14) {
-                Write-Warning "CPU12 profile: only $availableGiB GiB RAM currently free; close background apps before long HPO, or choose -CpuProfile conservative BEFORE creating its study."
+            $thresholdGiB = if ($resolvedProfile -eq "aggressive16") { 18 } else { 14 }
+            if ($availableGiB -lt $thresholdGiB) {
+                $message = "CPU $resolvedProfile profile: only $availableGiB GiB RAM available (recommended >=$thresholdGiB GiB at launch). Close background apps before long training; current resource profile will not be changed."
+                if ($Mode -eq "hpo" -and $resolvedProfile -eq "aggressive16") {
+                    throw $message
+                }
+                Write-Warning $message
             }
         }
         catch {
-            Write-Warning "Unable to read available RAM; monitor memory during CPU12 HPO."
+            # Safety guard must propagate, not be swallowed as a benign probe
+            # failure; first-party HPO commands should not ignore low RAM.
+            if ($Mode -eq "hpo" -and $resolvedProfile -eq "aggressive16") { throw }
+            Write-Warning "Unable to verify RAM headroom for $resolvedProfile; monitor memory during the smoke benchmark."
         }
     }
     Write-Output "V11 CPU profile=$resolvedProfile; selected workers=$selectedWorkers; resources are study-bound."

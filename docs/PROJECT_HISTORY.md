@@ -35,6 +35,10 @@ For current scientific claims, use [CURRENT_STATE.md](CURRENT_STATE.md) and the 
 
 ---
 
+## 2026-11-09 · Cuifa CPU provisional sync, not assumed identical hardware
+
+The user reported that the Windows RTX 4070 Ti SUPER / 32GB desktop used for the intended HPO has a CPU stronger than the local Ryzen 9 7945HX, without supplying the exact model. The previous unrecognized-host 2-worker default would underuse that machine. Therefore, the user's tested **12-worker / 4-queue / 64-cache** profile is the **conservative Windows default** on all Windows hosts, including Cuifa's 32GB desktop, regardless of CPU model or RAM size. The previous 2-worker low-memory fallback was deliberately removed at the owner's request; free-RAM warnings remain. A **16-worker resource profile** is deliberately opt-in for a bounded Train-only benchmark and full GPU/Validation headroom check, not automatically assumed faster or approved for HPO. This decision carries forward the same-parent paired-physics determinism and preserves the existing scientific experiment plans.
+
 ## 2026-11-09 · V11 CPU bottleneck measured and Windows prefetch tuned
 
 Once the complete six-profile Validation and a bounded real RTX 4060 training run had passed, the limiting engineering problem was **CPU-bound online TCH pseudo-Voigt spectrum generation**, not GPU memory. Rather than replacing the physics model, the project compared deterministic multiprocessing worker counts, bounded prefetch and reflection caches. With identical paired-spectrum SHA fingerprints, short CPU+GPU A0/JS comparisons improved from approximately **82 parents/s at 4 workers/2 queues** to **168 parents/s at 12 workers/4 queues** on the user's Ryzen 9 7945HX laptop. A follow-up 12-worker **512-step plus complete six-profile Validation** acceptance passed in 129.88s for the train+scoring phase (versus ~183.17s in the earlier 4-worker acceptance), with cached-panel and checkpoint hashes intact; the lowest observed free system memory was 5.80GiB, so further concurrency increases were not justified. This is a compute pipeline gain, not a trained-model accuracy result.

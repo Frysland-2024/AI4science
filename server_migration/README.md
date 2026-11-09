@@ -238,23 +238,36 @@ Paired-view hashes matched exactly across every CPU comparison; no Test or
 RRUFF data were used. Rates can vary with thermals, background load and
 the parent mix; full multi-hour durability is not established by these sweeps.
 
-`start_windows.ps1 -CpuProfile auto` now applies **12 workers / 4 queued
-batches / cache 64 / native_threads 1**, ONLY when the local CPU reports
-7945HX and at least 30 GiB installed physical RAM. Unknown CPUs (including
-cuifa's Windows desktop until its CPU is known) still default to **2 / 2 /
-256 / 1**. Explicit `-CpuProfile conservative` selects the fallback;
-`-CpuProfile ryzen7945hx` forces the measured resource profile. Any
+`start_windows.ps1 -CpuProfile auto` now selects the **conservative
+12-worker / 4 queued batches / 64 cached PeakTables per worker /
+native_threads=1** profile on **all Windows hosts**, including cuifa's desktop, without CPU-model,
+core-count or installed-RAM branches. `-CpuProfile conservative` explicitly
+forces this laptop-validated setting; `-CpuProfile ryzen7945hx` and
+`-CpuProfile performance12` remain equivalent aliases. There is no
+automatic low-memory worker fallback; current free RAM is still checked
+and warned about at launch.
+
+For cuifa's stronger but as-yet unmeasured CPU, the **optional,
+experimental** `-CpuProfile aggressive16` enables **16 workers /
+4 queued batches / cache 32 / native_threads=1**. It is not assumed faster
+or approved for formal HPO until cuifa-host CPU+GPU benchmark, complete
+six-profile Validation and restart/memory checks. On 16 workers the
+HPO launcher refuses startup with <18 GiB free RAM; the conservative
+12-worker profile warns below 14 GiB free RAM. Any
 individual `-RunnerArgs` resource flags take precedence without resetting
 the other flags. These exact settings are frozen on HPO start/resume; Linux
 final may override only already-authorized runtime CPU-resource settings.
 
 To profile a *different* Windows host without GPU training or Optuna:
 ```powershell
-& .\.venvs\xrd_test\Scripts\python.exe server_migration/benchmark_windows_v11.py --cpu-only --worker-cases 2:2,4:2,8:4,12:4 --steps 80 --batch 16 --cache 64 --output _local/v11_cpu_host_profile.json
+& .\.venvs\xrd_test\Scripts\python.exe server_migration/benchmark_windows_v11.py --cpu-only --worker-cases 4:2,8:4,12:4,16:4 --steps 80 --batch 16 --cache 32 --output _local/v11_cpu_host_profile.json
 powershell -ExecutionPolicy Bypass -File server_migration/start_windows.ps1 -Mode plan -Python .\.venvs\xrd_test\Scripts\python.exe
 ```
 The real `plan` confirms the resolved profile and effective experiment
 contract; neither command authorizes or starts HPO. If moving to cuifa,
-benchmark **on cuifa itself**, then choose a fixed resource profile before
-starting its HPO study. Recreate the private source snapshot after changing
+run this CPU-only benchmark **on cuifa itself**, then compare 12 vs
+16 workers under GPU load and select a fixed resource profile before
+starting her HPO study. The user reports that cuifa's CPU is faster than
+the local Ryzen 9 7945HX, but a faster CPU alone does not guarantee
+16-worker superiority with the same 32GiB RAM. Recreate the private source snapshot after changing
 the launcher or benchmark script; old kit hashes cannot be reused.
