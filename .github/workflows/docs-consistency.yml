@@ -63,13 +63,7 @@ jobs:
 
   # Closed, unmerged PRs are not covered by GitHub's native delete_branch_on_merge.
   closed-unmerged-branch-retirement:
-    if: >-
-      (github.event_name == 'pull_request' &&
-       github.event.action == 'closed' &&
-       github.event.pull_request.merged == false) ||
-      (github.event_name == 'push' &&
-       github.ref == 'refs/heads/main' &&
-       github.event.head_commit.message == 'chore: install safe closed-unmerged PR cleanup')
+    if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == false
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions:
@@ -81,8 +75,7 @@ jobs:
         with:
           script: |
             const { owner, repo } = context.repo;
-            // The one-time installation push also processes already-closed PR #74.
-            const number = context.eventName === "push" ? 74 : context.payload.pull_request.number;
+            const number = context.payload.pull_request.number;
             const pr = (await github.rest.pulls.get({ owner, repo, pull_number: number })).data;
             const repository = (await github.rest.repos.get({ owner, repo })).data;
             if (pr.state !== "closed" || pr.merged_at !== null) {
