@@ -4,7 +4,9 @@
 
 **状态日期：** 2026-11-09
 
-**2026-11-09 V11 迁移代码合并：** [PR #70](https://github.com/Frysland-2024/AI4science/pull/70) 已择取 #66/#67 中最新的 `server_migration/` 代码、确定性多进程预取、完整 Validation 面板和 Linux 预检/部署脚本合并至 `main`；源码编译、shell 语法、offline 数据完整性/预取测试的 PR CI [#42501805467](https://github.com/Frysland-2024/AI4science/actions/runs/42501805467) 已通过。#66/#67 已关闭。**这仅证明代码集成及 CI 检查，不代表完整私有数据包或租赁云 GPU 环境通过验收，也没有启动 HPO 或产生 RRUFF-Cu1011 正式评分。** #61 继续负责运行就绪审查，#55 负责其后新数据全量调参，均不得自动执行。
+**2026-11-09 V11 迁移代码合并：** [PR #70](https://github.com/Frysland-2024/AI4science/pull/70) 已择取 #66/#67 中最新的 `server_migration/` 代码、确定性多进程预取、完整 Validation 面板和 Linux 预检/部署脚本合并至 `main`；源码编译、shell 语法、offline 数据完整性/预取测试的 PR CI [#42501805467](https://github.com/Frysland-2024/AI4science/actions/runs/42501805467) 已通过。#66/#67 已关闭。**这仅证明代码集成及 CI 检查，不代表完整私有数据包或租赁云 GPU 环境通过验收，也没有启动 HPO 或产生 RRUFF-Cu1011 正式评分。** 按 2026-11-09 负责人指示，#61 仅收尾本机 package/schema/manifest/CPU preflight；尚未通过的目标 Linux GPU smoke、吞吐/显存/资源和 checkpoint/resume/RNG 验收移至 #55 的 Stage 0，作为 HPO 前置门槛。云端 GPU、HPO 与正式训练仍需单独预算和授权。
+
+**Issue #61 本机验收（2026-11-09）：** 当前 `main` 缺失的压缩 JSONL schema adapter 与 Train/Validation manifest builder 已补回到本机验收分支；`--records-path` 单结构 CPU precompute smoke 通过，builder 用现有只读完整缓存重建 131,729-row 训练/验证 manifest，SHA256 与冻结值 `7f169d…333dd` 完全一致且未纳入 Test。最新私有包通过 source snapshot/ZIP hash 验证及 `start_server.sh --plan`；ResNet-A0 CE+same-parent JS 一批 CPU smoke 通过，2-worker paired-view parity bitwise 一致。逐文件 PeakTable SHA256 本机审计通过。此结果仅关闭本机代码/包/数据/CPU 部分，不声称目标 Linux GPU 可运行；完整收据见 [Issue #61 local preflight](ISSUE61_LOCAL_PREFLIGHT_20261109.md)。
 
 **V11交付与训练边界（2026-11-05）：** PR #58 已合并至 `main`（merge commit `940942d5a9c30307295eb7b7a68c08e47687f955`），V11 模拟器、CIF→paired-view 路径、测试和验收记录已集成。验收记录报告 50 项测试通过、七个 CIF 保持晶系标签；合并提交的 main `XRD tests` CI run [#41965621220](https://github.com/Frysland-2024/AI4science/actions/runs/41965621220) 通过。这些是模拟器工程验证，不是模型训练证据：没有运行 V11 模型训练、HPO 或最终 RRUFF 评测，也没有证明相对 V9/V10 的分类性能提升。154,975-parent 全量 HPO 仍须先完成 structure-schema adapter、corpus-scale PeakTable 构建、审计与 GPU 吞吐准备（见 Issue #55）。
 

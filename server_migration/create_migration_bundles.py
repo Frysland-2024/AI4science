@@ -65,7 +65,7 @@ def main():
     for name in ("README.md","AGENTS.md","LICENSE","THIRD_PARTY_NOTICES.md","CITATION.md"):
         p=ROOT/name
         if p.is_file():files[p]=p.relative_to(ROOT).as_posix()
-    for name in ("CURRENT_STATE.md","PROJECT_HISTORY.md","SIMULATOR_V11_READINESS_20261103.md","STRUCTURE_LIBRARY_154975_TRAINING_ADAPTER.md","PXRD_CNN11_V10_NUMERICAL_DECISION_20261103.md"):
+    for name in ("CURRENT_STATE.md","PROJECT_HISTORY.md","SIMULATOR_V11_READINESS_20261103.md","STRUCTURE_LIBRARY_154975_TRAINING_ADAPTER.md","PXRD_CNN11_V10_NUMERICAL_DECISION_20261103.md","ISSUE61_LOCAL_PREFLIGHT_20261109.md"):
         p=ROOT/"docs"/name
         if p.is_file():files[p]=p.relative_to(ROOT).as_posix()
     for p in sorted((ROOT/"_local"/"resnet_joint_20261103").glob("*.py")):

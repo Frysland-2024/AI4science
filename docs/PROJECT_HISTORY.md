@@ -534,3 +534,19 @@ The review identified a mismatch between the V11 unit-area renderer and the lega
 The PR head `b43e28d` passed 134 non-data-bound CI tests. Its separate validation record also reports seven-system label preservation, fixed-seed replay, V9 regression, broadening trends, and integrated peak-area checks. **No model training was run as part of the V11 validation reported in PR #58, and the PR reports no V11 HPO result.** Later model work follows the current-state readiness gates.
 
 **Integration update (2026-11-05):** PR #58 merged into `main` as commit `940942d5a9c30307295eb7b7a68c08e47687f955`; Stage 1 simulator implementation and integration are complete. The merge commit's main `XRD tests` CI run [#41965621220](https://github.com/Frysland-2024/AI4science/actions/runs/41965621220) passed. The validation record's 50 focused tests and seven-system/paired-view acceptance are simulator engineering evidence only. No V11 model training, HPO, final RRUFF evaluation, or classification improvement is established. Subsequent full-scale HPO remains gated by the structure-schema adapter, corpus-scale PeakTable build, data audits and GPU-throughput proof.
+## 2026-11-09: Issue #61 local acceptance completed; GPU environment gate moved to #55
+
+**Date:** 2026-11-09
+
+**Question / previous assumption:** Issue #61 combined local package/schema/data acceptance with target Linux GPU readiness, and Issue #55 remained `BLOCKED BY #61`.
+
+**New evidence or reasoning:** On the clean checkout based on current `main` `3df75f9`, current `precompute_peak_tables.py` lacked the documented `--records-path` and source-schema adapter, while the migration package referenced a missing merged-library manifest builder. The private source shards and complete PeakTable cache already existed locally; a fresh adapter smoke, full runner-manifest reconstruction, versioned source package, plan-only extraction, and bounded CPU model/prefetch smokes could all be run on the laptop without GPU or training.
+
+**Decision:** Keep Issue #61 limited to local package/schema/manifest/CPU readiness. Transfer target Linux GPU smoke, throughput/memory/disk and full-Validation availability checks, checkpoint/resume/RNG parity to Stage 0 of Issue #55, before any HPO.
+
+**What changes now:** Restore the adapter and manifest builder on branch `codex/issue61-preflight-20261109`; bind a fresh source snapshot to that code and private-package hashes; record the laptop plan/CPU acceptance in `ISSUE61_LOCAL_PREFLIGHT_20261109.md`; make #55 own the remaining target-GPU acceptance gate.
+
+**What does NOT change:** No cloud instance, CUDA smoke, HPO, formal training, held-out Test scoring, or RRUFF-Cu1011 scoring was started or authorized. A laptop CPU pass is not Linux GPU acceptance. The V10 A0_R1 checkpoint in the private bundle remains reference-only, not a V11 trained model.
+
+**Status:** ACTIVE — local acceptance evidence complete on the issue branch; cloud/GPU acceptance is pending in #55 Stage 0.
+**Relevant files / commits:** `xrd_robustness/scripts/precompute_peak_tables.py`; `xrd_robustness/scripts/build_merged_library_training_manifest.py`; `server_migration/payload_contract.py`; `server_migration/README.md`; `docs/ISSUE61_LOCAL_PREFLIGHT_20261109.md`; base commit `3df75f9`.
