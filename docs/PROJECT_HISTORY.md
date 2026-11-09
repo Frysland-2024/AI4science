@@ -4,6 +4,29 @@ This file is the **public, concise history** of how the PXRD project evolved. It
 
 For current scientific claims, use [CURRENT_STATE.md](CURRENT_STATE.md) and the tracked result reports. History explains *how the project changed*; it does not override the current state.
 
+## 核对后的完整时间线（2026-11-09 阶段节点）
+
+**这张表是项目发展的主时间线**：记录不同科研阶段实际解决了什么问题，不把 Git 代码版本号当作严格顺序的独立论文，也不覆盖已有结果和失败记录。
+
+| 阶段 | 实际发生的事情 | 科研性质 |
+|---|---|---|
+| **FerroAI** | 从材料性质预测起步，逐渐建立对数据、模型和证据链的认识 | 前置研究经历 |
+| **PXRD 早期—V8** | 物理扰动模拟、PAMPT、Residual、结构化模拟等多次尝试与纠偏 | 研究问题与方法探索 |
+| **V9（2026 年 7–8 月）** | 转向 ResNet-18-GN，确定 JS λ=60，完成多种子 ERM–JS 对照及模拟 Test | **完整主研究成果** |
+| **早期 V10（7 月）** | 尝试测量信息监督的 Residual 解耦，得到负结果并归档 | 与 V9 后期交叠的探索支线 |
+| **2026 年 8–10 月** | RRUFF、CNRS、校准、数据效率补充实验；另探索参数反演，随后归档 | 已完成研究的补充与新方向尝试 |
+| **11 月的 V10** | 更新模拟环境，探索 CNN11、ResNet 的 Stride/Kernel，以及 LR/Scheduler | **下一阶段的初步架构与训练优化** |
+| **V11（当前）** | V11 物理模拟器、15.5 万结构数据库、完整训练和 RRUFF-Cu1011 竞争性测试规划 | 新阶段的基础设施基本就绪，正式性能实验待运行 |
+
+**主要阶段分界：** 回顾性地把 **V1–V9 视作已经完成的一轮 PXRD 科研**（研究问题→方法形成→V9 的冻结对照与 Test 验证）；**11 月的 V10 只是下一阶段的初步调参/架构筛选**；**V11 则负责更大数据集上的后续训练与真实域性能检验**。V9 不是被 V10/V11 “补做完”的项目。
+
+**历史精确性：** V1–V5 暂无逐版本完整可核验证据，因此“V1–V9”是科研阶段概括，不是九次独立验证；**7 月的 V10 Residual 分支**确实早于 V9 最终收束，与 V9 工作交叠，且和 **11 月的 V10 架构比较**不是同一试验。8–10 月对 V9 的真实域、可靠性和样本效率研究可视为第一轮成果的后续完善，不等于重新开启其超参数选择。11 月的 V10 单种子 A0_R1 优胜（Validation OOD Macro-F1 0.731830）来自 **LR=2e-4 与 Cosine 捆绑改变**；不能据此宣称 LR 单变量最优，更不能当成 V11 或 RRUFF 成绩。
+
+**可追溯依据：** [2026-08-23 历史全档](https://github.com/Frysland-2024/AI4science/blob/d70d84da6535a0a04e7cd5fba3faa794c64656cd/00_project_context/PROJECT_HISTORY.md)（FerroAI→V9、7 月 V10 负结果）、[V9 科研结果](../xrd_robustness/reports/RESULTS.md)、[JS 权重选择证据](PXRD_METHOD_DETAIL_EVIDENCE_CLOSURE.md)、[11 月 V10→V11 迁移说明](PXRD_SERVER_MIGRATION_V11_ONECLICK_20261103.md)。以下保留各节点的详细经历与负结果。**本表只整理历史，不修改研究合同、训练参数、Test 或 RRUFF 冻结规则。**
+
+---
+
+
 > **新增沟通记录（整理于 2026-09-20）：** [与学长沟通纪要：XRD 项目当前进展与后续计划](PROJECT_HISTORY_NOTE_2026-09-20_SENIOR_MEETING_SUMMARY.md)。依据用户提供的会议摘要截图，记录当前方法与验证进展、定量反演及初步晶体结构预测方向、云算力与协作安排；会议日期未注明。
 
 > **2026-10-22 导师汇报复盘（2026-10-23 整理）：** [方法设计、真实域验证与物理/应用可信度的视角错位](PROJECT_HISTORY_NOTE_2026-10-22_SUPERVISOR_PRESENTATION_REFLECTION.md)。系统记录当晚交流与后续对话纠偏：温度/成分扰动的物理边界、cubic 示例被误认为只做单一晶系、RRUFF 的 K-shot 微调被误听为总训练样本数、CNRS 无目标域适配的 zero-shot 相对增益与低绝对性能的不同评价、原方法/原模型比较及 bias、数据可获得性、扩容和发表文献跑分对标，以及实验室铁电陶瓷 R/T 相真实谱检验建议。保留负责人因方法设计贡献未得到充分理解而受挫及「横向方法研究 vs 纵向材料任务」的认识变化。此为历史反思，不更改冻结实验，也不宣称导师建议已获批或完成。
@@ -11,19 +34,6 @@ For current scientific claims, use [CURRENT_STATE.md](CURRENT_STATE.md) and the 
 > **2026-10-23 暂定研究兴趣认识（PROVISIONAL）：** 在复盘导师汇报、准备与东京大学小关泰之老师交流时，项目负责人提出一个新的自我观察：与以材料合成、制备及湿实验为核心的工作相比，自己可能更适合围绕**科学测量系统与测量数据**开展研究，尤其是从物理测量过程、模拟与正向模型、信号处理、监督设计、逆问题到真实域验证的研究链条。过去从 FerroAI 到 PXRD 的选择与反复尝试，为这一兴趣判断提供了经历依据；但当前的已完成研究主要是**基于现有 PXRD 数据/模拟的 ML 方法与评估**，不能据此声称已经具备激光/光学仪器搭建、测控硬件或完整测量系统开发经验。**有待进一步分辨的三个方向是：仪器与光路硬件、测量方法与采集策略、计算测量/信号分析。** 这是一种探索中的自我定位，不是项目主线或毕业课题已经正式变更，也不意味着排斥所有物理实验。未来选择研究组需确认具体课题是否主要涉及光学搭建、信号与算法，还是材料/生物样品制备。
 
 ---
-
-## 2026-11-09 · Research-stage boundary: V1–V9 completed study, V10 exploratory successor, V11 scale-up
-
-**Project-lead clarification (milestone definition, not a new experimental result):** Separate **research stages** from **code version numbers**. The stages overlap chronologically and must not be retroactively renumbered into a continuous, clean V1→V11 scientific sequence.
-
-1. **First completed PXRD research cycle — broadly V1–V9; V9/V9-T is the frozen scientific outcome.** Beginning with the experience and methodology developed through FerroAI, the project moved into physically meaningful measurement perturbations, dynamic PXRD simulation, and seven-crystal-system prediction. Its exploratory iterations included PAMPT, proposed measurement-factor/residual disentanglement, paired-view generation, and the eventual diagnosis that the PAMPT backbone did not adequately learn the task. The final stable main experiment used ML4pXRDs-derived ResNet-18-GN, **two-view Dynamic ERM versus same-parent Dynamic JS**, a Train-only JS gradient-scale gate followed by frozen-Validation selection of **`lambda_js=60`**, and matched five-seed comparisons on **14,060 source structures (9,842 Train / 2,109 Validation / 2,109 simulated Test)**. The simulated Test, RRUFF-301 few-shot and CNRS-318 zero-shot evidence, and subsequent calibration/parent-data-efficiency investigations constitute a completed, independently describable research contribution, with their published limitations and archival dates retained. Its substantive claim is the value of **simulator-retained parent identity as relationship supervision**, not inventing JS divergence or claiming universal real-domain superiority. The historical file gives particularly rich accounts of V6–V9; **individual V1–V5 implementations and dates are not exhaustively verified**, so “V1–V9” here means the retrospective *first research cycle*, not nine fully audited independent completed experiments.
-2. **Exploratory successor / V10 — NOT part of the V9 confirmation.** **The name V10 was reused across different exploratory tasks** and does not denote a single uninterrupted experiment. In **July 2026**, the early V10 **measurement-supervised Residual** branch tested whether simulator-known measurement labels would help separate measurement information from crystal-system content; its negative leakage/disentanglement result was explicitly archived, not tuned into a positive result. Later quantitative PXRD parameter inversion and forward/refinement-assistance proposals were separate exploratory branches and were also archived; do not fold them into the completed V9 classification claim. On **2026-11-03**, V10 was used for a **new preliminary performance/architecture screening**: upgraded pseudo-Voigt/Caglioti simulated measurement conditions, competing ResNet/CNN11 ideas, focused ResNet A0/A1/A2 stride/kernel variants, and two *bundled* training recipes **R0 = AdamW LR 1e-4 + constant** versus **R1 = AdamW LR 2e-4 + cosine**. The six-cell, single-seed **V10 Validation** winner was **A0_R1, OOD Macro-F1 0.731830**, not a V11 or real-RRUFF result; LR and scheduler were changed together and cannot be causally separated by that comparison. This is **an initial tuning/screening stage**, not a new complete generalization study or a retuning of the frozen V9 results.
-3. **Current V11 — scaling and real-domain benchmarking, formal results NOT_RUN.** V11 builds on the frozen V9 scientific method and lessons from V10, while changing the simulator, training database, engineering contract and evaluation objective. The **154,975 input records / 154,968 unique parents** now yield **108,478 Train / 23,245 Validation / 23,245 simulated Test parents** and a source-frozen **RRUFF-Cu1011** primary real-domain benchmark. New full-scale parameter selection, matched convergence/training, held-out Test and zero-shot real-domain scoring remain uncompleted; preliminary V10 hyperparameter winners are only starting points. The aim is better real-domain absolute seven-system performance **with scientific evidence**, not to rewrite the finished V9 paper's hypothesis, settings, or results.
-
-**Narrative boundary for future applications and project summaries:** `FerroAI → completed PXRD V1–V9 research cycle (with V9 validation/Test/real-domain evidence) → distinct July V10 residual negative branch and later inversion detours → Nov V10 preliminary architecture/training tuning → V11 larger-data, simulator and competitive real-domain follow-up`. When dates matter, explain the overlapping V9/V10 labels instead of asserting that one entire version finished before the next began. Keep failures, test-lock boundaries, and uncertain/incomplete provenance visible.
-
-**Evidence:** [full preserved August-23 chronological archive](https://github.com/Frysland-2024/AI4science/blob/d70d84da6535a0a04e7cd5fba3faa794c64656cd/00_project_context/PROJECT_HISTORY.md) (especially July 25 early V10 negative result, July 27–28 backbone/JS gates, Aug 3 Test confirmation); [frozen original-study results](../xrd_robustness/reports/RESULTS.md); [main-study methods and JS choice audit](PXRD_METHOD_DETAIL_EVIDENCE_CLOSURE.md); the later V10 [A0_R1 audit and V11 handoff](PXRD_SERVER_MIGRATION_V11_ONECLICK_20261103.md); current [Issue #55](https://github.com/Frysland-2024/AI4science/issues/55). This paragraph records a chronology clarification only; **no hyperparameters, experiments, dataset membership, Test claims or approvals change**.
-
 
 ## 2026-11-09 · V11 CPU bottleneck measured and Windows prefetch tuned
 
