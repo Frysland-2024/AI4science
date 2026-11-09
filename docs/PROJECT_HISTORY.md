@@ -534,3 +534,20 @@ The review identified a mismatch between the V11 unit-area renderer and the lega
 The PR head `b43e28d` passed 134 non-data-bound CI tests. Its separate validation record also reports seven-system label preservation, fixed-seed replay, V9 regression, broadening trends, and integrated peak-area checks. **No model training was run as part of the V11 validation reported in PR #58, and the PR reports no V11 HPO result.** Later model work follows the current-state readiness gates.
 
 **Integration update (2026-11-05):** PR #58 merged into `main` as commit `940942d5a9c30307295eb7b7a68c08e47687f955`; Stage 1 simulator implementation and integration are complete. The merge commit's main `XRD tests` CI run [#41965621220](https://github.com/Frysland-2024/AI4science/actions/runs/41965621220) passed. The validation record's 50 focused tests and seven-system/paired-view acceptance are simulator engineering evidence only. No V11 model training, HPO, final RRUFF evaluation, or classification improvement is established. Subsequent full-scale HPO remains gated by the structure-schema adapter, corpus-scale PeakTable build, data audits and GPU-throughput proof.
+
+## 2026-11-09: Issue #61 local preflight completed; target-GPU gate assigned to #55 Stage 0
+
+**Date:** 2026-11-09
+
+**Question / previous assumption:** Issue #61 combined local package/schema/manifest/CPU acceptance with target Linux GPU readiness and blocked Issue #55 until both were complete.
+
+**New evidence or reasoning:** Latest `main` commit `158c989` contains the merged-library `--records-path` schema adapter, parent-safe Train+Validation manifest builder with per-PeakTable SHA checks, and regression tests. XRD CI [#42554396816](https://github.com/Frysland-2024/AI4science/actions/runs/42554396816) and V11 migration CI [#42554691047](https://github.com/Frysland-2024/AI4science/actions/runs/42554691047) passed. On the laptop, a fresh private kit using payload contract `v11-prefetch-validation-20261109.3` passed source/archive verification and `start_server.sh --plan`; the full 154,975-record shard/cache readiness audit, frozen 131,729-row Train+Validation manifest reconstruction, one-record CPU PeakTable adapter smoke, one-batch ResNet-A0 CE+JS CPU smoke, and two-worker bitwise prefetch parity smoke passed. The full evidence and immutable input/output hashes are in `docs/ISSUE61_LOCAL_PREFLIGHT_20261109.md`.
+
+**Decision:** Limit Issue #61 to local package/schema/manifest/CPU acceptance. Move target Linux/CUDA smoke, throughput/resource measurement, complete Validation access through the GPU path, and checkpoint/resume/RNG checks to Stage 0 of Issue #55, before HPO. Stage 0 and any later GPU/HPO work still require separate budget and owner authorization.
+
+**What changes now:** Record the local preflight against current-main code and payload contract; close Issue #61 after its local acceptance receipt is published. Issue #55 owns the outstanding target-GPU gate as Stage 0.
+
+**What does NOT change:** No cloud instance or CUDA run was started. No throughput claim, HPO, formal training, Test/RRUFF inference, or checkpoint was produced. Local CPU checks do not establish Linux GPU readiness, and passing Stage 0 will not automatically authorize HPO.
+
+**Status:** CLOSED for Issue #61 local acceptance; Stage 0 remains ACTIVE / NOT_RUN in Issue #55.
+**Relevant files / commits:** `docs/ISSUE61_LOCAL_PREFLIGHT_20261109.md`; `server_migration/README.md`; source code snapshot `158c989`; CI runs `42554396816`, `42554691047`.
