@@ -14,6 +14,7 @@ PAYLOAD_REQUIRED_FILES = (
     "AI4science/server_migration/payload_contract.py",
     "AI4science/server_migration/tests/test_full_validation_selection.py",
     "AI4science/server_migration/tests/test_v11_prefetch_pipeline.py",
+    "AI4science/server_migration/tests/test_launcher_contract.py",
     "AI4science/server_migration/tests/test_source_snapshot.py",
     "AI4science/xrd_robustness/scripts/precompute_peak_tables.py",
     "AI4science/xrd_robustness/scripts/build_merged_library_training_manifest.py",
