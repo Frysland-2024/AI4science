@@ -663,6 +663,12 @@ def legacy_validation_panel_identity_compatible(saved, current):
          "v11-focused-science-cpu-20261109.9"),
         ("v11-parent-epoch-microbatch-20261109.7",
          "v11-focused-science-cpu-20261109.9"),
+        ("v11-parent-epoch-microbatch-20261109.7",
+         "v11-gradient-gated-optuna-20261110.10"),
+        ("v11-parent-epoch-budget-20261109.8",
+         "v11-gradient-gated-optuna-20261110.10"),
+        ("v11-focused-science-cpu-20261109.9",
+         "v11-gradient-gated-optuna-20261110.10"),
     }
     if (old,new) not in allowed:
         return False
