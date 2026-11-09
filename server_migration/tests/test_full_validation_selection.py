@@ -40,7 +40,7 @@ class ValidationSelection(unittest.TestCase):
             previous,{**current,"payload_contract_version":"v11-future"}))
 
     def test_reject_legacy_four_dim_hpo_schema(self):
-        with self.assertRaisesRegex(ValueError,"lambda_js and architecture"):
+        with self.assertRaisesRegex(ValueError,"lambda_js, middle_stride, kernel_size"):
             mod.resolve_v11_trial_params({
                 "learning_rate":2e-4,"lambda_js":60.0,
                 "weight_decay":1e-4,"scheduler":"cosine_5pct_floor"})
@@ -51,12 +51,12 @@ class ValidationSelection(unittest.TestCase):
                          {"learning_rate":2e-4,"weight_decay":1e-4,
                           "scheduler":"cosine_5pct_floor"})
         for architecture,(strides,kernel) in mod.V11_ARCHITECTURES.items():
-            chosen={"lambda_js":60.0,"architecture":architecture}
+            chosen=mod.v11_architecture_trial_params(architecture,60.0)
             resolved=mod.resolve_v11_trial_params(chosen)
             self.assertEqual(resolved["learning_rate"],2e-4)
             self.assertEqual(resolved["weight_decay"],1e-4)
             self.assertEqual(resolved["architecture"],architecture)
-            self.assertEqual(len(chosen),2)
+            self.assertEqual(len(chosen),3)
             from xrd_robustness.models.ml4pxrd_resnet1d import (
                 ML4PXRDResNet1DConfig, ML4PXRDResNet1D)
             config=mod.v11_model_config(chosen,ML4PXRDResNet1DConfig)
@@ -69,13 +69,13 @@ class ValidationSelection(unittest.TestCase):
                              model.final_channels*model.final_length)
         baseline=ML4PXRDResNet1D(ML4PXRDResNet1DConfig(model_id="18"))
         tuned=ML4PXRDResNet1D(mod.v11_model_config(
-            {"lambda_js":60.0,"architecture":"A0"},ML4PXRDResNet1DConfig))
+            mod.v11_architecture_trial_params("A0",60.0),ML4PXRDResNet1DConfig))
         self.assertEqual(baseline.parameter_count,13008839)
         self.assertEqual(baseline.parameter_count,tuned.parameter_count)
-        for bad in ({"lambda_js":60.0,"architecture":"Z"},
-                    {"lambda_js":60.0,"architecture":"A0","learning_rate":1e-4},
-                    {"lambda_js":float("nan"),"architecture":"A0"},
-                    {"lambda_js":200.0,"architecture":"A0"}):
+        for bad in ({"lambda_js":60.0,"middle_stride":3,"kernel_size":9},
+                    {"lambda_js":60.0,"middle_stride":4,"kernel_size":9,"learning_rate":1e-4},
+                    {"lambda_js":float("nan"),"middle_stride":4,"kernel_size":9},
+                    {"lambda_js":200.0,"middle_stride":4,"kernel_size":9}):
             with self.assertRaises(ValueError):
                 mod.resolve_v11_trial_params(bad)
 
@@ -88,6 +88,34 @@ class ValidationSelection(unittest.TestCase):
         self.assertTrue(mod.legacy_validation_panel_identity_compatible(intermediate,new))
         self.assertFalse(mod.legacy_validation_panel_identity_compatible(
             {**old,"render_source_sha256":{"physics":"changed"}},new))
+
+    def test_gradient_window_uses_v9_train_only_influence_bands(self):
+        window=mod.derive_train_only_js_range(0.029235)
+        self.assertAlmostEqual(window["low"],3.0,places=5)
+        self.assertAlmostEqual(window["high"],2.0/0.029235,places=5)
+        self.assertAlmostEqual(window["anchor"],60.0,places=5)
+        for bad in (0.0,float("nan"),1e-12,1e5):
+            with self.assertRaises(ValueError):
+                mod.derive_train_only_js_range(bad)
+
+    def test_three_knobs_and_gradient_bound_2x2_architecture_contrasts(self):
+        gate={"lambda_window":{"low":5.0,"high":80.0}}
+        good=mod.v11_architecture_trial_params("A2",60.0)
+        self.assertTrue(mod.assert_gradient_lambda(good,gate))
+        for bad in (4.0,81.0):
+            with self.assertRaisesRegex(RuntimeError,"outside frozen"):
+                mod.assert_gradient_lambda({**good,"lambda_js":bad},gate)
+        controls=[types.SimpleNamespace(
+            params=mod.v11_architecture_trial_params(arch,60.0),
+            state="COMPLETE",value=score) for arch,score in
+            [("A0",0.70),("A1",0.72),("A2",0.71),("A3",0.69)]]
+        evidence=mod.architecture_peak_preservation_screen(
+            controls,expected_lambda=60.0)
+        self.assertAlmostEqual(evidence["stride_2_vs_4_at_kernel9"],0.02)
+        self.assertAlmostEqual(evidence["kernel_5_vs_9_at_stride2"],-0.01)
+        with self.assertRaisesRegex(RuntimeError,"not comparable"):
+            mod.architecture_peak_preservation_screen(
+                [*controls[:3],controls[0]],expected_lambda=60.0)
 
     def fixture(self,root):
         rows=[];recs=[]
@@ -179,7 +207,7 @@ class ValidationSelection(unittest.TestCase):
             name="hpo_000"
             root=study/"trials"/name
             root.mkdir(parents=True)
-            params={"lambda_js":60.0,"architecture":"A0"}
+            params={"lambda_js":60.0,"middle_stride":4,"kernel_size":9}
             args=SimpleNamespace(batch_size=16,eval_every=100)
             contract_sha="c"*64
             panel_sha="a"*64
@@ -284,7 +312,7 @@ class ValidationSelection(unittest.TestCase):
             study=Path(tmp)
             args=SimpleNamespace(batch_size=16,eval_every=100,trials=2,
                                  hpo_steps=200,confirm_steps=300)
-            params={"lambda_js":60.0,"architecture":"A0"}
+            params={"lambda_js":60.0,"middle_stride":4,"kernel_size":9}
             contract_obj={"hpo_seed":123,"confirmation_seeds":[201,202]}
             contract_file=study/"contract.json"
             contract_file.write_text(json.dumps(contract_obj),encoding="utf-8")
