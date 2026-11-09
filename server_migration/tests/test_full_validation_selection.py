@@ -16,6 +16,22 @@ spec=importlib.util.spec_from_file_location("v11full",script)
 mod=importlib.util.module_from_spec(spec)
 spec.loader.exec_module(mod)
 
+def fixture_science_contract(**extra):
+    base={
+        "schema":"v11_154975_gradient_informed_three_parameter_v3",
+        "payload_contract_version":"v11-gradient-gated-optuna-20261110.10",
+        "implementation_sha256":{"runner":"fixture"},
+        "source_manifest_sha256":"fixture",
+        "simulator_config_sha256":"fixture",
+        "training_rows":108483,"training_parents":108478,
+        "architecture_presets":{},"fixed_optimizer":{"learning_rate":2e-4},
+        "batch_size_parents":16,"sampling_mode":"epoch_shuffle",
+        "training_precision":"bf16_if_supported_else_fp32",
+        "gradient_gate_contract":{"warmup_min_parent_epochs":5},
+    }
+    return {**base,**extra}
+
+
 class ValidationSelection(unittest.TestCase):
     def test_budget_only_payload_cache_transition_is_fail_closed(self):
         previous={
@@ -119,9 +135,14 @@ class ValidationSelection(unittest.TestCase):
 
     def test_train_only_gate_requires_real_learned_state_and_all_train_parents(self):
         parents=[types.SimpleNamespace(material_id=f"train_{i:06}") for i in range(108478)]
-        contract={"schema":"fixture"}
+        contract=fixture_science_contract()
         gate={"status":"TRAIN_ONLY_GRADIENT_GATE_PASS",
-              "contract_sha256":mod.canonical_digest(contract),
+              "science_identity_sha256":mod.gradient_science_identity(contract),
+              "training_only":True,"validation_access":False,
+              "batches_scanned":6780,"learned_state_stable":True,
+              "median_batch_trunk_cosine":-0.2,"q10_batch_trunk_cosine":-0.5,
+              "q90_batch_trunk_cosine":0.4,"full_train_trunk_cosine":-0.1,
+              "full_train_whole_model_cosine":0.15,
               "training_parent_ids_sha256":hashlib.sha256(
                   "\n".join(p.material_id for p in parents).encode()).hexdigest(),
               "parents_scanned":len(parents),"warmup_parent_epochs":5,
@@ -138,7 +159,7 @@ class ValidationSelection(unittest.TestCase):
                 {**gate,"learned_state_accuracy":0.1},contract,parents)
         with self.assertRaisesRegex(RuntimeError,"contract"):
             mod.validate_train_only_gradient_gate(
-                gate,{"schema":"different"},parents)
+                gate,fixture_science_contract(schema="different"),parents)
 
     def test_optuna_multivariate_tpe_proposes_three_bounded_knobs(self):
         try:
@@ -363,12 +384,12 @@ class ValidationSelection(unittest.TestCase):
             args=SimpleNamespace(batch_size=16,eval_every=100,trials=2,
                                  hpo_steps=200,confirm_steps=300)
             params={"lambda_js":60.0,"middle_stride":4,"kernel_size":9}
-            contract_obj={"hpo_seed":123,"confirmation_seeds":[201,202]}
+            contract_obj=fixture_science_contract(hpo_seed=123,confirmation_seeds=[201,202])
             contract_file=study/"contract.json"
             contract_file.write_text(json.dumps(contract_obj),encoding="utf-8")
             gate_file=study/"gradient_gate.json"
             gradient_gate={"status":"TRAIN_ONLY_GRADIENT_GATE_PASS",
-                           "contract_sha256":mod.canonical_digest(contract_obj),
+                           "science_identity_sha256":mod.gradient_science_identity(contract_obj),
                            "lambda_window":mod.derive_train_only_js_range(0.029235)}
             gate_file.write_text(json.dumps(gradient_gate),encoding="utf-8")
             gate_sha=mod.digest(gate_file)
