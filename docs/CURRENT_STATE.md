@@ -4,6 +4,9 @@
 
 **状态日期：** 2026-11-09
 
+**2026-11-09 V11 weight decay initially fixed (OWNER DECISION; PLAN ONLY):** Fix **AdamW `weight_decay=1e-4`** for initial V11 tuning and matched JS/ERM; exclude this dimension from initial HPO. This carries forward the historical V9/V10 project baseline, not a proven V11 optimum. OpenAlphaDiffract 2026 publishes AdamW weight decay 0.01, but different architecture/loss/training means there is no reason to copy it blindly. Revisit only for observed, persistent Train-vs-frozen-six-profile-Validation overfitting via separate targeted ablation, without accessing TEST/RRUFF. Current `one_click_v11.py` **still searches weight_decay from 1e-6 to 1e-3**, so code must be updated under the separately authorized protocol implementation; no training/code/PR change has yet been made. Full rationale in [Issue #55](https://github.com/Frysland-2024/AI4science/issues/55).
+
+
 **2026-11-09 V11 ResNet depth / width initial freeze (OWNER DECISION, NOT A CAPACITY OPTIMUM):** Initial V11 HPO keeps the existing ML4pXRDs-derived **ResNet-18-GN A0** residual stage block counts **(2,2,2,2)**, channels **(64,128,256,512)**, GroupNorm groups=32, Dense/embedding width=256 and seven classes; reference A0 has **13,008,839 parameters**. No depth/width/heads capacity sweep in first HPO. This relies on the old V10 A0_R1 provisional single-seed Validation lead (0.731830, old V10 data/simulator), **not** proof of V11 superiority. **Stride/downsampling and kernel are NOT frozen** and remain high-priority, separate architecture variables. Reopen network capacity only if meaningful controlled full-training Train/Validation diagnostics indicate underfitting/overfitting after optimizing schedule/LR/JS and checking downsampling. Documentation-only; source default already complies, no GPU job/PR or new standalone report. Details in existing [Issue #55](https://github.com/Frysland-2024/AI4science/issues/55).
 
 
