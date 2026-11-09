@@ -133,6 +133,16 @@ class ValidationSelection(unittest.TestCase):
             mod.architecture_peak_preservation_screen(
                 [*controls[:3],controls[0]],expected_lambda=60.0)
 
+    def test_train_state_requires_recent_learning_stability(self):
+        history=[{"epoch":i,"accuracy":0.45,"mean_ce":v}
+                 for i,v in enumerate((1.50,1.40,1.30,1.28,1.26),start=1)]
+        self.assertTrue(mod.train_state_ready(history))
+        self.assertFalse(mod.train_state_ready(history[:4]))
+        self.assertFalse(mod.train_state_ready(
+            history[:-1]+[{"epoch":5,"accuracy":0.45,"mean_ce":1.0}]))
+        self.assertFalse(mod.train_state_ready(
+            history[:-1]+[{"epoch":5,"accuracy":0.10,"mean_ce":1.26}]))
+
     def test_train_only_gate_requires_real_learned_state_and_all_train_parents(self):
         parents=[types.SimpleNamespace(material_id=f"train_{i:06}") for i in range(108478)]
         contract=fixture_science_contract()
@@ -146,6 +156,8 @@ class ValidationSelection(unittest.TestCase):
               "training_parent_ids_sha256":hashlib.sha256(
                   "\n".join(p.material_id for p in parents).encode()).hexdigest(),
               "parents_scanned":len(parents),"warmup_parent_epochs":5,
+              "warmup_train_parent_count":20480,
+              "warmup_train_parent_ids_sha256":"a"*64,
               "learned_state_accuracy":0.40,"learned_state_ce":1.5,
               "median_per_batch_js_ce_gradient_ratio":0.029235,
               "lambda_window":mod.derive_train_only_js_range(0.029235)}
