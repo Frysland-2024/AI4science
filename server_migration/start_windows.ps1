@@ -4,7 +4,7 @@
 # 64 cached PeakTables, independent of RAM size and CPU model.
 # Optional aggressive16 is unverified on cuifa.
 param(
-    [ValidateSet("plan", "smoke", "benchmark", "hpo", "export")]
+    [ValidateSet("plan", "smoke", "benchmark", "gradient", "hpo", "export")]
     [string]$Mode = "plan",
     [string]$Python = "python",
     [string]$Output = "",
@@ -120,6 +120,16 @@ try {
         Invoke-Python -Arguments @("server_migration/windows_cuda_smoke.py")
         Invoke-Python -Arguments @("server_migration/smoke_prefetch.py", "--workers", $selectedWorkers, "--batch-size", "16")
         Write-Output "BOUNDED preflight completed. Full Stage 0 still requires resource/Validation/restart checks."
+    }
+    elseif ($Mode -eq "gradient") {
+        # Laptop-only TRAIN-gradient calibration; NO synthetic Validation
+        # rendering, Optuna trial or RRUFF/Test access.
+        Invoke-Python -Arguments (@("server_migration/one_click_v11.py", "--mode", "gradient") + $RunnerArgs)
+        $evidence = Join-Path $root "server_migration\gradient_gate_v11_train_108478.json"
+        if (!(Test-Path $evidence)) {
+            throw "Gradient calibration incomplete. No HPO may start without the frozen result."
+        }
+        Write-Output "TRAIN-only gradient audit completed. Evidence staged at: $evidence"
     }
     else {
         # This is an explicit HPO launch, NOT an implicit result of plan/smoke.
