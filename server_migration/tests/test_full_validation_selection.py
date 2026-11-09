@@ -117,6 +117,56 @@ class ValidationSelection(unittest.TestCase):
             mod.architecture_peak_preservation_screen(
                 [*controls[:3],controls[0]],expected_lambda=60.0)
 
+    def test_train_only_gate_requires_real_learned_state_and_all_train_parents(self):
+        parents=[types.SimpleNamespace(material_id=f"train_{i:06}") for i in range(108478)]
+        contract={"schema":"fixture"}
+        gate={"status":"TRAIN_ONLY_GRADIENT_GATE_PASS",
+              "contract_sha256":mod.canonical_digest(contract),
+              "training_parent_ids_sha256":hashlib.sha256(
+                  "\n".join(p.material_id for p in parents).encode()).hexdigest(),
+              "parents_scanned":len(parents),"warmup_parent_epochs":5,
+              "learned_state_accuracy":0.40,"learned_state_ce":1.5,
+              "median_per_batch_js_ce_gradient_ratio":0.029235,
+              "lambda_window":mod.derive_train_only_js_range(0.029235)}
+        self.assertEqual(mod.validate_train_only_gradient_gate(
+            gate,contract,parents),gate["lambda_window"])
+        with self.assertRaisesRegex(RuntimeError,"whole|coverage|identity|parent"):
+            mod.validate_train_only_gradient_gate(
+                {**gate,"parents_scanned":108477},contract,parents)
+        with self.assertRaisesRegex(RuntimeError,"before meaningful learning"):
+            mod.validate_train_only_gradient_gate(
+                {**gate,"learned_state_accuracy":0.1},contract,parents)
+        with self.assertRaisesRegex(RuntimeError,"contract"):
+            mod.validate_train_only_gradient_gate(
+                gate,{"schema":"different"},parents)
+
+    def test_optuna_multivariate_tpe_proposes_three_bounded_knobs(self):
+        try:
+            import optuna
+        except ImportError:
+            self.skipTest("Optuna not installed in this test environment")
+        optuna.logging.set_verbosity(optuna.logging.ERROR)
+        gate=mod.derive_train_only_js_range(0.029235)
+        study=optuna.create_study(
+            sampler=optuna.samplers.TPESampler(
+                seed=20261103,n_startup_trials=4,multivariate=True))
+        for arch in mod.V11_ARCHITECTURES:
+            study.enqueue_trial(mod.v11_architecture_trial_params(
+                arch,gate["anchor"]))
+        for _ in range(8):
+            t=study.ask()
+            params={"lambda_js":t.suggest_float(
+                        "lambda_js",gate["low"],gate["high"],log=True),
+                    "middle_stride":t.suggest_categorical("middle_stride",[2,4]),
+                    "kernel_size":t.suggest_categorical("kernel_size",[5,9])}
+            self.assertTrue(mod.assert_gradient_lambda(
+                params,{"lambda_window":gate}))
+            study.tell(t,0.7+(params["middle_stride"]==2)*0.01
+                       +(params["kernel_size"]==9)*0.02)
+        self.assertEqual(len(study.trials),8)
+        self.assertEqual({mod.resolve_v11_trial_params(t.params)["architecture"]
+                          for t in study.trials[:4]},set(mod.V11_ARCHITECTURES))
+
     def fixture(self,root):
         rows=[];recs=[]
         for i in range(7):
