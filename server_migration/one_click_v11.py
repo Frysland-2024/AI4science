@@ -245,6 +245,9 @@ def contract(args):
         "final_steps":args.final_steps,
         "final_seeds":[20261106,20261107,20261108],
         "eval_interval_steps":args.eval_every,
+        "stopping_policy":{"min_parent_epochs":50,"max_parent_epochs":100,
+                           "validation_every_parent_epochs":10,
+                           "patience_validation_checks":3,"min_delta":0.002},
         "validation_mode":"FULL_PARENT_DISJOINT",
         "validation_rows":23246,
         "validation_parents":23245,
@@ -654,7 +657,8 @@ def trial_run(name,params,seed,max_steps,study_dir,train_records,val_records,pea
     final=root/"result.json"
     if final.is_file():
         row=json.loads(final.read_text(encoding="utf-8"))
-        if row.get("status")=="completed" and row["completed_steps"]==max_steps:
+        if (row.get("status")=="completed"
+            and (row["completed_steps"]==max_steps or row.get("stopped_early") is True)):
             validate_completed_trial_artifacts(
                 study_dir,name,params,seed,max_steps,argv,
                 canonical_digest(contract(argv)),validation_panel_index_sha256,
@@ -684,6 +688,20 @@ def trial_run(name,params,seed,max_steps,study_dir,train_records,val_records,pea
         )
         event("resumed",name=name,step=step)
     n=len(train_records)
+    # Count *complete parent epochs*, never absolute tiny-step proxies.
+    steps_per_parent_epoch=(n+argv.batch_size-1)//argv.batch_size
+    min_training_steps=50*steps_per_parent_epoch
+    meaningful_best=-math.inf
+    stagnant_checks=0
+    for item in history:
+        if item["step"]>=min_training_steps:
+            observed=float(item["mean_ood_macro_f1"])
+            if observed>meaningful_best+0.002:
+                meaningful_best=observed
+                stagnant_checks=0
+            else:
+                stagnant_checks+=1
+    stopped_early=False
     profiles=VALIDATION_OOD_PROFILES
     started=time.monotonic()
     # This pool is SHARED in design with full-Validation: the exact same V11
@@ -743,6 +761,14 @@ def trial_run(name,params,seed,max_steps,study_dir,train_records,val_records,pea
                 score=sum(row[p]["macro_f1"] for p in profiles)/6.0
                 if not math.isfinite(score):
                     raise RuntimeError("nonfinite validation macro F1")
+                if step>=min_training_steps:
+                    if score>meaningful_best+0.002:
+                        meaningful_best=score
+                        stagnant_checks=0
+                    else:
+                        stagnant_checks+=1
+                stopped_early=(step<max_steps and step>=min_training_steps
+                               and stagnant_checks>=3)
                 history.append({
                     "step":step,"mean_ood_macro_f1":score,"profiles":row,
                     "train_last_loss":float(loss),
@@ -770,12 +796,16 @@ def trial_run(name,params,seed,max_steps,study_dir,train_records,val_records,pea
                 event(
                     "trial_validation",name=name,step=step,
                     score=round(score,6),best=round(best,6),
+                    stagnant_checks=stagnant_checks,stopped_early=stopped_early,
                     gpu_seconds=round(time.monotonic()-started,1),
                 )
+                if stopped_early:
+                    break
     finally:
         pool.close()
     result={"status":"completed","name":name,"seed":seed,"architecture":params["architecture"]+" ResNet-18-GN",
-            "parameters":params,"completed_steps":step,"best_step":best_step,
+            "parameters":params,"completed_steps":step,"planned_max_steps":max_steps,
+            "stopped_early":stopped_early,"best_step":best_step,
             "best_validation_ood_macro_f1":best,"best_checkpoint_sha256":digest(root/"best.pt"),
             "last_checkpoint_sha256":digest(root/"last.pt"),
             "validation_unique_parents":len(val_records),"profiles":list(profiles),
@@ -809,9 +839,15 @@ def validate_completed_trial_artifacts(
     if any(cfg.get(key)!=value for key,value in expected.items()):
         raise RuntimeError(f"Completed trial contract mismatch: {name}")
     score=row.get("best_validation_ood_macro_f1")
+    actual_steps=row.get("completed_steps")
+    early=(row.get("stopped_early") is True
+           and isinstance(actual_steps,int) and actual_steps<max_steps
+           and actual_steps>=50*((108478+args.batch_size-1)//args.batch_size)
+           and actual_steps%args.eval_every==0)
     if (row.get("status")!="completed" or row.get("name")!=name
         or row.get("seed")!=seed or row.get("parameters")!=params
-        or row.get("completed_steps")!=max_steps
+        or row.get("planned_max_steps",max_steps)!=max_steps
+        or not (actual_steps==max_steps or early)
         or row.get("validation_unique_parents")!=23245
         or row.get("profiles")!=list(VALIDATION_OOD_PROFILES)
         or not isinstance(score,(int,float)) or not math.isfinite(float(score))):
@@ -910,14 +946,20 @@ def validate_final_recommendation(study_dir,args,contract_file,contract_obj,*,pr
 
 
 def run_pipeline(args):
-    if (args.trials<len(V11_ARCHITECTURES) or args.trials>12 or args.hpo_steps<1
+    if (args.trials<6 or args.trials>12 or args.hpo_steps<1
         or args.confirm_steps<args.hpo_steps or args.final_steps<args.confirm_steps):
         raise ValueError("bounded trials and training steps required")
     if (not (1 <= args.microbatch_size <= args.batch_size)
             or args.sampling_mode not in ("epoch_shuffle","random_batch")):
         raise ValueError("Invalid microbatch or parent sampling mode")
-    if args.sampling_mode=="epoch_shuffle" and args.hpo_steps < (108478+args.batch_size-1)//args.batch_size:
-        raise ValueError("HPO must cover at least one complete independent-parent epoch")
+    one_epoch=(108478+args.batch_size-1)//args.batch_size
+    if args.mode in ("run","final"):
+        if args.sampling_mode!="epoch_shuffle":
+            raise ValueError("Formal V11 training requires full parent epoch_shuffle")
+        if (args.hpo_steps<50*one_epoch or args.confirm_steps<100*one_epoch
+                or args.final_steps<100*one_epoch
+                or args.eval_every!=10*one_epoch):
+            raise ValueError("V11 min exposure: HPO>=50, confirmation/final>=100 full-parent epochs, Validation every 10")
     if not (1<=args.prefetch_workers<=16 and 1<=args.prefetch_batches<=8
             and 1<=args.native_threads<=4 and 16<=args.worker_peak_cache<=8192):
         raise ValueError("Unbounded or invalid V11 prefetch resources")
@@ -1073,7 +1115,7 @@ def run_pipeline(args):
     storage="sqlite:///"+(study_dir/"optuna.sqlite3").as_posix()
     study=optuna.create_study(study_name="v11_154975_a0_sameparent_js",storage=storage,
                 direction="maximize",load_if_exists=True,
-                sampler=optuna.samplers.TPESampler(seed=20261103,n_startup_trials=3),
+                sampler=optuna.samplers.TPESampler(seed=20261103,n_startup_trials=4),
                 pruner=optuna.pruners.NopPruner())
     if not study.trials:
         for arch in V11_ARCHITECTURES:
@@ -1093,6 +1135,16 @@ def run_pipeline(args):
             resolve_v11_trial_params(params)  # Detect legacy four-dimensional HPO states.
             number=frozen.number
         else:
+            # Sequential budget allocation: compare four architectures at
+            # common historical lambda=60 for >=50 full parent epochs FIRST.
+            # Then spend two more >=50-epoch runs bracketing JS strength on
+            # the best architecture. No 5/10-epoch early ranking.
+            if len(study.trials)==4 and len(done)==4:
+                reference_winner=max(done,key=lambda t:(float(t.value),-t.number))
+                focus_arch=reference_winner.params["architecture"]
+                for weight in (30.0,90.0):
+                    study.enqueue_trial({"lambda_js":weight,"architecture":focus_arch})
+                event("HPO_LAMBDA_FOCUS_ENQUEUED",architecture=focus_arch,weights=[30,90])
             trial=study.ask()
             number=trial.number
             params={"lambda_js":trial.suggest_float("lambda_js",15.,120.),
@@ -1163,14 +1215,14 @@ def main():
         parser.error("--batch-size must be positive")
     args.microbatch_size=args.batch_size if args.microbatch_size is None else args.microbatch_size
     default_steps=(108478+args.batch_size-1)//args.batch_size if args.sampling_mode=="epoch_shuffle" else 6160
-    # Scale-aware pre-HPO default: 5 parent epochs to compare candidates at
-    # meaningful convergence, then 10 epochs for confirmation and final.
+    # Scientific anti-short-exposure rule: >=50 full parent epochs for each
+    # HPO candidate. Independent confirmation/final use 100; Validation every 10.
     # In random_batch provenance mode, default_steps is a legacy step unit,
     # not an actual complete parent epoch; epoch_shuffle remains the default.
-    args.hpo_steps=5*default_steps if args.hpo_steps is None else args.hpo_steps
-    args.confirm_steps=10*default_steps if args.confirm_steps is None else args.confirm_steps
-    args.final_steps=10*default_steps if args.final_steps is None else args.final_steps
-    args.eval_every=default_steps if args.eval_every is None else args.eval_every
+    args.hpo_steps=50*default_steps if args.hpo_steps is None else args.hpo_steps
+    args.confirm_steps=100*default_steps if args.confirm_steps is None else args.confirm_steps
+    args.final_steps=100*default_steps if args.final_steps is None else args.final_steps
+    args.eval_every=10*default_steps if args.eval_every is None else args.eval_every
     if args.mode in ("run","final"):
         study_dir=ROOT/"server_runs"/"v11_a0_js_optuna"
         with exclusive_file_lock(study_dir/".study.lock"):
