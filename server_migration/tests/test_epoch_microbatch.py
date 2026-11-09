@@ -131,7 +131,7 @@ class MicrobatchTests(unittest.TestCase):
 class DefaultBudgetTests(unittest.TestCase):
     """Check the CLI plans longer HPO before any CUDA/HPO execution."""
 
-    def test_default_budget_is_5_10_10_parent_epochs(self):
+    def test_default_budget_is_50_100_100_parent_epochs(self):
         for batch_size in (16, 32):
             with self.subTest(batch=batch_size), mock.patch.object(
                 sys, "argv", ["one_click_v11.py", "--batch-size", str(batch_size)]
@@ -139,10 +139,10 @@ class DefaultBudgetTests(unittest.TestCase):
                 runner.main()
                 args=plan.call_args.args[0]
                 epoch=(108478+batch_size-1)//batch_size
-                self.assertEqual(args.hpo_steps, 5*epoch)
-                self.assertEqual(args.confirm_steps, 10*epoch)
-                self.assertEqual(args.final_steps, 10*epoch)
-                self.assertEqual(args.eval_every, epoch)
+                self.assertEqual(args.hpo_steps, 50*epoch)
+                self.assertEqual(args.confirm_steps, 100*epoch)
+                self.assertEqual(args.final_steps, 100*epoch)
+                self.assertEqual(args.eval_every, 10*epoch)
                 self.assertEqual(args.sampling_mode, "epoch_shuffle")
                 self.assertEqual(args.mode, "plan")
 
@@ -163,9 +163,9 @@ class DefaultBudgetTests(unittest.TestCase):
 class FinalRuntimeOverridesTests(unittest.TestCase):
     def fake_args(self):
         return SimpleNamespace(
-            mode="final",trials=6,hpo_steps=33900,confirm_steps=67800,
+            mode="final",trials=6,hpo_steps=339000,confirm_steps=678000,
             final_steps=67800,batch_size=16,microbatch_size=16,
-            sampling_mode="epoch_shuffle",eval_every=6780,
+            sampling_mode="epoch_shuffle",eval_every=67800,
             prefetch_workers=4,prefetch_batches=2,native_threads=1,
             worker_peak_cache=256,max_gpu_hours=24,validation_bf16=False)
 
