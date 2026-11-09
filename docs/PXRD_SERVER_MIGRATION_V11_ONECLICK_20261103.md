@@ -1,5 +1,8 @@
 # PXRD V11 + 154,975 parent structures: one-command Linux GPU migration (2026-11-03)
 
+> **Status superseded for execution on 2026-11-09:** do not follow historical launch commands in this note. Issue #61 is BLOCKED pending current-main schema/manifest and package-hash checks; GPU smoke is BLOCKED / NOT_RUN without separate authorization; #55 remains BLOCKED BY #61. See [the minimum preflight audit](ISSUE_61_V11_MINIMUM_PREFLIGHT_AUDIT_20261109.md).
+
+
 STATUS: LOCAL PACKAGE BUILT / PACKAGE HASHES VERIFIED / LOCAL CPU AND CUDA SMOKES PASS / RENTED LINUX GPU FULL HPO NOT RUN.
 
 ## Motivation and model selection
