@@ -172,8 +172,9 @@ def import_handoff(root: Path, archive_path: Path) -> dict:
             raise RuntimeError("Missing frozen TRAIN gradient prior in HPO handoff")
         frozen_gate=json.loads(archive.read("gradient_gate.json"))
         frozen_contract=json.loads(archive.read("contract.json"))
+        import one_click_v11 as runner
         if (frozen_gate.get("status")!="TRAIN_ONLY_GRADIENT_GATE_PASS"
-                or frozen_gate.get("contract_sha256")!=_canonical_index_digest(frozen_contract)
+                or frozen_gate.get("science_identity_sha256")!=runner.gradient_science_identity(frozen_contract)
                 or frozen_contract.get("schema")!="v11_154975_gradient_informed_three_parameter_v3"
                 or recommendation.get("gradient_gate_sha256")!=files["gradient_gate.json"]):
             raise RuntimeError("HPO handoff gradient-gate science protocol mismatch")
