@@ -358,6 +358,22 @@ def remove_unindexed_validation_panel_files(base, profile):
             path.unlink()
 
 
+def legacy_validation_panel_identity_compatible(saved, current):
+    """A budget-only payload bump may reuse physically identical frozen panels.
+
+    The .7 -> .8 transition changed HPO epoch budgets, NOT the V11 renderer,
+    input manifest, profile configuration, seed or data layout. Fail closed for
+    any other release or for any changed scientific/rendering identity field.
+    """
+    if not isinstance(saved, dict) or not isinstance(current, dict):
+        return False
+    if (saved.get("payload_contract_version") != "v11-parent-epoch-microbatch-20261109.7"
+            or current.get("payload_contract_version") != "v11-parent-epoch-budget-20261109.8"):
+        return False
+    without_payload=lambda x:{k:v for k,v in x.items() if k!="payload_contract_version"}
+    return without_payload(saved)==without_payload(current)
+
+
 def _prepare_validation_panels_locked(records, peaks, sim, libs, study_dir, *,
                               expected_parents=23245, workers=4, prefetch_batches=3,
                               native_threads=1, worker_peak_cache=512):
@@ -404,10 +420,19 @@ def _prepare_validation_panels_locked(records, peaks, sim, libs, study_dir, *,
     index_path=base/"panel_index.json"
     if index_path.exists():
         index=json.loads(index_path.read_text(encoding="utf-8"))
-        if (not isinstance(index,dict) or index.get("identity")!=identity
+        frozen_identity=index.get("identity") if isinstance(index,dict) else None
+        version_only_compatible=legacy_validation_panel_identity_compatible(
+            frozen_identity, identity)
+        if (not isinstance(index,dict)
+            or (frozen_identity!=identity and not version_only_compatible)
             or not isinstance(index.get("entries"),dict)
             or set(index["entries"]).difference(VALIDATION_OOD_PROFILES)):
             raise RuntimeError("Existing Validation cache identity mismatch; refuse overwrite")
+        if version_only_compatible:
+            event("validation_panel_budget_only_payload_compatibility",
+                  from_version=frozen_identity["payload_contract_version"],
+                  to_version=identity["payload_contract_version"],
+                  note="Retain original frozen index and verify every .npy SHA256")
     else:
         index={"identity":identity,"entries":{}}
         write_json(index_path,index)

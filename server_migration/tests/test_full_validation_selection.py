@@ -17,6 +17,28 @@ mod=importlib.util.module_from_spec(spec)
 spec.loader.exec_module(mod)
 
 class ValidationSelection(unittest.TestCase):
+    def test_budget_only_payload_cache_transition_is_fail_closed(self):
+        previous={
+            "payload_contract_version":"v11-parent-epoch-microbatch-20261109.7",
+            "render_source_sha256":{"physics":"unchanged-hash"},
+            "source_manifest_sha256":"same-train-validation-manifest",
+            "simulation_config_sha256":"same-simulator",
+            "parent_count":23245,
+            "profiles":["ood_noise","ood_texture"],
+        }
+        current={**previous,"payload_contract_version":"v11-parent-epoch-budget-20261109.8"}
+        self.assertTrue(mod.legacy_validation_panel_identity_compatible(previous,current))
+        self.assertFalse(mod.legacy_validation_panel_identity_compatible(
+            {**previous,"render_source_sha256":{"physics":"changed"}},current))
+        self.assertFalse(mod.legacy_validation_panel_identity_compatible(
+            previous,{**current,"parent_count":23244}))
+        self.assertFalse(mod.legacy_validation_panel_identity_compatible(
+            previous,{**current,"simulation_config_sha256":"changed"}))
+        self.assertFalse(mod.legacy_validation_panel_identity_compatible(
+            {**previous,"payload_contract_version":"unexpected"},current))
+        self.assertFalse(mod.legacy_validation_panel_identity_compatible(
+            previous,{**current,"payload_contract_version":"v11-future"}))
+
     def fixture(self,root):
         rows=[];recs=[]
         for i in range(7):

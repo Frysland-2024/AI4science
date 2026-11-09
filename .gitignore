@@ -38,6 +38,7 @@ sync_*
 03_tools_and_packages/
 04_external_lab_data/
 /outputs/
+/server_runs/
 /data/
 /xrd_robustness/data/
 **/outputs/
