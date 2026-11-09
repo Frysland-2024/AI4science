@@ -48,6 +48,8 @@ def _args_from_contract(contract: dict) -> argparse.Namespace:
         final_steps=contract["final_steps"],
         eval_every=contract["eval_interval_steps"],
         batch_size=contract["batch_size_parents"],
+        microbatch_size=contract.get("microbatch_size_parents",contract["batch_size_parents"]),
+        sampling_mode=contract.get("sampling_mode","random_batch"),
         prefetch_workers=contract["prefetch_workers"],
         prefetch_batches=contract["prefetch_batches"],
         native_threads=contract["native_threads"],

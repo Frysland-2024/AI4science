@@ -1,7 +1,7 @@
 # Native Windows V11 HPO: keep scientific training in one_click_v11.py.
 # Usage: powershell -ExecutionPolicy Bypass -File server_migration/start_windows.ps1 -Mode plan|smoke|hpo|export
 param(
-    [ValidateSet("plan", "smoke", "hpo", "export")]
+    [ValidateSet("plan", "smoke", "benchmark", "hpo", "export")]
     [string]$Mode = "plan",
     [string]$Python = "python",
     [string]$Output = "",
@@ -34,8 +34,13 @@ try {
         Write-Warning "Raw structure source kit not installed locally; relying on frozen Train/Validation manifest SHA + fully audited PeakTables. Preserve external source-audit receipt."
     }
     Invoke-Python -Arguments @("server_migration/verify_peak_cache.py", "--root", ".", "--fast")
-    # 16 GB VRAM / 32 GB RAM candidate: less aggressive prefetch by default.
-    # Defaults are protocol-bound, so the cloud final command must match.
+    if ($Mode -eq "benchmark") {
+        $benchOutput = Join-Path $root "_local\\v11_batch_benchmark.json"
+        Invoke-Python -Arguments (@("server_migration/benchmark_windows_v11.py", "--output", $benchOutput) + $RunnerArgs)
+        Write-Output "TRAIN-only bounded batch benchmark: $benchOutput (no HPO launched)."
+        exit 0
+    }
+    # 16 GB VRAM / 32 GB RAM candidate: conservative prefetch by default.
     if (!$RunnerArgs -or $RunnerArgs.Count -eq 0) {
         $RunnerArgs = @("--prefetch-workers", "2", "--prefetch-batches", "2", "--worker-peak-cache", "256")
     }

@@ -317,10 +317,50 @@ def iter_prefetched_batches(
             next_submit += batch_size
         yield start, pool.get(start)
 
+def sample_parent_indices(
+    rng: Any, count: int, batch_size: int, step: int, *,
+    sampling_mode: str = "random_batch",
+    sampling_seed: int | None = None,
+    permutation_cache: dict[int, Any] | None = None,
+) -> tuple[Any, int]:
+    """Return independent parent indices and their epoch; never expose Test/VAL.
+
+    In epoch_shuffle mode each parent occurs exactly once within an epoch.
+    The last step of an epoch may be shorter than batch_size; there is no
+    wraparound mixing the next epoch into the same batch. Permutations are
+    derived from (seed, epoch), so restarting at any optimizer step reproduces
+    the same parent sequence without storing large permutations in checkpoints.
+    """
+    import numpy as np
+
+    if count < 1 or batch_size < 1 or step < 0:
+        raise ValueError("Invalid parent sampler dimensions")
+    if sampling_mode == "random_batch":
+        if batch_size > count:
+            raise ValueError("Cannot sample unique parents within oversized batch")
+        return rng.choice(count, size=batch_size, replace=False), step * batch_size // count
+    if sampling_mode != "epoch_shuffle" or sampling_seed is None:
+        raise ValueError("Invalid or unseeded epoch parent sampler")
+    steps_per_epoch = (count + batch_size - 1) // batch_size
+    epoch, slot = divmod(step, steps_per_epoch)
+    if permutation_cache is None:
+        permutation_cache = {}
+    if epoch not in permutation_cache:
+        # SeedSequence avoids relying on process-global RNG or worker count.
+        permutation_cache.clear()
+        permutation_cache[epoch] = np.random.default_rng(
+            np.random.SeedSequence([int(sampling_seed), int(epoch)])
+        ).permutation(count)
+    start = slot * batch_size
+    return permutation_cache[epoch][start:min(start + batch_size, count)], epoch
+
+
 def enqueue_train_lookahead(
     pool: V11PairPrefetchPool, rng: Any, records: Sequence[Any], *,
     batch_size: int, start_step: int, next_submit: int,
     max_steps: int, committed_states: dict[int, Any],
+    sampling_mode: str = "random_batch", sampling_seed: int | None = None,
+    permutation_cache: dict[int, Any] | None = None,
 ) -> int:
     """Only the main process samples parents; save RNG state per submitted step.
 
@@ -335,12 +375,15 @@ def enqueue_train_lookahead(
     if not (0 <= start_step <= next_submit <= max_steps):
         raise ValueError("Out-of-order training prefetch step")
     while next_submit < max_steps and len(pool.pending) < pool.prefetch_batches:
-        selected = rng.choice(len(records), size=batch_size, replace=False)
+        selected, epoch = sample_parent_indices(
+            rng, len(records), batch_size, next_submit,
+            sampling_mode=sampling_mode, sampling_seed=sampling_seed,
+            permutation_cache=permutation_cache,
+        )
         batch = [records[int(index)] for index in selected]
         pool.submit(
             next_submit, batch,
-            epoch=next_submit * batch_size // len(records),
-            global_step=next_submit, profile="train",
+            epoch=epoch, global_step=next_submit, profile="train",
         )
         committed_states[next_submit] = copy.deepcopy(rng.bit_generator.state)
         next_submit += 1

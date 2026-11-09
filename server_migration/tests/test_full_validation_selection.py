@@ -114,6 +114,7 @@ class ValidationSelection(unittest.TestCase):
             panel_sha="a"*64
             cfg={"params":params,"seed":123,"max_steps":100,
                  "batch_size":args.batch_size,"eval_every":args.eval_every,
+                 "microbatch_size":16,"sampling_mode":"random_batch",
                  "sim_config_sha256":mod.digest(mod.XRD/"configs/simulation.v11_tch_pseudo_voigt.json"),
                  "validation_mode":"FULL_PARENT_DISJOINT","validation_parent_count":23245,
                  "training_parent_count":108478,"validation_panel_index_sha256":panel_sha,
@@ -235,6 +236,7 @@ class ValidationSelection(unittest.TestCase):
                         (root/filename).write_bytes(data)
                 cfg={"params":params,"seed":seed,"max_steps":steps,
                      "batch_size":args.batch_size,"eval_every":args.eval_every,
+                 "microbatch_size":16,"sampling_mode":"random_batch",
                      "sim_config_sha256":sim_sha,"validation_mode":"FULL_PARENT_DISJOINT",
                      "validation_parent_count":23245,"training_parent_count":108478,
                      "validation_panel_index_sha256":panel_sha,

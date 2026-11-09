@@ -20,6 +20,7 @@ import time
 from collections import defaultdict
 from dataclasses import asdict
 from v11_prefetch import V11PairPrefetchPool, iter_prefetched_batches, enqueue_train_lookahead
+from train_microbatch import paired_optimizer_step
 from payload_contract import PAYLOAD_CONTRACT_VERSION
 
 ROOT=Path(os.environ.get("AI4SCIENCE_ROOT", str(Path(__file__).resolve().parents[1]))).resolve()
@@ -94,6 +95,7 @@ def implementation_fingerprints():
     paths={
         "server_migration/one_click_v11.py":Path(__file__).resolve(),
         "server_migration/v11_prefetch.py":Path(__file__).with_name("v11_prefetch.py").resolve(),
+        "server_migration/train_microbatch.py":Path(__file__).with_name("train_microbatch.py").resolve(),
         "server_migration/payload_contract.py":Path(__file__).with_name("payload_contract.py").resolve(),
         "server_migration/verify_source_snapshot.py":Path(__file__).with_name("verify_source_snapshot.py").resolve(),
         "server_migration/verify_peak_cache.py":Path(__file__).with_name("verify_peak_cache.py").resolve(),
@@ -197,6 +199,8 @@ def contract(args):
         "architecture":"ML4PXRDResNet1D(model_id=18) A0; stride 4/4/4, kernel 9",
         "train_mode":"dynamic_js_same_parent",
         "batch_size_parents":args.batch_size,
+        "microbatch_size_parents":getattr(args,"microbatch_size",args.batch_size),
+        "sampling_mode":getattr(args,"sampling_mode","random_batch"),
         "prefetch_workers":args.prefetch_workers,
         "prefetch_batches":args.prefetch_batches,
         "native_threads":args.native_threads,
@@ -564,6 +568,7 @@ def trial_run(name,params,seed,max_steps,study_dir,train_records,val_records,pea
     np,torch,F,_,_,render_pair_batch,build_online_view_factory,ML4PXRDResNet1D,ML4PXRDResNet1DConfig,PhysicsParameterSampler,metrics=libs
     root=study_dir/"trials"/name
     cfg={"params":params,"seed":seed,"max_steps":max_steps,"batch_size":argv.batch_size,
+         "microbatch_size":argv.microbatch_size,"sampling_mode":argv.sampling_mode,
          "eval_every":argv.eval_every,"sim_config_sha256":digest(XRD/"configs/simulation.v11_tch_pseudo_voigt.json"),
          "validation_mode":"FULL_PARENT_DISJOINT","validation_parent_count":len(val_records),
          "validation_parent_ids_sha256":hashlib.sha256("\n".join(r.material_id for r in val_records).encode()).hexdigest(),
@@ -622,6 +627,7 @@ def trial_run(name,params,seed,max_steps,study_dir,train_records,val_records,pea
         max_cached_peaks=argv.worker_peak_cache,
     )
     future_rng={}
+    permutation_cache={}
     next_submit=step
     try:
         while step<max_steps:
@@ -631,6 +637,8 @@ def trial_run(name,params,seed,max_steps,study_dir,train_records,val_records,pea
                 pool,rng,train_records,batch_size=argv.batch_size,
                 start_step=step,next_submit=next_submit,max_steps=max_steps,
                 committed_states=future_rng,
+                sampling_mode=argv.sampling_mode, sampling_seed=seed,
+                permutation_cache=permutation_cache,
             )
             batch_first,batch_second,batch_labels=pool.get(step)
             # DO NOT checkpoint the look-ahead RNG. It includes future batches
@@ -653,18 +661,13 @@ def trial_run(name,params,seed,max_steps,study_dir,train_records,val_records,pea
                     group["lr"]=float(params["learning_rate"])*(
                         .05+.95*.5*(1+math.cos(math.pi*step/max_steps))
                     )
-            optimizer.zero_grad(set_to_none=True)
             use_amp=torch.cuda.is_bf16_supported()
-            with torch.autocast("cuda",dtype=torch.bfloat16,enabled=use_amp):
-                a=model(x1)["logits"];b=model(x2)["logits"]
-                loss,ce,js=loss_js(a,b,targets,float(params["lambda_js"]),torch,F)
-            if not bool(torch.isfinite(loss).item()):
-                raise RuntimeError(f"nonfinite loss {name} step {step+1}")
-            loss.backward()
-            norm=torch.nn.utils.clip_grad_norm_(
-                model.parameters(),max_norm=10.0,error_if_nonfinite=True,
+            loss,ce,js,norm=paired_optimizer_step(
+                model,optimizer,x1,x2,targets,
+                lambda_js=float(params["lambda_js"]),
+                microbatch_size=argv.microbatch_size,
+                loss_fn=loss_js,torch=torch,F=F,amp=use_amp,
             )
-            optimizer.step()
             step+=1
             if step%argv.eval_every==0 or step==max_steps:
                 row=validate(
@@ -676,12 +679,15 @@ def trial_run(name,params,seed,max_steps,study_dir,train_records,val_records,pea
                     raise RuntimeError("nonfinite validation macro F1")
                 history.append({
                     "step":step,"mean_ood_macro_f1":score,"profiles":row,
-                    "train_last_loss":float(loss.detach().cpu()),
-                    "last_ce":float(ce.detach().cpu()),
-                    "last_js":float(js.detach().cpu()),
+                    "train_last_loss":float(loss),
+                    "last_ce":float(ce),
+                    "last_js":float(js),
                     "lr":optimizer.param_groups[0]["lr"],
                     "prefetch_workers":argv.prefetch_workers,
                     "prefetch_batches":argv.prefetch_batches,
+                    "sampling_mode":argv.sampling_mode,
+                    "microbatch_size":argv.microbatch_size,
+                    "last_parent_batch_count":int(targets.shape[0]),
                 })
                 if score>best:
                     best=score;best_step=step
@@ -726,6 +732,8 @@ def validate_completed_trial_artifacts(
     expected={
         "params":params,"seed":seed,"max_steps":max_steps,
         "batch_size":args.batch_size,"eval_every":args.eval_every,
+        "microbatch_size":getattr(args,"microbatch_size",args.batch_size),
+        "sampling_mode":getattr(args,"sampling_mode","random_batch"),
         "sim_config_sha256":digest(XRD/"configs/simulation.v11_tch_pseudo_voigt.json"),
         "validation_mode":"FULL_PARENT_DISJOINT",
         "validation_parent_count":23245,"training_parent_count":108478,
@@ -839,14 +847,35 @@ def run_pipeline(args):
     if (args.trials<2 or args.trials>12 or args.hpo_steps<1
         or args.confirm_steps<args.hpo_steps or args.final_steps<args.confirm_steps):
         raise ValueError("bounded trials and training steps required")
+    if (not (1 <= args.microbatch_size <= args.batch_size)
+            or args.sampling_mode not in ("epoch_shuffle","random_batch")):
+        raise ValueError("Invalid microbatch or parent sampling mode")
+    if args.sampling_mode=="epoch_shuffle" and args.hpo_steps < (108478+args.batch_size-1)//args.batch_size:
+        raise ValueError("HPO must cover at least one complete independent-parent epoch")
     if not (1<=args.prefetch_workers<=16 and 1<=args.prefetch_batches<=8
             and 1<=args.native_threads<=4 and 16<=args.worker_peak_cache<=8192):
         raise ValueError("Unbounded or invalid V11 prefetch resources")
     c=contract(args)
     study_dir=ROOT/"server_runs"/"v11_a0_js_optuna"
     contract_file=study_dir/"contract.json"
+    runtime_overrides={}
     if contract_file.is_file():
-        if json.loads(contract_file.read_text(encoding="utf-8"))!=c:
+        saved=json.loads(contract_file.read_text(encoding="utf-8"))
+        if args.mode=="final":
+            # Workers, queue depth, CPU cache and wall-clock cap are machine
+            # resources, not HPO-selected science. All other keys stay frozen.
+            runtime_only={"prefetch_workers","prefetch_batches","native_threads",
+                          "worker_peak_cache","max_gpu_hours"}
+            changed={key for key in set(saved)|set(c) if saved.get(key)!=c.get(key)}
+            forbidden=changed-runtime_only
+            if forbidden:
+                raise RuntimeError("Final training science contract mismatch: "+str(sorted(forbidden)))
+            runtime_overrides={key:{"hpo":saved[key],"final":c[key]}
+                               for key in sorted(changed)}
+            c=saved
+            if runtime_overrides:
+                event("FINAL_RUNTIME_RESOURCE_OVERRIDES",changes=runtime_overrides)
+        elif saved!=c:
             raise RuntimeError("Existing study contract changed; refuse overwrite")
     elif args.mode=="run":
         write_json(contract_file,c)
@@ -965,6 +994,10 @@ def run_pipeline(args):
             "validation_parent_groups":len(val_full),
             "final_steps":args.final_steps,"runs":final_runs,
             "selected_hpo_contract_sha256":digest(contract_file),
+            "final_runtime_resource_overrides":runtime_overrides,
+            "sampling_mode":args.sampling_mode,
+            "effective_batch_parents":args.batch_size,
+            "microbatch_parents":args.microbatch_size,
             "selection_scope":"simulated frozen Validation only, not Test/RRUFF",
         })
         event("FINAL_TRAINING_FINISHED",seeds=len(final_runs))
@@ -1045,11 +1078,15 @@ def main():
     parser=argparse.ArgumentParser()
     parser.add_argument("--mode",choices=["plan","smoke","run","final"],default="plan")
     parser.add_argument("--trials",type=int,default=6)
-    parser.add_argument("--hpo-steps",type=int,default=6160)
-    parser.add_argument("--confirm-steps",type=int,default=12320)
+    parser.add_argument("--hpo-steps",type=int,default=None)
+    parser.add_argument("--confirm-steps",type=int,default=None)
     parser.add_argument("--final-steps",type=int,default=49280)
-    parser.add_argument("--eval-every",type=int,default=6160)
+    parser.add_argument("--eval-every",type=int,default=None)
     parser.add_argument("--batch-size",type=int,default=16)
+    parser.add_argument("--microbatch-size",type=int,default=None,
+                        help="GPU microbatch in parents; optimizer effective batch remains --batch-size")
+    parser.add_argument("--sampling-mode",choices=["epoch_shuffle","random_batch"],
+                        default="epoch_shuffle")
     parser.add_argument("--prefetch-workers",type=int,default=4)
     parser.add_argument("--prefetch-batches",type=int,default=3)
     parser.add_argument("--native-threads",type=int,default=1)
@@ -1057,6 +1094,13 @@ def main():
     parser.add_argument("--validation-bf16",action="store_true",help="Opt-in only after BF16 vs FP32 Validation parity checks")
     parser.add_argument("--max-gpu-hours",type=float,default=12.0)
     args=parser.parse_args()
+    if args.batch_size < 1:
+        parser.error("--batch-size must be positive")
+    args.microbatch_size=args.batch_size if args.microbatch_size is None else args.microbatch_size
+    default_steps=(108478+args.batch_size-1)//args.batch_size if args.sampling_mode=="epoch_shuffle" else 6160
+    args.hpo_steps=default_steps if args.hpo_steps is None else args.hpo_steps
+    args.confirm_steps=2*default_steps if args.confirm_steps is None else args.confirm_steps
+    args.eval_every=default_steps if args.eval_every is None else args.eval_every
     if args.mode in ("run","final"):
         study_dir=ROOT/"server_runs"/"v11_a0_js_optuna"
         with exclusive_file_lock(study_dir/".study.lock"):

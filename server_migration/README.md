@@ -175,9 +175,35 @@ bitwise identical, the correct response is **BLOCKED**, not to weaken hashes:
 transfer the existing separately SHA-verified `validation_panel_bundle.zip`
 as an optional kit asset, with its own line in `SHA256SUMS.txt`.
 
-Because the scientific contract locks the runtime options, cloud `--final`
-must receive the **same non-default runner flags** as Windows HPO (including
-budget, workers, batch and prefetch settings), unless a newly reviewed protocol
-explicitly separates platform-only resource settings. This workflow does not
-score RRUFF/Test. Final scoring remains a separate local task after the four
-Cu1011 scoring gates and checkpoint freeze.
+As of V11 payload contract `.7`, Windows HPO and Linux final may vary
+only CPU prefetch workers, queued batches, worker-cache size, native threads
+and the local GPU-hours soft stop. All differences are audited. The scientific
+effective/micro batch, sampling mode, training budgets, source, simulator,
+model, validation and selected hyperparameters remain frozen. Worker-count
+rendering parity is tested. Test/RRUFF scoring remains separate.
+
+
+### V11 parent coverage and batch profiling (2026-11-09 .7)
+
+- Default `epoch_shuffle` makes every complete train epoch cover each of the
+  **108,478** independent parents once, including a possibly short last batch.
+  Restarting at any optimizer step deterministically recovers the permutation.
+  `random_batch` is retained only as an explicit alternative; it does not
+  guarantee coverage across steps.
+- Default effective `--batch-size 16` processes 16 parents / 32 XRD views
+  per optimizer step. The HPO budget is **6,780 steps** (one full parent epoch);
+  confirmations use **13,560 steps** (two full epochs). These defaults
+  recompute with batch size using `ceil(108478 / batch)`. Final training
+  stays at the existing 49,280 optimizer steps unless separately approved.
+- `--microbatch-size 8 --batch-size 16` performs two backward passes with
+  parent-count-weighted CE + JS and only one clip/optimizer step; it reduces
+  activation memory without changing effective parent batch or exposure.
+  Microbatch size is still recorded in the frozen experiment contract.
+- Stage 0 can run a bounded Train-only, non-HPO batch check:
+  `powershell -ExecutionPolicy Bypass -File server_migration/start_windows.ps1
+  -Mode benchmark -Python path\to\python.exe`.
+  For an 8GB laptop, direct command example:
+  `python server_migration/benchmark_windows_v11.py
+  --cases 4:4,8:8,16:8 --warmup 1 --steps 2`.
+  Output gives parent/s, measured-step latency, CUDA allocated/reserved
+  memory and disk free. Tiny smokes do not certify cuifa's 4070 Ti SUPER.

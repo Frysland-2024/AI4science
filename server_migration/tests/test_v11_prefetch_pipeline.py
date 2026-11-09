@@ -262,6 +262,16 @@ class V11PrefetchContractTests(unittest.TestCase):
             self.assertTrue(np.array_equal(second[0],serial_second.numpy()[0]))
             self.assertTrue(np.array_equal(labels,serial_labels.numpy()))
             self.assertEqual(labels.tolist(),[3])
+            # Changing Windows/Cloud CPU worker count must not change physics.
+            with V11PairPrefetchPool(
+                config,run_seed=12345,workers=1,prefetch_batches=2,
+                native_threads=1,max_cached_peaks=16,
+            ) as single_worker:
+                single_worker.submit(137,[record],epoch=1,global_step=137,profile="train")
+                one_a,one_b,one_y=single_worker.get(137)
+            self.assertTrue(np.array_equal(first,one_a))
+            self.assertTrue(np.array_equal(second,one_b))
+            self.assertTrue(np.array_equal(labels,one_y))
 
     def test_worker_startup_failure_is_reported_and_children_are_joined(self):
         import json
