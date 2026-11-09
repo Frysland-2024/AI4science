@@ -94,6 +94,18 @@ class V11PrefetchContractTests(unittest.TestCase):
         self.assertEqual(pool.committed[0][1][3], "train")
 
     def test_cpu_interrupted_run_matches_uninterrupted_run(self):
+        import torch
+
+        self._assert_interrupted_run_matches_uninterrupted_run(torch.device("cpu"))
+
+    def test_cuda_interrupted_run_matches_uninterrupted_run(self):
+        import torch
+
+        if not torch.cuda.is_available():
+            self.skipTest("CUDA checkpoint parity requires an available GPU")
+        self._assert_interrupted_run_matches_uninterrupted_run(torch.device("cuda"))
+
+    def _assert_interrupted_run_matches_uninterrupted_run(self, device):
         import copy
         import tempfile
         import torch
@@ -108,7 +120,9 @@ class V11PrefetchContractTests(unittest.TestCase):
 
         def make_run(seed):
             torch.manual_seed(seed)
-            model = TinyModel()
+            if device.type == "cuda":
+                torch.cuda.manual_seed_all(seed)
+            model = TinyModel().to(device)
             optimizer = torch.optim.AdamW(model.parameters(), lr=0.003)
             rng = np.random.default_rng(20261109)
             return model, optimizer, rng, []
@@ -118,10 +132,10 @@ class V11PrefetchContractTests(unittest.TestCase):
                 parents = rng.integers(0, 41, size=5).tolist()
                 inputs = torch.tensor(
                     [[parent / 41, (parent % 7) / 7, 1.0] for parent in parents],
-                    dtype=torch.float32,
+                    dtype=torch.float32, device=device,
                 )
                 inputs = inputs + torch.rand_like(inputs) * 0.01
-                targets = torch.tensor([parent % 2 for parent in parents])
+                targets = torch.tensor([parent % 2 for parent in parents],device=device)
                 optimizer.zero_grad(set_to_none=True)
                 loss = torch.nn.functional.cross_entropy(model(inputs), targets)
                 loss.backward()
@@ -131,7 +145,7 @@ class V11PrefetchContractTests(unittest.TestCase):
 
         def assert_nested_equal(test, left, right):
             if torch.is_tensor(left):
-                test.assertTrue(torch.equal(left, right))
+                test.assertTrue(torch.equal(left.cpu(), right.cpu()))
             elif isinstance(left, dict):
                 test.assertEqual(left.keys(), right.keys())
                 for key in left:
@@ -148,6 +162,7 @@ class V11PrefetchContractTests(unittest.TestCase):
         full_model, full_optimizer, full_rng, full_history = make_run(1234)
         train(full_model, full_optimizer, full_rng, full_history, 0, total_steps)
         full_torch_rng = torch.get_rng_state().clone()
+        full_cuda_rngs = torch.cuda.get_rng_state_all() if device.type == "cuda" else []
 
         partial_model, partial_optimizer, partial_rng, partial_history = make_run(1234)
         train(partial_model, partial_optimizer, partial_rng, partial_history, 0, split_step)
@@ -166,7 +181,7 @@ class V11PrefetchContractTests(unittest.TestCase):
                 step=checkpoint["step"], best=checkpoint["best"],
                 best_step=checkpoint["best_step"], numpy_rng_state=committed_rng,
                 history=partial_history, contract={"seed": 1234},
-                device=torch.device("cpu"), torch=torch,
+                device=device, torch=torch,
             )
 
             # Simulate process restart, including new model construction and unrelated RNG use.
@@ -175,7 +190,7 @@ class V11PrefetchContractTests(unittest.TestCase):
             restored = runner.restore_trial_checkpoint(
                 path, model=resumed_model, optimizer=resumed_optimizer,
                 rng=resumed_rng, expected_contract={"seed": 1234},
-                device=torch.device("cpu"), torch=torch,
+                device=device, torch=torch,
             )
             step, best, best_step, resumed_history = restored
             self.assertEqual((step, best, best_step), (split_step, 0.625, split_step))
@@ -186,6 +201,11 @@ class V11PrefetchContractTests(unittest.TestCase):
         assert_nested_equal(self, full_optimizer.state_dict(), resumed_optimizer.state_dict())
         self.assertEqual(full_history, resumed_history)
         self.assertTrue(torch.equal(full_torch_rng, torch.get_rng_state()))
+        if device.type == "cuda":
+            resumed_cuda_rngs = torch.cuda.get_rng_state_all()
+            self.assertEqual(len(full_cuda_rngs), len(resumed_cuda_rngs))
+            for expected, actual in zip(full_cuda_rngs, resumed_cuda_rngs):
+                self.assertTrue(torch.equal(expected, actual))
 
     def test_invalid_resources_rejected_before_process_spawn(self):
         sim = {"simulator_version": "v11_tch_pseudo_voigt"}
