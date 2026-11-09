@@ -390,16 +390,27 @@ def remove_unindexed_validation_panel_files(base, profile):
 
 
 def legacy_validation_panel_identity_compatible(saved, current):
-    """A budget-only payload bump may reuse physically identical frozen panels.
+    """Reuse hashed Validation panels across explicitly audited training-only updates.
 
-    The .7 -> .8 transition changed HPO epoch budgets, NOT the V11 renderer,
-    input manifest, profile configuration, seed or data layout. Fail closed for
-    any other release or for any changed scientific/rendering identity field.
+    .7->.8 changed epochs; .8->.9 changes training HPO/architecture, never
+    the physical renderer, source input, Validation profile or seed.
+    Frozen indexes may still be at .7 after read-only reuse under .8.
+    Identity equality (apart from the enumerated payload version) and every
+    panel file SHA256 remain mandatory. No arbitrary future-version bypass.
     """
     if not isinstance(saved, dict) or not isinstance(current, dict):
         return False
-    if (saved.get("payload_contract_version") != "v11-parent-epoch-microbatch-20261109.7"
-            or current.get("payload_contract_version") != "v11-parent-epoch-budget-20261109.8"):
+    old=saved.get("payload_contract_version")
+    new=current.get("payload_contract_version")
+    allowed={
+        ("v11-parent-epoch-microbatch-20261109.7",
+         "v11-parent-epoch-budget-20261109.8"),
+        ("v11-parent-epoch-budget-20261109.8",
+         "v11-focused-science-cpu-20261109.9"),
+        ("v11-parent-epoch-microbatch-20261109.7",
+         "v11-focused-science-cpu-20261109.9"),
+    }
+    if (old,new) not in allowed:
         return False
     without_payload=lambda x:{k:v for k,v in x.items() if k!="payload_contract_version"}
     return without_payload(saved)==without_payload(current)
