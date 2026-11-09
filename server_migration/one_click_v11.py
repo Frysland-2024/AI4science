@@ -85,9 +85,18 @@ def derive_train_only_js_range(median_unweighted_ratio, *, previous_lambda=60.0)
     if high<low*2.0:
         raise ValueError("Learned-state gradient window lacks >=2x usable width")
     anchor=max(low,min(high,float(previous_lambda)))
+    bands={}
+    for name,(r_low,r_high) in {
+        "weak":(0.05,0.30),"medium":(0.30,1.00),"strong":(1.00,2.00)
+    }.items():
+        a=max(low,r_low/ratio)
+        b=min(high,r_high/ratio)
+        bands[name]=([float(a),float(b)] if b>a else None)
     return {"low":float(low),"high":float(high),"anchor":float(anchor),
             "reference_lambda":float(previous_lambda),
             "target_gradient_influence":[0.05,2.0],
+            "gradient_influence_bands":bands,
+            "band_definition":"weak R=0.05..0.30; medium R=0.30..1.0; strong R=1.0..2.0; unavailable means outside safe lambda bounds",
             "gradient_calibration_only":True}
 
 
@@ -102,6 +111,22 @@ def canonical_digest(value):
     return hashlib.sha256(
         json.dumps(value,sort_keys=True,separators=(",",":"),ensure_ascii=False).encode("utf-8")
     ).hexdigest()
+
+def gradient_science_identity(contract_obj):
+    """Portable TRAIN gradient contract, independent of host CPU and Optuna budget.
+
+    Source/renderer/model/objective bytes and science settings must match.
+    CPU worker count, GPU microbatch, HPO trial count and walltime may differ.
+    """
+    keys=("schema","payload_contract_version","implementation_sha256",
+          "source_manifest_sha256","simulator_config_sha256",
+          "training_rows","training_parents","architecture_presets",
+          "fixed_optimizer","batch_size_parents","sampling_mode",
+          "training_precision","gradient_gate_contract")
+    missing=[k for k in keys if k not in contract_obj]
+    if missing:
+        raise RuntimeError("Gradient science identity missing: "+str(missing))
+    return canonical_digest({k:contract_obj[k] for k in keys})
 
 _ACTIVE_LOCKS=set()
 _ACTIVE_LOCKS_GUARD=threading.Lock()
@@ -299,7 +324,11 @@ def contract(args):
                                   "learned_state_min_accuracy":0.30,
                                   "learned_state_max_cross_entropy":1.85,
                                   "safety_lambda":[3.0,120.0],
-                                  "target_gradient_ratio":[0.05,2.0]},
+                                  "target_gradient_ratio":[0.05,2.0],
+                                  "gradient_direction":"batch_and_full_cohort_cosine",
+                                  "impact_bands":{"weak":[0.05,0.3],
+                                                  "medium":[0.3,1.0],
+                                                  "strong":[1.0,2.0]}},
         "selection":"mean 6 simulated OOD Macro-F1 evaluated on ALL 23245 unique parent-disjoint Validation groups; fixed render seed, independent-seed confirmation",
         "full_validation_final":True,
         "max_gpu_hours":args.max_gpu_hours,
