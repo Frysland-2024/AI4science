@@ -1372,7 +1372,7 @@ def run_pipeline(args):
             or args.sampling_mode not in ("epoch_shuffle","random_batch")):
         raise ValueError("Invalid microbatch or parent sampling mode")
     one_epoch=(108478+args.batch_size-1)//args.batch_size
-    if args.mode in ("run","final"):
+    if args.mode in ("gradient","run","final"):
         if args.sampling_mode!="epoch_shuffle":
             raise ValueError("Formal V11 training requires full parent epoch_shuffle")
         if (args.hpo_steps<50*one_epoch or args.confirm_steps<100*one_epoch
@@ -1474,16 +1474,34 @@ def run_pipeline(args):
     train_unique,val_full,parent_audit=full_parent_disjoint_records(records_path,all_records)
     event("FULL_PARENT_SPLIT_VERIFIED",audit=parent_audit,
           validation_parents=len(val_full),train_parents=len(train_unique))
-    # Freeze a learned-state whole-TRAIN gradient prior before any Validation.
-    if args.mode=="run":
+    # Two explicit machines and stages: laptop gradient, cuifa HPO.
+    # Never silently calculate a lambda prior on the HPO GPU.
+    evidence_path=ROOT/"server_migration/gradient_gate_v11_train_108478.json"
+    gate_path=study_dir/"gradient_gate.json"
+    if args.mode=="gradient":
         gate=make_or_load_train_only_gradient_gate(
             study_dir,train_unique,sim,libs,args,c)
-    else:
-        gate_path=study_dir/"gradient_gate.json"
-        if not gate_path.is_file():
-            raise RuntimeError("Final training blocked: frozen TRAIN gradient gate missing")
-        gate=json.loads(gate_path.read_text(encoding="utf-8"))
-        validate_train_only_gradient_gate(gate,c,train_unique)
+        if evidence_path.is_file():
+            if json.loads(evidence_path.read_text(encoding="utf-8"))!=gate:
+                raise RuntimeError("Refusing overwrite of a different published TRAIN gradient prior")
+        else:
+            write_json(evidence_path,gate)
+        event("GRADIENT_ONLY_FINISHED",status="TRAIN_ONLY_NOT_HPO",
+              evidence=str(evidence_path),sha256=digest(evidence_path),
+              lambda_window=gate["lambda_window"],
+              note="Evidence staged locally; Git commit/push required for cuifa")
+        return
+    if not gate_path.is_file() and evidence_path.is_file() and args.mode=="run":
+        evidence=json.loads(evidence_path.read_text(encoding="utf-8"))
+        validate_train_only_gradient_gate(evidence,c,train_unique)
+        write_json(gate_path,evidence)
+        event("LAPTOP_TRAIN_GRADIENT_IMPORTED",evidence_sha256=digest(evidence_path))
+    if not gate_path.is_file():
+        raise RuntimeError("HPO/final blocked: frozen laptop TRAIN gradient gate missing")
+    gate=json.loads(gate_path.read_text(encoding="utf-8"))
+    validate_train_only_gradient_gate(gate,c,train_unique)
+    if evidence_path.is_file() and digest(evidence_path)!=digest(gate_path):
+        raise RuntimeError("Local gradient gate conflicts with Git-tracked laptop evidence")
     # Workers load PeakTables on demand and cap per-worker RAM via LRU.
     # No eager 131k-file NPZ extraction in the HPO main process.
     peaks={}
@@ -1634,7 +1652,7 @@ def run_pipeline(args):
 
 def main():
     parser=argparse.ArgumentParser()
-    parser.add_argument("--mode",choices=["plan","smoke","run","final"],default="plan")
+    parser.add_argument("--mode",choices=["plan","smoke","gradient","run","final"],default="plan")
     parser.add_argument("--trials",type=int,default=8,
                         help="At least six: four matched-lambda architecture controls; further trials are fully automatic 3D Optuna TPE")
     parser.add_argument("--hpo-steps",type=int,default=None)
@@ -1667,7 +1685,7 @@ def main():
     args.confirm_steps=100*default_steps if args.confirm_steps is None else args.confirm_steps
     args.final_steps=100*default_steps if args.final_steps is None else args.final_steps
     args.eval_every=10*default_steps if args.eval_every is None else args.eval_every
-    if args.mode in ("run","final"):
+    if args.mode in ("gradient","run","final"):
         study_dir=ROOT/"server_runs"/"v11_a0_js_optuna"
         with exclusive_file_lock(study_dir/".study.lock"):
             run_pipeline(args)
