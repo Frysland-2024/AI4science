@@ -4,6 +4,15 @@ This file is the **public, concise history** of how the PXRD project evolved. It
 
 For current scientific claims, use [CURRENT_STATE.md](CURRENT_STATE.md) and the tracked result reports. History explains *how the project changed*; it does not override the current state.
 
+## 2026-11-10 · V11 从固定候选转向梯度约束的全自动 HPO
+
+**思路转折（负责人明确纠正）：** 最初过于复杂的全维度 HPO 逐步收缩为两个科学问题——（1）同母结构 JS 正则强度 λ；（2）参考 Bin Cao/SimXRD 产生的 PXRD 峰信息保留假设，即 ResNet 下采样 Stride 与卷积 Kernel。Weight decay=1e-4、LR=2e-4+Cosine 继承 V9/V10 合理训练配方；Batch size=16 优先视为工程预算，不与科研参数混淆。随后早期 V11 .9 曾把这两个问题实现为四组固定架构加两个固定 λ=30/90，负责人进一步强调：**保留 Optuna 的真正全自动优化能力，但给优化限定有依据的方向与范围**，不能反过来把少量预定组合误称“自动调参”。
+
+**新的科学设计：** 以 V9 Train-only learned-state 梯度尺度 Gate 为先例，在新 V11 全部 108,478 个独立 Train 母结构上实施已学习状态的 CE/JS 全模型梯度检查（其中 ResNet trunk 比率用于 λ 作用范围的校准）；在 Validation 之前冻结 λ 的有界搜索范围。将中间 stage stride {2,4} 与 residual kernel {5,9} 分开作为 Optuna 两个变量，在 λ 锚点下先形成 A0/A1/A2/A3 的 2×2 可解释对照，再由多变量 TPE 自由建议后三维组合，决策仍取自冻结 synthetic Validation。为避免上一轮**暴露次数和训练步数过短**，每个 HPO Trial 至少 50 个完整 Train 母结构 Epoch（Batch16 为 339,000 optimizer updates），确认/正式训练最多 100 Epoch，早停不得先于 Epoch50，所有阶段统一 100 Epoch Cosine 时间尺度；没有凭 5/10 Epoch 的临时 F1 选赢家。测试集/RRUFF 严禁参与优化。
+
+**证据状态：** 本次已把 .10 自动方案提交到 main，隔离本机核验 **47 项 server_migration 回归测试 + 2 subtests PASS**，并包含真实 Optuna 4.9 的三维 TPE 候选模拟。它目前是**代码与方案交付，而不是 GPU 科学结果**：5–10 Epoch Train-only learned-state 训练、108,478 Train-parent 完整梯度审计、目标 GPU 的实际 HPO、确认种子和真实 RRUFF-Cu1011 得分均 NOT_RUN。相比 .9，这是一次**为保留科研问题与降低无效搜索，而不是为增加超参数数量**做出的流程纠偏。操作合同与限制以 [Issue #55](https://github.com/Frysland-2024/AI4science/issues/55) 为准。
+
+---
 ## 核对后的完整时间线（2026-11-09 阶段节点）
 
 **这张表是项目发展的主时间线**：记录不同科研阶段实际解决了什么问题，不把 Git 代码版本号当作严格顺序的独立论文，也不覆盖已有结果和失败记录。
