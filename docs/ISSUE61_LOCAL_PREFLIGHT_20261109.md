@@ -26,8 +26,10 @@ XRD CI [#42554396816](https://github.com/Frysland-2024/AI4science/actions/runs/4
 
 **后续源码变更：** CPU checkpoint/resume 回归使用 Python 3.11 与 PyTorch `2.15.0+cpu`；CUDA 回归使用 Python 3.11、PyTorch `2.13.0+cu126` 与本机 RTX 4060 Laptop GPU。两者均通过 9 步连续训练及 4+5 步中断恢复逐项相等检查。为使 trainer 与 CPU/CUDA 回归测试进入私有 source snapshot，payload contract 已从 `.3` 升至 `v11-prefetch-validation-20261109.5`。本记录中的 `.3` ZIP 验收结果仍只对应当时的 137-file source snapshot；本轮没有重建 `.5` ZIP，也没有改动结构分片、PeakTable cache 或参考 checkpoint。
 
+**2026-11-09 contract `.5` 本机补验：** 在 `main` commit `1f0f691c80fcc5d4c180339db426b4130e8c7b23` 上新建私有 source snapshot，并复用本记录上方已列明 SHA256 的结构分片、PeakTable cache、A0 参考 checkpoint 与 Validation panel ZIP；未重新压缩或改写这些冻结数据。source snapshot 共 137 个文件，SHA256 `dc8cbdfdbcc43819c8e4994e18ccee544ccda4653b806103559c613868f7f21e`。私有包清单、所有 ZIP 校验和及压缩前/解包后 source snapshot 校验均通过。隔离目录中的 `start_server.sh --plan` 完整解包并核对数据：Train/Validation/Test 为 108,483/23,246/23,246 条记录，154,975 条 PeakTable cache 均通过 readiness 核验，随后输出 `PLAN PASS`。本次只运行计划模式；没有创建 study/trial、训练、访问 Test/RRUFF 或使用云端。私有包和隔离解包目录位于本机 `_local/issue61_preflight_20261109/contract5_package/`；该目录不提交到仓库。
+
 ## 移交到 Issue #55 Stage 0 的云端门槛
 
-以下项目不属于 #61 的本机范围，仍标记 `BLOCKED / NOT_RUN` 并由 #55 Stage 0 负责：目标 Linux/CUDA 有界 smoke；Train batch 吞吐及 GPU 显存、主机 RAM、磁盘测量；全部 23,245 Validation parents 在目标 GPU 路径上的可访问性；真实 trainer/prefetch 数据游标和目标 Linux GPU 中断恢复验收。它们需负责人单独批准 GPU 预算和有限验收方案。**本轮只在本机运行微型合成 CUDA 回归；没有租云、启动目标实例、Optuna、正式训练或 Test/RRUFF 评分。**
+以下项目不属于 #61 的本机范围，仍标记 `BLOCKED / NOT_RUN` 并由 #55 Stage 0 负责：目标 Linux/CUDA 有界 smoke；Train batch 吞吐及 GPU 显存、主机 RAM、磁盘测量；全部 23,245 Validation parents 在目标 GPU 路径上的可访问性；真实 trainer/prefetch 数据游标和目标 Linux GPU 中断恢复验收。它们需负责人单独批准 GPU 预算和有限验收方案。**本机已运行微型合成 CUDA 回归和 contract `.5` 数据计划预检；没有租云、启动目标实例、Optuna、正式训练或 Test/RRUFF 评分。**
 
 Stage 0 通过也不自动授权 HPO 或正式训练；这些仍需单独预算、协议和负责人批准。V10 A0_R1 checkpoint 在迁移包中仅作历史参考，不是 V11/154,975 训练结果。
