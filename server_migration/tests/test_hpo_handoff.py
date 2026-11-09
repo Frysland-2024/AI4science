@@ -9,16 +9,31 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import hpo_handoff
+import one_click_v11 as runner
 
 
 class HandoffImportTests(unittest.TestCase):
+    @staticmethod
+    def science_contract():
+        return {
+            "schema":"v11_154975_gradient_informed_three_parameter_v3",
+            "payload_contract_version":"v11-gradient-gated-optuna-20261110.10",
+            "implementation_sha256":{"runner":"fixture"},
+            "source_manifest_sha256":"fixture",
+            "simulator_config_sha256":"fixture",
+            "training_rows":108483,"training_parents":108478,
+            "architecture_presets":{},"fixed_optimizer":{"learning_rate":2e-4},
+            "batch_size_parents":16,"sampling_mode":"epoch_shuffle",
+            "training_precision":"bf16_if_supported_else_fp32",
+            "gradient_gate_contract":{"warmup_min_parent_epochs":5},
+        }
+
     def make_archive(self, path, *, tamper=False, unsafe=False, omit_gate=False):
         index = {"identity": {"parent_count": 23245}, "entries": {}}
-        contract_obj={"schema":"v11_154975_gradient_informed_three_parameter_v3",
-                      "sample":1}
+        contract_obj=self.science_contract()
         contract=(json.dumps(contract_obj)+"\n").encode()
         gate={"status":"TRAIN_ONLY_GRADIENT_GATE_PASS",
-              "contract_sha256":hpo_handoff._canonical_index_digest(contract_obj),
+              "science_identity_sha256":runner.gradient_science_identity(contract_obj),
               "lambda_window":{"low":3.0,"high":120.0,"anchor":60.0}}
         gate_bytes=json.dumps(gate).encode()
         recommendation = {
@@ -57,7 +72,7 @@ class HandoffImportTests(unittest.TestCase):
             first = hpo_handoff.import_handoff(root, archive)
             self.assertEqual(first["status"], "imported_unscored")
             self.assertEqual((root / hpo_handoff.STUDY_REL / "contract.json").read_bytes(),
-                             (json.dumps({"schema":"v11_154975_gradient_informed_three_parameter_v3","sample":1})+"\n").encode())
+                             (json.dumps(self.science_contract())+"\n").encode())
             self.assertEqual(hpo_handoff.import_handoff(root, archive)["imported_files"], 5)
 
     def test_tamper_rejected_without_files_created(self):
