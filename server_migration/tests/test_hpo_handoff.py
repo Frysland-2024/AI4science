@@ -12,11 +12,18 @@ import hpo_handoff
 
 
 class HandoffImportTests(unittest.TestCase):
-    def make_archive(self, path, *, tamper=False, unsafe=False):
+    def make_archive(self, path, *, tamper=False, unsafe=False, omit_gate=False):
         index = {"identity": {"parent_count": 23245}, "entries": {}}
-        contract = b'{"sample":1}\n'
+        contract_obj={"schema":"v11_154975_gradient_informed_three_parameter_v3",
+                      "sample":1}
+        contract=(json.dumps(contract_obj)+"\n").encode()
+        gate={"status":"TRAIN_ONLY_GRADIENT_GATE_PASS",
+              "contract_sha256":hpo_handoff._canonical_index_digest(contract_obj),
+              "lambda_window":{"low":3.0,"high":120.0,"anchor":60.0}}
+        gate_bytes=json.dumps(gate).encode()
         recommendation = {
             "status": "hpo_and_confirmation_completed",
+            "gradient_gate_sha256":hashlib.sha256(gate_bytes).hexdigest(),
             "contract_sha256": hashlib.sha256(contract).hexdigest(),
             "validation_panel_index_sha256": hpo_handoff._canonical_index_digest(index),
         }
@@ -26,6 +33,8 @@ class HandoffImportTests(unittest.TestCase):
             "handoff_validation_panel_index.json": json.dumps(index).encode(),
             "optuna.sqlite3": b"fake db for transport unit test",
         }
+        if not omit_gate:
+            files["gradient_gate.json"] = gate_bytes
         if unsafe:
             files["../evil.txt"] = b"evil"
         manifest = {
@@ -48,8 +57,8 @@ class HandoffImportTests(unittest.TestCase):
             first = hpo_handoff.import_handoff(root, archive)
             self.assertEqual(first["status"], "imported_unscored")
             self.assertEqual((root / hpo_handoff.STUDY_REL / "contract.json").read_bytes(),
-                             b'{"sample":1}\n')
-            self.assertEqual(hpo_handoff.import_handoff(root, archive)["imported_files"], 4)
+                             (json.dumps({"schema":"v11_154975_gradient_informed_three_parameter_v3","sample":1})+"\n").encode())
+            self.assertEqual(hpo_handoff.import_handoff(root, archive)["imported_files"], 5)
 
     def test_tamper_rejected_without_files_created(self):
         with tempfile.TemporaryDirectory() as td:
@@ -68,6 +77,15 @@ class HandoffImportTests(unittest.TestCase):
             with self.assertRaisesRegex(RuntimeError, "Unsafe"):
                 hpo_handoff.import_handoff(root, archive)
             self.assertFalse((root / "evil.txt").exists())
+
+    def test_missing_gradient_gate_refused(self):
+        with tempfile.TemporaryDirectory() as td:
+            root=Path(td)
+            archive=root/"missing_gate.zip"
+            self.make_archive(archive,omit_gate=True)
+            with self.assertRaisesRegex(RuntimeError,"TRAIN gradient prior"):
+                hpo_handoff.import_handoff(root,archive)
+            self.assertFalse((root/hpo_handoff.STUDY_REL/"contract.json").exists())
 
     def test_newline_independent_validation_index_identity(self):
         obj = {"identity": {"a": 2}, "entries": {"b": {"sha256": ["x", "y"]}}}
