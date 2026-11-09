@@ -39,6 +39,50 @@ class ValidationSelection(unittest.TestCase):
         self.assertFalse(mod.legacy_validation_panel_identity_compatible(
             previous,{**current,"payload_contract_version":"v11-future"}))
 
+    def test_focused_v11_science_choices_and_fixed_training_recipe(self):
+        self.assertEqual(list(mod.V11_ARCHITECTURES), ["A0","A1","A2","A3"])
+        self.assertEqual(mod.V11_FIXED_OPTIMIZER,
+                         {"learning_rate":2e-4,"weight_decay":1e-4,
+                          "scheduler":"cosine_5pct_floor"})
+        for architecture,(strides,kernel) in mod.V11_ARCHITECTURES.items():
+            chosen={"lambda_js":60.0,"architecture":architecture}
+            resolved=mod.resolve_v11_trial_params(chosen)
+            self.assertEqual(resolved["learning_rate"],2e-4)
+            self.assertEqual(resolved["weight_decay"],1e-4)
+            self.assertEqual(resolved["architecture"],architecture)
+            self.assertEqual(len(chosen),2)
+            from xrd_robustness.models.ml4pxrd_resnet1d import (
+                ML4PXRDResNet1DConfig, ML4PXRDResNet1D)
+            config=mod.v11_model_config(chosen,ML4PXRDResNet1DConfig)
+            self.assertEqual(config.stage_transition_strides,strides)
+            self.assertEqual(config.residual_kernel_size,kernel)
+            model=ML4PXRDResNet1D(config)
+            self.assertEqual(model.stages[2][0].conv1.stride,strides[1])
+            self.assertEqual(model.stages[2][0].conv1.kernel_size,kernel)
+            self.assertEqual(model.embedding.in_features,
+                             model.final_channels*model.final_length)
+        baseline=ML4PXRDResNet1D(ML4PXRDResNet1DConfig(model_id="18"))
+        tuned=ML4PXRDResNet1D(mod.v11_model_config(
+            {"lambda_js":60.0,"architecture":"A0"},ML4PXRDResNet1DConfig))
+        self.assertEqual(baseline.parameter_count,13008839)
+        self.assertEqual(baseline.parameter_count,tuned.parameter_count)
+        for bad in ({"lambda_js":60.0,"architecture":"Z"},
+                    {"lambda_js":60.0,"architecture":"A0","learning_rate":1e-4},
+                    {"lambda_js":float("nan"),"architecture":"A0"},
+                    {"lambda_js":200.0,"architecture":"A0"}):
+            with self.assertRaises(ValueError):
+                mod.resolve_v11_trial_params(bad)
+
+    def test_cached_validation_panels_reuse_after_training_only_version_bump(self):
+        old={"payload_contract_version":"v11-parent-epoch-microbatch-20261109.7",
+             "render_source_sha256":{"physics":"same"},"parent_count":23245}
+        new={**old,"payload_contract_version":"v11-focused-science-cpu-20261109.9"}
+        self.assertTrue(mod.legacy_validation_panel_identity_compatible(old,new))
+        intermediate={**old,"payload_contract_version":"v11-parent-epoch-budget-20261109.8"}
+        self.assertTrue(mod.legacy_validation_panel_identity_compatible(intermediate,new))
+        self.assertFalse(mod.legacy_validation_panel_identity_compatible(
+            {**old,"render_source_sha256":{"physics":"changed"}},new))
+
     def fixture(self,root):
         rows=[];recs=[]
         for i in range(7):
