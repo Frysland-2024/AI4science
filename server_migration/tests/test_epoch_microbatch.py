@@ -128,11 +128,43 @@ class MicrobatchTests(unittest.TestCase):
                 loss_fn=runner.loss_js,torch=torch,F=torch.nn.functional,amp=False)
 
 
+class DefaultBudgetTests(unittest.TestCase):
+    """Check the CLI plans longer HPO before any CUDA/HPO execution."""
+
+    def test_default_budget_is_5_10_10_parent_epochs(self):
+        for batch_size in (16, 32):
+            with self.subTest(batch=batch_size), mock.patch.object(
+                sys, "argv", ["one_click_v11.py", "--batch-size", str(batch_size)]
+            ), mock.patch.object(runner, "run_pipeline") as plan:
+                runner.main()
+                args=plan.call_args.args[0]
+                epoch=(108478+batch_size-1)//batch_size
+                self.assertEqual(args.hpo_steps, 5*epoch)
+                self.assertEqual(args.confirm_steps, 10*epoch)
+                self.assertEqual(args.final_steps, 10*epoch)
+                self.assertEqual(args.eval_every, epoch)
+                self.assertEqual(args.sampling_mode, "epoch_shuffle")
+                self.assertEqual(args.mode, "plan")
+
+    def test_explicit_budget_overrides_are_preserved(self):
+        flags=["one_click_v11.py","--hpo-steps","6780",
+               "--confirm-steps","13560","--final-steps","49280",
+               "--eval-every","6780"]
+        with mock.patch.object(sys,"argv",flags), mock.patch.object(
+            runner,"run_pipeline"
+        ) as plan:
+            runner.main()
+            args=plan.call_args.args[0]
+            self.assertEqual((args.hpo_steps,args.confirm_steps,
+                              args.final_steps,args.eval_every),
+                             (6780,13560,49280,6780))
+
+
 class FinalRuntimeOverridesTests(unittest.TestCase):
     def fake_args(self):
         return SimpleNamespace(
-            mode="final",trials=6,hpo_steps=6780,confirm_steps=13560,
-            final_steps=49280,batch_size=16,microbatch_size=16,
+            mode="final",trials=6,hpo_steps=33900,confirm_steps=67800,
+            final_steps=67800,batch_size=16,microbatch_size=16,
             sampling_mode="epoch_shuffle",eval_every=6780,
             prefetch_workers=4,prefetch_batches=2,native_threads=1,
             worker_peak_cache=256,max_gpu_hours=24,validation_bf16=False)
