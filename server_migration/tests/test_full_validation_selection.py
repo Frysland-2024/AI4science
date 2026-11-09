@@ -19,7 +19,7 @@ spec.loader.exec_module(mod)
 def fixture_science_contract(**extra):
     base={
         "schema":"v11_154975_gradient_informed_three_parameter_v3",
-        "payload_contract_version":"v11-gradient-gated-optuna-20261110.10",
+        "payload_contract_version":"v11-laptop-gradient-portable-20261110.11",
         "implementation_sha256":{"runner":"fixture"},
         "source_manifest_sha256":"fixture",
         "simulator_config_sha256":"fixture",
