@@ -520,6 +520,44 @@ def atomically_save_torch(path,object_to_save,torch):
     torch.save(object_to_save,temp)
     os.replace(temp,path)
 
+def save_trial_checkpoint(path,*,model,optimizer,step,best,best_step,
+                          numpy_rng_state,history,contract,device,torch):
+    """Persist the optimizer state plus the NumPy and Torch RNG states in use."""
+    device=torch.device(device)
+    if device.type=="cuda" and not torch.cuda.is_available():
+        raise RuntimeError("CUDA checkpoint save requested without CUDA")
+    cuda_rngs=torch.cuda.get_rng_state_all() if device.type=="cuda" else []
+    atomically_save_torch(path,{
+        "model":model.state_dict(),"optimizer":optimizer.state_dict(),
+        "step":step,"best":best,"best_step":best_step,
+        "numpy_rng":numpy_rng_state,"torch_rng":torch.get_rng_state(),
+        "cuda_rngs":cuda_rngs,"history":history,"contract":contract,
+    },torch)
+
+def restore_trial_checkpoint(path,*,model,optimizer,rng,expected_contract,device,torch):
+    """Restore a trial checkpoint; CPU mode supports deterministic local regression tests."""
+    device=torch.device(device)
+    saved=torch.load(path,map_location=device,weights_only=False)
+    required={"model","optimizer","step","best","best_step","numpy_rng",
+              "torch_rng","cuda_rngs","history","contract"}
+    missing=required.difference(saved)
+    if missing:
+        raise RuntimeError(f"Incomplete trial checkpoint; missing fields: {sorted(missing)}")
+    if saved["contract"]!=expected_contract:
+        raise RuntimeError("Checkpoint protocol mismatch")
+    if device.type=="cuda":
+        if not torch.cuda.is_available():
+            raise RuntimeError("CUDA checkpoint restore requested without CUDA")
+        if len(saved["cuda_rngs"])!=torch.cuda.device_count():
+            raise RuntimeError("Checkpoint CUDA device count mismatch")
+    model.load_state_dict(saved["model"])
+    optimizer.load_state_dict(saved["optimizer"])
+    rng.bit_generator.state=saved["numpy_rng"]
+    torch.set_rng_state(saved["torch_rng"].cpu())
+    if device.type=="cuda":
+        torch.cuda.set_rng_state_all([state.cpu() for state in saved["cuda_rngs"]])
+    return saved["step"],saved["best"],saved["best_step"],saved["history"]
+
 def trial_run(name,params,seed,max_steps,study_dir,train_records,val_records,peaks,sim,libs,argv,
               validation_panels=None,validation_panel_index_sha256=None):
     np,torch,F,_,_,render_pair_batch,build_online_view_factory,ML4PXRDResNet1D,ML4PXRDResNet1DConfig,PhysicsParameterSampler,metrics=libs
@@ -565,14 +603,10 @@ def trial_run(name,params,seed,max_steps,study_dir,train_records,val_records,pea
     step=0;best=-1.;best_step=0;history=[]
     resume=root/"last.pt"
     if resume.is_file():
-        saved=torch.load(resume,map_location=device,weights_only=False)
-        if saved["contract"]!=cfg:raise RuntimeError("Checkpoint protocol mismatch")
-        model.load_state_dict(saved["model"])
-        optimizer.load_state_dict(saved["optimizer"])
-        rng.bit_generator.state=saved["numpy_rng"]
-        torch.set_rng_state(saved["torch_rng"].cpu())
-        torch.cuda.set_rng_state_all([x.cpu() for x in saved["cuda_rngs"]])
-        step=saved["step"];best=saved["best"];best_step=saved["best_step"];history=saved["history"]
+        step,best,best_step,history=restore_trial_checkpoint(
+            resume,model=model,optimizer=optimizer,rng=rng,
+            expected_contract=cfg,device=device,torch=torch,
+        )
         event("resumed",name=name,step=step)
     n=len(train_records)
     profiles=VALIDATION_OOD_PROFILES
@@ -654,14 +688,11 @@ def trial_run(name,params,seed,max_steps,study_dir,train_records,val_records,pea
                         "model":model.state_dict(),"step":step,
                         "validation_ood_macro_f1":score,"contract":cfg,
                     },torch)
-                atomically_save_torch(resume,{
-                    "model":model.state_dict(),"optimizer":optimizer.state_dict(),
-                    "step":step,"best":best,"best_step":best_step,
-                    "numpy_rng":committed_rng_state,
-                    "torch_rng":torch.get_rng_state(),
-                    "cuda_rngs":torch.cuda.get_rng_state_all(),
-                    "history":history,"contract":cfg,
-                },torch)
+                save_trial_checkpoint(
+                    resume,model=model,optimizer=optimizer,step=step,best=best,
+                    best_step=best_step,numpy_rng_state=committed_rng_state,
+                    history=history,contract=cfg,device=device,torch=torch,
+                )
                 write_json(root/"history.json",history)
                 event(
                     "trial_validation",name=name,step=step,

@@ -93,6 +93,100 @@ class V11PrefetchContractTests(unittest.TestCase):
         self.assertNotEqual(first[0], second_prefetched)
         self.assertEqual(pool.committed[0][1][3], "train")
 
+    def test_cpu_interrupted_run_matches_uninterrupted_run(self):
+        import copy
+        import tempfile
+        import torch
+
+        class TinyModel(torch.nn.Module):
+            def __init__(self):
+                super().__init__()
+                self.linear = torch.nn.Linear(3, 2)
+
+            def forward(self, values):
+                return self.linear(values)
+
+        def make_run(seed):
+            torch.manual_seed(seed)
+            model = TinyModel()
+            optimizer = torch.optim.AdamW(model.parameters(), lr=0.003)
+            rng = np.random.default_rng(20261109)
+            return model, optimizer, rng, []
+
+        def train(model, optimizer, rng, history, start, stop):
+            for step in range(start + 1, stop + 1):
+                parents = rng.integers(0, 41, size=5).tolist()
+                inputs = torch.tensor(
+                    [[parent / 41, (parent % 7) / 7, 1.0] for parent in parents],
+                    dtype=torch.float32,
+                )
+                inputs = inputs + torch.rand_like(inputs) * 0.01
+                targets = torch.tensor([parent % 2 for parent in parents])
+                optimizer.zero_grad(set_to_none=True)
+                loss = torch.nn.functional.cross_entropy(model(inputs), targets)
+                loss.backward()
+                optimizer.step()
+                history.append({"step": step, "parents": parents,
+                                "loss": float(loss.detach())})
+
+        def assert_nested_equal(test, left, right):
+            if torch.is_tensor(left):
+                test.assertTrue(torch.equal(left, right))
+            elif isinstance(left, dict):
+                test.assertEqual(left.keys(), right.keys())
+                for key in left:
+                    assert_nested_equal(test, left[key], right[key])
+            elif isinstance(left, (tuple, list)):
+                test.assertEqual(len(left), len(right))
+                for a, b in zip(left, right):
+                    assert_nested_equal(test, a, b)
+            else:
+                test.assertEqual(left, right)
+
+        total_steps = 9
+        split_step = 4
+        full_model, full_optimizer, full_rng, full_history = make_run(1234)
+        train(full_model, full_optimizer, full_rng, full_history, 0, total_steps)
+        full_torch_rng = torch.get_rng_state().clone()
+
+        partial_model, partial_optimizer, partial_rng, partial_history = make_run(1234)
+        train(partial_model, partial_optimizer, partial_rng, partial_history, 0, split_step)
+        committed_rng = copy.deepcopy(partial_rng.bit_generator.state)
+        checkpoint = {
+            "step": split_step,
+            "best": 0.625,
+            "best_step": split_step,
+            "history": partial_history,
+        }
+
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "last.pt"
+            runner.save_trial_checkpoint(
+                path, model=partial_model, optimizer=partial_optimizer,
+                step=checkpoint["step"], best=checkpoint["best"],
+                best_step=checkpoint["best_step"], numpy_rng_state=committed_rng,
+                history=partial_history, contract={"seed": 1234},
+                device=torch.device("cpu"), torch=torch,
+            )
+
+            # Simulate process restart, including new model construction and unrelated RNG use.
+            torch.manual_seed(9999)
+            resumed_model, resumed_optimizer, resumed_rng, _ = make_run(8765)
+            restored = runner.restore_trial_checkpoint(
+                path, model=resumed_model, optimizer=resumed_optimizer,
+                rng=resumed_rng, expected_contract={"seed": 1234},
+                device=torch.device("cpu"), torch=torch,
+            )
+            step, best, best_step, resumed_history = restored
+            self.assertEqual((step, best, best_step), (split_step, 0.625, split_step))
+            train(resumed_model, resumed_optimizer, resumed_rng, resumed_history,
+                  step, total_steps)
+
+        assert_nested_equal(self, full_model.state_dict(), resumed_model.state_dict())
+        assert_nested_equal(self, full_optimizer.state_dict(), resumed_optimizer.state_dict())
+        self.assertEqual(full_history, resumed_history)
+        self.assertTrue(torch.equal(full_torch_rng, torch.get_rng_state()))
+
     def test_invalid_resources_rejected_before_process_spawn(self):
         sim = {"simulator_version": "v11_tch_pseudo_voigt"}
         with self.assertRaises(ValueError):

@@ -19,11 +19,14 @@
 | `start_server.sh --plan` | payload `.3`、source snapshot 137 文件 hash、源分片行数/parent isolation、cache readiness 和 PLAN_ONLY contract 均通过；Train 108,478 parent、Validation 23,245 parent、held-out Test 23,245 parent；Test/RRUFF 访问禁止 | PASS；没有创建 study/trial |
 | ResNet/JS CPU smoke | `one_click_v11.py --mode smoke`：1 条 Train 与 1 条 Validation 记录，V11 → ResNet-18-GN A0 → CE + same-parent JS，13,008,839 参数，loss 有限 | PASS；单批 CPU smoke，不是训练结果 |
 | Prefetch parity | 私有 Train 8 条记录、2 workers；串行与多进程两视图及标签逐元素 bitwise 相同 | PASS；启动占主导的小样本，不构成加速结论 |
+| Checkpoint/resume CPU 回归 | `one_click_v11.py` 共用的保存/恢复函数；9 步连续运行与 4 步 checkpoint 后在新模型/优化器实例恢复并续跑，核对最终模型、优化器、NumPy parent 抽样、训练历史和 Torch RNG | PASS；CPU 合成训练回归，不覆盖 CUDA RNG 或目标 Linux GPU 路径 |
 
 XRD CI [#42554396816](https://github.com/Frysland-2024/AI4science/actions/runs/42554396816) 与 V11 migration CI [#42554691047](https://github.com/Frysland-2024/AI4science/actions/runs/42554691047) 均通过。私有包和隔离验收日志位于本机 `_local/issue61_preflight_20261109/`；结构分片、cache 与 checkpoint 未被改写。
 
+**后续源码变更：** CPU checkpoint/resume 回归使用 Python 3.11 与 PyTorch `2.15.0+cpu`，针对 9 步连续训练及 4+5 步中断恢复逐项相等检查通过。为使新增 trainer 与测试进入私有 source snapshot，payload contract 已从 `.3` 升至 `v11-prefetch-validation-20261109.4`。本记录中的 `.3` ZIP 验收结果仍只对应当时的 137-file source snapshot；本轮没有重建 `.4` ZIP，也没有改动结构分片、PeakTable cache 或参考 checkpoint。
+
 ## 移交到 Issue #55 Stage 0 的云端门槛
 
-以下项目不属于 #61 的本机范围，均标记 `BLOCKED / NOT_RUN` 并由 #55 Stage 0 负责：目标 Linux/CUDA 有界 smoke；Train batch 吞吐及 GPU 显存、主机 RAM、磁盘测量；全部 23,245 Validation parents 在 GPU 路径上的可访问性；checkpoint/resume、数据游标和 RNG 复现。它们需负责人单独批准 GPU 预算和有限验收方案。**本记录没有租云、启动 CUDA/GPU、Optuna、正式训练或 Test/RRUFF 评分。**
+以下项目不属于 #61 的本机范围，仍标记 `BLOCKED / NOT_RUN` 并由 #55 Stage 0 负责：目标 Linux/CUDA 有界 smoke；Train batch 吞吐及 GPU 显存、主机 RAM、磁盘测量；全部 23,245 Validation parents 在 GPU 路径上的可访问性；真实 trainer/prefetch 数据游标与 CUDA RNG 的 GPU 中断恢复验收。它们需负责人单独批准 GPU 预算和有限验收方案。**本记录没有租云、启动 CUDA/GPU、Optuna、正式训练或 Test/RRUFF 评分。**
 
 Stage 0 通过也不自动授权 HPO 或正式训练；这些仍需单独预算、协议和负责人批准。V10 A0_R1 checkpoint 在迁移包中仅作历史参考，不是 V11/154,975 训练结果。

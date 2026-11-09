@@ -1,6 +1,6 @@
 """Versioned member contract for the private V11 Linux migration snapshot."""
 
-PAYLOAD_CONTRACT_VERSION = "v11-prefetch-validation-20261109.3"
+PAYLOAD_CONTRACT_VERSION = "v11-prefetch-validation-20261109.4"
 PAYLOAD_MANIFEST_MEMBER = "AI4science/server_migration/source_snapshot_manifest.json"
 
 PAYLOAD_REQUIRED_FILES = (
