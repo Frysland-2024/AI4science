@@ -126,6 +126,8 @@ The complete private `xrd_robustness/data/merged_154975_v11` source/cache,
 frozen manifest and matching source snapshot must be present, and remain
 outside public GitHub. Do not restart old 9,842-parent Optuna.
 
+**SimXRD-4M hardware reference (literature; checked 2026-11-09, not a V11 measurement):** Bin Cao et al., *SimXRD-4M* (ICLR 2025), §4.2 p.7, explicitly report PyTorch training on **GeForce RTX 3090 (24 GB VRAM)**, **not RTX 3070**; their shared settings were batch size **128**, learning rate **2.5e-4**, up to **50 epochs**, and early-stopping patience **3**. The paper does **not** establish how many 3090 cards were used or any V11 runtime/compatibility result. The cuifa **4070 Ti SUPER (16 GB)** has less VRAM and the V11 same-parent paired-view workload/batch meaning differs, so do **not** transfer the paper's batch size, throughput, or feasibility assumptions; use the Stage-0 measured batch/microbatch, peak VRAM, CPU-prefetch/RAM, full Validation and resume gates in Issue #55. Primary source: [ICLR 2025 official PDF, §4.2](https://proceedings.iclr.cc/paper_files/paper/2025/file/b04843d76c9f090beca55f335c4ea6bf-Paper-Conference.pdf).
+
 From the repository root, using native PowerShell (no WSL/Ubuntu required):
 
 ```powershell
