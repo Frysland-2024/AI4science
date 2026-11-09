@@ -39,6 +39,12 @@ class ValidationSelection(unittest.TestCase):
         self.assertFalse(mod.legacy_validation_panel_identity_compatible(
             previous,{**current,"payload_contract_version":"v11-future"}))
 
+    def test_reject_legacy_four_dim_hpo_schema(self):
+        with self.assertRaisesRegex(ValueError,"lambda_js and architecture"):
+            mod.resolve_v11_trial_params({
+                "learning_rate":2e-4,"lambda_js":60.0,
+                "weight_decay":1e-4,"scheduler":"cosine_5pct_floor"})
+
     def test_focused_v11_science_choices_and_fixed_training_recipe(self):
         self.assertEqual(list(mod.V11_ARCHITECTURES), ["A0","A1","A2","A3"])
         self.assertEqual(mod.V11_FIXED_OPTIMIZER,
@@ -173,8 +179,7 @@ class ValidationSelection(unittest.TestCase):
             name="hpo_000"
             root=study/"trials"/name
             root.mkdir(parents=True)
-            params={"learning_rate":0.0002,"lambda_js":60.0,
-                    "weight_decay":0.0001,"scheduler":"none"}
+            params={"lambda_js":60.0,"architecture":"A0"}
             args=SimpleNamespace(batch_size=16,eval_every=100)
             contract_sha="c"*64
             panel_sha="a"*64
@@ -279,8 +284,7 @@ class ValidationSelection(unittest.TestCase):
             study=Path(tmp)
             args=SimpleNamespace(batch_size=16,eval_every=100,trials=2,
                                  hpo_steps=200,confirm_steps=300)
-            params={"learning_rate":0.0002,"lambda_js":60.0,
-                    "weight_decay":0.0001,"scheduler":"none"}
+            params={"lambda_js":60.0,"architecture":"A0"}
             contract_obj={"hpo_seed":123,"confirmation_seeds":[201,202]}
             contract_file=study/"contract.json"
             contract_file.write_text(json.dumps(contract_obj),encoding="utf-8")
