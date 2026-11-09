@@ -48,6 +48,9 @@ class ML4PXRDResNet1DConfig:
     group_norm_groups: int = 32
     group_norm_eps: float = 1e-3
     square_kernel_size_and_stride: bool = True
+    # Optional independent PXRD architecture controls; None preserves source ML4pXRDs.
+    stage_transition_strides: tuple[int, int, int] | None = None
+    residual_kernel_size: int | None = None
     add_additional_dense_layer: bool = True
     dense_width: int = 256
     embed_dim: int = 256
@@ -61,6 +64,15 @@ class ML4PXRDResNet1DConfig:
             raise ValueError("GroupNorm settings must be positive")
         if self.dense_width <= 0 or self.embed_dim != self.dense_width:
             raise ValueError("embed_dim must equal the source dense_width")
+        if self.stage_transition_strides is not None:
+            if len(self.stage_transition_strides) != 3 or any(
+                s not in (1, 2, 4) for s in self.stage_transition_strides
+            ):
+                raise ValueError("stage_transition_strides must be a 3-tuple of 1, 2, or 4")
+        if self.residual_kernel_size is not None and (
+            self.residual_kernel_size < 3 or self.residual_kernel_size % 2 != 1
+        ):
+            raise ValueError("residual_kernel_size must be an odd integer >=3")
         for channels, _ in _RESNET_SPECS[self.model_id]:
             groups = min(self.group_norm_groups, channels)
             if channels % groups != 0:
@@ -149,7 +161,8 @@ class _BasicResidualBlock1D(nn.Module):
         use_projection: bool,
     ) -> None:
         super().__init__()
-        kernel = 9 if config.square_kernel_size_and_stride else 3
+        kernel = (config.residual_kernel_size if config.residual_kernel_size is not None
+                  else (9 if config.square_kernel_size_and_stride else 3))
         self.projection = None
         self.projection_norm = None
         if use_projection:
@@ -205,8 +218,10 @@ class ML4PXRDResNet1D(nn.Module):
         groups: list[nn.Module] = []
         in_channels = 64
         stage_stride = 4 if config.square_kernel_size_and_stride else 2
+        transition_strides = (config.stage_transition_strides if config.stage_transition_strides is not None
+                              else (stage_stride, stage_stride, stage_stride))
         for stage_index, (out_channels, repeats) in enumerate(_RESNET_SPECS[config.model_id]):
-            stride = 1 if stage_index == 0 else stage_stride
+            stride = 1 if stage_index == 0 else transition_strides[stage_index - 1]
             blocks: list[nn.Module] = [
                 _BasicResidualBlock1D(
                     in_channels,
@@ -246,9 +261,10 @@ class ML4PXRDResNet1D(nn.Module):
         length = math.ceil(length / 2)
         length = math.ceil(length / 2)
         stride = 4 if self.config.square_kernel_size_and_stride else 2
-        for stage_index in range(len(_RESNET_SPECS[self.config.model_id])):
-            if stage_index > 0:
-                length = math.ceil(length / stride)
+        transitions = (self.config.stage_transition_strides if self.config.stage_transition_strides is not None
+                       else (stride, stride, stride))
+        for transition_stride in transitions:
+            length = math.ceil(length / transition_stride)
         return length
 
     @staticmethod
