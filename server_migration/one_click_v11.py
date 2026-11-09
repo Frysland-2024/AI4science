@@ -407,6 +407,214 @@ def loss_js(logit1,logit2,targets,weight,torch,F):
     js=0.5*((p.exp()*(p-m)).sum(-1).mean()+(q.exp()*(q-m)).sum(-1).mean())
     return ce+weight*js,ce,js
 
+
+def validate_train_only_gradient_gate(gate, contract_obj, train_records):
+    """Fail closed: a gradient prior is not a Validation performance estimate."""
+    if not isinstance(gate,dict) or gate.get("status")!="TRAIN_ONLY_GRADIENT_GATE_PASS":
+        raise RuntimeError("Missing or incomplete learned-state TRAIN gradient gate")
+    if gate.get("contract_sha256")!=canonical_digest(contract_obj):
+        raise RuntimeError("TRAIN gradient gate does not match frozen V11 contract")
+    expected=hashlib.sha256("\n".join(r.material_id for r in train_records).encode()).hexdigest()
+    if gate.get("training_parent_ids_sha256")!=expected or gate.get("parents_scanned")!=len(train_records):
+        raise RuntimeError("TRAIN gradient gate parent coverage/identity mismatch")
+    if gate.get("parents_scanned")!=108478 or gate.get("warmup_parent_epochs",0)<5:
+        raise RuntimeError("TRAIN-only gate lacks full parent coverage or learned-state warmup")
+    if (gate.get("learned_state_accuracy",0)<0.30
+        or gate.get("learned_state_ce",99)>1.85):
+        raise RuntimeError("TRAIN-only JS gradient gate measured before meaningful learning")
+    window=derive_train_only_js_range(gate["median_per_batch_js_ce_gradient_ratio"])
+    if gate.get("lambda_window")!=window:
+        raise RuntimeError("TRAIN-only JS lambda window has changed")
+    return window
+
+
+def make_or_load_train_only_gradient_gate(study_dir,train_records,sim,libs,argv,contract_obj):
+    """Automatic V9-style gate: learned A0 ERM then whole-TRAIN gradient audit.
+
+    Read NO Validation spectra/metrics. All 108478 parents are inspected once
+    at learned state, with FP32 CE/JS gradients over the entire backbone.
+    The gradient result constrains lambda but NEVER selects model performance.
+    """
+    import numpy as np
+    import torch
+    from xrd_robustness.models.ml4pxrd_resnet1d import ML4PXRDResNet1D,ML4PXRDResNet1DConfig
+    gate_path=Path(study_dir)/"gradient_gate.json"
+    if gate_path.is_file():
+        gate=json.loads(gate_path.read_text(encoding="utf-8"))
+        validate_train_only_gradient_gate(gate,contract_obj,train_records)
+        return gate
+    if len(train_records)!=108478 or not torch.cuda.is_available():
+        raise RuntimeError("Whole-TRAIN gradient gate requires 108478 parents and CUDA")
+    np_lib,torch_lib,F,*_=libs
+    seed=20261110
+    random.seed(seed);torch.manual_seed(seed);torch.cuda.manual_seed_all(seed)
+    model=ML4PXRDResNet1D(ML4PXRDResNet1DConfig(model_id="18")).cuda()
+    optimizer=torch.optim.AdamW(model.parameters(),
+        lr=V11_FIXED_OPTIMIZER["learning_rate"],
+        weight_decay=V11_FIXED_OPTIMIZER["weight_decay"])
+    one_epoch=(len(train_records)+argv.batch_size-1)//argv.batch_size
+    max_steps=10*one_epoch
+    base=Path(study_dir)/"gradient_gate_warmup.pt"
+    gate_contract={"purpose":"TRAIN_ONLY_LEARNED_GRADIENT_V1",
+                   "main_contract_sha256":canonical_digest(contract_obj),
+                   "training_parent_sha256":hashlib.sha256(
+                       "\n".join(r.material_id for r in train_records).encode()).hexdigest(),
+                   "batch_size":argv.batch_size,"epoch_steps":one_epoch,"seed":seed}
+    rng=np.random.default_rng(seed)
+    step=0
+    history=[]
+    if base.is_file():
+        step,_,_,history=restore_trial_checkpoint(
+            base,model=model,optimizer=optimizer,rng=rng,
+            expected_contract=gate_contract,device=torch.device("cuda"),torch=torch)
+        if step%one_epoch!=0 or step>max_steps:
+            raise RuntimeError("Invalid TRAIN-only learned-state checkpoint milestone")
+    if not history or history[-1]["accuracy"]<.30 or history[-1]["mean_ce"]>1.85:
+        model.train()
+        pool=V11PairPrefetchPool(sim,run_seed=seed,
+            workers=argv.prefetch_workers,prefetch_batches=argv.prefetch_batches,
+            native_threads=argv.native_threads,max_cached_peaks=argv.worker_peak_cache)
+        next_submit=step;future_rng={};permutation_cache={}
+        right=0;seen=0;ce_acc=0.;measured=0
+        try:
+            while step<max_steps:
+                next_submit=enqueue_train_lookahead(
+                    pool,rng,train_records,batch_size=argv.batch_size,
+                    start_step=step,next_submit=next_submit,max_steps=max_steps,
+                    committed_states=future_rng,sampling_mode="epoch_shuffle",
+                    sampling_seed=seed,permutation_cache=permutation_cache)
+                first,second,labels=pool.get(step)
+                committed_state=future_rng.pop(step)
+                a=torch.from_numpy(first).to("cuda")
+                b=torch.from_numpy(second).to("cuda")
+                y=torch.from_numpy(labels).to("cuda")
+                _,ce,_,_=paired_optimizer_step(
+                    model,optimizer,a,b,y,lambda_js=0.0,
+                    microbatch_size=argv.microbatch_size,loss_fn=loss_js,
+                    torch=torch,F=F,amp=torch.cuda.is_bf16_supported())
+                # Bounded Train-only learned-state check on every 25th optimizer step.
+                if step%25==0:
+                    with torch.no_grad():
+                        with torch.autocast("cuda",dtype=torch.bfloat16,
+                                            enabled=torch.cuda.is_bf16_supported()):
+                            logits=model(a)["logits"]
+                        right+=int((logits.argmax(-1)==y).sum().item())
+                        seen+=len(y)
+                        ce_acc+=float(ce)
+                        measured+=1
+                step+=1
+                if step%one_epoch==0:
+                    epoch=step//one_epoch
+                    score=right/max(1,seen)
+                    ce_mean=ce_acc/max(1,measured)
+                    history.append({"epoch":epoch,"step":step,
+                                    "accuracy":score,"mean_ce":ce_mean,
+                                    "sampled_train_parents":seen})
+                    save_trial_checkpoint(
+                        base,model=model,optimizer=optimizer,step=step,best=0.,
+                        best_step=0,numpy_rng_state=committed_state,
+                        history=history,contract=gate_contract,
+                        device=torch.device("cuda"),torch=torch)
+                    event("TRAIN_ONLY_LEARNED_STATE",epoch=epoch,
+                          accuracy=round(score,5),mean_ce=round(ce_mean,5))
+                    right=0;seen=0;ce_acc=0.;measured=0
+                    if epoch>=5 and score>=0.30 and ce_mean<=1.85:
+                        break
+        finally:
+            pool.close()
+    if not history or history[-1]["accuracy"]<.30 or history[-1]["mean_ce"]>1.85:
+        raise RuntimeError("TRAIN-only ERM did not reach learned-state gate within 10 epochs; block HPO")
+    # Frozen learned model is NEVER used as a starting checkpoint for HPO trials.
+    model.eval()
+    params=tuple(p for p in model.parameters() if p.requires_grad)
+    full_ce=[torch.zeros_like(p,dtype=torch.float32) for p in params]
+    full_js=[torch.zeros_like(p,dtype=torch.float32) for p in params]
+    scan_seed=20261111
+    scan_rng=np.random.default_rng(scan_seed)
+    pool=V11PairPrefetchPool(sim,run_seed=scan_seed,
+        workers=argv.prefetch_workers,prefetch_batches=argv.prefetch_batches,
+        native_threads=argv.native_threads,max_cached_peaks=argv.worker_peak_cache)
+    ratios=[]
+    seen=0;submitted=0
+    future_rng={};permutation_cache={}
+    try:
+        for step in range(one_epoch):
+            submitted=enqueue_train_lookahead(
+                pool,scan_rng,train_records,batch_size=argv.batch_size,
+                start_step=step,next_submit=submitted,max_steps=one_epoch,
+                committed_states=future_rng,sampling_mode="epoch_shuffle",
+                sampling_seed=scan_seed,permutation_cache=permutation_cache)
+            first,second,labels=pool.get(step)
+            future_rng.pop(step)
+            a=torch.from_numpy(first).to("cuda")
+            b=torch.from_numpy(second).to("cuda")
+            y=torch.from_numpy(labels).to("cuda")
+            out_a=model(a)["logits"].float()
+            out_b=model(b)["logits"].float()
+            _,ce,js=loss_js(out_a,out_b,y,0.0,torch,F)
+            grad_ce=torch.autograd.grad(ce,params,retain_graph=True,allow_unused=True)
+            grad_js=torch.autograd.grad(js,params,allow_unused=True)
+            ce_sq=torch.zeros((),device="cuda");js_sq=torch.zeros((),device="cuda")
+            fraction=len(y)/len(train_records)
+            with torch.no_grad():
+                for i,(gc,gj) in enumerate(zip(grad_ce,grad_js)):
+                    if gc is not None:
+                        g=gc.detach().float()
+                        ce_sq+=g.square().sum()
+                        full_ce[i].add_(g,alpha=fraction)
+                    if gj is not None:
+                        g=gj.detach().float()
+                        js_sq+=g.square().sum()
+                        full_js[i].add_(g,alpha=fraction)
+                den=float(ce_sq.sqrt().item())
+                num=float(js_sq.sqrt().item())
+            if not math.isfinite(den) or not math.isfinite(num) or den<=1e-12:
+                raise RuntimeError("Nonfinite/zero learned-state backbone gradients")
+            ratios.append(num/den)
+            seen+=len(y)
+    finally:
+        pool.close()
+    if seen!=len(train_records):
+        raise RuntimeError("TRAIN-only full gradient scan failed parent exposure")
+    ce_total=float(torch.stack([t.square().sum() for t in full_ce]).sum().sqrt().item())
+    js_total=float(torch.stack([t.square().sum() for t in full_js]).sum().sqrt().item())
+    if ce_total<=1e-12 or not all(math.isfinite(z) for z in (ce_total,js_total)):
+        raise RuntimeError("Aggregate full-TRAIN backbone gradient not identifiable")
+    ratio=float(np.median(ratios))
+    window=derive_train_only_js_range(ratio)
+    gate={"status":"TRAIN_ONLY_GRADIENT_GATE_PASS",
+          "contract_sha256":canonical_digest(contract_obj),
+          "training_parent_ids_sha256":gate_contract["training_parent_sha256"],
+          "training_only":True,"validation_access":False,
+          "parents_scanned":seen,"batches_scanned":len(ratios),
+          "warmup_parent_epochs":history[-1]["epoch"],
+          "learned_state_accuracy":history[-1]["accuracy"],
+          "learned_state_ce":history[-1]["mean_ce"],
+          "median_per_batch_js_ce_gradient_ratio":ratio,
+          "q10_per_batch_ratio":float(np.quantile(ratios,0.1)),
+          "q90_per_batch_ratio":float(np.quantile(ratios,0.9)),
+          "full_train_ce_gradient_norm":ce_total,
+          "full_train_js_gradient_norm":js_total,
+          "full_train_aggregate_ratio":js_total/ce_total,
+          "lambda_window":window,
+          "note":"Full backbone and whole Train split; gate defines lambda bounds, Validation decides the winner"}
+    validate_train_only_gradient_gate(gate,contract_obj,train_records)
+    write_json(gate_path,gate)
+    event("TRAIN_ONLY_GRADIENT_GATE_FROZEN",parents=seen,
+          median_ratio=round(ratio,6),lambda_window=window,
+          full_train_aggregate_ratio=round(js_total/ce_total,6))
+    return gate
+
+
+def assert_gradient_lambda(params, gate):
+    """No Optuna-selected lambda can escape the pre-Validation gradient gate."""
+    value=resolve_v11_trial_params(params)["lambda_js"]
+    w=gate["lambda_window"]
+    if not w["low"]-1e-12<=value<=w["high"]+1e-12:
+        raise RuntimeError("Trial lambda is outside frozen learned-gradient search range")
+    return True
+
+
 VALIDATION_OOD_PROFILES=("ood_shift_negative","ood_shift_positive","ood_broadening",
                          "ood_noise","ood_background","ood_texture")
 
