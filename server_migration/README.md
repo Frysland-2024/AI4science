@@ -171,7 +171,7 @@ Run `bash start_server.sh --plan` first (handoff ZIP may already be present),
 then **only with separate final-training authorization** run:
 
 ```bash
-bash start_server.sh --final --prefetch-workers 2 --prefetch-batches 2 --worker-peak-cache 256
+bash start_server.sh --final
 ```
 
 The final launcher imports the hash-verified handoff, regenerates full
@@ -217,6 +217,27 @@ rendering parity is tested. Test/RRUFF scoring remains separate.
   Output gives parent/s, measured-step latency, CUDA allocated/reserved
   memory and disk free. Tiny smokes do not certify cuifa's 4070 Ti SUPER.
 
+
+### Unified CPU prefetch default — Windows, Linux and future cloud
+
+Owner decision (2026-11-09): **12 prefetch workers / 4 queued batches /
+64 cached PeakTables per worker / native_threads=1** is the universal
+engineering starting point. This applies to the native Windows launcher,
+`python server_migration/one_click_v11.py` directly, and the Linux
+`bash start_server.sh --plan|--run|--final` launcher on rented cloud
+servers. There is no automatic worker downgrade based on CPU model/RAM;
+explicit `--prefetch-workers`, `--prefetch-batches`,
+`--worker-peak-cache`, `--native-threads` overrides remain available.
+The Linux prefetch smoke also follows an explicitly overridden worker
+count instead of hardcoding four. HPO/final study contracts record the
+actual choices, and resumed jobs must remain scientifically consistent.
+
+The **12/4/64/1 performance numbers come only from the Ryzen 9 7945HX
+Windows laptop**. Linux/cloud throughput and memory stability are not
+yet demonstrated; measure the target machine in Stage 0 before
+authorizing full-duration training. Rebuild the private source snapshot
+and associated SHA256SUMS after this default change. Neither an
+untested cloud deployment nor a `--plan` is a completed GPU training run.
 
 ### CPU prefetch tuning — local Ryzen 9 7945HX (2026-11-09)
 

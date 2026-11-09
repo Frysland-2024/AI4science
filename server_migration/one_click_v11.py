@@ -1208,10 +1208,12 @@ def main():
                         help="GPU microbatch in parents; optimizer effective batch remains --batch-size")
     parser.add_argument("--sampling-mode",choices=["epoch_shuffle","random_batch"],
                         default="epoch_shuffle")
-    parser.add_argument("--prefetch-workers",type=int,default=4)
-    parser.add_argument("--prefetch-batches",type=int,default=3)
+    # Unified CPU prefetch default across Windows, Linux and cloud runners.
+    # Runtime-only flags can be overridden per host without changing science.
+    parser.add_argument("--prefetch-workers",type=int,default=12)
+    parser.add_argument("--prefetch-batches",type=int,default=4)
     parser.add_argument("--native-threads",type=int,default=1)
-    parser.add_argument("--worker-peak-cache",type=int,default=512)
+    parser.add_argument("--worker-peak-cache",type=int,default=64)
     parser.add_argument("--validation-bf16",action="store_true",help="Opt-in only after BF16 vs FP32 Validation parity checks")
     parser.add_argument("--max-gpu-hours",type=float,default=12.0)
     args=parser.parse_args()

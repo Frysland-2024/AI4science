@@ -67,7 +67,24 @@ if [ "$MODE" = "--plan" ]; then
 fi
 bash server_migration/setup_linux.sh
 "$PYTHON" server_migration/one_click_v11.py --mode smoke "$@"
-"$PYTHON" server_migration/smoke_prefetch.py --workers 4 --batch-size 8
+# Match smoke CPU worker count to the cloud runner default or user override.
+# Both --prefetch-workers N and --prefetch-workers=N are accepted.
+CPU_WORKERS=12
+RUNNER_ARGS=("$@")
+for ((i=0;i<${#RUNNER_ARGS[@]};i++)); do
+  case "${RUNNER_ARGS[i]}" in
+    --prefetch-workers)
+      if (( i + 1 < ${#RUNNER_ARGS[@]} )); then
+        CPU_WORKERS="${RUNNER_ARGS[i+1]}"
+      fi
+      ;;
+    --prefetch-workers=*)
+      CPU_WORKERS="${RUNNER_ARGS[i]#*=}"
+      ;;
+  esac
+done
+echo "Cloud V11 prefetch: workers=$CPU_WORKERS; queues=4, cache=64 by default (overridable)."
+"$PYTHON" server_migration/smoke_prefetch.py --workers "$CPU_WORKERS" --batch-size 8
 if [ "$MODE" = "--final" ]; then
   if [ -f "$KIT/hpo_handoff.zip" ]; then
     "$PYTHON" server_migration/hpo_handoff.py import --root "$DEST/AI4science" --archive "$KIT/hpo_handoff.zip"

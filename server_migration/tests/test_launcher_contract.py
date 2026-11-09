@@ -8,6 +8,18 @@ class StartServerArgumentForwardingTests(unittest.TestCase):
         content = script.read_text(encoding="utf-8")
         self.assertIn('one_click_v11.py --mode smoke "$@"', content)
         self.assertIn('one_click_v11.py --mode run "$@"', content)
+        self.assertIn('CPU_WORKERS=12', content)
+        self.assertIn('--prefetch-workers=*)', content)
+        self.assertIn('smoke_prefetch.py --workers "$CPU_WORKERS"', content)
+
+
+class CrossPlatformCpuDefaultTests(unittest.TestCase):
+    def test_python_runner_cloud_default_matches_windows(self):
+        source = (Path(__file__).resolve().parents[1] / "one_click_v11.py").read_text(encoding="utf-8")
+        self.assertIn('parser.add_argument("--prefetch-workers",type=int,default=12)',source)
+        self.assertIn('parser.add_argument("--prefetch-batches",type=int,default=4)',source)
+        self.assertIn('parser.add_argument("--worker-peak-cache",type=int,default=64)',source)
+        self.assertIn('parser.add_argument("--native-threads",type=int,default=1)',source)
 
 
 class WindowsCpuProfileTests(unittest.TestCase):
