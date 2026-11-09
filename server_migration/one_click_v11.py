@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Portable V11/154975 ResNet-A0 + Dynamic JS bounded Optuna pipeline.
+"""Portable V11/154975 PXRD ResNet + Dynamic JS focused science pipeline.
 
 No locked Test/RRUFF access; old-data V10 supervisor is deliberately not used.
 Use plan/smoke locally, and --mode run only on a CUDA Linux machine.
@@ -26,6 +26,36 @@ from payload_contract import PAYLOAD_CONTRACT_VERSION
 ROOT=Path(os.environ.get("AI4SCIENCE_ROOT", str(Path(__file__).resolve().parents[1]))).resolve()
 XRD=ROOT/"xrd_robustness"
 sys.path.insert(0,str(XRD/"src"))
+
+# Two science choices: same-parent JS strength and interpretable PXRD peak-preserving
+# ResNet architecture. Keep the historically supported optimizer recipe fixed.
+V11_FIXED_OPTIMIZER={"learning_rate":2e-4,"weight_decay":1e-4,
+                     "scheduler":"cosine_5pct_floor"}
+V11_ARCHITECTURES={
+    "A0":((4,4,4),9),  # Historical ML4pXRDs source-style baseline.
+    "A1":((4,2,4),9),  # V10 selective downsampling.
+    "A2":((4,2,4),5),  # V10 selective downsampling + narrower kernel.
+    "A3":((4,4,4),5),  # Missing kernel-only control for clean interpretation.
+}
+
+def resolve_v11_trial_params(params):
+    """Restrict Optuna to JS lambda + discrete PXRD architecture presets."""
+    if set(params)!={"lambda_js","architecture"}:
+        raise ValueError("V11 trials must contain only lambda_js and architecture")
+    architecture=params["architecture"]
+    if architecture not in V11_ARCHITECTURES:
+        raise ValueError(f"Unknown PXRD architecture preset: {architecture}")
+    weight=float(params["lambda_js"])
+    if not math.isfinite(weight) or not 15.0<=weight<=120.0:
+        raise ValueError("V11 lambda_js must be finite and in the frozen 15..120 range")
+    return {**V11_FIXED_OPTIMIZER,"lambda_js":weight,"architecture":architecture}
+
+def v11_model_config(params, config_type):
+    arch=resolve_v11_trial_params(params)["architecture"]
+    strides,kernel=V11_ARCHITECTURES[arch]
+    return config_type(model_id="18",stage_transition_strides=strides,
+                       residual_kernel_size=kernel)
+
 
 def digest(path):
     h=hashlib.sha256()
@@ -187,7 +217,7 @@ def contract(args):
     if not all(p in obj["profiles"] for p in needed):
         raise RuntimeError("Required V11 profiles missing")
     return {
-        "schema":"v11_154975_resnet_a0_js_optuna_v1",
+        "schema":"v11_154975_pxrd_lambda_architecture_v2",
         "payload_contract_version":PAYLOAD_CONTRACT_VERSION,
         "implementation_sha256":implementation_fingerprints(),
         "source_manifest_sha256":expected_records,
@@ -196,7 +226,9 @@ def contract(args):
         "training_rows":108483, "training_parents":108478,
         "validation_rows":23246, "validation_parents":23245,
         "held_out_test_parents":23245, "test_and_rruff_access":"prohibited",
-        "architecture":"ML4PXRDResNet1D(model_id=18) A0; stride 4/4/4, kernel 9",
+        "architecture":"ML4PXRDResNet1D ResNet-18-GN, frozen depth/width; selectable PXRD stride/kernel presets",
+        "architecture_presets":{key:{"stage_transition_strides":list(value[0]),"residual_kernel_size":value[1]} for key,value in V11_ARCHITECTURES.items()},
+        "fixed_optimizer":V11_FIXED_OPTIMIZER,
         "train_mode":"dynamic_js_same_parent",
         "batch_size_parents":args.batch_size,
         "microbatch_size_parents":getattr(args,"microbatch_size",args.batch_size),
@@ -221,8 +253,7 @@ def contract(args):
         "hpo_seed":20260711,
         "confirmation_seeds":[20261104,20261105],
         "max_new_trials":args.trials,
-        "search_space":{"learning_rate":[5e-5,3e-4],"lambda_js":[15.,120.],
-                        "weight_decay":[1e-6,1e-3],"scheduler":["cosine_5pct_floor","none"]},
+        "search_space":{"lambda_js":[15.,120.],"architecture":list(V11_ARCHITECTURES)},
         "selection":"mean 6 simulated OOD Macro-F1 evaluated on ALL 23245 unique parent-disjoint Validation groups; fixed render seed, independent-seed confirmation",
         "full_validation_final":True,
         "max_gpu_hours":args.max_gpu_hours,
@@ -624,10 +655,12 @@ def trial_run(name,params,seed,max_steps,study_dir,train_records,val_records,pea
     device=torch.device("cuda")
     # Seed BEFORE model initialization; otherwise multi-seed comparisons are invalid.
     random.seed(seed); torch.manual_seed(seed); torch.cuda.manual_seed_all(seed)
-    model=ML4PXRDResNet1D(ML4PXRDResNet1DConfig(model_id="18")).to(device)
-    optimizer=torch.optim.AdamW(model.parameters(),lr=float(params["learning_rate"]),weight_decay=float(params["weight_decay"]))
-    if model.parameter_count<10000000 or model.parameter_count>20000000:
-        raise RuntimeError("Unexpected A0 parameter count")
+    resolved=resolve_v11_trial_params(params)
+    model=ML4PXRDResNet1D(v11_model_config(params,ML4PXRDResNet1DConfig)).to(device)
+    optimizer=torch.optim.AdamW(model.parameters(),lr=resolved["learning_rate"],
+                                weight_decay=resolved["weight_decay"])
+    if model.parameter_count<5000000 or model.parameter_count>20000000:
+        raise RuntimeError("Unexpected PXRD ResNet parameter count")
     train_fac=factory(sim,seed,PhysicsParameterSampler,build_online_view_factory)
     val_fac=factory(sim,20260721,PhysicsParameterSampler,build_online_view_factory)
     rng=np.random.default_rng(seed)
@@ -680,16 +713,13 @@ def trial_run(name,params,seed,max_steps,study_dir,train_records,val_records,pea
             else:
                 x1=x1.to(device);x2=x2.to(device);targets=targets.to(device)
             for group in optimizer.param_groups:
-                if params["scheduler"]=="none":
-                    group["lr"]=float(params["learning_rate"])
-                else:
-                    group["lr"]=float(params["learning_rate"])*(
-                        .05+.95*.5*(1+math.cos(math.pi*step/max_steps))
-                    )
+                group["lr"]=resolved["learning_rate"]*(
+                    .05+.95*.5*(1+math.cos(math.pi*step/max_steps))
+                )
             use_amp=torch.cuda.is_bf16_supported()
             loss,ce,js,norm=paired_optimizer_step(
                 model,optimizer,x1,x2,targets,
-                lambda_js=float(params["lambda_js"]),
+                lambda_js=resolved["lambda_js"],
                 microbatch_size=argv.microbatch_size,
                 loss_fn=loss_js,torch=torch,F=F,amp=use_amp,
             )
@@ -733,7 +763,7 @@ def trial_run(name,params,seed,max_steps,study_dir,train_records,val_records,pea
                 )
     finally:
         pool.close()
-    result={"status":"completed","name":name,"seed":seed,"architecture":"A0 ResNet-18-GN",
+    result={"status":"completed","name":name,"seed":seed,"architecture":params["architecture"]+" ResNet-18-GN",
             "parameters":params,"completed_steps":step,"best_step":best_step,
             "best_validation_ood_macro_f1":best,"best_checkpoint_sha256":digest(root/"best.pt"),
             "last_checkpoint_sha256":digest(root/"last.pt"),
@@ -869,7 +899,7 @@ def validate_final_recommendation(study_dir,args,contract_file,contract_obj,*,pr
 
 
 def run_pipeline(args):
-    if (args.trials<2 or args.trials>12 or args.hpo_steps<1
+    if (args.trials<len(V11_ARCHITECTURES) or args.trials>12 or args.hpo_steps<1
         or args.confirm_steps<args.hpo_steps or args.final_steps<args.confirm_steps):
         raise ValueError("bounded trials and training steps required")
     if (not (1 <= args.microbatch_size <= args.batch_size)
@@ -1014,7 +1044,7 @@ def run_pipeline(args):
             })
         write_json(study_dir/"final_training_summary.json",{
             "status":"final_three_seed_training_completed",
-            "model":"ResNet-18-GN A0","simulator":"v11_tch_pseudo_voigt",
+            "model":"ResNet-18-GN "+params["architecture"],"simulator":"v11_tch_pseudo_voigt",
             "training_parent_groups":len(train_unique),
             "validation_parent_groups":len(val_full),
             "final_steps":args.final_steps,"runs":final_runs,
@@ -1035,8 +1065,8 @@ def run_pipeline(args):
                 sampler=optuna.samplers.TPESampler(seed=20261103,n_startup_trials=3),
                 pruner=optuna.pruners.NopPruner())
     if not study.trials:
-        study.enqueue_trial({"learning_rate":2e-4,"lambda_js":60.0,
-            "weight_decay":1e-4,"scheduler":"cosine_5pct_floor"})
+        for arch in V11_ARCHITECTURES:
+            study.enqueue_trial({"lambda_js":60.0,"architecture":arch})
     from optuna.trial import TrialState
     while True:
         done=[t for t in study.trials if t.state in (TrialState.COMPLETE,TrialState.FAIL,TrialState.PRUNED)]
@@ -1049,15 +1079,13 @@ def run_pipeline(args):
             if len(pending)!=1:raise RuntimeError("Multiple RUNNING trials; cannot resume unambiguously")
             frozen=pending[0]
             params=dict(frozen.params)
-            if len(params)!=4:raise RuntimeError("Incomplete stored trial params")
+            resolve_v11_trial_params(params)  # Detect legacy four-dimensional HPO states.
             number=frozen.number
         else:
             trial=study.ask()
             number=trial.number
-            params={"learning_rate":trial.suggest_float("learning_rate",5e-5,3e-4,log=True),
-                "lambda_js":trial.suggest_float("lambda_js",15.,120.),
-                "weight_decay":trial.suggest_float("weight_decay",1e-6,1e-3,log=True),
-                "scheduler":trial.suggest_categorical("scheduler",["cosine_5pct_floor","none"])}
+            params={"lambda_js":trial.suggest_float("lambda_js",15.,120.),
+                    "architecture":trial.suggest_categorical("architecture",list(V11_ARCHITECTURES))}
         name=f"hpo_{number:03d}"
         try:
             row=trial_run(name,params,20260711,args.hpo_steps,study_dir,train_unique,val_full,peaks,sim,libs,args,
@@ -1087,7 +1115,7 @@ def run_pipeline(args):
                             validation_panel_index_sha256=panel_index_sha)
         confirmation.append({"seed":seed,"score":row["best_validation_ood_macro_f1"],
                              "checkpoint_sha256":row["best_checkpoint_sha256"]})
-    result={"status":"hpo_and_confirmation_completed","architecture":"A0 ResNet-18-GN",
+    result={"status":"hpo_and_confirmation_completed","architecture":best_trial.params["architecture"]+" ResNet-18-GN",
             "simulator":"v11_tch_pseudo_voigt","dataset":"154975 MP ID; 108478 unique train parents; ALL 23245 unique Validation parents",
             "best_hpo_trial":best_trial.number,"best_hpo_validation_ood_f1":best_trial.value,
             "recommended_hyperparameters":best_trial.params,"confirmation":confirmation,
@@ -1102,7 +1130,8 @@ def run_pipeline(args):
 def main():
     parser=argparse.ArgumentParser()
     parser.add_argument("--mode",choices=["plan","smoke","run","final"],default="plan")
-    parser.add_argument("--trials",type=int,default=6)
+    parser.add_argument("--trials",type=int,default=6,
+                        help="At least four: one lambda=60 reference for each architecture preset")
     parser.add_argument("--hpo-steps",type=int,default=None)
     parser.add_argument("--confirm-steps",type=int,default=None)
     parser.add_argument("--final-steps",type=int,default=None)
