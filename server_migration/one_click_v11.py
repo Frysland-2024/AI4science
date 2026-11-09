@@ -603,8 +603,9 @@ def make_or_load_train_only_gradient_gate(study_dir,train_records,sim,libs,argv,
     pool=V11PairPrefetchPool(sim,run_seed=scan_seed,
         workers=argv.prefetch_workers,prefetch_batches=argv.prefetch_batches,
         native_threads=argv.native_threads,max_cached_peaks=argv.worker_peak_cache)
-    ratios=[]
+    ratios=[];batch_cosines=[]
     seen=0;submitted=0
+    audit_microbatch=min(argv.microbatch_size,4)  # 8 GiB RTX 4060 safe default
     future_rng={};permutation_cache={}
     try:
         for step in range(one_epoch):
@@ -618,30 +619,45 @@ def make_or_load_train_only_gradient_gate(study_dir,train_records,sim,libs,argv,
             a=torch.from_numpy(first).to("cuda")
             b=torch.from_numpy(second).to("cuda")
             y=torch.from_numpy(labels).to("cuda")
-            out_a=model(a)["logits"].float()
-            out_b=model(b)["logits"].float()
-            _,ce,js=loss_js(out_a,out_b,y,0.0,torch,F)
-            grad_ce=torch.autograd.grad(ce,params,retain_graph=True,allow_unused=True)
-            grad_js=torch.autograd.grad(js,params,allow_unused=True)
-            ce_sq=torch.zeros((),device="cuda");js_sq=torch.zeros((),device="cuda")
+            # FP32 full-model audit with bounded GPU microbatches. Accumulate
+            # exact parent-weighted gradients for the ORIGINAL effective batch.
+            # GN has no running batch-statistics; microbatching is loss-equivalent.
+            batch_ce=[torch.zeros_like(p,dtype=torch.float32) for p in params]
+            batch_js=[torch.zeros_like(p,dtype=torch.float32) for p in params]
+            for pos in range(0,len(y),audit_microbatch):
+                stop=min(pos+audit_microbatch,len(y))
+                batch_fraction=(stop-pos)/len(y)
+                out_a=model(a[pos:stop])["logits"].float()
+                out_b=model(b[pos:stop])["logits"].float()
+                _,ce,js=loss_js(out_a,out_b,y[pos:stop],0.0,torch,F)
+                grad_ce=torch.autograd.grad(ce,params,retain_graph=True,allow_unused=True)
+                grad_js=torch.autograd.grad(js,params,allow_unused=True)
+                with torch.no_grad():
+                    for i,(gc,gj) in enumerate(zip(grad_ce,grad_js)):
+                        if gc is not None:
+                            batch_ce[i].add_(gc.detach().float(),alpha=batch_fraction)
+                        if gj is not None:
+                            batch_js[i].add_(gj.detach().float(),alpha=batch_fraction)
+                del out_a,out_b,ce,js,grad_ce,grad_js
+            ce_sq=torch.zeros((),device="cuda")
+            js_sq=torch.zeros((),device="cuda")
+            dot=torch.zeros((),device="cuda")
             fraction=len(y)/len(train_records)
             with torch.no_grad():
-                for i,(gc,gj) in enumerate(zip(grad_ce,grad_js)):
-                    if gc is not None:
-                        g=gc.detach().float()
-                        if is_backbone[i]:
-                            ce_sq+=g.square().sum()
-                        full_ce[i].add_(g,alpha=fraction)
-                    if gj is not None:
-                        g=gj.detach().float()
-                        if is_backbone[i]:
-                            js_sq+=g.square().sum()
-                        full_js[i].add_(g,alpha=fraction)
+                for i,(gc,gj) in enumerate(zip(batch_ce,batch_js)):
+                    if is_backbone[i]:
+                        ce_sq+=gc.square().sum()
+                        js_sq+=gj.square().sum()
+                        dot+=(gc*gj).sum()
+                    full_ce[i].add_(gc,alpha=fraction)
+                    full_js[i].add_(gj,alpha=fraction)
                 den=float(ce_sq.sqrt().item())
                 num=float(js_sq.sqrt().item())
-            if not math.isfinite(den) or not math.isfinite(num) or den<=1e-12:
+                cosine=float((dot/(ce_sq.sqrt()*js_sq.sqrt()).clamp_min(1e-20)).item())
+            if not all(math.isfinite(x) for x in (den,num,cosine)) or min(den,num)<=1e-12:
                 raise RuntimeError("Nonfinite/zero learned-state backbone gradients")
             ratios.append(num/den)
+            batch_cosines.append(max(-1.0,min(1.0,cosine)))
             seen+=len(y)
     finally:
         pool.close()
@@ -649,6 +665,17 @@ def make_or_load_train_only_gradient_gate(study_dir,train_records,sim,libs,argv,
         raise RuntimeError("TRAIN-only full gradient scan failed parent exposure")
     ce_total=float(torch.stack([t.square().sum() for t in full_ce]).sum().sqrt().item())
     js_total=float(torch.stack([t.square().sum() for t in full_js]).sum().sqrt().item())
+    all_dot=sum(float((a*b).sum().item()) for a,b in zip(full_ce,full_js))
+    all_cosine=all_dot/max(1e-20,ce_total*js_total)
+    trunk_ce=math.sqrt(sum(float(a.square().sum().item())
+                           for a,include in zip(full_ce,is_backbone) if include))
+    trunk_js=math.sqrt(sum(float(a.square().sum().item())
+                           for a,include in zip(full_js,is_backbone) if include))
+    trunk_dot=sum(float((a*b).sum().item())
+                  for a,b,include in zip(full_ce,full_js,is_backbone) if include)
+    if min(trunk_ce,trunk_js)<=1e-12:
+        raise RuntimeError("Full Train trunk gradient direction undefined")
+    trunk_cosine=trunk_dot/(trunk_ce*trunk_js)
     if ce_total<=1e-12 or not all(math.isfinite(z) for z in (ce_total,js_total)):
         raise RuntimeError("Aggregate full-TRAIN backbone gradient not identifiable")
     ratio=float(np.median(ratios))
@@ -668,6 +695,12 @@ def make_or_load_train_only_gradient_gate(study_dir,train_records,sim,libs,argv,
           "whole_model_gradient_scope":"all trainable parameters incl embedding/head",
           "q10_per_batch_ratio":float(np.quantile(ratios,0.1)),
           "q90_per_batch_ratio":float(np.quantile(ratios,0.9)),
+          "median_batch_trunk_cosine":float(np.median(batch_cosines)),
+          "q10_batch_trunk_cosine":float(np.quantile(batch_cosines,0.1)),
+          "q90_batch_trunk_cosine":float(np.quantile(batch_cosines,0.9)),
+          "full_train_trunk_cosine":float(max(-1.,min(1.,trunk_cosine))),
+          "full_train_whole_model_cosine":float(max(-1.,min(1.,all_cosine))),
+          "cosine_interpretation":"positive aligns CE/JS; negative opposes; norm ratio does not determine update direction",
           "full_train_ce_gradient_norm":ce_total,
           "full_train_js_gradient_norm":js_total,
           "full_train_aggregate_ratio":js_total/ce_total,
