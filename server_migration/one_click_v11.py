@@ -824,6 +824,7 @@ def validate_completed_trial_artifacts(
     if not contract_path.is_file() or not result_path.is_file():
         raise RuntimeError(f"Completed trial artifacts missing: {name}")
     cfg=json.loads(contract_path.read_text(encoding="utf-8"))
+    resolve_v11_trial_params(params)  # Reject legacy four-dimensional studies.
     row=json.loads(result_path.read_text(encoding="utf-8"))
     expected={
         "params":params,"seed":seed,"max_steps":max_steps,
@@ -905,6 +906,8 @@ def validate_final_recommendation(study_dir,args,contract_file,contract_obj,*,pr
     trials=study.trials
     if len(trials)!=args.trials or any(t.state!=TrialState.COMPLETE for t in trials):
         raise RuntimeError("Final training blocked: every requested Optuna trial must be COMPLETE")
+    for trial in trials:
+        resolve_v11_trial_params(dict(trial.params))
     ordered=sorted(trials,key=lambda trial:(-float(trial.value),trial.number))
     best=ordered[0]
     params=dict(best.params)
@@ -1166,6 +1169,7 @@ def run_pipeline(args):
                     key=lambda t:(-float(t.value),t.number))
     if not complete:raise RuntimeError("No valid completed HPO trial")
     best_trial=complete[0]
+    resolve_v11_trial_params(dict(best_trial.params))
     confirmation=[]
     for seed in c["confirmation_seeds"]:
         if time.monotonic()-start>args.max_gpu_hours*3600:
