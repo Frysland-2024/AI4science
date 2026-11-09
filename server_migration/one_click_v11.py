@@ -526,7 +526,11 @@ def make_or_load_train_only_gradient_gate(study_dir,train_records,sim,libs,argv,
         raise RuntimeError("TRAIN-only ERM did not reach learned-state gate within 10 epochs; block HPO")
     # Frozen learned model is NEVER used as a starting checkpoint for HPO trials.
     model.eval()
-    params=tuple(p for p in model.parameters() if p.requires_grad)
+    named_params=[(name,p) for name,p in model.named_parameters() if p.requires_grad]
+    params=tuple(p for _,p in named_params)
+    # Measure ALL layers, but use the convolutional trunk for V9-comparable
+    # lambda influence bounds; embedding/head can have different gradient scales.
+    is_backbone=tuple(not name.startswith(("embedding.","head.")) for name,_ in named_params)
     full_ce=[torch.zeros_like(p,dtype=torch.float32) for p in params]
     full_js=[torch.zeros_like(p,dtype=torch.float32) for p in params]
     scan_seed=20261111
@@ -560,11 +564,13 @@ def make_or_load_train_only_gradient_gate(study_dir,train_records,sim,libs,argv,
                 for i,(gc,gj) in enumerate(zip(grad_ce,grad_js)):
                     if gc is not None:
                         g=gc.detach().float()
-                        ce_sq+=g.square().sum()
+                        if is_backbone[i]:
+                            ce_sq+=g.square().sum()
                         full_ce[i].add_(g,alpha=fraction)
                     if gj is not None:
                         g=gj.detach().float()
-                        js_sq+=g.square().sum()
+                        if is_backbone[i]:
+                            js_sq+=g.square().sum()
                         full_js[i].add_(g,alpha=fraction)
                 den=float(ce_sq.sqrt().item())
                 num=float(js_sq.sqrt().item())
@@ -591,6 +597,8 @@ def make_or_load_train_only_gradient_gate(study_dir,train_records,sim,libs,argv,
           "learned_state_accuracy":history[-1]["accuracy"],
           "learned_state_ce":history[-1]["mean_ce"],
           "median_per_batch_js_ce_gradient_ratio":ratio,
+          "lambda_calibration_gradient_scope":"ResNet stem+residual stages, excludes embedding/head",
+          "whole_model_gradient_scope":"all trainable parameters incl embedding/head",
           "q10_per_batch_ratio":float(np.quantile(ratios,0.1)),
           "q90_per_batch_ratio":float(np.quantile(ratios,0.9)),
           "full_train_ce_gradient_norm":ce_total,
