@@ -1309,6 +1309,16 @@ def run_pipeline(args):
     train_unique,val_full,parent_audit=full_parent_disjoint_records(records_path,all_records)
     event("FULL_PARENT_SPLIT_VERIFIED",audit=parent_audit,
           validation_parents=len(val_full),train_parents=len(train_unique))
+    # Freeze a learned-state whole-TRAIN gradient prior before any Validation.
+    if args.mode=="run":
+        gate=make_or_load_train_only_gradient_gate(
+            study_dir,train_unique,sim,libs,args,c)
+    else:
+        gate_path=study_dir/"gradient_gate.json"
+        if not gate_path.is_file():
+            raise RuntimeError("Final training blocked: frozen TRAIN gradient gate missing")
+        gate=json.loads(gate_path.read_text(encoding="utf-8"))
+        validate_train_only_gradient_gate(gate,c,train_unique)
     # Workers load PeakTables on demand and cap per-worker RAM via LRU.
     # No eager 131k-file NPZ extraction in the HPO main process.
     peaks={}
@@ -1369,11 +1379,20 @@ def run_pipeline(args):
     storage="sqlite:///"+(study_dir/"optuna.sqlite3").as_posix()
     study=optuna.create_study(study_name="v11_154975_a0_sameparent_js",storage=storage,
                 direction="maximize",load_if_exists=True,
-                sampler=optuna.samplers.TPESampler(seed=20261103,n_startup_trials=4),
+                sampler=optuna.samplers.TPESampler(
+                    seed=20261103,n_startup_trials=4,multivariate=True),
                 pruner=optuna.pruners.NopPruner())
+    gate_sha=digest(study_dir/"gradient_gate.json")
+    prior_sha=study.user_attrs.get("gradient_gate_sha256")
+    if prior_sha is not None and prior_sha!=gate_sha:
+        raise RuntimeError("Refusing to resume Optuna with changed TRAIN gradient prior")
     if not study.trials:
+        study.set_user_attr("gradient_gate_sha256",gate_sha)
         for arch in V11_ARCHITECTURES:
-            study.enqueue_trial({"lambda_js":60.0,"architecture":arch})
+            study.enqueue_trial(v11_architecture_trial_params(
+                arch,gate["lambda_window"]["anchor"]))
+    elif prior_sha is None:
+        raise RuntimeError("Old Optuna study lacks frozen TRAIN gradient gate identity")
     from optuna.trial import TrialState
     while True:
         done=[t for t in study.trials if t.state in (TrialState.COMPLETE,TrialState.FAIL,TrialState.PRUNED)]
@@ -1389,20 +1408,17 @@ def run_pipeline(args):
             resolve_v11_trial_params(params)  # Detect legacy four-dimensional HPO states.
             number=frozen.number
         else:
-            # Sequential budget allocation: compare four architectures at
-            # common historical lambda=60 for >=50 full parent epochs FIRST.
-            # Then spend two more >=50-epoch runs bracketing JS strength on
-            # the best architecture. No 5/10-epoch early ranking.
-            if len(study.trials)==4 and len(done)==4:
-                reference_winner=max(done,key=lambda t:(float(t.value),-t.number))
-                focus_arch=reference_winner.params["architecture"]
-                for weight in (30.0,90.0):
-                    study.enqueue_trial({"lambda_js":weight,"architecture":focus_arch})
-                event("HPO_LAMBDA_FOCUS_ENQUEUED",architecture=focus_arch,weights=[30,90])
+            # Four pre-registered, equal-lambda architecture controls provide
+            # interpretable physical evidence. Subsequent trials are free TPE
+            # suggestions in the three frozen, gradient-informed dimensions.
             trial=study.ask()
             number=trial.number
-            params={"lambda_js":trial.suggest_float("lambda_js",15.,120.),
-                    "architecture":trial.suggest_categorical("architecture",list(V11_ARCHITECTURES))}
+            window=gate["lambda_window"]
+            params={"lambda_js":trial.suggest_float(
+                        "lambda_js",window["low"],window["high"],log=True),
+                    "middle_stride":trial.suggest_categorical("middle_stride",[2,4]),
+                    "kernel_size":trial.suggest_categorical("kernel_size",[5,9])}
+        assert_gradient_lambda(params,gate)
         name=f"hpo_{number:03d}"
         try:
             row=trial_run(name,params,20260711,args.hpo_steps,study_dir,train_unique,val_full,peaks,sim,libs,args,
@@ -1437,6 +1453,8 @@ def run_pipeline(args):
             "simulator":"v11_tch_pseudo_voigt","dataset":"154975 MP ID; 108478 unique train parents; ALL 23245 unique Validation parents",
             "best_hpo_trial":best_trial.number,"best_hpo_validation_ood_f1":best_trial.value,
             "recommended_hyperparameters":best_trial.params,"confirmation":confirmation,
+            "gradient_gate_sha256":gate_sha,
+            "lambda_window":gate["lambda_window"],
             "validation_parent_audit":parent_audit,
             "selection_warning":"Chosen on ALL 23245 unique frozen Validation parents; confirmation seeds use same domain, not Test/RRUFF.",
             "hpo_trial_count":len(complete),"contract_sha256":digest(contract_file),
@@ -1448,8 +1466,8 @@ def run_pipeline(args):
 def main():
     parser=argparse.ArgumentParser()
     parser.add_argument("--mode",choices=["plan","smoke","run","final"],default="plan")
-    parser.add_argument("--trials",type=int,default=6,
-                        help="At least six: four architecture references at lambda=60, then lambda=30/90 on the winning architecture")
+    parser.add_argument("--trials",type=int,default=8,
+                        help="At least six: four matched-lambda architecture controls; further trials are fully automatic 3D Optuna TPE")
     parser.add_argument("--hpo-steps",type=int,default=None)
     parser.add_argument("--confirm-steps",type=int,default=None)
     parser.add_argument("--final-steps",type=int,default=None)
