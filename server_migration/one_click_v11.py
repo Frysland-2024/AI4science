@@ -468,6 +468,8 @@ def validate_train_only_gradient_gate(gate, contract_obj, train_records):
         raise RuntimeError("TRAIN gradient gate parent coverage/identity mismatch")
     if (gate.get("parents_scanned")!=108478
         or gate.get("warmup_train_parent_count")!=20480
+        or not isinstance(gate.get("warmup_train_parent_ids_sha256"),str)
+        or len(gate["warmup_train_parent_ids_sha256"])!=64
         or not 5<=gate.get("warmup_parent_epochs",0)<=20):
         raise RuntimeError("TRAIN-only gate lacks full parent coverage or learned-state warmup")
     if (gate.get("learned_state_accuracy",0)<0.30
