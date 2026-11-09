@@ -530,7 +530,7 @@ def make_or_load_train_only_gradient_gate(study_dir,train_records,sim,libs,argv,
             expected_contract=gate_contract,device=torch.device("cuda"),torch=torch)
         if step%one_epoch!=0 or step>max_steps:
             raise RuntimeError("Invalid TRAIN-only learned-state checkpoint milestone")
-    if not history or history[-1]["accuracy"]<.30 or history[-1]["mean_ce"]>1.85:
+    if not train_state_ready(history):
         model.train()
         pool=V11PairPrefetchPool(sim,run_seed=seed,
             workers=argv.prefetch_workers,prefetch_batches=argv.prefetch_batches,
