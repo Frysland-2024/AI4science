@@ -1,109 +1,32 @@
-# AI4science 2026-11-03 — Linux GPU migration + bounded one-command V11 Optuna
+# V11 server migration — current execution status (2026-11-09)
 
-CURRENT STATE: 154,975 MP-ID structures split 108,483 train / 23,246 Validation / 23,246 Test, with complete ideal PeakTables. ResNet-18-GN A0_R1 won the previous V10/14,060 single-seed architecture study, but it is NOT a V11/154,975 checkpoint.
+> **STOP: #61 is BLOCKED and #55 is BLOCKED BY #61. Do not run `start_server.sh --run`, rent/start a GPU, launch HPO, or begin formal training.** The historical package and local laptop receipts have not been rebound to the current `main` source and private package hashes. GPU smoke is **BLOCKED / NOT_RUN** without separate authorization.
 
-## Private files
-- source_snapshot.zip: V11 source/config/tests + ResNet code + new one_click_v11.py.
-- structure_shards.zip: all 154,975 source parent structures and provenance.
-- peak_cache_bundle.zip: all 154,975 precomputed ideal PeakTables plus 131,729 train/validation runner records.
-- a0_reference_checkpoint.zip: historical V10 single-seed A0_R1 checkpoint and run evidence. REFERENCE ONLY, not a ready V11 model.
-- `source_snapshot.zip` includes a versioned member manifest with SHA256 for every source file. `start_server.sh` rejects missing, stale, altered, or incomplete snapshots and verifies an extracted staging tree before copying it into `~/research/AI4science`.
-- bundle_manifest.json / SHA256SUMS.txt: archive and launcher SHA256s. Transfer `start_server.sh`, `verify_source_snapshot.py`, and `payload_contract.py` beside the four ZIPs and SHA256SUMS.txt.
-- `create_migration_bundles.py` resolves project files from its own Git worktree and restricts the bundle destination to that worktree; it does not source code from the main checkout or a separately staged project tree.
+## Current authoritative gate
 
-Keep private source data/checkpoints OFF public GitHub. Obey Materials Project and XQueryer terms.
+See [Issue #61](https://github.com/Frysland-2024/AI4science/issues/61), [Issue #55](https://github.com/Frysland-2024/AI4science/issues/55), and the [minimum preflight audit](../docs/ISSUE_61_V11_MINIMUM_PREFLIGHT_AUDIT_20261109.md).
 
-## On rented Linux GPU server
-Choose a GPU-enabled Linux image with Python 3.11 and CUDA-compatible PyTorch. Transfer all four ZIPs, SHA256SUMS.txt, start_server.sh, verify_source_snapshot.py, and payload_contract.py together by private SCP/SFTP. From the transfer directory run:
+PR #70 is merged and its CI passed. This verifies code integration/offline checks; it is not a private-payload or Linux-GPU acceptance. The latest #61 audit records two unresolved current-main gaps: the schema adapter/Train+Validation manifest-builder from unmerged PR #66 is absent, and current `precompute_peak_tables.py` lacks the documented `--records-path` interface. Historical local cache/package/CUDA receipts do not close these gaps.
 
-    bash start_server.sh --plan
+## Evidence labels
 
-This unpacks archives into ~/research/AI4science, checks ZIP SHA256, original 154,975 structure IDs/parent isolation, PeakTable manifests/sizes, and prints the frozen HPO design. It DOES NOT run training.
+- **Source split documented:** 154,975 MP-ID rows, 154,968 parent groups, with 108,478 Train / 23,245 Validation / 23,245 synthetic Test parent groups. This is source-split evidence, not server loader acceptance.
+- **Historical private-package receipts:** prior local checks reported full PeakTable construction and hash/integrity checks. Their current bytes and code-version binding are not reverified.
+- **Current-main CI:** passed for PR #70. It does not run against the user's private data bundle or a rented server.
+- **Target GPU:** `BLOCKED / NOT_RUN`. No GPU smoke is claimed.
+- **HPO/formal training/RRUFF score:** not run and not authorized by #61 or #55 documentation.
 
-When the above passes and GPU budget is approved, run exactly one command:
+## Minimum CPU/data preflight before any GPU request
 
-    bash start_server.sh --run
+1. Record exact current `main` SHA and software versions.
+2. Implement and regression-test the current-main private-schema adapter, Train+Validation manifest builder, and explicit source-record input interface. Port only the required pieces; do not transplant stale PR #66 wholesale.
+3. Match private source snapshot, shard, PeakTable, optional Validation-panel, payload-contract and checksum versions to that SHA. Reuse verified caches; do not redownload or rebuild them without evidence of mismatch.
+4. Verify row/group counts, fingerprints, split isolation, PeakTable schema/loader round trip, file counts/sizes/SHA values, skip count and exact Train+Validation membership. Keep all 23,245 Test parents out of training/selection manifests.
+5. Run only the current-main `--plan` and bounded offline CPU smoke in a clean environment; preserve commands, environment, logs and input/output hashes.
+6. Publish a receipt tied to source SHA and private package hashes. Keep GPU `BLOCKED / NOT_RUN` unless a separate authorization is given and a bounded GPU smoke is actually completed.
 
-This rechecks data, installs scientific requirements into the selected Python environment, runs CPU one-batch V11/ResNet-A0/JS smoke, then automatically searches using Optuna TPE:
-- Fixed architecture: original ResNet-18-GN A0, 13,008,839 parameters (not an unproven CNN11 replacement).
-- Dynamic same-parent JS. V11 TCH pseudo-Voigt online rendering from pretrained ideal-reflection PeakTables.
-- Formal training pool: all 108,478 unique TRAIN parent groups (108,483 MP IDs; five aliases deduplicated). Full HPO Validation: all 23,245 independent parent groups (23,246 MP IDs, one alias deduplicated), six OOD profiles. No 896-parent sampling for formal model selection. Frozen seed 20260721. Locked Test/RRUFF inaccessible.
-- 6 trials x 6,160 optimizer steps each, 16 parents/batch, with FULL Validation after 6,160 steps; two new-seed confirmations x 12,320 steps with 2 full Validation checkpoints each. Reduced validation frequency intentionally limits GPU cost when using all 23,245 parents.
-- Parameters: LR 5e-5 to 3e-4, JS lambda 15 to 120, AdamW weight decay 1e-6 to 1e-3, cosine-vs-constant schedule. First Optuna trial is the old A0_R1 recipe, reevaluated on the NEW data and V11, not treated as a prior score.
-- Deterministic full-Validation paired spectra are generated ONCE per profile, cached as immutable memory-mapped .npy arrays (~3.64 GiB total for 6 profiles x 2 views x 23,245 x 3,501 float32 samples), SHA256-indexed and reused across every candidate/seed. Half-written profiles are rebuilt; mismatching completed profiles fail closed. SQLite study, frozen trial contract, checksummed checkpoint, validation history, final JSON and safe resume.
-- max_gpu_hours default 12 is a soft stop before new trials, NOT a hard spending cap or a background shutdown.
+A CPU-only pass is necessary but not sufficient for #61 `READY`. The bounded target-GPU smoke is a separate authorization and evidence gate. Even after #61 is READY, GPU HPO and formal training remain separate work under #55, with its own explicit budget/protocol approval.
 
-Output: ~/research/AI4science/server_runs/v11_a0_js_optuna/
+## Historical migration instructions
 
-## Scientific / implementation boundaries
-The local package test verified ZIP integrity, 154,975 source records/parent isolation, and V11 two-view ResNet A0 one-batch forward+backprop on CPU. Full 155k PeakTable cache file count, hashes and manifest were separately audited on the laptop. FULL OPTUNA EXPERIMENT HAS NOT RUN ON A RENTED LINUX GPU.
-
-The existing generic xrd_robustness.training.runner does not implement the full architecture-conditioned cosine HPO. New server_migration/one_click_v11.py implements a separate bounded A0 trainer with validation and checkpoint recovery. It must pass Linux CUDA + memory + throughput smoke before formal unattended operation can be considered production proven.
-
-Do NOT claim the old V10 validation 0.7318 has been achieved under V11/new data. Do NOT use the frozen Test or real RRUFF to tune. Final RRUFF paper-aligned protocol remains a later stage; full unique-parent Validation is now mandatory for HPO selection; independent seeds on the same Validation still do not constitute external real-domain evidence.
-
-Recommend inspecting 32+ GiB RAM, 16+ GiB GPU memory, and at least 20 GiB spare disk (including ~3.64 GiB for frozen Validation panels) as initial planning targets; actual machine sizing and cloud runtimes have not been measured. Original Windows E-drive scripts are in source_snapshot under reference_windows_resnet_joint and are NOT used by this workflow.
-
-Changing HPO budget/search parameters after starting a study triggers an immutable-contract error. Use a separately named new study rather than silently overwriting old trials.
-
-**Scope verified (2026-11-03):** The actual 131,729-record train/validation manifest was checked row-by-row: train 108,478 unique parents, Validation 23,245 unique parents, all 7 systems, alias exclusions 5/1, no overlap. Four automated regression tests pass; direct V11 simulated-vs-cached scores matched exactly on a seven-parent six-profile smoke fixture. This does NOT mean full validation GPU scoring or Linux cloud HPO has run.
-
-
-## Unified prefetch and GPU training path (draft update, PR #67)
-
-The same deterministic pipeline is now selected for **all V11 GPU stages**, not
-only Validation:
-
-- TRAIN: a bounded set of 4 `spawn` CPU workers (defaults: `--prefetch-workers 4
-  --prefetch-batches 3 --native-threads 1 --worker-peak-cache 512`) lazily
-  load ideal-peak NPZ into per-worker LRU caches and render same-parent dynamic
-  pairs concurrently with the GPU forward/backward pass. SHA256 material-ID
-  worker sharding and native thread policy are reused from the earlier
-  `training_prefetch.py`.
-- GPU: pinned CPU input buffers, asynchronous H2D transfers, BF16 forward
-  when supported, stable FP32 CE + JS arithmetic, finite-gradient assertion,
-  and periodic last/best checkpoints.
-- VALIDATION: the same V11 prefetch workers render all **23,245 parent-disjoint
-  groups** over six fixed OOD profiles exactly once. The paired float32 spectra
-  are SHA-indexed and memory-mapped for repeated batched GPU evaluation.
-  FP32 inference is the default for consistent HPO ranking. Optional
-  `--validation-bf16` requires separate parity verification.
-- RESUME: CPU can schedule ahead, but the checkpoint saves the RNG state
-  *after the last completed optimizer step*, never the later prefetched RNG
-  state; resumed experiments can reproduce parent selection.
-- OPTUNA: `bash start_server.sh --run` uses this shared loop for six trial
-  configurations plus two-seed confirmation.
-- FINAL: after a completed HPO study, a separate explicit
-  `bash start_server.sh --final` runs three predetermined independent seeds
-  (default 49,280 optimizer steps each) with the **same optimized pipeline**.
-  It saves `final_training_summary.json` but does not evaluate RRUFF/Test.
-  The final stage is NOT automatically started before confirmation.
-- Do **not** transfer or run an older four-ZIP kit unchanged. Regenerate the
-  private snapshot from the reviewed worktree so its versioned manifest and
-  all member hashes match the current `payload_contract.py`; update
-  `SHA256SUMS.txt` with the launcher and verifier files too.
-
-**Validation level:** integration code and regression tests are committed
-to GitHub, but the authorized laptop is offline. The new pipeline has NOT yet
-been executed through the full GPU parity/throughput/resume tests or the rented
-Linux server. Do not claim it is a fully tested production runner.
-
-
-### Optional portable precomputed full Validation panels (2026-11-03)
-
-On the local RTX 4060 laptop, all 23,245 independent Validation parents under
-all six V11 OOD profiles were rendered and SHA-indexed successfully. A separate
-GPU FP32 engineering scoring pass evaluated all six profiles with UNTRAINED
-model weights; these are NOT scientific model performance results. The data
-contains 3,906,277,296 bytes in 12 paired-view .npy arrays.
-
-The package_validation_panels.py script can generate optional integrity-checked
-validation_panel_bundle.zip. If this fifth ZIP is present and SHA256SUMS.txt
-includes its checksum, start_server.sh --run automatically extracts it into
-~/research/AI4science/server_runs/v11_a0_js_optuna/validation_panels_v11 once.
-The HPO runner rechecks exact renderer/source/parent identity and every array
-SHA before reuse. Without the optional ZIP, the original four-ZIP one-click
-workflow still works and regenerates frozen Validation panels on the server.
-Never treat the simulated Validation data as held-out Test or RRUFF evidence.
-
-This optional cache remains private; do not upload it to public GitHub.
+The remainder of this README and the linked one-click migration note preserve earlier #66/#67 implementation details, data/package descriptions and proposed commands for provenance. They are **not the present execution contract** and must not be used until the preflight audit's current-main code, data, package and authorization gates are closed.
