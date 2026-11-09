@@ -39,22 +39,57 @@ V11_ARCHITECTURES={
 }
 
 def resolve_v11_trial_params(params):
-    """Restrict Optuna to JS lambda + discrete PXRD architecture presets."""
-    if set(params)!={"lambda_js","architecture"}:
-        raise ValueError("V11 trials must contain only lambda_js and architecture")
-    architecture=params["architecture"]
-    if architecture not in V11_ARCHITECTURES:
-        raise ValueError(f"Unknown PXRD architecture preset: {architecture}")
+    """Three explicit HPO dimensions: JS lambda, middle stride and kernel."""
+    if set(params)!={"lambda_js","middle_stride","kernel_size"}:
+        raise ValueError("V11 trials must contain only lambda_js, middle_stride, kernel_size")
+    middle_stride=params["middle_stride"]
+    kernel=params["kernel_size"]
+    if type(middle_stride) is not int or middle_stride not in (2,4):
+        raise ValueError("middle_stride must be 2 or 4")
+    if type(kernel) is not int or kernel not in (5,9):
+        raise ValueError("kernel_size must be 5 or 9")
+    architecture=next(
+        (key for key,(strides,k) in V11_ARCHITECTURES.items()
+         if strides==(4,middle_stride,4) and k==kernel),None)
+    if architecture is None:
+        raise ValueError("Unregistered PXRD architecture")
     weight=float(params["lambda_js"])
-    if not math.isfinite(weight) or not 15.0<=weight<=120.0:
-        raise ValueError("V11 lambda_js must be finite and in the frozen 15..120 range")
-    return {**V11_FIXED_OPTIMIZER,"lambda_js":weight,"architecture":architecture}
+    if not math.isfinite(weight) or not 3.0<=weight<=120.0:
+        raise ValueError("V11 lambda_js must be finite and within safety range 3..120")
+    return {**V11_FIXED_OPTIMIZER,"lambda_js":weight,"architecture":architecture,
+            "middle_stride":middle_stride,"kernel_size":kernel}
 
 def v11_model_config(params, config_type):
-    arch=resolve_v11_trial_params(params)["architecture"]
-    strides,kernel=V11_ARCHITECTURES[arch]
-    return config_type(model_id="18",stage_transition_strides=strides,
-                       residual_kernel_size=kernel)
+    settings=resolve_v11_trial_params(params)
+    return config_type(model_id="18",
+        stage_transition_strides=(4,settings["middle_stride"],4),
+        residual_kernel_size=settings["kernel_size"])
+
+def v11_architecture_trial_params(architecture,weight):
+    """Named A0–A3 presets are scientific controls; Optuna optimizes knobs."""
+    strides,kernel=V11_ARCHITECTURES[architecture]
+    return {"lambda_js":float(weight),"middle_stride":strides[1],
+            "kernel_size":kernel}
+
+def derive_train_only_js_range(median_unweighted_ratio, *, previous_lambda=60.0):
+    """V9-style weak-to-dominant influence window, prior to any Validation access.
+
+    All ratios refer to full-backbone FP32 gradients of unweighted JS / CE
+    from a learned classifier, measured over independent TRAIN parents.
+    """
+    ratio=float(median_unweighted_ratio)
+    if not math.isfinite(ratio) or ratio<=1e-9:
+        raise ValueError("Learned-state JS gradient ratio is not identifiable")
+    low=max(3.0,min(120.0,0.05/ratio))
+    high=max(3.0,min(120.0,2.0/ratio))
+    if high<low*2.0:
+        raise ValueError("Learned-state gradient window lacks >=2x usable width")
+    anchor=max(low,min(high,float(previous_lambda)))
+    return {"low":float(low),"high":float(high),"anchor":float(anchor),
+            "reference_lambda":float(previous_lambda),
+            "target_gradient_influence":[0.05,2.0],
+            "gradient_calibration_only":True}
+
 
 
 def digest(path):
@@ -217,7 +252,7 @@ def contract(args):
     if not all(p in obj["profiles"] for p in needed):
         raise RuntimeError("Required V11 profiles missing")
     return {
-        "schema":"v11_154975_pxrd_lambda_architecture_v2",
+        "schema":"v11_154975_gradient_informed_three_parameter_v3",
         "payload_contract_version":PAYLOAD_CONTRACT_VERSION,
         "implementation_sha256":implementation_fingerprints(),
         "source_manifest_sha256":expected_records,
@@ -256,7 +291,15 @@ def contract(args):
         "hpo_seed":20260711,
         "confirmation_seeds":[20261104,20261105],
         "max_new_trials":args.trials,
-        "search_space":{"lambda_js":[15.,120.],"architecture":list(V11_ARCHITECTURES)},
+        "search_space":{"lambda_js":"TRAIN_ONLY_LEARNED_GRADIENT_GATE_3_TO_120",
+                        "middle_stride":[2,4],"kernel_size":[5,9]},
+        "gradient_gate_contract":{"warmup_min_parent_epochs":5,"warmup_max_parent_epochs":10,
+                                  "whole_training_parent_gradient_sweep":108478,
+                                  "full_backbone_gradient":True,
+                                  "learned_state_min_accuracy":0.30,
+                                  "learned_state_max_cross_entropy":1.85,
+                                  "safety_lambda":[3.0,120.0],
+                                  "target_gradient_ratio":[0.05,2.0]},
         "selection":"mean 6 simulated OOD Macro-F1 evaluated on ALL 23245 unique parent-disjoint Validation groups; fixed render seed, independent-seed confirmation",
         "full_validation_final":True,
         "max_gpu_hours":args.max_gpu_hours,
@@ -803,7 +846,7 @@ def trial_run(name,params,seed,max_steps,study_dir,train_records,val_records,pea
                     break
     finally:
         pool.close()
-    result={"status":"completed","name":name,"seed":seed,"architecture":params["architecture"]+" ResNet-18-GN",
+    result={"status":"completed","name":name,"seed":seed,"architecture":resolve_v11_trial_params(params)["architecture"]+" ResNet-18-GN",
             "parameters":params,"completed_steps":step,"planned_max_steps":max_steps,
             "stopped_early":stopped_early,"best_step":best_step,
             "best_validation_ood_macro_f1":best,"best_checkpoint_sha256":digest(root/"best.pt"),
@@ -1100,7 +1143,7 @@ def run_pipeline(args):
             })
         write_json(study_dir/"final_training_summary.json",{
             "status":"final_three_seed_training_completed",
-            "model":"ResNet-18-GN "+params["architecture"],"simulator":"v11_tch_pseudo_voigt",
+            "model":"ResNet-18-GN "+resolve_v11_trial_params(params)["architecture"],"simulator":"v11_tch_pseudo_voigt",
             "training_parent_groups":len(train_unique),
             "validation_parent_groups":len(val_full),
             "final_steps":args.final_steps,"runs":final_runs,
@@ -1182,7 +1225,7 @@ def run_pipeline(args):
                             validation_panel_index_sha256=panel_index_sha)
         confirmation.append({"seed":seed,"score":row["best_validation_ood_macro_f1"],
                              "checkpoint_sha256":row["best_checkpoint_sha256"]})
-    result={"status":"hpo_and_confirmation_completed","architecture":best_trial.params["architecture"]+" ResNet-18-GN",
+    result={"status":"hpo_and_confirmation_completed","architecture":resolve_v11_trial_params(best_trial.params)["architecture"]+" ResNet-18-GN",
             "simulator":"v11_tch_pseudo_voigt","dataset":"154975 MP ID; 108478 unique train parents; ALL 23245 unique Validation parents",
             "best_hpo_trial":best_trial.number,"best_hpo_validation_ood_f1":best_trial.value,
             "recommended_hyperparameters":best_trial.params,"confirmation":confirmation,
