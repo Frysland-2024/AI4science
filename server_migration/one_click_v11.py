@@ -319,6 +319,7 @@ def contract(args):
         "search_space":{"lambda_js":"TRAIN_ONLY_LEARNED_GRADIENT_GATE_3_TO_120",
                         "middle_stride":[2,4],"kernel_size":[5,9]},
         "gradient_gate_contract":{"warmup_min_parent_epochs":5,"warmup_max_parent_epochs":20,
+                                  "warmup_stratified_train_parents":20480,
                                   "whole_training_parent_gradient_sweep":108478,
                                   "full_backbone_gradient":True,
                                   "learned_state_min_accuracy":0.30,
@@ -466,6 +467,7 @@ def validate_train_only_gradient_gate(gate, contract_obj, train_records):
     if gate.get("training_parent_ids_sha256")!=expected or gate.get("parents_scanned")!=len(train_records):
         raise RuntimeError("TRAIN gradient gate parent coverage/identity mismatch")
     if (gate.get("parents_scanned")!=108478
+        or gate.get("warmup_train_parent_count")!=20480
         or not 5<=gate.get("warmup_parent_epochs",0)<=20):
         raise RuntimeError("TRAIN-only gate lacks full parent coverage or learned-state warmup")
     if (gate.get("learned_state_accuracy",0)<0.30
@@ -511,12 +513,40 @@ def make_or_load_train_only_gradient_gate(study_dir,train_records,sim,libs,argv,
     optimizer=torch.optim.AdamW(model.parameters(),
         lr=V11_FIXED_OPTIMIZER["learning_rate"],
         weight_decay=V11_FIXED_OPTIMIZER["weight_decay"])
-    one_epoch=(len(train_records)+argv.batch_size-1)//argv.batch_size
+    # Train-only *representative warmup*, full Train *gradient measurement*:
+    # limit expensive 4060 optimizer updates without reducing 108478-parent
+    # gradient evidence. Every class has >=64 guaranteed unique examples
+    # when available, then the remaining parents are drawn uniformly.
+    sample_rng=np.random.default_rng(seed)
+    by_class={k:[] for k in range(7)}
+    for index,record in enumerate(train_records):
+        by_class[record.label].append(index)
+    if any(not rows for rows in by_class.values()):
+        raise RuntimeError("TRAIN-only learned-state warmup lacks one or more crystal systems")
+    mandatory=set()
+    for class_indices in by_class.values():
+        quota=min(64,len(class_indices))
+        mandatory.update(int(i) for i in sample_rng.choice(
+            class_indices,size=quota,replace=False))
+    warmup_count=20480
+    if len(mandatory)>warmup_count:
+        raise RuntimeError("Warmup class strata exceed sample budget")
+    remainder=[i for i in range(len(train_records)) if i not in mandatory]
+    additional=sample_rng.choice(
+        remainder,size=warmup_count-len(mandatory),replace=False)
+    warmup_ids=sorted(mandatory|set(int(i) for i in additional))
+    warmup_records=[train_records[i] for i in warmup_ids]
+    if len(warmup_records)!=warmup_count or {r.label for r in warmup_records}!=set(range(7)):
+        raise RuntimeError("TRAIN-only stratified warmup sample does not cover seven crystal systems")
+    one_epoch=(warmup_count+argv.batch_size-1)//argv.batch_size
     max_steps=20*one_epoch
     base=Path(study_dir)/"gradient_gate_warmup.pt"
     gate_contract={"purpose":"TRAIN_ONLY_LEARNED_GRADIENT_V1",
                    "science_identity_sha256":gradient_science_identity(contract_obj),
                    "warmup_microbatch_size":argv.microbatch_size,
+                   "warmup_parent_count":warmup_count,
+                   "warmup_parent_ids_sha256":hashlib.sha256(
+                       "\n".join(r.material_id for r in warmup_records).encode()).hexdigest(),
                    "maximum_warmup_parent_epochs":20,
                    "training_parent_sha256":hashlib.sha256(
                        "\n".join(r.material_id for r in train_records).encode()).hexdigest(),
@@ -540,7 +570,7 @@ def make_or_load_train_only_gradient_gate(study_dir,train_records,sim,libs,argv,
         try:
             while step<max_steps:
                 next_submit=enqueue_train_lookahead(
-                    pool,rng,train_records,batch_size=argv.batch_size,
+                    pool,rng,warmup_records,batch_size=argv.batch_size,
                     start_step=step,next_submit=next_submit,max_steps=max_steps,
                     committed_states=future_rng,sampling_mode="epoch_shuffle",
                     sampling_seed=seed,permutation_cache=permutation_cache)
@@ -686,6 +716,8 @@ def make_or_load_train_only_gradient_gate(study_dir,train_records,sim,libs,argv,
           "training_only":True,"validation_access":False,
           "parents_scanned":seen,"batches_scanned":len(ratios),
           "warmup_parent_epochs":history[-1]["epoch"],
+          "warmup_train_parent_count":warmup_count,
+          "warmup_train_parent_ids_sha256":gate_contract["warmup_parent_ids_sha256"],
           "learned_state_accuracy":history[-1]["accuracy"],
           "learned_state_ce":history[-1]["mean_ce"],
           "learned_state_stable":train_state_ready(history),
