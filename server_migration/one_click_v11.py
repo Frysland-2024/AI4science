@@ -606,6 +606,41 @@ def make_or_load_train_only_gradient_gate(study_dir,train_records,sim,libs,argv,
     return gate
 
 
+
+def architecture_peak_preservation_screen(trials, *, expected_lambda):
+    """Four matched-lambda, matched-budget ResNet contrasts.
+
+    These are hypothesis tests inspired by the SimXRD comparison of
+    convolution/pooling networks, NOT results claimed by Cao et al.
+    """
+    if len(trials)<4:
+        raise ValueError("Complete four prespecified controls first")
+    found={}
+    for trial in trials[:4]:
+        params=trial.params
+        arch=resolve_v11_trial_params(params)["architecture"]
+        if arch in found or not math.isclose(float(params["lambda_js"]),
+                                              float(expected_lambda),abs_tol=1e-10):
+            raise RuntimeError("Architecture screen controls are not comparable")
+        if getattr(trial.state,"name",str(trial.state))!="COMPLETE":
+            raise RuntimeError("Architecture screen attempted before all controls complete")
+        found[arch]=float(trial.value)
+    if set(found)!=set(V11_ARCHITECTURES):
+        raise RuntimeError("Architecture screen lacks a balanced 2x2 design")
+    for value in found.values():
+        if not math.isfinite(value):
+            raise RuntimeError("Architecture screen received nonfinite score")
+    return {"status":"EXPLORATORY_SINGLE_SEED_MATCHED_ARCHITECTURE_SCREEN",
+            "matched_lambda":expected_lambda,
+            "scores_by_architecture":found,
+            "stride_2_vs_4_at_kernel9":found["A1"]-found["A0"],
+            "stride_2_vs_4_at_kernel5":found["A2"]-found["A3"],
+            "kernel_5_vs_9_at_stride4":found["A3"]-found["A0"],
+            "kernel_5_vs_9_at_stride2":found["A2"]-found["A1"],
+            "stride_kernel_interaction":(found["A2"]-found["A1"])-(found["A3"]-found["A0"]),
+            "note":"Synthetic Validation; one seed; smaller stride/kernel not presumed superior"}
+
+
 def assert_gradient_lambda(params, gate):
     """No Optuna-selected lambda can escape the pre-Validation gradient gate."""
     value=resolve_v11_trial_params(params)["lambda_js"]
@@ -1457,6 +1492,9 @@ def run_pipeline(args):
     complete=sorted([t for t in study.trials if t.state==TrialState.COMPLETE],
                     key=lambda t:(-float(t.value),t.number))
     if not complete:raise RuntimeError("No valid completed HPO trial")
+    screen=architecture_peak_preservation_screen(
+        study.trials,expected_lambda=gate["lambda_window"]["anchor"])
+    write_json(study_dir/"architecture_screen.json",screen)
     best_trial=complete[0]
     assert_gradient_lambda(dict(best_trial.params),gate)
     confirmation=[]
@@ -1477,6 +1515,7 @@ def run_pipeline(args):
             "recommended_hyperparameters":best_trial.params,"confirmation":confirmation,
             "gradient_gate_sha256":gate_sha,
             "lambda_window":gate["lambda_window"],
+            "architecture_screen":screen,
             "validation_parent_audit":parent_audit,
             "selection_warning":"Chosen on ALL 23245 unique frozen Validation parents; confirmation seeds use same domain, not Test/RRUFF.",
             "hpo_trial_count":len(complete),"contract_sha256":digest(contract_file),
