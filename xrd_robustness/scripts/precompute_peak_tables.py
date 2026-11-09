@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import csv
 from concurrent.futures import ThreadPoolExecutor
+import gzip
 import hashlib
 import json
 from pathlib import Path
@@ -44,7 +45,64 @@ REQUIRED_ARRAYS = (
 
 
 def _sha256(path: Path) -> str:
-    return hashlib.sha256(path.read_bytes()).hexdigest()
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def _summary_path(path: Path) -> str:
+    try:
+        return project_relative_path(PROJECT_ROOT, path)
+    except ValueError:
+        return str(path.resolve())
+
+
+def _load_structure_records(path: Path) -> tuple[list[dict[str, Any]], dict[str, int]]:
+    """Load legacy rows or adapt the merged library's ``structure`` schema."""
+    opener = gzip.open if path.suffix.lower() == ".gz" else open
+    records: list[dict[str, Any]] = []
+    adapted_structure_rows = 0
+    adapted_fingerprint_rows = 0
+    with opener(path, "rt", encoding="utf-8") as handle:
+        for line_number, line in enumerate(handle, start=1):
+            if not line.strip():
+                continue
+            row = json.loads(line)
+            if not isinstance(row, dict):
+                raise ValueError(f"record line {line_number} must be a JSON object")
+            row = dict(row)
+            if not str(row.get("material_id", "")).strip():
+                raise ValueError(f"record line {line_number} requires material_id")
+            if "standardized_structure" not in row:
+                structure = row.get("structure")
+                if not isinstance(structure, dict):
+                    raise ValueError(
+                        f"record line {line_number} requires standardized_structure or structure"
+                    )
+                row["standardized_structure"] = structure
+                row.pop("structure", None)
+                adapted_structure_rows += 1
+            if not isinstance(row["standardized_structure"], dict):
+                raise ValueError(
+                    f"record line {line_number} standardized_structure must be an object"
+                )
+            if not str(row.get("structure_fingerprint", "")).strip():
+                source_fingerprint = str(
+                    row.get("source_structure_fingerprint", "")
+                ).strip()
+                if not source_fingerprint:
+                    raise ValueError(
+                        f"record line {line_number} requires structure_fingerprint or source_structure_fingerprint"
+                    )
+                row["structure_fingerprint"] = source_fingerprint
+                adapted_fingerprint_rows += 1
+            records.append(row)
+    return records, {
+        "structure_to_standardized_structure": adapted_structure_rows,
+        "source_fingerprint_to_structure_fingerprint": adapted_fingerprint_rows,
+    }
 
 
 def _write_csv(path: Path, rows: list[dict[str, Any]], fields: list[str]) -> None:
@@ -69,9 +127,23 @@ def _table_from_payload(row: dict[str, Any]) -> PeakTable:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--data-root", default=str(PROJECT_ROOT / "data"))
+    parser.add_argument(
+        "--records-path",
+        help=(
+            "optional JSONL/JSONL.GZ source path; defaults to "
+            "<data-root>/mp_processed/structure_records.jsonl"
+        ),
+    )
     parser.add_argument("--workers", type=int, default=3)
     parser.add_argument("--batch-size", type=int, default=100)
     parser.add_argument("--cache-name", default="peak_tables_v7_reflection")
+    parser.add_argument(
+        "--external-python",
+        help=(
+            "explicit compatible Python interpreter for threaded batch computation; "
+            "defaults to the repository's optional xrd_legacy environment"
+        ),
+    )
     parser.add_argument("--manifest-name", default="peak_cache_manifest.v7.reflection.csv")
     parser.add_argument(
         "--skipped-records-name",
@@ -102,13 +174,19 @@ def main() -> int:
             )
 
     data_root = resolve_data_root(PROJECT_ROOT, args.data_root)
-    records_path = data_root / "mp_processed" / "structure_records.jsonl"
+    if args.records_path:
+        records_path = Path(args.records_path)
+        if not records_path.is_absolute():
+            records_path = PROJECT_ROOT / records_path
+        records_path = records_path.resolve()
+    else:
+        records_path = data_root / "mp_processed" / "structure_records.jsonl"
     output_dir = data_root / "mp_processed" / args.cache_name
     staging_dir = output_dir.with_name(output_dir.name + ".tmp")
     manifest_path = data_root / "manifests" / args.manifest_name
     skipped_records_path = data_root / "manifests" / args.skipped_records_name
     summary_path = data_root / "manifests" / args.summary_name
-    if not records_path.exists():
+    if not records_path.is_file():
         raise SystemExit(f"structure records are missing: {records_path}")
     protected_paths = [output_dir, manifest_path, skipped_records_path, summary_path]
     if not args.resume_staging:
@@ -119,11 +197,7 @@ def main() -> int:
     if args.resume_staging and not staging_dir.exists():
         raise SystemExit(f"--resume-staging requested but staging cache is absent: {staging_dir}")
 
-    records = [
-        json.loads(line)
-        for line in records_path.read_text(encoding="utf-8").splitlines()
-        if line.strip()
-    ]
+    records, adapter_counts = _load_structure_records(records_path)
     records.sort(key=lambda row: str(row["material_id"]))
     if args.limit is not None:
         records = records[: args.limit]
@@ -133,12 +207,14 @@ def main() -> int:
     if len(records_by_id) != len(records):
         raise SystemExit("structure records contain duplicate material_id values")
 
-    if not args.resume_staging:
-        staging_dir.mkdir(parents=True)
     started = time.perf_counter()
     grid = SimulationGrid()
-    external_python = virtual_environment_python(
-        PROJECT_ROOT.parent / ".venvs" / "xrd_legacy"
+    if args.external_python and args.force_local:
+        raise SystemExit("--external-python cannot be combined with --force-local")
+    external_python = (
+        Path(args.external_python).expanduser().resolve()
+        if args.external_python
+        else virtual_environment_python(PROJECT_ROOT.parent / ".venvs" / "xrd_legacy")
     )
     external_helper = PROJECT_ROOT / "scripts" / "precompute_peak_table_batch.py"
     external_issue = None
@@ -150,12 +226,16 @@ def main() -> int:
             external_helper,
             cwd=PROJECT_ROOT,
         )
+        if args.external_python and external_issue is not None:
+            raise SystemExit(f"requested external Python runtime is unusable: {external_issue}")
         use_external = external_issue is None
         if external_issue is not None and external_python.exists():
             print(
                 f"warning: ignoring unusable legacy peak-table runtime; {external_issue}",
                 file=sys.stderr,
             )
+    if not args.resume_staging:
+        staging_dir.mkdir(parents=True)
 
     def compute_external(batch: list[dict[str, Any]]) -> list[dict[str, Any]]:
         """Compute in the compatible pymatgen interpreter and isolate process crashes."""
@@ -342,8 +422,9 @@ def main() -> int:
             else "incomplete"
         ),
         "data_root": project_relative_path(PROJECT_ROOT, data_root),
-        "source_records": project_relative_path(PROJECT_ROOT, records_path),
+        "source_records": _summary_path(records_path),
         "source_records_sha256": _sha256(records_path),
+        "input_schema_adaptations": adapter_counts,
         "source_record_count": expected_record_count,
         "cache_name": args.cache_name,
         "required_arrays": list(REQUIRED_ARRAYS),
@@ -378,11 +459,9 @@ def main() -> int:
     staging_dir.replace(output_dir)
     manifest_fields = list(manifest[0])
     _write_csv(manifest_path, manifest, manifest_fields)
-    summary["manifest"] = project_relative_path(PROJECT_ROOT, manifest_path)
+    summary["manifest"] = _summary_path(manifest_path)
     summary["manifest_sha256"] = _sha256(manifest_path)
-    summary["skipped_records"] = project_relative_path(
-        PROJECT_ROOT, skipped_records_path
-    )
+    summary["skipped_records"] = _summary_path(skipped_records_path)
     summary["skipped_records_sha256"] = _sha256(skipped_records_path)
     summary_path.write_text(
         json.dumps(summary, indent=2, sort_keys=True) + "\n",
