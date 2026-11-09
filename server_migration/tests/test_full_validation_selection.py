@@ -316,6 +316,12 @@ class ValidationSelection(unittest.TestCase):
             contract_obj={"hpo_seed":123,"confirmation_seeds":[201,202]}
             contract_file=study/"contract.json"
             contract_file.write_text(json.dumps(contract_obj),encoding="utf-8")
+            gate_file=study/"gradient_gate.json"
+            gradient_gate={"status":"TRAIN_ONLY_GRADIENT_GATE_PASS",
+                           "contract_sha256":mod.canonical_digest(contract_obj),
+                           "lambda_window":mod.derive_train_only_js_range(0.029235)}
+            gate_file.write_text(json.dumps(gradient_gate),encoding="utf-8")
+            gate_sha=mod.digest(gate_file)
             panel_index=study/"validation_panels_v11"/"panel_index.json"
             panel_index.parent.mkdir(parents=True)
             panel_index.write_text("{\"frozen\":true}\n",encoding="utf-8")
@@ -361,6 +367,8 @@ class ValidationSelection(unittest.TestCase):
             rec={"status":"hpo_and_confirmation_completed","contract_sha256":contract_sha,
                  "hpo_trial_count":2,"validation_panel_index_sha256":panel_sha,
                  "best_hpo_trial":0,"recommended_hyperparameters":params,
+                 "gradient_gate_sha256":gate_sha,
+                 "lambda_window":gradient_gate["lambda_window"],
                  "best_hpo_validation_ood_f1":0.75,"confirmation":confirmations}
             (study/"final_recommendation.json").write_text(json.dumps(rec),encoding="utf-8")
 
@@ -374,7 +382,8 @@ class ValidationSelection(unittest.TestCase):
                 SimpleNamespace(number=0,state=TrialState.COMPLETE,params=params,value=0.75),
                 SimpleNamespace(number=1,state=TrialState.COMPLETE,params=params,value=0.70),
             ]
-            optuna.load_study=lambda **kwargs:SimpleNamespace(trials=trials)
+            optuna.load_study=lambda **kwargs:SimpleNamespace(
+                trials=trials,user_attrs={"gradient_gate_sha256":gate_sha})
             with mock.patch.dict(sys.modules,{"optuna":optuna,"optuna.trial":optuna_trial}):
                 recommendation,selected,verified_panel=mod.validate_final_recommendation(
                     study,args,contract_file,contract_obj)
