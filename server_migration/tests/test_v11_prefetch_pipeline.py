@@ -195,3 +195,23 @@ class V11PrefetchContractTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+
+class ValidationPanelRecoveryTests(unittest.TestCase):
+    def test_unindexed_complete_and_partial_files_are_removed_for_regeneration(self):
+        import tempfile
+
+        with tempfile.TemporaryDirectory() as temp:
+            base = Path(temp)
+            profile = "ood_noise"
+            names = [
+                profile + ".first.npy",
+                profile + ".second.npy",
+                profile + ".first.partial.npy",
+                profile + ".second.partial.npy",
+            ]
+            for name in names:
+                (base / name).write_bytes(b"orphan")
+            runner.remove_unindexed_validation_panel_files(base, profile)
+            self.assertTrue(all(not (base / name).exists() for name in names))
