@@ -1286,7 +1286,7 @@ def validate_final_recommendation(study_dir,args,contract_file,contract_obj,*,pr
     gate_sha=digest(gate_file)
     gate=json.loads(gate_file.read_text(encoding="utf-8"))
     if (gate.get("status")!="TRAIN_ONLY_GRADIENT_GATE_PASS"
-        or gate.get("contract_sha256")!=canonical_digest(contract_obj)):
+        or gate.get("science_identity_sha256")!=gradient_science_identity(contract_obj)):
         raise RuntimeError("Final training blocked: gradient prior contract invalid")
     if json.loads(contract_file.read_text(encoding="utf-8"))!=contract_obj:
         raise RuntimeError("Final training contract differs from original HPO")
