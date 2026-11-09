@@ -2,6 +2,7 @@ name: Docs Consistency
 
 on:
   pull_request:
+    types: [opened, synchronize, reopened, closed]
   push:
     branches: [main]
     paths:
@@ -24,6 +25,7 @@ permissions:
 
 jobs:
   check:
+    if: github.event_name != 'pull_request' || github.event.action != 'closed'
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -39,7 +41,7 @@ jobs:
         run: python scripts/check_docs_consistency.py --root .
 
   pr-hygiene:
-    if: github.event_name == 'pull_request'
+    if: github.event_name == 'pull_request' && github.event.action != 'closed'
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions:
@@ -58,3 +60,103 @@ jobs:
         env:
           PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
         run: python scripts/check_pr_hygiene.py --base "$PR_BASE_SHA" --head HEAD
+
+  # Closed, unmerged PRs are not covered by GitHub's native delete_branch_on_merge.
+  closed-unmerged-branch-retirement:
+    if: >-
+      (github.event_name == 'pull_request' &&
+       github.event.action == 'closed' &&
+       github.event.pull_request.merged == false) ||
+      (github.event_name == 'push' &&
+       github.ref == 'refs/heads/main' &&
+       github.event.head_commit.message == 'chore: install safe closed-unmerged PR cleanup')
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+      pull-requests: read
+    steps:
+      - name: Archive exact head SHA and remove unused closed-unmerged branch
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            // The one-time installation push also processes already-closed PR #74.
+            const number = context.eventName === "push" ? 74 : context.payload.pull_request.number;
+            const pr = (await github.rest.pulls.get({ owner, repo, pull_number: number })).data;
+            const repository = (await github.rest.repos.get({ owner, repo })).data;
+            if (pr.state !== "closed" || pr.merged_at !== null) {
+              core.info("PR #" + number + " is not closed-unmerged; skipping.");
+              return;
+            }
+            if (pr.head.repo?.full_name !== repository.full_name) {
+              core.info("Fork or inaccessible head; skipping.");
+              return;
+            }
+            const branch = pr.head.ref;
+            const expected = pr.head.sha;
+            if (!branch || !expected || branch === repository.default_branch) {
+              core.info("Empty, default, or unknown head; skipping.");
+              return;
+            }
+
+            let branchInfo, ref;
+            try {
+              branchInfo = (await github.rest.repos.getBranch({ owner, repo, branch })).data;
+              ref = (await github.rest.git.getRef({ owner, repo, ref: "heads/" + branch })).data;
+            } catch (err) {
+              if (err.status === 404) {
+                core.info("Head branch already removed; nothing to do.");
+                return;
+              }
+              throw err;
+            }
+            if (branchInfo.protected || ref.object.sha !== expected) {
+              core.info("Protected head or changed tip; retaining branch.");
+              return;
+            }
+            const openPRs = await github.paginate(github.rest.pulls.list, {
+              owner, repo, state: "open", per_page: 100
+            });
+            const inUse = openPRs.some(other =>
+              other.base.ref === branch ||
+              (other.head.repo?.full_name === repository.full_name && other.head.ref === branch)
+            );
+            if (inUse) {
+              core.info("Another open PR uses branch " + branch + "; retaining branch.");
+              return;
+            }
+
+            // Persist exact head SHA as a lightweight tag before deleting the live branch.
+            const tagName = "pr-archive/closed-unmerged/" + number + "-" + expected.slice(0, 12);
+            try {
+              const tag = (await github.rest.git.getRef({
+                owner, repo, ref: "tags/" + tagName
+              })).data;
+              if (tag.object.sha !== expected) {
+                core.setFailed("Existing archive tag points elsewhere; no deletion.");
+                return;
+              }
+            } catch (err) {
+              if (err.status !== 404) throw err;
+              await github.rest.git.createRef({
+                owner, repo, ref: "refs/tags/" + tagName, sha: expected
+              });
+              core.info("Archived PR #" + number + " at " + tagName + " (" + expected + ").");
+            }
+
+            const latest = (await github.rest.pulls.get({ owner, repo, pull_number: number })).data;
+            if (latest.state !== "closed" || latest.merged_at !== null) {
+              core.info("PR reopened/merged during cleanup; preserving branch.");
+              return;
+            }
+            const latestRef = (await github.rest.git.getRef({
+              owner, repo, ref: "heads/" + branch
+            })).data;
+            if (latestRef.object.sha !== expected) {
+              core.info("Branch moved during cleanup; preserving branch.");
+              return;
+            }
+            await github.rest.git.deleteRef({ owner, repo, ref: "heads/" + branch });
+            core.info("Deleted branch " + branch + " of closed-unmerged PR #" + number +
+              "; recover via tag " + tagName + ".");
