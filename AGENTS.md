@@ -2,7 +2,7 @@
 
 ## Current research direction (2026-11-09)
 
-**Active:** PXRD seven-crystal-system classification with same-parent Dynamic JS consistency. Simulator integration PR #58 is merged. The 154,975-record structure library is collected but not yet fully integrated into V11 training. **First complete [Issue #61](https://github.com/Frysland-2024/AI4science/issues/61) (schema/PeakTable/integrity/readiness); only then consider [Issue #55](https://github.com/Frysland-2024/AI4science/issues/55) (bounded GPU tuning on 108,478 training parents).** GPU rental/training requires explicit authorization.
+**Active:** PXRD seven-crystal-system classification with same-parent Dynamic JS consistency. Simulator PR #58, V11 migration code and Issue #61 local preflight are complete; 154,975 records/154,968 parent groups are validated but formal V11 GPU HPO is NOT_RUN. The next execution gate is [Issue #55](https://github.com/Frysland-2024/AI4science/issues/55): first validate the native Windows cuifa 4070 Ti SUPER 16 GB / RAM 32 GB candidate, then separately authorize full-parent HPO; optionally transfer the hash-verified frozen selection to Linux for final multi-seed training. No Windows target-GPU Stage 0, HPO, Linux final training or RRUFF scoring is authorized or complete. Do not demand Ubuntu/WSL2 on cuifa merely for the existing Linux launcher; consult `server_migration/README.md`. GPU rental/training requires explicit authorization.
 
 **Do not:** recollect the existing structure library, restart owner-cancelled legacy 9,842-parent Optuna, optimize against held-out synthetic test or real RRUFF, reopen archived parameter inversion/DONUT/AutoLab tasks, or treat planning as executed experiments.
 

@@ -20,6 +20,14 @@ if [ -f "$KIT/validation_panel_bundle.zip" ]; then
     exit 3
   }
 fi
+# An HPO handoff is optional for existing same-machine studies, but any
+# externally supplied handoff MUST be included in the kit checksum list.
+if [ -f "$KIT/hpo_handoff.zip" ]; then
+  # --plan may verify a complete final-stage kit; only --final imports it.
+  grep -q '  hpo_handoff.zip$' SHA256SUMS.txt || {
+    echo "BLOCKED: hpo_handoff.zip is absent from SHA256SUMS.txt"; exit 3;
+  }
+fi
 # Pre-extraction verifier is a Python module with an adjacent frozen contract.
 for f in verify_source_snapshot.py payload_contract.py; do
   test -s "$f" || { echo "BLOCKED: missing pre-extraction source verification dependency $f"; exit 3; }
@@ -61,6 +69,9 @@ bash server_migration/setup_linux.sh
 "$PYTHON" server_migration/one_click_v11.py --mode smoke "$@"
 "$PYTHON" server_migration/smoke_prefetch.py --workers 4 --batch-size 8
 if [ "$MODE" = "--final" ]; then
+  if [ -f "$KIT/hpo_handoff.zip" ]; then
+    "$PYTHON" server_migration/hpo_handoff.py import --root "$DEST/AI4science" --archive "$KIT/hpo_handoff.zip"
+  fi
   "$PYTHON" server_migration/one_click_v11.py --mode final "$@"
   RESULT="$DEST/AI4science/server_runs/v11_a0_js_optuna/final_training_summary.json"
   if [ ! -f "$RESULT" ]; then

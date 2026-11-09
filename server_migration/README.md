@@ -111,3 +111,73 @@ workflow still works and regenerates frozen Validation panels on the server.
 Never treat the simulated Validation data as held-out Test or RRUFF evidence.
 
 This optional cache remains private; do not upload it to public GitHub.
+
+
+## Native Windows HPO → Linux final training (2026-11-09)
+
+The **same** V11 simulator, ResNet-A0, same-parent JS loss, frozen 108,478
+training parents and 23,245 Validation parents are used on both platforms.
+This is an *execution split*, not a new research protocol or a second model.
+
+**cuifa Windows desktop candidate:** RTX 4070 Ti SUPER 16 GiB VRAM,
+32 GiB RAM. CPU/SSD not yet measured. CUDA PyTorch, Optuna and the Python
+package must be installed in a suitable Windows Python 3.11 environment.
+The complete private `xrd_robustness/data/merged_154975_v11` source/cache,
+frozen manifest and matching source snapshot must be present, and remain
+outside public GitHub. Do not restart old 9,842-parent Optuna.
+
+From the repository root, using native PowerShell (no WSL/Ubuntu required):
+
+```powershell
+powershell -ExecutionPolicy Bypass -File server_migration/start_windows.ps1 -Mode plan
+powershell -ExecutionPolicy Bypass -File server_migration/start_windows.ps1 -Mode smoke
+# Only after explicit owner approval and complete Stage-0 hardware / resource /
+# full-Validation / resume acceptance; plan/smoke do not authorize formal HPO:
+powershell -ExecutionPolicy Bypass -File server_migration/start_windows.ps1 -Mode hpo
+# Once all 6 trials + 2 independent confirmation seeds really complete:
+powershell -ExecutionPolicy Bypass -File server_migration/start_windows.ps1 -Mode export
+```
+
+`smoke` checks CUDA two-view forward/backprop and two-worker rendering parity,
+but is **only a bounded smoke**, not a completed Stage 0. With 16/32 GiB,
+measure GPU peak memory, Windows RAM/commit, SSD free space, full six-profile
+Validation accessibility, GPU/CPU throughput and interrupted resume *before*
+authorizing HPO. If batch or prefetch settings change, keep the contract and
+optimization exposure fixed across trial comparisons and record the change.
+
+The native launcher defaults to two prefetch workers, two queued batches and
+256 cached PeakTables per worker on the candidate 16/32 GiB desktop. Non-default
+runner options may be forwarded via `-RunnerArgs` and must then be repeated
+for final training.
+
+Export creates private `_local/v11_hpo_handoff.zip`: verified Optuna database,
+trial JSON evidence, selected and confirmation checkpoints and their hashes,
+original experiment contract, and a compact Validation index. It intentionally
+excludes frozen Test / RRUFF and the large simulated Validation `.npy` arrays.
+
+For **cloud Linux final training**, rebuild the full private source kit using
+the current source snapshot contract (not the old `.5` kit), transfer the
+HPO ZIP into the same kit directory, and add its SHA256 to
+`SHA256SUMS.txt` as `<64-hex-sha>  hpo_handoff.zip`.
+Run `bash start_server.sh --plan` first (handoff ZIP may already be present),
+then **only with separate final-training authorization** run:
+
+```bash
+bash start_server.sh --final --prefetch-workers 2 --prefetch-batches 2 --worker-peak-cache 256
+```
+
+The final launcher imports the hash-verified handoff, regenerates full
+Validation panels if they were not separately supplied, checks every paired
+panel SHA against the frozen HPO identity, then revalidates Optuna trial scores,
+the selected checkpoint, both confirmation checkpoints and the full
+contract before starting three final seeds. If cross-OS rendering is not
+bitwise identical, the correct response is **BLOCKED**, not to weaken hashes:
+transfer the existing separately SHA-verified `validation_panel_bundle.zip`
+as an optional kit asset, with its own line in `SHA256SUMS.txt`.
+
+Because the scientific contract locks the runtime options, cloud `--final`
+must receive the **same non-default runner flags** as Windows HPO (including
+budget, workers, batch and prefetch settings), unless a newly reviewed protocol
+explicitly separates platform-only resource settings. This workflow does not
+score RRUFF/Test. Final scoring remains a separate local task after the four
+Cu1011 scoring gates and checkpoint freeze.

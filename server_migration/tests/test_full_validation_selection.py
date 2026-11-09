@@ -195,7 +195,7 @@ class ValidationSelection(unittest.TestCase):
                  }):
                 panels,index_sha=mod.prepare_validation_panels(
                     records,{},sim,libs,study,expected_parents=2)
-                self.assertEqual(index_sha,mod.digest(index_path))
+                self.assertEqual(index_sha,mod.canonical_digest(json.loads(index_path.read_text(encoding="utf-8"))))
                 self.assertIsInstance(panels[mod.VALIDATION_OOD_PROFILES[0]][0],np.memmap)
                 self.assertFalse(panels[mod.VALIDATION_OOD_PROFILES[0]][0].flags.writeable)
                 del panels
@@ -220,7 +220,7 @@ class ValidationSelection(unittest.TestCase):
             panel_index=study/"validation_panels_v11"/"panel_index.json"
             panel_index.parent.mkdir(parents=True)
             panel_index.write_text("{\"frozen\":true}\n",encoding="utf-8")
-            panel_sha=mod.digest(panel_index)
+            panel_sha=mod.canonical_digest(json.loads(panel_index.read_text(encoding="utf-8")))
             contract_sha=mod.digest(contract_file)
             sim_sha=mod.digest(mod.XRD/"configs/simulation.v11_tch_pseudo_voigt.json")
 
@@ -281,9 +281,19 @@ class ValidationSelection(unittest.TestCase):
                 self.assertEqual(recommendation["status"],"hpo_and_confirmation_completed")
                 self.assertEqual(selected,params)
                 self.assertEqual(verified_panel,panel_sha)
+                # Imported Windows handoff initially has only the frozen index.
+                # Cloud final validates the regenerated index identity afterward.
+                panel_index.unlink()
+                _,_,cloud_panel=mod.validate_final_recommendation(
+                    study,args,contract_file,contract_obj,prepared_panel_sha=panel_sha)
+                self.assertEqual(cloud_panel,panel_sha)
+                with self.assertRaisesRegex(RuntimeError,"Validation panel hash mismatch"):
+                    mod.validate_final_recommendation(
+                        study,args,contract_file,contract_obj,prepared_panel_sha="0"*64)
                 trials[1].state="FAIL"
                 with self.assertRaisesRegex(RuntimeError,"every requested Optuna trial"):
-                    mod.validate_final_recommendation(study,args,contract_file,contract_obj)
+                    mod.validate_final_recommendation(
+                        study,args,contract_file,contract_obj,prepared_panel_sha=panel_sha)
 
 if __name__=="__main__":
     unittest.main()

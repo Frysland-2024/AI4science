@@ -473,7 +473,8 @@ def _prepare_validation_panels_locked(records, peaks, sim, libs, study_dir, *,
     finally:
         if pool is not None:
             pool.close()
-    return panels,digest(index_path)
+    # Canonical JSON identity is portable across Windows CRLF and Linux LF.
+    return panels,canonical_digest(json.loads(index_path.read_text(encoding="utf-8")))
 
 def validate(model,records,peaks,val_factory,device,libs,batch_size,profiles,panels=None,*,use_bf16=False):
     np,torch,F,_,_,render_pair_batch,*tail=libs
@@ -758,7 +759,7 @@ def validate_completed_trial_artifacts(
     return row
 
 
-def validate_final_recommendation(study_dir,args,contract_file,contract_obj):
+def validate_final_recommendation(study_dir,args,contract_file,contract_obj,*,prepared_panel_sha=None):
     """Fail before loading the full data/cache unless HPO and both confirmations are valid."""
     rec_path=Path(study_dir)/"final_recommendation.json"
     if not contract_file.is_file() or not rec_path.is_file():
@@ -772,9 +773,12 @@ def validate_final_recommendation(study_dir,args,contract_file,contract_obj):
         or recommendation.get("hpo_trial_count")!=args.trials):
         raise RuntimeError("Final training blocked: recommendation contract/status/count mismatch")
     panel_index=Path(study_dir)/"validation_panels_v11"/"panel_index.json"
-    if not panel_index.is_file():
-        raise RuntimeError("Final training blocked: frozen Validation panels are missing")
-    panel_sha=digest(panel_index)
+    if prepared_panel_sha is not None:
+        panel_sha=prepared_panel_sha
+    else:
+        if not panel_index.is_file():
+            raise RuntimeError("Final training blocked: frozen Validation panels are missing")
+        panel_sha=canonical_digest(json.loads(panel_index.read_text(encoding="utf-8")))
     if recommendation.get("validation_panel_index_sha256")!=panel_sha:
         raise RuntimeError("Final training blocked: recommendation Validation panel hash mismatch")
 
@@ -850,8 +854,20 @@ def run_pipeline(args):
         event("PLAN_ONLY",contract=c,cache_root=str(XRD/"data/merged_154975_v11"),
               note="No GPU training or trial created. Unzip full caches and verify hashes before run.")
         return
-    final_context=(validate_final_recommendation(study_dir,args,contract_file,c)
-                   if args.mode=="final" else None)
+    final_context=None
+    if args.mode=="final":
+        rec_path=study_dir/"final_recommendation.json"
+        if not rec_path.is_file():
+            raise RuntimeError("Final training blocked: frozen HPO recommendation missing")
+        handoff_index=study_dir/"handoff_validation_panel_index.json"
+        if handoff_index.is_file():
+            # Imported Windows HPO keeps the indexed identity, not multi-GB arrays.
+            expected=canonical_digest(json.loads(handoff_index.read_text(encoding="utf-8")))
+            if json.loads(rec_path.read_text(encoding="utf-8")).get("validation_panel_index_sha256")!=expected:
+                raise RuntimeError("Final training blocked: imported Validation identity mismatch")
+        else:
+            # Original same-machine final path keeps the early evidence check.
+            final_context=validate_final_recommendation(study_dir,args,contract_file,c)
     libs=ctx_libraries()
     np,torch,F,load_peak_records,load_peak_tables,render_pair_batch,build_online_view_factory,ML4PXRDResNet1D,ML4PXRDResNet1DConfig,PhysicsParameterSampler,metrics=libs
     records_path=XRD/"data/merged_154975_v11/training_records.v1.jsonl"
@@ -912,6 +928,14 @@ def run_pipeline(args):
     event("FULL_VALIDATION_READY",parents=len(val_full),profiles=len(VALIDATION_OOD_PROFILES),
           index_sha256=panel_index_sha)
     if args.mode=="final":
+        # Regenerated Linux panels must exactly match Windows HPO's frozen
+        # canonical index and each underlying paired-spectrum SHA256.
+        if (study_dir/"handoff_validation_panel_index.json").is_file():
+            expected=canonical_digest(json.loads((study_dir/"handoff_validation_panel_index.json").read_text(encoding="utf-8")))
+            if panel_index_sha!=expected:
+                raise RuntimeError("Final training blocked: regenerated Validation differs from Windows HPO")
+        final_context=validate_final_recommendation(
+            study_dir,args,contract_file,c,prepared_panel_sha=panel_index_sha)
         # Separate explicit final-stage command; it reuses the exact same
         # prefetch, full frozen Validation and checkpoint/replay engine.
         recommendation,params,expected_panel_sha=final_context

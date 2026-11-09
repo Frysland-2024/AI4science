@@ -72,7 +72,7 @@ def main():
         files[p]="reference_windows_resnet_joint/"+p.name
     for p in sorted((ROOT/"_local"/"resnet_joint_20261103"/"protocols").glob("*.json")):
         files[p]="reference_windows_resnet_joint/protocols/"+p.name
-    for name in ("verify_payload.py","verify_peak_cache.py","one_click_v11.py","v11_prefetch.py","smoke_prefetch.py","start_server.sh","preflight.sh","build_peak_tables.sh","setup_linux.sh","README.md","payload_contract.py","verify_source_snapshot.py","create_migration_bundles.py"):
+    for name in ("verify_payload.py","verify_peak_cache.py","one_click_v11.py","v11_prefetch.py","smoke_prefetch.py","start_server.sh","start_windows.ps1","windows_cuda_smoke.py","hpo_handoff.py","preflight.sh","build_peak_tables.sh","setup_linux.sh","README.md","payload_contract.py","verify_source_snapshot.py","create_migration_bundles.py"):
         p=ROOT/"server_migration"/name
         if not p.is_file():raise RuntimeError(f"Missing current-worktree migration source: {p}")
         files[p]=p.relative_to(ROOT).as_posix()
