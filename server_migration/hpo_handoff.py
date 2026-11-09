@@ -19,7 +19,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 STUDY_REL = Path("server_runs/v11_a0_js_optuna")
 MANIFEST = "handoff_manifest.json"
-VERSION = "v11-hpo-handoff-v1"
+VERSION = "v11-hpo-handoff-v2"
 
 
 def sha256(path: Path) -> str:
@@ -82,6 +82,7 @@ def export_handoff(root: Path, output: Path) -> dict:
     files = {
         "contract.json": contract_file,
         "final_recommendation.json": rec_file,
+        "gradient_gate.json":study / "gradient_gate.json",
         "handoff_validation_panel_index.json": study / "validation_panels_v11/panel_index.json",
     }
     for number in range(contract["max_new_trials"]):
@@ -167,6 +168,15 @@ def import_handoff(root: Path, archive_path: Path) -> dict:
         if _canonical_index_digest(index_obj) != manifest.get("validation_index_sha256"):
             raise RuntimeError("Validation index identity missing or mismatched")
         recommendation = json.loads(archive.read("final_recommendation.json"))
+        if "gradient_gate.json" not in files:
+            raise RuntimeError("Missing frozen TRAIN gradient prior in HPO handoff")
+        frozen_gate=json.loads(archive.read("gradient_gate.json"))
+        frozen_contract=json.loads(archive.read("contract.json"))
+        if (frozen_gate.get("status")!="TRAIN_ONLY_GRADIENT_GATE_PASS"
+                or frozen_gate.get("contract_sha256")!=_canonical_index_digest(frozen_contract)
+                or frozen_contract.get("schema")!="v11_154975_gradient_informed_three_parameter_v3"
+                or recommendation.get("gradient_gate_sha256")!=files["gradient_gate.json"]):
+            raise RuntimeError("HPO handoff gradient-gate science protocol mismatch")
         if (recommendation.get("status") != "hpo_and_confirmation_completed"
                 or recommendation.get("contract_sha256") != manifest["contract_sha256"]
                 or recommendation.get("validation_panel_index_sha256") != manifest["validation_index_sha256"]):
