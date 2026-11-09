@@ -60,3 +60,8 @@ Git tracks this evidence record and its checksums; the large compressed structur
 - Decision history: [`PROJECT_HISTORY.md`](PROJECT_HISTORY.md)
 - External delivery readme: `D:\AI4science_external_data\pxrd_scale_sources_20261103\processed\merged_154975_parent_split_20261103\README.md`
 - External machine-readable integrity record: `D:\AI4science_external_data\pxrd_scale_sources_20261103\processed\merged_154975_parent_split_20261103\delivery_validation.json`
+
+
+## 2026-11-09 execution-boundary addendum
+
+This document establishes the source-library split only. It does **not** establish that the current `main` schema adapter can consume these JSONL shards, that the server migration loader can read their PeakTables, or that a private package matches current source code. The latest Issue #61 audit reports the current-main adapter/manifest-builder and `--records-path` gaps; the private artifacts could not be re-opened for current hash verification. Keep this source-split evidence as historical input evidence and use [the current preflight audit](ISSUE_61_V11_MINIMUM_PREFLIGHT_AUDIT_20261109.md) for readiness. #61 remains BLOCKED and #55 remains blocked; GPU smoke is **BLOCKED / NOT_RUN** until separately authorized and executed.
