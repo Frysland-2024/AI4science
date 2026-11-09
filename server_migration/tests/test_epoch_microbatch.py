@@ -164,7 +164,7 @@ class FinalRuntimeOverridesTests(unittest.TestCase):
     def fake_args(self):
         return SimpleNamespace(
             mode="final",trials=6,hpo_steps=339000,confirm_steps=678000,
-            final_steps=67800,batch_size=16,microbatch_size=16,
+            final_steps=678000,batch_size=16,microbatch_size=16,
             sampling_mode="epoch_shuffle",eval_every=67800,
             prefetch_workers=4,prefetch_batches=2,native_threads=1,
             worker_peak_cache=256,max_gpu_hours=24,validation_bf16=False)
