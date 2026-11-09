@@ -1,6 +1,6 @@
 """Versioned member contract for the private V11 Linux migration snapshot."""
 
-PAYLOAD_CONTRACT_VERSION = "v11-parent-epoch-budget-20261109.8"
+PAYLOAD_CONTRACT_VERSION = "v11-focused-science-cpu-20261109.9"
 PAYLOAD_MANIFEST_MEMBER = "AI4science/server_migration/source_snapshot_manifest.json"
 
 PAYLOAD_REQUIRED_FILES = (
