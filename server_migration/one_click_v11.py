@@ -1080,7 +1080,7 @@ def main():
     parser.add_argument("--trials",type=int,default=6)
     parser.add_argument("--hpo-steps",type=int,default=None)
     parser.add_argument("--confirm-steps",type=int,default=None)
-    parser.add_argument("--final-steps",type=int,default=49280)
+    parser.add_argument("--final-steps",type=int,default=None)
     parser.add_argument("--eval-every",type=int,default=None)
     parser.add_argument("--batch-size",type=int,default=16)
     parser.add_argument("--microbatch-size",type=int,default=None,
@@ -1098,8 +1098,13 @@ def main():
         parser.error("--batch-size must be positive")
     args.microbatch_size=args.batch_size if args.microbatch_size is None else args.microbatch_size
     default_steps=(108478+args.batch_size-1)//args.batch_size if args.sampling_mode=="epoch_shuffle" else 6160
-    args.hpo_steps=default_steps if args.hpo_steps is None else args.hpo_steps
-    args.confirm_steps=2*default_steps if args.confirm_steps is None else args.confirm_steps
+    # Scale-aware pre-HPO default: 5 parent epochs to compare candidates at
+    # meaningful convergence, then 10 epochs for confirmation and final.
+    # In random_batch provenance mode, default_steps is a legacy step unit,
+    # not an actual complete parent epoch; epoch_shuffle remains the default.
+    args.hpo_steps=5*default_steps if args.hpo_steps is None else args.hpo_steps
+    args.confirm_steps=10*default_steps if args.confirm_steps is None else args.confirm_steps
+    args.final_steps=10*default_steps if args.final_steps is None else args.final_steps
     args.eval_every=default_steps if args.eval_every is None else args.eval_every
     if args.mode in ("run","final"):
         study_dir=ROOT/"server_runs"/"v11_a0_js_optuna"
