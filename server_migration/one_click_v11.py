@@ -343,6 +343,17 @@ def prepare_validation_panels(records, peaks, sim, libs, study_dir, *,
             worker_peak_cache=worker_peak_cache,
         )
 
+def remove_unindexed_validation_panel_files(base, profile):
+    """Remove files left by a crash before the panel index was committed."""
+    base=Path(base)
+    names=[profile+".first.npy",profile+".second.npy",
+           profile+".first.partial.npy",profile+".second.partial.npy"]
+    for name in names:
+        path=base/name
+        if path.exists():
+            path.unlink()
+
+
 def _prepare_validation_panels_locked(records, peaks, sim, libs, study_dir, *,
                               expected_parents=23245, workers=4, prefetch_batches=3,
                               native_threads=1, worker_peak_cache=512):
@@ -424,14 +435,10 @@ def _prepare_validation_panels_locked(records, peaks, sim, libs, study_dir, *,
                 event("validation_panel_reused",profile=profile,parents=len(records))
             else:
                 # Temporary files are never used as scored Validation evidence.
+                # With no index entry these files cannot be trusted as a
+                # completed panel; remove them and regenerate under the cache lock.
+                remove_unindexed_validation_panel_files(base,profile)
                 temporary=[base/(profile+f".{view}.partial.npy") for view in ("first","second")]
-                for item in temporary:
-                    if item.exists():item.unlink()
-                # A crash after one rename but before the index commit can leave
-                # unindexed panel files. Under the exclusive cache lock they are
-                # known incomplete and safe to rebuild; indexed panels are immutable.
-                for item in paths:
-                    if item.exists():item.unlink()
                 first=np.lib.format.open_memmap(temporary[0],mode="w+",dtype=np.float32,
                                                  shape=(len(records),3501))
                 second=np.lib.format.open_memmap(temporary[1],mode="w+",dtype=np.float32,
