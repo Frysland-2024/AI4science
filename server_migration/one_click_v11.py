@@ -318,7 +318,7 @@ def contract(args):
         "max_new_trials":args.trials,
         "search_space":{"lambda_js":"TRAIN_ONLY_LEARNED_GRADIENT_GATE_3_TO_120",
                         "middle_stride":[2,4],"kernel_size":[5,9]},
-        "gradient_gate_contract":{"warmup_min_parent_epochs":5,"warmup_max_parent_epochs":10,
+        "gradient_gate_contract":{"warmup_min_parent_epochs":5,"warmup_max_parent_epochs":20,
                                   "whole_training_parent_gradient_sweep":108478,
                                   "full_backbone_gradient":True,
                                   "learned_state_min_accuracy":0.30,
@@ -437,6 +437,25 @@ def loss_js(logit1,logit2,targets,weight,torch,F):
     return ce+weight*js,ce,js
 
 
+def train_state_ready(history):
+    """Train-only evidence of non-random, sufficiently stable learned features.
+
+    This is NOT a claim of full convergence or Validation performance.
+    """
+    if len(history)<5:
+        return False
+    last=history[-1]
+    if last["accuracy"]<0.30 or last["mean_ce"]>1.85:
+        return False
+    earlier=history[-3]["mean_ce"]
+    latest=last["mean_ce"]
+    if not all(math.isfinite(x) and x>0 for x in (earlier,latest)):
+        return False
+    # Keep training if the Train-only CE is still falling rapidly (>5% over
+    # two parent epochs), up to an explicit 20-epoch safety ceiling.
+    return max(0.0,(earlier-latest)/earlier)<=0.05
+
+
 def validate_train_only_gradient_gate(gate, contract_obj, train_records):
     """Verify portable learned-Train evidence WITHOUT accessing Validation."""
     if not isinstance(gate,dict) or gate.get("status")!="TRAIN_ONLY_GRADIENT_GATE_PASS":
@@ -447,10 +466,11 @@ def validate_train_only_gradient_gate(gate, contract_obj, train_records):
     if gate.get("training_parent_ids_sha256")!=expected or gate.get("parents_scanned")!=len(train_records):
         raise RuntimeError("TRAIN gradient gate parent coverage/identity mismatch")
     if (gate.get("parents_scanned")!=108478
-        or not 5<=gate.get("warmup_parent_epochs",0)<=10):
+        or not 5<=gate.get("warmup_parent_epochs",0)<=20):
         raise RuntimeError("TRAIN-only gate lacks full parent coverage or learned-state warmup")
     if (gate.get("learned_state_accuracy",0)<0.30
-        or gate.get("learned_state_ce",99)>1.85):
+        or gate.get("learned_state_ce",99)>1.85
+        or gate.get("learned_state_stable") is not True):
         raise RuntimeError("TRAIN-only JS gradient gate measured before meaningful learning")
     window=derive_train_only_js_range(gate["median_per_batch_js_ce_gradient_ratio"])
     if gate.get("lambda_window")!=window:
@@ -492,11 +512,12 @@ def make_or_load_train_only_gradient_gate(study_dir,train_records,sim,libs,argv,
         lr=V11_FIXED_OPTIMIZER["learning_rate"],
         weight_decay=V11_FIXED_OPTIMIZER["weight_decay"])
     one_epoch=(len(train_records)+argv.batch_size-1)//argv.batch_size
-    max_steps=10*one_epoch
+    max_steps=20*one_epoch
     base=Path(study_dir)/"gradient_gate_warmup.pt"
     gate_contract={"purpose":"TRAIN_ONLY_LEARNED_GRADIENT_V1",
                    "science_identity_sha256":gradient_science_identity(contract_obj),
                    "warmup_microbatch_size":argv.microbatch_size,
+                   "maximum_warmup_parent_epochs":20,
                    "training_parent_sha256":hashlib.sha256(
                        "\n".join(r.material_id for r in train_records).encode()).hexdigest(),
                    "batch_size":argv.batch_size,"epoch_steps":one_epoch,"seed":seed}
@@ -528,6 +549,10 @@ def make_or_load_train_only_gradient_gate(study_dir,train_records,sim,libs,argv,
                 a=torch.from_numpy(first).to("cuda")
                 b=torch.from_numpy(second).to("cuda")
                 y=torch.from_numpy(labels).to("cuda")
+                # Match HPO's 100-epoch LR time base, not a short warmup decay.
+                for group in optimizer.param_groups:
+                    group["lr"]=V11_FIXED_OPTIMIZER["learning_rate"]*(
+                        .05+.95*.5*(1+math.cos(math.pi*step/(100*one_epoch))))
                 _,ce,_,_=paired_optimizer_step(
                     model,optimizer,a,b,y,lambda_js=0.0,
                     microbatch_size=argv.microbatch_size,loss_fn=loss_js,
@@ -558,12 +583,12 @@ def make_or_load_train_only_gradient_gate(study_dir,train_records,sim,libs,argv,
                     event("TRAIN_ONLY_LEARNED_STATE",epoch=epoch,
                           accuracy=round(score,5),mean_ce=round(ce_mean,5))
                     right=0;seen=0;ce_acc=0.;measured=0
-                    if epoch>=5 and score>=0.30 and ce_mean<=1.85:
+                    if train_state_ready(history):
                         break
         finally:
             pool.close()
-    if not history or history[-1]["accuracy"]<.30 or history[-1]["mean_ce"]>1.85:
-        raise RuntimeError("TRAIN-only ERM did not reach learned-state gate within 10 epochs; block HPO")
+    if not train_state_ready(history):
+        raise RuntimeError("TRAIN-only ERM did not reach stable learned-state gate within 20 epochs; block HPO")
     # Frozen learned model is NEVER used as a starting checkpoint for HPO trials.
     model.eval()
     named_params=[(name,p) for name,p in model.named_parameters() if p.requires_grad]
@@ -636,6 +661,8 @@ def make_or_load_train_only_gradient_gate(study_dir,train_records,sim,libs,argv,
           "warmup_parent_epochs":history[-1]["epoch"],
           "learned_state_accuracy":history[-1]["accuracy"],
           "learned_state_ce":history[-1]["mean_ce"],
+          "learned_state_stable":train_state_ready(history),
+          "train_only_epoch_history":history,
           "median_per_batch_js_ce_gradient_ratio":ratio,
           "lambda_calibration_gradient_scope":"ResNet stem+residual stages, excludes embedding/head",
           "whole_model_gradient_scope":"all trainable parameters incl embedding/head",
