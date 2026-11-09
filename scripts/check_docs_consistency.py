@@ -60,13 +60,36 @@ def current_facts(agents: str, state: str) -> tuple[str, bool, tuple[str, str]]:
         r"(?i)\*\*Decision:\s*(RRUFF[-–](?:Cu)?\d{2,5})\s+is\s+the\s+official\s+prospective\s+PRIMARY", state)
     if not benchmark:
         raise ValueError("CURRENT_STATE lacks an explicit official primary RRUFF benchmark")
-    order = re.search(
+    # Both stages are legitimate: while #61 was pending it had to precede
+    # #55; since local #61 closed, #55 Stage 0 must precede *authorized* HPO.
+    old_order = re.search(
         r"First complete\s*\[Issue\s*#(\d+)\].{0,260}?only then consider\s*\[Issue\s*#(\d+)\]",
         active, re.I | re.S)
-    if not order:
-        raise ValueError("AGENTS.md lacks explicit readiness-then-HPO issue order")
+    if old_order:
+        ready, hpo = old_order.groups()
+    else:
+        local_done = re.search(
+            r"\bIssue\s*#(\d+)\s+local\s+preflight\b.{0,65}\b(?:complete|passed|closed)\b",
+            active, re.I | re.S)
+        next_gate = re.search(
+            r"\bnext execution gate is\s*\[Issue\s*#(\d+)\](?:\([^)]*\))?",
+            active, re.I)
+        stage0_before_hpo = (
+            re.search(
+                r"^\s*:\s*first\s+(?:validate|verify|check)\b[^.;]{0,250}"
+                r"\bthen\s+(?:separately\s+)?(?:authorize|approve)\b[^.;]{0,120}\bHPO\b",
+                active[next_gate.end():], re.I)
+            if next_gate else None
+        )
+        if not (local_done and next_gate and local_done.start() < next_gate.start()
+                and stage0_before_hpo):
+            raise ValueError(
+                "AGENTS.md must document completed local preflight, "
+                "target-GPU Stage 0 before separately authorized HPO"
+            )
+        ready, hpo = local_done.group(1), next_gate.group(1)
     unrun = "没有启动 HPO" in state[:6000] or "HPO 仍" in state[:6000]
-    return benchmark.group(1), unrun, order.groups()
+    return benchmark.group(1), unrun, (ready, hpo)
 
 def markdown_links(text: str):
     text = re.sub(r"(?ms)^(\x60{3}|~~~).*?^\1[^\n]*$", "", text)

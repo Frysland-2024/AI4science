@@ -39,6 +39,37 @@ The old freeze is archived.
     def test_current_state_passes(self):
         self.assertEqual(self.issues(), [])
 
+    def test_completed_local_preflight_then_gpu_gate_passes(self):
+        self.put("AGENTS.md", """# AGENTS
+## Current research direction (2026-11-09)
+**Active:** PXRD seven-system classification. Issue #61 local preflight are complete; GPU HPO remains NOT_RUN. The next execution gate is [Issue #55](https://github.com/example): first validate the native Windows target GPU Stage 0, then separately authorize full-parent HPO.
+## Historical policy
+The old freeze is archived.
+""")
+        self.assertEqual(self.issues(), [])
+
+    def test_new_sequence_cannot_put_hpo_before_gpu_gate(self):
+        self.put("AGENTS.md", """# AGENTS
+## Current research direction (2026-11-09)
+**Active:** PXRD seven-system classification. Issue #61 local preflight are complete. The next execution gate is [Issue #55](https://github.com/example): first authorize full-parent HPO, then validate Windows GPU Stage 0.
+## Historical policy
+The old freeze is archived.
+""")
+        self.assertTrue(any("Stage 0 before" in x for x in self.issues()))
+
+    def test_new_sequence_requires_actual_local_preflight_completion(self):
+        self.put("AGENTS.md", """# AGENTS
+## Current research direction (2026-11-09)
+**Active:** PXRD seven-system classification. Issue #61 local preflight NOT_RUN. The next execution gate is [Issue #55](https://github.com/example): first validate Windows GPU Stage 0, then separately authorize full-parent HPO.
+## Historical policy
+The old freeze is archived.
+""")
+        self.assertTrue(any("completed local preflight" in x for x in self.issues()))
+
+    def test_real_repo_docs_consistency(self):
+        # Prevent a synthetic-fixture green run while live AGENTS.md fails.
+        self.assertEqual(guard.inspect(Path(__file__).resolve().parents[1]), [])
+
     def test_old_writeup_freeze_fails(self):
         self.put("docs/REVIEWER_GUIDE.md", "RRUFF-Cu1011. No new experiments are in scope.\n")
         self.assertTrue(any("freeze" in x for x in self.issues()))
