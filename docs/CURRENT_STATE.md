@@ -4,6 +4,8 @@
 
 **状态日期：** 2026-11-09
 
+**2026-11-09 V11 preflight code correction:** current `main` now includes the merged-shard schema adapter/`--records-path`, parent-safe Train+Validation manifest builder with exact PeakTable SHA verification, and regression tests. XRD CI passed on run [#42554396816](https://github.com/Frysland-2024/AI4science/actions/runs/42554396816); latest V11 migration CI is pending. Payload contract is now `v11-prefetch-validation-20261109.3`, so the old private source snapshot is stale and must be regenerated/rechecked. **#61 remains BLOCKED:** no current-private-package or target-server acceptance; target GPU smoke stays `BLOCKED / NOT_RUN` absent separate authorization. #55 remains blocked.
+
 **2026-11-09 V11 迁移代码合并：** [PR #70](https://github.com/Frysland-2024/AI4science/pull/70) 已择取 #66/#67 中最新的 `server_migration/` 代码、确定性多进程预取、完整 Validation 面板和 Linux 预检/部署脚本合并至 `main`；源码编译、shell 语法、offline 数据完整性/预取测试的 PR CI [#42501805467](https://github.com/Frysland-2024/AI4science/actions/runs/42501805467) 已通过。#66/#67 已关闭。**这仅证明代码集成及 CI 检查，不代表完整私有数据包或租赁云 GPU 环境通过验收，也没有启动 HPO 或产生 RRUFF-Cu1011 正式评分。** #61 继续负责运行就绪审查，#55 负责其后新数据全量调参，均不得自动执行。
 
 **V11交付与训练边界（2026-11-05）：** PR #58 已合并至 `main`（merge commit `940942d5a9c30307295eb7b7a68c08e47687f955`），V11 模拟器、CIF→paired-view 路径、测试和验收记录已集成。验收记录报告 50 项测试通过、七个 CIF 保持晶系标签；合并提交的 main `XRD tests` CI run [#41965621220](https://github.com/Frysland-2024/AI4science/actions/runs/41965621220) 通过。这些是模拟器工程验证，不是模型训练证据：没有运行 V11 模型训练、HPO 或最终 RRUFF 评测，也没有证明相对 V9/V10 的分类性能提升。154,975-parent 全量 HPO 仍须先完成 structure-schema adapter、corpus-scale PeakTable 构建、审计与 GPU 吞吐准备（见 Issue #55）。
