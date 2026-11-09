@@ -14,7 +14,7 @@
 | PeakTable 缓存 | `verify_peak_cache.py` 对 154,975 个缓存逐文件 SHA256 全量核验；三个 split 的 summary、manifest 与 aggregate hash 一致 | PASS；缓存未重建或修改 |
 | `--records-path` 与 schema adapter | 新增支持外部 `.jsonl` / `.jsonl.gz`；以全量 train shard 的行读取/字段适配、限一条真实结构执行 CPU PeakTable precompute；适配计数为 108,483 个 `structure → standardized_structure` 与 108,483 个 `source_structure_fingerprint → structure_fingerprint`，输出 1 项、跳过 0 项 | PASS |
 | Train/Validation runner manifest | 对三个源 shard 和现有 train/validation 缓存完整重建 runner manifest；train 108,483 rows、validation 23,246 rows、Test 不写入；输出 131,729 rows，SHA256 `7f169d555de18b4dd811e18a67196acee317733864a1232fa719a861104333dd`，与冻结 manifest 一致 | PASS |
-| 新私有 source snapshot | payload contract `v11-prefetch-validation-20261109.1`；135 个成员通过哈希/必需文件清单校验；四个 ZIP 与 launcher/verifier 的 SHA256 检查通过 | PASS |
+| 新私有 source snapshot | payload contract `v11-prefetch-validation-20261109.1`；136 个成员通过哈希/必需文件清单校验；四个 ZIP 与 launcher/verifier 的 SHA256 检查通过 | PASS |
 | `start_server.sh --plan` | 在临时 HOME `E:\AI4science\_local\issue61_preflight_20261109\server_home` 完整解包；源分片逐行和 parent-isolation 校验通过；full PeakTable 清单快速校验通过；生成 PLAN_ONLY contract，Test/RRUFF 访问仍禁止 | PASS；没有创建 study/trial |
 | ResNet/JS CPU smoke | `one_click_v11.py --mode smoke`：一条 Train 与一条 Validation 记录，V11 paired views → ResNet-18-GN A0 → CE+same-parent JS，13,008,839 参数，loss 有限 | PASS；一批 CPU，不是训练结果 |
 | Prefetch parity smoke | 私有 Train 8 条记录、2 worker；串行与并行的两视图及标签逐元素 bitwise 相同 | PASS；启动耗时小样本，不作加速结论 |
