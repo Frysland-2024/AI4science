@@ -12,6 +12,21 @@ For current scientific claims, use [CURRENT_STATE.md](CURRENT_STATE.md) and the 
 
 **证据状态：** 本次已把 .10 自动方案提交到 main，隔离本机核验 **47 项 server_migration 回归测试 + 2 subtests PASS**，并包含真实 Optuna 4.9 的三维 TPE 候选模拟。它目前是**代码与方案交付，而不是 GPU 科学结果**：5–10 Epoch Train-only learned-state 训练、108,478 Train-parent 完整梯度审计、目标 GPU 的实际 HPO、确认种子和真实 RRUFF-Cu1011 得分均 NOT_RUN。相比 .9，这是一次**为保留科研问题与降低无效搜索，而不是为增加超参数数量**做出的流程纠偏。操作合同与限制以 [Issue #55](https://github.com/Frysland-2024/AI4science/issues/55) 为准。
 
+**V11 未训练梯度先验摸底（2026-11-09；仅作设计参考）：** 为把 V9 的梯度尺度判断迁移到新的 154,975 条来源结构和 TCH pseudo-Voigt V11 模拟器，额外完成一个 **Train-only、A0 随机初始化**的数值实验：从冻结的 **108,478 个 Train parent** 中，每个种子按七晶系分层抽取 **112 个不同 parent**（每类 16），使用种子 `20260711` / `20261109`；batch=16，共 **14 个 batch 观测**，分别计算全模型可训练参数的 FP32 CE 与未加权 JS 梯度。仅使用 Validation 分割元数据作隔离校验，**未加载 Validation 谱图，也未读取 synthetic Test、RRUFF 或 CNRS**。
+
+| 未训练模型梯度诊断量 | 观测值 |
+|---|---:|
+| 未加权梯度范数比中位数 `||∇JS|| / ||∇CE||` | **0.048486** |
+| 比率 P10 / P90 | 0.025746 / 0.076274 |
+| 当 λ=60 时加权梯度范数比中位数 | **2.90914** |
+| CE/JS 梯度余弦相似度中位数 | **−0.349669** |
+| 余弦相似度 P10 / P90 | −0.479127 / −0.002932 |
+
+以**初始化态梯度范数比的中位数**换算的 JS 相对梯度强度目标 `0.05 / 0.2 / 0.5 / 1 / 2`，对应 λ 原始值约为 `1.03 / 4.12 / 10.31 / 20.62 / 41.25`；按 V11 安全范围 `[3,120]` 裁剪后约为 **`3 / 4.12 / 10.31 / 20.62 / 41.25`**。这只提示后续可以**优先调查 λ=60 以下的梯度尺度**，绝不代表正式 HPO 搜索边界或性能最优 λ。负余弦表示这组初始梯度在方向上有冲突，不能据此断言 JS 对训练有害。
+
+**与正式设计的本质区别：** 这里测量的是**随机初始化下、逐 batch、全模型参数梯度范数比**；当前 V11 正式 Gate 需经过至少 5、最多 20 个完整 Train epoch，并满足 Train Accuracy ≥0.30、CE ≤1.85 及近期 Train-only CE 下降幅度趋稳等门槛，再使用全部 108,478 个 Train parents，并以**卷积主干（排除 embedding/head）的梯度尺度**决定弱/中/强 λ 范围。不能把本次 Pilot 伪装为已通过 Gate 的结果，更不能据此提前批准正式 HPO。执行当时源码为 `4749806`（历史版本，而非现行训练合同）；源 manifest SHA256 为 `7f169d555de18b4dd811e18a67196acee317733864a1232fa719a861104333dd`，模拟器配置 SHA256 为 `367aeb8a28c88106ab6df13b4d6b10cf088534318b9d78dd94b6d2f41bc79860`。完整 **14 个 batch 原始数值**及双种子的抽样指纹已按原文件保存在 [V11 Train-only 初始化梯度记录](../xrd_robustness/reports/v11_train_only_init_gradients_20261109.json)，状态为 **`UNTRAINED_DIAGNOSTIC_NOT_VALID_LAMBDA_GATE`**。
+
+
 ---
 ## 核对后的完整时间线（2026-11-09 阶段节点）
 
