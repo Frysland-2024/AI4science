@@ -58,7 +58,7 @@ if [ "$MODE" = "--plan" ]; then
   exit 0
 fi
 bash server_migration/setup_linux.sh
-"$PYTHON" server_migration/one_click_v11.py --mode smoke
+"$PYTHON" server_migration/one_click_v11.py --mode smoke "$@"
 "$PYTHON" server_migration/smoke_prefetch.py --workers 4 --batch-size 8
 if [ "$MODE" = "--final" ]; then
   "$PYTHON" server_migration/one_click_v11.py --mode final "$@"
