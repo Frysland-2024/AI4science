@@ -1198,7 +1198,7 @@ def main():
     parser=argparse.ArgumentParser()
     parser.add_argument("--mode",choices=["plan","smoke","run","final"],default="plan")
     parser.add_argument("--trials",type=int,default=6,
-                        help="At least four: one lambda=60 reference for each architecture preset")
+                        help="At least six: four architecture references at lambda=60, then lambda=30/90 on the winning architecture")
     parser.add_argument("--hpo-steps",type=int,default=None)
     parser.add_argument("--confirm-steps",type=int,default=None)
     parser.add_argument("--final-steps",type=int,default=None)
