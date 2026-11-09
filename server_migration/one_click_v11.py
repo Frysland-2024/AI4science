@@ -438,15 +438,16 @@ def loss_js(logit1,logit2,targets,weight,torch,F):
 
 
 def validate_train_only_gradient_gate(gate, contract_obj, train_records):
-    """Fail closed: a gradient prior is not a Validation performance estimate."""
+    """Verify portable learned-Train evidence WITHOUT accessing Validation."""
     if not isinstance(gate,dict) or gate.get("status")!="TRAIN_ONLY_GRADIENT_GATE_PASS":
         raise RuntimeError("Missing or incomplete learned-state TRAIN gradient gate")
-    if gate.get("contract_sha256")!=canonical_digest(contract_obj):
-        raise RuntimeError("TRAIN gradient gate does not match frozen V11 contract")
+    if gate.get("science_identity_sha256")!=gradient_science_identity(contract_obj):
+        raise RuntimeError("TRAIN gradient gate science contract mismatch")
     expected=hashlib.sha256("\n".join(r.material_id for r in train_records).encode()).hexdigest()
     if gate.get("training_parent_ids_sha256")!=expected or gate.get("parents_scanned")!=len(train_records):
         raise RuntimeError("TRAIN gradient gate parent coverage/identity mismatch")
-    if gate.get("parents_scanned")!=108478 or gate.get("warmup_parent_epochs",0)<5:
+    if (gate.get("parents_scanned")!=108478
+        or not 5<=gate.get("warmup_parent_epochs",0)<=10):
         raise RuntimeError("TRAIN-only gate lacks full parent coverage or learned-state warmup")
     if (gate.get("learned_state_accuracy",0)<0.30
         or gate.get("learned_state_ce",99)>1.85):
@@ -454,6 +455,15 @@ def validate_train_only_gradient_gate(gate, contract_obj, train_records):
     window=derive_train_only_js_range(gate["median_per_batch_js_ce_gradient_ratio"])
     if gate.get("lambda_window")!=window:
         raise RuntimeError("TRAIN-only JS lambda window has changed")
+    # Direction can oppose CE despite a large JS norm. Preserve signed evidence.
+    for key in ("median_batch_trunk_cosine","q10_batch_trunk_cosine",
+                "q90_batch_trunk_cosine","full_train_trunk_cosine",
+                "full_train_whole_model_cosine"):
+        value=gate.get(key)
+        if not isinstance(value,(float,int)) or not math.isfinite(value) or not -1.000001<=value<=1.000001:
+            raise RuntimeError("TRAIN gradient gate missing valid direction evidence: "+key)
+    if gate.get("batches_scanned",0)<1 or gate.get("training_only") is not True or gate.get("validation_access") is not False:
+        raise RuntimeError("TRAIN gradient gate provenance mismatch")
     return window
 
 
@@ -485,7 +495,8 @@ def make_or_load_train_only_gradient_gate(study_dir,train_records,sim,libs,argv,
     max_steps=10*one_epoch
     base=Path(study_dir)/"gradient_gate_warmup.pt"
     gate_contract={"purpose":"TRAIN_ONLY_LEARNED_GRADIENT_V1",
-                   "main_contract_sha256":canonical_digest(contract_obj),
+                   "science_identity_sha256":gradient_science_identity(contract_obj),
+                   "warmup_microbatch_size":argv.microbatch_size,
                    "training_parent_sha256":hashlib.sha256(
                        "\n".join(r.material_id for r in train_records).encode()).hexdigest(),
                    "batch_size":argv.batch_size,"epoch_steps":one_epoch,"seed":seed}
@@ -618,7 +629,7 @@ def make_or_load_train_only_gradient_gate(study_dir,train_records,sim,libs,argv,
     ratio=float(np.median(ratios))
     window=derive_train_only_js_range(ratio)
     gate={"status":"TRAIN_ONLY_GRADIENT_GATE_PASS",
-          "contract_sha256":canonical_digest(contract_obj),
+          "science_identity_sha256":gradient_science_identity(contract_obj),
           "training_parent_ids_sha256":gate_contract["training_parent_sha256"],
           "training_only":True,"validation_access":False,
           "parents_scanned":seen,"batches_scanned":len(ratios),
