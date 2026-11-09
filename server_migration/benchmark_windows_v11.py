@@ -17,8 +17,83 @@ from pathlib import Path
 import numpy as np
 
 import one_click_v11 as v11
-from v11_prefetch import V11PairPrefetchPool
+from v11_prefetch import V11PairPrefetchPool, sample_parent_indices
 from train_microbatch import paired_optimizer_step
+
+
+def cpu_worker_sweep(args):
+    """CPU-only paired-physics worker scaling, reproducible on another Windows host.
+
+    This probes actual Train parents, compares rendered bytes, and never reads
+    held-out Test/RRUFF, creates Optuna state or invokes GPU optimization.
+    """
+    import hashlib
+    if not (8 <= args.steps <= 256 and 1 <= args.batch <= 32
+            and 16 <= args.cache <= 1024):
+        raise ValueError("CPU sweep must be bounded: 8..256 steps, batch 1..32")
+    libs = v11.ctx_libraries()
+    path = v11.XRD / "data/merged_154975_v11/training_records.v1.jsonl"
+    records = libs[3](path)
+    train, valid, _ = v11.full_parent_disjoint_records(path, records)
+    if len(train) != 108478 or len(valid) != 23245:
+        raise RuntimeError("Frozen parent counts changed")
+    sim = json.loads((v11.XRD / "configs/simulation.v11_tch_pseudo_voigt.json").read_text(
+        encoding="utf-8"))
+    result = {"status":"CPU_ONLY_BENCHMARK_NOT_HPO",
+              "train_parents_available":len(train),"test_rruff_access":"none",
+              "sampling":"epoch_shuffle","effective_batch":args.batch,
+              "steps_per_case":args.steps,"cache_per_worker":args.cache,
+              "results":[]}
+    for value in args.worker_cases.split(","):
+        workers,depth = map(int,value.split(":"))
+        if not (1 <= workers <= 16 and 1 <= depth <= 8):
+            raise ValueError("Unsafe CPU worker sweep setting")
+        rng = np.random.default_rng(20260711)
+        permutations = {}
+        signature = hashlib.sha256()
+        times = []
+        pool = V11PairPrefetchPool(
+            sim,run_seed=20260711,workers=workers,
+            prefetch_batches=depth,native_threads=1,
+            max_cached_peaks=args.cache)
+        start = time.perf_counter()
+        def submit(step):
+            indices,epoch = sample_parent_indices(
+                rng,len(train),args.batch,step,sampling_mode="epoch_shuffle",
+                sampling_seed=20260711,permutation_cache=permutations)
+            pool.submit(step,[train[int(i)] for i in indices],epoch=epoch,
+                        global_step=step,profile="train")
+        try:
+            for step in range(min(depth,args.steps)):
+                submit(step)
+            count = 0
+            for step in range(args.steps):
+                t0 = time.perf_counter()
+                first,second,labels = pool.get(step)
+                signature.update(first.tobytes())
+                signature.update(second.tobytes())
+                signature.update(labels.tobytes())
+                count += len(labels)
+                if step + depth < args.steps:
+                    submit(step + depth)
+                times.append(time.perf_counter()-t0)
+        finally:
+            pool.close()
+        elapsed = time.perf_counter()-start
+        row = {"workers":workers,"prefetch_batches":depth,
+               "parents":count,"seconds":round(elapsed,3),
+               "throughput_parents_per_sec":round(count/elapsed,2),
+               "batch_p95_seconds":round(float(np.percentile(times,95)),3),
+               "rendered_sha256":signature.hexdigest()}
+        result["results"].append(row)
+        print(json.dumps(row),flush=True)
+    if len({x["rendered_sha256"] for x in result["results"]})!=1:
+        raise RuntimeError("CPU worker sweep changed V11 paired-spectrum bytes")
+    result["status"]="PASS_SHA256_IDENTICAL_CPU_ONLY"
+    if args.output:
+        args.output.parent.mkdir(parents=True,exist_ok=True)
+        args.output.write_text(json.dumps(result,indent=2)+"\n",encoding="utf-8")
+    print(json.dumps({"status":result["status"],"cases":len(result["results"])}),flush=True)
 
 
 def main():
@@ -28,8 +103,17 @@ def main():
     p.add_argument("--steps",type=int,default=3)
     p.add_argument("--workers",type=int,default=2)
     p.add_argument("--cache",type=int,default=128)
+    p.add_argument("--cpu-only",action="store_true",
+                   help="Profile Train-only CPU prefetch worker scaling; no GPU/HPO")
+    p.add_argument("--worker-cases",default="2:2,4:2,8:4,12:4",
+                   help="CPU-only worker:queue-depth pairs")
+    p.add_argument("--batch",type=int,default=16,
+                   help="Parent batch size for --cpu-only")
     p.add_argument("--output",type=Path,default=None)
     a=p.parse_args()
+    if a.cpu_only:
+        cpu_worker_sweep(a)
+        return
     cases=[]
     for entry in a.cases.split(","):
         batch,micro=map(int,entry.split(":"))

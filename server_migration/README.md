@@ -32,7 +32,7 @@ This rechecks data, installs scientific requirements into the selected Python en
 - Fixed architecture: original ResNet-18-GN A0, 13,008,839 parameters (not an unproven CNN11 replacement).
 - Dynamic same-parent JS. V11 TCH pseudo-Voigt online rendering from pretrained ideal-reflection PeakTables.
 - Formal training pool: all 108,478 unique TRAIN parent groups (108,483 MP IDs; five aliases deduplicated). Full HPO Validation: all 23,245 independent parent groups (23,246 MP IDs, one alias deduplicated), six OOD profiles. No 896-parent sampling for formal model selection. Frozen seed 20260721. Locked Test/RRUFF inaccessible.
-- 6 trials x 6,160 optimizer steps each, 16 parents/batch, with FULL Validation after 6,160 steps; two new-seed confirmations x 12,320 steps with 2 full Validation checkpoints each. Reduced validation frequency intentionally limits GPU cost when using all 23,245 parents.
+- Executable `.8` CLI defaults (NOT_RUN): six HPO trials x five parent epochs (33,900 steps per trial at effective batch16), two confirmations x ten epochs (67,800 steps per seed), and three final seeds x ten epochs. Complete six-profile Validation every parent epoch. The later **performance-first v2 active research plan** (NOT YET IMPLEMENTED) instead proposes matched JS/ERM 50-epoch convergence pilots and 12 HPO candidates per method. Neither plan is a finished experiment; see Issue #55.
 - Parameters: LR 5e-5 to 3e-4, JS lambda 15 to 120, AdamW weight decay 1e-6 to 1e-3, cosine-vs-constant schedule. First Optuna trial is the old A0_R1 recipe, reevaluated on the NEW data and V11, not treated as a prior score.
 - Deterministic full-Validation paired spectra are generated ONCE per profile, cached as immutable memory-mapped .npy arrays (~3.64 GiB total for 6 profiles x 2 views x 23,245 x 3,501 float32 samples), SHA256-indexed and reused across every candidate/seed. Half-written profiles are rebuilt; mismatching completed profiles fail closed. SQLite study, frozen trial contract, checksummed checkpoint, validation history, final JSON and safe resume.
 - max_gpu_hours default 12 is a soft stop before new trials, NOT a hard spending cap or a background shutdown.
@@ -187,7 +187,7 @@ model, validation and selected hyperparameters remain frozen. Worker-count
 rendering parity is tested. Test/RRUFF scoring remains separate.
 
 
-### V11 parent coverage and batch profiling (2026-11-09 .7)
+### V11 parent coverage and batch profiling (.8 current; .7 historical tests)
 
 - Default `epoch_shuffle` makes every complete train epoch cover each of the
   **108,478** independent parents once, including a possibly short last batch.
@@ -195,10 +195,11 @@ rendering parity is tested. Test/RRUFF scoring remains separate.
   `random_batch` is retained only as an explicit alternative; it does not
   guarantee coverage across steps.
 - Default effective `--batch-size 16` processes 16 parents / 32 XRD views
-  per optimizer step. The HPO budget is **6,780 steps** (one full parent epoch);
-  confirmations use **13,560 steps** (two full epochs). These defaults
-  recompute with batch size using `ceil(108478 / batch)`. Final training
-  stays at the existing 49,280 optimizer steps unless separately approved.
+  per optimizer step. The **currently implemented .8 CLI default (NOT_RUN; superseded by the separate v2 research plan)** is
+  **33,900 steps** (5 parent epochs); confirmation and final are both
+  **67,800 steps** (10 epochs) per seed. Validation runs every **6,780 steps**.
+  These planned defaults rescale with batch size using `ceil(108478 / batch)`.
+  Legacy .7 one/two-epoch figures describe historical engineering tests only.
 - `--microbatch-size 8 --batch-size 16` performs two backward passes with
   parent-count-weighted CE + JS and only one clip/optimizer step; it reduces
   activation memory without changing effective parent batch or exposure.
@@ -211,3 +212,49 @@ rendering parity is tested. Test/RRUFF scoring remains separate.
   --cases 4:4,8:8,16:8 --warmup 1 --steps 2`.
   Output gives parent/s, measured-step latency, CUDA allocated/reserved
   memory and disk free. Tiny smokes do not certify cuifa's 4070 Ti SUPER.
+
+
+### CPU prefetch tuning — local Ryzen 9 7945HX (2026-11-09)
+
+Only **engineering resource settings** changed. TCH pseudo-Voigt rendering,
+the fixed 108,478-parent Train pool, deterministic epoch shuffle, two views,
+ResNet-A0, CE+JS and the frozen six-profile Validation are unchanged.
+
+On the user's **Ryzen 9 7945HX (16 cores/32 threads), Windows, 32 GiB RAM,
+RTX 4060 Laptop**, Train-only CPU paired-render sweeps with identical
+SHA256 outputs measured 2/2: **52.83**, 4/2: **84.82**, 6/3: **116.54**,
+8/4: **140.15** parents/s (48 batches; 64-item caches); additional
+80-batch sweeps yielded 8/4: **144.60**, 10/4: **165.50**,
+12/4: **181.49** parents/s. Short measurements are not HPO estimates.
+
+More importantly, actual **CPU+GPU paired ResNet-A0/JS optimizer** comparisons
+at effective/microbatch=16, native_threads=1 and deterministic
+`epoch_shuffle` yielded 4/2/128: **82.43** parents/s (128 measured steps);
+8/4/64: **136.64**, 10/4/64: **149.14**, 12/4/64:
+**168.08** parents/s (160 measured steps). GPU step compute was about
+0.036–0.048 seconds; most overhead was waiting for the CPU renderer.
+12 workers' minimum sampled available RAM was **10.25 GiB** in the 160-step GPU benchmark. A later 12-worker 512-step + complete six-profile Validation acceptance **PASS** took 129.88s for training+scoring (earlier 4-worker full-Validation acceptance: ~183.17s, not load-matched); the lowest available RAM was only **5.80 GiB**, with GPU temperature at most 58°C and total VRAM usage at most 2,594MiB. The launcher warns when startup free RAM is below 14 GiB; close heavy background apps before HPO.
+Paired-view hashes matched exactly across every CPU comparison; no Test or
+RRUFF data were used. Rates can vary with thermals, background load and
+the parent mix; full multi-hour durability is not established by these sweeps.
+
+`start_windows.ps1 -CpuProfile auto` now applies **12 workers / 4 queued
+batches / cache 64 / native_threads 1**, ONLY when the local CPU reports
+7945HX and at least 30 GiB installed physical RAM. Unknown CPUs (including
+cuifa's Windows desktop until its CPU is known) still default to **2 / 2 /
+256 / 1**. Explicit `-CpuProfile conservative` selects the fallback;
+`-CpuProfile ryzen7945hx` forces the measured resource profile. Any
+individual `-RunnerArgs` resource flags take precedence without resetting
+the other flags. These exact settings are frozen on HPO start/resume; Linux
+final may override only already-authorized runtime CPU-resource settings.
+
+To profile a *different* Windows host without GPU training or Optuna:
+```powershell
+& .\.venvs\xrd_test\Scripts\python.exe server_migration/benchmark_windows_v11.py --cpu-only --worker-cases 2:2,4:2,8:4,12:4 --steps 80 --batch 16 --cache 64 --output _local/v11_cpu_host_profile.json
+powershell -ExecutionPolicy Bypass -File server_migration/start_windows.ps1 -Mode plan -Python .\.venvs\xrd_test\Scripts\python.exe
+```
+The real `plan` confirms the resolved profile and effective experiment
+contract; neither command authorizes or starts HPO. If moving to cuifa,
+benchmark **on cuifa itself**, then choose a fixed resource profile before
+starting its HPO study. Recreate the private source snapshot after changing
+the launcher or benchmark script; old kit hashes cannot be reused.
