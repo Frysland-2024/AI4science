@@ -6,6 +6,7 @@ The queue, approvals and journals live inside the existing repository's .git dir
 from __future__ import annotations
 
 import argparse
+import calendar
 import hashlib
 import json
 import os
@@ -128,7 +129,7 @@ def records(root: Path) -> list[dict]:
             if label == "RUNNING":
                 stamp = row.get("heartbeat_utc", row.get("started_utc", ""))
                 try:
-                    age = time.time() - time.mktime(time.strptime(stamp, "%Y-%m-%dT%H:%M:%SZ"))
+                    age = time.time() - calendar.timegm(time.strptime(stamp, "%Y-%m-%dT%H:%M:%SZ"))
                 except (ValueError, TypeError, OverflowError):
                     age = float("inf")
                 if age > 180:
