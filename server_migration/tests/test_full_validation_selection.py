@@ -162,7 +162,8 @@ class ValidationSelection(unittest.TestCase):
         gate={"status":"TRAIN_ONLY_GRADIENT_GATE_PASS",
               "science_identity_sha256":mod.gradient_science_identity(contract),
               "training_only":True,"validation_access":False,
-              "batches_scanned":6780,"learned_state_stable":True,
+              "batches_scanned":6780,"full_train_expected_batches":6780,
+              "whole_train_coverage_verified":True,"learned_state_stable":True,
               "median_batch_trunk_cosine":-0.2,"q10_batch_trunk_cosine":-0.5,
               "q90_batch_trunk_cosine":0.4,"full_train_trunk_cosine":-0.1,
               "full_train_whole_model_cosine":0.15,
@@ -182,6 +183,9 @@ class ValidationSelection(unittest.TestCase):
         with self.assertRaisesRegex(RuntimeError,"before meaningful learning"):
             mod.validate_train_only_gradient_gate(
                 {**gate,"learned_state_accuracy":0.1},contract,parents)
+        with self.assertRaisesRegex(RuntimeError,"incomplete cohort"):
+            mod.validate_train_only_gradient_gate(
+                {**gate,"batches_scanned":1280},contract,parents)
         with self.assertRaisesRegex(RuntimeError,"contract"):
             mod.validate_train_only_gradient_gate(
                 gate,fixture_science_contract(schema="different"),parents)
