@@ -113,6 +113,22 @@ class DispatcherTest(unittest.TestCase):
         self.install()
         self.assertEqual(mod.records(self.root)[0]["status"], "AWAITING_APPROVAL")
 
+    def test_stale_running_journal_is_not_claimed_live(self):
+        self.install()
+        run_path = self.home / "runs" / "review_001.json"
+        run_path.parent.mkdir(parents=True, exist_ok=True)
+        run_path.write_text(json.dumps({
+            "status": "RUNNING", "started_utc": "2020-01-01T00:00:00Z"
+        }), encoding="utf-8")
+        self.assertEqual(mod.records(self.root)[0]["status"], "NEEDS_DECISION")
+        self.assertEqual(mod.run_once(self.root)["status"], "IDLE")
+
+    def test_concurrent_worker_lock_fails_closed(self):
+        self.install()
+        self.authorize()
+        (self.home / "dispatch.lock").mkdir()
+        self.assertEqual(mod.run_once(self.root)["status"], "BLOCKED")
+
     def test_wrong_machine_fails_closed(self):
         with patch.dict(os.environ, {"COMPUTERNAME": "OTHER"}):
             with self.assertRaisesRegex(ValueError, "different host"):
