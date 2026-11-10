@@ -75,6 +75,23 @@ try {
             "--native-threads" = "1"
         }
     }
+    # RTX 4060 real-Train throughput sweep (2026-11-10): the source-
+    # compatible effective parent batch is 16, with microbatch 16 (no
+    # accumulation). 64-step sustained Train-only throughput was 170.74
+    # parents/s (vs 68.17 at micro2); PyTorch reserved peak 0.461 GiB.
+    # Larger effective batches (32/64/128/256) were hardware benchmarked,
+    # but would CHANGE optimizer statistics and INVALIDATE the frozen
+    # 108478-parent Train-only lambda gradient contract. Do NOT auto-upgrade
+    # the scientific effective batch simply because GPU RAM permits it.
+    # GPU microbatch 16 here is a launcher default, not a Cuifa speed claim.
+    if ($Mode -eq "hpo") {
+        if (@($RunnerArgs) -notcontains "--batch-size") {
+            $RunnerArgs = @($RunnerArgs) + @("--batch-size", "16")
+        }
+        if (@($RunnerArgs) -notcontains "--microbatch-size") {
+            $RunnerArgs = @($RunnerArgs) + @("--microbatch-size", "16")
+        }
+    }
     # User-supplied flags take precedence individually. Passing --batch-size
     # must not silently reset CPU prefetch settings to generic Python defaults.
     $provided = @($RunnerArgs)
