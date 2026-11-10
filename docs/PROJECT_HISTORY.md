@@ -4,6 +4,11 @@ This file is the **public, concise history** of how the PXRD project evolved. It
 
 For current scientific claims, use [CURRENT_STATE.md](CURRENT_STATE.md) and the tracked result reports. History explains *how the project changed*; it does not override the current state.
 
+**2026-11-10 Research decision — restore the V9 lambda-selection logic in V11.** Source-level archaeology uncovered an important distinction: V9 originally used PAMPT-B3 probes (λ=0.3/3/30), observed a FAIL when those gradient bands transferred poorly to ResNet-18-GN, then shifted to ResNet probes (λ=3/30/60) and separately selected λ=60 on frozen Validation. The old V11 design instead transformed a Train gradient-norm heuristic (R≤2) into a hard Optuna exclusion rule, ruling out λ60 before any Validation training. We corrected the methodological overreach: **the gradient gate may admit a cross-decade candidate span after combined-gradient safety checks, but cannot select the best λ**. See V9 primary reports at Git commits `09185c8`, `0697cb2`, `e7965db` and `34fe205`.
+
+**New direct evidence:** the existing 108,478-parent/6,780-batch V11 learned-state Train gradient audit was preserved verbatim; a separate real RTX4060 Train-only learned A0 FP32 trunk check covered 704 independent Train parents in 44 batches at λ0.3/3/30/60. All passed the original V9-style checks (median cosine between CE and combined CE+λJS gradients positive; maximum combined/CE norm ratio ≤50). At λ60 the **median cosine is 0.2232**, its P10 is **0.0193**, and the worst combined/CE gradient norm ratio is **10.08**; this passes the limited safety gate but has smaller direction margin than λ30, and cannot predict Validation advantage. The new HPO proposal covers **λ∈[0.3,60]**, alongside middle stride and residual kernel, selected entirely on frozen Validation **on cuifa after Stage0 and budget authorization**. The six pre-enqueued comparisons include four λ30 A0–A3 architecture controls and A0 λ0.3/60 endpoints, followed by multivariate TPE. Nothing has been trained/tuned on cuifa; Test and RRUFF remain locked. This decision repairs an overly strict assumption, not a demonstrated new model improvement.
+
+
 ## 核对后的完整时间线（2026-11-09 阶段节点）
 
 **这张表是项目发展的主时间线**：记录不同科研阶段实际解决了什么问题，不把 Git 代码版本号当作严格顺序的独立论文，也不覆盖已有结果和失败记录。

@@ -54,8 +54,8 @@ def resolve_v11_trial_params(params):
     if architecture is None:
         raise ValueError("Unregistered PXRD architecture")
     weight=float(params["lambda_js"])
-    if not math.isfinite(weight) or not 3.0<=weight<=120.0:
-        raise ValueError("V11 lambda_js must be finite and within safety range 3..120")
+    if not math.isfinite(weight) or not 0.3<=weight<=120.0:
+        raise ValueError("V11 lambda_js must be finite and within safety range 0.3..120")
     return {**V11_FIXED_OPTIMIZER,"lambda_js":weight,"architecture":architecture,
             "middle_stride":middle_stride,"kernel_size":kernel}
 
@@ -72,33 +72,36 @@ def v11_architecture_trial_params(architecture,weight):
             "kernel_size":kernel}
 
 def derive_train_only_js_range(median_unweighted_ratio, *, previous_lambda=60.0):
-    """V9-style weak-to-dominant influence window, prior to any Validation access.
+    """V9-style cross-decade SCALE PROBES, not an R<=2 cutoff.
 
-    All ratios refer to full-backbone FP32 gradients of unweighted JS / CE
-    from a learned classifier, measured over independent TRAIN parents.
+    The 108478-parent TRAIN sweep supplies the learned A0 trunk gradient
+    ratio; a separate trained-state TRAIN-only combined-gradient safety
+    audit authorizes the proposed [0.3, 60] HPO design domain.
+    Validation on cuifa, never these gradients, chooses optimal lambda.
     """
     ratio=float(median_unweighted_ratio)
-    if not math.isfinite(ratio) or ratio<=1e-9:
+    if not math.isfinite(ratio) or not 1e-9<ratio<1e4:
         raise ValueError("Learned-state JS gradient ratio is not identifiable")
-    low=max(3.0,min(120.0,0.05/ratio))
-    high=max(3.0,min(120.0,2.0/ratio))
-    if high<low*2.0:
-        raise ValueError("Learned-state gradient window lacks >=2x usable width")
-    anchor=max(low,min(high,float(previous_lambda)))
-    bands={}
-    for name,(r_low,r_high) in {
-        "weak":(0.05,0.30),"medium":(0.30,1.00),"strong":(1.00,2.00)
-    }.items():
-        a=max(low,r_low/ratio)
-        b=min(high,r_high/ratio)
-        bands[name]=([float(a),float(b)] if b>a else None)
-    return {"low":float(low),"high":float(high),"anchor":float(anchor),
+    candidates=(0.3,3.0,30.0,60.0)
+    def band(influence):
+        if influence<0.01:return "negligible"
+        if influence<0.1:return "weak"
+        if influence<1.:return "material_non_dominant"
+        return "dominant"
+    measurements=[{"lambda_js":float(weight),"weighted_gradient_ratio":float(weight*ratio),
+                   "influence_band":band(weight*ratio)} for weight in candidates]
+    if not {"weak","material_non_dominant","dominant"}.issubset(
+            {item["influence_band"] for item in measurements}):
+        raise ValueError("V9-style TRAIN probes do not span weak/non-dominant/dominant")
+    return {"low":0.3,"high":60.0,"anchor":30.0,
             "reference_lambda":float(previous_lambda),
-            "target_gradient_influence":[0.05,2.0],
-            "gradient_influence_bands":bands,
-            "band_definition":"weak R=0.05..0.30; medium R=0.30..1.0; strong R=1.0..2.0; unavailable means outside safe lambda bounds",
-            "gradient_calibration_only":True}
-
+            "candidate_probe_lambdas":list(candidates),
+            "probe_gradient_scale":measurements,
+            "bands_definition":{"negligible":"R<0.01","weak":"0.01<=R<0.1",
+                                "material_non_dominant":"0.1<=R<1","dominant":"R>=1"},
+            "lambda_limit_reason":"cross-decade V9-style probes + TRAIN combined-gradient safety; no universal R<=2 exclusion",
+            "gradient_calibration_only":True,
+            "validation_selects_lambda":True}
 
 
 def digest(path):
@@ -316,7 +319,7 @@ def contract(args):
         "hpo_seed":20260711,
         "confirmation_seeds":[20261104,20261105],
         "max_new_trials":args.trials,
-        "search_space":{"lambda_js":"TRAIN_ONLY_LEARNED_GRADIENT_GATE_3_TO_120",
+        "search_space":{"lambda_js":"TRAIN_ONLY_V9_STYLE_SAFETY_GATE_0P3_TO_60",
                         "middle_stride":[2,4],"kernel_size":[5,9]},
         "gradient_gate_contract":{"warmup_min_parent_epochs":5,"warmup_max_parent_epochs":20,
                                   "warmup_stratified_train_parents":20480,
@@ -324,12 +327,16 @@ def contract(args):
                                   "full_backbone_gradient":True,
                                   "learned_state_min_accuracy":0.30,
                                   "learned_state_max_cross_entropy":1.85,
-                                  "safety_lambda":[3.0,120.0],
-                                  "target_gradient_ratio":[0.05,2.0],
+                                  "safety_lambda":[0.3,120.0],
+                                  "v9style_hpo_candidate_span":[0.3,3.0,30.0,60.0],
+                                  "train_only_combined_gradient_safety":True,
+                                  "max_batch_combined_to_ce_ratio":50.0,
+                                  "median_combined_gradient_alignment_must_be_positive":True,
                                   "gradient_direction":"batch_and_full_cohort_cosine",
-                                  "impact_bands":{"weak":[0.05,0.3],
-                                                  "medium":[0.3,1.0],
-                                                  "strong":[1.0,2.0]}},
+                                  "impact_bands":{"negligible":[0.0,0.01],
+                                                  "weak":[0.01,0.1],
+                                                  "material_non_dominant":[0.1,1.0],
+                                                  "dominant":[1.0,None]}},
         "selection":"mean 6 simulated OOD Macro-F1 evaluated on ALL 23245 unique parent-disjoint Validation groups; fixed render seed, independent-seed confirmation",
         "full_validation_final":True,
         "max_gpu_hours":args.max_gpu_hours,
@@ -485,6 +492,9 @@ def validate_train_only_gradient_gate(gate, contract_obj, train_records):
     window=derive_train_only_js_range(gate["median_per_batch_js_ce_gradient_ratio"])
     if gate.get("lambda_window")!=window:
         raise RuntimeError("TRAIN-only JS lambda window has changed")
+    if gate.get("reference_whole_train_gradient_sha256")!="7f6c759f5c6fea7fe855ab579ce2d0dd6771f7edbab815db9339c4e25eb1d020":
+        raise RuntimeError("TRAIN gate missing pinned original whole-Train reference")
+    validate_v9style_safety(gate.get("v9style_train_safety_audit"))
     # Direction can oppose CE despite a large JS norm. Preserve signed evidence.
     for key in ("median_batch_trunk_cosine","q10_batch_trunk_cosine",
                 "q90_batch_trunk_cosine","full_train_trunk_cosine",
@@ -784,6 +794,183 @@ def make_or_load_train_only_gradient_gate(study_dir,train_records,sim,libs,argv,
           full_train_aggregate_ratio=round(js_total/ce_total,6))
     return gate
 
+
+
+
+def v9style_combined_gradient_metrics(raw_js_ce_ratio, ce_js_cosine, weight):
+    """Exact gradient-vector identity; one Train batch, no optimizer step."""
+    ratio=float(raw_js_ce_ratio)
+    cosine=float(ce_js_cosine)
+    weight=float(weight)
+    if (not all(math.isfinite(x) for x in (ratio,cosine,weight))
+        or ratio<=0 or weight<0 or not -1.000001<=cosine<=1.000001):
+        raise ValueError("Invalid CE/JS full-backbone gradient geometry")
+    cosine=max(-1.0,min(1.0,cosine))
+    weighted=weight*ratio
+    combined=math.sqrt(max(0.,1.+weighted**2+2.*weighted*cosine))
+    if combined<1e-12:
+        raise ValueError("Combined gradient is degenerate")
+    return {"weighted_js_ce_ratio":weighted,
+            "combined_to_ce_gradient_ratio":combined,
+            "combined_ce_cosine":max(-1.,min(1.,(1.+weighted*cosine)/combined))}
+
+
+def validate_v9style_safety(audit):
+    """Original V9 pass rule: finite, no >50x combined norm, median CE descent."""
+    if not isinstance(audit,dict) or audit.get("training_only") is not True:
+        raise RuntimeError("V9-style safety audit must use only Train")
+    if (audit.get("validation_access") is not False
+        or audit.get("sampled_train_parents")!=704
+        or audit.get("batches")!=44
+        or not isinstance(audit.get("sampled_train_ids_sha256"),str)
+        or len(audit["sampled_train_ids_sha256"])!=64):
+        raise RuntimeError("V9-style safety sample and provenance incomplete")
+    rows=audit.get("lambda_probes")
+    if not isinstance(rows,list) or [r.get("lambda_js") for r in rows]!=[0.3,3.,30.,60.]:
+        raise RuntimeError("V9-style candidate probes not locked")
+    for row in rows:
+        if (row.get("status")!="PASS" or row.get("n_batches")!=44
+            or not all(math.isfinite(row.get(k,float("nan")))
+                        for k in ("median_combined_ce_cosine","p10_combined_ce_cosine",
+                                  "max_combined_to_ce_ratio"))
+            or row["median_combined_ce_cosine"]<=0
+            or row["max_combined_to_ce_ratio"]>50):
+            raise RuntimeError("V9-style Train combined-gradient safety failed")
+    return True
+
+
+def make_v9style_gate_from_frozen_train_sweep(train_records,sim,libs,argv,contract_obj):
+    """Reinterpret pinned full TRAIN sweep, then run new TRAIN-only V9 safety.
+
+    The source 108478-parent scan remains byte-for-byte unchanged and pinned.
+    No Validation spectra, Test, RRUFF, or HPO is read or executed here.
+    """
+    import numpy as np
+    import torch
+    from xrd_robustness.models.ml4pxrd_resnet1d import ML4PXRDResNet1D,ML4PXRDResNet1DConfig
+    frozen=ROOT/"server_migration/gradient_gate_v11_train_108478.json"
+    original_sha="7f6c759f5c6fea7fe855ab579ce2d0dd6771f7edbab815db9339c4e25eb1d020"
+    old_identity="39eebfd9daff7e4d6a29ca069a605e49e1e44818c0fc4b6abb77c51c2162318d"
+    checkpoint=ROOT/"server_runs/v11_a0_js_optuna/gradient_gate_warmup.pt"
+    ck_sha="d7ebd5c742c4bec63171f019aad1516e49ce5407bb9b22377a8b4c663ae85f4a"
+    if digest(frozen)!=original_sha or digest(checkpoint)!=ck_sha:
+        raise RuntimeError("Pinned original Train gradient scan/checkpoint SHA mismatch")
+    prior=json.loads(frozen.read_text(encoding="utf-8"))
+    parent_sha=hashlib.sha256("\n".join(r.material_id for r in train_records).encode()).hexdigest()
+    if (prior.get("status")!="TRAIN_ONLY_GRADIENT_GATE_PASS"
+        or prior.get("science_identity_sha256")!=old_identity
+        or prior.get("training_parent_ids_sha256")!=parent_sha
+        or prior.get("parents_scanned")!=108478
+        or prior.get("whole_train_coverage_verified") is not True
+        or prior.get("batches_scanned")!=6780
+        or not train_state_ready(prior.get("train_only_epoch_history",[]))):
+        raise RuntimeError("Historical entire-Train gradient sweep cannot be reused")
+    if not torch.cuda.is_available():
+        raise RuntimeError("Train-only V9-style safety requires CUDA")
+    # Trusted checkpoint is loaded only after exact digest verification.
+    torch.set_num_threads(1)
+    model=ML4PXRDResNet1D(ML4PXRDResNet1DConfig(model_id="18")).cuda()
+    saved=torch.load(checkpoint,map_location="cpu",weights_only=False)
+    if saved.get("step")!=20*1280:
+        raise RuntimeError("Pinned A0 learned-state checkpoint has wrong step")
+    model.load_state_dict(saved["model"],strict=True)
+    model.eval()
+    named=[(n,p) for n,p in model.named_parameters() if p.requires_grad
+           and not n.startswith(("embedding.","head."))]
+    params=tuple(p for n,p in named)
+    # Independent, class-balanced TRAIN subset; V9 used 44 batches.
+    rng=np.random.default_rng(20261110)
+    by_label={k:[] for k in range(7)}
+    for idx,row in enumerate(train_records):
+        by_label[row.label].append(idx)
+    selected=[]
+    for k in range(7):
+        if len(by_label[k])<100:raise RuntimeError("Insufficient TRAIN examples in class")
+        selected.extend(int(i) for i in rng.choice(by_label[k],size=100,replace=False))
+    remaining=[i for i in range(len(train_records)) if i not in set(selected)]
+    selected.extend(int(i) for i in rng.choice(remaining,size=4,replace=False))
+    rng.shuffle(selected)
+    if len(selected)!=704 or len(set(selected))!=704:
+        raise RuntimeError("Safety sample must have 704 unique Train parents")
+    subset=[train_records[i] for i in selected]
+    subset_sha=hashlib.sha256("\n".join(x.material_id for x in subset).encode()).hexdigest()
+    pool=V11PairPrefetchPool(sim,run_seed=20261110,workers=argv.prefetch_workers,
+        prefetch_batches=argv.prefetch_batches,native_threads=argv.native_threads,
+        max_cached_peaks=argv.worker_peak_cache)
+    results={weight:{"ratios":[],"directions":[]} for weight in (0.3,3.,30.,60.)}
+    start=time.monotonic()
+    audit_microbatch=min(argv.microbatch_size,4)
+    try:
+        for step in range(44):
+            if step<min(44,argv.prefetch_batches):
+                pool.submit(step,subset[step*16:(step+1)*16],epoch=0,
+                            global_step=step,profile="train")
+        for step in range(44):
+            first,second,labels=pool.get(step)
+            if step+argv.prefetch_batches<44:
+                future=step+argv.prefetch_batches
+                pool.submit(future,subset[future*16:(future+1)*16],epoch=0,
+                            global_step=future,profile="train")
+            a=torch.from_numpy(first).to("cuda")
+            b=torch.from_numpy(second).to("cuda")
+            y=torch.from_numpy(labels).to("cuda")
+            grad_ce=[torch.zeros_like(p,dtype=torch.float32) for p in params]
+            grad_js=[torch.zeros_like(p,dtype=torch.float32) for p in params]
+            for pos in range(0,len(y),audit_microbatch):
+                stop=min(pos+audit_microbatch,len(y))
+                out_a=model(a[pos:stop])["logits"].float()
+                out_b=model(b[pos:stop])["logits"].float()
+                _,ce,js=loss_js(out_a,out_b,y[pos:stop],0.0,torch,torch.nn.functional)
+                gce=torch.autograd.grad(ce,params,retain_graph=True,allow_unused=True)
+                gjs=torch.autograd.grad(js,params,allow_unused=True)
+                with torch.no_grad():
+                    scale=(stop-pos)/len(y)
+                    for i,(x,z) in enumerate(zip(gce,gjs)):
+                        if x is not None:grad_ce[i].add_(x.float(),alpha=scale)
+                        if z is not None:grad_js[i].add_(z.float(),alpha=scale)
+                del out_a,out_b,ce,js,gce,gjs
+            ce_sq=sum(float(x.square().sum().item()) for x in grad_ce)
+            js_sq=sum(float(x.square().sum().item()) for x in grad_js)
+            dot=sum(float((x*z).sum().item()) for x,z in zip(grad_ce,grad_js))
+            if min(ce_sq,js_sq)<1e-20:raise RuntimeError("Degenerate batch gradient")
+            ratio=math.sqrt(js_sq/ce_sq)
+            cosine=max(-1.,min(1.,dot/math.sqrt(ce_sq*js_sq)))
+            for weight,row in results.items():
+                geo=v9style_combined_gradient_metrics(ratio,cosine,weight)
+                row["ratios"].append(geo["combined_to_ce_gradient_ratio"])
+                row["directions"].append(geo["combined_ce_cosine"])
+            if (step+1)%11==0:
+                event("TRAIN_ONLY_V9_STYLE_SAFETY_PROGRESS",batches=step+1,total=44)
+    finally:
+        pool.close()
+    probes=[]
+    for weight,values in results.items():
+        align=np.asarray(values["directions"],dtype=float)
+        impact=np.asarray(values["ratios"],dtype=float)
+        row={"lambda_js":weight,"n_batches":44,
+             "median_combined_ce_cosine":float(np.median(align)),
+             "p10_combined_ce_cosine":float(np.quantile(align,.1)),
+             "max_combined_to_ce_ratio":float(impact.max()),
+             "median_combined_to_ce_ratio":float(np.median(impact))}
+        row["status"]="PASS" if row["median_combined_ce_cosine"]>0 and row["max_combined_to_ce_ratio"]<=50 else "FAIL"
+        probes.append(row)
+    safety={"training_only":True,"validation_access":False,
+            "sampled_train_parents":len(subset),"batches":44,
+            "sampled_train_ids_sha256":subset_sha,
+            "seed":20261110,"checkpoint_sha256":ck_sha,
+            "gradient_scope":"ResNet conv trunk FP32 A0 learned-state",
+            "lambda_probes":probes,"elapsed_seconds":round(time.monotonic()-start,2),
+            "interpretation":"V9 criterion checks median combined CE descent and max 50x norm; individual opposing batches retained"}
+    validate_v9style_safety(safety)
+    gate={**prior,
+          "science_identity_sha256":gradient_science_identity(contract_obj),
+          "reference_whole_train_gradient_sha256":original_sha,
+          "reference_old_science_identity_sha256":old_identity,
+          "lambda_window":derive_train_only_js_range(prior["median_per_batch_js_ce_gradient_ratio"]),
+          "v9style_train_safety_audit":safety,
+          "note":"Entire original 108478 Train sweep reused by pinned SHA; new 704-parent trained-state Train-only V9 combined-gradient safety; cuifa Validation HPO selects lambda"}
+    validate_train_only_gradient_gate(gate,contract_obj,train_records)
+    return gate
 
 
 def architecture_peak_preservation_screen(trials, *, expected_lambda):
@@ -1555,11 +1742,15 @@ def run_pipeline(args):
           validation_parents=len(val_full),train_parents=len(train_unique))
     # Two explicit machines and stages: laptop gradient, cuifa HPO.
     # Never silently calculate a lambda prior on the HPO GPU.
-    evidence_path=ROOT/"server_migration/gradient_gate_v11_train_108478.json"
+    evidence_path=ROOT/"server_migration/gradient_gate_v11_v9style_train_108478.json"
     gate_path=study_dir/"gradient_gate.json"
     if args.mode=="gradient":
-        gate=make_or_load_train_only_gradient_gate(
-            study_dir,train_unique,sim,libs,args,c)
+        if evidence_path.is_file():
+            gate=json.loads(evidence_path.read_text(encoding="utf-8"))
+            validate_train_only_gradient_gate(gate,c,train_unique)
+        else:
+            gate=make_v9style_gate_from_frozen_train_sweep(
+                train_unique,sim,libs,args,c)
         if evidence_path.is_file():
             if json.loads(evidence_path.read_text(encoding="utf-8"))!=gate:
                 raise RuntimeError("Refusing overwrite of a different published TRAIN gradient prior")
@@ -1653,6 +1844,10 @@ def run_pipeline(args):
         for arch in V11_ARCHITECTURES:
             study.enqueue_trial(v11_architecture_trial_params(
                 arch,gate["lambda_window"]["anchor"]))
+        # V9-style cross-decade probes, matched at fixed A0. TPE then
+        # jointly searches lambda, middle stride and kernel using VAL.
+        for weight in (0.3,60.0):
+            study.enqueue_trial(v11_architecture_trial_params("A0",weight))
     elif prior_sha is None:
         raise RuntimeError("Old Optuna study lacks frozen TRAIN gradient gate identity")
     from optuna.trial import TrialState
@@ -1732,7 +1927,7 @@ def run_pipeline(args):
 def main():
     parser=argparse.ArgumentParser()
     parser.add_argument("--mode",choices=["plan","smoke","gradient","run","final"],default="plan")
-    parser.add_argument("--trials",type=int,default=8,
+    parser.add_argument("--trials",type=int,default=12,
                         help="At least six: four matched-lambda architecture controls; further trials are fully automatic 3D Optuna TPE")
     parser.add_argument("--hpo-steps",type=int,default=None)
     parser.add_argument("--confirm-steps",type=int,default=None)

@@ -107,12 +107,54 @@ class ValidationSelection(unittest.TestCase):
 
     def test_gradient_window_uses_v9_train_only_influence_bands(self):
         window=mod.derive_train_only_js_range(0.029235)
-        self.assertAlmostEqual(window["low"],3.0,places=5)
-        self.assertAlmostEqual(window["high"],2.0/0.029235,places=5)
-        self.assertAlmostEqual(window["anchor"],60.0,places=5)
+        self.assertAlmostEqual(window["low"],0.3,places=5)
+        self.assertAlmostEqual(window["high"],60.0,places=5)
+        self.assertAlmostEqual(window["anchor"],30.0,places=5)
+        self.assertEqual(window["candidate_probe_lambdas"],[0.3,3.0,30.0,60.0])
+        self.assertEqual([item["influence_band"] for item in window["probe_gradient_scale"]],
+                         ["negligible","weak","material_non_dominant","dominant"])
         for bad in (0.0,float("nan"),1e-12,1e5):
             with self.assertRaises(ValueError):
                 mod.derive_train_only_js_range(bad)
+
+    def test_v9_style_train_only_combined_gradient_safety_is_direction_aware(self):
+        # CE=(1,0), JS=(-0.01,1) is a transparent two-vector test;
+        # lambda>2 gradient influence alone must not imply rejection.
+        import math
+        raw_ratio=math.hypot(-0.01,1.0)
+        cosine=-0.01/raw_ratio
+        for lam in (0.3,3.,30.,60.):
+            result=mod.v9style_combined_gradient_metrics(raw_ratio,cosine,lam)
+            expected=(1.0-0.01*lam,lam)
+            expected_norm=math.hypot(*expected)
+            self.assertAlmostEqual(result["combined_to_ce_gradient_ratio"],expected_norm)
+            self.assertAlmostEqual(result["combined_ce_cosine"],expected[0]/expected_norm)
+        self.assertGreater(mod.v9style_combined_gradient_metrics(
+            raw_ratio,cosine,60.)["weighted_js_ce_ratio"],2.0)
+        with self.assertRaises(ValueError):
+            mod.v9style_combined_gradient_metrics(0.,0.,30.)
+        with self.assertRaises(ValueError):
+            mod.v9style_combined_gradient_metrics(0.1,float("nan"),30.)
+
+    def test_v9_safety_report_cannot_pass_misaligned_or_explosive_probe(self):
+        safe={"training_only":True,"validation_access":False,"batches":44,
+              "sampled_train_parents":704,"sampled_train_ids_sha256":"a"*64,
+              "lambda_probes":[{"lambda_js":lam,"status":"PASS","n_batches":44,
+                                "median_combined_ce_cosine":0.5,
+                                "p10_combined_ce_cosine":0.02,
+                                "max_combined_to_ce_ratio":40.}
+                               for lam in (0.3,3.,30.,60.)]}
+        self.assertTrue(mod.validate_v9style_safety(safe))
+        bad=json.loads(json.dumps(safe))
+        bad["lambda_probes"][-1]["median_combined_ce_cosine"]=-0.1
+        with self.assertRaisesRegex(RuntimeError,"safety failed"):
+            mod.validate_v9style_safety(bad)
+        bad=json.loads(json.dumps(safe))
+        bad["lambda_probes"][-1]["max_combined_to_ce_ratio"]=60.
+        with self.assertRaisesRegex(RuntimeError,"safety failed"):
+            mod.validate_v9style_safety(bad)
+        with self.assertRaisesRegex(RuntimeError,"probes not locked"):
+            mod.validate_v9style_safety({**safe,"lambda_probes":safe["lambda_probes"][:-1]})
 
     def test_three_knobs_and_gradient_bound_2x2_architecture_contrasts(self):
         gate={"lambda_window":{"low":5.0,"high":80.0}}
@@ -174,7 +216,17 @@ class ValidationSelection(unittest.TestCase):
               "warmup_train_parent_ids_sha256":"a"*64,
               "learned_state_accuracy":0.40,"learned_state_ce":1.5,
               "median_per_batch_js_ce_gradient_ratio":0.029235,
-              "lambda_window":mod.derive_train_only_js_range(0.029235)}
+              "lambda_window":mod.derive_train_only_js_range(0.029235),
+              "reference_whole_train_gradient_sha256":"7f6c759f5c6fea7fe855ab579ce2d0dd6771f7edbab815db9339c4e25eb1d020",
+              "v9style_train_safety_audit":{
+                  "training_only":True,"validation_access":False,
+                  "sampled_train_parents":704,"batches":44,
+                  "sampled_train_ids_sha256":"b"*64,
+                  "lambda_probes":[{"lambda_js":weight,"status":"PASS","n_batches":44,
+                                    "median_combined_ce_cosine":0.6,
+                                    "p10_combined_ce_cosine":0.1,
+                                    "max_combined_to_ce_ratio":10.0}
+                                    for weight in (0.3,3.,30.,60.)]}}
         self.assertEqual(mod.validate_train_only_gradient_gate(
             gate,contract,parents),gate["lambda_window"])
         with self.assertRaisesRegex(RuntimeError,"whole|coverage|identity|parent"):
