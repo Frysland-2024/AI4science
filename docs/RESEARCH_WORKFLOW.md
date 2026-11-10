@@ -191,6 +191,10 @@ A material scientific result that exists only in a chat is not a durable project
 
 ### The wild-bison problem: protect time to think (2026-11-10 owner-confirmed principle)
 
+**Two-sided capability, not just a metaphor:** The owner explicitly described Vibe Research as granting the power to carry out work one does not yet know or understand, calling it both “the best thing” and “the worst thing.” It enables cross-disciplinary, otherwise inaccessible exploration; it also allows the execution queue to outrun human interpretation. **Cheap trials can create expensive reflection debt.** Machine throughput is not scientific understanding.
+
+**Two distinct timescales:** Machine time should be fast for already authorized searches, coding, experiments, and evidence packaging. Human time should be protected and deliberately slower for reading, doubt, causal interpretation, research direction, and decisions to stop or defer. A user-chosen interval with **no new AI task dispatch** is legitimate scientific work, not idle time. The goal is not to make the owner match AI speed, but to stop AI speed from interrupting thought.
+
 The owner described the core Vibe Research tension as **“Vibe research 第一次让人有了‘自己不知道’的能力”**: AI enables action on methods and experiments before the human has fully learned how they work. Rapid exploration may become **“像野牛一样横冲直撞”** unless time for scientific understanding and deliberate choice is protected. These are researcher reflections, not new experimental findings. The original missing chat is not claimed to be recovered; the metaphor's meaning was explicitly confirmed in a later conversation.
 
 **Default loop: Human question and hypothesis → bounded, approved AI/Codex/GPU execution → evidence digest with uncertainties → protected human interpretation and decision → only then authorize the next stage.**
