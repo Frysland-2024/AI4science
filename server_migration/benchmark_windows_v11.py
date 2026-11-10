@@ -98,11 +98,11 @@ def cpu_worker_sweep(args):
 
 def main():
     p=argparse.ArgumentParser()
-    p.add_argument("--cases",default="4:4,8:8,16:16")
+    p.add_argument("--cases",default="16:2,16:4,16:8,16:16")
     p.add_argument("--warmup",type=int,default=1)
     p.add_argument("--steps",type=int,default=3)
-    p.add_argument("--workers",type=int,default=2)
-    p.add_argument("--cache",type=int,default=128)
+    p.add_argument("--workers",type=int,default=12)
+    p.add_argument("--cache",type=int,default=64)
     p.add_argument("--cpu-only",action="store_true",
                    help="Profile Train-only CPU prefetch worker scaling; no GPU/HPO")
     p.add_argument("--worker-cases",default="2:2,4:2,8:4,12:4",
@@ -117,10 +117,10 @@ def main():
     cases=[]
     for entry in a.cases.split(","):
         batch,micro=map(int,entry.split(":"))
-        if not 1<=micro<=batch<=32:
-            raise ValueError("Case must be EFFECTIVE_BATCH:MICROBATCH, each 1..32")
+        if not 1<=micro<=batch<=512:
+            raise ValueError("Case must be EFFECTIVE_BATCH:MICROBATCH, each 1..512")
         cases.append((batch,micro))
-    if not 1<=len(cases)<=4 or not 1<=a.steps<=10 or not 0<=a.warmup<=4 or not 1<=a.workers<=4:
+    if not 1<=len(cases)<=24 or not 1<=a.steps<=12 or not 0<=a.warmup<=4 or not 1<=a.workers<=16:
         raise ValueError("Bounded benchmarking cases/steps/workers required")
     np_lib,torch,F,load_peak_records,*tail=v11.ctx_libraries()
     if not torch.cuda.is_available():
@@ -134,6 +134,9 @@ def main():
     from xrd_robustness.models.ml4pxrd_resnet1d import ML4PXRDResNet1D,ML4PXRDResNet1DConfig
     started_at=time.time()
     result={"status":"ENGINEERING_ONLY_NOT_FULL_STAGE0","gpu":torch.cuda.get_device_name(0),
+            "vram_total_gib":round(torch.cuda.get_device_properties(0).total_memory/1024**3,2),
+            "scientific_effective_parent_batch_baseline":16,
+            "effective_batch_change_changes_gradient_noise_and_invalidates_frozen_lambda_gate":True,
             "train_parents_available":len(train),"validation_parents_not_scored":len(valid),
             "no_test_rruff":True,"warmup":a.warmup,"measured_steps":a.steps,
             "results":[]}
@@ -151,19 +154,22 @@ def main():
             model_times=[]
             parent_count=0
             rng=np.random.default_rng(20260711)
+            permutations={}
             pool=V11PairPrefetchPool(sim,run_seed=20260711,workers=a.workers,
-                 prefetch_batches=2,native_threads=1,max_cached_peaks=a.cache)
+                 prefetch_batches=4,native_threads=1,max_cached_peaks=a.cache)
             total=a.warmup+a.steps
             def submit_step(step):
-                idx=rng.choice(len(train),batch,replace=False)
+                idx,epoch=sample_parent_indices(rng,len(train),batch,step,
+                    sampling_mode="epoch_shuffle",sampling_seed=20260711,
+                    permutation_cache=permutations)
                 chosen=[train[int(i)] for i in idx]
-                pool.submit(step,chosen,epoch=0,global_step=step,profile="train")
-            for at in range(min(2,total)):
+                pool.submit(step,chosen,epoch=epoch,global_step=step,profile="train")
+            for at in range(min(4,total)):
                 submit_step(at)
             for step in range(total):
                 start=time.perf_counter()
                 first,second,labels=pool.get(step)
-                future=step+2
+                future=step+4
                 if future<total:
                     submit_step(future)
                 x1=torch.from_numpy(first).to("cuda")
@@ -180,11 +186,14 @@ def main():
                     model_times.append(time.perf_counter()-forward_start)
                     parent_count+=len(labels)
             output.update(status="PASS",parents_measured=parent_count,
+                  effective_parent_exposure_per_step=batch,
+                  optimizer_steps_measured=a.steps,
                   parent_per_second=round(parent_count/sum(step_times),2),
                   seconds_per_step_mean=round(statistics.mean(step_times),3),
                   seconds_per_step_p95=round(float(np.percentile(step_times,95)),3),
                   gpu_peak_allocated_gib=round(torch.cuda.max_memory_allocated()/1024**3,3),
                   gpu_peak_reserved_gib=round(torch.cuda.max_memory_reserved()/1024**3,3),
+                  pytorch_vram_free_gib_after=round(torch.cuda.mem_get_info()[0]/1024**3,3),
                   loss_last=round(float(loss),6))
             try:
                 import psutil
