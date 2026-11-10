@@ -4,9 +4,9 @@
 
 **状态日期：** 2026-11-10
 
-**2026-11-10 OWNER PRIORITY / HPO DELIBERATION DEFERRED (NO NEW AUTHORIZATION):** 研究者明确决定**暂时不进一步学习或审议 V11 HPO，也不启动 cuifa Stage 0/HPO**。原因：cuifa 的目标电脑据负责人告知未来约两周被其他任务占用（只是预计资源阻塞期限，**不代表到期自动恢复或授权**）；研究者眼前更重要的事务是**2026-11-10 下午的面谈准备与最后一轮套磁安排**。这是一项有意识的研究优先级与注意力分配决定，不代表放弃七晶系分类主线、撤销当前冻结 HPO 方案，或产生新的科学结果。
+**2026-11-10 OWNER PRIORITY / HPO DELIBERATION DEFERRED (NO NEW AUTHORIZATION):** 研究者明确决定**暂时不进一步学习或审议 V11 HPO，也不启动 cuifa Stage 0/HPO**。原因：cuifa 的目标电脑据负责人告知未来约两周被其他任务占用（只是预计资源阻塞期限，**不代表到期自动恢复或授权**）；研究者眼前更重要的事务是**2026-11-10 下午的面谈准备、最后一轮套磁安排，以及仍需持续推进的 GRE 备考**。这是一项有意识的研究优先级与注意力分配决定，不代表放弃七晶系分类主线、撤销当前冻结 HPO 方案，或产生新的科学结果。
 
-**NEXT RESEARCH RESUMPTION CHECKPOINT（未来恢复科研时首先执行，仅讨论/检查，不自动训练）：** 从**理解和审议 HPO**开始，而不是从 GPU 启动、Codex 工单或参数调整开始。先用当前代码、Issue #55、冻结协议与 Train-only 梯度证据解释：(1) HPO 的科学目的、为何现在需要它、要消除什么不确定性；(2) 现有完整执行方案与 Optuna/TPE、R=λr 的原理；(3) 三参数 λ / middle stride / kernel 的科学意义、固定变量、四组架构对照与后续探索；(4) 当前 8-trial 设计与分阶段／扩大搜索／暂不 HPO 等替代路线的优劣；(5) Stage 0 实测后可承担的预算、可能结果、决策价值与停止条件。**只有研究者理解并决定采用何种路线，且 Stage 0 与预算等独立门槛实际通过并另行授权，才可推进 HPO。**研究恢复时间由研究者另行决定，不设置自动到期执行。当前 GPU Stage0、HPO、confirmation、final、Test、RRUFF 均仍 NOT_RUN。本条仅保存恢复入口，不更改任何代码、科研合同、数据划分或训练参数。
+**NEXT RESEARCH RESUMPTION CHECKPOINT（未来恢复科研时首先执行，仅讨论/检查，不自动训练）：** 遵循长期阶段规则 **先理解 → 再规划 → 后执行**。当前具体从**理解和审议 HPO**开始，而不是从 GPU 启动、Codex 工单或参数调整开始。先用当前代码、Issue #55、冻结协议与 Train-only 梯度证据解释：(1) HPO 的科学目的、为何现在需要它、要消除什么不确定性；(2) 现有完整执行方案与 Optuna/TPE、R=λr 的原理；(3) 三参数 λ / middle stride / kernel 的科学意义、固定变量、四组架构对照与后续探索；(4) 当前 8-trial 设计与分阶段／扩大搜索／暂不 HPO 等替代路线的优劣；(5) Stage 0 实测后可承担的预算、可能结果、决策价值与停止条件。**只有研究者理解并决定采用何种路线，且 Stage 0 与预算等独立门槛实际通过并另行授权，才可推进 HPO。**研究恢复时间由研究者另行决定，不设置自动到期执行。当前 GPU Stage0、HPO、confirmation、final、Test、RRUFF 均仍 NOT_RUN。本条仅保存恢复入口，不更改任何代码、科研合同、数据划分或训练参数。
 
 **2026-11-10 HPO-launch safety repair (CODE + TEST; CUIFA STAGE0/HPO NOT_RUN):**
 The current runner now refuses \`--mode run\` without a SHA-verified,
