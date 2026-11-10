@@ -66,6 +66,16 @@ class TestResearchStatus(unittest.TestCase):
         self.assertEqual(r["status"], "COMPLETED")
         self.assertIn("Test/RRUFF", r["boundary"])
 
+    def test_results_without_contract_block(self):
+        self.save("trials/hpo_000/result.json", {"status": "completed"})
+        self.assertEqual(mod.summarize(self.study)["status"], "BLOCKED")
+
+    def test_final_summary_without_trials_blocks(self):
+        self.save("contract.json", {"max_new_trials": 2})
+        self.save("final_recommendation.json", {"status": "hpo_and_confirmation_completed", "hpo_trial_count": 2})
+        self.save("final_training_summary.json", {"status": "final_three_seed_training_completed", "runs": [{"seed": 1}, {"seed": 2}, {"seed": 3}]})
+        self.assertEqual(mod.summarize(self.study)["status"], "BLOCKED")
+
     def test_missing_confirmation_blocks_false_recommendation(self):
         self.save("contract.json", {"max_new_trials": 1})
         self.save("trials/hpo_000/result.json", {"status": "completed"})
