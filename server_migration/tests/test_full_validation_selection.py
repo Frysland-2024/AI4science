@@ -142,6 +142,19 @@ class ValidationSelection(unittest.TestCase):
             history[:-1]+[{"epoch":5,"accuracy":0.45,"mean_ce":1.0}]))
         self.assertFalse(mod.train_state_ready(
             history[:-1]+[{"epoch":5,"accuracy":0.10,"mean_ce":1.26}]))
+        # 20 full warmup epochs and excellent Train fit are evidence of a
+        # learned reference, even when CE is still improving quickly.
+        epoch20=[{"epoch":i,"accuracy":0.90,"mean_ce":0.3}
+                 for i in range(1,19)]
+        epoch20.extend([
+            {"epoch":19,"accuracy":0.99877,"mean_ce":0.11147},
+            {"epoch":20,"accuracy":0.99387,"mean_ce":0.08357},
+        ])
+        self.assertTrue(mod.train_state_ready(epoch20))
+        self.assertFalse(mod.train_state_ready(
+            epoch20[:-1]+[{"epoch":20,"accuracy":0.60,"mean_ce":0.08357}]))
+        self.assertFalse(mod.train_state_ready(
+            epoch20[:-1]+[{"epoch":20,"accuracy":0.99387,"mean_ce":0.5}]))
 
     def test_train_only_gate_requires_real_learned_state_and_all_train_parents(self):
         parents=[types.SimpleNamespace(material_id=f"train_{i:06}") for i in range(108478)]
