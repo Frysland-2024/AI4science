@@ -48,11 +48,7 @@ def main():
     PROJECT=ROOT/"xrd_robustness"
     PREPROCESSED=SOURCE.parent
     DEST.mkdir(parents=True,exist_ok=True)
-    if args.source_only:
-        # Never publish an uncommitted source snapshot (even if it passes SHA).
-        if git("status","--porcelain","--untracked-files=no"):
-            raise RuntimeError("Commit tracked changes before building current-source ZIP")
-    else:
+    if not args.source_only:
         data=json.loads((SOURCE/"delivery_validation.json").read_text(encoding="utf-8"))
         assert data["status"]=="passed"
         assert data["material_id_records"]==154975 and data["parent_structure_groups"]==154968
@@ -75,10 +71,11 @@ def main():
     for name in ("CURRENT_STATE.md","PROJECT_HISTORY.md","SIMULATOR_V11_READINESS_20261103.md","STRUCTURE_LIBRARY_154975_TRAINING_ADAPTER.md","PXRD_CNN11_V10_NUMERICAL_DECISION_20261103.md"):
         p=ROOT/"docs"/name
         if p.is_file():files[p]=p.relative_to(ROOT).as_posix()
-    for p in sorted((ROOT/"_local"/"resnet_joint_20261103").glob("*.py")):
-        files[p]="reference_windows_resnet_joint/"+p.name
-    for p in sorted((ROOT/"_local"/"resnet_joint_20261103"/"protocols").glob("*.json")):
-        files[p]="reference_windows_resnet_joint/protocols/"+p.name
+    if not args.source_only:
+        for p in sorted((ROOT/"_local"/"resnet_joint_20261103").glob("*.py")):
+            files[p]="reference_windows_resnet_joint/"+p.name
+        for p in sorted((ROOT/"_local"/"resnet_joint_20261103"/"protocols").glob("*.json")):
+            files[p]="reference_windows_resnet_joint/protocols/"+p.name
     for name in ("verify_payload.py","verify_peak_cache.py","one_click_v11.py","v11_prefetch.py","smoke_prefetch.py","start_server.sh","start_windows.ps1","windows_cuda_smoke.py","hpo_handoff.py","research_status.py","train_microbatch.py","benchmark_windows_v11.py","preflight.sh","build_peak_tables.sh","setup_linux.sh","README.md","payload_contract.py","verify_source_snapshot.py","create_migration_bundles.py","gradient_gate_v11_train_108478.json","gradient_gate_v11_v9style_train_108478.json"):
         p=ROOT/"server_migration"/name
         if not p.is_file():raise RuntimeError(f"Missing current-worktree migration source: {p}")
@@ -91,9 +88,15 @@ def main():
     for name in ("acceptance_rerun_20261103.json","merged_154975_precompute_20261103.json","merged_154975_sample_20261103.json"):
         p=PROJECT/"reports"/"simulator_v11"/name
         if p.is_file():files[p]=p.relative_to(ROOT).as_posix()
-    for name in ("summary.json","README.md"):
-        p=ROOT/"_local"/"resnet_joint_20261103"/name
-        if p.is_file():files[p]="reference_windows_resnet_joint/"+name
+    if not args.source_only:
+        for name in ("summary.json","README.md"):
+            p=ROOT/"_local"/"resnet_joint_20261103"/name
+            if p.is_file():files[p]="reference_windows_resnet_joint/"+name
+    if args.source_only:
+        rels=[p.relative_to(ROOT).as_posix() for p in files]
+        dirty=git("status","--porcelain","--untracked-files=normal","--",*rels)
+        if dirty:
+            raise RuntimeError("Source-only snapshot has uncommitted included files: "+dirty)
     code_path=DEST/("source_snapshot_current.zip" if args.source_only else "source_snapshot.zip")
     temporary=code_path.with_name(code_path.name+".partial")
     manifest_files={
