@@ -149,6 +149,21 @@ def approve(root: Path, ident: str) -> dict:
 
 def run_once(root: Path, *, dry_run: bool = False) -> dict:
     home = state_root(root)
+    if dry_run:
+        return _run_once_unlocked(root, home, dry_run=True)
+    home.mkdir(parents=True, exist_ok=True)
+    lock = home / "dispatch.lock"
+    try:
+        lock.mkdir()
+    except FileExistsError:
+        return {"status": "BLOCKED", "note": "another worker or stale lock; inspect locally, do not auto-retry"}
+    try:
+        return _run_once_unlocked(root, home, dry_run=False)
+    finally:
+        lock.rmdir()
+
+
+def _run_once_unlocked(root: Path, home: Path, *, dry_run: bool = False) -> dict:
     pending = (home / "tasks")
     if not pending.exists():
         return {"status": "IDLE", "note": "empty queue; nothing launched"}
@@ -183,14 +198,36 @@ def run_once(root: Path, *, dry_run: bool = False) -> dict:
             write_atomic(run_path, meta)  # fail closed on crash: never auto-repeat
             try:
                 with (journal / "console.txt").open("w", encoding="utf-8") as log:
-                    completed = subprocess.run(
-                        args, cwd=root, input=task.get("prompt") if task["lane"] == "codex_review" else None,
-                        text=True, stdout=log, stderr=subprocess.STDOUT,
-                        timeout=cap, check=False)
-                meta["status"] = "COMPLETED" if completed.returncode == 0 else "BLOCKED"
-                meta["exit_code"] = completed.returncode
+                    flags = (subprocess.CREATE_NEW_PROCESS_GROUP if sys.platform == "win32" else 0)
+                    proc = subprocess.Popen(args, cwd=root, text=True, stdout=log,
+                                            stderr=subprocess.STDOUT,
+                                            stdin=subprocess.PIPE if task["lane"] == "codex_review" else subprocess.DEVNULL,
+                                            creationflags=flags)
+                    if task["lane"] == "codex_review":
+                        proc.stdin.write(task["prompt"])
+                        proc.stdin.close()
+                    started = time.monotonic()
+                    meta["pid"] = proc.pid
+                    while proc.poll() is None:
+                        meta["heartbeat_utc"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+                        write_atomic(run_path, meta)
+                        if time.monotonic() - started > cap:
+                            if sys.platform == "win32":
+                                subprocess.run(["taskkill", "/T", "/F", "/PID", str(proc.pid)],
+                                               capture_output=True, timeout=30, check=False)
+                            else:
+                                proc.kill()
+                            try:
+                                proc.wait(timeout=30)
+                            except subprocess.TimeoutExpired:
+                                pass
+                            raise subprocess.TimeoutExpired(args, cap)
+                        time.sleep(3)
+                    exit_code = proc.wait()
+                meta["status"] = "COMPLETED" if exit_code == 0 else "BLOCKED"
+                meta["exit_code"] = exit_code
                 meta["note"] = ("Execution exited successfully; evidence needs owner review."
-                                if completed.returncode == 0 else "Nonzero exit: review private log; no retry.")
+                                if exit_code == 0 else "Nonzero exit: review private log; no retry.")
             except subprocess.TimeoutExpired:
                 meta.update(status="BLOCKED", note="Bounded execution timeout; no automatic retry.")
             except Exception as exc:
