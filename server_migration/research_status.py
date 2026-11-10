@@ -74,6 +74,7 @@ def summarize(study: Path) -> dict:
     }
     try:
         contract = _load(study / "contract.json")
+        count = None
         if contract is not None:
             count = contract.get("max_new_trials")
             if not isinstance(count, int) or isinstance(count, bool) or count < 1:
@@ -95,6 +96,9 @@ def summarize(study: Path) -> dict:
             raise ValueError("more HPO results than frozen contract permits")
         recommendation = _load(study / "final_recommendation.json")
         final = _load(study / "final_training_summary.json")
+        if contract is None and (output["completed_hpo_trials"] or output["confirmation_results"]
+                                 or recommendation is not None or final is not None):
+            raise ValueError("result artifacts exist without frozen study contract")
         if final is not None:
             seeds = final.get("runs")
             if (final.get("status") != "final_three_seed_training_completed"
@@ -103,6 +107,10 @@ def summarize(study: Path) -> dict:
                 raise ValueError("final summary missing valid three-seed completion evidence")
             if recommendation is None or recommendation.get("status") != "hpo_and_confirmation_completed":
                 raise ValueError("final summary exists without completed HPO recommendation")
+            if (recommendation.get("hpo_trial_count") != count
+                    or output["completed_hpo_trials"] != count
+                    or output["confirmation_results"] != 2):
+                raise ValueError("final summary exists without complete HPO and confirmation evidence")
             output.update(status="COMPLETED", stage="FINAL_TRAINING_EVIDENCE",
                           next_action="Review checkpoint hashes and authorize independent Test/RRUFF only if appropriate; not run by this tool.")
         elif recommendation is not None:
