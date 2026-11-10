@@ -227,3 +227,63 @@ The script reads only local server_runs/v11_a0_js_optuna metadata and probes an 
 
 As of 2026-11-10, laptop Train-only gradient evidence is closed. Cuifa Stage 0/HPO, final training and Test/RRUFF have not run and are not newly authorized by this workflow. See CURRENT_STATE.md and Issue #55 for current authority; cross-check live host logs before reporting execution.
 
+### Controlled local task dispatch (Codex review / bounded V11 preflight)
+
+Source: server_migration/controlled_dispatch.py; tests:
+server_migration/tests/test_controlled_dispatch.py. This is a limited
+execution helper, NOT a new scientific protocol or an old-Bridge revival.
+
+- Allowlisted lanes: codex_review (read-only ephemeral Codex CLI),
+  v11_plan, v11_smoke (fixed Windows launcher commands). HPO, final,
+  Test/RRUFF, arbitrary shell, Codex write/PR, and GPU rental are blocked.
+- Private tasks, approvals and journals live inside the existing Git common
+  directory: controlled_dispatch_v1/tasks, approvals, runs.
+  Do NOT commit prompts, logs or local data.
+- Every task requires exact source SHA, hostname, explicit local approval
+  binding the entire task JSON SHA256, and a clean working tree. Failed,
+  stale or inconsistent jobs do not auto-retry; a new task ID and renewed
+  approval are needed. A single-instance lock and bounded subprocess
+  timeouts prevent duplicate launch. Uncertainty is not reported as live.
+- Current laptop may have uncommitted work; NEVER reset/pull over it
+  merely to satisfy a dispatch preflight. No work is queued by default.
+- Separate human approval for cuifa Stage 0, full HPO, final training and
+  opening held-out Test/RRUFF still applies (Issue #55).
+
+Read-only inspection:
+
+~~~powershell
+cd E:\AI4science
+python server_migration/controlled_dispatch.py --status
+python server_migration/controlled_dispatch.py --dry-run
+~~~
+
+A *private* task under .git/controlled_dispatch_v1/tasks/review_001.json
+uses this schema, with values filled from the approved actual machine:
+
+~~~json
+{
+  "version": 1,
+  "task_id": "review_001",
+  "lane": "codex_review",
+  "source_sha": "REPLACE_WITH_40_LOWERCASE_GIT_SHA",
+  "expected_hostname": "REPLACE_WITH_COMPUTERNAME",
+  "prompt": "Review V11 code and AGENTS.md for reproducible bugs. Do not modify files."
+}
+~~~
+
+Once reviewed, the owner explicitly authorizes this task:
+
+~~~powershell
+python server_migration/controlled_dispatch.py --approve review_001
+python server_migration/controlled_dispatch.py --dry-run
+~~~
+
+A local Windows Scheduled Task named AI4science-Controlled-Dispatch may
+check the approved queue every 30 minutes using --once and IgnoreNew.
+An empty or unapproved queue launches NOTHING. It works only while the
+authorized machine is available; it cannot remotely check cuifa or report
+private logs through GitHub. The 10:00/20:30 ChatGPT summaries are
+independent read-only checks and must never claim access to a disconnected
+host. Disable the named task before uninstalling it. No public Issues/PRs
+should be created for normal dispatcher polls.
+
