@@ -203,6 +203,22 @@ The owner described the core Vibe Research tension as **“Vibe research 第一�
 
 This is a **human-deliberation safeguard**, not a mandate to slow approved machines, add bureaucracy or run a new experiment. Current V11 source of truth and compute authorization still reside in `CURRENT_STATE.md` and Issue #55.
 
+### Pre-task purpose gate (owner-confirmed, 2026-11-10)
+
+**First understand why a task should be done; only then decide what to ask AI to do and how.** Vibe Research makes it easy to launch work before understanding the problem. Before authorizing a *new scientific or scope-changing* task, GPT should first help the owner clarify five concise questions, in conversation rather than generating a new form or document:
+
+1. **Purpose — What scientific question or concrete decision does this task serve?**
+2. **Motivation — Why now? What limitation, unknown, or evidence gap makes it necessary?**
+3. **Expected interpretations — What plausible outcomes could occur, including negative or inconclusive results, and what would each imply?**
+4. **Decision value — How will the evidence change what we choose to do, stop, or defer?**
+5. **Stopping condition — What is sufficient evidence, what is the resource boundary, and when must execution stop?**
+
+**Decision rule:** If the owner cannot yet explain the task's purpose or how the result will inform a decision, keep the idea at `CANDIDATE / NEEDS_THINKING`; discuss, read or inspect existing evidence first. **Choosing not to run a task is a valid research decision.** Only move to `APPROVED_EXECUTION` after the owner understands the science-relevant assumptions and explicitly approves the bounded scope. This supplements, not replaces, the existing approval requirements for GPU, HPO, final, Test/RRUFF, protocol or budget changes.
+
+**Proportionate application:** Routine authorized fixes, read-only status checks, and mechanical upkeep do not require a five-question ceremony or separate sign-off per step. The purpose gate is for new scientific experiments, research-direction changes and substantial resource commitments. Do not block an already authorized frozen multi-trial run to re-approve every internal trial, and do not create extra Issues, PRs, Markdown files or busywork checklists.
+
+**One-line handoff:** `Question / Why now / Possible outcomes / Decision unlocked / Stop boundary`. If this cannot be stated clearly, prefer `THINK / READ / DEFER` over `EXECUTE`.
+
 ### Ownership and permissions
 
 - **Owner (L3):** research hypothesis, protocol/dataset/split changes, Test/RRUFF release, publication claims, extra GPU rental or compute budget, and permission to enter the next major stage. Always require explicit approval.
