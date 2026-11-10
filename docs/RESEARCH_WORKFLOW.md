@@ -287,3 +287,36 @@ independent read-only checks and must never claim access to a disconnected
 host. Disable the named task before uninstalling it. No public Issues/PRs
 should be created for normal dispatcher polls.
 
+### Controlled dispatcher deployment (2026-11-10)
+
+**Active on the owner laptop:** Windows scheduled task **AI4science-Controlled-Dispatch**
+runs every 30 minutes. Its private source and one-shot task records are under
+.git/controlled_dispatch_v1/. It supports only explicitly approved, pinned
+read-only Codex review and bounded V11 plan/smoke preflight; it cannot
+launch HPO/final or create a PR. Read its status on the same laptop:
+
+~~~powershell
+python E:\AI4science\.git\controlled_dispatch_v1\controlled_dispatch.py --root E:\AI4science --status
+~~~
+
+**No duplicate scheduler:** an experimental second Windows task,
+**AI4science-Controlled-Dispatcher**, was briefly installed and has been
+**disabled** so only one active laptop task consumes approvals.
+Neither task reinstates the retired research_bridge or October PhaseRouter.
+
+**Deferred cuifa GPU lane:** source-controlled
+server_migration/controlled_dispatcher.py and its tests offer a bounded
+one-shot HPO dispatch route, but this is **not installed on cuifa**.
+Future activation requires actual target-machine Stage0 proof, including
+CUDA, sufficient resources, full six-profile frozen Validation,
+cache integrity and checkpoint/restart checks; hash-pinned private
+artifacts; matching source SHA; and separate budget approval. Its
+max-gpu-hours budget is a **soft stop between HPO trials**, not a hard
+wall-time or cloud-spending guarantee. No real cuifa Stage0 or HPO
+can be inferred from this implementation.
+
+**Human-facing review cadence:** use the two existing ChatGPT morning/evening
+summaries, preferably with read-only local state if the authorized machine
+is online; otherwise explicitly say local state is unknown. Never push
+idle heartbeats, open routine PRs/Issues or auto-expand scientific scope.
+
