@@ -122,8 +122,20 @@ def records(root: Path) -> list[dict]:
         ident = path.stem
         status = home / "runs" / (ident + ".json")
         approval = home / "approvals" / (ident + ".json")
-        answer.append({"task": ident, "status": json_read(status).get("status") if status.exists()
-                       else "APPROVED" if approval.exists() else "AWAITING_APPROVAL"})
+        if status.exists():
+            row = json_read(status)
+            label = row.get("status", "BLOCKED")
+            if label == "RUNNING":
+                stamp = row.get("heartbeat_utc", row.get("started_utc", ""))
+                try:
+                    age = time.time() - time.mktime(time.strptime(stamp, "%Y-%m-%dT%H:%M:%SZ"))
+                except (ValueError, TypeError, OverflowError):
+                    age = float("inf")
+                if age > 180:
+                    label = "NEEDS_DECISION"  # not proof of a dead process; never auto-retry
+        else:
+            label = "APPROVED" if approval.exists() else "AWAITING_APPROVAL"
+        answer.append({"task": ident, "status": label})
     return answer
 
 
