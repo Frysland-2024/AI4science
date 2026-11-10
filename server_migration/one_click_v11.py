@@ -650,6 +650,10 @@ def make_or_load_train_only_gradient_gate(study_dir,train_records,sim,libs,argv,
     is_backbone=tuple(not name.startswith(("embedding.","head.")) for name,_ in named_params)
     full_ce=[torch.zeros_like(p,dtype=torch.float32) for p in params]
     full_js=[torch.zeros_like(p,dtype=torch.float32) for p in params]
+    # The 20,480-parent warmup has a DIFFERENT epoch length from the
+    # mandatory 108,478-parent whole-Train gradient pass. Never reuse
+    # warmup one_epoch when scheduling the full-cohort scan.
+    full_scan_steps=(len(train_records)+argv.batch_size-1)//argv.batch_size
     scan_seed=20261111
     scan_rng=np.random.default_rng(scan_seed)
     pool=V11PairPrefetchPool(sim,run_seed=scan_seed,
@@ -660,10 +664,10 @@ def make_or_load_train_only_gradient_gate(study_dir,train_records,sim,libs,argv,
     audit_microbatch=min(argv.microbatch_size,4)  # 8 GiB RTX 4060 safe default
     future_rng={};permutation_cache={}
     try:
-        for step in range(one_epoch):
+        for step in range(full_scan_steps):
             submitted=enqueue_train_lookahead(
                 pool,scan_rng,train_records,batch_size=argv.batch_size,
-                start_step=step,next_submit=submitted,max_steps=one_epoch,
+                start_step=step,next_submit=submitted,max_steps=full_scan_steps,
                 committed_states=future_rng,sampling_mode="epoch_shuffle",
                 sampling_seed=scan_seed,permutation_cache=permutation_cache)
             first,second,labels=pool.get(step)
@@ -713,8 +717,10 @@ def make_or_load_train_only_gradient_gate(study_dir,train_records,sim,libs,argv,
             seen+=len(y)
     finally:
         pool.close()
-    if seen!=len(train_records):
-        raise RuntimeError("TRAIN-only full gradient scan failed parent exposure")
+    if seen!=len(train_records) or len(ratios)!=full_scan_steps:
+        raise RuntimeError("TRAIN-only full gradient scan failed parent exposure "
+            f"(seen={seen}, expected={len(train_records)}, "
+            f"batches={len(ratios)}, expected_batches={full_scan_steps})")
     ce_total=float(torch.stack([t.square().sum() for t in full_ce]).sum().sqrt().item())
     js_total=float(torch.stack([t.square().sum() for t in full_js]).sum().sqrt().item())
     all_dot=sum(float((a*b).sum().item()) for a,b in zip(full_ce,full_js))
@@ -740,6 +746,8 @@ def make_or_load_train_only_gradient_gate(study_dir,train_records,sim,libs,argv,
           "training_parent_ids_sha256":gate_contract["training_parent_sha256"],
           "training_only":True,"validation_access":False,
           "parents_scanned":seen,"batches_scanned":len(ratios),
+          "full_train_expected_batches":full_scan_steps,
+          "whole_train_coverage_verified":True,
           "warmup_parent_epochs":history[-1]["epoch"],
           "warmup_train_parent_count":warmup_count,
           "warmup_train_parent_ids_sha256":gate_contract["warmup_parent_ids_sha256"],
