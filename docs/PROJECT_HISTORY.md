@@ -4,6 +4,63 @@ This file is the **public, concise history** of how the PXRD project evolved. It
 
 For current scientific claims, use [CURRENT_STATE.md](CURRENT_STATE.md) and the tracked result reports. History explains *how the project changed*; it does not override the current state.
 
+## 2026-11-10: 从“野牛横冲直撞”到有边界的 Vibe Research —— 研究者的思考时间与工作流
+
+**记录类型：研究者的方法论与工作方式转折（不是新的模型结果）。** 本条记录 2026-11-10 前后关于 AI 辅助科研的连续反思，保留尚未解决的矛盾，供将来回溯项目发展和撰写申请材料。它不改变 V11 科学协议；执行真相始终以 CURRENT_STATE 和原始证据为准。
+
+### 一、首先意识到的矛盾：AI 执行能力扩张，而人的思考时间反而被挤占
+
+研究者直接提出过：**“我觉得，在 vibe research 时代，能做的事情很多，但是留给人去思考的时间很少。”** 这不是反对 AI，也不是否认其显著提高了编码、调研、实验计划和证据整理的速度；恰恰相反，问题是可做的事情膨胀得太快。生成新方向、新试验、新修复建议的速度，开始超过一个人判断它们是否值得做、为什么要做、应当何时停止的速度。**执行吞吐量增加，不等于科研判断质量按同样比例增加。**
+
+研究者此次又特意要求保留**“野牛横冲直撞”**这一比喻。完整原句和上下文目前未能从可核对的记录中找到，因此不能虚构逐字引语。就本轮讨论所表达的主题而言，它可作为一个**暂定的自我警示意象**：如果科研只追逐下一次 AI 输出、下一项实验和下一个看似可行的方向，就可能获得很强的前进动能，却没有足够时间辨别路径。这是对比喻的整理性解释，**不是声称研究者已逐字这样定义它**；若找到原话，应以原话校正本条。
+
+### 二、从研究方法上的“不成体系”，到认知资源上的“被任务淹没”
+
+更早的自我对照是：一些同伴的课题似乎有现成范式、模板和流水线，而自己的 PXRD/AI4science 路线更依靠直觉选择研究问题、拼接实验设计、反复试错；研究者曾将其比作**“经过考级训练的钢琴手”与“纯靠直觉演奏音符的钢琴手”**。这种处境有两个面向：直觉允许跨材料表征、测量系统与机器学习做探索，但也意味着每次转向都可能重新消耗方法设计与优先级判断的精力。记录这一点不是要否认已完成的研究或把探索描述成失败，而是承认**当外部范式不足时，内部的项目地图、检验标准和停止条件就更重要**。
+
+与此直接相关的要求是建立**“项目地图路径”**：不仅知道今天做什么，还要看到各阶段的研究假设、证据、依赖条件、失败分支、可暂停环节，以及为何从 ferroAI、早期 XRD 任务走向同源谱一致性、真实域评估、大规模 V11 和后续计测方向。地图要帮助人做选择，而不是成为又一个需要不断维护的文档工程。
+
+### 三、注意到 Vibe Research 引发的心理循环：期待（A）＋急迫（C）
+
+研究者主动询问过，为何用 GPT 开展 Vibe Research 时会焦虑、忍不住反复拿起手机看进展。对更具体的自我观察，他选择了 **A（期待看到新成果）与 C（总觉得科研还没做完、需要继续推进）**，而不是简单归因于“害怕 AI 出错”。
+
+本轮归纳出的待验证解释是：AI 可能随时交付一个新结果；结果令人兴奋，却几乎总能引出下一项任务，于是“检查进展—收到新结果—发现待办—再次检查”不断循环。这里描述的是研究者报告的感受及对话中的工作假设，**不是临床判断，也不等于证明了某种心理机制**。重要的是：这种兴奋是真实的科研动力，但不应令研究者丧失主动离开工作状态的能力。
+
+由此形成一个核心区分：**“整个项目还没有完成”不等于“今天我应该继续工作”。** 机器仍在训练、待办仍然存在，都不能自动成为继续盯着手机的理由。每天需要一个真实的个人完成条件。
+
+### 四、意识到角色错配：不应永远当 GPT／Codex／GitHub／GPU 之间的“人力转接器”
+
+研究者随后明确说：**“我觉得我需要建立一个健康的 vibe research 工作流，而不是一直当人力转接器。”** 这句话标志着问题定义的变化。先前主要思考**如何让 AI 能做更多科研任务**，此时转向思考**应该把哪些权力交给 AI，以及如何让 AI 执行任务时不持续占用人的注意力**。
+
+不希望继续重复“GPT 提建议 → 人复制给 Codex → Codex 出错 → 人转发给 GPT → 再复制指令”的链条。理想职责分工是：**人选择科学问题、优先级和重大资源决策；AI 拆解和审查已定义的任务；受控调度器负责在权限内运行、记录、失败即停；GitHub／原始产物提供可追溯证据；人只在约定的验收窗口或真正需要批准时介入。** 这一方向不是要把科学判断外包，而是把低价值的消息搬运从研究者身上移走。
+
+### 五、健康的自动化必须有“停止的能力”
+
+这次讨论形成的工作原则，不是“让 AI 24 小时源源不断地产生下一件事”，而是以下几条边界：
+
+1. **预先冻结范围**：每个任务必须明确输入、可执行动作、预算、验收证据、失败处理与停止条件。小修复和已批准的试验可自动执行；更改 loss、数据集、冻结 Test、GPU 预算或下一研究阶段，需要研究者重新批准。
+2. **任务完成不自动扩大任务**：V11 HPO 的结束点是可供审查的模型选择证据，不是自动进入 final、Test 或 RRUFF。负面结果也应可结案，而非自动触发无限改法。
+3. **允许离线**：研究者不在线不妨碍已经授权的执行；但自动化不得因为缺少回复就推定拥有新权限。机器的状态不明时，报告 UNKNOWN／NEEDS_DECISION，不能假装“仍在运行”。
+4. **减少信息刺激**：以定时、简短的结果摘要代替高频通知和反复刷新；优先呈现新证据、阻塞、唯一需要本人处理的决策，不用普通进展催促马上开始新任务。
+5. **文件与历史要够用而非越多越好**：保留真实科学转向及有意义的负面证据，但避免每次想法、每个 PR 都产生新报告；项目历史不是自动生成的科研流水账。
+
+### 六、具体行动与尚未闭环之处
+
+讨论随后从抽象反思转为工程动作：在现有仓库采用任务状态、分层审批、只读验收、受控 Codex 审查及 V11 执行器的可恢复能力；笔记本已有受控任务调度和定时摘要，旧 research_bridge 不应复活；截至本次记录，**cuifa 目标机器的真实 Stage 0、正式 HPO 和后续评测均未因工作流建设而获得许可或被证明已运行**。这些属于执行边界，不应写成训练成绩。
+
+真正的下一阶段不是无休止扩建代理网络，而是检验这个体系能否减少研究者的时间碎片化：**即便一天只集中查看两次，能否仍然掌握足够的科研事实并作出必要决策？** 如果系统增加了新的报告维护、审批搬运和无意义通知，就说明虽有技术自动化，却没有实现最初要解决的人机协作问题。
+
+### 七、为未来申请材料保留的真实转折
+
+这段经历不宜被追溯性包装成“一开始就有完备路线图”。更真实的脉络是：
+
+**依靠直觉探索材料表征 AI → 借助 GPT/Codex 显著加速研究 → 面对持续产生的实验机会与待办，感到思考时间受挤压 → 注意到期待与急迫交织的频繁检查行为 → 发现自己成了 AI 之间的人力转接器 → 开始建立项目地图、权限边界和可结案的执行系统 → 重新把科学判断与注意力主权留给人。**
+
+这一变化的意义，不在于证明模型更好，而在于研究者逐渐理解：**科研能力不仅是“能尝试多少个实验”，也是“知道哪些问题值得问、哪些实验应该做、什么时候已有足够证据、什么时候应当停下来思考”。** 未来若再次改变对自动化程度、项目组织或人机分工的看法，应保留本次判断及修改原因，而不是悄悄改写成一条从未犹豫的直线路径。
+
+**取材范围与可信度：** 本条依据可见的 2026-11-09 至 11-10 项目内对话、用户本轮追补的“野牛横冲直撞”关键词及当前工作流代码/规范；标示为“研究者直接提出”的短句有对话依据，未找到完整原话的比喻已明确说明解释边界。非逐字的心理机制与价值判断均为整理性归纳，需由研究者日后校正。
+
+
 **2026-11-10 Research decision — restore the V9 lambda-selection logic in V11.** Source-level archaeology uncovered an important distinction: V9 originally used PAMPT-B3 probes (λ=0.3/3/30), observed a FAIL when those gradient bands transferred poorly to ResNet-18-GN, then shifted to ResNet probes (λ=3/30/60) and separately selected λ=60 on frozen Validation. The old V11 design instead transformed a Train gradient-norm heuristic (R≤2) into a hard Optuna exclusion rule, ruling out λ60 before any Validation training. We corrected the methodological overreach: **the gradient gate may admit a cross-decade candidate span after combined-gradient safety checks, but cannot select the best λ**. See V9 primary reports at Git commits `09185c8`, `0697cb2`, `e7965db` and `34fe205`.
 
 **New direct evidence:** the existing 108,478-parent/6,780-batch V11 learned-state Train gradient audit was preserved verbatim; a separate real RTX4060 Train-only learned A0 FP32 trunk check covered 704 independent Train parents in 44 batches at λ0.3/3/30/60. All passed the original V9-style checks (median cosine between CE and combined CE+λJS gradients positive; maximum combined/CE norm ratio ≤50). At λ60 the **median cosine is 0.2232**, its P10 is **0.0193**, and the worst combined/CE gradient norm ratio is **10.08**; this passes the limited safety gate but has smaller direction margin than λ30, and cannot predict Validation advantage. The new HPO proposal covers **λ∈[0.3,60]**, alongside middle stride and residual kernel, selected entirely on frozen Validation **on cuifa after Stage0 and budget authorization**. The six pre-enqueued comparisons include four λ30 A0–A3 architecture controls and A0 λ0.3/60 endpoints, followed by multivariate TPE. Nothing has been trained/tuned on cuifa; Test and RRUFF remain locked. This decision repairs an overly strict assumption, not a demonstrated new model improvement.
