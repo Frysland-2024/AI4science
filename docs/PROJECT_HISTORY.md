@@ -4,6 +4,30 @@ This file is the **public, concise history** of how the PXRD project evolved. It
 
 For current scientific claims, use [CURRENT_STATE.md](CURRENT_STATE.md) and the tracked result reports. History explains *how the project changed*; it does not override the current state.
 
+## 核对后的完整时间线（2026-11-09 阶段节点）
+
+**这张表是项目发展的主时间线**：记录不同科研阶段实际解决了什么问题，不把 Git 代码版本号当作严格顺序的独立论文，也不覆盖已有结果和失败记录。
+
+| 阶段 | 实际发生的事情 | 科研性质 |
+|---|---|---|
+| **FerroAI** | 从材料性质预测起步，逐渐建立对数据、模型和证据链的认识 | 前置研究经历 |
+| **PXRD 早期—V8** | 物理扰动模拟、PAMPT、Residual、结构化模拟等多次尝试与纠偏 | 研究问题与方法探索 |
+| **V9（2026 年 7–8 月）** | 转向 ResNet-18-GN，确定 JS λ=60，完成多种子 ERM–JS 对照及模拟 Test | **完整主研究成果** |
+| **早期 V10（7 月）** | 尝试测量信息监督的 Residual 解耦，得到负结果并归档 | 与 V9 后期交叠的探索支线 |
+| **2026 年 8–10 月** | RRUFF、CNRS、校准、数据效率补充实验；另探索参数反演，随后归档 | 已完成研究的补充与新方向尝试 |
+| **11 月的 V10** | 更新模拟环境，探索 CNN11、ResNet 的 Stride/Kernel，以及 LR/Scheduler | **下一阶段的初步架构与训练优化** |
+| **V11（当前）** | V11 物理模拟器、15.5 万结构数据库、完整训练和 RRUFF-Cu1011 竞争性测试规划 | 新阶段的基础设施基本就绪，正式性能实验待运行 |
+
+**主要阶段分界：** 回顾性地把 **V1–V9 视作已经完成的一轮 PXRD 科研**（研究问题→方法形成→V9 的冻结对照与 Test 验证）；**11 月的 V10 只是下一阶段的初步调参/架构筛选**；**V11 则负责更大数据集上的后续训练与真实域性能检验**。V9 不是被 V10/V11 “补做完”的项目。
+
+**历史精确性：** V1–V5 暂无逐版本完整可核验证据，因此“V1–V9”是科研阶段概括，不是九次独立验证；**7 月的 V10 Residual 分支**确实早于 V9 最终收束，与 V9 工作交叠，且和 **11 月的 V10 架构比较**不是同一试验。8–10 月对 V9 的真实域、可靠性和样本效率研究可视为第一轮成果的后续完善，不等于重新开启其超参数选择。11 月的 V10 单种子 A0_R1 优胜（Validation OOD Macro-F1 0.731830）来自 **LR=2e-4 与 Cosine 捆绑改变**；不能据此宣称 LR 单变量最优，更不能当成 V11 或 RRUFF 成绩。
+
+**可追溯依据：** [2026-08-23 历史全档](https://github.com/Frysland-2024/AI4science/blob/d70d84da6535a0a04e7cd5fba3faa794c64656cd/00_project_context/PROJECT_HISTORY.md)（FerroAI→V9、7 月 V10 负结果）、[V9 科研结果](../xrd_robustness/reports/RESULTS.md)、[JS 权重选择证据](PXRD_METHOD_DETAIL_EVIDENCE_CLOSURE.md)、[11 月 V10→V11 迁移说明](PXRD_SERVER_MIGRATION_V11_ONECLICK_20261103.md)。以下保留各节点的详细经历与负结果。**本表只整理历史，不修改研究合同、训练参数、Test 或 RRUFF 冻结规则。**
+
+---
+
+
+
 ## 2026-11-10 · V11 从固定候选转向梯度约束的全自动 HPO
 
 **思路转折（负责人明确纠正）：** 最初过于复杂的全维度 HPO 逐步收缩为两个科学问题——（1）同母结构 JS 正则强度 λ；（2）参考 Bin Cao/SimXRD 产生的 PXRD 峰信息保留假设，即 ResNet 下采样 Stride 与卷积 Kernel。Weight decay=1e-4、LR=2e-4+Cosine 继承 V9/V10 合理训练配方；Batch size=16 优先视为工程预算，不与科研参数混淆。随后早期 V11 .9 曾把这两个问题实现为四组固定架构加两个固定 λ=30/90，负责人进一步强调：**保留 Optuna 的真正全自动优化能力，但给优化限定有依据的方向与范围**，不能反过来把少量预定组合误称“自动调参”。
@@ -37,29 +61,6 @@ For current scientific claims, use [CURRENT_STATE.md](CURRENT_STATE.md) and the 
 **成果与下一阶段证据交接：** 完整可核验 JSON 已上传 [gradient_gate_v11_train_108478.json](../server_migration/gradient_gate_v11_train_108478.json)，SHA256 `7f6c759f5c6fea7fe855ab579ce2d0dd6771f7edbab815db9339c4e25eb1d020`，证据提交 `8d7c7a6b4834d5369f9190cdc418f1e449ac5686`。cuifa 上的下一阶段采用锁定证据范围的**全自动** Optuna TPE，搜索 JS λ、中间层 Stride≤4（{2,4}）及 Kernel≤9（{5,9}），不重新进行梯度审计。**实际 HPO / 多种子确认 / RRUFF-Cu1011 仍未运行**。这次经历说明，记录科研历程时应保留“最初判据过严→复用可信检查点→误扫子集被审计拦截→全量重跑与冻结搜索范围”这一完整纠偏链；它是方法论与工程证据质量的重要发展，而不是实验跑分成果。
 
 ---
-## 核对后的完整时间线（2026-11-09 阶段节点）
-
-**这张表是项目发展的主时间线**：记录不同科研阶段实际解决了什么问题，不把 Git 代码版本号当作严格顺序的独立论文，也不覆盖已有结果和失败记录。
-
-| 阶段 | 实际发生的事情 | 科研性质 |
-|---|---|---|
-| **FerroAI** | 从材料性质预测起步，逐渐建立对数据、模型和证据链的认识 | 前置研究经历 |
-| **PXRD 早期—V8** | 物理扰动模拟、PAMPT、Residual、结构化模拟等多次尝试与纠偏 | 研究问题与方法探索 |
-| **V9（2026 年 7–8 月）** | 转向 ResNet-18-GN，确定 JS λ=60，完成多种子 ERM–JS 对照及模拟 Test | **完整主研究成果** |
-| **早期 V10（7 月）** | 尝试测量信息监督的 Residual 解耦，得到负结果并归档 | 与 V9 后期交叠的探索支线 |
-| **2026 年 8–10 月** | RRUFF、CNRS、校准、数据效率补充实验；另探索参数反演，随后归档 | 已完成研究的补充与新方向尝试 |
-| **11 月的 V10** | 更新模拟环境，探索 CNN11、ResNet 的 Stride/Kernel，以及 LR/Scheduler | **下一阶段的初步架构与训练优化** |
-| **V11（当前）** | V11 物理模拟器、15.5 万结构数据库、完整训练和 RRUFF-Cu1011 竞争性测试规划 | 新阶段的基础设施基本就绪，正式性能实验待运行 |
-
-**主要阶段分界：** 回顾性地把 **V1–V9 视作已经完成的一轮 PXRD 科研**（研究问题→方法形成→V9 的冻结对照与 Test 验证）；**11 月的 V10 只是下一阶段的初步调参/架构筛选**；**V11 则负责更大数据集上的后续训练与真实域性能检验**。V9 不是被 V10/V11 “补做完”的项目。
-
-**历史精确性：** V1–V5 暂无逐版本完整可核验证据，因此“V1–V9”是科研阶段概括，不是九次独立验证；**7 月的 V10 Residual 分支**确实早于 V9 最终收束，与 V9 工作交叠，且和 **11 月的 V10 架构比较**不是同一试验。8–10 月对 V9 的真实域、可靠性和样本效率研究可视为第一轮成果的后续完善，不等于重新开启其超参数选择。11 月的 V10 单种子 A0_R1 优胜（Validation OOD Macro-F1 0.731830）来自 **LR=2e-4 与 Cosine 捆绑改变**；不能据此宣称 LR 单变量最优，更不能当成 V11 或 RRUFF 成绩。
-
-**可追溯依据：** [2026-08-23 历史全档](https://github.com/Frysland-2024/AI4science/blob/d70d84da6535a0a04e7cd5fba3faa794c64656cd/00_project_context/PROJECT_HISTORY.md)（FerroAI→V9、7 月 V10 负结果）、[V9 科研结果](../xrd_robustness/reports/RESULTS.md)、[JS 权重选择证据](PXRD_METHOD_DETAIL_EVIDENCE_CLOSURE.md)、[11 月 V10→V11 迁移说明](PXRD_SERVER_MIGRATION_V11_ONECLICK_20261103.md)。以下保留各节点的详细经历与负结果。**本表只整理历史，不修改研究合同、训练参数、Test 或 RRUFF 冻结规则。**
-
----
-
-
 > **新增沟通记录（整理于 2026-09-20）：** [与学长沟通纪要：XRD 项目当前进展与后续计划](PROJECT_HISTORY_NOTE_2026-09-20_SENIOR_MEETING_SUMMARY.md)。依据用户提供的会议摘要截图，记录当前方法与验证进展、定量反演及初步晶体结构预测方向、云算力与协作安排；会议日期未注明。
 
 > **2026-10-22 导师汇报复盘（2026-10-23 整理）：** [方法设计、真实域验证与物理/应用可信度的视角错位](PROJECT_HISTORY_NOTE_2026-10-22_SUPERVISOR_PRESENTATION_REFLECTION.md)。系统记录当晚交流与后续对话纠偏：温度/成分扰动的物理边界、cubic 示例被误认为只做单一晶系、RRUFF 的 K-shot 微调被误听为总训练样本数、CNRS 无目标域适配的 zero-shot 相对增益与低绝对性能的不同评价、原方法/原模型比较及 bias、数据可获得性、扩容和发表文献跑分对标，以及实验室铁电陶瓷 R/T 相真实谱检验建议。保留负责人因方法设计贡献未得到充分理解而受挫及「横向方法研究 vs 纵向材料任务」的认识变化。此为历史反思，不更改冻结实验，也不宣称导师建议已获批或完成。
