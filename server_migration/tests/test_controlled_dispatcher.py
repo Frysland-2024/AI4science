@@ -108,11 +108,14 @@ class TestControlledDispatcher(unittest.TestCase):
         j["stage0_receipt"] = "fixture"
         j["stage0_sha256"] = "b" * 64
         mod.write_json(mod.QUEUE / (j["id"] + ".json"), j)
-        with patch.object(mod, "stage0_receipt", return_value="b" * 64):
-            with patch.object(mod, "_execute", return_value=0) as exe:
-                self.assertEqual(mod.tick()["status"], "NEEDS_DECISION")
-                self.assertEqual(exe.call_count, 1)
-                self.assertEqual(mod.tick()["status"], "IDLE")
+        from types import SimpleNamespace
+        fake_status = SimpleNamespace(summarize=lambda _: {"stage": "HPO_NOT_CONFIRMED"})
+        with patch.dict("sys.modules", {"research_status": fake_status}):
+            with patch.object(mod, "stage0_receipt", return_value="b" * 64):
+                with patch.object(mod, "_execute", return_value=0) as exe:
+                    self.assertEqual(mod.tick()["status"], "NEEDS_DECISION")
+                    self.assertEqual(exe.call_count, 1)
+                    self.assertEqual(mod.tick()["status"], "IDLE")
 
     def test_lock_rejects_parallel_tick(self):
         lock, unlock = mod._exclusive_lock()
