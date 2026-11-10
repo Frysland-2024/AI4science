@@ -456,7 +456,7 @@ def train_state_ready(history):
     # After a substantive 20-epoch, 20480-parent Train-only warmup, a
     # near-perfect learned classifier with very low CE can be audited even if
     # training loss still improves; this does NOT imply generalization.
-    stable=max(0.0,(earlier-latest)/earlier)<=0.05
+    stable=(earlier>=latest and (earlier-latest)/earlier<=0.05)
     well_learned=(last.get("epoch",0)>=20
                   and last["accuracy"]>=0.95
                   and last["mean_ce"]<=0.20)
