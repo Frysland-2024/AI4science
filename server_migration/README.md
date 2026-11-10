@@ -369,3 +369,17 @@ starting her HPO study. The user reports that cuifa's CPU is faster than
 the local Ryzen 9 7945HX, but a faster CPU alone does not guarantee
 16-worker superiority with the same 32GiB RAM. Recreate the private source snapshot after changing
 the launcher or benchmark script; old kit hashes cannot be reused.
+
+
+### Approved unattended HPO dispatch (interface only; not a launch authorization)
+
+The existing server_migration/controlled_dispatcher.py now consumes the **same** private Stage 0 schema used by one_click_v11.py: ai4science-cuifa-stage0-v1. A separate, manually authored ai4science-v11-hpo-approval-v1 JSON is required; its receipt SHA, runner SHA, approver and approved GPU hours must match. The dispatcher locks the source commit and host, verifies five Stage 0 evidence files, and forwards both approval paths to the native PowerShell launcher. The V11 runner performs the stricter scientific identity, timestamp and measured-hours checks before any Optuna work. A bounded dispatcher timeout is an additional stop, not a promise of checkpoint completeness.
+
+The following is only a **future example after cuifa Stage 0**. Do not execute on the laptop or fabricate PASS evidence:
+
+~~~powershell
+python server_migration/controlled_dispatcher.py approve-v11-hpo --sha FULL_40_CHARACTER_COMMIT --stage0-receipt _local\cuifa_stage0.json --hpo-approval _local\cuifa_hpo_owner_approval.json --max-gpu-hours APPROVED_HOURS
+python server_migration/controlled_dispatcher.py status
+~~~
+
+Approval requires the owner to perform that explicit local action. The dispatcher is not registered on cuifa by the laptop's read-only scheduled task. No Stage 0, HPO, final, Test or RRUFF job is launched as part of this compatibility change.

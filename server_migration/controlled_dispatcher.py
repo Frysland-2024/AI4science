@@ -27,7 +27,6 @@ QUEUE = PRIVATE / "queue"
 RUNS = PRIVATE / "runs"
 SHA = re.compile(r"^[a-f0-9]{40}$")
 TERMINAL = {"COMPLETED", "BLOCKED", "NEEDS_DECISION"}
-STAGE0_CHECKS = ("cuda", "resources", "full_validation", "checkpoint_recovery", "cache_integrity")
 
 
 def utc():
@@ -68,34 +67,43 @@ def check_source(sha, *, clean=True):
 
 
 def stage0_receipt(path, sha, hours):
-    """Verify frozen, host-specific, privately approved *evidence*, not a prose claim."""
+    """Pre-check the SAME cuifa receipt format as one_click_v11.py; runner is final authority."""
     p = Path(path).resolve(strict=True)
-    if not p.is_relative_to((ROOT / "_local").resolve()):
-        raise ValueError("Stage0 receipt must be inside the private _local directory")
+    private = (ROOT / "_local").resolve()
+    if not p.is_relative_to(private) or not p.is_file():
+        raise ValueError("Stage0 receipt must be a private local file")
     receipt = read_json(p)
-    if receipt.get("schema") != "v11-cuifa-stage0-receipt-v1":
-        raise ValueError("Unrecognized cuifa Stage0 evidence schema")
-    if receipt.get("source_sha") != sha:
-        raise ValueError("Stage0 receipt is for a different source revision")
+    if (receipt.get("schema") != "ai4science-cuifa-stage0-v1"
+            or receipt.get("status") != "PASS"):
+        raise ValueError("Unrecognized or unpassed cuifa Stage0 evidence schema")
     if receipt.get("hostname", "").lower() != socket.gethostname().lower():
         raise ValueError("Stage0 receipt belongs to a different computer")
-    checks = receipt.get("checks")
-    if not isinstance(checks, dict) or any(checks.get(k) != "PASS" for k in STAGE0_CHECKS):
-        raise ValueError("Cuifa Stage0 has not passed all required validation/restart gates")
-    if receipt.get("gpu_name") != "NVIDIA GeForce RTX 4070 Ti SUPER":
+    if "4070 ti super" not in str(receipt.get("gpu_name", "")).lower():
         raise ValueError("Receipt is not for the intended cuifa GPU")
-    evidence = receipt.get("evidence")
-    if not isinstance(evidence, list) or len(evidence) < 2:
-        raise ValueError("Stage0 requires at least two independently recorded local evidence files")
-    for item in evidence:
-        if not isinstance(item, dict) or set(item) != {"relative_path", "sha256"}:
-            raise ValueError("Bad evidence entry")
-        f = (ROOT / item["relative_path"]).resolve(strict=True)
-        if not f.is_relative_to((ROOT / "_local").resolve()) or not f.is_file():
-            raise ValueError("Evidence path must be a private local file")
-        digest = hashlib.sha256(f.read_bytes()).hexdigest()
-        if digest != item["sha256"]:
-            raise ValueError(f"Stage0 evidence hash mismatch: {f.name}")
+    if (receipt.get("batch_size_parents") != 16
+            or receipt.get("validation_parent_count") != 23245
+            or receipt.get("validation_profile_count") != 6
+            or not isinstance(receipt.get("runner_sha256"), str)
+            or len(receipt["runner_sha256"]) != 64):
+        raise ValueError("Incomplete Stage0 scientific contract")
+    checks = receipt.get("checks")
+    required = {"peak_cache", "cuda_train", "full_validation", "resume_parity", "throughput"}
+    if not isinstance(checks, dict) or set(checks) != required:
+        raise ValueError("Cuifa Stage0 has not passed all required validation/restart gates")
+    seen = set()
+    for name, record in checks.items():
+        if not isinstance(record, dict) or record.get("status") != "PASS":
+            raise ValueError("Cuifa Stage0 has not passed all required validation/restart gates")
+        rel = record.get("path")
+        expected = record.get("sha256")
+        if (not isinstance(rel, str) or not isinstance(expected, str)
+                or len(expected) != 64):
+            raise ValueError("Stage0 evidence metadata missing")
+        evidence = (p.parent / rel).resolve(strict=True)
+        if (not evidence.is_relative_to(private) or not evidence.is_file()
+                or evidence in seen or hashlib.sha256(evidence.read_bytes()).hexdigest() != expected):
+            raise ValueError("Stage0 evidence path/hash/uniqueness mismatch")
+        seen.add(evidence)
     if not isinstance(hours, (int, float)) or isinstance(hours, bool) or not 0 < hours <= 24:
         raise ValueError("Explicit finite owner-approved GPU budget required (0-24 hours)")
     try:
@@ -105,10 +113,32 @@ def stage0_receipt(path, sha, hours):
         raise RuntimeError("Cannot verify target GPU") from err
     if name != receipt["gpu_name"]:
         raise RuntimeError("Actual GPU differs from frozen Stage0 machine receipt")
+    # The runner additionally verifies freshness, parent counts, gradient science
+    # identity, manifest SHA, simulator SHA and measured-duration budget.
     return hashlib.sha256(p.read_bytes()).hexdigest()
 
 
-def approve(kind, sha, *, hours=None, receipt=None):
+def owner_hpo_approval(path, receipt_path, hours):
+    """A separate owner-supplied JSON; never infer consent from Stage0 PASS."""
+    p = Path(path).resolve(strict=True)
+    if not p.is_relative_to((ROOT / "_local").resolve()) or not p.is_file():
+        raise ValueError("HPO owner approval must be a private local file")
+    obj = read_json(p)
+    stage = read_json(Path(receipt_path).resolve(strict=True))
+    if (obj.get("schema") != "ai4science-v11-hpo-approval-v1"
+            or obj.get("decision") != "APPROVE_CUIFA_V11_HPO"
+            or obj.get("stage0_receipt_sha256") != hashlib.sha256(Path(receipt_path).read_bytes()).hexdigest()
+            or obj.get("runner_sha256") != stage.get("runner_sha256")
+            or not isinstance(obj.get("approved_by"), str)
+            or not obj["approved_by"].strip()
+            or not isinstance(obj.get("approved_gpu_hours"), (int, float))
+            or isinstance(obj["approved_gpu_hours"], bool)
+            or obj["approved_gpu_hours"] < hours):
+        raise ValueError("Missing separately approved SHA-bound HPO budget")
+    return hashlib.sha256(p.read_bytes()).hexdigest()
+
+
+def approve(kind, sha, *, hours=None, receipt=None, hpo_approval=None):
     """A locally invoked explicit approval. Never inferred from Issues or repo text."""
     if kind not in ("codex_review", "v11_hpo"):
         raise ValueError("Task type is not allowlisted")
@@ -119,12 +149,14 @@ def approve(kind, sha, *, hours=None, receipt=None):
         "approved_at_utc": utc(), "approved_by": "explicit_local_owner_action",
     }
     if kind == "v11_hpo":
-        if receipt is None or hours is None:
-            raise ValueError("Owner must supply a passed private Stage0 receipt and GPU budget")
+        if receipt is None or hours is None or hpo_approval is None:
+            raise ValueError("Owner must supply Stage0 receipt, separate HPO approval and GPU budget")
         obj["stage0_receipt"] = str(Path(receipt).resolve(strict=True))
         obj["stage0_sha256"] = stage0_receipt(receipt, sha, hours)
+        obj["hpo_approval"] = str(Path(hpo_approval).resolve(strict=True))
+        obj["hpo_approval_sha256"] = owner_hpo_approval(hpo_approval, receipt, hours)
         obj["max_gpu_hours"] = hours
-    elif receipt is not None or hours is not None:
+    elif receipt is not None or hours is not None or hpo_approval is not None:
         raise ValueError("Codex review accepts no GPU options")
     write_json(QUEUE / (obj["id"] + ".json"), obj)
     return obj
@@ -151,7 +183,7 @@ def _run_command(argv, log_path, *, timeout=None):
             else:
                 process.kill()
             process.wait(timeout=30)
-            raise RuntimeError("Codex review exceeded the bounded 30-minute limit")
+            raise RuntimeError("Approved task exceeded its hard time budget")
 
 
 def _validate_job(job):
@@ -168,6 +200,9 @@ def _validate_job(job):
         receipt_hash = stage0_receipt(job["stage0_receipt"], job["source_sha"], job["max_gpu_hours"])
         if receipt_hash != job["stage0_sha256"]:
             raise ValueError("Stage0 receipt has been changed after approval")
+        approval_hash = owner_hpo_approval(job["hpo_approval"], job["stage0_receipt"], job["max_gpu_hours"])
+        if approval_hash != job.get("hpo_approval_sha256"):
+            raise ValueError("Separate owner HPO approval changed since task creation")
     return True
 
 
@@ -186,8 +221,14 @@ def _execute(job):
         # Existing launcher/runner enforces frozen science and stop/checkpoint policy.
         cmd = ["powershell.exe", "-NoProfile", "-ExecutionPolicy", "Bypass",
                "-File", str(ROOT / "server_migration" / "start_windows.ps1"),
-               "-Mode", "hpo", "--max-gpu-hours", str(job["max_gpu_hours"])]
-        return _run_command(cmd, RUNS / job["id"] / "v11_hpo.log")
+               "-Mode", "hpo",
+               "-Stage0Receipt", job["stage0_receipt"],
+               "-HpoApproval", job["hpo_approval"],
+               "--max-gpu-hours", str(job["max_gpu_hours"])]
+        # Never exceed the separate owner GPU-hour cap. Runner also has
+        # a checkpoint-aware soft stop; interrupted jobs do not auto-retry.
+        return _run_command(cmd, RUNS / job["id"] / "v11_hpo.log",
+                            timeout=float(job["max_gpu_hours"]) * 3600)
     raise ValueError("Unsupported task")
 
 
@@ -308,6 +349,7 @@ def main():
     parser.add_argument("--repo-root", type=Path, help="Explicit local repository, for staged private dispatcher copy")
     parser.add_argument("--sha", help="40-character pinned local HEAD")
     parser.add_argument("--stage0-receipt", type=Path)
+    parser.add_argument("--hpo-approval", type=Path)
     parser.add_argument("--max-gpu-hours", type=float)
     args = parser.parse_args()
     if args.repo_root is not None:
@@ -318,7 +360,8 @@ def main():
         result = tick()
     else:
         kind = "codex_review" if args.command == "approve-codex-review" else "v11_hpo"
-        result = approve(kind, args.sha, hours=args.max_gpu_hours, receipt=args.stage0_receipt)
+        result = approve(kind, args.sha, hours=args.max_gpu_hours,
+                         receipt=args.stage0_receipt, hpo_approval=args.hpo_approval)
     print(json.dumps(result, indent=2, ensure_ascii=False))
 
 
