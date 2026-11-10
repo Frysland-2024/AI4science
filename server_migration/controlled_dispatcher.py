@@ -290,13 +290,28 @@ def status():
             "note": "Local-only queue; no remote host inference. RUNNING can be stale after crash: no automatic retry."}
 
 
+def configure_root(path):
+    """Use a fixed local repository root when the executable is staged in _local."""
+    global ROOT, PRIVATE, QUEUE, RUNS
+    root = Path(path).resolve(strict=True)
+    if not (root / ".git").exists():
+        raise ValueError("Configured root is not a Git working copy")
+    ROOT = root
+    PRIVATE = ROOT / "_local" / "controlled_dispatcher"
+    QUEUE = PRIVATE / "queue"
+    RUNS = PRIVATE / "runs"
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("command", choices=("status", "tick", "approve-codex-review", "approve-v11-hpo"))
+    parser.add_argument("--repo-root", type=Path, help="Explicit local repository, for staged private dispatcher copy")
     parser.add_argument("--sha", help="40-character pinned local HEAD")
     parser.add_argument("--stage0-receipt", type=Path)
     parser.add_argument("--max-gpu-hours", type=float)
     args = parser.parse_args()
+    if args.repo_root is not None:
+        configure_root(args.repo_root)
     if args.command == "status":
         result = status()
     elif args.command == "tick":
