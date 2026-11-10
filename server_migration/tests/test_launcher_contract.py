@@ -45,6 +45,10 @@ class WindowsCpuProfileTests(unittest.TestCase):
         self.assertIn('$Mode -eq "hpo" -and $resolvedProfile -eq "aggressive16"', text)
         self.assertIn('one_click_v11.py", "--mode", "plan"', text)
         self.assertIn('one_click_v11.py", "--mode", "run"', text)
+        self.assertIn('Stage0Receipt',text)
+        self.assertIn('HpoApproval',text)
+        self.assertIn('--stage0-receipt',text)
+        self.assertIn('--hpo-approval',text)
 
 
 if __name__ == "__main__":

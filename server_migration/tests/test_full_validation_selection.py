@@ -19,7 +19,7 @@ spec.loader.exec_module(mod)
 def fixture_science_contract(**extra):
     base={
         "schema":"v11_154975_gradient_informed_three_parameter_v3",
-        "payload_contract_version":"v11-laptop-gradient-portable-20261110.11",
+        "payload_contract_version":"v11-laptop-gradient-portable-20261110.12",
         "implementation_sha256":{"runner":"fixture"},
         "source_manifest_sha256":"fixture",
         "simulator_config_sha256":"fixture",
@@ -33,6 +33,96 @@ def fixture_science_contract(**extra):
 
 
 class ValidationSelection(unittest.TestCase):
+    def test_hpo_session_budget_pauses_at_optimizer_step_and_keeps_trial_incomplete(self):
+        with mock.patch.object(mod.time,"monotonic",return_value=101.0):
+            snapshots=[]
+            with self.assertRaises(mod.V11BudgetPause):
+                mod.pause_v11_at_safe_boundary(100.0,75,70,
+                                              lambda:snapshots.append(75))
+            self.assertEqual(snapshots,[75])
+            with self.assertRaises(mod.V11BudgetPause):
+                mod.pause_v11_at_safe_boundary(100.0,75,75,
+                                              lambda:snapshots.append(0))
+            self.assertEqual(snapshots,[75])
+            mod.pause_v11_at_safe_boundary(120.0,75,70,
+                                          lambda:snapshots.append(0))
+            self.assertEqual(snapshots,[75])
+
+    def test_stage0_budget_estimate_counts_eight_train_trials_and_confirmation(self):
+        expected_train=108478*(8*50+2*100)
+        expected_val=23245*6*(8*5+2*10)
+        hours=mod.estimate_cuifa_hpo_gpu_hours(1000,2000,trials=8)
+        self.assertAlmostEqual(hours,1.3*(expected_train/1000+expected_val/2000)/3600)
+        self.assertGreater(mod.estimate_cuifa_hpo_gpu_hours(
+            1000,2000,trials=8,hpo_steps=678000),hours)
+        for bad in (0,float("nan"),-20):
+            with self.assertRaises(ValueError):
+                mod.estimate_cuifa_hpo_gpu_hours(bad,2000)
+
+    def test_stage0_evidence_and_separate_approval_fail_closed(self):
+        from datetime import datetime,timezone
+        with tempfile.TemporaryDirectory() as t:
+            base=Path(t)
+            science=fixture_science_contract(
+                implementation_sha256={"server_migration/one_click_v11.py":"a"*64},
+                max_new_trials=8,
+                hpo_steps=339000,confirmation_steps=678000,
+                eval_interval_steps=67800)
+            checks={}
+            for name in ("peak_cache","cuda_train","full_validation",
+                         "resume_parity","throughput"):
+                log=base/(name+".json")
+                log.write_text(json.dumps({"status":"PASS","check":name}),encoding="utf-8")
+                checks[name]={"status":"PASS","path":log.name,
+                              "sha256":hashlib.sha256(log.read_bytes()).hexdigest()}
+            stage={"schema":"ai4science-cuifa-stage0-v1","status":"PASS",
+                   "hostname":"CUIFA-RTX","gpu_name":"RTX 4070 Ti SUPER",
+                   "batch_size_parents":16,"validation_parent_count":23245,
+                   "validation_profile_count":6,
+                   "runner_sha256":"a"*64,
+                   "science_identity_sha256":mod.gradient_science_identity(science),
+                   "source_manifest_sha256":"fixture",
+                   "simulator_config_sha256":"fixture",
+                   "completed_at_utc":datetime.now(timezone.utc).isoformat(),
+                   "train_parents_per_second":1000,
+                   "validation_profile_parents_per_second":2000,
+                   "checks":checks}
+            receipt=base/"receipt.json"
+            approval_file=base/"approval.json"
+            receipt.write_text(json.dumps(stage),encoding="utf-8")
+            approval={"schema":"ai4science-v11-hpo-approval-v1",
+                      "decision":"APPROVE_CUIFA_V11_HPO",
+                      "stage0_receipt_sha256":hashlib.sha256(receipt.read_bytes()).hexdigest(),
+                      "runner_sha256":"a"*64,
+                      "approved_by":"owner","approved_gpu_hours":100}
+            approval_file.write_text(json.dumps(approval),encoding="utf-8")
+            with self.assertRaisesRegex(RuntimeError,"required"):
+                mod.verify_cuifa_stage0_approval(None,None,science,
+                                                  expected_host="CUIFA-RTX",
+                                                  expected_gpu="RTX 4070 Ti SUPER")
+            passed=mod.verify_cuifa_stage0_approval(
+                receipt,approval_file,science,
+                expected_host="CUIFA-RTX",expected_gpu="RTX 4070 Ti SUPER")
+            self.assertEqual(passed["status"],"PASS")
+            self.assertLess(passed["estimated_hpo_plus_confirmation_gpu_hours"],100)
+            with self.assertRaisesRegex(RuntimeError,"host"):
+                mod.verify_cuifa_stage0_approval(
+                    receipt,approval_file,science,expected_host="WRONG-PC",
+                    expected_gpu="RTX 4070 Ti SUPER")
+            approval["approved_gpu_hours"]=1
+            approval_file.write_text(json.dumps(approval),encoding="utf-8")
+            with self.assertRaisesRegex(RuntimeError,"estimated"):
+                mod.verify_cuifa_stage0_approval(
+                    receipt,approval_file,science,expected_host="CUIFA-RTX",
+                    expected_gpu="RTX 4070 Ti SUPER")
+            approval["approved_gpu_hours"]=100
+            approval_file.write_text(json.dumps(approval),encoding="utf-8")
+            (base/"throughput.json").write_text("TAMPERED",encoding="utf-8")
+            with self.assertRaisesRegex(RuntimeError,"hash mismatch"):
+                mod.verify_cuifa_stage0_approval(
+                    receipt,approval_file,science,expected_host="CUIFA-RTX",
+                    expected_gpu="RTX 4070 Ti SUPER")
+
     def test_budget_only_payload_cache_transition_is_fail_closed(self):
         previous={
             "payload_contract_version":"v11-parent-epoch-microbatch-20261109.7",

@@ -1,5 +1,68 @@
 # AI4science 2026-11-03 — Linux GPU migration + bounded one-command V11 Optuna
 
+## Active cuifa launch safety — 2026-11-10 (NOT_RUN, fail closed)
+
+**Latest source-only transfer:** After committing the exact code, run
+`python server_migration/create_migration_bundles.py --source-only` in the existing
+`E:\\AI4science` worktree. The code-only archive
+`_local/server_migration_20261103/source_snapshot_current.zip` and its
+`source_snapshot_current_receipt.json` are rebuilt and SHA-verified from
+the **current Git commit**. Both immutable Train gradient JSON reports are
+required members. This operation **does not** package or change any 154,975
+PeakTables or structure shards. Existing older `source_snapshot.zip` files
+are **stale, do not transfer them as current code**. To use the source-only ZIP,
+the target host still needs the separately authorized/prepared full data cache.
+Verify a copy with
+`python server_migration/verify_source_snapshot.py --archive <path-to-current-zip>`.
+
+**Stage 0 approval is mandatory before any HPO** even if invoking Python
+directly rather than the PowerShell launcher. Stage 0 is completed on **cuifa's
+machine**, not this laptop. A PASS JSON receipt must be generated there using
+actual evidence for five distinct checks: `peak_cache`, `cuda_train`,
+`full_validation`, `resume_parity`, `throughput`. Each has
+`{"status":"PASS","path":"<existing log>","sha256":"<log SHA256>"}`.
+The receipt must contain:
+`schema="ai4science-cuifa-stage0-v1"`, `status="PASS"`, cuifa
+`hostname`, actual `gpu_name` matching PyTorch CUDA device 0,
+`completed_at_utc` with timezone and age <=30 days,
+`batch_size_parents=16`, `validation_parent_count=23245`,
+`validation_profile_count=6`, `runner_sha256` matching
+the current code in the experiment contract, `source_manifest_sha256`
+and `simulator_config_sha256` from the contract, plus
+`science_identity_sha256` from the complete gradient science identity,
+and **measured**
+`train_parents_per_second` and `validation_profile_parents_per_second`
+(the latter counts one parent evaluated under one profile). The receipt
+is rejected on wrong host/GPU, missing logs, changed hashes or stale timestamp.
+Do not manufacture a PASS: `-Mode smoke` alone is **not** full Stage 0.
+
+A **separate, explicit owner approval JSON** must contain
+`schema="ai4science-v11-hpo-approval-v1"`,
+`decision="APPROVE_CUIFA_V11_HPO"`, `approved_by`,
+`runner_sha256`, `stage0_receipt_sha256` (SHA256 of the entire finished
+Stage0 receipt), and `approved_gpu_hours`. The gate estimates total HPO
+plus two confirmation-seed GPU hours from actual measured throughputs:
+8 x 50 full Train-parent epochs + 2 x 100 confirmation epochs, six-profile
+Validation every 10 epochs, **plus 30% planning buffer**.
+It rejects insufficient approved hours. Estimates are not guarantees;
+owner must review real metrics and any overhead beyond the model.
+
+Only after Stage0 and explicit human review:
+```powershell
+powershell -ExecutionPolicy Bypass -File server_migration/start_windows.ps1 -Mode hpo -Stage0Receipt "C:\\path\\stage0_receipt.json" -HpoApproval "C:\\path\\hpo_approval.json"
+```
+Both files must be present on **cuifa**, not generated automatically by plan
+mode; direct `one_click_v11.py --mode run` requires the same two flags.
+The default `--max-gpu-hours 12` is a **per-invocation session limit**,
+not the total-HPO approval and not a preemptive guarantee to the millisecond.
+The training loop checks the deadline between each *completed optimizer step*,
+atomically saves `last.pt` and retains the Optuna trial as RUNNING for exact
+resume on renewed authorization. A full Validation computation in progress
+cannot be interrupted at optimizer-step boundaries and may overrun the
+deadline. On resume, use the frozen same science options and new authorized
+session; never report a paused trial as COMPLETE. Final training remains a
+separate authorization step.
+
 > **ACTIVE 2026-11-10 — R-FIRST V11 HPO; LAPTOP GRADIENT WORK CLOSED; AWAIT CUIFA STAGE 0/HPO.** The authoritative Train gradient scale is the FIRST [108,478-parent whole-Train audit](gradient_gate_v11_train_108478.json), with A0 r=0.0681726422271 (6,780 batches, fingerprint pinned). Rather than copying V9's numeric lambda=60, transfer the historical Validation-winning **R=1.754115** as a reference: lambda=R/r≈25.73 on V11 A0. Main HPO SEARCH FOCUS is **R=lambda*r_A0** (nominal target 0.05..2, actual after lambda minimum R≈0.20452..2), corresponding to **lambda 3..29.33728156**. R=2 is a design limit, NOT a universal safety threshold. The [second 704-parent Train-only combined-gradient report](gradient_gate_v11_v9style_train_108478.json) is immutable **supplementary safety evidence**, not the primary lambda-range selector. The cuifa runner reconstructs its portable gradient_gate.json from BOTH SHA-pinned JSONs (no laptop GPU run or repeated 108,478-parent sweep). Four A0–A3 architecture comparisons use a COMMON reference lambda≈25.73, then multivariate TPE jointly searches lambda log-float / middle stride {2,4} / kernel {5,9} on frozen 23,245-parent six-profile Validation; default **8 trials**, not 12. Using the same A0 reference R does NOT imply equal actual R across different architectures. Tests, data, physics, batch16/micro16 and fixed optimizer remain unchanged; cuifa Stage0, formal HPO, independent-seed confirmation, final training, synthetic Test and RRUFF remain NOT_RUN. Stage0 budget approval is still required. Prior discussions of copying V9 lambda [0.3,60] or hard-cutting at R=2 are historical; neither is the current HPO protocol.
 
 > **2026-11-10 measured laptop Batch default (ACTIVE):** Effective `--batch-size 16` plus `--microbatch-size 16` (no accumulation) is already the unchanged `one_click_v11.py` default. Under RTX 4060 Laptop/8GiB and 12-worker/4-queue/64-cache prefetch, this ran 256 Train-only optimizer steps (4,096 independent-parent exposures) at ~162.10 parents/s with PyTorch allocated peak 0.419GiB. All four A0–A3 architectures passed short 16:16 CUDA steps. Short hardware-ceiling tests passed physical batch 384, but 448+ terminated before acceptance and 384 was NOT verified for sustained training. **Do not automatically raise effective batch**, because both the historical whole-Train gradient audit and the new V9-style safety gate are bound to effective batch16; raising it is a new science/optimizer choice, not a pure VRAM tweak. Cuifa 4070 Ti SUPER Stage0 and HPO remain NOT_RUN. Source: [CURRENT_STATE.md](../docs/CURRENT_STATE.md), [Issue #55](https://github.com/Frysland-2024/AI4science/issues/55). The historical `.10` descriptions below predate the completed `.11` gradient run; use current-state evidence for execution.

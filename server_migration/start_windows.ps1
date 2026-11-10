@@ -8,6 +8,8 @@ param(
     [string]$Mode = "plan",
     [string]$Python = "python",
     [string]$Output = "",
+    [string]$Stage0Receipt = "",
+    [string]$HpoApproval = "",
     [ValidateSet("auto", "conservative", "ryzen7945hx", "performance12", "aggressive16")]
     [string]$CpuProfile = "auto",
     [Parameter(ValueFromRemainingArguments = $true)]
@@ -17,6 +19,9 @@ $ErrorActionPreference = "Stop"
 $root = (Resolve-Path (Join-Path $PSScriptRoot "..")).Path
 Push-Location $root
 try {
+    if ($Mode -eq "hpo" -and (-not $Stage0Receipt -or -not $HpoApproval)) {
+        throw "HPO blocked before preflight: cuifa Stage0 evidence (-Stage0Receipt) and explicit approved budget (-HpoApproval) are both required."
+    }
     function Invoke-Python([string[]]$Arguments) {
         & $Python @Arguments
         if ($LASTEXITCODE -ne 0) {
@@ -85,6 +90,10 @@ try {
     # the scientific effective batch simply because GPU RAM permits it.
     # GPU microbatch 16 here is a launcher default, not a Cuifa speed claim.
     if ($Mode -eq "hpo") {
+        if (-not $Stage0Receipt -or -not $HpoApproval) {
+            throw "HPO blocked: specify -Stage0Receipt and -HpoApproval with cuifa-local verified evidence; -Mode smoke is NOT Stage0 certification."
+        }
+        $RunnerArgs = @($RunnerArgs) + @("--stage0-receipt", $Stage0Receipt, "--hpo-approval", $HpoApproval)
         if (@($RunnerArgs) -notcontains "--batch-size") {
             $RunnerArgs = @($RunnerArgs) + @("--batch-size", "16")
         }

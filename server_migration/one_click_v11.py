@@ -12,6 +12,8 @@ import hashlib
 import json
 import math
 import os
+import socket
+from datetime import datetime,timezone
 from pathlib import Path
 import random
 import sys
@@ -1128,13 +1130,13 @@ def legacy_validation_panel_identity_compatible(saved, current):
         ("v11-focused-science-cpu-20261109.9",
          "v11-gradient-gated-optuna-20261110.10"),
         ("v11-parent-epoch-microbatch-20261109.7",
-         "v11-laptop-gradient-portable-20261110.11"),
+         "v11-laptop-gradient-portable-20261110.12"),
         ("v11-parent-epoch-budget-20261109.8",
-         "v11-laptop-gradient-portable-20261110.11"),
+         "v11-laptop-gradient-portable-20261110.12"),
         ("v11-focused-science-cpu-20261109.9",
-         "v11-laptop-gradient-portable-20261110.11"),
+         "v11-laptop-gradient-portable-20261110.12"),
         ("v11-gradient-gated-optuna-20261110.10",
-         "v11-laptop-gradient-portable-20261110.11"),
+         "v11-laptop-gradient-portable-20261110.12"),
     }
     if (old,new) not in allowed:
         return False
@@ -1357,7 +1359,8 @@ def restore_trial_checkpoint(path,*,model,optimizer,rng,expected_contract,device
     return saved["step"],saved["best"],saved["best_step"],saved["history"]
 
 def trial_run(name,params,seed,max_steps,study_dir,train_records,val_records,peaks,sim,libs,argv,
-              validation_panels=None,validation_panel_index_sha256=None):
+              validation_panels=None,validation_panel_index_sha256=None,
+              session_deadline=None):
     np,torch,F,_,_,render_pair_batch,build_online_view_factory,ML4PXRDResNet1D,ML4PXRDResNet1DConfig,PhysicsParameterSampler,metrics=libs
     root=study_dir/"trials"/name
     cfg={"params":params,"seed":seed,"max_steps":max_steps,"batch_size":argv.batch_size,
@@ -1439,8 +1442,19 @@ def trial_run(name,params,seed,max_steps,study_dir,train_records,val_records,pea
     future_rng={}
     permutation_cache={}
     next_submit=step
+    last_saved_step=step
+    last_committed_rng_state=None
     try:
         while step<max_steps:
+            def _save_budget_resume():
+                save_trial_checkpoint(
+                    resume,model=model,optimizer=optimizer,step=step,
+                    best=best,best_step=best_step,
+                    numpy_rng_state=last_committed_rng_state,
+                    history=history,contract=cfg,device=device,torch=torch)
+                event("TRIAL_BUDGET_PAUSE_CHECKPOINTED",name=name,step=step)
+            pause_v11_at_safe_boundary(
+                session_deadline,step,last_saved_step,_save_budget_resume)
             # CPU prepares upcoming spectra while GPU trains on the first
             # submitted step. Only the MAIN process advances the sampling RNG.
             next_submit=enqueue_train_lookahead(
@@ -1455,6 +1469,7 @@ def trial_run(name,params,seed,max_steps,study_dir,train_records,val_records,pea
             # whose optimizer steps have not committed; resumed studies would
             # otherwise skip parents and change scientific sampling trajectories.
             committed_rng_state=future_rng.pop(step)
+            last_committed_rng_state=committed_rng_state
             x1=torch.from_numpy(batch_first)
             x2=torch.from_numpy(batch_second)
             targets=torch.from_numpy(batch_labels)
@@ -1519,6 +1534,7 @@ def trial_run(name,params,seed,max_steps,study_dir,train_records,val_records,pea
                     best_step=best_step,numpy_rng_state=committed_rng_state,
                     history=history,contract=cfg,device=device,torch=torch,
                 )
+                last_saved_step=step
                 write_json(root/"history.json",history)
                 event(
                     "trial_validation",name=name,step=step,
@@ -1687,6 +1703,144 @@ def validate_final_recommendation(study_dir,args,contract_file,contract_obj,*,pr
     return recommendation,params,panel_sha
 
 
+
+class V11BudgetPause(Exception):
+    """An authorized session stopped with exact optimizer/RNG state saved."""
+
+
+def pause_v11_at_safe_boundary(deadline, step, last_checkpoint_step, persist_checkpoint):
+    """Stop between complete optimizer updates; never mark trial COMPLETE."""
+    if deadline is None or time.monotonic() < deadline:
+        return
+    if step != last_checkpoint_step:
+        if step < 1:
+            raise RuntimeError("Cannot pause after uncheckpointed optimizer work")
+        persist_checkpoint()
+    raise V11BudgetPause(f"Budget reached at optimizer step {step}; resume from last.pt")
+
+
+def estimate_cuifa_hpo_gpu_hours(train_parents_per_second, val_profile_parents_per_second,
+                                 trials=8, safety_factor=1.30,
+                                 *, hpo_steps=339000, confirmation_steps=678000,
+                                 eval_interval_steps=67800):
+    """Minimum 50 train epochs/trial + 100 epochs/confirmation seed.
+
+    Validation: every 10 epochs, 6 profiles x 23245 parents; this is a
+    conservative Stage0 planning estimate, not a completion-time guarantee.
+    """
+    train_rate=float(train_parents_per_second)
+    val_rate=float(val_profile_parents_per_second)
+    if not (math.isfinite(train_rate) and math.isfinite(val_rate)
+            and train_rate>0 and val_rate>0 and 6<=trials<=12
+            and safety_factor>=1.0):
+        raise ValueError("cuifa Stage0 must supply finite measured throughput")
+    per_epoch=(108478+15)//16
+    if not all(isinstance(v,int) and not isinstance(v,bool) and v>0
+               for v in (hpo_steps,confirmation_steps,eval_interval_steps)):
+        raise ValueError("Invalid planned full-dataset training/Validation steps")
+    train_exposures=108478*(
+        trials*math.ceil(hpo_steps/per_epoch)+2*math.ceil(confirmation_steps/per_epoch))
+    validation_exposures=23245*6*(
+        trials*math.ceil(hpo_steps/eval_interval_steps)
+        +2*math.ceil(confirmation_steps/eval_interval_steps))
+    return safety_factor*(train_exposures/train_rate
+                          +validation_exposures/val_rate)/3600.0
+
+
+def verify_cuifa_stage0_approval(receipt_file, approval_file, science_contract,
+                                  *, expected_host=None, expected_gpu=None):
+    """Fail closed BEFORE study initialization/Optuna/Validation/HPO GPU work.
+
+    Stage0/approval are cuifa-originated external evidence, not a self-issued
+    success report. Both are required even if invoking Python directly.
+    """
+    if not receipt_file or not approval_file:
+        raise RuntimeError("HPO BLOCKED: --stage0-receipt AND --hpo-approval required")
+    stage_path=Path(receipt_file).expanduser().resolve()
+    approval_path=Path(approval_file).expanduser().resolve()
+    if not stage_path.is_file() or not approval_path.is_file():
+        raise RuntimeError("HPO BLOCKED: missing Stage0 evidence or approval file")
+    stage=json.loads(stage_path.read_text(encoding="utf-8"))
+    approval=json.loads(approval_path.read_text(encoding="utf-8"))
+    if not isinstance(stage,dict) or not isinstance(approval,dict):
+        raise RuntimeError("HPO BLOCKED: Stage0/approval must be JSON objects")
+    host=(expected_host or socket.gethostname()).casefold()
+    if expected_gpu is None:
+        import torch
+        if not torch.cuda.is_available():
+            raise RuntimeError("HPO BLOCKED: cuifa Stage0 requires real CUDA")
+        expected_gpu=torch.cuda.get_device_name(0)
+    if "4070 ti super" not in expected_gpu.lower():
+        raise RuntimeError("HPO BLOCKED: target hardware is cuifa RTX 4070 Ti SUPER; wrong GPU")
+    if (stage.get("schema")!="ai4science-cuifa-stage0-v1"
+        or stage.get("status")!="PASS"
+        or str(stage.get("hostname","")).casefold()!=host
+        or stage.get("gpu_name")!=expected_gpu
+        or stage.get("batch_size_parents")!=16
+        or stage.get("validation_parent_count")!=23245
+        or stage.get("validation_profile_count")!=6
+        or stage.get("runner_sha256")!=science_contract["implementation_sha256"]["server_migration/one_click_v11.py"]
+        or stage.get("science_identity_sha256")!=gradient_science_identity(science_contract)
+        or stage.get("source_manifest_sha256")!=science_contract["source_manifest_sha256"]
+        or stage.get("simulator_config_sha256")!=science_contract["simulator_config_sha256"]):
+        raise RuntimeError("HPO BLOCKED: Stage0 host, dataset, CUDA or science provenance mismatch")
+    try:
+        moment=datetime.fromisoformat(stage["completed_at_utc"].replace("Z","+00:00"))
+        if moment.utcoffset() is None:
+            raise ValueError("Stage0 UTC timezone missing")
+        age=(datetime.now(timezone.utc)-moment.astimezone(timezone.utc)).total_seconds()
+        if age<0 or age>30*86400:
+            raise ValueError("Stage0 evidence is future-dated or older than 30 days")
+    except (ValueError,TypeError,KeyError) as exc:
+        raise RuntimeError("HPO BLOCKED: Stage0 timestamp is missing, stale or invalid") from exc
+    names=("peak_cache","cuda_train","full_validation","resume_parity","throughput")
+    checks=stage.get("checks")
+    if not isinstance(checks,dict) or set(checks)!=set(names):
+        raise RuntimeError("HPO BLOCKED: Stage0 acceptance checks are incomplete")
+    distinct=set()
+    for name in names:
+        record=checks[name]
+        if not isinstance(record,dict) or record.get("status")!="PASS":
+            raise RuntimeError(f"HPO BLOCKED: Stage0 {name} not PASS")
+        source=record.get("path")
+        expected=record.get("sha256")
+        if not isinstance(source,str) or not source or not isinstance(expected,str) or len(expected)!=64:
+            raise RuntimeError(f"HPO BLOCKED: Stage0 {name} log provenance missing")
+        evidence=(stage_path.parent/source).resolve()
+        if evidence in distinct or not evidence.is_file() or evidence.stat().st_size==0:
+            raise RuntimeError(f"HPO BLOCKED: Stage0 {name} evidence missing/duplicate")
+        if digest(evidence)!=expected:
+            raise RuntimeError(f"HPO BLOCKED: Stage0 {name} evidence hash mismatch")
+        distinct.add(evidence)
+    try:
+        estimate=estimate_cuifa_hpo_gpu_hours(
+            stage.get("train_parents_per_second"),
+            stage.get("validation_profile_parents_per_second"),
+            science_contract["max_new_trials"],
+            hpo_steps=science_contract["hpo_steps"],
+            confirmation_steps=science_contract["confirmation_steps"],
+            eval_interval_steps=science_contract["eval_interval_steps"])
+    except (ValueError,TypeError,KeyError) as exc:
+        raise RuntimeError("HPO BLOCKED: Stage0 measured rates or planned steps missing/invalid") from exc
+    if (approval.get("schema")!="ai4science-v11-hpo-approval-v1"
+        or approval.get("decision")!="APPROVE_CUIFA_V11_HPO"
+        or approval.get("stage0_receipt_sha256")!=digest(stage_path)
+        or approval.get("runner_sha256")!=stage["runner_sha256"]
+        or not isinstance(approval.get("approved_by"),str)
+        or not approval["approved_by"].strip()):
+        raise RuntimeError("HPO BLOCKED: missing owner-signed, SHA-bound HPO approval")
+    try:
+        approved=float(approval["approved_gpu_hours"])
+    except (KeyError,TypeError,ValueError) as exc:
+        raise RuntimeError("HPO BLOCKED: approved GPU-hour budget missing") from exc
+    if not math.isfinite(approved) or approved<estimate:
+        raise RuntimeError(f"HPO BLOCKED: estimated >= {estimate:.1f} GPUh with buffer; approved {approved:.1f} GPUh")
+    return {"status":"PASS","source":"cuifa_stage0_verified_and_owner_approved",
+            "stage0_sha256":digest(stage_path),"approval_sha256":digest(approval_path),
+            "estimated_hpo_plus_confirmation_gpu_hours":round(estimate,3),
+            "approved_gpu_hours":approved,"hostname":host,"gpu_name":expected_gpu}
+
+
 def run_pipeline(args):
     if (args.trials<6 or args.trials>12 or args.hpo_steps<1
         or args.confirm_steps<args.hpo_steps or args.final_steps<args.confirm_steps):
@@ -1706,6 +1860,11 @@ def run_pipeline(args):
             and 1<=args.native_threads<=4 and 16<=args.worker_peak_cache<=8192):
         raise ValueError("Unbounded or invalid V11 prefetch resources")
     c=contract(args)
+    if not math.isfinite(args.max_gpu_hours) or args.max_gpu_hours<=0:
+        raise ValueError("GPU session hours must be finite and positive")
+    if args.mode=="run":
+        receipt=verify_cuifa_stage0_approval(args.stage0_receipt,args.hpo_approval,c)
+        event("CUIFA_STAGE0_AND_HPO_BUDGET_APPROVED",**receipt)
     study_dir=ROOT/"server_runs"/"v11_a0_js_optuna"
     contract_file=study_dir/"contract.json"
     runtime_overrides={}
@@ -1930,8 +2089,13 @@ def run_pipeline(args):
         try:
             row=trial_run(name,params,20260711,args.hpo_steps,study_dir,train_unique,val_full,peaks,sim,libs,args,
                             validation_panels=validation_panels,
-                            validation_panel_index_sha256=panel_index_sha)
+                            validation_panel_index_sha256=panel_index_sha,
+                            session_deadline=start+args.max_gpu_hours*3600)
             study.tell(number,row["best_validation_ood_macro_f1"])
+        except V11BudgetPause as pause:
+            event("HPO_SESSION_BUDGET_PAUSE",trial=name,detail=str(pause),
+                  note="Trial remains RUNNING in Optuna; checkpoint exists; rerun ONLY with renewed authorization")
+            return
         except Exception as err:
             event("TRIAL_FAILED_STOP",trial=name,error=repr(err),
                   note="Safe stop, resolve blocker before --mode run resume")
@@ -1954,9 +2118,14 @@ def run_pipeline(args):
             return
         params=dict(best_trial.params)
         name=f"confirm_{seed}"
-        row=trial_run(name,params,seed,args.confirm_steps,study_dir,train_unique,val_full,peaks,sim,libs,args,
+        try:
+            row=trial_run(name,params,seed,args.confirm_steps,study_dir,train_unique,val_full,peaks,sim,libs,args,
                             validation_panels=validation_panels,
-                            validation_panel_index_sha256=panel_index_sha)
+                            validation_panel_index_sha256=panel_index_sha,
+                            session_deadline=start+args.max_gpu_hours*3600)
+        except V11BudgetPause as pause:
+            event("CONFIRM_SESSION_BUDGET_PAUSE",seed=seed,detail=str(pause))
+            return
         confirmation.append({"seed":seed,"score":row["best_validation_ood_macro_f1"],
                              "checkpoint_sha256":row["best_checkpoint_sha256"]})
     result={"status":"hpo_and_confirmation_completed","architecture":resolve_v11_trial_params(best_trial.params)["architecture"]+" ResNet-18-GN",
@@ -1998,7 +2167,12 @@ def main():
     parser.add_argument("--native-threads",type=int,default=1)
     parser.add_argument("--worker-peak-cache",type=int,default=64)
     parser.add_argument("--validation-bf16",action="store_true",help="Opt-in only after BF16 vs FP32 Validation parity checks")
-    parser.add_argument("--max-gpu-hours",type=float,default=12.0)
+    parser.add_argument("--max-gpu-hours",type=float,default=12.0,
+                        help="Per-invocation session cap, checked between full optimizer steps; resume-safe")
+    parser.add_argument("--stage0-receipt",type=Path,default=None,
+                        help="cuifa Stage0 PASS record with SHA-bound real GPU logs; required for --mode run")
+    parser.add_argument("--hpo-approval",type=Path,default=None,
+                        help="Explicit human HPO approval tied to Stage0 SHA and measured GPU-hour budget")
     args=parser.parse_args()
     if args.batch_size < 1:
         parser.error("--batch-size must be positive")

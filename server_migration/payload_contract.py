@@ -1,10 +1,11 @@
 """Versioned member contract for the private V11 Linux migration snapshot."""
 
-PAYLOAD_CONTRACT_VERSION = "v11-laptop-gradient-portable-20261110.11"
+PAYLOAD_CONTRACT_VERSION = "v11-laptop-gradient-portable-20261110.12"
 PAYLOAD_MANIFEST_MEMBER = "AI4science/server_migration/source_snapshot_manifest.json"
 
 PAYLOAD_REQUIRED_FILES = (
     "AI4science/server_migration/one_click_v11.py",
+    "AI4science/server_migration/research_status.py",
     "AI4science/server_migration/gradient_gate_v11_train_108478.json",
     "AI4science/server_migration/gradient_gate_v11_v9style_train_108478.json",
     "AI4science/server_migration/v11_prefetch.py",

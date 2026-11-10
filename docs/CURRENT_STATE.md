@@ -4,6 +4,23 @@
 
 **状态日期：** 2026-11-10
 
+**2026-11-10 HPO-launch safety repair (CODE + TEST; CUIFA STAGE0/HPO NOT_RUN):**
+The current runner now refuses \`--mode run\` without a SHA-verified,
+cuifa-local Stage0 PASS receipt and a separate owner HPO approval referencing
+that receipt and containing a measured-throughput-based GPU-hour budget.
+Stage0 requires real peak-cache, CUDA Train, full six-profile Validation,
+checkpoint/resume parity and sustained throughput evidence; this laptop
+**cannot certify** cuifa. Total 8 HPO + 2 confirmation stages are estimated
+with a 30% buffer before approval; the per-invocation 12-hour deadline is
+now checked at complete optimizer-step boundaries, atomically checkpointed
+and safely resumed, but an ongoing full Validation evaluation may overrun.
+A new **source-only current-commit ZIP** mode lets the owner refresh code,
+tests and both pinned Train JSON reports without re-archiving 154,975 cached
+PeakTables. All five older source snapshots were pre-.12 and must not be
+treated as current. This is launch engineering; R-first science, batch16,
+108,478-parent Train and 23,245-parent Validation are unchanged.
+
+
 **2026-11-10 ACTIVE — V11 R-FIRST HPO FREEZE; LAPTOP STAGE COMPLETE; CUIFA STAGE0/HPO NOT_RUN:** The definitive HPO-scale source is the FIRST, complete **108,478 independent Train-parent / 6,780-batch** learned-state A0 gradient audit (source SHA256 7f6c759f5c6fea7fe855ab579ce2d0dd6771f7edbab815db9339c4e25eb1d020). It measured unweighted trunk r=||grad JS||/||grad CE||=**0.0681726422271**. Transfer V9's **Validation-winning R=1.7541151944**, NOT its numerical lambda=60: the equivalent V11 A0 reference is lambda=R/r≈**25.73**. The primary HPO design uses **R=lambda*r_A0**, nominal R target [0.05,2.0], mapped into frozen **lambda [3.0,29.33728156]** (effective reference R≈[0.20452,2.0] after lambda lower clipping). R<=2 is a **search-focus/budget choice**, NOT a universal unsafe-gradient cutoff. All A0–A3 candidates use this **common A0 reference r** for HPO-space design; their actual learned gradient ratios need not be equal, nor does R itself establish alignment. Four A0–A3 matched-**lambda≈25.73** architecture controls precede 4 multivariate TPE trials (default **8 total**, three HPO dimensions lambda log-float/stride2-or-4/kernel5-or-9), with selection on frozen **23,245-parent × six OOD-profile Validation** only. The SECOND V9-style laptop Train-only safety audit (704 distinct Train parents, 44 batches, lambda0.3/3/30/60, all gate PASS) stays **preserved verbatim as supporting safety/negative-design-history evidence**, but lambda60 and R≈4.09 are **not** in this primary HPO search. Exact old reports are SHA-pinned and combined into the cuifa study gradient_gate.json by a deterministic CPU-only importer; no additional laptop Train gradient measurements or GPU runs are planned. The stage is officially **WAITING_FOR_CUIFA_STAGE0_AND_HPO**; no cuifa Stage0, HPO, confirmation, final, synthetic Test, or RRUFF has run. Effective batch16/micro16, data/simulator/optimizer/splits unchanged.
 
 **Superseded 2026-11-10 intermediate proposal:** An earlier attempt copied V9 lambda [0.3,3,30,60] to V11, producing an overly broad R≈[0.02045,4.09036] domain and default 12 HPO trials. It passed a limited A0 Train-only safety check, which did **not** make that interval more relevant to transferring V9's R≈1.75 success. Keep the original V9-style supplemental safety JSON and commit as research-history evidence; do not use that proposal as the active HPO scope.

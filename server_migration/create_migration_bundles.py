@@ -34,6 +34,8 @@ def main():
     parser=argparse.ArgumentParser(description="Build private migration bundles from this worktree only")
     parser.add_argument("--destination",type=Path,default=DEFAULT_DEST)
     parser.add_argument("--source-splits",type=Path,default=DEFAULT_SOURCE)
+    parser.add_argument("--source-only",action="store_true",
+                        help="Refresh only a verified code+frozen-Train-evidence snapshot, without rebuilding 154975 cache archives")
     args=parser.parse_args()
     DEST=args.destination.resolve()
     SOURCE=args.source_splits.resolve()
@@ -46,15 +48,20 @@ def main():
     PROJECT=ROOT/"xrd_robustness"
     PREPROCESSED=SOURCE.parent
     DEST.mkdir(parents=True,exist_ok=True)
-    data=json.loads((SOURCE/"delivery_validation.json").read_text(encoding="utf-8"))
-    assert data["status"]=="passed"
-    assert data["material_id_records"]==154975 and data["parent_structure_groups"]==154968
-    assert data["row_counts_by_split"]==EXPECTED
-    print("Verifying source split SHA256 against frozen delivery_validation...")
-    for filename,digest in data["sha256"].items():
-        result=sha256(SOURCE/filename)
-        if result!=digest:raise RuntimeError(f"upstream split hash mismatch: {filename}")
-        print("VERIFIED",filename,(SOURCE/filename).stat().st_size)
+    if args.source_only:
+        # Never publish an uncommitted source snapshot (even if it passes SHA).
+        if git("status","--porcelain","--untracked-files=no"):
+            raise RuntimeError("Commit tracked changes before building current-source ZIP")
+    else:
+        data=json.loads((SOURCE/"delivery_validation.json").read_text(encoding="utf-8"))
+        assert data["status"]=="passed"
+        assert data["material_id_records"]==154975 and data["parent_structure_groups"]==154968
+        assert data["row_counts_by_split"]==EXPECTED
+        print("Verifying source split SHA256 against frozen delivery_validation...")
+        for filename,expected_hash in data["sha256"].items():
+            result=sha256(SOURCE/filename)
+            if result!=expected_hash:raise RuntimeError(f"upstream split hash mismatch: {filename}")
+            print("VERIFIED",filename,(SOURCE/filename).stat().st_size)
     files={}
     for sub in ("src","scripts","configs","tests"):
         for p in included(PROJECT/sub):
@@ -72,7 +79,7 @@ def main():
         files[p]="reference_windows_resnet_joint/"+p.name
     for p in sorted((ROOT/"_local"/"resnet_joint_20261103"/"protocols").glob("*.json")):
         files[p]="reference_windows_resnet_joint/protocols/"+p.name
-    for name in ("verify_payload.py","verify_peak_cache.py","one_click_v11.py","v11_prefetch.py","smoke_prefetch.py","start_server.sh","start_windows.ps1","windows_cuda_smoke.py","hpo_handoff.py","train_microbatch.py","benchmark_windows_v11.py","preflight.sh","build_peak_tables.sh","setup_linux.sh","README.md","payload_contract.py","verify_source_snapshot.py","create_migration_bundles.py","gradient_gate_v11_train_108478.json","gradient_gate_v11_v9style_train_108478.json"):
+    for name in ("verify_payload.py","verify_peak_cache.py","one_click_v11.py","v11_prefetch.py","smoke_prefetch.py","start_server.sh","start_windows.ps1","windows_cuda_smoke.py","hpo_handoff.py","research_status.py","train_microbatch.py","benchmark_windows_v11.py","preflight.sh","build_peak_tables.sh","setup_linux.sh","README.md","payload_contract.py","verify_source_snapshot.py","create_migration_bundles.py","gradient_gate_v11_train_108478.json","gradient_gate_v11_v9style_train_108478.json"):
         p=ROOT/"server_migration"/name
         if not p.is_file():raise RuntimeError(f"Missing current-worktree migration source: {p}")
         files[p]=p.relative_to(ROOT).as_posix()
@@ -87,7 +94,8 @@ def main():
     for name in ("summary.json","README.md"):
         p=ROOT/"_local"/"resnet_joint_20261103"/name
         if p.is_file():files[p]="reference_windows_resnet_joint/"+name
-    code_path=DEST/"source_snapshot.zip"
+    code_path=DEST/("source_snapshot_current.zip" if args.source_only else "source_snapshot.zip")
+    temporary=code_path.with_name(code_path.name+".partial")
     manifest_files={
         "AI4science/"+rel:sha256(file)
         for file,rel in sorted(files.items(),key=lambda item:item[1])
@@ -99,10 +107,35 @@ def main():
         "files":manifest_files,
         "source_git_commit":git("rev-parse","HEAD"),
     }
-    with zipfile.ZipFile(code_path,"w",compression=zipfile.ZIP_DEFLATED,compresslevel=6,allowZip64=True) as zf:
-        for file,rel in sorted(files.items(),key=lambda item:item[1]):
-            zf.write(file,"AI4science/"+rel)
-        zf.writestr(PAYLOAD_MANIFEST_MEMBER,json.dumps(source_manifest,sort_keys=True,indent=2)+"\n")
+    try:
+        with zipfile.ZipFile(temporary,"w",compression=zipfile.ZIP_DEFLATED,compresslevel=6,allowZip64=True) as zf:
+            for file,rel in sorted(files.items(),key=lambda item:item[1]):
+                zf.write(file,"AI4science/"+rel)
+            zf.writestr(PAYLOAD_MANIFEST_MEMBER,json.dumps(source_manifest,sort_keys=True,indent=2)+"\n")
+        from verify_source_snapshot import read_and_validate_manifest
+        if read_and_validate_manifest(temporary)!=source_manifest:
+            raise RuntimeError("Source snapshot manifest failed verification")
+        temporary.replace(code_path)
+    finally:
+        temporary.unlink(missing_ok=True)
+    if args.source_only:
+        receipt={"status":"PASS","schema":"v11-current-source-only-v1",
+                 "source_git_commit":source_manifest["source_git_commit"],
+                 "payload_contract_version":PAYLOAD_CONTRACT_VERSION,
+                 "zip_sha256":sha256(code_path),"files":len(files),
+                 "required_train_gradient_reports":[
+                    "server_migration/gradient_gate_v11_train_108478.json",
+                    "server_migration/gradient_gate_v11_v9style_train_108478.json"],
+                 "archive_name":code_path.name,
+                 "data_archives_rebuilt":False,
+                 "cuifa_stage0_complete":False}
+        for item in receipt["required_train_gradient_reports"]:
+            if "AI4science/"+item not in manifest_files:
+                raise RuntimeError("Source-only snapshot missing frozen Train evidence")
+        (DEST/"source_snapshot_current_receipt.json").write_text(
+            json.dumps(receipt,sort_keys=True,indent=2)+"\n",encoding="utf-8")
+        print(json.dumps(receipt,indent=2),flush=True)
+        return
     data_files=sorted(SOURCE.glob("*"))
     audit_file=PREPROCESSED/"screening_report.md"
     if audit_file.is_file():data_files.append(audit_file)
