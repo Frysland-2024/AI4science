@@ -205,6 +205,8 @@ This is a **human-deliberation safeguard**, not a mandate to slow approved machi
 
 ### Three-stage research rule: UNDERSTAND → PLAN → EXECUTE (owner-confirmed, 2026-11-10)
 
+**Division of labor (owner clarification, 2026-11-10): UNDERSTAND and PLAN are interactive discussions between the researcher and ChatGPT.** GPT's role is to help explain, question assumptions, compare evidence and alternatives, and make tradeoffs explicit. The owner retains scientific judgment and decides when their understanding is sufficient. Do **not** treat an AI-authored plan, a finished implementation, or silence as evidence of user comprehension or approval. **EXECUTE** is the separately authorized stage delegated to Codex, controlled runners, GPUs, or other execution tools; GPT may inspect and review resulting evidence, but does not silently turn conversation into execution.
+
 **For every new research stage, use this order and do not skip ahead:**
 
 1. **UNDERSTAND / 理解：** The owner first understands the scientific goal, why this stage is needed, the existing scheme and underlying methods, evidence gaps, plausible alternatives, and expected value of success/failure. GPT explains and checks against current repository evidence; understanding, not the volume of completed tasks, is the first milestone.
