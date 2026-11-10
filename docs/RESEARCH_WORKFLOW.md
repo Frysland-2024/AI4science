@@ -203,6 +203,18 @@ The owner described the core Vibe Research tension as **“Vibe research 第一�
 
 This is a **human-deliberation safeguard**, not a mandate to slow approved machines, add bureaucracy or run a new experiment. Current V11 source of truth and compute authorization still reside in `CURRENT_STATE.md` and Issue #55.
 
+### Three-stage research rule: UNDERSTAND → PLAN → EXECUTE (owner-confirmed, 2026-11-10)
+
+**For every new research stage, use this order and do not skip ahead:**
+
+1. **UNDERSTAND / 理解：** The owner first understands the scientific goal, why this stage is needed, the existing scheme and underlying methods, evidence gaps, plausible alternatives, and expected value of success/failure. GPT explains and checks against current repository evidence; understanding, not the volume of completed tasks, is the first milestone.
+2. **PLAN / 规划：** Compare technical routes, tradeoffs, data/compute/time budget, validation criteria, expected outcomes, and explicit stop/deferral conditions; the owner chooses the intended route. A draft plan is not approval to run.
+3. **EXECUTE / 执行：** Only after explicit stage authorization, let AI/Codex/GPU perform the bounded approved work and supply verifiable evidence. Once the agreed stage is complete, return to **UNDERSTAND** before authorizing the next stage.
+
+**Applies across all future AI4science research stages**, not only V11 HPO. Do not equate "the implementation is ready" or "the GPU is available" with a scientific decision. Existing authorized routine operations can continue within their prior scope; this rule is not a requirement to interrupt an in-progress approved step or demand repeated approvals for mundane maintenance.
+
+**Concrete current example:** At future V11 HPO resumption, first explain and review the present HPO purpose, Optuna/TPE and gradient-ratio logic, alternative search routes and potential evidence; then plan and approve a route; **only then** arrange Stage 0 and any separately approved GPU HPO run. See CURRENT_STATE.md for current resource/priorities, not a timer-based auto-resume.
+
 ### Pre-task purpose gate (owner-confirmed, 2026-11-10)
 
 **First understand why a task should be done; only then decide what to ask AI to do and how.** Vibe Research makes it easy to launch work before understanding the problem. Before authorizing a *new scientific or scope-changing* task, GPT should first help the owner clarify five concise questions, in conversation rather than generating a new form or document:
