@@ -5,6 +5,8 @@ PAYLOAD_MANIFEST_MEMBER = "AI4science/server_migration/source_snapshot_manifest.
 
 PAYLOAD_REQUIRED_FILES = (
     "AI4science/server_migration/one_click_v11.py",
+    "AI4science/server_migration/gradient_gate_v11_train_108478.json",
+    "AI4science/server_migration/gradient_gate_v11_v9style_train_108478.json",
     "AI4science/server_migration/v11_prefetch.py",
     "AI4science/server_migration/smoke_prefetch.py",
     "AI4science/server_migration/start_server.sh",

@@ -139,14 +139,14 @@ try {
         Write-Output "BOUNDED preflight completed. Full Stage 0 still requires resource/Validation/restart checks."
     }
     elseif ($Mode -eq "gradient") {
-        # Laptop-only TRAIN-gradient calibration; NO synthetic Validation
-        # rendering, Optuna trial or RRUFF/Test access.
+        # COMPLETED laptop Train-only audit: verify frozen report/R prior only.
+        # Do not rerun warmup, gradient scans, Optuna, Validation, or Test.
         Invoke-Python -Arguments (@("server_migration/one_click_v11.py", "--mode", "gradient") + $RunnerArgs)
         $evidence = Join-Path $root "server_migration\gradient_gate_v11_train_108478.json"
         if (!(Test-Path $evidence)) {
             throw "Gradient calibration incomplete. No HPO may start without the frozen result."
         }
-        Write-Output "TRAIN-only gradient audit completed. Evidence staged at: $evidence"
+        Write-Output "TRAIN-only gradient stage CLOSED (existing SHA-frozen report). Waiting for cuifa Stage0/HPO. Evidence: $evidence"
     }
     else {
         # This is an explicit HPO launch, NOT an implicit result of plan/smoke.

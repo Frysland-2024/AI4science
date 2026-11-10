@@ -105,17 +105,40 @@ class ValidationSelection(unittest.TestCase):
         self.assertFalse(mod.legacy_validation_panel_identity_compatible(
             {**old,"render_source_sha256":{"physics":"changed"}},new))
 
-    def test_gradient_window_uses_v9_train_only_influence_bands(self):
-        window=mod.derive_train_only_js_range(0.029235)
-        self.assertAlmostEqual(window["low"],0.3,places=5)
-        self.assertAlmostEqual(window["high"],60.0,places=5)
-        self.assertAlmostEqual(window["anchor"],30.0,places=5)
-        self.assertEqual(window["candidate_probe_lambdas"],[0.3,3.0,30.0,60.0])
-        self.assertEqual([item["influence_band"] for item in window["probe_gradient_scale"]],
-                         ["negligible","weak","material_non_dominant","dominant"])
+    def test_first_whole_train_R_range_reinstated_with_v9_R_anchor(self):
+        ratio=0.06817264222714081
+        window=mod.derive_train_only_js_range(ratio)
+        self.assertEqual(window["low"],3.0)
+        self.assertAlmostEqual(window["high"],29.337281564301204,places=7)
+        self.assertAlmostEqual(window["anchor"]*ratio,1.754115194414842,places=9)
+        self.assertAlmostEqual(window["reference_R_range"][0],3.0*ratio,places=9)
+        self.assertAlmostEqual(window["reference_R_range"][1],2.0,places=9)
+        self.assertTrue(window["R_upper_is_hpo_design_target_not_safety_law"])
+        self.assertTrue(3.0<window["anchor"]<window["high"])
+        # Cross-run R is a REFERENCE calibration, not a claim that A1/A2/A3
+        # will have the same physical gradient ratio as learned A0.
+        v9=mod.derive_train_only_js_range(0.029235)
+        self.assertAlmostEqual(v9["anchor"],60.0,delta=0.01)
         for bad in (0.0,float("nan"),1e-12,1e5):
             with self.assertRaises(ValueError):
                 mod.derive_train_only_js_range(bad)
+
+    def test_r_first_gate_is_built_only_from_immutable_laptop_train_reports(self):
+        gate=mod.make_r_reference_gate_from_frozen_reports(fixture_science_contract())
+        ratio=gate["median_per_batch_js_ce_gradient_ratio"]
+        self.assertAlmostEqual(ratio,0.06817264222714081)
+        self.assertEqual(gate["parents_scanned"],108478)
+        self.assertEqual(gate["batches_scanned"],6780)
+        self.assertEqual(gate["reference_whole_train_gradient_sha256"],
+                         mod.V11_ORIGINAL_WHOLE_TRAIN_REPORT_SHA)
+        self.assertEqual(gate["supporting_v9style_safety_sha256"],
+                         mod.V11_SUPPLEMENTARY_SAFETY_REPORT_SHA)
+        self.assertAlmostEqual(gate["lambda_window"]["high"],29.337281564301204)
+        self.assertAlmostEqual(gate["lambda_window"]["anchor"]*ratio,
+                               mod.V9_SELECTED_REFERENCE_R)
+        self.assertEqual(gate["v9style_train_safety_audit"]["sampled_train_parents"],704)
+        self.assertTrue(gate["training_only"])
+        self.assertFalse(gate["validation_access"])
 
     def test_v9_style_train_only_combined_gradient_safety_is_direction_aware(self):
         # CE=(1,0), JS=(-0.01,1) is a transparent two-vector test;
@@ -217,7 +240,8 @@ class ValidationSelection(unittest.TestCase):
               "learned_state_accuracy":0.40,"learned_state_ce":1.5,
               "median_per_batch_js_ce_gradient_ratio":0.029235,
               "lambda_window":mod.derive_train_only_js_range(0.029235),
-              "reference_whole_train_gradient_sha256":"7f6c759f5c6fea7fe855ab579ce2d0dd6771f7edbab815db9339c4e25eb1d020",
+              "reference_whole_train_gradient_sha256":mod.V11_ORIGINAL_WHOLE_TRAIN_REPORT_SHA,
+              "supporting_v9style_safety_sha256":mod.V11_SUPPLEMENTARY_SAFETY_REPORT_SHA,
               "v9style_train_safety_audit":{
                   "training_only":True,"validation_access":False,
                   "sampled_train_parents":704,"batches":44,
@@ -238,6 +262,9 @@ class ValidationSelection(unittest.TestCase):
         with self.assertRaisesRegex(RuntimeError,"incomplete cohort"):
             mod.validate_train_only_gradient_gate(
                 {**gate,"batches_scanned":1280},contract,parents)
+        with self.assertRaisesRegex(RuntimeError,"supplementary"):
+            mod.validate_train_only_gradient_gate(
+                {**gate,"supporting_v9style_safety_sha256":"0"*64},contract,parents)
         with self.assertRaisesRegex(RuntimeError,"contract"):
             mod.validate_train_only_gradient_gate(
                 gate,fixture_science_contract(schema="different"),parents)
