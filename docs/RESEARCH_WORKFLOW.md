@@ -189,6 +189,20 @@ A material scientific result that exists only in a chat is not a durable project
 
 **Goal:** Eliminate the project owner as a real-time relay among ChatGPT, Codex, GitHub, and GPU. Separate the *scientific decision* from the *approved execution*. This policy does not authorize tasks currently blocked.
 
+### The wild-bison problem: protect time to think (2026-11-10 owner-confirmed principle)
+
+The owner described the core Vibe Research tension as **“Vibe research 第一次让人有了‘自己不知道’的能力”**: AI enables action on methods and experiments before the human has fully learned how they work. Rapid exploration may become **“像野牛一样横冲直撞”** unless time for scientific understanding and deliberate choice is protected. These are researcher reflections, not new experimental findings. The original missing chat is not claimed to be recovered; the metaphor's meaning was explicitly confirmed in a later conversation.
+
+**Default loop: Human question and hypothesis → bounded, approved AI/Codex/GPU execution → evidence digest with uncertainties → protected human interpretation and decision → only then authorize the next stage.**
+
+- **Thinking is research, not idle time.** Schedule uninterrupted periods for reading results, challenging mechanisms, choosing among alternatives, and deciding what *not* to run. Routine status notices should not interrupt this work.
+- **Decision gate, not automatic expansion.** After an approved research stage concludes, stop at `NEEDS_DECISION`; do not autonomously create follow-on experiments, new branches/PRs/issues, spending commitments or broader hypotheses. Existing scoped recovery and explicitly authorized multi-trial HPO may continue within their frozen budget and contract.
+- **One research map, not a document factory.** Reuse `CURRENT_STATE.md` for current truth, `PROJECT_HISTORY.md` for meaningful pivots, and this workflow for human/AI roles. A map should expose (a) current question, (b) evidence and uncertainty, (c) active / waiting / candidate / archived paths, (d) why paths were chosen or dropped, (e) the **one next human decision**. Do not create a per-thought MD or infer progress solely from commits.
+- **Decision digest.** At the owner review window, report: what was actually verified; what remains unknown; why it matters scientifically; proposed choices including **stop / defer**; which choice requires owner approval. Do not mistake recommendations for approvals.
+- **Understanding threshold.** The owner need not read every generated code line, but must understand the scientific assumption, key controls, credible evidence, limitations, and consequences before approving a change to the research direction.
+
+This is a **human-deliberation safeguard**, not a mandate to slow approved machines, add bureaucracy or run a new experiment. Current V11 source of truth and compute authorization still reside in `CURRENT_STATE.md` and Issue #55.
+
 ### Ownership and permissions
 
 - **Owner (L3):** research hypothesis, protocol/dataset/split changes, Test/RRUFF release, publication claims, extra GPU rental or compute budget, and permission to enter the next major stage. Always require explicit approval.
