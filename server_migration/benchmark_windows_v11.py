@@ -120,8 +120,9 @@ def main():
         if not 1<=micro<=batch<=512:
             raise ValueError("Case must be EFFECTIVE_BATCH:MICROBATCH, each 1..512")
         cases.append((batch,micro))
-    if not 1<=len(cases)<=24 or not 1<=a.steps<=12 or not 0<=a.warmup<=4 or not 1<=a.workers<=16:
-        raise ValueError("Bounded benchmarking cases/steps/workers required")
+    if (not 1<=len(cases)<=24 or not 1<=a.steps<=256 or not 0<=a.warmup<=16
+            or not 1<=a.workers<=16 or max(batch for batch,_ in cases)*a.steps>8192):
+        raise ValueError("Bounded benchmark: <=256 steps, <=16 warmup, <=8192 measured parents/case")
     np_lib,torch,F,load_peak_records,*tail=v11.ctx_libraries()
     if not torch.cuda.is_available():
         raise RuntimeError("CUDA unavailable: cannot benchmark V11 GPU")
