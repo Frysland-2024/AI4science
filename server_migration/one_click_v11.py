@@ -492,8 +492,13 @@ def validate_train_only_gradient_gate(gate, contract_obj, train_records):
         value=gate.get(key)
         if not isinstance(value,(float,int)) or not math.isfinite(value) or not -1.000001<=value<=1.000001:
             raise RuntimeError("TRAIN gradient gate missing valid direction evidence: "+key)
-    if gate.get("batches_scanned",0)<1 or gate.get("training_only") is not True or gate.get("validation_access") is not False:
-        raise RuntimeError("TRAIN gradient gate provenance mismatch")
+    required_batches=(len(train_records)+contract_obj["batch_size_parents"]-1)//contract_obj["batch_size_parents"]
+    if (gate.get("batches_scanned")!=required_batches
+        or gate.get("full_train_expected_batches")!=required_batches
+        or gate.get("whole_train_coverage_verified") is not True
+        or gate.get("training_only") is not True
+        or gate.get("validation_access") is not False):
+        raise RuntimeError("TRAIN gradient gate incomplete cohort coverage/provenance")
     return window
 
 
