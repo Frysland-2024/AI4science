@@ -184,3 +184,46 @@ A research task is complete at the relevant level when:
 - **communication done:** the artifact is fact-checked against current repository state.
 
 A material scientific result that exists only in a chat is not a durable project decision.
+
+## 9. Healthy Vibe Research — human handoff (2026-11-10)
+
+**Goal:** Eliminate the project owner as a real-time relay among ChatGPT, Codex, GitHub, and GPU. Separate the *scientific decision* from the *approved execution*. This policy does not authorize tasks currently blocked.
+
+### Ownership and permissions
+
+- **Owner (L3):** research hypothesis, protocol/dataset/split changes, Test/RRUFF release, publication claims, extra GPU rental or compute budget, and permission to enter the next major stage. Always require explicit approval.
+- **GPT (planning/review):** consult AGENTS.md, CURRENT_STATE and actual evidence; prepare bounded tasks with acceptance/stop conditions. Conversational plans do not authorize GPU runs.
+- **Codex/execution runner (L1/L2):** perform only approved maintenance and SHA-frozen steps within the resource budget. Existing HPO proposal/recovery rules apply; retries must be bounded, logged and must not silently change scientific contracts.
+- **Reporting:** put routine updates in existing Issue #55 and canonical evidence; do not create new Issues, PRs, branches or narrative Markdown just to record progress. Follow AGENTS.md risk-based change delivery.
+- **Retired path:** research_bridge is not an active job manager. Do not reinstall its worker/supervisor or scheduled tasks.
+
+### Status handoff
+
+| Owner-facing state | Meaning | Action |
+| --- | --- | --- |
+| COMPLETED | Scope-specific outputs exist, not necessarily scientifically certified | Review once, then close or approve next stage |
+| RUNNING | A live V11 runner lock is confirmed on that same machine | No routine intervention |
+| BLOCKED | Malformed/inconsistent evidence or an explicit gate failure | Investigate; no automatic science changes |
+| NEEDS_DECISION | Awaiting approval or execution cannot be confirmed | Decide at the next review window unless safety/cost risk is urgent |
+
+Read-only local commands:
+
+~~~powershell
+cd E:\AI4science
+python server_migration/research_status.py
+python server_migration/research_status.py --json
+~~~
+
+The script reads only local server_runs/v11_a0_js_optuna metadata and probes an *existing* process lock. It never touches Test/RRUFF, launches or resumes GPU work, or assumes that a file's existence means a live process. It does not monitor another computer. A local metadata-complete status is not a substitute for hash-verifying checkpoints and scientific acceptance via the V11 runner's strict validators.
+
+### Review cadence — no notification flood
+
+- Recommended owner review windows: **10:00 and 20:30** in the owner's chosen local timezone. Between those windows, capture ideas without altering a running approved protocol.
+- One brief digest: completed/running/blocked/needs approval, one next decision, evidence URL, and observable budget status. Suppress unchanged messages wherever the scheduling system supports it.
+- No automatic phase expansion: complete HPO and independent confirmation, then stop for separate final-training approval. Complete final training, then stop before held-out synthetic Test and real RRUFF.
+- Distinguish *the project is unfinished* from *today's research decisions are complete*. Outside review windows, an authorized runner may continue without owner attention.
+
+### V11 transition (dated, not a live heartbeat)
+
+As of 2026-11-10, laptop Train-only gradient evidence is closed. Cuifa Stage 0/HPO, final training and Test/RRUFF have not run and are not newly authorized by this workflow. See CURRENT_STATE.md and Issue #55 for current authority; cross-check live host logs before reporting execution.
+
