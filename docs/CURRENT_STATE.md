@@ -2,7 +2,11 @@
 
 > **权威性说明：** 本文件记录当前科学状态与当前执行口径。历史版本、旧聊天和 `PROJECT_HISTORY.md` 用于解释“为什么改变”，不得覆盖这里的当前结论；AI/Agent 工作规则见 [`../AGENTS.md`](../AGENTS.md) 与 [`RESEARCH_WORKFLOW.md`](RESEARCH_WORKFLOW.md)。
 
-**状态日期：** 2026-11-10
+**状态日期：** 2026-11-11
+
+**2026-11-11 ISSUE #61 / PR #75 状态对齐：** Issue #61 已关闭，结论仅覆盖本机 package/schema/manifest/CPU preflight；该本机结论由 Issue 正文及当前主分支验收记录支持。PR #75 目前为 **closed, unmerged**，不得描述为已合并。PR 正文中的“#61 remains open for PR review/merge”与当前 Issue 状态不符，已过时；它不改变 #61 已关闭的本机范围，也不满足 #55 的目标机 readiness gate。
+
+**版本与证据边界：** #61 的本机收据针对 `v11-prefetch-validation-20261109.3`。当前迁移源码合约为 `v11-laptop-gradient-portable-20261110.12`；最新 source-only ZIP 尚待在 cuifa 解包核验，数据缓存另行准备。cuifa Stage 0 仍为 **BLOCKED / NOT_RUN**，没有 HPO 授权。#61 / PR #75 的本机证据不能作为目标 GPU、吞吐、HPO、正式训练或 Test/RRUFF 评分的完成证明。
 
 **2026-11-10 OWNER PRIORITY / HPO DELIBERATION DEFERRED (NO NEW AUTHORIZATION):** 研究者明确决定**暂时不进一步学习或审议 V11 HPO，也不启动 cuifa Stage 0/HPO**。原因：cuifa 的目标电脑据负责人告知未来约两周被其他任务占用（只是预计资源阻塞期限，**不代表到期自动恢复或授权**）；研究者眼前更重要的事务是**2026-11-10 下午的面谈准备、最后一轮套磁安排，以及仍需持续推进的 GRE 备考**。这是一项有意识的研究优先级与注意力分配决定，不代表放弃七晶系分类主线、撤销当前冻结 HPO 方案，或产生新的科学结果。
 
