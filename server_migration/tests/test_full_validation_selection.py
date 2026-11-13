@@ -213,6 +213,23 @@ class ValidationSelection(unittest.TestCase):
             with self.assertRaises(ValueError):
                 mod.derive_train_only_js_range(bad)
 
+    def test_frozen_train_report_hash_is_stable_across_lf_and_crlf(self):
+        reports=(
+            ("gradient_gate_v11_train_108478.json",
+             mod.V11_ORIGINAL_WHOLE_TRAIN_REPORT_SHA),
+            ("gradient_gate_v11_v9style_train_108478.json",
+             mod.V11_SUPPLEMENTARY_SAFETY_REPORT_SHA),
+        )
+        with tempfile.TemporaryDirectory() as tmp:
+            for filename,expected in reports:
+                original=(mod.ROOT/"server_migration"/filename).read_bytes()
+                lf=original.replace(b"\r\n",b"\n").replace(b"\r",b"\n")
+                crlf=lf.replace(b"\n",b"\r\n")
+                for ending,payload in (("lf",lf),("crlf",crlf)):
+                    path=Path(tmp)/f"{filename}.{ending}"
+                    path.write_bytes(payload)
+                    self.assertEqual(mod.digest_crlf_normalized(path),expected)
+
     def test_r_first_gate_is_built_only_from_immutable_laptop_train_reports(self):
         gate=mod.make_r_reference_gate_from_frozen_reports(fixture_science_contract())
         ratio=gate["median_per_batch_js_ce_gradient_ratio"]

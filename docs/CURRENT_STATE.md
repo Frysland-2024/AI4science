@@ -2,7 +2,9 @@
 
 > **权威性说明：** 本文件记录当前科学状态与当前执行口径。历史版本、旧聊天和 `PROJECT_HISTORY.md` 用于解释“为什么改变”，不得覆盖这里的当前结论；AI/Agent 工作规则见 [`../AGENTS.md`](../AGENTS.md) 与 [`RESEARCH_WORKFLOW.md`](RESEARCH_WORKFLOW.md)。
 
-**状态日期：** 2026-11-11
+**状态日期：** 2026-11-13
+
+**2026-11-13 冻结梯度报告哈希跨平台修复：** CI 失败来自 Git 将原始 Windows CRLF JSON 报告检出为 LF；报告数值和科学身份未变，但直接按原始字节校验会误报。runner 现在仅对这两份冻结报告按 CRLF 规范化后校验，保留既有来源 SHA；package、manifest 与 Stage 0 日志仍按原始字节哈希。已补充 LF/CRLF 回归覆盖。没有改动报告、梯度结果、HPO 协议或授权状态；cuifa Stage 0/HPO 仍为 NOT_RUN。
 
 **2026-11-11 ISSUE #61 / PR #75 状态对齐：** Issue #61 已关闭，结论仅覆盖本机 package/schema/manifest/CPU preflight；该本机结论由 Issue 正文及当前主分支验收记录支持。PR #75 目前为 **closed, unmerged**，不得描述为已合并。PR 正文中的“#61 remains open for PR review/merge”与当前 Issue 状态不符，已过时；它不改变 #61 已关闭的本机范围，也不满足 #55 的目标机 readiness gate。
 

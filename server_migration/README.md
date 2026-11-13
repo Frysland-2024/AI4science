@@ -15,6 +15,11 @@ the target host still needs the separately authorized/prepared full data cache.
 Verify a copy with
 `python server_migration/verify_source_snapshot.py --archive <path-to-current-zip>`.
 
+The two frozen Train-report SHA pins refer to the original Windows CRLF evidence
+bytes. Git may check these JSON files out with LF endings, so the runner normalizes
+line endings to CRLF only for those two provenance checks. It does not rewrite the
+reports; source-manifest, package, and Stage 0 log hashes remain raw-byte SHA256s.
+
 **Stage 0 approval is mandatory before any HPO** even if invoking Python
 directly rather than the PowerShell launcher. Stage 0 is completed on **cuifa's
 machine**, not this laptop. A PASS JSON receipt must be generated there using

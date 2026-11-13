@@ -77,6 +77,8 @@ def v11_architecture_trial_params(architecture,weight):
 # V9 lambda=60 was SELECTED later on independent Validation; R was not
 # measured on the final model, and R by itself does not prove gradient alignment.
 V9_SELECTED_REFERENCE_R=1.754115194414842
+# Source evidence hashes are from the original Windows CRLF report bytes.
+# Git checkouts may normalize these JSON files to LF; hash them as CRLF below.
 V11_ORIGINAL_WHOLE_TRAIN_REPORT_SHA="7f6c759f5c6fea7fe855ab579ce2d0dd6771f7edbab815db9339c4e25eb1d020"
 V11_SUPPLEMENTARY_SAFETY_REPORT_SHA="1d49b6df02179040f24819aad38e92bf47c6f5816283deed50be0380d9250322"
 V11_ORIGINAL_GRADIENT_SCIENCE_ID="39eebfd9daff7e4d6a29ca069a605e49e1e44818c0fc4b6abb77c51c2162318d"
@@ -129,6 +131,13 @@ def digest(path):
     with Path(path).open("rb") as stream:
         for part in iter(lambda:stream.read(1024*1024),b""):h.update(part)
     return h.hexdigest()
+
+
+def digest_crlf_normalized(path):
+    """Hash UTF-8 evidence text using the original CRLF newline convention."""
+    text=Path(path).read_bytes().decode("utf-8")
+    normalized=text.replace("\r\n","\n").replace("\r","\n").replace("\n","\r\n")
+    return hashlib.sha256(normalized.encode("utf-8")).hexdigest()
 
 def canonical_digest(value):
     return hashlib.sha256(
@@ -1003,9 +1012,9 @@ def make_r_reference_gate_from_frozen_reports(contract_obj):
     """
     original_file=ROOT/"server_migration/gradient_gate_v11_train_108478.json"
     supplementary_file=ROOT/"server_migration/gradient_gate_v11_v9style_train_108478.json"
-    if digest(original_file)!=V11_ORIGINAL_WHOLE_TRAIN_REPORT_SHA:
+    if digest_crlf_normalized(original_file)!=V11_ORIGINAL_WHOLE_TRAIN_REPORT_SHA:
         raise RuntimeError("Original whole-Train gradient report SHA changed")
-    if digest(supplementary_file)!=V11_SUPPLEMENTARY_SAFETY_REPORT_SHA:
+    if digest_crlf_normalized(supplementary_file)!=V11_SUPPLEMENTARY_SAFETY_REPORT_SHA:
         raise RuntimeError("Supplementary V9-style safety report SHA changed")
     original=json.loads(original_file.read_text(encoding="utf-8"))
     supplementary=json.loads(supplementary_file.read_text(encoding="utf-8"))
