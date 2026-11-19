@@ -408,3 +408,9 @@ for two_theta, relative_intensity in zip(pattern.x, pattern.y):
 
 Keep API keys in environment variables/local secrets, never commit them. Retrieval or simulation does not authorize writing new scientific conclusions, running GPUs/HPO, changing PXRD frozen evidence, posting messages or expanding the task. Begin with a single user-provided CIF or one known structure and verify an actual run before marking any integration **WORKING**.
 
+
+### Codex Skills: source installed in this repository (2026-11-20)
+
+Three pinned K-Dense specialist Skills with all bundled scripts and references are now versioned under `../.agents/skills/`: `paper-lookup`, `database-lookup`, `pymatgen`. The small project-specific `materials-investigation` Skill orchestrates them. Upstream version commit `ec59a29a03d5c40f73ab40878df04860bc00e876`; attribution in `../THIRD_PARTY_NOTICES.md`.
+
+From Codex opened at the locally cloned AI4science root, invoke `$materials-investigation` or one of the three specialist Skills. Read `../.agents/skills/materials-investigation/SKILL.md` for dependency setup, read-only examples, and safety limits. **The Git-backed Skill source is installed; the offline personal laptop has not been updated or tested, and pymatgen/mp-api, `MP_API_KEY`, PaperQA2, ASE and atomate2 are not automatically provisioned.** Run a bounded CIF/XRD smoke on an authorized device before saying scientific execution works. No changes to PXRD evidence or research authorization are implied.
