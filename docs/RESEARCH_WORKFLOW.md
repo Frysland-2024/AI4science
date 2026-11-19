@@ -367,4 +367,44 @@ can be inferred from this implementation.
 summaries, preferably with read-only local state if the authorized machine
 is online; otherwise explicitly say local state is unknown. Never push
 idle heartbeats, open routine PRs/Issues or auto-expand scientific scope.
+## 10. Optional personal scientific toolchain (2026-11-20)
+
+**Owner decision:** Preserve the idea of a public, general-purpose autonomous scientific research agent as an **inactive future concept**. **Current use is personal and on demand:** reuse proven literature, structure/CIF and scientific Python tools in an *explicitly requested*, bounded investigation. This inventory is a **reference/catalog, not evidence of installation, API access, working integrations, a deployed Skill, or an authorized autonomous research run**. Do not create a second project dashboard, issues, PRs or unattended pipelines for this idea.
+
+### Reusable tools and canonical links
+
+| Need | Tool | Canonical reference | Practical boundary |
+| --- | --- | --- | --- |
+| Discover papers / metadata | OpenAlex | https://help.openalex.org/api/ | Works/search API; basic requests are possible without a key, account/API key and usage limits matter at scale; verify DOI and original source. |
+| Verify DOI / publication metadata | Crossref | https://www.crossref.org/documentation/retrieve-metadata/rest-api/ | Bibliographic metadata is not necessarily paper full text. |
+| Read supplied PDFs with citations | PaperQA2 | https://github.com/Future-House/paper-qa | Optional, requires environment and configured model/retrieval dependencies; inspect quotations against primary PDFs. |
+| Retrieve computed crystal structures | Materials Project API / \`mp-api\` | https://docs.materialsproject.org/downloading-data/using-the-api/getting-started | Needs a valid personal API key; computed structures are not automatically the observed phase in a sample. |
+| Retrieve deposited CIFs | Crystallography Open Database (COD) | https://wiki.crystallography.net/RESTful_API/ | Known COD ID: \`https://www.crystallography.net/cod/<COD-ID>.cif\`; track record ID, revision, metadata and occupancy. Respect rate limits and cache results. |
+| Read CIF / inspect structure / simulate powder lines | pymatgen | https://pymatgen.org/pymatgen.analysis.diffraction.html | \`Structure.from_file(...)\`, \`XRDCalculator(...)\`; confirm wavelength, symmetry, occupancy and instrumental effects before comparison. |
+| Numerical checks / fitting | NumPy, SciPy | https://numpy.org/doc/stable/ ; https://docs.scipy.org/doc/scipy/ | Fit and candidate ranking are diagnostic, not automatic proof of phase identity. |
+| Optional atomistic calculations | ASE | https://docs.ase-lib.org/ | Calculator/back-end and compute cost are separate requirements; not a prerequisite for basic CIF/XRD analysis. |
+| Optional multi-step simulation | atomate2 | https://materialsproject.github.io/atomate2/user/index.html | May require external calculators/software and computational resources; **not** installed or authorized here. |
+| Reuse existing agent skill instructions | K-Dense Scientific Agent Skills | https://github.com/K-Dense-AI/scientific-agent-skills | Inspect external skill code/dependencies and license, pin a reviewed revision before installing or executing it. |
+
+### Minimum personal-use sequence (not an autonomous job)
+
+1. **Read existing context** (sample information, raw spectrum, known composition, instrument wavelength); do not invent sample identity or silently change existing study protocols.
+2. **Research:** search OpenAlex; cross-check DOI via Crossref; read authorized primary texts or supplied PDFs (PaperQA2 is optional). Preserve URLs/DOIs and separate abstract-level information from full-text evidence.
+3. **Structure:** source CIF from COD or Materials Project with identifiers and provenance; inspect metadata, chemistry, possible disorder and duplicate structures. Treat experimentally deposited and computed CIFs distinctly.
+4. **Compute:** load with pymatgen, simulate with an explicit X-ray wavelength and compared \`2theta\` range; use NumPy/SciPy for comparisons with instrument/background/width limitations declared.
+5. **Audit:** export inputs, identifiers, environment/package versions, parameters, code, scores, failed candidates and unresolved peaks. Multiple matches or unidentified peaks mean **unresolved**, not inferred new phase or confirmed mixture. Human decides whether to search further.
+
+**Tiny offline CIF smoke example (only after installing pymatgen into a separate environment):**
+
+~~~python
+from pymatgen.core import Structure
+from pymatgen.analysis.diffraction.xrd import XRDCalculator
+
+structure = Structure.from_file("example.cif")
+pattern = XRDCalculator(wavelength="CuKa").get_pattern(structure)
+for two_theta, relative_intensity in zip(pattern.x, pattern.y):
+    print(f"{two_theta:.3f} deg: {relative_intensity:.1f}")
+~~~
+
+Keep API keys in environment variables/local secrets, never commit them. Retrieval or simulation does not authorize writing new scientific conclusions, running GPUs/HPO, changing PXRD frozen evidence, posting messages or expanding the task. Begin with a single user-provided CIF or one known structure and verify an actual run before marking any integration **WORKING**.
 
