@@ -1,5 +1,6 @@
 ﻿# Local Python environment
 .venv/
+.venv-science/
 venv/
 env/
 __pycache__/

@@ -29,14 +29,24 @@ Start Codex at the clone of `Frysland-2024/AI4science` and say:
 Individual Skills also work: `$paper-lookup`, `$database-lookup`, `$pymatgen`.
 
 ## Local dependency bootstrap (not automatically run)
-Python 3.11+ and suitable environment with network are needed to install science packages:
+Python 3.11+ and suitable environment with network are needed to install science packages. Create a **separate, Git-ignored** environment. Use the commands for your operating system.
+
+Linux/macOS:
 ```bash
 python -m venv .venv-science
-# POSIX: .venv-science/bin/python ; Windows: .venv-science\\Scripts\\python
 .venv-science/bin/python -m pip install "pymatgen==2026.9.24" "pymatgen-core==2026.9.23" "mp-api==0.46.5" numpy scipy
 .venv-science/bin/python .agents/skills/pymatgen/scripts/structure_analyzer.py --help
 python -m unittest discover -s tests -p test_repo_science_skills.py
 ```
-On Windows use `.venv-science\\Scripts\\python` instead. These pins mirror the reviewed K-Dense snapshot, not a full dependency lock. Preserve a lockfile for any reproducibility claim. Querying Materials Project needs `MP_API_KEY` set as a local environment secret, plus approved network access. Do not expose the key in a transcript or commit it.
+
+Windows PowerShell:
+```powershell
+py -3.11 -m venv .venv-science
+.\.venv-science\Scripts\python.exe -m pip install "pymatgen==2026.9.24" "pymatgen-core==2026.9.23" "mp-api==0.46.5" numpy scipy
+.\.venv-science\Scripts\python.exe .agents/skills/pymatgen/scripts/structure_analyzer.py --help
+py -3.11 -m unittest discover -s tests -p test_repo_science_skills.py
+```
+
+These pins mirror the reviewed K-Dense snapshot, not a full dependency lock. Preserve a lockfile for any reproducibility claim. Querying Materials Project needs `MP_API_KEY` set as a local environment secret, plus approved network access. Do not expose the key in a transcript or commit it.
 
 Three specialist Skills are unmodified upstream copies from `K-Dense-AI/scientific-agent-skills` @ `ec59a29a03d5c40f73ab40878df04860bc00e876` under MIT; license text is `../K_DENSE_LICENSE.md`. Updates require a separately reviewed pinned revision.
