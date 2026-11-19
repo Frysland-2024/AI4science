@@ -8,6 +8,13 @@
 
 **Historical:** the October 26 write-up-only freeze and the November 3 simulator-first phase are superseded as execution instructions. Preserve their evidence and rationale in Git history, not as current commands.
 
+## Milly Sc-XRD sample identity: owner-confirmed interpretation (2026-11-19)
+
+- **Sc-1**: nominal Na0.5Sc0.5TiO3, calcined at 1000°C and sintered at **1175°C**. **Sc-2**: same nominal composition, calcined at 1000°C and sintered at **1200°C**. Treat these as **two distinct sintered samples / conditions**, as the owner has expressly directed.
+- Both Rigaku exports contain the instrument field `*FILE_SAMPLE "SC54-260915C1"`. This is **not** a basis for questioning whether they are distinct samples: the La/Eu/Ho/Lu exports also reuse a single instrument sample field across different compositions. Keep original metadata intact; do not infer physical sample identity from an operator-entered label.
+- **Standing owner correction:** Do **not** revisit, speculate about, or ask the owner/Milly/YIXIN to re-prove whether Sc-1 and Sc-2 are different sintered samples. Previous agent claims that identical instrument IDs created a sample-identity blocker were an overinterpretation and are **superseded**.
+- For Milly's separate ceramic-XRD collaboration, investigate why the **1175°C and 1200°C Sc samples** show many similar experimental diffraction features. Preserve uncertainty about *phase identification* and actual chemical reactions, but **do not manufacture doubt about the sample distinction**. This rule does not alter the separate seven-crystal-system PXRD ML thesis.
+
 ## Minimal operating protocol
 
 1. Read `docs/CURRENT_STATE.md`, current issues #61/#55, relevant code, and machine-readable evidence; check for newer conflicting execution decisions.
