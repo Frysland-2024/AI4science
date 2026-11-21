@@ -2,8 +2,10 @@
 
 > **权威性说明：** 本文件记录当前科学状态与当前执行口径。历史版本、旧聊天和 `PROJECT_HISTORY.md` 用于解释“为什么改变”，不得覆盖这里的当前结论；AI/Agent 工作规则见 [`../AGENTS.md`](../AGENTS.md) 与 [`RESEARCH_WORKFLOW.md`](RESEARCH_WORKFLOW.md)。
 
-**状态日期：** 2026-11-13
+**状态日期：** 2026-11-21
 
+
+**2026-11-21 OWNER DECISION — RESULTS FROZEN; MANUSCRIPT NARRATIVE LOW PRIORITY:** The owner confirms that the AI4science results are frozen. Treat the already-established result set as closed to routine reruns, retuning, or result-driven experiment expansion. Organizing the paper's main narrative remains a **LOW-PRIORITY writing task**, to be done when convenient; it is not a current project gate or a reason to start experiments. This freeze does not retroactively turn any previously NOT_RUN training or evaluation into completed work, and it does not change any reported metric or evidence boundary. Existing result files and reports remain authoritative.
 **2026-11-13 冻结梯度报告哈希跨平台修复：** CI 失败来自 Git 将原始 Windows CRLF JSON 报告检出为 LF；报告数值和科学身份未变，但直接按原始字节校验会误报。runner 现在仅对这两份冻结报告按 CRLF 规范化后校验，保留既有来源 SHA；package、manifest 与 Stage 0 日志仍按原始字节哈希。已补充 LF/CRLF 回归覆盖。没有改动报告、梯度结果、HPO 协议或授权状态；cuifa Stage 0/HPO 仍为 NOT_RUN。
 
 **2026-11-11 ISSUE #61 / PR #75 状态对齐：** Issue #61 已关闭，结论仅覆盖本机 package/schema/manifest/CPU preflight；该本机结论由 Issue 正文及当前主分支验收记录支持。PR #75 目前为 **closed, unmerged**，不得描述为已合并。PR 正文中的“#61 remains open for PR review/merge”与当前 Issue 状态不符，已过时；它不改变 #61 已关闭的本机范围，也不满足 #55 的目标机 readiness gate。
@@ -356,7 +358,7 @@ Related: [frozen classification results](../xrd_robustness/reports/RESULTS.md), 
 |---|---|---|
 | 五类扰动的物理/文献依据 | **CLOSED** | 已有系统 evidence；后续只在 Methods / PPT / 答辩中调用，不重新调查 |
 | RRUFF-301 composition / near-duplicate 检查 | **CLOSED** | 无相同 RRUFF ID、无相同谱、无 Pearson ≥ 0.95 的跨 split 近重复谱；不修改 frozen split |
-| 新颖性 framing | **ACTIVE WRITING** | 当前最高优先级；打磨 `simulator = data generator + relationship supervisor`，不是补实验或加算法 |
+| 新颖性 framing | **LOW PRIORITY / WRITING ONLY** | 结果冻结后可择机整理论文主叙事，沿用 `simulator = data generator + relationship supervisor`；不作为当前执行门槛，不触发补实验或重跑 |
 
 除非未来 scientific claim 明显改变，否则前两个问题不再重新开启。
 
