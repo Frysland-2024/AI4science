@@ -1,12 +1,14 @@
 # AGENTS.md — Research Agent Operating Rules
 
-## Current research direction (2026-11-09)
+## Current research status (2026-11-21)
 
-**Active:** PXRD seven-crystal-system classification with same-parent Dynamic JS consistency. Simulator PR #58, V11 migration code and Issue #61 local preflight are complete; 154,975 records/154,968 parent groups are validated but formal V11 GPU HPO is NOT_RUN. The next execution gate is [Issue #55](https://github.com/Frysland-2024/AI4science/issues/55): first validate the native Windows cuifa 4070 Ti SUPER 16 GB / RAM 32 GB candidate, then separately authorize full-parent HPO; optionally transfer the hash-verified frozen selection to Linux for final multi-seed training. No Windows target-GPU Stage 0, HPO, Linux final training or RRUFF scoring is authorized or complete. Do not demand Ubuntu/WSL2 on cuifa merely for the existing Linux launcher; consult `server_migration/README.md`. GPU rental/training requires explicit authorization.
+**Owner decision: results frozen.** The AI4science result set is closed to routine reruns, retuning, and result-driven experiment expansion. The existing result artifacts and reports remain authoritative; this decision does not convert any earlier `NOT_RUN` item into a completed experiment or alter its metrics/evidence status.
+
+**Current priority:** organizing the main paper narrative is **LOW PRIORITY / WRITING ONLY**. It can be done when convenient and is not a project gate. Use the existing framing in `docs/PXRD_SUPERVISION_FRAMING.md`; do not start experiments or reopen frozen results to support the prose unless the owner makes a separate new decision.
 
 **Do not:** recollect the existing structure library, restart owner-cancelled legacy 9,842-parent Optuna, optimize against held-out synthetic test or real RRUFF, reopen archived parameter inversion/DONUT/AutoLab tasks, or treat planning as executed experiments.
 
-**Historical:** the October 26 write-up-only freeze and the November 3 simulator-first phase are superseded as execution instructions. Preserve their evidence and rationale in Git history, not as current commands.
+**Historical:** earlier V11 HPO, training and benchmark plans below preserve their original context and evidence. They are not current execution instructions unless a new owner decision explicitly reactivates them.
 
 ## Milly Sc-XRD sample identity: owner-confirmed interpretation (2026-11-19)
 
@@ -101,7 +103,7 @@ Use exact symbolic or numerical verification when precision materially affects t
 ### Public communication
 Ground figures, reports, manuscripts, and summaries in repository evidence. Presentation convenience must not alter scientific claims.
 
-## 2026-11-03 ACTIVE THESIS RESTART — replaces 2026-10-26 execution freeze
+## Historical thesis restart proposal (2026-11-03; execution instructions superseded by 2026-11-21 results freeze)
 
 **The project lead explicitly restarted the undergraduate thesis.** This newer decision supersedes the 2026-10-26 *no new research* execution instruction below, which remains historical evidence only. Active project: PXRD seven-system classification, retained same-parent Dynamic JS consistency, improving absolute RRUFF experimental classification performance. **Phase 1 deliverable is a runnable versioned new simulator integrated and tested in `xrd_robustness/`, not a literature-only report** (implementation task [Issue #53](https://github.com/Frysland-2024/AI4science/issues/53)). Inspect/reuse SimXRD/Pysimxrd, GSAS-II, ML4pXRDs and selected equivalents; do not copy broken or label-changing operators. Retain old simulator, frozen configs, datasets and old outputs. **Only after simulator implementation passes tests, compare architectures** (ResNet-18-GN+JS vs CNN11+JS). No architecture training as part of Phase 1. The separate `research_bridge` code lane still has an old protected-path allowlist and cannot autonomously modify `xrd_robustness/`; do not misrepresent a GitHub Issue as executed code. For current truth read [CURRENT_STATE](docs/CURRENT_STATE.md) and [simulator candidates](docs/PXRD_SIMULATOR_CANDIDATES_2026-11-03.md).
 
