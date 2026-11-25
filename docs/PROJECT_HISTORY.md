@@ -273,6 +273,74 @@ When choosing a new characterization problem, PXRD became attractive because it 
 
 The initial question was not simply "can a network classify clean simulated patterns?" but whether a classifier remains reliable when the same structure is observed under plausible measurement variation.
 
+### 2026-05-20—06-29：早期研究构想、文献吸收与一致性方法形成（2026-11-26 回溯补记）
+
+**来源与性质：** 本节应研究者本人要求，依据 2026-05-20 至 06-29 的可检索历史对话摘录回溯整理；日期按检索记录的日期，区分研究者明确提出/确认的决定与助手曾提出的建议。不是原始聊天全文、穷尽式文献综述或实验运行记录；文献名及链接仅在摘录或仓库已有依据时列出，不把当时讨论等同于读完、复现或采用。2026-11-26 本人另确认 AugMix 为 JS 一致性直接灵感来源，见 [方法谱系](PXRD_NOVELTY_LITERATURE_LINEAGE.md)。本节保留早期设想及后来的收敛，不用后见之明把所有早期想法改写成现行方案。
+
+#### 五月：从材料 ML、因果推断走向科学测量
+
+| 日期 | 可追溯的讨论与决定 |
+|---|---|
+| 05-20 | 研究者提出暑期材料 ML 毕设：优先公开/模拟数据丰富、可呼应本校实验方向的任务，训练模型，可能加入因果推断限制层，初步希望 12 月前完成。助手推荐 XRD/PXRD/SimXRD，讨论 WPEM 的 diffraction consistency / Bragg-law constraint，并建议因果分析作为可靠性与偏差分析而非 MVP 核心；也比较 Raman、FTIR、UV-Vis、XPS、NMR、EIS、显微图像、晶体结构、工艺性能数据。 |
+| 05-23 | 研究者认可工业测量与 ML 的落脚点，认为信号/图像处理可以落在 XRD/SEM，期望形成测量数据理解、信号/图像处理、ML、工程实现、可靠性分析等能力。助手补充 inverse problems、instrument-aware ML、uncertainty/OOD 等差异化方向。 |
+| 05-25 | 研究者认为单纯分子预测方向偏窄；助手提出 XRD perturbation robustness benchmark，利用 SimXRD-4M，而非低配复刻其分类任务，关注 realistic measurement perturbations、failure mode、raw profile/peak-list、峰位与强度、sim-to-real、混相及置信度。同期 Raman/FTIR/NIR 的噪声、基线漂移、峰位偏移鲁棒性也被讨论，但未检索到特定 Raman 论文题名。 |
+| 05-29 | 在对比可控数据任务后，XRD 被认为便于以 CIF/SimXRD 自行生成数据，实现 clean → corrupted → prediction → reliability audit。助手提出 SimXRD-based causal stress-test benchmark：XRD → crystal symmetry，以 noise、broadening、texture、zero shift 构建 unbiased/biased/intervention 数据，检查 shortcut learning。 |
+| 05-30 | 研究者明确要求后续优先检索别人如何处理类似技术问题以及论文/benchmark 先例，避免“先射箭后画靶子”。助手建议将 confounding 定义为 protocol/source-induced 而非简单制造 label→nuisance 相关；预设扰动、强度和划分，并用 counterfactual pairs 检验同结构换扰动应保持预测、不同结构同扰动仍应有区分力。 |
+
+#### 六月上旬：从 measurement intervention 到 consistency regularization
+
+| 日期 | 可追溯的讨论与决定 |
+|---|---|
+| 06-01 | 助手提出 clean baseline → physical perturbation stress test → intervention-aware/consistency training，扰动包含 peak shift、broadening、noise、background。研究者明确回复“很好很好，记住”，确认该暑期 SimXRD/XRD scientific ML MVP 主线及边界。备选题目为 *Physically Motivated Measurement Interventions for Robust XRD Symmetry Classification* 与 *Intervention-Aware Robust Learning for XRD-Based Crystal Symmetry Classification under Measurement Perturbations*。 |
+| 06-05 | 研究者要求先建立学姐式 data → preprocessing → model → metric → error analysis → figures 的完整基础 pipeline，再加入 physical measurement perturbation、robustness、consistency/invariance；坚持保留 invariance。助手提出 *Physically Motivated Invariance Learning for Robust XRD Symmetry Classification under Measurement Perturbations*，用 f(x_clean) ≈ f(x_perturbed) 表达目标；zero shift/noise/background 是候选 nuisance，broadening 需要限制范围，strain/phase transition 不应一概视为 invariant。 |
+| 06-06 | 仍以 SimXRD/XRD physical perturbation/invariance robustness 定位，并讨论 scientific measurement ML、materials informatics、inverse problems。 |
+| 06-07 | 项目工程闭环被描述为 clean baseline → 物理扰动 → FlipRate/robustness audit → augmentation vs consistency/invariance → real XRD validation。助手根据当时讨论的学校真实 XRD 数据条件将 real validation 纳入规划（非数据已取得或实验已完成）。当时英文表述：*Controlled SimXRD robustness benchmark + real XRD validation for AI-assisted phase/symmetry identification under measurement perturbations.* |
+| 06-11 | 研究者认可从其他领域迁移 consistency regularization，明确将其作为项目主方法、因果推断降为背景。助手提出 XRD-specific robustness benchmark + physics-informed perturbation operators + consistency-based invariant learning，并讨论 accuracy drop、flip rate、prediction consistency、calibration；另建议 *Physics-guided Weak-to-Strong Consistency Regularization for Robust XRD Classification*。当时 weak-to-strong、KL/MSE 等为候选，并非已经冻结的 Dynamic JS 实现。 |
+
+#### 六月中下旬：四组消融、物理边界与方法来源
+
+- **06-16（目前检索到的最早明确四组记录）：** 助手列出 ERM baseline、Aug-only、Consistency-only、Aug+consistency，要求扰动具有物理依据且 label-preserving，并评估 accuracy、FlipRate、calibration/OOD。另建议先检查约 20 条谱及标签，建立 1D-CNN baseline，曾写出 CE + lambda·KL/MSE 的候选损失。
+- **06-27：** 研究者独立提出并要求评价 measurement-invariance 下的 consistency regularization 研究方案。讨论将贡献定位为 XRD-specific label-preserving measurement interventions、paired reliability benchmark 与检验普通 augmentation 是否足够，而非发明新正则项。助手再次明确四组消融、已见/未见/复合扰动和真实 XRD，以及 FlipRate、prediction consistency、ECE/calibration；若 Aug-only 已足够应如实报告。术语上更倾向 physically motivated consistency regularization，而非将其夸大为严格物理约束求解。
+- **06-28：** 讨论 SimXRD、paired intervention、physics-bounded consistency、FlipRate/JSD/ECE 与 WPEM/Bin Cao 等背景；zero shift、背景/噪声、轻微仪器展宽通常作为候选标签保持扰动，强应变、相混合、严重 texture 暂不直接用于一致性约束。此为当时的适用边界讨论，不替代后续冻结的 texture 等具体实现。
+- **06-29：** 继续对比 XRD-ML 文献、EELS calibration-invariance 及跨领域一致性方法；AugMix 被讨论为多视图 JS 一致性的参考，拟改为物理扰动；还讨论 GroupDRO、feature consistency、预处理校正后分类等替代路线。研究重点仍是普通 ERM/增强/预测一致性对照及 FlipRate、worst-condition accuracy。
+
+当时的四组概念设计是一个 augmentation × consistency 的 2×2 消融：
+
+| 历史实验组 | 物理扰动谱的标签监督（augmentation） | 显式预测一致性 |
+|---|---|---|
+| Clean ERM | 否 | 否 |
+| Augmentation-only | 是 | 否 |
+| Consistency-only | 否 | 是 |
+| Augmentation + Consistency / Full | 是 | 是 |
+
+这里的 “consistency-only” 并非无标签或无扰动输入，而是指不额外以扰动谱的类别 CE 作为增强监督、仍利用扰动视图计算一致性。此表是概念层面的复原；各早期版本的确切 loss 权重、视图采样方式及是否实际运行需另查代码和 run records。后续收敛为 Dynamic ERM vs Dynamic JS，匹配两张扰动谱、标签、backbone、训练预算及扰动分布，唯一额外目标为 same-parent JS。四组历史方案不是当前重新运行的任务。
+
+#### 当时讨论的文献与方法（按历史讨论用途，而非重要性排名）
+
+| 文献、方法或线索 | 可追溯讨论 | 当时用途/边界 |
+|---|---|---|
+| Karniadakis 等，*Physics-informed machine learning* | 05-20 | 物理信息学习背景；不是本项目具体损失的来源。 |
+| Ziatdinov 的 STEM 因果分析（06-11 摘录提及 2020 npj Computational Materials）；Kalinin 相关科学成像方向、AtomAI | 05-20、06-11 等（具体论文尚待核） | 观测偏差、confounding、科学成像与因果启发；未确认完整书目，不凭记忆补题名。 |
+| WPEM / XRD refinement | 05-20、05-25、06-07、06-28 | diffraction consistency、Bragg-law constraint、PXRD 峰重叠与物理约束背景；当时不是分类一致性损失的直接来源，完整书目待核。 |
+| [SimXRD-4M](https://arxiv.org/abs/2406.15469) | 05-25、06-11、06-28 | 大规模模拟 XRD 与晶体对称性分类基准；提供数据/任务基础，避免仅复刻分类。 |
+| Bin Cao, *Physics-Constrained Learning of Crystal Structures and Properties from Powder Diffraction*, thesis (May 2026) | 06-07、06-28 | 物理约束 PXRD 的相关研究线索；当时可见 thesis/摘要信息，未确认完整阅读。 |
+| Chatzidakis & Botton, *[Towards calibration-invariant spectroscopy using deep learning](https://doi.org/10.1038/s41598-019-38482-1)* (2019) | 06-07、06-29 | EELS 的校准不变性、光谱测量条件变化与泛化的类比；非 Raman，非 JS consistency loss 来源。 |
+| Lee et al., *A Deep Learning Approach to Powder X-Ray Diffraction Pattern Analysis: Addressing Generalizability and Perturbation Issues Simultaneously* (2023) | 06-11 | PXRD 物理扰动、增强及泛化领域先例。 |
+| Szymanski/Bartel/Ceder 多相衍射 probabilistic deep learning；XQueryer | 06-11 | PXRD 相关先例与其他任务比较；历史摘录没有提供具体完整书目。 |
+| [Mean Teacher](https://arxiv.org/abs/1703.01780)、FixMatch、UDA、[VAT](https://arxiv.org/abs/1704.03976)、Cross-Consistency Training | 06-11、06-29 | 半监督/跨领域 consistency 思想参考：不同视图/模型预测稳定、弱强视图等；未意味着采用其伪标签或训练机制。 |
+| [ImageNet-C/P](https://arxiv.org/abs/1903.12261) | 06-11 | 系统化 corruption/perturbation 测试与预测稳定性指标的参考。 |
+| 医学影像 domain adaptation / scanner-protocol shift | 06-11、06-27 | 仪器和测量域变化下稳定识别的类比；未确认具体医学论文。 |
+| XRDMatch | 06-29 | XRD 半监督弱强视图一致性领域先例；历史讨论中的完整论文题名及 DOI 需单独核对。 |
+| KBSS | 06-29；后续 07-13 历史笔记 | 知识引导增强与同对象视图预测一致性的思想参考，不移植其代码。详见 [原笔记](https://github.com/Frysland-2024/AI4science/blob/f36be82b2a0b5fd3c58ec87a58fa6e3ba839f217/00_project_context/KBSS_PROJECT_RELEVANCE.md)。 |
+| Hendrycks et al., [AugMix](https://arxiv.org/abs/1912.02781) (ICLR 2020) | 06-29；11-26 本人回溯确认 | JS prediction consistency 的直接灵感来源；将图像增强视图思想重新解释为物理测量视图。 |
+| *[Machine learning in X-ray diffraction for materials discovery and characterization](https://www.sciencedirect.com/science/article/abs/pii/S2590238525003157)*, Matter (2025) | 06-29 | 当时讨论 physics-agnostic XRD-ML、experimental artifacts、transferability 和 responsible reporting。 |
+| XRPD 测量扰动/物相识别论文（题名未检索到） | 06-29 | 当时讨论 noise、baseline、constant theta shift、peak-width irregularity 与更困难的 preferred orientation/poor particle statistics，以及峰位/强度的相对作用。 |
+| FlexMatch、GroupDRO、feature consistency、预处理校正后分类 | 06-29 | 候选算法与替代路径，不代表最终采用。 |
+
+**Raman 线索：** 05-20 和 05-25 的摘录确实包括 Raman 及其他光谱 ML、噪声/基线/峰移鲁棒性；研究者 11-26 回忆还曾读到某篇 Raman + 物理限制/consistency 论文。目前不能从可检索的早期摘录确认其题名或 DOI，也不能证明 EELS 论文就是唯一被回忆的文献；保留待考线索，而不以新检索论文冒充历史来源。
+
+**历史意义：** 五月最初的因果/物理限制探索，经过测量干预、预测不变性、跨领域一致性方法和四组消融，逐步收敛为同母结构的测量等价关系监督。研究者在 06-01 确认主线、06-05 坚持 invariance、06-11 选定一致性正则化、06-27 明确研究问题；这些是可追溯的科学方向与设计决策。助手提供的备选算法、文献提示及具体实验建议分别保留，不追认成研究者独立提出的全部细节或已完成成果。当前方法、结果冻结和执行边界仍由 [CURRENT_STATE.md](CURRENT_STATE.md) 及冻结证据决定。
+
 ## 2. Physical perturbation and dynamic augmentation
 
 Early versions built a simulator around label-preserving PXRD variation: peak-position shift, peak broadening, preferred orientation, background, and noise.
