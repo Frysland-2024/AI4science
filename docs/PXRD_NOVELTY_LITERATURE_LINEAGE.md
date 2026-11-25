@@ -89,6 +89,14 @@
 
 > *Schopmans et al. further adopted continuous on-the-fly generation during training.*
 
+### Hendrycks et al., ICLR 2020 — AugMix
+
+Dan Hendrycks et al., [*AugMix: A Simple Data Processing Method to Improve Robustness and Uncertainty*](https://arxiv.org/abs/1912.02781)（2019 年预印本，ICLR 2020）。
+
+**2026-11-26 研究者本人确认的直接方法灵感来源：** 当前 PXRD 项目中的 JS prediction consistency 直接借鉴 AugMix 的思想，即通过 Jensen–Shannon divergence 约束同一对象不同增强视图的预测分布。AugMix 原方法比较原图与两个独立增强图像的三个预测分布；本项目使用在线 PXRD 模拟器从同一母结构生成两张独立测量扰动谱，对二者的预测分布施加 JS consistency，并与使用相同双视图和标签的 Dynamic ERM 对照。
+
+**方法谱系区分：** AugMix 是 JS 一致性目标的直接灵感来源；KBSS 是同一对象不同视图预测稳定性的另一项思想参考（见 [2026-07-13 KBSS 思想吸收笔记](https://github.com/Frysland-2024/AI4science/blob/f36be82b2a0b5fd3c58ec87a58fa6e3ba839f217/00_project_context/KBSS_PROJECT_RELEVANCE.md)）；Schopmans 等提供在线 PXRD 生成的领域先例。本项目的具体贡献仍然是将 simulator-retained same-parent identity 转化为 measurement-equivalence relational supervision，而非发明 JS 或完整复现 AugMix。此补记依据研究者本人对历史灵感的确认，不改变原有实现、冻结结果或执行状态。
+
 ### 其他 supporting literature
 
 本轮文献讨论还整理了 Chitturi et al. (2021)、CPICANN (2024)、end-to-end structure determination (2024)、以及后续 experiment-informed augmentation 工作等候选 supporting precedents。它们可以用于扩充 Related Work，但在正式论文写出“first / no prior work”之前，应逐篇核验原文与训练实现，不把当前讨论直接等同于穷尽式 novelty search。
