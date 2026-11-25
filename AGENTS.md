@@ -1,10 +1,17 @@
 # AGENTS.md — Research Agent Operating Rules
 
-## Current research status (2026-11-21)
+## Current research status
 
-**Owner decision: results frozen.** The AI4science result set is closed to routine reruns, retuning, and result-driven experiment expansion. The existing result artifacts and reports remain authoritative; this decision does not convert any earlier `NOT_RUN` item into a completed experiment or alter its metrics/evidence status.
+<!-- DOCS_SYNC:BEGIN research_status -->
+**Research status (2026-11-21):** PXRD seven-crystal-system classification. Results: **FROZEN**; manuscript priority: **LOW**; V11 execution: **DEFERRED**.
 
-**Current priority:** organizing the main paper narrative is **LOW PRIORITY / WRITING ONLY**. It can be done when convenient and is not a project gate. Use the existing framing in `docs/PXRD_SUPERVISION_FRAMING.md`; do not start experiments or reopen frozen results to support the prose unless the owner makes a separate new decision.
+- Issue #61: CLOSED_LOCAL_SCOPE; local preflight: PASS. Issue #55: OPEN_DEFERRED.
+- Prospective benchmark: **RRUFF-Cu1011**.
+- Cuifa Stage 0: NOT_RUN; HPO: NOT_RUN; Confirmation: NOT_RUN; Final training: NOT_RUN; Synthetic Test: NOT_RUN; RRUFF scoring: NOT_RUN.
+- This status is not experiment authorization. Separate owner approval and applicable evidence gates are required.
+<!-- DOCS_SYNC:END research_status -->
+
+For structured status changes, edit `research_state.json` only after owner approval and evidence review, then run `python scripts/sync_docs.py --write`. Do not edit generated blocks manually. Scientific interpretation remains in `docs/CURRENT_STATE.md`; frozen artifacts remain authoritative for results. Use `docs/PXRD_SUPERVISION_FRAMING.md` for manuscript framing.
 
 **Do not:** recollect the existing structure library, restart owner-cancelled legacy 9,842-parent Optuna, optimize against held-out synthetic test or real RRUFF, reopen archived parameter inversion/DONUT/AutoLab tasks, or treat planning as executed experiments.
 

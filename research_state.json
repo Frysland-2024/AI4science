@@ -1,0 +1,20 @@
+{
+  "schema": 1,
+  "date": "2026-11-21",
+  "direction": "PXRD seven-crystal-system classification",
+  "results": "FROZEN",
+  "manuscript_priority": "LOW",
+  "execution": "DEFERRED",
+  "local_preflight": "PASS",
+  "issue61": "CLOSED_LOCAL_SCOPE",
+  "issue55": "OPEN_DEFERRED",
+  "benchmark": "RRUFF-Cu1011",
+  "stages": {
+    "cuifa_stage0": "NOT_RUN",
+    "hpo": "NOT_RUN",
+    "confirmation": "NOT_RUN",
+    "final_training": "NOT_RUN",
+    "synthetic_test": "NOT_RUN",
+    "rruff_scoring": "NOT_RUN"
+  }
+}

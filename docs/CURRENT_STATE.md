@@ -1,9 +1,15 @@
 # AI4science 当前状态
 
-> **权威性说明：** 本文件记录当前科学状态与当前执行口径。历史版本、旧聊天和 `PROJECT_HISTORY.md` 用于解释“为什么改变”，不得覆盖这里的当前结论；AI/Agent 工作规则见 [`../AGENTS.md`](../AGENTS.md) 与 [`RESEARCH_WORKFLOW.md`](RESEARCH_WORKFLOW.md)。
+> **权威性说明：** 本文件记录当前科学解释与证据边界；结构化执行状态以 `research_state.json` 为准，由同步器生成下方状态区块。历史版本、旧聊天和 `PROJECT_HISTORY.md` 用于解释“为什么改变”，不得覆盖这里的当前结论；AI/Agent 工作规则见 [`../AGENTS.md`](../AGENTS.md) 与 [`RESEARCH_WORKFLOW.md`](RESEARCH_WORKFLOW.md)。
 
-**状态日期：** 2026-11-21
+<!-- DOCS_SYNC:BEGIN research_status -->
+**Research status (2026-11-21):** PXRD seven-crystal-system classification. Results: **FROZEN**; manuscript priority: **LOW**; V11 execution: **DEFERRED**.
 
+- Issue #61: CLOSED_LOCAL_SCOPE; local preflight: PASS. Issue #55: OPEN_DEFERRED.
+- Prospective benchmark: **RRUFF-Cu1011**.
+- Cuifa Stage 0: NOT_RUN; HPO: NOT_RUN; Confirmation: NOT_RUN; Final training: NOT_RUN; Synthetic Test: NOT_RUN; RRUFF scoring: NOT_RUN.
+- This status is not experiment authorization. Separate owner approval and applicable evidence gates are required.
+<!-- DOCS_SYNC:END research_status -->
 
 **2026-11-21 OWNER DECISION — RESULTS FROZEN; MANUSCRIPT NARRATIVE LOW PRIORITY:** The owner confirms that the AI4science results are frozen. Treat the already-established result set as closed to routine reruns, retuning, or result-driven experiment expansion. Organizing the paper's main narrative remains a **LOW-PRIORITY writing task**, to be done when convenient; it is not a current project gate or a reason to start experiments. This freeze supersedes the earlier V11 HPO resumption checkpoint: no pending HPO, training, or scoring plan is a current task unless the owner separately reactivates it. It does not retroactively turn any previously NOT_RUN training or evaluation into completed work, and it does not change any reported metric or evidence boundary. Existing result files and reports remain authoritative.
 

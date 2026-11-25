@@ -21,14 +21,18 @@ Different simulated measurements of the same parent crystal share the same cryst
 
 Read the [full results and caveats](xrd_robustness/reports/RESULTS.md), [calibration analysis](xrd_robustness/reports/CALIBRATION_ANALYSIS.md) and [data-efficiency report](xrd_robustness/reports/PARENT_BUDGET_EFFICIENCY.md).
 
-## Current status (2026-11-21)
+## Current status
 
-**Results frozen; manuscript narrative low priority.** No new experiments are authorized. See [current state](docs/CURRENT_STATE.md) for the controlling decision.
+<!-- DOCS_SYNC:BEGIN research_status -->
+**Research status (2026-11-21):** PXRD seven-crystal-system classification. Results: **FROZEN**; manuscript priority: **LOW**; V11 execution: **DEFERRED**.
 
-- V11 simulator integration and the 154,975-record structure library (154,968 parent groups) are preserved.
-- [Issue #61](https://github.com/Frysland-2024/AI4science/issues/61) is closed for local package/CPU preflight only; target GPU readiness is not established.
-- [Issue #55](https://github.com/Frysland-2024/AI4science/issues/55) is open but deferred. Cuifa Stage 0, HPO, confirmation, final training, synthetic Test and RRUFF-Cu1011 scoring remain NOT_RUN.
-- The frozen 1,011-spectrum [RRUFF-Cu1011 protocol](docs/RRUFF_CU1011_PRIMARY_BENCHMARK_FREEZE_ALPHA_2026_RATIONALE.md) is prospective, not a completed evaluation.
+- Issue #61: CLOSED_LOCAL_SCOPE; local preflight: PASS. Issue #55: OPEN_DEFERRED.
+- Prospective benchmark: **RRUFF-Cu1011**.
+- Cuifa Stage 0: NOT_RUN; HPO: NOT_RUN; Confirmation: NOT_RUN; Final training: NOT_RUN; Synthetic Test: NOT_RUN; RRUFF scoring: NOT_RUN.
+- This status is not experiment authorization. Separate owner approval and applicable evidence gates are required.
+<!-- DOCS_SYNC:END research_status -->
+
+See [current state](docs/CURRENT_STATE.md) for scientific context and evidence boundaries.
 
 ## Code and reproducibility
 

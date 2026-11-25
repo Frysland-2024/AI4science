@@ -108,8 +108,17 @@ def inspect(root: Path) -> list[str]:
         return errors
     agents, state = (read(root, name) for name in SOURCES)
     try:
-        benchmark, unrun, (ready, hpo) = current_facts(agents, state)
-    except ValueError as exc:
+        if (root / 'research_state.json').exists() or 'DOCS_SYNC:BEGIN' in agents:
+            sys.path.insert(0, str(Path(__file__).resolve().parent))
+            from sync_docs import load, changes
+            facts = load(root)
+            errors.extend(f'{path}: generated status drift' for path, _, _ in changes(root))
+            benchmark = facts['benchmark']
+            unrun = facts['stages']['hpo'] == 'NOT_RUN' or facts['stages']['final_training'] == 'NOT_RUN'
+            ready, hpo = '61', '55'
+        else:
+            benchmark, unrun, (ready, hpo) = current_facts(agents, state)
+    except (ValueError, OSError, TypeError, KeyError) as exc:
         return [f"Canonical source failure: {exc}"]
     for doc in PUBLIC_DOCS:
         content = read(root, doc)

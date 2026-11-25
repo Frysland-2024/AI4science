@@ -8,7 +8,14 @@ This is a machine-learning project on **PXRD seven-crystal-system classification
 
 The tested implementation compares Dynamic JS Consistency with matched Dynamic ERM using ResNet-18-GN. It improves simulated OOD Macro-F1 by **5.46 percentage points** over five matched seeds. Existing RRUFF-301 K=1/2/5 and CNRS-318 results are supporting completed evidence and must be reported with their task and uncertainty limits.
 
-**Current work (2026-11-21):** results frozen; manuscript narrative low priority. V11 execution is deferred. [Issue #61](https://github.com/Frysland-2024/AI4science/issues/61) is closed for local preflight only; [Issue #55](https://github.com/Frysland-2024/AI4science/issues/55) remains open but inactive. Cuifa Stage 0, HPO, confirmation, final training, synthetic Test and RRUFF-Cu1011 scoring remain NOT_RUN. See [current state](CURRENT_STATE.md).
+<!-- DOCS_SYNC:BEGIN research_status -->
+**Research status (2026-11-21):** PXRD seven-crystal-system classification. Results: **FROZEN**; manuscript priority: **LOW**; V11 execution: **DEFERRED**.
+
+- Issue #61: CLOSED_LOCAL_SCOPE; local preflight: PASS. Issue #55: OPEN_DEFERRED.
+- Prospective benchmark: **RRUFF-Cu1011**.
+- Cuifa Stage 0: NOT_RUN; HPO: NOT_RUN; Confirmation: NOT_RUN; Final training: NOT_RUN; Synthetic Test: NOT_RUN; RRUFF scoring: NOT_RUN.
+- This status is not experiment authorization. Separate owner approval and applicable evidence gates are required.
+<!-- DOCS_SYNC:END research_status -->
 
 The historical simulated parent-budget study is supplementary evidence and does not establish a quantitative structure-saving claim. The V11 simulator code has been integrated, and the 154,975-record structure library has been collected; V11 full-data training and the new zero-shot benchmark are **not completed**. Preserve older protocols as history rather than treating them as active execution instructions.
 

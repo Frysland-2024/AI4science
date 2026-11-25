@@ -4,7 +4,14 @@
 
 This guide is a navigation layer—not a replacement for the frozen experiment files or result reports. The [README](../README.md) gives the shortest overview; [CURRENT_STATE.md](CURRENT_STATE.md) is authoritative on scientific status.
 
-**Current project status (2026-11-09):** completed same-parent JS versus ERM evidence remains frozen. The active PXRD seven-crystal-system project is preparing V11 full-data training: the 154,975-record structure library is collected, while full training readiness remains under [Issue #61](https://github.com/Frysland-2024/AI4science/issues/61), followed (only after approval) by bounded HPO under [Issue #55](https://github.com/Frysland-2024/AI4science/issues/55). The official prospective real-domain primary benchmark is **RRUFF-Cu1011** (1,011 spectra); scoring has not run. Quantitative parameter inversion and DONUT/AutoLab remain archived.
+<!-- DOCS_SYNC:BEGIN research_status -->
+**Research status (2026-11-21):** PXRD seven-crystal-system classification. Results: **FROZEN**; manuscript priority: **LOW**; V11 execution: **DEFERRED**.
+
+- Issue #61: CLOSED_LOCAL_SCOPE; local preflight: PASS. Issue #55: OPEN_DEFERRED.
+- Prospective benchmark: **RRUFF-Cu1011**.
+- Cuifa Stage 0: NOT_RUN; HPO: NOT_RUN; Confirmation: NOT_RUN; Final training: NOT_RUN; Synthetic Test: NOT_RUN; RRUFF scoring: NOT_RUN.
+- This status is not experiment authorization. Separate owner approval and applicable evidence gates are required.
+<!-- DOCS_SYNC:END research_status -->
 
 ## The 60-second explanation
 
@@ -79,7 +86,7 @@ The **ResNet implementation is adapted from ML4pXRDs** under the [third-party no
 
 ## Current scope and historical tracks
 
-- **Active main project:** [xrd_robustness](../xrd_robustness/) — preserve completed, frozen classification comparisons while preparing V11 dataset readiness and a separately authorized new model evaluation. For active status, use [CURRENT_STATE](CURRENT_STATE.md).
+- **Active main project:** [xrd_robustness](../xrd_robustness/) — preserve completed classification comparisons; V11 plans are technical references subject to current status and separate authorization. For active status, use [CURRENT_STATE](CURRENT_STATE.md).
 - **Archived / inactive numerical-inversion research:** [xrd_inversion](../xrd_inversion/) contains forward-model / recoverability gates; its formal report records **288/288** clean P2-R successes while other nominal-start and nuisance diagnostics fail. **No neural training** was run for those numerical gates, and this is **not** evidence of a validated real-domain ML inversion model.
 - **PR #46 inversion benchmark:** partial synthetic exploration: 42 models, 8,085 primary rows, q-accuracy gate **0/42**, per-DOF cell-MAE constraint **41/42**. PR43 test parents were already opened; new-architecture stress and real RRUFF validation were not run. It does not establish method superiority.
 - **Completed supplementary study:** [parent-structure efficiency results](../xrd_robustness/reports/PARENT_BUDGET_EFFICIENCY.md) — 40 models across four independent-parent budgets. JS performs better at each matched budget, but no quantitative parent saving is demonstrated; this reuses a previously evaluated Test.

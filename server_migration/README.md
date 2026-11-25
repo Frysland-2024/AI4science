@@ -1,6 +1,15 @@
 # AI4science 2026-11-03 — Linux GPU migration + bounded one-command V11 Optuna
 
-> **Current disposition (2026-11-21): RESULTS FROZEN.** This entire launcher guide is a preserved technical reference, not an active execution instruction. Cuifa Stage 0, HPO, confirmation, final training, Test and RRUFF remain NOT_RUN. Separate owner reactivation is required; see [CURRENT_STATE.md](../docs/CURRENT_STATE.md).
+<!-- DOCS_SYNC:BEGIN research_status -->
+**Research status (2026-11-21):** PXRD seven-crystal-system classification. Results: **FROZEN**; manuscript priority: **LOW**; V11 execution: **DEFERRED**.
+
+- Issue #61: CLOSED_LOCAL_SCOPE; local preflight: PASS. Issue #55: OPEN_DEFERRED.
+- Prospective benchmark: **RRUFF-Cu1011**.
+- Cuifa Stage 0: NOT_RUN; HPO: NOT_RUN; Confirmation: NOT_RUN; Final training: NOT_RUN; Synthetic Test: NOT_RUN; RRUFF scoring: NOT_RUN.
+- This status is not experiment authorization. Separate owner approval and applicable evidence gates are required.
+<!-- DOCS_SYNC:END research_status -->
+
+This launcher guide is a technical reference, not authorization to execute. See [CURRENT_STATE.md](../docs/CURRENT_STATE.md).
 
 ## Historical cuifa launch safety — 2026-11-10 (NOT_RUN, fail closed)
 

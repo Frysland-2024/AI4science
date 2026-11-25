@@ -6,6 +6,10 @@ on:
   push:
     branches: [main]
     paths:
+      - "research_state.json"
+      - "scripts/sync_docs.py"
+      - "tests/test_sync_docs.py"
+      - "server_migration/README.md"
       - "README.md"
       - "AGENTS.md"
       - "docs/CURRENT_STATE.md"
@@ -33,6 +37,10 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
+      - name: Test and check generated status
+        run: |
+          python -m unittest discover -s tests -p 'test_sync_docs.py' -v
+          python scripts/sync_docs.py --check
       - name: Check guardrail unit tests
         run: python -m unittest discover -s tests -p "test_docs_consistency.py" -v
       - name: Test existing PR hygiene parser and safeguards
