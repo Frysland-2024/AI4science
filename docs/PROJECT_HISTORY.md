@@ -337,7 +337,7 @@ The initial question was not simply "can a network classify clean simulated patt
 | XRPD 测量扰动/物相识别论文（题名未检索到） | 06-29 | 当时讨论 noise、baseline、constant theta shift、peak-width irregularity 与更困难的 preferred orientation/poor particle statistics，以及峰位/强度的相对作用。 |
 | FlexMatch、GroupDRO、feature consistency、预处理校正后分类 | 06-29 | 候选算法与替代路径，不代表最终采用。 |
 
-**Raman 线索：** 05-20 和 05-25 的摘录确实包括 Raman 及其他光谱 ML、噪声/基线/峰移鲁棒性；研究者 11-26 回忆还曾读到某篇 Raman + 物理限制/consistency 论文。目前不能从可检索的早期摘录确认其题名或 DOI，也不能证明 EELS 论文就是唯一被回忆的文献；保留待考线索，而不以新检索论文冒充历史来源。
+**EELS／Raman 回忆纠正（2026-11-26 本人确认）：** 此前记成 Raman 的光谱测量不变性论文实际为 Chatzidakis & Botton (2019), *[Towards calibration-invariant spectroscopy using deep learning](https://doi.org/10.1038/s41598-019-38482-1)*（EELS）；AugMix 为 JS 一致性直接灵感来源。五月的 Raman 讨论仍保留，原独立 Raman 论文待考线索关闭。见 [方法谱系](PXRD_NOVELTY_LITERATURE_LINEAGE.md)。
 
 **历史意义：** 五月最初的因果/物理限制探索，经过测量干预、预测不变性、跨领域一致性方法和四组消融，逐步收敛为同母结构的测量等价关系监督。研究者在 06-01 确认主线、06-05 坚持 invariance、06-11 选定一致性正则化、06-27 明确研究问题；这些是可追溯的科学方向与设计决策。助手提供的备选算法、文献提示及具体实验建议分别保留，不追认成研究者独立提出的全部细节或已完成成果。当前方法、结果冻结和执行边界仍由 [CURRENT_STATE.md](CURRENT_STATE.md) 及冻结证据决定。
 
@@ -413,6 +413,66 @@ The simulator is therefore used as:
 > **data generator + relationship supervisor**
 
 This is the current method-level interpretation.
+
+### 2026-07—08 中旬：研究思想与实验决策的同期证据（2026-11-26 考古补记）
+
+**Research decision:** 回补 V6→V9/V10、真实域与反演分岔的研究思想史，尤其保留被放弃的方案、实验如何改变判断，以及当时尚未回答的问题。依据以下同期或接近同期文档，而非将后来的成熟叙事倒灌为早期原话：
+
+- [旧版 PROJECT_JOURNEY.md](https://github.com/Frysland-2024/AI4science/blob/f36be82b2a0b5fd3c58ec87a58fa6e3ba839f217/00_project_context/PROJECT_JOURNEY.md)（含逐日决策与 08-11 时效说明、08-13 反演设想，约 4.8 万字符）。
+- [KBSS 思想吸收笔记，07-13](https://github.com/Frysland-2024/AI4science/blob/f36be82b2a0b5fd3c58ec87a58fa6e3ba839f217/00_project_context/KBSS_PROJECT_RELEVANCE.md)。
+- 07-25 的十页技术简报 `PXRD_robust_learning_project_architecture_for_Haotian_Hu_v4_architecture_page_replaced.pdf`（研究者文档库原件，日期化快照；用于与 Hu et al. 方法进行技术讨论，不证明实际会谈或对方答复）。
+- 08-07 的交接文件 `AI4Science_Project_Handoff_for_Admissions_AI_2026-08-07.docx`（研究者文档库原件，含当时结果与申请叙事；其中较强证据表述由 08-11 审计覆盖）。
+- [08-08 的 Application Research Narrative V1](https://github.com/Frysland-2024/AI4science/blob/f36be82b2a0b5fd3c58ec87a58fa6e3ba839f217/00_project_context/APPLICATION_RESEARCH_NARRATIVE_V1_20260808.md)（保留历史 supersession notice）。
+
+完整的六月中下旬至八月中旬原始聊天目前未恢复；以下是上述文档中的决策、记录及历史技术讨论的归纳，不冒充逐字对话。数值仅用于解释当时的决定，不是重新定义现行结果。
+
+#### 1. V6/V7：从测量不变性走向复杂学习方案
+
+- 六月已有 augmentation × consistency 四组概念消融；V6 进一步将 PAMPT 峰形感知骨干、Offline/Dynamic ERM、Dynamic JS、Dynamic Residual、物理扰动和 OOD 评价组织成可运行流程。
+- V7 补上 reflection-level March–Dollase 择优取向，使五类扰动涵盖峰位、峰形、相对强度、背景和噪声；又引入 25/50/100% 独立训练结构预算。后者回答的是另一项科学问题，不能与测量域泛化自动合并。
+- 07-13 的 KBSS 代码审计已区分弱/强视图、伪标签筛选、论文与实现是否一致、初始化缓存与训练时动态生成；决定仅吸收高层预测稳定性思想，不移植其代码。AugMix 是研究者后来明确确认的 JS 直接灵感来源。
+
+#### 2. 07-15—16：一度放弃 JS，尝试结构化模拟与测量表征
+
+V8 将独立算子随机化视为尚可改进的模拟范式：先采样虚拟 sample/instrument/acquisition state，再采样条件相关的五扰动参数；不强制所有扰动相互相关，强调同一物理机制内部一致、参数有文献/代码/公式依据以及合理生成顺序。拟比较 Independent Dynamic ERM、Structured Dynamic ERM、Structured Dynamic + Residual。
+
+- 07-15 删除 Structured Dynamic + JS 正文组，并移除独立结构样本效率轴，避免把多个科学问题塞入同一主实验；取消无依据的“最多两个强扰动”规则。Independent Dynamic ERM 借用 XRDMatch 的算子级独立在线随机化思想，不复制其半监督训练或具体算子；完成软件 smoke，而非科学结果。
+- 当时也讨论扰动差参数监督（AugSelf 式思路）：令两视图特征差预测模拟器已知的测量参数差，同时降低晶系信息；复杂连续/离散/结构化标签及可辨识性问题使其成为独立未来支线。
+- 07-16 V9.2 将结构化联合模拟归档为未来模块（状态变量与联合分布缺少足够证据冻结）；形成测量参数监督与 matched ERM/JS/Residual 比较的双轨计划。真实仪器被定位为 external validation，而非某台仪器专属模拟器的必要前提。
+
+#### 3. 07-22：一致性假象、权重治理与 Raman 第二项目
+
+- 复核 Hu et al. SD3Net：论文 Table 5 的去相关权重 lambda_3=1 与 Fig.12 中约 1e-4 的 regularization parameter 不应混为一谈。外部论文是机制及敏感性实验先例，不是 PXRD 权重的来源。
+- 初始 Train-only 128-step 审计 late 段分类准确率 11.96%、CE 1.9499（近 ln(7)），两个视图 top-1 一致率却 99.34%、JS 约 2.97e-7；residual probe 也接近随机。**尚未学会的模型可以表现出虚假的一致性。** 不把巨大梯度比倒数当权重提案，不把随机 probe 当作已成功去相关。
+- 后续 learned-state audit 以 Train-only ERM 学习里程碑取样；三个互斥 700-parent 子集分别用于 detached probe 训练、probe 审计、loss/gradient audit。到 epoch 5，主任务和 probe 已有学习信号，probe accuracy 32.57%、raw JS 中位 0.01862、top-1 disagreement 35.42%。由此才能解释辅助梯度尺度。最终以 Train-only 证据冻结旧 PAMPT 候选 JS [0.3,3,30]、Residual [0.2,2,20]，不接触 Validation/Test/real。相应 BF16 容差与未授权阈值修订见同期 PROJECT_JOURNEY；不把 gate 当科学性能结论。
+- 复现性也从“保存模型”升级为 checkpoint/resume 同一随机流、后续 loss 与模型哈希的等价性；同期记录 12/12 检查通过。
+- 同日另有 **Raman mapping 第二项目**：两份 undoped/doped 文件，每份 26×26×829，虽共有 1,352 条像素谱，却只有两个独立样品。随机像素划分可能泄漏样品与批次；MATLAB 原型只完成读取、积分、绘图与空间显示。决定不替代 XRD 主线，不用 3D CNN/Transformer 强行做两样品分类，优先描述性 PCA/NMF；未来在更多独立样品、批次和可靠标签下研究空间-光谱自监督、解混/分割、异常检测。这是后续科学光谱研究兴趣的同期线索，不是已完成 Raman ML 项目，也与此前误记为 Raman 的 EELS 论文是两件不同的事。
+
+#### 4. 07-25：三种学习原则与失败机制的讨论
+
+7 月 25 日技术简报中的正式设想是同一母结构、同一动态 pair stream 和计算预算下，比较普通增强、JS 和 residual 类别去相关。PAMPT-B3 尚为公共骨干，正式调参 0/7、多种子 0/15，RRUFF-70 当时仅完成规划；P0 的 JS 为 promising but seed-sensitive，Residual 独立 probe 约 29–31% 对 14.3% chance，收益区间跨零。V10 无条件测量监督提升背景/展宽/噪声可解码性，却同时提高 signed/symmetric residual 晶系泄漏（相对 matched V9 分别 +0.01429/+0.03714 accuracy），因而归档。
+
+简报列出的五个待讨论问题值得完整保留其含义：① SD3Net 的跨域残差思想迁移到同晶体双视图时，symmetric absolute residual + adversarial class entropy 是否合适；② 不稳定来自优化/交替训练还是结构性的目标冲突；③ 如何区分内部 discriminator 被欺骗和独立 probe 真正无法读出类别；④ 是否可用 stop-gradient semantic context 条件化 measurement decoder；⑤ 哪些 OOD/real 指标之外的机制证据（probe、effective rank、class separation、residual norm、flip、profile sensitivity、representation visualization）才足以支持论文。它们是当时开放的技术问题，不声称已得到 Hu 的反馈或最终解决。
+
+参考文献按 07-25 简报保留：Hu et al., *Hyperspectral single-source domain generalization via structured data simulation and domain-disparity decorrelation*, Knowledge-Based Systems 348 (2026) 116429；Lee et al., *A Deep Learning Approach to Powder X-Ray Diffraction Pattern Analysis: Addressing Generalizability and Perturbation Issues Simultaneously*, Advanced Intelligent Systems 5 (2023) 2300140；Schopmans, Reiser & Friederich, *Neural networks trained on synthetically generated crystals can extract structural information from ICSD powder X-ray diffractograms*, Digital Discovery 2 (2023) 1414–1424；Oviedo et al., *Fast and interpretable classification of small X-ray diffraction datasets using data augmentation and deep neural networks*, npj Computational Materials 5 (2019) 60；Yu et al., *A Knowledge-Based Semi-Supervised Crystal Property Prediction Framework with Consistency Regularization*, IEEE TKDE (2026)。这些为同期简报书目，不代表本轮重新核验每篇原文。
+
+#### 5. 07-26—28：先验证地基，再决定算法
+
+- 07-26：旧 PAMPT 七条 Validation-only run 在 30,650-step 固定终点协议完成，曾选择 JS=3 / Residual=2；发现仅终点评估不能证明收敛，故重订最长 100 epochs 与预注册 early stopping。之后更换 family-disjoint 为按晶系分层的 exact-parent-disjoint split，旧选择及 run 作废，不外推。另有 Git provenance 缺口导致首轮停止并重启等工程审计。
+- 07-27：新 split pilot ID Macro-F1 约 0.42、OOD 约 0.36，排除旧 family split 为主要瓶颈；Foundation Gate 3 的 matched Clean 诊断将 PAMPT-B3 与 ML4pXRDs ResNet-18-GN 比较：Train accuracy 0.638494→1.0、level-0 Macro-F1 0.532749→0.652168、OOD 0.289676→0.403163。决定先更换骨干，不把训练失败归因于物理增强。
+- 07-28：sqrt preprocessing、Adam、warm-up+cosine 三项 Clean 诊断未改善原 ResNet 主指标；matched Dynamic ERM 诊断将 OOD 从约 0.4032 提升到 0.6563，表明旧动态训练崩溃主要是 backbone interaction。Residual 独立 probe 三 seed 稳定性 gate 在 epoch 3/5/10 为 2/3、1/3、2/3，未通过预注册要求，因此不改阈值救方法；正式主线收敛至 Dynamic ERM vs JS。重新冻结 JS [3,30,60] 的 Train-only 梯度网格，并预注册四条 Validation-only 比较；此前七组合同关闭。此处的四条是超参数比较，与六月四组消融不同。
+
+#### 6. 08-03—13：关系监督、真实域证据与可辨识性
+
+- 08-03：云端十个 checkpoint 的哈希恢复证明产物完整，但归档不含性能摘要；随后与权威 Git 同步取得五 seed 的 Validation OOD 证据，全部 favor JS lambda=60。冻结 simulated Test 平均 paired gain +0.054600；monoclinic、shift/texture 部分 profile 仍有下降，不能宣称处处有效。
+- 同日 RRUFF 先扩至 350，再至 371（70 legacy + 301 extension）的历史设计；角色后来重新划分。矿物名重叠提醒外部测量域 transfer 不等于 unseen-mineral generalization。
+- 08-04：opXRD 铁电氧化物/陶瓷真实谱可行性模型盲审计 NO_GO。原因是数据采集对象与标签可用性不匹配，不靠放宽阈值虚构有效样本；未以模型结果筛数据。
+- 08-06：尝试将真实域任务定义为谭启组功能陶瓷相态识别（single phase / polymorphic coexistence / secondary phase），而非强凑七晶系；保留通用预训练、Scratch/ERM/JS 适配比较和独立物理样品/配方批次分组原则。属于 prospective 下游研究设想，非已完成 benchmark。
+- 08-07—08：交接与研究叙事明确区分 Materials Science enabled by ML 与 ML motivated by a scientific problem；从更多真实模拟谱转向同样数据暴露下的 learning principle；将 x1=g(s,m1)、x2=g(s,m2) 的同一潜在物体关系变成额外监督。保留 Backbone–Augmentation Compatibility、simulator provenance、label-efficient transfer、科学数据语义等思想。RRUFF-70 的 monoclinic 负迁移现象在 RRUFF-301 历史结果中未复现，提示小样本机制叙事风险；trigonal/hexagonal 标签错误被发现并纠正。校准分析属补充，非主贡献。
+- 08-11：从代码、confusion matrix、逐条预测与哈希反校叙事。确认实际完成的是分类，不是参数反演；360/360 profile 的旧命名 per_crystal_system_f1 字段需纠正，主 Macro-F1 等不受影响；正式 split 只有 exact-parent-disjoint，不是 formula/family-disjoint；RRUFF-301 原 runner、support IDs、授权及 runtime binding 缺失，虽指标可重算，证据降为 retrospective，不能称 confirmatory。上述 08-07/08 的较强历史表述以本条及当前权威证据为准。
+- 08-13：另立 known-template identifiability-aware sample/instrument inversion 候选，以 isotropic lattice strain 和 instrument zero shift 两变量为最小问题；前者角度相关、后者为常量，但需 Jacobian/Fisher、参数碰撞搜索和 classical multistart fit 证明可辨识性，不能以网络分数代替。扩维分级、forward discrepancy 辅助目标及 operator-mismatch panel 为计划，不是训练结果。该时期开始将科学测量主线延伸到 inverse problems，分类证据不因此改变。
+
+**思想史价值（本轮回顾）：** 这不是从一开始就知道终点的成功故事。七月曾主动移除 JS、探索复杂表征；随机一致性假象、probe 失败、数据划分及 backbone 诊断迫使问题重构；八月将物理观测的同源关系识别为监督信息，又对已获得结果进行证据降级和纠错。应保留这一过程及未解决的问题，而非仅保存最后分数。七月至八月完整原始聊天仍是待恢复材料；本节不改变冻结结果、研究任务、执行授权或当前 scientific framing。
 
 ## 7. Frozen simulated evaluation
 
