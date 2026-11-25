@@ -97,6 +97,12 @@ Dan Hendrycks et al., [*AugMix: A Simple Data Processing Method to Improve Robus
 
 **方法谱系区分：** AugMix 是 JS 一致性目标的直接灵感来源；KBSS 是同一对象不同视图预测稳定性的另一项思想参考（见 [2026-07-13 KBSS 思想吸收笔记](https://github.com/Frysland-2024/AI4science/blob/f36be82b2a0b5fd3c58ec87a58fa6e3ba839f217/00_project_context/KBSS_PROJECT_RELEVANCE.md)）；Schopmans 等提供在线 PXRD 生成的领域先例。本项目的具体贡献仍然是将 simulator-retained same-parent identity 转化为 measurement-equivalence relational supervision，而非发明 JS 或完整复现 AugMix。此补记依据研究者本人对历史灵感的确认，不改变原有实现、冻结结果或执行状态。
 
+### Chatzidakis & Botton, Scientific Reports, 2019 — EELS 校准不变性
+
+[*Towards calibration-invariant spectroscopy using deep learning*](https://doi.org/10.1038/s41598-019-38482-1)。
+
+**2026-11-26 本人确认的 EELS／Raman 回忆纠正：** 此前记成 Raman 的早期光谱测量不变性论文实际为上述 EELS 研究。该文提供科学光谱测量不变性的思想参考；AugMix 是 JS 一致性的直接灵感来源。五月确有 Raman 等光谱 ML 讨论，但不另立未经确认的 Raman 论文。此条关闭 [PROJECT_HISTORY.md](PROJECT_HISTORY.md) 早期研究史中的 Raman 待考线索，并覆盖其旧待核表述。仅纠正历史文献来源，不改变现行方法、冻结结果或执行状态。
+
 ### 其他 supporting literature
 
 本轮文献讨论还整理了 Chitturi et al. (2021)、CPICANN (2024)、end-to-end structure determination (2024)、以及后续 experiment-informed augmentation 工作等候选 supporting precedents。它们可以用于扩充 Related Work，但在正式论文写出“first / no prior work”之前，应逐篇核验原文与训练实现，不把当前讨论直接等同于穷尽式 novelty search。
