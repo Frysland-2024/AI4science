@@ -426,6 +426,18 @@ This is the current method-level interpretation.
 
 完整的六月中下旬至八月中旬原始聊天目前未恢复；以下是上述文档中的决策、记录及历史技术讨论的归纳，不冒充逐字对话。数值仅用于解释当时的决定，不是重新定义现行结果。
 
+#### 0. 06-29—07-12：补回四组消融与 V5 之间的早期讨论（历史聊天摘录）
+
+2026-11-26 再次检索恢复以下日期化聊天摘要。与同期 Git 原稿互为补充；不是完整逐字聊天，暂不能为 V1–V5 每个版本确定日期。旧仓库默认分支的 06-15—07-14 日期范围提交查询没有返回记录，不能因此断言当时没有代码或研究活动。
+
+- **06-29 本人确认项目定稿与三个月计划：** 七晶系分类，以物理测量扰动下的预测一致性与鲁棒性为主线，计划 SimXRD 训练、RRUFF 直接外测及本地重复扫描验证；四种扰动为 zero shift、角度相关展宽、background、count noise；structure-disjoint split；ERM/Aug-only/Cons-only/Full。评价候选包括 FlipRate、probability drift、confidence drop、calibration、扰动强度曲线。当时计划本地 8–12 个单相样品、每个 5–6 次重复扫描，并暂排除 domain adaptation、伪标签、FixMatch、texture 和多相。这是历史方案而非已执行任务；后续加入 texture 和 few-shot 并非最初即已确定。同期另讨论 AugMix/PhysicsMix、GroupDRO、feature consistency、预处理校正后分类等备选。
+- **06-30：** 讨论明确区分 structure diversity、measurement diversity 和 augmentation factor。同一母结构生成更多观测不是增加独立结构数。与 FerroAI 的温度—晶相标签补密/插值（label densification/interpolation）相比，XRD 的 measurement-invariance augmentation 具有不同的科学含义。此为当时的概念比较，不额外声称 FerroAI 有未验证的实验成果。
+- **07-04 算法改进储备：** 助手提出 anchor-supervised consistency 四组版本（Cons-only 为 weak/anchor CE + strong 对齐），以及 perturbation-aware weighting、curriculum、EMA teacher、adaptive augmentation policy 等候选。曾用 p(t,s|e,c) 表示扰动类型 t、强度 s 依赖训练轮次 e、类别或样本条件 c 的自适应采样设想。这表明当时已讨论动态扰动分布，但并不等于随后匹配双视图或现行在线模拟器已实现，也不将所有助手建议归为本人独立提出或已采用。
+- **07-05：** 用户关于长期科研定位的讨论已经聚焦科学测量（XRD）+ AI + Reliable ML；助手概括为 Reliable AI for Scientific/Medical Measurement，关注测量噪声、设备/条件差异、distribution shift、consistency、uncertainty、calibration 与跨设备泛化。科学/医学测量这一跨领域研究兴趣在七月初已有可追溯记录，不必用后来的 SRS 申请倒推。
+- **07-12 V5 方法与 7–9 月执行计划讨论：** 用户询问能否看懂当时的方法文件，助手概括四级方法链 Offline Multi-view ERM → Dynamic ERM → Dynamic JS → Dynamic Measurement-Residual Decorrelation。已讨论允许非零残差、抑制晶系类别信息的核心假设；各 Dynamic 方法共享 structure_id、两个测量参数及对应谱图，Residual 交替优化与独立 post-hoc probe；要求非零 residual norm、类别可解码性降低、OOD/real-XRD 改善且 in-range 不明显牺牲。07-12 是可检索到的 V5 讨论日期，不是该版本首次提出日期。V6 原稿明确说明其在保留 V5 四种训练目标的基础上升级普通 Patch Transformer 为 PAMPT。
+
+未恢复的关键材料仍为 07-01—07-03、07-06—07-11 的连续原话、V1–V4 逐版规范及 SD3Net/TASAM 首次被提出的日期；只保留已查证的时间锚点，不用后期文档填造当时对话。
+
 #### 1. V6/V7：从测量不变性走向复杂学习方案
 
 - 六月已有 augmentation × consistency 四组概念消融；V6 进一步将 PAMPT 峰形感知骨干、Offline/Dynamic ERM、Dynamic JS、Dynamic Residual、物理扰动和 OOD 评价组织成可运行流程。
