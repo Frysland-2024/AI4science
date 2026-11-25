@@ -93,9 +93,9 @@
 
 ## 六、ICENAT 原件与计算物理支线（2026-11-26 再考）
 
-### 1. 会议原稿已恢复，但必须区分作者
+### 1. 会议原稿已恢复，本人确认实际撰写者
 
-[ferroai-audit 历史档案](https://github.com/Frysland-2024/ferroai-audit/blob/main/FerroAI/RESEARCH_INTELLECTUAL_HISTORY.md) 已补入两份 conference summary.docx 的全文核对、blob SHA 和 Word 内部日期：2026-04-16、04-23。两份正文完全相同，回顾 March 28th Theme E，比较 Kioseoglou 的 molecular/pharmaceutical materials 相互作用及势能景观学习与 FerroAI 的相标签映射，并记录 AI hallucination 与数据质量思考。**正文署名 Yifeng CHEN，元数据 creator 为张舒凡**，不认定为本人逐字第一人称观点；本人 04-23/24 研究判断以灵感汇总及可核个人讨论为依据。该发现关闭会议 Word 全文缺口，但不解决最初思想或文本作者的分工归属。两张灵感图仍待核验。
+[ferroai-audit 历史档案](https://github.com/Frysland-2024/ferroai-audit/blob/main/FerroAI/RESEARCH_INTELLECTUAL_HISTORY.md) 已补入两份 conference summary.docx 的全文核对、blob SHA 和 Word 内部日期：2026-04-16、04-23。两份正文完全相同，回顾 March 28th Theme E，比较 Kioseoglou 的 molecular/pharmaceutical materials 相互作用及势能景观学习与 FerroAI 的相标签映射，并记录 AI hallucination 与数据质量思考。**2026-11-26 本人直接确认“这都是我写的”**，两份会议总结均为张舒凡本人撰写；原件正文署名 Yifeng CHEN、Word creator 为张舒凡，保留该事实但不再以署名否定本人实际撰写者身份，亦不推测署名原因。最迟 04-16 已有本人亲自撰写的关于物理学习目标与 AI hallucination 的反思，早于 04-23/24 灵感汇总。该发现关闭会议 Word 全文及实际撰写者的疑问；最初构思日期和会后交流细节仍待考。两张灵感图仍待核验。
 
 ### 2. 量子散射：与 Scientific ML 并行的计算物理学习支线
 
