@@ -1,6 +1,8 @@
 # AI4science 2026-11-03 — Linux GPU migration + bounded one-command V11 Optuna
 
-## Active cuifa launch safety — 2026-11-10 (NOT_RUN, fail closed)
+> **Current disposition (2026-11-21): RESULTS FROZEN.** This entire launcher guide is a preserved technical reference, not an active execution instruction. Cuifa Stage 0, HPO, confirmation, final training, Test and RRUFF remain NOT_RUN. Separate owner reactivation is required; see [CURRENT_STATE.md](../docs/CURRENT_STATE.md).
+
+## Historical cuifa launch safety — 2026-11-10 (NOT_RUN, fail closed)
 
 **Latest source-only transfer:** After committing the exact code, run
 `python server_migration/create_migration_bundles.py --source-only` in the existing

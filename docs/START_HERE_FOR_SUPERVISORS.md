@@ -8,7 +8,7 @@ This is a machine-learning project on **PXRD seven-crystal-system classification
 
 The tested implementation compares Dynamic JS Consistency with matched Dynamic ERM using ResNet-18-GN. It improves simulated OOD Macro-F1 by **5.46 percentage points** over five matched seeds. Existing RRUFF-301 K=1/2/5 and CNRS-318 results are supporting completed evidence and must be reported with their task and uncertainty limits.
 
-**Current work (2026-11-09):** the completed five-seed same-parent JS/ERM study remains frozen evidence, while the undergraduate PXRD classification project has resumed V11 development. The official prospective real-domain zero-shot benchmark is **RRUFF-Cu1011** (1,011 frozen spectra); no final Cu1011 model score has been produced. Finish data/PeakTable/integrity readiness in [Issue #61](https://github.com/Frysland-2024/AI4science/issues/61) before considering bounded GPU optimization in [Issue #55](https://github.com/Frysland-2024/AI4science/issues/55). GPU rental and training require separate approval.
+**Current work (2026-11-21):** results frozen; manuscript narrative low priority. V11 execution is deferred. [Issue #61](https://github.com/Frysland-2024/AI4science/issues/61) is closed for local preflight only; [Issue #55](https://github.com/Frysland-2024/AI4science/issues/55) remains open but inactive. Cuifa Stage 0, HPO, confirmation, final training, synthetic Test and RRUFF-Cu1011 scoring remain NOT_RUN. See [current state](CURRENT_STATE.md).
 
 The historical simulated parent-budget study is supplementary evidence and does not establish a quantitative structure-saving claim. The V11 simulator code has been integrated, and the 154,975-record structure library has been collected; V11 full-data training and the new zero-shot benchmark are **not completed**. Preserve older protocols as history rather than treating them as active execution instructions.
 
@@ -16,7 +16,7 @@ The historical simulated parent-budget study is supplementary evidence and does 
 
 | Time | Read | What it establishes |
 |---|---|---|
-| 0–1 min | [Repository README](../README.md) | Active project, completed findings, and pending execution gates |
+| 0–1 min | [Repository README](../README.md) | Active project, completed findings, and deferred execution gates |
 | 1–2 min | [Same-parent method figure](../xrd_robustness/figures/figure_1_method_overview.png) | How simulator-retained parent identity becomes relationship supervision |
 | 2–3 min | [Frozen results](../xrd_robustness/reports/RESULTS.md) | Exact simulated, RRUFF few-shot, and CNRS results and limits |
 | 3–4 min | [Calibration analysis](../xrd_robustness/reports/CALIBRATION_ANALYSIS.md) and [parent-budget analysis](../xrd_robustness/reports/PARENT_BUDGET_EFFICIENCY.md) | Existing reliability and data-efficiency evidence; neither establishes RRUFF calibration or structures saved |
@@ -32,7 +32,7 @@ The historical simulated parent-budget study is supplementary evidence and does 
 
 ## Parameter-inversion disposition
 
-The active project remains seven-crystal-system classification, with current V11 scale-up preparation separate from the frozen completed study. Parameter inversion is a historical side line and is **Archived / Inactive** for current work. The PR #36 result below is historical context only and is excluded from the classification thesis evidence.
+The active project remains seven-crystal-system classification, with deferred V11 scale-up preparation separate from the frozen completed study. Parameter inversion is a historical side line and is **Archived / Inactive** for current work. The PR #36 result below is historical context only and is excluded from the classification thesis evidence.
 
 **PR #36 is completed conditional synthetic evidence.** Its four-stage report used one known COD 9014273 BaTiO3 P4mm CIF, a frozen 358/77/77 split, three seeds, and 77 test parents per seed. In Exp 4, direct normalized-q MAE was **0.033607/0.033578/0.034282** for A/B/C and **0.228037** for DONUT-PXRD; after the same bounded joint q+instrument L-BFGS-B refinement, the results were **0.000343/0.000350/0.000341** for A/B/C and **0.080026** for DONUT-PXRD. The refined score is not direct neural accuracy, and the A/B/C refined scores are nearly tied. Keep this only as feasibility evidence for the one known-CIF synthetic setup; it says nothing about real-XRD accuracy, unseen-material transfer, multiphase inversion, or broad neural superiority. The 1D DONUT-PXRD adaptation does not test or invalidate the original 2D DONUT method. The [final report](https://github.com/Frysland-2024/AI4science/blob/codex/donut-pxrd-experiment-20261019/donut_pxrd/reports/FINAL_TECHNICAL_REPORT.md) is on closed, unmerged PR #36.
 

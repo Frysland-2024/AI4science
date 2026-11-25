@@ -7,6 +7,10 @@
 
 **2026-11-21 OWNER DECISION — RESULTS FROZEN; MANUSCRIPT NARRATIVE LOW PRIORITY:** The owner confirms that the AI4science results are frozen. Treat the already-established result set as closed to routine reruns, retuning, or result-driven experiment expansion. Organizing the paper's main narrative remains a **LOW-PRIORITY writing task**, to be done when convenient; it is not a current project gate or a reason to start experiments. This freeze supersedes the earlier V11 HPO resumption checkpoint: no pending HPO, training, or scoring plan is a current task unless the owner separately reactivates it. It does not retroactively turn any previously NOT_RUN training or evaluation into completed work, and it does not change any reported metric or evidence boundary. Existing result files and reports remain authoritative.
 
+## Historical technical receipts and decisions (non-operative)
+
+> All dated entries below preserve evidence and earlier decisions. Any ACTIVE, NEXT, WAITING or launch wording is historical and does not override the 2026-11-21 freeze above. Issue #61 is closed for local scope; Issue #55 is open but deferred. No experiment is authorized by this section.
+
 **2026-11-13 冻结梯度报告哈希跨平台修复：** CI 失败来自 Git 将原始 Windows CRLF JSON 报告检出为 LF；报告数值和科学身份未变，但直接按原始字节校验会误报。runner 现在仅对这两份冻结报告按 CRLF 规范化后校验，保留既有来源 SHA；package、manifest 与 Stage 0 日志仍按原始字节哈希。已补充 LF/CRLF 回归覆盖。没有改动报告、梯度结果、HPO 协议或授权状态；cuifa Stage 0/HPO 仍为 NOT_RUN。
 
 **2026-11-11 ISSUE #61 / PR #75 状态对齐：** Issue #61 已关闭，结论仅覆盖本机 package/schema/manifest/CPU preflight；该本机结论由 Issue 正文及当前主分支验收记录支持。PR #75 目前为 **closed, unmerged**，不得描述为已合并。PR 正文中的“#61 remains open for PR review/merge”与当前 Issue 状态不符，已过时；它不改变 #61 已关闭的本机范围，也不满足 #55 的目标机 readiness gate。

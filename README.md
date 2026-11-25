@@ -21,14 +21,14 @@ Different simulated measurements of the same parent crystal share the same cryst
 
 Read the [full results and caveats](xrd_robustness/reports/RESULTS.md), [calibration analysis](xrd_robustness/reports/CALIBRATION_ANALYSIS.md) and [data-efficiency report](xrd_robustness/reports/PARENT_BUDGET_EFFICIENCY.md).
 
-## Current development (November 2026)
+## Current status (2026-11-21)
 
-The project has resumed development toward a larger-scale seven-system classification benchmark; the older October 2026 *write-up only* freeze is historical.
+**Results frozen; manuscript narrative low priority.** No new experiments are authorized. See [current state](docs/CURRENT_STATE.md) for the controlling decision.
 
-- **Simulator:** the versioned simulator integration was merged in [PR #58](https://github.com/Frysland-2024/AI4science/pull/58). Integration tests are not evidence of completed large-scale model training.
-- **Data:** a structure-only library of **154,975 MP-ID records / 154,968 parent groups** has been reported as collected and split (108,478 train / 23,245 validation / 23,245 synthetic test parent groups). V11 loader, PeakTable/cache and corpus-level readiness are still pending; see [#61](https://github.com/Frysland-2024/AI4science/issues/61).
-- **Next:** after data readiness and explicit GPU provisioning, bounded model tuning on the full new training parent set; see [#55](https://github.com/Frysland-2024/AI4science/issues/55).
-- **Target evaluation:** the frozen **RRUFF-Cu1011** real-domain primary benchmark (1,011 spectra), independent-parent data-efficiency curve, and calibration (ECE). The benchmark protocol and sample membership are documented in [merged PR #68](https://github.com/Frysland-2024/AI4science/pull/68) and the [frozen cohort rationale](docs/RRUFF_CU1011_PRIMARY_BENCHMARK_FREEZE_ALPHA_2026_RATIONALE.md). **No final new-data or RRUFF-Cu1011 model score is claimed yet.**
+- V11 simulator integration and the 154,975-record structure library (154,968 parent groups) are preserved.
+- [Issue #61](https://github.com/Frysland-2024/AI4science/issues/61) is closed for local package/CPU preflight only; target GPU readiness is not established.
+- [Issue #55](https://github.com/Frysland-2024/AI4science/issues/55) is open but deferred. Cuifa Stage 0, HPO, confirmation, final training, synthetic Test and RRUFF-Cu1011 scoring remain NOT_RUN.
+- The frozen 1,011-spectrum [RRUFF-Cu1011 protocol](docs/RRUFF_CU1011_PRIMARY_BENCHMARK_FREEZE_ALPHA_2026_RATIONALE.md) is prospective, not a completed evaluation.
 
 ## Code and reproducibility
 
@@ -36,8 +36,8 @@ The project has resumed development toward a larger-scale seven-system classific
 - [Reproducibility and data policy](docs/DATA_AND_REPRODUCIBILITY.md)
 - [Full research results](xrd_robustness/reports/RESULTS.md)
 - [Current project state](docs/CURRENT_STATE.md)
-- [V11/cloud HPO execution plan](docs/PXRD_154975_CLOUD_HPO_EXECUTION_PLAN_20261103.md)
-- [Integrated V11 Linux migration and deterministic prefetch pipeline](server_migration/README.md) — code and offline CI validated; cloud GPU run still pending
+- [Historical V11/cloud HPO execution plan](docs/PXRD_154975_CLOUD_HPO_EXECUTION_PLAN_20261103.md)
+- [Integrated V11 Linux migration and deterministic prefetch pipeline](server_migration/README.md) — code and offline CI validated; target GPU run NOT_RUN; execution deferred
 - [Project history and archived directions](docs/PROJECT_HISTORY.md) · [Archive guide](archive/README.md)
 
 Experimental files and local datasets may not all be distributed in this repository; consult the data policy and evidence manifests before attempting reproduction.

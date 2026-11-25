@@ -4,7 +4,7 @@
 
 ## Active project
 - [Current state](CURRENT_STATE.md) — authoritative scientific status and execution boundaries.
-- [154,975-structure V11 HPO plan](PXRD_154975_CLOUD_HPO_EXECUTION_PLAN_20261103.md) — planned large-data preparation and GPU experiments; see open issues [#61](https://github.com/Frysland-2024/AI4science/issues/61) and [#55](https://github.com/Frysland-2024/AI4science/issues/55).
+- [Historical V11 HPO plan](PXRD_154975_CLOUD_HPO_EXECUTION_PLAN_20261103.md) — deferred; [#61](https://github.com/Frysland-2024/AI4science/issues/61) closed for local preflight, [#55](https://github.com/Frysland-2024/AI4science/issues/55) open but inactive under the results freeze.
 - [Data and reproducibility](DATA_AND_REPRODUCIBILITY.md).
 - [RRUFF literature benchmarking](RRUFF_REAL_DOMAIN_LITERATURE_BENCHMARK_2026-10-22.md); the frozen RRUFF-Cu1011 protocol is integrated via [merged PR #68](https://github.com/Frysland-2024/AI4science/pull/68); see the [cohort freeze rationale](RRUFF_CU1011_PRIMARY_BENCHMARK_FREEZE_ALPHA_2026_RATIONALE.md).
 

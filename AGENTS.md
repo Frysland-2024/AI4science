@@ -42,9 +42,9 @@
 - **Verification and transparency:** read the latest repository authority before changing anything; make only the requested diff, run applicable automated checks, verify the resulting commit and report any test/permission limits honestly. Do not claim an Action or local task was stopped without checking its actual runtime state.
 - **Preserve history without clutter:** Git commits and existing issues/PRs provide the engineering audit trail. Keep genuine scientific changes and negative findings in existing canonical evidence; do not generate a new PR or Markdown history record for mundane maintenance.
 
-## Historical full agent policy
+## Historical full agent policy and enduring safeguards
 
-The following is retained for provenance and technical safeguards. **Any superseded historical execution instruction is non-operative.** The current section above and newly authorized work take precedence.
+The following is retained for provenance and technical safeguards. **Any superseded historical execution instruction is non-operative. ACTIVE/NEXT labels in dated historical sections refer only to their original dates; current execution authority is docs/CURRENT_STATE.md.** The current section above and newly authorized work take precedence.
 
 ---
 
