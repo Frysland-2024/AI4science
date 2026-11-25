@@ -561,6 +561,20 @@ A separate xrd_inversion line studies numerical quantitative inversion. Its firs
 
 The surviving inversion module focuses on auditable forward-model and numerical-recoverability infrastructure. It is intentionally separate from the completed classification evidence.
 
+### 2026-08-23—09-27：反演设想与科研定位（2026-11-26 回溯补记）
+
+**Research decision:** 保存中期研究问题从定量反演到面向物理测量的 ML 推断的变化，并补足早期方法及人机科研史的原始材料索引。以下为本轮可检索的日期化对话摘录及现存 Git 资料，非逐字全文；不修改任何实验或冻结状态。
+
+- **08-23（本人提出）：** 将 XRD 模型扩展为从谱预测晶格/峰形物理参数，再以 forward diffraction 重构和 physics consistency loss 约束；后续强调完整研究叙事不宜拆分。同期助手建议最小任务为已知单相/已知晶系，先预测晶格及少量峰形参数，比较普通回归、soft/hard physics，并指出仪器展宽、晶粒尺寸、microstrain 的可辨识性耦合。协作分工仅是建议，不据此追认任何人的实际贡献。
+- **08-27（本人明确分类）：** A 类量测/检测反演（半导体、生物医学、工业量测），B 类响应曲线反演（半导体器件、电池）。当时讨论小野寛太的多相 PXRD 信号分解及神谷/井手的器件参数估计路线，属于方向调研，不代表已读完相关论文、实现其方法或联系成功。申请路线的后续演化见 [application 仓库](https://github.com/Frysland-2024/application)。
+- **08-28 阶段汇报：** 本人要求第6页合并为两点：三档真实标注预算均有改善、相近或更好性能下真实谱需求较少。历史对话列出 RRUFF K=1/2/5 的原报告数值；严格证据范围以现行报告为准，不重新将 retrospective 称为 confirmatory。同期汇报文件索引为 `63b4fb5f-0097-48b7-8ac5-d645372b38d9.pdf/.pptx`（用户资料库检索摘要）。其中规划已知相/单相/四方晶系的 a,c、零偏及 FWHM，先做 Jacobian、再做 forward consistency；将 ML 看作传统精修的初值助手而非取代精修。以上为当时计划，不是完成证明。
+- **09-27（本人明确）：** ML 可能并非辅助，而是本人的工作与核心。同期助手将研究身份概括为“用 ML 解物理测量问题”：measurement/simulation → ML-driven inverse inference/reconstruction/parameter estimation；方向筛选可包含没有 ML 字面但有明显计算反演空间的研究。这是从具体材料对象向通用计算推断问题转向的申请/科研定位，不改变已有分类任务。
+- **后续证据入口：** 10-18 的 forward-reconstruction-loss、预精修、不同模板扩展和 AutoLab 候选在本文已有独立日期段落；10-26/27 的最终反演证据边界已记录 PR #36 单已知 CIF 的条件性可行性、PR #43/#45/#46 的有限或负结果与归档决定。现行分类冻结仍由 CURRENT_STATE 决定。此前历史的反演设想不视为完成成果。
+
+**补充检索结果：** 重新查找 06-29—07-15 只恢复 07-12 V5 讨论（本人确认四级动态方法主线，助手同日承认曾误用旧一致性架构），未取得 V1–V4 原稿、07-01—03/06—11 连续原话、SD3Net/TASAM 首次引入日期。07-25 技术简报和 08-07 交接文件可支持 Hu 等的 residual 思想来源；TASAM 仅由 V6 原稿确认，完整书目待核；AugMix 由本人 11-26 确认直接 JS 灵感，不据此补造首次阅读日期。08-07 交接文件另列《材料机器学习的惯性.txt》《我是语音输入的.txt》《ResNet实验进展.txt》《XRD精修与AI协作.txt》《AI4Materials 评价分析.txt》《分支 · AI4science 项目汇总.txt》为历史资料线索；本轮未恢复全文。阅读谱系见 [PXRD_NOVELTY_LITERATURE_LINEAGE.md](PXRD_NOVELTY_LITERATURE_LINEAGE.md) 及前述各期历史文献表。
+
+**Vibe Research / 人机科研分工：** 本轮未恢复新增原始对话；本文已有 11-10 和 11-19 两篇详细记录，含研究者本人补充的原话、经确认的比喻与助手归纳的界限。前者关注执行快/理解慢、行动边界超过知识边界、停止权；后者关注专业工具与通用 Agent 的“手/脑”分工及可证伪的科学理解。保留原段落，不复制成新档案，不把工作流建设等同于自主科学发现。
+
 ## 11. 2026-10-08: prospective undergraduate thesis plan (not active research)
 
 For future graduate applications, a possible undergraduate thesis direction was formulated: predict a limited set of structural and measurement parameters from PXRD; reconstruct a theoretical pattern with a forward physical model; then test whether a reconstruction-based **auxiliary** training constraint improves parameter accuracy, data/label efficiency, or training behavior under specific conditions.
