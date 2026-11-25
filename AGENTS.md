@@ -24,6 +24,10 @@ For structured status changes, edit `research_state.json` only after owner appro
 - **Standing owner correction:** Do **not** revisit, speculate about, or ask the owner/Milly/YIXIN to re-prove whether Sc-1 and Sc-2 are different sintered samples. Previous agent claims that identical instrument IDs created a sample-identity blocker were an overinterpretation and are **superseded**.
 - For Milly's separate ceramic-XRD collaboration, investigate why the **1175°C and 1200°C Sc samples** show many similar experimental diffraction features. Preserve uncertainty about *phase identification* and actual chemical reactions, but **do not manufacture doubt about the sample distinction**. This rule does not alter the separate seven-crystal-system PXRD ML thesis.
 
+## Mandatory documentation synchronization
+
+Every agent working on this repository must read the latest main-branch `research_state.json` and `docs/CURRENT_STATE.md` before changing research status. For material, evidence-backed and owner-authorized status changes, update the JSON source, run `python scripts/sync_docs.py --write`, then `python scripts/sync_docs.py --check` and `python scripts/check_docs_consistency.py --root .`. Include the source and all changed generated documents in the same commit. Verify CI when available; report any unexecuted or failed checks explicitly. Never hand-edit generated blocks, infer authorization from a status change, or rewrite frozen evidence. Routine code changes and brainstorming do not justify changing research status. If execution tools are unavailable, render the exact managed blocks deterministically and disclose which checks could not be run; do not claim validation.
+
 ## Minimal operating protocol
 
 1. Read `docs/CURRENT_STATE.md`, current issues #61/#55, relevant code, and machine-readable evidence; check for newer conflicting execution decisions.
