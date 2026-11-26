@@ -1,6 +1,7 @@
 """Tests: the guard catches explicit contradictions and ignores archives."""
 from __future__ import annotations
 import importlib.util
+import json
 import tempfile
 import unittest
 from pathlib import Path
@@ -37,6 +38,46 @@ The old freeze is archived.
         return guard.inspect(self.root)
 
     def test_current_state_passes(self):
+        self.assertEqual(self.issues(), [])
+
+    def test_structured_status_source_does_not_require_legacy_heading(self):
+        state = {
+            "schema": 1,
+            "date": "2026-11-21",
+            "direction": "PXRD seven-crystal-system classification",
+            "results": "FROZEN",
+            "manuscript_priority": "LOW",
+            "execution": "DEFERRED",
+            "local_preflight": "PASS",
+            "issue61": "CLOSED_LOCAL_SCOPE",
+            "issue55": "OPEN_DEFERRED",
+            "benchmark": "RRUFF-Cu1011",
+            "stages": {
+                "cuifa_stage0": "NOT_RUN",
+                "hpo": "NOT_RUN",
+                "confirmation": "NOT_RUN",
+                "final_training": "NOT_RUN",
+                "synthetic_test": "NOT_RUN",
+                "rruff_scoring": "NOT_RUN",
+            },
+        }
+        self.put("research_state.json", json.dumps(state, indent=2) + "\n")
+
+        sync_script = Path(__file__).resolve().parents[1] / "scripts/sync_docs.py"
+        sync_spec = importlib.util.spec_from_file_location("sync_docs_for_test", sync_script)
+        assert sync_spec and sync_spec.loader
+        sync = importlib.util.module_from_spec(sync_spec)
+        sync_spec.loader.exec_module(sync)
+        managed_block = f"{sync.BEGIN}\n{sync.render(state)}\n{sync.END}\n"
+
+        for filename in sync.DOCS:
+            heading = "# Fixture\n"
+            if filename == "AGENTS.md":
+                heading = "# AGENTS\n## Current research status\n"
+            elif filename == "docs/CURRENT_STATE.md":
+                heading = "# Current state\n"
+            self.put(filename, heading + managed_block)
+
         self.assertEqual(self.issues(), [])
 
     def test_completed_local_preflight_then_gpu_gate_passes(self):
