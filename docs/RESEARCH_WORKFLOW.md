@@ -447,3 +447,17 @@ The owner's explicit generalization was: “我发现你提方案总是喜欢搞
 **Domain first, AI second; compare existing methods before decomposing a model.** A future AI-assisted research plan should begin with the domain problem, the actual measurement data and credible current methods, then formulate the proposed approach and a meaningful comparison. Only then consider targeted ablations if a mechanism or component question warrants them. The primary question is whether and in what respects the proposed method helps solve the domain problem; component attribution is a distinct question.
 
 This is a research-design preference, not a universal claim that ablation is unimportant. Apply it together with UNDERSTAND → PLAN → EXECUTE and owner approval. No PXRD result, protocol, frozen artifact, execution status, or authorization changes; no SRS experiment or new project is authorized by this record.
+
+### Follow-up: chemically meaningful spectral information as the SRS research hypothesis (2026-11-27)
+
+The owner identified the following idea before leaving for an exam and explicitly requested that it be recorded in Git:
+
+> 比起之前搞消融实验的想法，真正的创新点，就是，多通道二维图像的ML，是否遗漏了光谱本身带来的化学信息？
+
+**Core research question:** Do existing multichannel 2D image-based machine-learning methods fully exploit the chemically meaningful information encoded in Raman spectra, including peak shapes and relationships across Raman wavenumbers?
+
+**Candidate hypothesis:** Explicit spectral feature learning may complement conventional multichannel image-based learning by better capturing chemically relevant spectral signatures in hyperspectral SRS data. Explore spectral-spatial feature fusion as a means of combining explicit local spectral learning with spatial-context learning, and evaluate its value for tumor tissue identification against appropriate existing analysis methods.
+
+The distinction from the earlier ablation-first proposal is that the scientific question concerns how effectively existing approaches use the spectral information already present in their inputs, rather than whether two supposedly independent physical information sources can be separated. Multichannel 2D networks can learn chemical information; incomplete exploitation of it is a hypothesis, not an established deficiency. A credible comparison should control available input information and prediction targets so that an improvement is not automatically attributed to spectral learning when it could arise from additional data or model capacity.
+
+**Status: CANDIDATE / NEEDS_THINKING.** This is the owner's candidate innovation idea, not a verified novelty claim or experimental finding. On resuming RP discussion, examine existing spectral-learning methods and their treatment of Raman signatures, then develop Chapter 3 around this question, with any necessary alignment of the motivation and expected outcomes. No architecture, experimental protocol, dataset availability or performance conclusion is fixed. The v7 RP and frozen PXRD research state are unchanged; no execution is authorized.
