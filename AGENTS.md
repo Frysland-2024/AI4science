@@ -28,6 +28,19 @@ For structured status changes, edit `research_state.json` only after owner appro
 
 Every agent working on this repository must read the latest main-branch `research_state.json` and `docs/CURRENT_STATE.md` before changing research status. For material, evidence-backed and owner-authorized status changes, update the JSON source, run `python scripts/sync_docs.py --write`, then `python scripts/sync_docs.py --check` and `python scripts/check_docs_consistency.py --root .`. Include the source and all changed generated documents in the same commit. Verify CI when available; report any unexecuted or failed checks explicitly. Never hand-edit generated blocks, infer authorization from a status change, or rewrite frozen evidence. Routine code changes and brainstorming do not justify changing research status. If execution tools are unavailable, render the exact managed blocks deterministically and disclose which checks could not be run; do not claim validation.
 
+## AI+X / Scientific ML research design (ACTIVE; owner-confirmed 2026-11-27)
+
+**Domain first, AI second; compare existing methods before decomposing a model.** For AI+X and Scientific ML, prioritize a real domain question and the value of solving it over the appearance of a complete ML experiment template.
+
+- Understand the physical phenomenon, measurement process, data, target task and domain requirements before choosing an architecture. Read relevant primary literature and, when material, inspect its actual inputs, processing, outputs, evaluation and limitations.
+- Establish domain-relevant existing methods as the primary comparison (Baseline Comparison). Select credible conventional or ML methods appropriate to the same scientific task, available information, evaluation units and metrics; explain what a comparison can establish. Keep conditions comparable and distinguish changes in input information from changes in processing strategy.
+- Use ablation studies as optional, question-driven supporting evidence for mechanism or component contribution, not a default experiment structure. Do not invent Only/Full groups simply because a proposed model has multiple branches or modules; ablation does not replace comparison with existing methods.
+- Require physical and methodological meaning: distinct algorithmic branches do not necessarily receive independent physical information. For example, multi-channel SRS images already encode chemical contrast as well as spatial context; a 2D network is not a physically pure spatial-only control. Compare well-defined data-processing strategies instead.
+- For research proposals, prioritize WHAT and WHY, with HOW in support: articulate the domain problem, precedents, proposed method and meaningful evaluation. Define feasible inputs and prediction targets, and defer unnecessary architectural or experimental details until the data and question justify them.
+- Historical lesson from the owner's PXRD and SRS discussions: the useful comparison is between scientifically meaningful methods or learning strategies (e.g., matched Dynamic ERM vs Dynamic JS consistency for PXRD), not merely splitting modules into Aug-only / Cons-only or Spectral-only / Spatial-only groups. This is a prospective design principle, not a claim that historical ablations were invalid.
+
+This standing principle complements UNDERSTAND → PLAN → EXECUTE in `docs/RESEARCH_WORKFLOW.md`. It does not alter the frozen PXRD results, existing protocols, evidence boundaries, current status, or execution authorization.
+
 ## Minimal operating protocol
 
 1. Read `docs/CURRENT_STATE.md`, current issues #61/#55, relevant code, and machine-readable evidence; check for newer conflicting execution decisions.
