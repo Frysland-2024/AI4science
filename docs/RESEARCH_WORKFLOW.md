@@ -414,3 +414,36 @@ Keep API keys in environment variables/local secrets, never commit them. Retriev
 Three pinned K-Dense specialist Skills with all bundled scripts and references are now versioned under `../.agents/skills/`: `paper-lookup`, `database-lookup`, `pymatgen`. The small project-specific `materials-investigation` Skill orchestrates them. Upstream version commit `ec59a29a03d5c40f73ab40878df04860bc00e876`; attribution in `../THIRD_PARTY_NOTICES.md`.
 
 From Codex opened at the locally cloned AI4science root, invoke `$materials-investigation` or one of the three specialist Skills. Read `../.agents/skills/materials-investigation/SKILL.md` for dependency setup, read-only examples, and safety limits. **The Git-backed Skill source is installed; the offline personal laptop has not been updated or tested, and pymatgen/mp-api, `MP_API_KEY`, PaperQA2, ASE and atomate2 are not automatically provisioned.** Run a bounded CIF/XRD smoke on an authorized device before saying scientific execution works. No changes to PXRD evidence or research authorization are implied.
+
+## 11. Origin of the domain-first, baseline-first principle (2026-11-27; owner-confirmed)
+
+**Nature of record:** a methodological reflection from the owner's Tokyo University Ozeki-lab master's research-proposal discussion, not a new AI4science experimental result or a change of the frozen PXRD project. The operational rule is in [AGENTS.md](../AGENTS.md#ai+x--scientific-ml-research-design-active-owner-confirmed-2026-11-27).
+
+### How the insight emerged
+
+- The SRS proposal asks how spectral-spatial feature fusion could improve tumor tissue identification from hyperspectral stimulated Raman scattering (SRS) microscopy. During drafting sections 3.1–3.3, GPT repeatedly proposed Spectral-only / Spatial-only / Fusion groups, treating the two model branches as if they were independent physical information sources.
+- The owner challenged the actual inputs: what does each network receive, how did Yang Ma input data into 2D networks, and how do hyperspectral remote-sensing methods construct their inputs? The owner then questioned the premise of the controls themselves: “因为很简单，你怎么可能做到spatial only和spetral only呢？”
+- The key correction: a pointwise Raman spectrum can omit explicit spatial context, but an SRS image obtains contrast from molecular vibrational signals; a single-band, multiband, or spectrally compressed SRS image is not physically free of chemical information. A 2D CNN can process multiple channels. Distinguish physical information content from the inductive bias or processing strategy of a network branch. Branch ablations can still be meaningful for architecture questions; they cannot by themselves establish independent contributions of physical information.
+- The discussion moved to explicit local spectral learning and neighborhood-image learning from the same hyperspectral data, with fusion as the proposed method and credible existing high-spectral image-analysis methods as potential comparators. Define comparable inputs, target labels, evaluation units and conditions before selecting baselines. Do not assert that the candidate fusion method is novel or superior, or that labeled tumor data are already available.
+
+### Literature that prompted the reconsideration
+
+- **Ma, Mizuguchi, Spratt & Ozeki (2025)**, *Label-Free organelle image prediction using deep learning and large-scale hyperspectral stimulated Raman imaging*, Proc. SPIE 13332, 133320E, [DOI](https://doi.org/10.1117/12.3041987). Methods 2.1–2.2 of the supplied paper describe hyperspectral SRS / fluorescence pairs and a modified UwU-Net: two 1×1 convolutions mix the spectral channels into five feature maps, which are processed by five U-Nets and combined for fluorescence prediction. The paper reports 91 acquired wavenumbers and 90 model channels; the discrepancy is not resolved in this record. This is a concrete example of spectral processing followed by spatial learning, not a pure spatial control.
+- **Manifold, Men, Hu & Fu (2021)**, *A versatile deep learning architecture for classification and label-free prediction of hyperspectral images*, Nature Machine Intelligence 3, 306–315, [DOI](https://doi.org/10.1038/s42256-021-00309-y), [open full text](https://pmc.ncbi.nlm.nih.gov/articles/PMC8528004/). The discussion identified UwU-Net as the methodological predecessor linking hyperspectral remote sensing and SRS; it prompted the distinction between comparing available spectral information and comparing how networks process that information. Its organelle prediction task is not identical to tumor tissue identification; adapting it as a baseline would require a matched task and data contract.
+- **Wang et al. (2020)**, *Dual-branch dense residual network for hyperspectral imagery classification*, [DOI](https://doi.org/10.1080/01431161.2019.1693078). The remote-sensing dual-branch approach prompted the parallel spectral/spatial architecture idea. Only abstract-level evidence was available for its specific architecture in this discussion; exact inputs and experimental controls remain unverified. Other remote-sensing examples discussed neighborhood image inputs and center-position spectra; they were methodological analogies, not validated SRS protocols.
+
+These are inspiration and literature leads, not an exhaustive review or a claim of reproduced results.
+
+### Link to the owner's earlier PXRD experience
+
+The owner spontaneously recalled: “我想起来了，一开始搞XRD的时候也是，搞所谓aug only consist only，后来才拉出DYNAMIC和CONSIST的比较”。
+
+The parallel is important: a module-first experimental template can obscure the actual scientific comparison. In PXRD, the established matched Dynamic ERM versus Dynamic JS consistency comparison asks whether simulator-known same-parent measurement relations add useful supervision beyond class labels under matched dynamic data generation. This is more directly connected to the scientific question than simply enumerating augmentation/consistency switches. The historical ablations are not retroactively invalidated; their role is determined by the claims they can support. Consult [PXRD_SUPERVISION_FRAMING.md](PXRD_SUPERVISION_FRAMING.md) for the current scientific framing.
+
+The owner's explicit generalization was: “我发现你提方案总是喜欢搞消融实验，很AI，但是实际上在AI+X的领域真正重要的不是消融实验，而是与现有方法的对比”。
+
+### Decision and practical consequence
+
+**Domain first, AI second; compare existing methods before decomposing a model.** A future AI-assisted research plan should begin with the domain problem, the actual measurement data and credible current methods, then formulate the proposed approach and a meaningful comparison. Only then consider targeted ablations if a mechanism or component question warrants them. The primary question is whether and in what respects the proposed method helps solve the domain problem; component attribution is a distinct question.
+
+This is a research-design preference, not a universal claim that ablation is unimportant. Apply it together with UNDERSTAND → PLAN → EXECUTE and owner approval. No PXRD result, protocol, frozen artifact, execution status, or authorization changes; no SRS experiment or new project is authorized by this record.
